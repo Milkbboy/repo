@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf9b82e2ec9d5d4d8f2bfe093d392a1, type: 3}
+  m_Name: scenario_coop2
+  m_EditorClassIdentifier: 
+  id: scenario_coop2
+  title: Co-op 2
+  desc: 
+  champions: 2
+  start_gold: 250
+  start_xp: 0
+  enemy_hp_percentage: 1.5
+  enemy_power_add: 1
+  enemy_armor_add: 0
+  maps:
+  - {fileID: 11400000, guid: 23b38dda50600c544abe0cdf1289d176, type: 2}
+  - {fileID: 11400000, guid: 9f07a1faab1b8e44fb1562203faa0872, type: 2}

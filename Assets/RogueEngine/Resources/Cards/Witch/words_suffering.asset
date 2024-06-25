@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
+  m_Name: words_suffering
+  m_EditorClassIdentifier: 
+  id: words_suffering
+  title: Words of Suffering
+  art_icon: {fileID: 0}
+  art_full: {fileID: 21300000, guid: f58eac0a498752c43ae910e844663bef, type: 3}
+  card_type: 20
+  item_type: 0
+  team: {fileID: 11400000, guid: 7bc636fc5705f6143ac7676532f19540, type: 2}
+  rarity: {fileID: 11400000, guid: fab1a52f5a36cc942985dea95be18ac9, type: 2}
+  mana: 1
+  traits:
+  - {fileID: 11400000, guid: 038a229020abf73438635230f0cb3d39, type: 2}
+  stats: []
+  abilities:
+  - {fileID: 11400000, guid: f1c06b51252b04143ba3b2dc1f65b838, type: 2}
+  - {fileID: 11400000, guid: 41f7fb56ee579e641a1dd074a1bcf728, type: 2}
+  level_max: 3
+  upgrade_mana: 0
+  cost: 100
+  intent: {fileID: 0}
+  text: Deal <value> magic damage. Gain a Cursed card.
+  upg_text: 
+  spawn_fx: {fileID: 0}
+  spawn_audio: {fileID: 0}
+  caster_anim: action
+  target_anim: 
+  show_collection: 1

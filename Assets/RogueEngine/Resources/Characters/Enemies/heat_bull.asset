@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e4018d1852d674fb87eb882c12be89, type: 3}
+  m_Name: heat_bull
+  m_EditorClassIdentifier: 
+  id: heat_bull
+  title: Heat Bull
+  art_full: {fileID: 21300000, guid: 04f6c89dfa64b594290688c645cfaa24, type: 3}
+  art_portrait: {fileID: 21300000, guid: 04f6c89dfa64b594290688c645cfaa24, type: 3}
+  prefab: {fileID: 3315427549352430699, guid: 6a217469c0bc04f4b93f7a1094249ed4, type: 3}
+  hp: 30
+  speed: 5
+  hand: 0
+  energy: 1
+  level_max: 3
+  level_up_hp: 5
+  level_up_speed: 0.5
+  level_up_hand: 0
+  level_up_energy: 0
+  behavior: {fileID: 11400000, guid: 8d1ff12afa7a643478446471511e24ab, type: 2}
+  traits:
+  - {fileID: 11400000, guid: 9436e14bc49faf74595ac5f19b793ba3, type: 2}
+  stats: []
+  abilities: []
+  cards:
+  - {fileID: 11400000, guid: 231c5b3e5056cc34cb6b354338f51c65, type: 2}
+  - {fileID: 11400000, guid: 231c5b3e5056cc34cb6b354338f51c65, type: 2}
+  - {fileID: 11400000, guid: dbab80bd8df97cc4cb6d26486c9cca2e, type: 2}
+  - {fileID: 11400000, guid: dbab80bd8df97cc4cb6d26486c9cca2e, type: 2}
+  - {fileID: 11400000, guid: 0828693756075974797b2c68e4179471, type: 2}
+  reward_gold: 70
+  reward_xp: 70
+  desc: 
+  spawn_fx: {fileID: 0}
+  death_fx: {fileID: 0}
+  spawn_audio: {fileID: 0}
+  death_audio: {fileID: 0}

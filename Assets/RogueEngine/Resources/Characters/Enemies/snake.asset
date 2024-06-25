@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e4018d1852d674fb87eb882c12be89, type: 3}
+  m_Name: snake
+  m_EditorClassIdentifier: 
+  id: snake
+  title: Snake
+  art_full: {fileID: 21300000, guid: 56f4e92879f1d1e4f8b088baf599f05a, type: 3}
+  art_portrait: {fileID: 21300000, guid: 56f4e92879f1d1e4f8b088baf599f05a, type: 3}
+  prefab: {fileID: 3315427549352430699, guid: bd998f1bc5e283d4cb2ddac22a01d4f9, type: 3}
+  hp: 12
+  speed: 5
+  hand: 0
+  energy: 1
+  level_max: 3
+  level_up_hp: 3
+  level_up_speed: 1
+  level_up_hand: 0
+  level_up_energy: 0
+  behavior: {fileID: 11400000, guid: 8d1ff12afa7a643478446471511e24ab, type: 2}
+  traits: []
+  stats: []
+  abilities: []
+  cards:
+  - {fileID: 11400000, guid: ff2c3888fd9a6814e9fb81457dc6e090, type: 2}
+  - {fileID: 11400000, guid: ff2c3888fd9a6814e9fb81457dc6e090, type: 2}
+  - {fileID: 11400000, guid: ff2c3888fd9a6814e9fb81457dc6e090, type: 2}
+  - {fileID: 11400000, guid: 91f15f50c2cf60240badca4bc7c35fe4, type: 2}
+  - {fileID: 11400000, guid: 91f15f50c2cf60240badca4bc7c35fe4, type: 2}
+  reward_gold: 40
+  reward_xp: 40
+  desc: 
+  spawn_fx: {fileID: 0}
+  death_fx: {fileID: 0}
+  spawn_audio: {fileID: 0}
+  death_audio: {fileID: 0}

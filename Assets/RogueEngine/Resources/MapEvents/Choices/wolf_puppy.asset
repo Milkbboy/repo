@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352676b4616ff8a45837071a2fc469a4, type: 3}
+  m_Name: wolf_puppy
+  m_EditorClassIdentifier: 
+  id: wolf_puppy
+  depth_min: 2
+  depth_max: 99
+  icon: {fileID: 21300000, guid: 7fb7cf43dfffa9d408fc0f4a32f869d5, type: 3}
+  text: "While walking in the forest, you come across a pityful wolf pup that seems
+    lost. \n\nShould you try to tame it? \nOr ignore it?"
+  choices:
+  - text: Tame the puppy
+    subtext: Maybe it can help you
+    effect: {fileID: 11400000, guid: de91ea0a8d388b04786168278e327a33, type: 2}
+  - text: Stay away
+    subtext: Those wolves are dangerous
+    effect: {fileID: 11400000, guid: 777e0b881c1878948b602d5cc7afc494, type: 2}

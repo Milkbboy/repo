@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce5f81e5cc37f547af6923758602c8c, type: 3}
+  m_Name: attack_stun_last
+  m_EditorClassIdentifier: 
+  id: attack_stun_last
+  trigger: 10
+  conditions_trigger: []
+  target: 72
+  conditions_target:
+  - {fileID: 11400000, guid: d2f9d6b736bdb1044904ed93f710b5ed, type: 2}
+  - {fileID: 11400000, guid: 41c58513071a53b4e9066a58c439760f, type: 2}
+  - {fileID: 11400000, guid: 3e9f5c6050bfe2e43a0a33758c1c1f52, type: 2}
+  filters_target: []
+  effects: []
+  status:
+  - {fileID: 11400000, guid: ea1f6f5dff526dc4e85c2deafadea52d, type: 2}
+  value: 0
+  upgrade_value: 0
+  bonus_value: 0
+  chain_abilities: []
+  board_fx: {fileID: 0}
+  caster_fx: {fileID: 0}
+  target_fx: {fileID: 0}
+  cast_audio: {fileID: 0}
+  target_audio: {fileID: 0}
+  title: 
+  desc: 

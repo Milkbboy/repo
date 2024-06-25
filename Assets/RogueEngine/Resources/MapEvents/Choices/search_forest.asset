@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352676b4616ff8a45837071a2fc469a4, type: 3}
+  m_Name: search_forest
+  m_EditorClassIdentifier: 
+  id: search_forest
+  depth_min: 0
+  depth_max: 0
+  icon: {fileID: 21300000, guid: 7fb7cf43dfffa9d408fc0f4a32f869d5, type: 3}
+  text: 'You search the area and don''t find anything extremely valuable. However
+    there are a few things that could be worth bringing just in case. Which of those
+    would you like to take?
+
+
+    -A Bunch of Bananas
+
+    -A Hatchet
+
+    -A Map'
+  choices:
+  - text: Take the Bananas
+    subtext: 
+    effect: {fileID: 11400000, guid: 330c6b7920796b146b27fd646a5a3429, type: 2}
+  - text: Take the Hatchet
+    subtext: 
+    effect: {fileID: 11400000, guid: dd1eb909389c3ed438e65c9b5b67f970, type: 2}
+  - text: Take the Map
+    subtext: 
+    effect: {fileID: 11400000, guid: 3f94722192850d042ac8f7a2297796c7, type: 2}
+  - text: Take Nothing
+    subtext: 
+    effect: {fileID: 11400000, guid: 777e0b881c1878948b602d5cc7afc494, type: 2}

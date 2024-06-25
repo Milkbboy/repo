@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352676b4616ff8a45837071a2fc469a4, type: 3}
+  m_Name: rescue_reward
+  m_EditorClassIdentifier: 
+  id: rescue_reward
+  depth_min: 0
+  depth_max: 0
+  text: The old man is grateful and offers you one of his potions. Which one would
+    you like to take?
+  choices:
+  - text: Pick the Red One
+    subtext: 
+    effect: {fileID: 11400000, guid: 642cc540534802e4d8735485daf973a2, type: 2}
+  - text: Pick the Green One
+    subtext: 
+    effect: {fileID: 11400000, guid: 7854624bd82e4c0449eaf02acb151b91, type: 2}
+  - text: Pick the Blue One
+    subtext: 
+    effect: {fileID: 11400000, guid: 6ca128583d306f94095debf48857411f, type: 2}
+  - text: Pick None
+    subtext: 
+    effect: {fileID: 11400000, guid: 777e0b881c1878948b602d5cc7afc494, type: 2}

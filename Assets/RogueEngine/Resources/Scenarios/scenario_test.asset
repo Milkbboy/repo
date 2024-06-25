@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf9b82e2ec9d5d4d8f2bfe093d392a1, type: 3}
+  m_Name: scenario_test
+  m_EditorClassIdentifier: 
+  id: scenario_test
+  title: Test
+  desc: 
+  champions: 1
+  start_gold: 250
+  start_xp: 150
+  start_cards: []
+  start_items:
+  - {fileID: 11400000, guid: 38cdc857c508c4b41945ad309bfe21fb, type: 2}
+  - {fileID: 11400000, guid: 1cf0e88b3cd95d14891fe0ac5da50f0b, type: 2}
+  - {fileID: 11400000, guid: b5f404fda8c67a346ab72ecfcc04b5f8, type: 2}
+  - {fileID: 11400000, guid: 258d289574a63ed4997c05eaf0c72851, type: 2}
+  - {fileID: 11400000, guid: bb2bf0a66cae46c448a05699f294e931, type: 2}
+  - {fileID: 11400000, guid: 92b27ccd4e7c7f34fb47e6803c81c5df, type: 2}
+  enemy_hp_percentage: 1
+  enemy_power_add: 0
+  enemy_armor_add: 0
+  maps:
+  - {fileID: 11400000, guid: 23b38dda50600c544abe0cdf1289d176, type: 2}
+  - {fileID: 11400000, guid: 9f07a1faab1b8e44fb1562203faa0872, type: 2}

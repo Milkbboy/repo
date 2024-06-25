@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 491b3dc2d13ad0347b053ba46556fd69, type: 3}
+  m_Name: lost_run
+  m_EditorClassIdentifier: 
+  id: lost_run
+  depth_min: 0
+  depth_max: 0
+  conditions_trigger: []
+  target: 15
+  effects:
+  - {fileID: 11400000, guid: 06b957c60c23ae34393b64e78b92e0e3, type: 2}
+  value: 0
+  chain_event: {fileID: 0}
+  text: 'You start running in a random directly, having no idea where you are going.
+    After a bit, you trip on a tree root and scratch your leg. You are bleeding,
+    but still determined to find your way.
+
+
+    All champions gain a Wounded card.'

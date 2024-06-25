@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 491b3dc2d13ad0347b053ba46556fd69, type: 3}
+  m_Name: monkeys_flee
+  m_EditorClassIdentifier: 
+  id: monkeys_flee
+  depth_min: 0
+  depth_max: 0
+  icon: {fileID: 0}
+  conditions_trigger: []
+  target: 10
+  effects:
+  - {fileID: 11400000, guid: 4369324687c62ca488c57afd73a2be36, type: 2}
+  - {fileID: 11400000, guid: 06b957c60c23ae34393b64e78b92e0e3, type: 2}
+  value: 5
+  chain_event: {fileID: 0}
+  text: 'You managed to run away but not without a scratch. One of the monkey grabbed
+    your foot and took a big bite before you escaped.
+
+
+    You lose 5 HP and gain
+    a Wounded card.'

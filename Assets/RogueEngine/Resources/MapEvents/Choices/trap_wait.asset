@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 491b3dc2d13ad0347b053ba46556fd69, type: 3}
+  m_Name: trap_wait
+  m_EditorClassIdentifier: 
+  id: trap_wait
+  depth_min: 0
+  depth_max: 0
+  conditions_trigger: []
+  target: 10
+  effects: []
+  value: 0
+  chain_event: {fileID: 0}
+  text: 'You wait for a while and nothing happens, until you realize that the trap
+    isn''t tied to anything, so you can just walk away with the net around you. 
+    A bit more far away you find a sharp rock and use it to escape.
+
+
+'

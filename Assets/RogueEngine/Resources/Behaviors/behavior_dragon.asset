@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d2828866c127d345baeb97b0987514d, type: 3}
+  m_Name: behavior_dragon
+  m_EditorClassIdentifier: 
+  summon_card: {fileID: 11400000, guid: fb5546a4d9e3f364198adf11578bc8d0, type: 2}
+  ultimate_card: {fileID: 11400000, guid: fabad135e781d1b4b805db778f86679a, type: 2}
+  phase_trait: {fileID: 11400000, guid: 87b892716dc9557449d94042c8b7450a, type: 2}

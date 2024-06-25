@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352676b4616ff8a45837071a2fc469a4, type: 3}
+  m_Name: ritual
+  m_EditorClassIdentifier: 
+  id: ritual
+  depth_min: 2
+  depth_max: 99
+  icon: {fileID: 21300000, guid: 7fb7cf43dfffa9d408fc0f4a32f869d5, type: 3}
+  text: 'You come across a hidden location in a cave, large stone in a circle, which
+    seems to be an ancient ritual location. Encarved in the stone you read: Step
+    on this stone to receive both a curse and a boon.
+
+
+    You may step on the stone
+    to reduce your max HP by 10 and increase your hand size by 1.'
+  choices:
+  - text: Step on the stone
+    subtext: 
+    effect: {fileID: 11400000, guid: 97d6b250bc9156047ab445c0c3e9a09f, type: 2}
+  - text: Ignore it
+    subtext: 
+    effect: {fileID: 11400000, guid: 777e0b881c1878948b602d5cc7afc494, type: 2}

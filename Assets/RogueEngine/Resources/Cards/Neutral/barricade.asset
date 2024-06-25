@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
+  m_Name: barricade
+  m_EditorClassIdentifier: 
+  id: barricade
+  title: Barricade
+  art_icon: {fileID: 0}
+  art_full: {fileID: 21300000, guid: 2a9f3a5c54de51645a1d27325081706c, type: 3}
+  card_type: 20
+  item_type: 0
+  team: {fileID: 11400000, guid: 9c12594a77ae77640a525efd72555731, type: 2}
+  rarity: {fileID: 11400000, guid: 15eaa2a0fbd97f149b3aa87387c160d1, type: 2}
+  mana: 2
+  traits:
+  - {fileID: 11400000, guid: 17ea253e5ca2e81409b0944ff29bfed9, type: 2}
+  stats: []
+  abilities:
+  - {fileID: 11400000, guid: 5af8f18f87ce0e3438e5164217266a11, type: 2}
+  - {fileID: 11400000, guid: 9413d01084135a64fbc25be60a5487f2, type: 2}
+  level_max: 3
+  upgrade_mana: -1
+  cost: 200
+  intent: {fileID: 0}
+  text: 'Increase your armor by <value>.
+
+    Exhaust.'
+  upg_text: 
+  spawn_fx: {fileID: 0}
+  spawn_audio: {fileID: 0}
+  caster_anim: action
+  target_anim: 
+  availability: 10

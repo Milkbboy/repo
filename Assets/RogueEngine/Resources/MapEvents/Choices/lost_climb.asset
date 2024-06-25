@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 491b3dc2d13ad0347b053ba46556fd69, type: 3}
+  m_Name: lost_climb
+  m_EditorClassIdentifier: 
+  id: lost_climb
+  depth_min: 0
+  depth_max: 0
+  conditions_trigger: []
+  target: 10
+  effects:
+  - {fileID: 11400000, guid: cf28107a77279474c8ddf6961610fb83, type: 2}
+  value: 1
+  chain_event: {fileID: 0}
+  text: 'Climbing a tree was really exhausting. But it really helped to orient yourself
+    and now you know where to go.
+
+
+    You gain an Exhasuted card.'

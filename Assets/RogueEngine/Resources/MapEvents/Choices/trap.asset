@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352676b4616ff8a45837071a2fc469a4, type: 3}
+  m_Name: trap
+  m_EditorClassIdentifier: 
+  id: statue
+  depth_min: 2
+  depth_max: 99
+  icon: {fileID: 21300000, guid: 7fb7cf43dfffa9d408fc0f4a32f869d5, type: 3}
+  text: "As you walked peacefully, you step on a device hidden with leaves on the
+    floor. \n\nIt's a TRAP! You are now stuck in a net."
+  choices:
+  - text: Try to cut the net
+    subtext: With whatever tool you have.
+    effect: {fileID: 11400000, guid: 4ac2af034a5bbfa4d91d5a7dd1d156b2, type: 2}
+  - text: Yell for Help
+    subtext: Hopefully someone will come
+    effect: {fileID: 11400000, guid: ed5c6ee729778b644a460aa8b1b7e635, type: 2}
+  - text: Just wait for your fate
+    subtext: In Silence
+    effect: {fileID: 11400000, guid: 7b58729b22f3c3d4da8f76dc5bb630de, type: 2}

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
+  m_Name: slash
+  m_EditorClassIdentifier: 
+  id: slash
+  title: Slash
+  art_icon: {fileID: 0}
+  art_full: {fileID: 21300000, guid: 5fb2bfddfd910c54db59c12bf073674d, type: 3}
+  card_type: 20
+  item_type: 0
+  team: {fileID: 11400000, guid: 9c12594a77ae77640a525efd72555731, type: 2}
+  rarity: {fileID: 11400000, guid: 80387c89b69729144b8397050270c574, type: 2}
+  mana: 1
+  traits:
+  - {fileID: 11400000, guid: 5be8c269bf64803408a27d61e071afee, type: 2}
+  - {fileID: 11400000, guid: 038a229020abf73438635230f0cb3d39, type: 2}
+  stats: []
+  abilities:
+  - {fileID: 11400000, guid: 4bc795e832aa26c409d47745aec515ba, type: 2}
+  level_max: 3
+  upgrade_mana: 0
+  cost: 100
+  intent: {fileID: 0}
+  text: Deal <value> damage to the nearest enemy.
+  upg_text: 
+  spawn_fx: {fileID: 0}
+  spawn_audio: {fileID: 0}
+  caster_anim: attack
+  target_anim: hit
+  show_collection: 1

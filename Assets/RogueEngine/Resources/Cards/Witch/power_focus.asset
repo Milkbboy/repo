@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
+  m_Name: power_focus
+  m_EditorClassIdentifier: 
+  id: power_focus
+  title: Power Focus
+  art_icon: {fileID: 0}
+  art_full: {fileID: 21300000, guid: 4dd60f719ca104b4b8dd5197ea991e14, type: 3}
+  card_type: 20
+  item_type: 0
+  team: {fileID: 11400000, guid: 7bc636fc5705f6143ac7676532f19540, type: 2}
+  rarity: {fileID: 11400000, guid: 15eaa2a0fbd97f149b3aa87387c160d1, type: 2}
+  mana: 1
+  traits:
+  - {fileID: 11400000, guid: 17ea253e5ca2e81409b0944ff29bfed9, type: 2}
+  stats: []
+  abilities:
+  - {fileID: 11400000, guid: bf395e5673779904794f1850e420ec17, type: 2}
+  - {fileID: 11400000, guid: 41f7fb56ee579e641a1dd074a1bcf728, type: 2}
+  level_max: 2
+  upgrade_mana: -1
+  cost: 200
+  intent: {fileID: 0}
+  text: Increase your magic power by 1, gain a Cursed card.
+  upg_text: 
+  spawn_fx: {fileID: 0}
+  spawn_audio: {fileID: 0}
+  caster_anim: action
+  target_anim: 
+  show_collection: 1
+  availability: 10

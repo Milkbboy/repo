@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce5f81e5cc37f547af6923758602c8c, type: 3}
+  m_Name: gain_cursed
+  m_EditorClassIdentifier: 
+  id: gain_cursed
+  trigger: 10
+  conditions_trigger: []
+  target: 4
+  conditions_target: []
+  filters_target: []
+  effects:
+  - {fileID: 11400000, guid: 98f7c2b3f10aa1d4c84bf14a440cae24, type: 2}
+  status: []
+  value: 0
+  upgrade_value: 0
+  bonus_value: 0
+  chain_abilities: []
+  board_fx: {fileID: 0}
+  caster_fx: {fileID: 0}
+  target_fx: {fileID: 0}
+  cast_audio: {fileID: 0}
+  target_audio: {fileID: 0}
+  title: 
+  desc: 

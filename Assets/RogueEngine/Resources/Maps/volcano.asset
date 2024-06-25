@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fb23f9f8701bc14d839f9f3f681b26c, type: 3}
+  m_Name: volcano
+  m_EditorClassIdentifier: 
+  id: volcano
+  title: Volcano
+  map_scene: Map
+  battle_scene: BattleVolcano
+  depth: 12
+  width_min: 3
+  width_max: 5
+  fork_probability: 0.25
+  events:
+  - {fileID: 11400000, guid: 726e764938f2b3448aaf493419334dd4, type: 2}
+  - {fileID: 11400000, guid: 690b857dea074b44f917d872bf901d59, type: 2}
+  - {fileID: 11400000, guid: 690b857dea074b44f917d872bf901d59, type: 2}
+  - {fileID: 11400000, guid: 73e253c4ae0f86346b741b95438b89e8, type: 2}
+  - {fileID: 11400000, guid: 2c4dc6339cd72d94c8dd0ace18bcf5bf, type: 2}
+  - {fileID: 11400000, guid: 90f2ce42fe25ee5478fbbe481f64d3d3, type: 2}
+  - {fileID: 11400000, guid: 1c2259ee5e103ad4f8d60df39fadcde7, type: 2}
+  - {fileID: 11400000, guid: cf1dcc25391380f42bee7bbc02b1c519, type: 2}
+  - {fileID: 11400000, guid: b2aaa7ac48574614a892f5b7761ac731, type: 2}
+  - {fileID: 11400000, guid: bed8ae9097e6a554eb9a6a56004d0dfe, type: 2}
+  - {fileID: 11400000, guid: ed8509128fd3e794ebbd8890b0635732, type: 2}
+  fixed_widths:
+  - depth: 3
+    width: 3
+  - depth: 6
+    width: 2
+  - depth: 9
+    width: 3
+  - depth: 12
+    width: 1
+  fixed_events:
+  - depth: 3
+    index_min: 0
+    index_max: 9
+    evt: {fileID: 11400000, guid: 936ee42085cc1ce44975c598644ca596, type: 2}
+  - depth: 6
+    index_min: 0
+    index_max: 9
+    evt: {fileID: 11400000, guid: b55e047829949924c8916422df6b204a, type: 2}
+  - depth: 9
+    index_min: 0
+    index_max: 9
+    evt: {fileID: 11400000, guid: 936ee42085cc1ce44975c598644ca596, type: 2}
+  - depth: 12
+    index_min: 0
+    index_max: 9
+    evt: {fileID: 11400000, guid: 2f648bb052830234d8c61580b3ff2df0, type: 2}

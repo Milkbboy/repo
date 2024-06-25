@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 491b3dc2d13ad0347b053ba46556fd69, type: 3}
+  m_Name: trap_cut
+  m_EditorClassIdentifier: 
+  id: trap_cut
+  depth_min: 0
+  depth_max: 0
+  conditions_trigger: []
+  target: 15
+  effects: []
+  value: 1
+  chain_event: {fileID: 0}
+  text: 'After hours of trying to cut the rope with your teeth, you eventually get
+    out of the trap. But you are extremely tired.
+
+
+    Each champion gain an Exhausted
+    card.'

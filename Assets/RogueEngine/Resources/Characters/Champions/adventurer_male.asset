@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ac0c3319c62cf04885caa19ba4102e5, type: 3}
+  m_Name: adventurer_male
+  m_EditorClassIdentifier: 
+  id: adventurer_male
+  title: Adventurer
+  art_full: {fileID: 21300000, guid: e425c60e27006bd4a957da85d42ddb3d, type: 3}
+  art_portrait: {fileID: 21300000, guid: b16f6491da949cb4fb381c9932a1fae7, type: 3}
+  prefab: {fileID: 4831116586470567743, guid: 0fbfb6fcb5dfe3f4290aff20643ad828, type: 3}
+  hp: 30
+  speed: 7
+  hand: 4
+  energy: 3
+  level_up_hp: 10
+  level_up_speed: 0.5
+  level_up_hand: 0.25
+  level_up_energy: 0
+  team: {fileID: 11400000, guid: 6bbb96863ece0314fb318c0fce569afc, type: 2}
+  traits: []
+  stats: []
+  abilities: []
+  start_cards:
+  - {fileID: 11400000, guid: b3fb66486dab0454e921ea5548997501, type: 2}
+  - {fileID: 11400000, guid: b3fb66486dab0454e921ea5548997501, type: 2}
+  - {fileID: 11400000, guid: de0b85f37c281884c9f9f7c524a04b9e, type: 2}
+  - {fileID: 11400000, guid: de0b85f37c281884c9f9f7c524a04b9e, type: 2}
+  - {fileID: 11400000, guid: ee203a96c2180434fb61cf9ec9aa1ea5, type: 2}
+  - {fileID: 11400000, guid: ee203a96c2180434fb61cf9ec9aa1ea5, type: 2}
+  - {fileID: 11400000, guid: ee203a96c2180434fb61cf9ec9aa1ea5, type: 2}
+  - {fileID: 11400000, guid: e1f82d4f9aafb5d46b51d43ce80b9bcd, type: 2}
+  start_items: []
+  reward_cards:
+  - {fileID: 11400000, guid: 6bbb96863ece0314fb318c0fce569afc, type: 2}
+  - {fileID: 11400000, guid: 9c12594a77ae77640a525efd72555731, type: 2}
+  desc: 

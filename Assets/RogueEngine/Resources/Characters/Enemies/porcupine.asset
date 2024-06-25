@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e4018d1852d674fb87eb882c12be89, type: 3}
+  m_Name: porcupine
+  m_EditorClassIdentifier: 
+  id: porcupine
+  title: Porcupine
+  art_full: {fileID: 21300000, guid: 6fa5376d51e11d6498d4a974a5bb96ba, type: 3}
+  art_portrait: {fileID: 21300000, guid: 6fa5376d51e11d6498d4a974a5bb96ba, type: 3}
+  prefab: {fileID: 3315427549352430699, guid: e67c102517fd47e498f0016577bf9323, type: 3}
+  hp: 15
+  speed: 6
+  hand: 0
+  energy: 1
+  level_max: 3
+  level_up_hp: 5
+  level_up_speed: 0.5
+  level_up_hand: 0
+  level_up_energy: 0
+  behavior: {fileID: 11400000, guid: 8d1ff12afa7a643478446471511e24ab, type: 2}
+  traits: []
+  stats: []
+  abilities: []
+  cards:
+  - {fileID: 11400000, guid: 83e7f1550418352438c9be36f34c9d3b, type: 2}
+  - {fileID: 11400000, guid: 83e7f1550418352438c9be36f34c9d3b, type: 2}
+  - {fileID: 11400000, guid: 83e7f1550418352438c9be36f34c9d3b, type: 2}
+  - {fileID: 11400000, guid: bf29e64731f989649a037cfa8f553216, type: 2}
+  - {fileID: 11400000, guid: bf29e64731f989649a037cfa8f553216, type: 2}
+  reward_gold: 40
+  reward_xp: 40
+  desc: 
+  spawn_fx: {fileID: 0}
+  death_fx: {fileID: 0}
+  spawn_audio: {fileID: 0}
+  death_audio: {fileID: 0}

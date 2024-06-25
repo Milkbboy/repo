@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02f13508bc7512499fe479934d42e4e, type: 3}
+  m_Name: search_forest_hatchet
+  m_EditorClassIdentifier: 
+  id: search_forest_hatchet
+  depth_min: 0
+  depth_max: 0
+  target: 10
+  spend_cards: []
+  spend_items: []
+  spend_gold: 0
+  hp_damage: 0
+  gain_cards: []
+  gain_items:
+  - {fileID: 11400000, guid: af4cd90dfb6fb5f4ea1c984c181484bb, type: 2}
+  gain_gold: 0
+  gain_xp: 0
+  hp_heal: 0
+  text: You gain a new Hatchet card.
+  chain_event: {fileID: 0}

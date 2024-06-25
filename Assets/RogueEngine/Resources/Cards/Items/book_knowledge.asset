@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
+  m_Name: book_knowledge
+  m_EditorClassIdentifier: 
+  id: book_knowledge
+  title: Book of Knowledge
+  art_icon: {fileID: 21300000, guid: d41e4529f3171dd43abf13980c9e1aa0, type: 3}
+  art_full: {fileID: 21300000, guid: 664dcf332ab06c2429606c5273c75878, type: 3}
+  card_type: 0
+  item_type: 26
+  team: {fileID: 11400000, guid: 5c917eefa746ca24193d4308f5418128, type: 2}
+  rarity: {fileID: 11400000, guid: 15eaa2a0fbd97f149b3aa87387c160d1, type: 2}
+  mana: 0
+  traits: []
+  stats: []
+  abilities:
+  - {fileID: 11400000, guid: 3f038477474f2d948a220d5fab1d0b2b, type: 2}
+  level_max: 1
+  upgrade_mana: 0
+  cost: 150
+  intent: {fileID: 0}
+  text: At the start of each battle, draw 3 cards.
+  upg_text: 
+  spawn_fx: {fileID: 0}
+  spawn_audio: {fileID: 0}
+  caster_anim: 
+  target_anim: 
+  availability: 0

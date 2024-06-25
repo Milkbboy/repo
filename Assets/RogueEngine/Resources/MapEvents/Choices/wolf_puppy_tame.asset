@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02f13508bc7512499fe479934d42e4e, type: 3}
+  m_Name: wolf_puppy_tame
+  m_EditorClassIdentifier: 
+  id: wolf_puppy_tame
+  depth_min: 0
+  depth_max: 0
+  icon: {fileID: 0}
+  target: 10
+  spend_cards: []
+  spend_items: []
+  spend_ally: []
+  spend_gold: 0
+  hp_damage: 5
+  gain_cards: []
+  gain_items: []
+  gain_ally:
+  - {fileID: 11400000, guid: ea2694712b856f647a6d452d9514c6fa, type: 2}
+  gain_gold: 0
+  gain_xp: 0
+  hp_heal: 0
+  text: 'After a few attemps and many scratches, you finally befriend it.
+
+
+    You
+    lose 5 HP.
+
+    The wolf pup starts following you.'
+  chain_event: {fileID: 0}

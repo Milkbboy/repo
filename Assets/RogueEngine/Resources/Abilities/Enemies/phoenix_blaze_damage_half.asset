@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce5f81e5cc37f547af6923758602c8c, type: 3}
+  m_Name: phoenix_blaze_damage_half
+  m_EditorClassIdentifier: 
+  id: phoenix_blaze_damage_half
+  trigger: 10
+  conditions_trigger: []
+  target: 7
+  conditions_target:
+  - {fileID: 11400000, guid: 41c58513071a53b4e9066a58c439760f, type: 2}
+  filters_target:
+  - {fileID: 11400000, guid: b8ebec56928213c4995e8740d2f2631b, type: 2}
+  - {fileID: 11400000, guid: 507a3373a2fe2e7419a20621a468048f, type: 2}
+  effects:
+  - {fileID: 11400000, guid: 9460749c5b0ac4641b6c71db5c3381ed, type: 2}
+  status: []
+  value: 0
+  upgrade_value: 0
+  bonus_value: 0
+  chain_abilities: []
+  board_fx: {fileID: 0}
+  caster_fx: {fileID: 0}
+  target_fx: {fileID: 1978218510890451076, guid: a12deeffd1eefbb4f878c6692e5363fd,
+    type: 3}
+  cast_audio: {fileID: 0}
+  target_audio: {fileID: 0}
+  charge_target: 0
+  title: 
+  desc: 

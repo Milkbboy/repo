@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7edf116efdfa73646a6de43812f81a4a, type: 3}
+  m_Name: add_speed_once
+  m_EditorClassIdentifier: 
+  id: add_speed_once
+  effect: 7
+  duration: 20
+  is_negative: 0
+  title: Speed +
+  icon: {fileID: 21300000, guid: b4fd0554231eff54185ec98e27553d94, type: 3}
+  desc: 'Increased speed this turn.
+
+    Highest speed goes first each round.'
+  status_fx: {fileID: 0}
+  animation: 
