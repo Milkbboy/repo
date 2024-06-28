@@ -6,21 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/RogueEngine/Scenes/Menu/LoginMenu.unity
+    path: Assets/1.RogueEngine/Scenes/Menu/LoginMenu.unity
     guid: 8cbdb492db4e09042a4393591c0007e5
   - enabled: 1
-    path: Assets/RogueEngine/Scenes/Menu/Menu.unity
+    path: Assets/1.RogueEngine/Scenes/Menu/Menu.unity
     guid: 4566b59cd2acb7347b68ebb689bbe171
   - enabled: 1
-    path: Assets/RogueEngine/Scenes/Game/GameSetup.unity
+    path: Assets/1.RogueEngine/Scenes/Game/GameSetup.unity
     guid: 3b2ce7b782dbdea47ad24e4f7e52d451
   - enabled: 1
-    path: Assets/RogueEngine/Scenes/Game/Map.unity
+    path: Assets/1.RogueEngine/Scenes/Game/Map.unity
     guid: 0ca890b6f51041b4fa6690a9dc90a5d2
   - enabled: 1
-    path: Assets/RogueEngine/Scenes/Game/BattleForest.unity
+    path: Assets/1.RogueEngine/Scenes/Game/BattleForest.unity
     guid: f0ed4c87b3263b245933a7fb794898b8
   - enabled: 1
-    path: Assets/RogueEngine/Scenes/Game/BattleVolcano.unity
+    path: Assets/1.RogueEngine/Scenes/Game/BattleVolcano.unity
     guid: 8fdaea57529455c439d9b4e21baa38e2
   m_configObjects: {}
