@@ -165,7 +165,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.IndieMarc.RogueEngine
-    Standalone: com.Indie-Marc.RogueEngine
+    Standalone: com.DefaultCompany.Card
   buildNumber:
     Standalone: 0
     VisionOS: 0
