@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b38bf914f06ab640a3d5c50da8e0007, type: 3}
   m_Name: CardData_Yellow
   m_EditorClassIdentifier: 
-  uid: 
-  cardName: 
-  description: 
+  uid: Card_Yellow
+  cardName: Yellow
+  description: yellow color card
   attack: 0
-  hp: 0
+  hp: 5
