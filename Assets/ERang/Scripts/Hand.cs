@@ -1,25 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ERang;
 
 namespace ERang
 {
-    public class DataLoader : MonoBehaviour
+    public class Hand : MonoBehaviour
     {
+        private List<Card> cards = new List<Card>();
+
         // Start is called before the first frame update
         void Start()
         {
-            CardData.Load("ExcelExports/CardItems");
-            Debug.Log("CardData loaded");
 
-            Champion.Load();
-            Debug.Log("Champion loaded");
         }
 
         // Update is called once per frame
         void Update()
         {
+
         }
     }
 }

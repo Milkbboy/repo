@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724180699ddfffa43b054f99cb069a8c, type: 3}
+  m_Name: CardItems
+  m_EditorClassIdentifier: 
+  cards:
+  - uid: a
+    name: card_a
+    desc: "\uCE74\uB4DC a"
+    hp: 100
+    atk: 4
+    def: 0
+    cost: 1
+  - uid: b
+    name: card_b
+    desc: "\uCE74\uB4DC b"
+    hp: 220
+    atk: 3
+    def: 0
+    cost: 1
+  - uid: c
+    name: card_c
+    desc: "\uCE74\uB4DC c"
+    hp: 330
+    atk: 2
+    def: 0
+    cost: 2
+  - uid: d
+    name: card_d
+    desc: "\uCE74\uB4DC d"
+    hp: 440
+    atk: 1
+    def: 1
+    cost: 2
