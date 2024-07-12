@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
-using ERang;
 
 namespace ERang
 {
@@ -10,16 +10,8 @@ namespace ERang
         // Start is called before the first frame update
         void Start()
         {
-            CardData.Load("ExcelExports/CardItems");
-            Debug.Log("CardData loaded");
-
-            Champion.Load();
-            Debug.Log("Champion loaded");
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
+            CardData.Load("ExcelExports/ExcelCard");
+            ChampionData.Load("ExcelExports/ExcelChampion");
         }
     }
 }

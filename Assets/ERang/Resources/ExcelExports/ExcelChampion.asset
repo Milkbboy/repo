@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13f180c292cc40f478c5ea755a651ffc, type: 3}
-  m_Name: Champions
+  m_Script: {fileID: 11500000, guid: bef819f5f561b264ea0574e01bc115e0, type: 3}
+  m_Name: ExcelChampion
   m_EditorClassIdentifier: 
-  champions:
+  items:
   - uid: champion_a
     name: warrior
     desc: "\uC804\uC0AC"
     hp: 500
     atk: 10
     def: 10
-    startCost: 2
+    mana: 2
     startCard_1: a
     startCard_2: a
     startCard_3: a
@@ -31,7 +31,7 @@ MonoBehaviour:
     hp: 600
     atk: 8
     def: 0
-    startCost: 2
+    mana: 2
     startCard_1: a
     startCard_2: a
     startCard_3: a
@@ -43,7 +43,7 @@ MonoBehaviour:
     hp: 400
     atk: 5
     def: 5
-    startCost: 2
+    mana: 2
     startCard_1: a
     startCard_2: b
     startCard_3: c

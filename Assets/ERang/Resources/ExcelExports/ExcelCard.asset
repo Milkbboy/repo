@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 724180699ddfffa43b054f99cb069a8c, type: 3}
-  m_Name: CardItems
+  m_Script: {fileID: 11500000, guid: abe6c76dca1e39844abc35268e7c45d0, type: 3}
+  m_Name: ExcelCard
   m_EditorClassIdentifier: 
-  cards:
+  items:
   - uid: a
     name: card_a
     desc: "\uCE74\uB4DC a"

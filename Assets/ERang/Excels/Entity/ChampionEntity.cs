@@ -9,7 +9,7 @@ namespace ERang
         public int hp;
         public int atk;
         public int def;
-        public int startCost;
+        public int mana;
         public string startCard_1;
         public string startCard_2;
         public string startCard_3;

@@ -14,11 +14,16 @@ public class ExcelAssetScriptMenu
 	const string ScriptTemplateName = "ExcelAssetScriptTemplete.cs.txt";
 	const string FieldTemplete = "\t//public List<EntityType> #FIELDNAME#; // Replace 'EntityType' to an actual type that is serializable.";
 
-	[MenuItem("Assets/Create/ERang/ExcelAssetScript", false)]
+	[MenuItem("Assets/Create/ERang/ExcelAssetScript", false, 1)]
 	static void CreateScript()
 	{
-		string savePath = EditorUtility.SaveFolderPanel("Save ExcelAssetScript", Application.dataPath, "");
-		if (savePath == "") return;
+		// string savePath = EditorUtility.SaveFolderPanel("Save ExcelAssetScript", Application.dataPath, "");
+		// if (savePath == "") return;
+
+		// 고정된 저장 경로 설정
+		string relativePath = "ERang/Excels/ExcelAssetScripts";
+		string savePath = Path.Combine(Application.dataPath, relativePath);
+		if (!Directory.Exists(savePath)) Directory.CreateDirectory(savePath);
 
 		var selectedAssets = Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets);
 
@@ -34,7 +39,7 @@ public class ExcelAssetScriptMenu
 		AssetDatabase.Refresh();
 	}
 
-	[MenuItem("Assets/Create/ExcelAssetScript", true)]
+	// [MenuItem("Assets/Create/ERang/ExcelAssetScript", true)]
 	static bool CreateScriptValidation()
 	{
 		var selectedAssets = Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets);
