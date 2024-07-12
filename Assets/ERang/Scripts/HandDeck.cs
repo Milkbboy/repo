@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
-    public class Hand : MonoBehaviour
+    public class HandDeck : MonoBehaviour
     {
-        private List<Card> cards = new List<Card>();
+        public List<CardData> handCards = new List<CardData>();
 
         // Start is called before the first frame update
         void Start()

@@ -66,12 +66,26 @@ namespace ERang
 
                 champ_list.Add(championData);
                 champ_dict.Add(championData.uid, championData);
+
+                // Debug.Log("ChampionData loaded: " + championData.championName + " " + championData.uid + " " + championData.atk + " " + championData.hp + " " + championData.def + " " + championData.mana + " " + championData.startCardUids.Count);
             }
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Debug.Log("ChampionData loaded");
+            Debug.Log("ChampionData load complete");
+        }
+
+        public static ChampionData GetChampionData(string uid)
+        {
+            Debug.Log("GetChampionData: " + uid);
+
+            if (champ_dict.ContainsKey(uid))
+            {
+                return champ_dict[uid];
+            }
+
+            return null;
         }
     }
 }

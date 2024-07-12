@@ -7,11 +7,14 @@ namespace ERang
 {
     public class DataLoader : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             CardData.Load("ExcelExports/ExcelCard");
             ChampionData.Load("ExcelExports/ExcelChampion");
+        }
+        // Start is called before the first frame update
+        void Start()
+        {
         }
     }
 }

@@ -17,13 +17,13 @@ namespace ERang
 
         public void Initialize(CardEntity cardEntity)
         {
-            this.uid = cardEntity.uid;
-            this.cardName = cardEntity.name;
-            this.desc = cardEntity.desc;
-            this.cost = cardEntity.cost;
-            this.atk = cardEntity.atk;
-            this.def = cardEntity.def;
-            this.hp = cardEntity.hp;
+            uid = cardEntity.uid;
+            cardName = cardEntity.name;
+            desc = cardEntity.desc;
+            cost = cardEntity.cost;
+            atk = cardEntity.atk;
+            def = cardEntity.def;
+            hp = cardEntity.hp;
         }
 
         public static List<CardData> card_list = new List<CardData>();
@@ -62,6 +62,11 @@ namespace ERang
             AssetDatabase.Refresh();
 
             Debug.Log("CardData loaded");
+        }
+
+        public static CardData GetCardData(string uid)
+        {
+            return card_dict[uid];
         }
     }
 }
