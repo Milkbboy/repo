@@ -143,8 +143,16 @@ public class ExcelImporter : AssetPostprocessor
 	{
 		var entity = Activator.CreateInstance(entityType);
 
+		// Debug.Log($"row.RowNum: ${row.RowNum}, columnNames.Count: {columnNames.Count}");
+
 		for (int i = 0; i < columnNames.Count; i++)
 		{
+			// Debug.Log($"columnName[{i}]: {columnNames[i]}");
+			if (columnNames[i].StartsWith("#"))
+			{
+				continue;
+			}
+
 			FieldInfo entityField = entityType.GetField(
 				columnNames[i],
 				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
@@ -159,6 +167,7 @@ public class ExcelImporter : AssetPostprocessor
 			{
 				object fieldValue = CellToFieldObject(cell, entityField);
 				entityField.SetValue(entity, fieldValue);
+				// Debug.Log(columnNames[i]);
 			}
 			catch
 			{

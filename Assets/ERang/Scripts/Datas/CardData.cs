@@ -7,27 +7,37 @@ namespace ERang
 {
     public class CardData : ScriptableObject
     {
-        public string uid;
-        public string cardName;
-        public string desc;
-        public int cost;
+        public int card_id;
+        public string cardNameDesc_id;
+        public string cardDesc_id;
+        public string cardType;
+        public int creatureAI_id;
+        public int costMana;
+        public int hp;
         public int atk;
         public int def;
-        public int hp;
+        public string ability_id;
+        public string extinction;
+        public string completeExtinction;
 
         public void Initialize(CardEntity cardEntity)
         {
-            uid = cardEntity.uid;
-            cardName = cardEntity.name;
-            desc = cardEntity.desc;
-            cost = cardEntity.cost;
-            atk = cardEntity.atk;
-            def = cardEntity.def;
-            hp = cardEntity.hp;
+            card_id = cardEntity.Card_id;
+            cardNameDesc_id = cardEntity.CardNameDesc_id;
+            cardDesc_id = cardEntity.CardDesc_id;
+            cardType = cardEntity.CardType;
+            creatureAI_id = cardEntity.CreatureAI_id;
+            costMana = cardEntity.CostMana;
+            hp = cardEntity.Hp;
+            atk = cardEntity.Atk;
+            def = cardEntity.Def;
+            ability_id = cardEntity.Ability_id;
+            extinction = cardEntity.Extinction;
+            completeExtinction = cardEntity.CompleteExtinction;
         }
 
         public static List<CardData> card_list = new List<CardData>();
-        public static Dictionary<string, CardData> card_dict = new Dictionary<string, CardData>();
+        public static Dictionary<int, CardData> card_dict = new Dictionary<int, CardData>();
 
         public static void Load(string path = "")
         {
@@ -42,7 +52,7 @@ namespace ERang
 
             foreach (var cardEntity in cardItems.items)
             {
-                string assetPath = $"Assets/ERang/Resources/Cards/{cardEntity.name}.asset";
+                string assetPath = $"Assets/ERang/Resources/Cards/{cardEntity.Card_id}.asset";
                 CardData cardData = AssetDatabase.LoadAssetAtPath<CardData>(assetPath);
 
                 if (cardData == null)
@@ -55,7 +65,7 @@ namespace ERang
                 cardData.Initialize(cardEntity);
 
                 card_list.Add(cardData);
-                card_dict.Add(cardData.uid, cardData);
+                card_dict.Add(cardData.card_id, cardData);
             }
 
             AssetDatabase.SaveAssets();
@@ -64,9 +74,9 @@ namespace ERang
             Debug.Log("CardData loaded");
         }
 
-        public static CardData GetCardData(string uid)
+        public static CardData GetCardData(int card_id)
         {
-            return card_dict[uid];
+            return card_dict[card_id];
         }
     }
 }

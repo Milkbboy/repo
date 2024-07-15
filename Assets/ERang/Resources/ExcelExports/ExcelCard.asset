@@ -13,31 +13,75 @@ MonoBehaviour:
   m_Name: ExcelCard
   m_EditorClassIdentifier: 
   items:
-  - uid: a
-    name: card_a
-    desc: "\uCE74\uB4DC a"
-    hp: 100
-    atk: 4
-    def: 0
-    cost: 1
-  - uid: b
-    name: card_b
-    desc: "\uCE74\uB4DC b"
-    hp: 220
-    atk: 3
-    def: 0
-    cost: 1
-  - uid: c
-    name: card_c
-    desc: "\uCE74\uB4DC c"
-    hp: 330
-    atk: 2
-    def: 0
-    cost: 2
-  - uid: d
-    name: card_d
-    desc: "\uCE74\uB4DC d"
-    hp: 440
-    atk: 1
-    def: 1
-    cost: 2
+  - Card_id: 1001
+    CardNameDesc_id: CardName_1001
+    CardDesc_id: CardDesc_1001
+    CardType: Magic
+    CreatureAI_id: 0
+    CostMana: 1
+    Hp: 0
+    Atk: 0
+    Def: 0
+    Ability_id: 9001001
+    Extinction: 
+    CompleteExtinction: 
+  - Card_id: 1002
+    CardNameDesc_id: CardName_1002
+    CardDesc_id: CardDesc_1002
+    CardType: Creature
+    CreatureAI_id: 1001
+    CostMana: 2
+    Hp: 0
+    Atk: 5
+    Def: 3
+    Ability_id: 9001002
+    Extinction: 
+    CompleteExtinction: 
+  - Card_id: 1003
+    CardNameDesc_id: CardName_1003
+    CardDesc_id: CardDesc_1003
+    CardType: Building
+    CreatureAI_id: 0
+    CostMana: 3
+    Hp: 150
+    Atk: 0
+    Def: 0
+    Ability_id: 9001003
+    Extinction: 
+    CompleteExtinction: TRUE
+  - Card_id: 1004
+    CardNameDesc_id: CardName_1004
+    CardDesc_id: CardDesc_1004
+    CardType: Charm
+    CreatureAI_id: 0
+    CostMana: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    Ability_id: 9001004
+    Extinction: 
+    CompleteExtinction: 
+  - Card_id: 1005
+    CardNameDesc_id: CardName_1005
+    CardDesc_id: CardDesc_1005
+    CardType: Curse
+    CreatureAI_id: 0
+    CostMana: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    Ability_id: 9001005
+    Extinction: 
+    CompleteExtinction: 
+  - Card_id: 1006
+    CardNameDesc_id: CardName_1006
+    CardDesc_id: CardDesc_1006
+    CardType: Magic
+    CreatureAI_id: 0
+    CostMana: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    Ability_id: 9001005,9001006
+    Extinction: 
+    CompleteExtinction: TRUE

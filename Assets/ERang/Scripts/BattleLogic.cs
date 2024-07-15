@@ -26,19 +26,19 @@ namespace ERang
                     return;
                 }
 
-                championData.startCardUids.ForEach(uid =>
-                {
-                    CardData cardData = CardData.GetCardData(uid);
+                // championData.startCardUids.ForEach(uid =>
+                // {
+                //     CardData cardData = CardData.GetCardData(uid);
 
-                    if (cardData)
-                    {
-                        handDeck.handCards.Add(cardData);
-                    }
-                    else
-                    {
-                        Debug.LogError($"CardData {uid} is null");
-                    }
-                });
+                //     if (cardData)
+                //     {
+                //         handDeck.handCards.Add(cardData);
+                //     }
+                //     else
+                //     {
+                //         Debug.LogError($"CardData {uid} is null");
+                //     }
+                // });
             }
         }
 
