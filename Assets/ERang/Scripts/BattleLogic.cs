@@ -18,13 +18,13 @@ namespace ERang
             // 처음 시작이면 플레이서 startDeck 설정
             if (turn == 0)
             {
-                ChampionData championData = ChampionData.GetChampionData("champion_a");
+                // MasterData championData = MasterData.GetMasterData("champion_a");
 
-                if (championData == null)
-                {
-                    Debug.LogError("ChampionData is null");
-                    return;
-                }
+                // if (championData == null)
+                // {
+                //     Debug.LogError("ChampionData is null");
+                //     return;
+                // }
 
                 // championData.startCardUids.ForEach(uid =>
                 // {

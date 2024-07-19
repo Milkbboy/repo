@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a26730dce0bfdc4383bb157519f053e, type: 3}
+  m_Name: MonsterCardDataTable
+  m_EditorClassIdentifier: 
+  items:
+  - Card_Id: 1001
+    CardNameDesc_Id: CardName_1001
+    CardDesc_Id: CardDesc_1001
+    CardType: Creature
+    AiGroup_id: 11001
+    CostMana: 1
+    CostGold: 0
+    Hp: 5
+    Atk: 3
+    Def: 1
+    Ability_Id: 
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: 
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 0
+  - Card_Id: 1002
+    CardNameDesc_Id: CardName_1002
+    CardDesc_Id: CardDesc_1002
+    CardType: Creature
+    AiGroup_id: 11002
+    CostMana: 2
+    CostGold: 0
+    Hp: 3
+    Atk: 4
+    Def: 0
+    Ability_Id: 
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: 
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 0
+  - Card_Id: 1003
+    CardNameDesc_Id: CardName_1003
+    CardDesc_Id: CardDesc_1003
+    CardType: Creature
+    AiGroup_id: 11003
+    CostMana: 3
+    CostGold: 50
+    Hp: 1
+    Atk: 6
+    Def: 3
+    Ability_Id: 
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: 
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 0

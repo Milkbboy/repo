@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46db324a6d961734cb7b67e2f97155b0, type: 3}
+  m_Name: CardDataTable
+  m_EditorClassIdentifier: 
+  items:
+  - Card_Id: 1001
+    CardNameDesc_Id: CardName_1001
+    CardDesc_Id: CardDesc_1001
+    CardType: Creature
+    AiGroup_id: 21001
+    CostMana: 2
+    CostGold: 0
+    Hp: 5
+    Atk: 3
+    Def: 0
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: Crotch_Lv1
+    Level_3_img: Crotch_Lv3
+    Level_5_img: Crotch_Lv5
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 1002
+    CardNameDesc_Id: CardName_1002
+    CardDesc_Id: CardDesc_1002
+    CardType: Magic
+    AiGroup_id: 21002
+    CostMana: 1
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: 
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 1003
+    CardNameDesc_Id: CardName_1003
+    CardDesc_Id: CardDesc_1003
+    CardType: Building
+    AiGroup_id: 21003
+    CostMana: 3
+    CostGold: 150
+    Hp: 0
+    Atk: 0
+    Def: 0
+    Extinction: 1
+    CompleteExtinction: 1
+    Level: 0
+    Level_1_img: 
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 0
+  - Card_Id: 1004
+    CardNameDesc_Id: CardName_1004
+    CardDesc_Id: CardDesc_1004
+    CardType: Charm
+    AiGroup_id: 21004
+    CostMana: 0
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: 
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 9000111
+    HandEnd_Ability: 
+    Owner: 0
+  - Card_Id: 1005
+    CardNameDesc_Id: CardName_1005
+    CardDesc_Id: CardDesc_1005
+    CardType: Curse
+    AiGroup_id: 21005
+    CostMana: 0
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: 
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 9000221
+    Owner: 0
+  - Card_Id: 1006
+    CardNameDesc_Id: CardName_1006
+    CardDesc_Id: CardDesc_1006
+    CardType: Magic
+    AiGroup_id: 21006
+    CostMana: 0
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    Extinction: 1
+    CompleteExtinction: 1
+    Level: 0
+    Level_1_img: 
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 0

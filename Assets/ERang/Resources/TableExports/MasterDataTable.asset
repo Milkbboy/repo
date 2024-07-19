@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 022e7f1a8ce506c49a231b8092f4955e, type: 3}
+  m_Name: MasterDataTable
+  m_EditorClassIdentifier: 
+  items:
+  - Master_Id: 1001
+    MasterNameDesc_Id: MasterName_1001
+    MasterDesc_Id: MasterDesc_1001
+    MasterAi_id: 10001
+    Hp: 12
+    Atk: 0
+    Def: 4
+    StartMana: 2
+    MaxMana: 6
+    RechargeMana: 2
+    StartCardDeck_Id: 100101, 100101, 100301, 200101, 300101, 300101, 300201
+    StartArtiFact_Id: 1001
+    StartAbility_Id: 9001001
+  - Master_Id: 1002
+    MasterNameDesc_Id: MasterName_1002
+    MasterDesc_Id: MasterDesc_1002
+    MasterAi_id: 10002
+    Hp: 20
+    Atk: 4
+    Def: 0
+    StartMana: 2
+    MaxMana: 5
+    RechargeMana: 2
+    StartCardDeck_Id: 100103, 100104, 100105, 200102, 200102, 300101, 300201
+    StartArtiFact_Id: 0
+    StartAbility_Id: 9001002, 9001002
+  - Master_Id: 1003
+    MasterNameDesc_Id: MasterName_1003
+    MasterDesc_Id: MasterDesc_1003
+    MasterAi_id: 10003
+    Hp: 13
+    Atk: 2
+    Def: 0
+    StartMana: 2
+    MaxMana: 5
+    RechargeMana: 2
+    StartCardDeck_Id: 100105, 100105, 100305, 200101, 300101, 300101, 300201
+    StartArtiFact_Id: 0
+    StartAbility_Id: 9001004

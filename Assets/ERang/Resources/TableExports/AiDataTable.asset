@@ -1,0 +1,325 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 918738da7b5380541b6d23801c4fe044, type: 3}
+  m_Name: AiDataTable
+  m_EditorClassIdentifier: 
+  items:
+  - Ai_Id: 1001
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70001
+  - Ai_Id: 1002
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 3
+    Atk_Interval: 0.5
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70002
+  - Ai_Id: 1003
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1, 2
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70003
+  - Ai_Id: 1004
+    Type: Ranged
+    Target: Enemy
+    Atk_Type: Automatic
+    Atk_Range: 4
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70004
+  - Ai_Id: 1005
+    Type: Ranged
+    Target: Enemy
+    Atk_Type: Automatic
+    Atk_Range: 4
+    Atk_Cnt: 2
+    Atk_Interval: 0.5
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70005
+  - Ai_Id: 1006
+    Type: Ranged
+    Target: Enemy
+    Atk_Type: Automatic
+    Atk_Range: 3, 4
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70006
+  - Ai_Id: 1007
+    Type: Explosion
+    Target: Enemy
+    Atk_Type: Automatic
+    Atk_Range: 4
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: -2
+    Ability_id: 70007
+  - Ai_Id: 1008
+    Type: Ranged
+    Target: Random Enemy
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70008
+  - Ai_Id: 1009
+    Type: Ranged
+    Target: Random Enemy Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 4
+    Atk_Interval: 0.5
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70009
+  - Ai_Id: 1010
+    Type: Ranged
+    Target: Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70010
+  - Ai_Id: 1011
+    Type: Ranged
+    Target: All Enemy
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 2
+    Atk_Interval: 0.5
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70011
+  - Ai_Id: 1012
+    Type: Ranged
+    Target: All Enemy Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70012
+  - Ai_Id: 1013
+    Type: Ranged
+    Target: Friendly
+    Atk_Type: Select Friendly
+    Atk_Range: 
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70013
+  - Ai_Id: 1014
+    Type: Ranged
+    Target: All Friendly Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70014
+  - Ai_Id: 2001
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70015
+  - Ai_Id: 2002
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 50
+    Explosion_Shock: 0
+    Ability_id: 70016
+  - Ai_Id: 2003
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70017
+  - Ai_Id: 2004
+    Type: DeBuff
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70018
+  - Ai_Id: 3001
+    Type: Ranged
+    Target: Enemy
+    Atk_Type: Automatic
+    Atk_Range: 4
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70019
+  - Ai_Id: 3002
+    Type: Ranged
+    Target: Enemy
+    Atk_Type: Automatic
+    Atk_Range: 3, 4
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70020
+  - Ai_Id: 3003
+    Type: Ranged
+    Target: Enemy
+    Atk_Type: Automatic
+    Atk_Range: 4
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70021
+  - Ai_Id: 4001
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70022
+  - Ai_Id: 4002
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 50
+    Explosion_Shock: 0
+    Ability_id: 70023
+  - Ai_Id: 4003
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 1, 2
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70024
+  - Ai_Id: 4004
+    Type: Melee
+    Target: All Enemy Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 70025
+  - Ai_Id: 90001
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 90001
+  - Ai_Id: 90002
+    Type: Enemy
+    Target: Select Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 90002
+  - Ai_Id: 90003
+    Type: Build
+    Target: Self
+    Atk_Type: Select Field
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 90003
+  - Ai_Id: 90004
+    Type: Buff
+    Target: All Friendly Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 
+  - Ai_Id: 90005
+    Type: DeBuff
+    Target: All Friendly Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 
+  - Ai_Id: 90006
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 90004, 90005

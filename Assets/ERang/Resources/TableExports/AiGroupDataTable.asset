@@ -1,0 +1,168 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252a875f613cf7f41a9d092690b95630, type: 3}
+  m_Name: AiGroupDataTable
+  m_EditorClassIdentifier: 
+  items:
+  - AiGroup_Id: 11001
+    Type: Repeat
+    Ai_Group_1: 2001, 2002
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 1001
+    Reaction_Condition_1_Ratio: 0.5
+    Reaction_Ai_1: 2004
+    Reaction_Condition_2: 1002
+    Reaction_Condition_2_Ratio: 1
+    Reaction_Ai_2: 2003
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 11002
+    Type: Repeat
+    Ai_Group_1: 3001
+    Ai_Group_2: 3002
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 2001
+    Reaction_Condition_1_Ratio: 0.3
+    Reaction_Ai_1: 2003
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 11003
+    Type: Random
+    Ai_Group_1: 4001
+    Ai_Group_2: 4002
+    Ai_Group_3: 4003
+    Ai_Group_4: 4004
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 21001
+    Type: Repeat
+    Ai_Group_1: 90001
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 21002
+    Type: Repeat
+    Ai_Group_1: 90002
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 21003
+    Type: Repeat
+    Ai_Group_1: 90003
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 21004
+    Type: Repeat
+    Ai_Group_1: 
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 21005
+    Type: Repeat
+    Ai_Group_1: 
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 21006
+    Type: Repeat
+    Ai_Group_1: 
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0

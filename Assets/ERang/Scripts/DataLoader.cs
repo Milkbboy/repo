@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using ERang.Data;
 
 namespace ERang
 {
@@ -9,9 +7,13 @@ namespace ERang
     {
         void Awake()
         {
-            CardData.Load("ExcelExports/ExcelCard");
-            ChampionData.Load("ExcelExports/ExcelChampion");
+            CardData.Load("TableExports/CardDataTable");
+            MasterData.Load("TableExports/MasterDataTable");
+            AiData.Load("TableExports/AiDataTable");
+            AiGroupData.Load("TableExports/AiGroupDataTable");
+            ConditionData.Load("TableExports/ConditionDataTable");
         }
+
         // Start is called before the first frame update
         void Start()
         {
