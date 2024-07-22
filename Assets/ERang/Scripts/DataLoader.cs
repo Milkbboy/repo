@@ -12,6 +12,7 @@ namespace ERang
             AiData.Load("TableExports/AiDataTable");
             AiGroupData.Load("TableExports/AiGroupDataTable");
             ConditionData.Load("TableExports/ConditionDataTable");
+            AbilityData.Load("TableExports/AbilityDataTable");
         }
 
         // Start is called before the first frame update

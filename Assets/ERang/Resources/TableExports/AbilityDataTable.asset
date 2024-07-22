@@ -1,0 +1,431 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb0df618ed9e1fa449213717fb86a6a2, type: 3}
+  m_Name: AbilityDataTable
+  m_EditorClassIdentifier: 
+  items:
+  - AbilityData_Id: 70001
+    AbilityType: Damage
+    Value: 5
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+  - AbilityData_Id: 70002
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: Atk_02
+    FxSound: 
+  - AbilityData_Id: 70003
+    AbilityType: Damage
+    Value: 4
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+  - AbilityData_Id: 70004
+    AbilityType: Damage
+    Value: 4
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: Arrow_01
+    SkillIcon: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+  - AbilityData_Id: 70005
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: Arrow_01
+    SkillIcon: 
+    SkillViewIcon: Atk_02
+    FxSound: 
+  - AbilityData_Id: 70006
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: ArrowRain_01
+    SkillIcon: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+  - AbilityData_Id: 70007
+    AbilityType: Damage
+    Value: 5
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_02
+    PtojectileFx: Boom_01
+    SkillIcon: 
+    SkillViewIcon: Atk_04
+    FxSound: 
+  - AbilityData_Id: 70008
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 70009
+    AbilityType: Damage
+    Value: 4
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 70010
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitFireball_01
+    PtojectileFx: FireBall_01
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 70011
+    AbilityType: Damage
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitBlizzard_01
+    PtojectileFx: Blizzard_01
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 70012
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitFireWall_01
+    PtojectileFx: FireWall_01
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 70013
+    AbilityType: Heal
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitHeal_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 70014
+    AbilityType: AtkUp
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitAtkUp_01
+    PtojectileFx: 
+    SkillIcon: AtkUp_01
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 70015
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+  - AbilityData_Id: 70016
+    AbilityType: Damage
+    Value: 5
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: Atk_02
+    FxSound: 
+  - AbilityData_Id: 70017
+    AbilityType: DefUp
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_Buff_01
+    PtojectileFx: 
+    SkillIcon: DefUp_01
+    SkillViewIcon: Skill_01
+    FxSound: 
+  - AbilityData_Id: 70018
+    AbilityType: BrokenDef
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_DeBuff_01
+    PtojectileFx: 
+    SkillIcon: DefDown_01
+    SkillViewIcon: Skill_01
+    FxSound: 
+  - AbilityData_Id: 70019
+    AbilityType: Damage
+    Value: 5
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: Arrow_01
+    SkillIcon: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+  - AbilityData_Id: 70020
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: ArrowRain_01
+    SkillIcon: 
+    SkillViewIcon: Atk_02
+    FxSound: 
+  - AbilityData_Id: 70021
+    AbilityType: ChargeDamage
+    Value: 8
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_03
+    PtojectileFx: Arrow_02
+    SkillIcon: 
+    SkillViewIcon: Skill_01
+    FxSound: 
+  - AbilityData_Id: 70022
+    AbilityType: Damage
+    Value: 5
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+  - AbilityData_Id: 70023
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: Atk_02
+    FxSound: 
+  - AbilityData_Id: 70024
+    AbilityType: AtkUp
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 3
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitAtkUp_01
+    PtojectileFx: 
+    SkillIcon: AtkUp_01
+    SkillViewIcon: Skill_01
+    FxSound: 
+  - AbilityData_Id: 70025
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+  - AbilityData_Id: 90001
+    AbilityType: Damage
+    Value: 4
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 90002
+    AbilityType: Damage
+    Value: 5
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: HitFireball_01
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 90003
+    AbilityType: AddGoldPer
+    Value: 0
+    Ratio: 0.2
+    Type: Passive
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: AddGold_01
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 90004
+    AbilityType: AddMana
+    Value: 1
+    Ratio: 0
+    Type: OnHand
+    Duration: 1
+    SkillAnim: 
+    SkillFx: Skill_Charm_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 90005
+    AbilityType: BrokenDef
+    Value: 2
+    Ratio: 0
+    Type: OnHand
+    Duration: 2
+    SkillAnim: 
+    SkillFx: Skill_Curse_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 90006
+    AbilityType: AddGold
+    Value: 30
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 90007
+    AbilityType: AddGoldPer
+    Value: 0
+    Ratio: 0.1
+    Type: Onstage
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: AddGold_01
+    SkillViewIcon: 
+    FxSound: 
