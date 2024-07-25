@@ -50,10 +50,6 @@ namespace ERang
 
         void OnMouseDrag()
         {
-            if (selected == false)
-            {
-            }
-
             selected = true;
 
             // 마우스의 현재 화면 좌표를 가져옵니다.

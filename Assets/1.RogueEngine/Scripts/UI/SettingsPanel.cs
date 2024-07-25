@@ -110,7 +110,7 @@ namespace RogueEngine.UI
             if (resolutions.Count > 0)
             {
                 Resolution resolu = resolutions[reso_value];
-                string reso_tag = resolu.width + "x" + resolu.height + " " + Screen.currentResolution.refreshRate + "Hz";
+                string reso_tag = resolu.width + "x" + resolu.height + " " + Screen.currentResolution.refreshRateRatio + "Hz";
                 resolution_txt.text = reso_tag;
             }
         }
@@ -163,12 +163,12 @@ namespace RogueEngine.UI
         {
             Hide();
         }
-        
+
         private int GetResolutionIndex()
         {
             int dist_min = 99999;
             int closest = 0;
-            for (int i=0; i<resolutions.Count; i++)
+            for (int i = 0; i < resolutions.Count; i++)
             {
                 Resolution res = resolutions[i];
                 int dist = Mathf.Abs(res.height - Screen.height) + Mathf.Abs(res.width - Screen.width);

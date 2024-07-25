@@ -3,6 +3,9 @@ using ERang.Data;
 
 namespace ERang
 {
+    /**
+    * @brief 데이터를 로드하는 클래스
+    */
     public class DataLoader : MonoBehaviour
     {
         void Awake()

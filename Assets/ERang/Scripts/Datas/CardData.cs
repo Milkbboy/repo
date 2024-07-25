@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using ERang.Table;
+using Mono.Cecil;
 
 namespace ERang.Data
 {
@@ -31,6 +32,9 @@ namespace ERang.Data
         public int Owner; // 개성 카드에만 입력. 해당 카드를 소유한 마스터의 Id를 입력
         public List<int> abilityIds = new List<int>();
 
+        [Header("Display")]
+        public Texture2D cardTexture;
+
         public void Initialize(CardDataEntity cardEntity)
         {
             card_id = cardEntity.Card_Id;
@@ -51,6 +55,15 @@ namespace ERang.Data
             handStart_Ability = cardEntity.HandStart_Ability;
             handEnd_Ability = cardEntity.HandEnd_Ability;
             Owner = cardEntity.Owner;
+
+            // 이미지 로드 및 cardImange 에 할당
+            string texturePath = $"Textures/{level_1_img}";
+            cardTexture = Resources.Load<Texture2D>(texturePath);
+
+            if (cardTexture == null)
+            {
+                Debug.LogError("Card Texture not found: " + texturePath);
+            }
         }
 
         public static List<CardData> card_list = new List<CardData>();
@@ -97,6 +110,11 @@ namespace ERang.Data
         public static CardData GetCardData(int card_id)
         {
             return card_dict[card_id];
+        }
+
+        public Texture2D GetCardTexture()
+        {
+            return cardTexture;
         }
     }
 }

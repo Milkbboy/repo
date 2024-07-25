@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataTable
   m_EditorClassIdentifier: 
   items:
-  - Card_Id: 1001
+  - Card_Id: 100101
     CardNameDesc_Id: CardName_1001
     CardDesc_Id: CardDesc_1001
     CardType: Creature
@@ -32,7 +32,7 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
-  - Card_Id: 1002
+  - Card_Id: 100301
     CardNameDesc_Id: CardName_1002
     CardDesc_Id: CardDesc_1002
     CardType: Magic
@@ -45,13 +45,13 @@ MonoBehaviour:
     Extinction: 0
     CompleteExtinction: 0
     Level: 0
-    Level_1_img: 
-    Level_3_img: 
-    Level_5_img: 
+    Level_1_img: FireBall_Lv1
+    Level_3_img: FireBall_Lv3
+    Level_5_img: FireBall_Lv5
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
-  - Card_Id: 1003
+  - Card_Id: 200101
     CardNameDesc_Id: CardName_1003
     CardDesc_Id: CardDesc_1003
     CardType: Building
@@ -64,13 +64,13 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 1
     Level: 0
-    Level_1_img: 
-    Level_3_img: 
-    Level_5_img: 
+    Level_1_img: GoldMine_Lv1
+    Level_3_img: GoldMine_Lv3
+    Level_5_img: GoldMine_Lv5
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 0
-  - Card_Id: 1004
+  - Card_Id: 300101
     CardNameDesc_Id: CardName_1004
     CardDesc_Id: CardDesc_1004
     CardType: Charm
@@ -83,13 +83,13 @@ MonoBehaviour:
     Extinction: 0
     CompleteExtinction: 0
     Level: 0
-    Level_1_img: 
-    Level_3_img: 
-    Level_5_img: 
+    Level_1_img: Abundance_Lv1
+    Level_3_img: Abundance_Lv3
+    Level_5_img: Abundance_Lv5
     HandStart_Ability: 9000111
     HandEnd_Ability: 
     Owner: 0
-  - Card_Id: 1005
+  - Card_Id: 300201
     CardNameDesc_Id: CardName_1005
     CardDesc_Id: CardDesc_1005
     CardType: Curse
@@ -102,9 +102,9 @@ MonoBehaviour:
     Extinction: 0
     CompleteExtinction: 0
     Level: 0
-    Level_1_img: 
-    Level_3_img: 
-    Level_5_img: 
+    Level_1_img: Protect_Lv1
+    Level_3_img: Protect_Lv3
+    Level_5_img: Protect_Lv5
     HandStart_Ability: 
     HandEnd_Ability: 9000221
     Owner: 0
@@ -121,9 +121,9 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 1
     Level: 0
-    Level_1_img: 
-    Level_3_img: 
-    Level_5_img: 
+    Level_1_img: Frican_Lv1
+    Level_3_img: Frican_Lv3
+    Level_5_img: Frican_Lv5
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 0
