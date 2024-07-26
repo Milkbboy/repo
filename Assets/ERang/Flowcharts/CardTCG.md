@@ -17,17 +17,3 @@ sequenceDiagram
     CardUI --> CardUI: SetCard
     deactivate CardUI
 ```
-```mermaid
-flowchart TB
-    subgraph HandCardArea
-    Update --> SpawnNewCard
-    end
-    SpawnNewCard -->|Instantiate| HandCard
-    subgraph HandCard
-    SetCard --> CardUI
-    end
-    subgraph CardUI
-    CardUI --> CardUI:SetCard
-    CardUI --> 이미지설정
-    end
-```
