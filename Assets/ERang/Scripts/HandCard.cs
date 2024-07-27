@@ -1,28 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ERang.Data;
 
 namespace ERang
 {
     public class HandCard : MonoBehaviour
     {
-        private CardData cardData;
         private CardUI cardUI;
         private Vector3 originalPosition;
 
         public int cardId;
-        public int costMana;
-        public int costGold;
-        public int hp;
-        public int atk;
-        public int def;
-        public int level;
+        private bool drag = false;
 
+        // Start is called before the first frame update
         void Awake()
         {
             cardUI = GetComponent<CardUI>();
         }
+
+        // 카드 hp, atk, def, costMana, costGold 등은 cardData 의 기본 값에서 해당 카드의 ability 로 최종 값을 결정하자.
 
         // Start is called before the first frame update
         void Start()
@@ -38,8 +34,9 @@ namespace ERang
 
         void OnMouseDown()
         {
-            Debug.Log("Clicked card: " + cardData.card_id);
-            originalPosition = transform.position;
+            Debug.Log("Clicked card: " + cardId);
+
+            drag = true;
         }
 
         void OnMouseDrag()
@@ -47,29 +44,43 @@ namespace ERang
             Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
-            transform.position = objPosition;
+            transform.position = new Vector3(objPosition.x, objPosition.y, originalPosition.z - 0.05f);
+            drag = false;
         }
 
         void OnMouseUp()
         {
-            transform.position = originalPosition;
+            GameObject fieldSlotObj = Field.Instance.NeareastFieldSlot(transform.position);
+
+            if (fieldSlotObj != null)
+            {
+                // Debug.Log($"slot: {fieldSlot.slot}");
+                // 카드를 놓을 수 있는 fieldSlot 이 존재하면 카드를 놓는다.
+                FieldSlot fieldSlot = fieldSlotObj.GetComponent<FieldSlot>();
+                fieldSlot.GetComponent<CardUI>().SetCard(cardId);
+
+                // HandDeck 에서 카드를 제거
+                HandDeck.Instance.RemoveCard(this);
+            }
+            else
+            {
+                // Debug.Log("No slot");
+                // 원래 위치로 돌아가게 함
+                transform.position = originalPosition;
+            }
         }
 
-        public void SetCard(CardData cardData)
+        public void SetCard(int cardId)
         {
-            this.cardData = cardData;
-
-            // this.cardData 의 값을 변경하면 reference type 이기 때문에 cardData 의 값도 변경됨
-            cardId = cardData.card_id;
-            costMana = cardData.costMana;
-            costGold = cardData.costGold;
-            hp = cardData.hp;
-            atk = cardData.atk;
-            def = cardData.def;
-            level = cardData.level;
+            this.cardId = cardId;
 
             // 카드 ui 설정
-            cardUI.SetCard(cardData);
+            cardUI.SetCard(cardId);
+        }
+
+        public bool IsDrag()
+        {
+            return drag;
         }
     }
 }

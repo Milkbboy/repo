@@ -35,19 +35,11 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph HandCard
-    OnTriggerEnter-- true -->other
-    OnTriggerExit-- false -->other
+    OnTriggerEnter --> other
+    OnTriggerExit --> other
     OnMouseUp
     end
-    
-    subgraph Field
-    UpdateOverlappedFieldSlot --- slots
-    slots([ List#lt;FieldSlot#gt; ])
-    slots --> find{ Is Overlapped<br>FieldSlot }
-    find -- Yes --> found[ FieldSlot ]
-    find -- no --> End
-    end
-    
+
     subgraph FieldSlot
     SetOverlap-. true .-> overlap
     SetOverlap-. false .-> overlap
@@ -57,7 +49,12 @@ flowchart TB
     occupy([ isOccupied ])
     cardId([ cardId ])
     end
-    
-    found -- "cardId, true" --> SetOccupy
-    SetOccupy -- "slotId, fieldType" --> SetField
+
+    subgraph Field
+    UpdateOverlappedFieldSlot --- slots
+    slots([ List#lt;FieldSlot#gt; ])
+    slots --> find{ Is Overlapped<br>FieldSlot }
+    find -- Yes --> found[ FieldSlot ]
+    find -- no --> End
+    end
 ```

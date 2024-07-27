@@ -12,6 +12,9 @@ namespace ERang
         public int turn = 0;
         public int masterId = 1001;
 
+        // 인게임에서 사용되는 마스터 카드 리스트
+        private static List<Card> masterCards = new List<Card>();
+
         // Start is called before the first frame update
         void Start()
         {
