@@ -10,6 +10,7 @@ namespace ERang
         private Vector3 originalPosition;
 
         public int cardId;
+        public string cardUid;
         private bool drag = false;
 
         // Start is called before the first frame update
@@ -34,7 +35,7 @@ namespace ERang
 
         void OnMouseDown()
         {
-            Debug.Log("Clicked card: " + cardId);
+            Debug.Log("OnMouseDown card: " + cardId);
 
             drag = true;
         }
@@ -54,10 +55,11 @@ namespace ERang
 
             if (fieldSlotObj != null)
             {
-                // Debug.Log($"slot: {fieldSlot.slot}");
+                Card card = Master.Instance.GetHandCard(cardUid);
+
                 // 카드를 놓을 수 있는 fieldSlot 이 존재하면 카드를 놓는다.
                 FieldSlot fieldSlot = fieldSlotObj.GetComponent<FieldSlot>();
-                fieldSlot.GetComponent<CardUI>().SetCard(cardId);
+                fieldSlot.GetComponent<CardUI>().SetCard(card);
 
                 // HandDeck 에서 카드를 제거
                 HandDeck.Instance.RemoveCard(this);
@@ -70,12 +72,13 @@ namespace ERang
             }
         }
 
-        public void SetCard(int cardId)
+        public void SetCard(Card card)
         {
-            this.cardId = cardId;
+            cardUid = card.uid;
+            cardId = card.id;
 
             // 카드 ui 설정
-            cardUI.SetCard(cardId);
+            cardUI.SetCard(card);
         }
 
         public bool IsDrag()

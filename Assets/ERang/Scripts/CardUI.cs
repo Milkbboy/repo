@@ -10,10 +10,10 @@ namespace ERang
     {
         public MeshRenderer cardMeshRenderer;
 
-        public void SetCard(int cardId)
+        public void SetCard(Card card)
         {
-            Debug.Log("CardUI SetCard: " + cardId);
-            CardData cardData = CardData.GetCardData(cardId);
+            // Debug.Log("CardUI SetCard: " + cardId);
+            CardData cardData = CardData.GetCardData(card.id);
             Texture2D cardTexture = cardData.GetCardTexture();
 
             if (!cardTexture)

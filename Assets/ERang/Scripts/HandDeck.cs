@@ -15,6 +15,7 @@ namespace ERang
         public GameObject cardPrefab;
         private float cardSpacing = 1f;
         private List<HandCard> cards = new List<HandCard>();
+        float cardWidth = 0f;
 
         void Awake()
         {
@@ -25,31 +26,25 @@ namespace ERang
         void Start()
         {
             // Debug.Log(cardPrefab.GetComponent<BoxCollider>().size);
+            cardWidth = cardPrefab.GetComponent<BoxCollider>().size.x;
         }
 
         // Update is called once per frame
         void Update()
         {
+        }
 
+        public void SpawnNewCard(Card card)
+        {
+            GameObject cardObj = Instantiate(cardPrefab, transform);
+
+            cardObj.GetComponent<HandCard>().SetCard(card);
+            cards.Add(cardObj.GetComponent<HandCard>());
         }
 
         // 카드 최초 생성
-        public void SpawnNewCards(List<int> cardIds)
+        public void DrawCards()
         {
-            foreach (int cardId in cardIds)
-            {
-                GameObject cardObj = Instantiate(cardPrefab, transform);
-
-                cardObj.GetComponent<CardUI>().SetCard(cardId);
-
-                HandCard handCard = cardObj.GetComponent<HandCard>();
-                handCard.SetCard(cardId);
-
-                cards.Add(handCard);
-
-                Debug.Log("Spawned card: " + cardId);
-            }
-
             // 카드의 너비를 얻기 위해 cardPrefab의 BoxCollider 컴포넌트에서 size.x 값을 사용
             float cardWidth = cardPrefab.GetComponent<BoxCollider>().size.x;
             // 겹치는 정도를 조절하기 위해 cardWidth의 일부를 사용
@@ -67,7 +62,7 @@ namespace ERang
                 // 카드의 Z 위치를 인덱스에 따라 조정하여 위에 있는 카드가 앞으로 오도록 설정
                 // float zPosition = i * zOffset;
 
-                cards[i].transform.localPosition = new Vector3(xPosition, 0, 0);
+                this.cards[i].transform.localPosition = new Vector3(xPosition, 0, 0);
             }
         }
 
