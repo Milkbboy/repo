@@ -51,15 +51,15 @@ namespace ERang
 
         void OnMouseUp()
         {
-            GameObject fieldSlotObj = Field.Instance.NeareastFieldSlot(transform.position);
+            GameObject boardSlotObj = Board.Instance.NeareastBoardSlot(transform.position);
 
-            if (fieldSlotObj != null)
+            if (boardSlotObj != null)
             {
                 Card card = Master.Instance.GetHandCard(cardUid);
 
-                // 카드를 놓을 수 있는 fieldSlot 이 존재하면 카드를 놓는다.
-                FieldSlot fieldSlot = fieldSlotObj.GetComponent<FieldSlot>();
-                fieldSlot.GetComponent<CardUI>().SetCard(card);
+                // 카드를 놓을 수 있는 boardSlot 이 존재하면 카드를 놓는다.
+                BoardSlot boardSlot = boardSlotObj.GetComponent<BoardSlot>();
+                boardSlot.GetComponent<CardUI>().SetCard(card);
 
                 // HandDeck 에서 카드를 제거
                 HandDeck.Instance.RemoveCard(this);

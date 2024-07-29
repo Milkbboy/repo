@@ -94,11 +94,11 @@ GameObject:
   - component: {fileID: 8045897006974528574}
   - component: {fileID: 285940992626332973}
   - component: {fileID: 892779617036634003}
-  - component: {fileID: 6704125993590927331}
   - component: {fileID: 3157150826960349189}
+  - component: {fileID: 8346777839352572465}
   m_Layer: 0
-  m_Name: FieldSlot
-  m_TagString: FieldSlot
+  m_Name: BoardSlot
+  m_TagString: BoardSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,21 +167,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 6.1232336e-17}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6704125993590927331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5312741086512756945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 958a652204ff5a341a6becf414681403, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slot: 0
-  isOccupied: 0
-  isOverlapCard: 0
 --- !u!114 &3157150826960349189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,3 +180,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardMeshRenderer: {fileID: 7219049151278660686}
+--- !u!114 &8346777839352572465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312741086512756945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5d8eb76e2474744901f9e02c22722a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: 0
+  isOccupied: 0
+  isOverlapCard: 0

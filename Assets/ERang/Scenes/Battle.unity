@@ -133,10 +133,9 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_7
+      value: BoardSlot_7
       objectReference: {fileID: 0}
-    - target: {fileID: 6704125993590927331, guid: 1769a32f697a34c4983cb027c0c18c7f,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: slot
       value: 7
       objectReference: {fileID: 0}
@@ -441,13 +440,17 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_4
+      value: BoardSlot_4
       objectReference: {fileID: 0}
-    - target: {fileID: 6704125993590927331, guid: 1769a32f697a34c4983cb027c0c18c7f,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: slot
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 7219049151278660686, guid: 1769a32f697a34c4983cb027c0c18c7f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 404a21c12b1ee4e4d8fdb6628a03b94a, type: 2}
     - target: {fileID: 8045897006974528574, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -526,10 +529,9 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_1
+      value: BoardSlot_1
       objectReference: {fileID: 0}
-    - target: {fileID: 6704125993590927331, guid: 1769a32f697a34c4983cb027c0c18c7f,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: slot
       value: 1
       objectReference: {fileID: 0}
@@ -611,10 +613,9 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_8
+      value: BoardSlot_8
       objectReference: {fileID: 0}
-    - target: {fileID: 6704125993590927331, guid: 1769a32f697a34c4983cb027c0c18c7f,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: slot
       value: 8
       objectReference: {fileID: 0}
@@ -939,8 +940,13 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_0
+      value: BoardSlot_0
       objectReference: {fileID: 0}
+    - target: {fileID: 7219049151278660686, guid: 1769a32f697a34c4983cb027c0c18c7f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e5b72895f1235af40bb19bbc0c963800, type: 2}
     - target: {fileID: 8045897006974528574, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1019,10 +1025,9 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_2
+      value: BoardSlot_2
       objectReference: {fileID: 0}
-    - target: {fileID: 6704125993590927331, guid: 1769a32f697a34c4983cb027c0c18c7f,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: slot
       value: 2
       objectReference: {fileID: 0}
@@ -1247,9 +1252,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1524841215}
-  - component: {fileID: 1524841216}
+  - component: {fileID: 1524841217}
   m_Layer: 0
-  m_Name: Field
+  m_Name: Board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1281,7 +1286,7 @@ Transform:
   - {fileID: 1578082317}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1524841216
+--- !u!114 &1524841217
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1290,10 +1295,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1524841214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81fb08a2f25ee68459cc7f4c5db5ad9c, type: 3}
+  m_Script: {fileID: 11500000, guid: 69093b0146ccc3c42a0f9a19b3a6fc5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filedSlots:
+  boardSlots:
   - {fileID: 1315929801}
   - {fileID: 839099273}
   - {fileID: 1426525414}
@@ -1315,13 +1320,17 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_5
+      value: BoardSlot_5
       objectReference: {fileID: 0}
-    - target: {fileID: 6704125993590927331, guid: 1769a32f697a34c4983cb027c0c18c7f,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: slot
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7219049151278660686, guid: 1769a32f697a34c4983cb027c0c18c7f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 404a21c12b1ee4e4d8fdb6628a03b94a, type: 2}
     - target: {fileID: 8045897006974528574, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1505,13 +1514,17 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_9
+      value: BoardSlot_9
       objectReference: {fileID: 0}
-    - target: {fileID: 6704125993590927331, guid: 1769a32f697a34c4983cb027c0c18c7f,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: slot
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 7219049151278660686, guid: 1769a32f697a34c4983cb027c0c18c7f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e5b72895f1235af40bb19bbc0c963800, type: 2}
     - target: {fileID: 8045897006974528574, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1590,10 +1603,9 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_3
+      value: BoardSlot_3
       objectReference: {fileID: 0}
-    - target: {fileID: 6704125993590927331, guid: 1769a32f697a34c4983cb027c0c18c7f,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: slot
       value: 3
       objectReference: {fileID: 0}
@@ -1675,10 +1687,9 @@ PrefabInstance:
     - target: {fileID: 5312741086512756945, guid: 1769a32f697a34c4983cb027c0c18c7f,
         type: 3}
       propertyPath: m_Name
-      value: FieldSlot_6
+      value: BoardSlot_6
       objectReference: {fileID: 0}
-    - target: {fileID: 6704125993590927331, guid: 1769a32f697a34c4983cb027c0c18c7f,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: slot
       value: 6
       objectReference: {fileID: 0}

@@ -4,13 +4,14 @@ using UnityEngine;
 
 namespace ERang
 {
-    public class Field : MonoBehaviour
+    public class Board : MonoBehaviour
     {
-        public static Field Instance { get; private set; }
+        // Start is called before the first frame update
+        public static Board Instance { get; private set; }
 
-        public GameObject[] filedSlots;
-        private float fieldWidth = 0f;
-        private float fieldSpacing = 0.2f;
+        public GameObject[] boardSlots;
+        private float boardWidth = 0f;
+        private float boardSpacing = 0.2f;
 
         void Awake()
         {
@@ -20,17 +21,17 @@ namespace ERang
         // Start is called before the first frame update
         void Start()
         {
-            fieldWidth = filedSlots[0].GetComponent<BoxCollider>().size.x * filedSlots[0].transform.localScale.x;
+            boardWidth = boardSlots[0].GetComponent<BoxCollider>().size.x * boardSlots[0].transform.localScale.x;
 
-            float totalWidth = (filedSlots.Length - 1) * (fieldWidth + fieldSpacing);
+            float totalWidth = (boardSlots.Length - 1) * (boardWidth + boardSpacing);
             float startX = -totalWidth / 2;
 
-            for (int i = 0; i < filedSlots.Length; i++)
+            for (int i = 0; i < boardSlots.Length; i++)
             {
-                filedSlots[i].GetComponent<FieldSlot>().slot = i;
-                float xPosition = startX + i * (fieldWidth + fieldSpacing);
+                boardSlots[i].GetComponent<BoardSlot>().slot = i;
+                float xPosition = startX + i * (boardWidth + boardSpacing);
 
-                filedSlots[i].transform.position = new Vector3(xPosition, filedSlots[i].transform.position.y, filedSlots[i].transform.position.z);
+                boardSlots[i].transform.position = new Vector3(xPosition, boardSlots[i].transform.position.y, boardSlots[i].transform.position.z);
             }
         }
 
@@ -40,18 +41,18 @@ namespace ERang
 
         }
 
-        public GameObject NeareastFieldSlot(Vector3 position)
+        public GameObject NeareastBoardSlot(Vector3 position)
         {
             GameObject nearestSlot = null;
             float minDistance = float.MaxValue;
 
-            foreach (GameObject slot in filedSlots)
+            foreach (GameObject slot in boardSlots)
             {
-                FieldSlot fieldSlot = slot.GetComponent<FieldSlot>();
+                BoardSlot BoardSlot = slot.GetComponent<BoardSlot>();
 
-                // Debug.Log($"slot: {fieldSlot.slot}, isOverlapCard: {fieldSlot.isOverlapCard}");
+                // Debug.Log($"slot: {BoardSlot.slot}, isOverlapCard: {BoardSlot.isOverlapCard}");
 
-                if (fieldSlot.isOverlapCard == false)
+                if (BoardSlot.isOverlapCard == false)
                 {
                     continue;
                 }
@@ -76,9 +77,9 @@ namespace ERang
 
             foreach (RaycastHit hit in hits)
             {
-                foreach (GameObject slot in filedSlots)
+                foreach (GameObject slot in boardSlots)
                 {
-                    int slotNum = slot.GetComponent<FieldSlot>().slot;
+                    int slotNum = slot.GetComponent<BoardSlot>().slot;
 
                     if (hit.transform.gameObject == slot)
                     {

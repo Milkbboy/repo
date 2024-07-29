@@ -39,5 +39,19 @@ namespace ERang
 
             return null;
         }
+
+        public void HandCardToBoard(string cardUid)
+        {
+            Card card = GetHandCard(cardUid);
+
+            if (card == null)
+            {
+                Debug.LogError($"HandCardToBoard: card is null({cardUid})");
+                return;
+            }
+
+            handCards.Remove(card);
+            boardCards.Add(card);
+        }
     }
 }

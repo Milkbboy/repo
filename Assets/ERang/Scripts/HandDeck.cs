@@ -20,13 +20,15 @@ namespace ERang
         void Awake()
         {
             Instance = this;
+
+            // 카드의 너비를 얻기 위해 cardPrefab의 BoxCollider 컴포넌트에서 size.x 값을 사용
+            cardWidth = cardPrefab.GetComponent<BoxCollider>().size.x;
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            // Debug.Log(cardPrefab.GetComponent<BoxCollider>().size);
-            cardWidth = cardPrefab.GetComponent<BoxCollider>().size.x;
+
         }
 
         // Update is called once per frame
@@ -45,8 +47,6 @@ namespace ERang
         // 카드 최초 생성
         public void DrawCards()
         {
-            // 카드의 너비를 얻기 위해 cardPrefab의 BoxCollider 컴포넌트에서 size.x 값을 사용
-            float cardWidth = cardPrefab.GetComponent<BoxCollider>().size.x;
             // 겹치는 정도를 조절하기 위해 cardWidth의 일부를 사용
             float overlap = cardWidth * 0.05f; // 20% 겹치도록 설정
             cardSpacing = cardWidth + overlap; // 카드 간격 재조정
@@ -68,6 +68,9 @@ namespace ERang
 
         public void RemoveCard(HandCard handCard)
         {
+            Master master = BattleLogic.Instance.GetMaster();
+            master.HandCardToBoard(handCard.cardUid);
+
             cards.Remove(handCard);
             Destroy(handCard.gameObject);
         }
