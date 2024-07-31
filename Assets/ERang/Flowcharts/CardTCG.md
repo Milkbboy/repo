@@ -17,3 +17,11 @@ sequenceDiagram
     CardUI --> CardUI: SetCard
     deactivate CardUI
 ```
+```mermaid
+sequenceDiagram
+    participant BattleUI
+    BattleUI->>GameClient: EndTurn
+    GameClient->>BattleLogic: NextStep
+    BattleLogic->>BattleLogic: EndTurn
+    BattleLogic-->BattleLogic: RemoveFromInitiativeCurrent (배틀 순서 초상화 지우기)
+    BattleLogic->>BattleLogic: StartTurn

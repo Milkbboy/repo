@@ -9,7 +9,6 @@ namespace ERang
     public class CardUI : MonoBehaviour
     {
         public MeshRenderer cardMeshRenderer;
-
         public void SetCard(Card card)
         {
             // Debug.Log("CardUI SetCard: " + cardId);

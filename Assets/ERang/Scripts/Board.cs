@@ -68,29 +68,5 @@ namespace ERang
 
             return nearestSlot;
         }
-
-        // Function to get the filedSlot GameObject at the current mouse position
-        public GameObject GetFiledSlotAtMousePosition()
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] hits = Physics.RaycastAll(ray);
-
-            foreach (RaycastHit hit in hits)
-            {
-                foreach (GameObject slot in boardSlots)
-                {
-                    int slotNum = slot.GetComponent<BoardSlot>().slot;
-
-                    if (hit.transform.gameObject == slot)
-                    {
-                        float distance = Vector3.Distance(hit.point, slot.transform.position);
-                        Debug.Log($"slotNum: {slotNum}, distance: {distance}");
-                        return slot;
-                    }
-                }
-            }
-
-            return null;
-        }
     }
 }

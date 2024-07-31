@@ -25,21 +25,11 @@ namespace ERang
         // Start is called before the first frame update
         void Start()
         {
-            master = new Master();
-
             // 처음 시작이면 플레이어 startDeck 설정
+            master = DataLoader.Instance.GetMaster();
+
             if (turn == 0)
             {
-                MasterData masterData = MasterData.GetMasterData(masterId);
-
-                foreach (int cardId in masterData.startCardIds)
-                {
-                    CardData cardData = CardData.GetCardData(cardId);
-                    Card card = new Card(cardData);
-                    master.allCards.Add(card);
-                    master.deckCards.Add(card);
-                }
-
                 // deck 카드 섞기
                 ShuffleDeck(master.deckCards);
 
