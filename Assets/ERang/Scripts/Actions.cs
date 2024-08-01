@@ -34,8 +34,8 @@ namespace ERang
             // HandDeck 에서 카드 제거
             HandDeck.Instance.RemoveCard(cardUid);
 
-            // Master 의 HandCards => BoardCards 로 이동
-            Master.Instance.HandCardToBoard(cardUid);
+            // Master 의 handCards => boardCreatureCards or boardBuildingCards 로 이동
+            Master.Instance.HandCardToBoard(cardUid, card.type);
         }
 
         public void HandCardUsed(string cardUid)
@@ -45,7 +45,7 @@ namespace ERang
             // HandDeck 에서 카드 제거
             HandDeck.Instance.RemoveCard(cardUid);
 
-            // Master 의 HandCards => GraveCards 로 이동
+            // Master 의 handCards => graveCards 로 이동
             Master.Instance.HandCardToGrave(cardUid);
         }
     }

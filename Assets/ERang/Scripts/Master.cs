@@ -19,9 +19,9 @@ namespace ERang
         // 손에 있는 카드
         public List<Card> handCards = new List<Card>();
         // 보드에 있는 크리쳐 카드
-        public List<Card> boardCards = new List<Card>();
+        public List<Card> boardCreatureCards = new List<Card>();
         // 필드에 있는 건물 카드
-        public List<Card> fieldCards = new List<Card>();
+        public List<Card> boardBuildingCards = new List<Card>();
         // 무덤에 있는 카드
         public List<Card> graveCards = new List<Card>();
         // 소멸한 카드
@@ -50,7 +50,7 @@ namespace ERang
             return null;
         }
 
-        public void HandCardToBoard(string cardUid)
+        public void HandCardToBoard(string cardUid, CardType cardType)
         {
             Card card = GetHandCard(cardUid);
 
@@ -61,9 +61,19 @@ namespace ERang
             }
 
             handCards.Remove(card);
-            boardCards.Add(card);
 
-            Debug.Log($"HandCardToBoard: {cardUid}");
+            if (cardType == CardType.Creature)
+            {
+                boardCreatureCards.Add(card);
+
+                Debug.Log($"HandCardToBoard: {cardUid}, HandCardCount: {handCards.Count}, boardCreatureCardCount: {boardCreatureCards.Count}");
+            }
+            else if (cardType == CardType.Building)
+            {
+                boardBuildingCards.Add(card);
+
+                Debug.Log($"HandCardToBoard: {cardUid}, HandCardCount: {handCards.Count}, boardBuildingCardCount: {boardBuildingCards.Count}");
+            }
         }
 
         public void HandCardToGrave(string cardUid)
@@ -79,7 +89,7 @@ namespace ERang
             handCards.Remove(card);
             graveCards.Add(card);
 
-            Debug.Log($"HandCardToGrave: {cardUid}");
+            Debug.Log($"HandCardToGrave: {cardUid}, HandCardCount: {handCards.Count}, GraveCardCount: {graveCards.Count}");
         }
     }
 }
