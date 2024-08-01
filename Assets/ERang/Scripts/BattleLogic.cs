@@ -25,19 +25,9 @@ namespace ERang
         // Start is called before the first frame update
         void Start()
         {
-            // 처음 시작이면 플레이어 startDeck 설정
-            master = DataLoader.Instance.GetMaster();
+            InitMaster(masterId);
 
-            if (turn == 0)
-            {
-                // deck 카드 섞기
-                ShuffleDeck(master.deckCards);
-
-                // draw staring card
-                DrawCard(handCardCount);
-            }
-
-            // StartTurn();
+            TurnStart();
         }
 
         // Update is called once per frame
@@ -46,6 +36,37 @@ namespace ERang
 
         }
 
+        void TurnStart()
+        {
+            // deck 카드 섞기
+            ShuffleDeck(master.deckCards);
+
+            // draw staring card
+            StartCoroutine(DrawHandDeckCard(handCardCount));
+        }
+
+        void TurnEnd()
+        {
+            turn += 1;
+        }
+
+        void InitMaster(int masterId)
+        {
+            MasterData masterData = MasterData.GetMasterData(masterId);
+
+            this.master = new Master(masterId);
+
+            foreach (int cardId in masterData.startCardIds)
+            {
+                CardData cardData = CardData.GetCardData(cardId);
+                Card card = new Card(cardData);
+
+                master.allCards.Add(card);
+                master.deckCards.Add(card);
+            }
+        }
+
+        // 카드 섞기
         void ShuffleDeck(List<Card> cards)
         {
             for (int i = 0; i < cards.Count; ++i)
@@ -57,7 +78,8 @@ namespace ERang
             }
         }
 
-        void DrawCard(int cardCount)
+        // 카드 그리기
+        IEnumerator DrawHandDeckCard(int cardCount)
         {
             for (int i = 0; i < cardCount; ++i)
             {
@@ -77,14 +99,10 @@ namespace ERang
                 master.handCards.Add(card);
 
                 HandDeck.Instance.SpawnNewCard(card);
+                HandDeck.Instance.DrawCards();
+
+                yield return new WaitForSeconds(.2f);
             }
-
-            HandDeck.Instance.DrawCards();
-        }
-
-        public Master GetMaster()
-        {
-            return master;
         }
     }
 }

@@ -6,6 +6,7 @@ namespace ERang
     {
         public string uid;
         public int id;
+        public CardType cardType;
         public int costMana; // 소환에 필요한 마나
         public int costGold; // 소환에 필요한 골드
         public int hp; // 체력 값
@@ -16,6 +17,7 @@ namespace ERang
         {
             uid = Utils.GenerateShortUniqueID();
             id = cardData.card_id;
+            cardType = cardData.cardType;
             costMana = cardData.costMana;
             costGold = cardData.costGold;
             hp = cardData.hp;

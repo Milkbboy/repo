@@ -8,6 +8,8 @@ namespace ERang
     {
         // Start is called before the first frame update
         public int slot;
+        // 보드에 장착할 수 있는 cardType
+        public CardType cardType;
         // 현재 사용 중인지 여부
         public bool isOccupied = false;
         // 카드가 올라가 있는지 여부

@@ -15,7 +15,7 @@ MonoBehaviour:
   card_id: 0
   cardNameDesc_id: 
   cardDesc_id: 
-  cardType: 
+  cardType: 0
   aiGroup_id: 0
   creatureAI_id: 0
   costMana: 0
@@ -33,4 +33,5 @@ MonoBehaviour:
   handStart_Ability: 
   handEnd_Ability: 
   Owner: 0
-  abilityList: 
+  abilityIds: 
+  cardTexture: {fileID: 0}

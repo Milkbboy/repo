@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ERang
@@ -7,10 +8,10 @@ namespace ERang
     public class HandCard : MonoBehaviour
     {
         private CardUI cardUI;
-        private Vector3 originalPosition;
-
-        public int cardId;
+        public Vector3 originalPosition;
         public string cardUid;
+        public int cardId;
+        public CardType cardType;
         private bool drag = false;
 
         // Start is called before the first frame update
@@ -24,7 +25,7 @@ namespace ERang
         // Start is called before the first frame update
         void Start()
         {
-            originalPosition = transform.position;
+
         }
 
         // Update is called once per frame
@@ -35,8 +36,7 @@ namespace ERang
 
         void OnMouseDown()
         {
-            Debug.Log("OnMouseDown card: " + cardId);
-
+            // Debug.Log("OnMouseDown card: " + cardId);
             drag = true;
         }
 
@@ -51,31 +51,41 @@ namespace ERang
 
         void OnMouseUp()
         {
-            GameObject boardSlotObj = Board.Instance.NeareastBoardSlot(transform.position);
-
-            if (boardSlotObj != null)
+            // CardType 별 동작
+            switch (cardType)
             {
-                Card card = Master.Instance.GetHandCard(cardUid);
+                case CardType.Creature:
+                case CardType.Building:
+                    BoardSlot boardSlot = Board.Instance.NeareastBoardSlot(transform.position);
 
-                // 카드를 놓을 수 있는 boardSlot 이 존재하면 카드를 놓는다.
-                BoardSlot boardSlot = boardSlotObj.GetComponent<BoardSlot>();
-                boardSlot.GetComponent<CardUI>().SetCard(card);
+                    if (boardSlot != null && boardSlot.cardType == this.cardType)
+                    {
+                        // 보드 슬롯에 카드를 장착
+                        Actions.OnBoardSlotEquipCard?.Invoke(boardSlot, cardUid);
+                    }
+                    break;
+                case CardType.Curse:
+                case CardType.Charm:
+                case CardType.Magic:
+                case CardType.Individuality:
+                    Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+                    if (IsUpperCenter(screenPosition))
+                    {
+                        // 카드 사용
+                        Actions.OnHandCardUsed?.Invoke(cardUid);
+                    }
+                    break;
+            }
 
-                // HandDeck 에서 카드를 제거
-                HandDeck.Instance.RemoveCard(this);
-            }
-            else
-            {
-                // Debug.Log("No slot");
-                // 원래 위치로 돌아가게 함
-                transform.position = originalPosition;
-            }
+            // 원래 위치로 돌아가게 함
+            transform.position = originalPosition;
         }
 
         public void SetCard(Card card)
         {
             cardUid = card.uid;
             cardId = card.id;
+            cardType = card.cardType;
 
             // 카드 ui 설정
             cardUI.SetCard(card);
@@ -84,6 +94,15 @@ namespace ERang
         public bool IsDrag()
         {
             return drag;
+        }
+        private bool IsUpperCenter(Vector3 screenPosition)
+        {
+            float screenHeight = Screen.height;
+
+            // Define the upper center area (e.g., top 50% of the screen and middle 50% width)
+            float upperHeight = screenHeight * 0.5f;
+
+            return screenPosition.y > screenHeight - upperHeight;
         }
     }
 }

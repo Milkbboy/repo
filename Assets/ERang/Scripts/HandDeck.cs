@@ -63,16 +63,23 @@ namespace ERang
                 // float zPosition = i * zOffset;
 
                 this.cards[i].transform.localPosition = new Vector3(xPosition, 0, 0);
+                this.cards[i].originalPosition = this.cards[i].transform.position;
             }
         }
 
-        public void RemoveCard(HandCard handCard)
+        public void RemoveCard(string cardUid)
         {
-            Master master = BattleLogic.Instance.GetMaster();
-            master.HandCardToBoard(handCard.cardUid);
+            HandCard handCard = cards.Find(x => x.cardUid == cardUid);
+
+            if (handCard == null)
+            {
+                return;
+            }
 
             cards.Remove(handCard);
             Destroy(handCard.gameObject);
+
+            DrawCards();
         }
     }
 }
