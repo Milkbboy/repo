@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "repo.sln"
+    "dotnet.defaultSolution": "repo.sln",
+    "editor.codeLens": false
 }

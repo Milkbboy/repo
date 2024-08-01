@@ -6,14 +6,22 @@ namespace ERang
 {
     public class BoardSlot : MonoBehaviour
     {
-        // Start is called before the first frame update
-        public int slot;
-        // 보드에 장착할 수 있는 cardType
-        public CardType cardType;
-        // 현재 사용 중인지 여부
-        public bool isOccupied = false;
-        // 카드가 올라가 있는지 여부
-        public bool isOverlapCard = false;
+        [SerializeField] private int cardId;
+        [SerializeField] private CardType cardType; // 보드에 장착할 수 있는 cardType
+        [SerializeField] private int slot;
+        private string cardUid;
+        private bool isOccupied = false; // 현재 사용 중인지 여부
+        private bool isOverlapCard = false; // 카드가 올라가 있는지 여부
+
+        private CardUI cardUI;
+
+        public bool IsOccupied { get { return isOccupied; } }
+        public bool IsOverlapCard { get { return isOverlapCard; } }
+
+        void Awake()
+        {
+            cardUI = GetComponent<CardUI>();
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -41,6 +49,39 @@ namespace ERang
             {
                 isOverlapCard = false;
             }
+        }
+
+        public void CreateSlot(int slot, CardType cardType)
+        {
+            this.slot = slot;
+            this.cardType = cardType;
+        }
+
+        /**
+         * @brief 카드 장착
+         * @param card 카드 정보
+        */
+        public void EquipCard(Card card)
+        {
+            this.cardId = card.id;
+            this.cardType = card.type;
+            this.isOccupied = true;
+            this.isOverlapCard = false;
+
+            cardUI.SetCard(card);
+        }
+
+        /**
+         * @brief 슬롯의 카드 타입 얻기
+        */
+        public CardType GetCardType()
+        {
+            return cardType;
+        }
+
+        public int GetSlot()
+        {
+            return slot;
         }
     }
 }

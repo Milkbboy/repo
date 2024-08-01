@@ -62,14 +62,13 @@ namespace ERang
                 // 카드의 Z 위치를 인덱스에 따라 조정하여 위에 있는 카드가 앞으로 오도록 설정
                 // float zPosition = i * zOffset;
 
-                this.cards[i].transform.localPosition = new Vector3(xPosition, 0, 0);
-                this.cards[i].originalPosition = this.cards[i].transform.position;
+                this.cards[i].SetDrawPostion(new Vector3(xPosition, 0, 0));
             }
         }
 
         public void RemoveCard(string cardUid)
         {
-            HandCard handCard = cards.Find(x => x.cardUid == cardUid);
+            HandCard handCard = cards.Find(x => x.GetUID() == cardUid);
 
             if (handCard == null)
             {

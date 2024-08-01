@@ -28,11 +28,8 @@ namespace ERang
         {
             Card card = Master.Instance.GetHandCard(cardUid);
 
-            // 카드를 보드에 장착
-            boardSlotRef.isOccupied = true;
-            boardSlotRef.isOverlapCard = false;
-
-            boardSlotRef.GetComponent<CardUI>().SetCard(card);
+            // BoardSlot 에 카드 장착
+            boardSlotRef.EquipCard(card);
 
             // HandDeck 에서 카드 제거
             HandDeck.Instance.RemoveCard(cardUid);

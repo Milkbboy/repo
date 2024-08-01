@@ -7,11 +7,11 @@ namespace ERang
 {
     public class HandCard : MonoBehaviour
     {
+        [SerializeField] private int cardId;
+        [SerializeField] private CardType cardType;
+        private string cardUid;
         private CardUI cardUI;
-        public Vector3 originalPosition;
-        public string cardUid;
-        public int cardId;
-        public CardType cardType;
+        private Vector3 originalPosition;
         private bool drag = false;
 
         // Start is called before the first frame update
@@ -56,9 +56,9 @@ namespace ERang
             {
                 case CardType.Creature:
                 case CardType.Building:
-                    BoardSlot boardSlot = Board.Instance.NeareastBoardSlot(transform.position);
+                    BoardSlot boardSlot = Board.Instance.NeareastBoardSlotSlot(transform.position, cardType);
 
-                    if (boardSlot != null && boardSlot.cardType == this.cardType)
+                    if (boardSlot != null && boardSlot.GetCardType() == this.cardType)
                     {
                         // 보드 슬롯에 카드를 장착
                         Actions.OnBoardSlotEquipCard?.Invoke(boardSlot, cardUid);
@@ -85,16 +85,27 @@ namespace ERang
         {
             cardUid = card.uid;
             cardId = card.id;
-            cardType = card.cardType;
+            cardType = card.type;
 
-            // 카드 ui 설정
             cardUI.SetCard(card);
+        }
+
+        public void SetDrawPostion(Vector3 position)
+        {
+            transform.localPosition = position;
+            originalPosition = transform.position;
+        }
+
+        public string GetUID()
+        {
+            return cardUid;
         }
 
         public bool IsDrag()
         {
             return drag;
         }
+
         private bool IsUpperCenter(Vector3 screenPosition)
         {
             float screenHeight = Screen.height;
