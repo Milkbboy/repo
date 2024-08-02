@@ -90,6 +90,8 @@ namespace ERang
             graveCards.Add(card);
 
             Debug.Log($"HandCardToGrave: {cardUid}, HandCardCount: {handCards.Count}, GraveCardCount: {graveCards.Count}");
+
+            Actions.OnGraveDeckCountChange?.Invoke();
         }
     }
 }

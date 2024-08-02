@@ -13,6 +13,8 @@ namespace ERang
         public readonly CardType[] BoardSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None, CardType.None, CardType.EnemyCreature, CardType.EnemyCreature, CardType.EnemyCreature, CardType.Master };
         public readonly CardType[] BuildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
         public BoardSlot boardSlot;
+        public DeckUI deckUI;
+        public DeckUI graveDeckUI;
 
         private List<BoardSlot> creatureSlots = new List<BoardSlot>();
         private List<BoardSlot> buildingSlots = new List<BoardSlot>();
@@ -101,6 +103,16 @@ namespace ERang
             Debug.Log($"cardType: {cardType}, nearestSlot: {nearestSlot?.GetSlot()}");
 
             return nearestSlot;
+        }
+
+        public void SetDeckCount(int count)
+        {
+            deckUI.SetCount(count);
+        }
+
+        public void SetGraveDeckCount(int count)
+        {
+            graveDeckUI.SetCount(count);
         }
     }
 }

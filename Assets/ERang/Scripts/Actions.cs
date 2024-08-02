@@ -11,17 +11,23 @@ namespace ERang
         // HandDeck => BoardSlot 으로 이동
         public static UnityAction<BoardSlot, string> OnBoardSlotEquipCard;
         public static UnityAction<string> OnHandCardUsed;
+        public static UnityAction OnDeckCountChange;
+        public static UnityAction OnGraveDeckCountChange;
 
         void OnEnable()
         {
             OnBoardSlotEquipCard += BoardSlotEquipCard;
             OnHandCardUsed += HandCardUsed;
+            OnDeckCountChange += DeckCountChanged;
+            OnGraveDeckCountChange += GraveDeckCountChange;
         }
 
         void OnDisable()
         {
             OnBoardSlotEquipCard -= BoardSlotEquipCard;
             OnHandCardUsed -= HandCardUsed;
+            OnDeckCountChange -= DeckCountChanged;
+            OnGraveDeckCountChange -= GraveDeckCountChange;
         }
 
         public void BoardSlotEquipCard(BoardSlot boardSlotRef, string cardUid)
@@ -47,6 +53,18 @@ namespace ERang
 
             // Master 의 handCards => graveCards 로 이동
             Master.Instance.HandCardToGrave(cardUid);
+        }
+
+        public void DeckCountChanged()
+        {
+            int count = Master.Instance.deckCards.Count;
+            Board.Instance.SetDeckCount(count);
+        }
+
+        public void GraveDeckCountChange()
+        {
+            int count = Master.Instance.graveCards.Count;
+            Board.Instance.SetGraveDeckCount(count);
         }
     }
 }

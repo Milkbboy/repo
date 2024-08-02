@@ -64,6 +64,8 @@ namespace ERang
                 master.allCards.Add(card);
                 master.deckCards.Add(card);
             }
+
+            Actions.OnDeckCountChange?.Invoke();
         }
 
         // 카드 섞기
@@ -103,6 +105,8 @@ namespace ERang
 
                 yield return new WaitForSeconds(.2f);
             }
+
+            Actions.OnDeckCountChange?.Invoke();
         }
     }
 }

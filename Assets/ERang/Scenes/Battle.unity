@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 503914799}
   - component: {fileID: 503914798}
   m_Layer: 0
-  m_Name: Count
+  m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 824969430}
   - component: {fileID: 824969429}
   m_Layer: 0
-  m_Name: Count
+  m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -608,6 +608,7 @@ GameObject:
   - component: {fileID: 1361047918}
   - component: {fileID: 1361047920}
   - component: {fileID: 1361047919}
+  - component: {fileID: 1361047921}
   m_Layer: 0
   m_Name: Deck
   m_TagString: Untagged
@@ -673,6 +674,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1361047917}
   m_CullTransparentMesh: 1
+--- !u!114 &1361047921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361047917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 116ea7f6a14ddf2428dd2a1b40917cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardCounts: {fileID: 1702694977}
 --- !u!1 &1408640870
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,6 +698,7 @@ GameObject:
   - component: {fileID: 1408640871}
   - component: {fileID: 1408640873}
   - component: {fileID: 1408640872}
+  - component: {fileID: 1408640874}
   m_Layer: 0
   m_Name: GraveDeck
   m_TagString: Untagged
@@ -749,6 +764,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1408640870}
   m_CullTransparentMesh: 1
+--- !u!114 &1408640874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408640870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 116ea7f6a14ddf2428dd2a1b40917cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardCounts: {fileID: 1863826364}
 --- !u!1 &1448890857
 GameObject:
   m_ObjectHideFlags: 0
