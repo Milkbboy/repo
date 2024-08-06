@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ERang.Data;
 using UnityEngine;
 
 namespace ERang
@@ -13,6 +14,8 @@ namespace ERang
         public int masterId;
         public int hp;
         public int atk;
+        public int mana;
+        public int maxMana;
         public static Master Instance { get; private set; }
         // 모든 카드
         public List<Card> allCards = new List<Card>();
@@ -29,10 +32,14 @@ namespace ERang
         // 소멸한 카드
         public List<Card> extinctionCards = new List<Card>();
 
-        public Master(int masterId)
+        public Master(MasterData masterData)
         {
             Instance = this;
-            this.masterId = masterId;
+            this.masterId = masterData.master_Id;
+            this.hp = masterData.hp;
+            this.atk = masterData.atk;
+            this.mana = masterData.startMana;
+            this.maxMana = masterData.maxMana;
         }
 
         ~Master()
@@ -50,6 +57,55 @@ namespace ERang
             }
 
             return null;
+        }
+
+        public void IncreaseMana(int value)
+        {
+            mana += value;
+
+            if (mana > maxMana)
+            {
+                mana = maxMana;
+            }
+        }
+
+        public void DecreaseMana(int value)
+        {
+            mana -= value;
+
+            if (mana < 0)
+            {
+                mana = 0;
+            }
+        }
+
+        public int GetMana()
+        {
+            return mana;
+        }
+
+        public int GetMaxMana()
+        {
+            return maxMana;
+        }
+
+        public bool CanUseCard(string cardUid)
+        {
+            Card card = GetHandCard(cardUid);
+
+            if (card == null)
+            {
+                Debug.LogError($"CanUseCard: card is null({card.id})");
+                return false;
+            }
+
+            if (mana < card.costMana)
+            {
+                Debug.LogError($"CanUseCard: mana is not enough({card.id}, {mana} < {card.costMana})");
+                return false;
+            }
+
+            return true;
         }
 
         public void HandCardToBoard(string cardUid, CardType cardType)

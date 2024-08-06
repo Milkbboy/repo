@@ -45,7 +45,7 @@ namespace ERang
             // draw staring card
             StartCoroutine(DrawHandDeckCard(handCardCount));
 
-            Actions.OnTurnChanged?.Invoke(turn);
+            Board.Instance.SetTurn(turn);
         }
 
         public void TurnEnd()
@@ -65,7 +65,10 @@ namespace ERang
                 master.handCards.Clear();
             }
 
-            Actions.OnTurnChanged?.Invoke(turn);
+            // 마스터 마나 증가
+            master.IncreaseMana(2);
+
+            Board.Instance.SetTurn(turn);
 
             TurnStart();
         }
@@ -74,7 +77,7 @@ namespace ERang
         {
             MasterData masterData = MasterData.GetMasterData(masterId);
 
-            this.master = new Master(masterId);
+            this.master = new Master(masterData);
 
             foreach (int cardId in masterData.startCardIds)
             {

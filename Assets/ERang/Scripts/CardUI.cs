@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using ERang.Data;
@@ -10,8 +8,7 @@ namespace ERang
     {
         public MeshRenderer cardMeshRenderer;
         public TextMeshProUGUI cardTypeText;
-        public TextMeshProUGUI hpText;
-        public TextMeshProUGUI atkText;
+        public TextMeshProUGUI descText;
 
         public void SetCard(Card card)
         {
@@ -30,19 +27,25 @@ namespace ERang
                 cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
             }
 
-            if (hpText != null)
-            {
-                hpText.text = $"{card.hp}";
-            }
-
-            if (atkText != null)
-            {
-                atkText.text = $"{card.atk}";
-            }
-
             if (cardTypeText != null)
             {
                 cardTypeText.text = card.type.ToString();
+            }
+
+            // 카드 정보 표시
+            if (descText != null)
+            {
+                descText.text = $"gold: {card.costGold.ToString()}\nmana: {card.costMana.ToString()}";
+
+                if (card.hp > 0)
+                {
+                    descText.text += $"\nhp: {card.hp}";
+                }
+
+                if (card.atk > 0)
+                {
+                    descText.text += $"\natk: {card.atk}";
+                }
             }
         }
 
@@ -64,19 +67,19 @@ namespace ERang
                 cardMeshRenderer.materials[0].SetTexture("_BaseMap", masterTexture);
             }
 
-            if (hpText != null)
-            {
-                hpText.text = $"{master.hp}";
-            }
-
-            if (atkText != null)
-            {
-                atkText.text = $"{master.atk}";
-            }
-
             if (cardTypeText != null)
             {
                 cardTypeText.text = "Master";
+            }
+
+            SetMasterStat(master);
+        }
+
+        public void SetMasterStat(Master master)
+        {
+            if (descText != null)
+            {
+                descText.text = $"hp: {master.hp}\natk: {master.atk}\nmana: {master.mana}/{master.maxMana}";
             }
         }
     }

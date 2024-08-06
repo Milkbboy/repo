@@ -36,7 +36,6 @@ namespace ERang
         void Start()
         {
             CreateBoardSlots();
-
         }
 
         // Update is called once per frame
@@ -156,7 +155,18 @@ namespace ERang
 
         public void SetTurn(int turn)
         {
+            Master master = BattleLogic.Instance.GetMaster();
+            SetMaster(master);
+
             turnUI.SetTurn(turn);
+        }
+
+        public void SetMaster(Master master)
+        {
+            if (masterSlot != null)
+            {
+                masterSlot.SetMasterStat(master);
+            }
         }
     }
 }

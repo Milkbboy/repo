@@ -65,6 +65,11 @@ namespace ERang
             cardUI.SetCard(master);
         }
 
+        public void SetMasterStat(Master master)
+        {
+            cardUI.SetMasterStat(master);
+        }
+
         /**
          * @brief 카드 장착
          * @param card 카드 정보

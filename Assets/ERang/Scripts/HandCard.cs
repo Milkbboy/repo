@@ -51,6 +51,16 @@ namespace ERang
 
         void OnMouseUp()
         {
+            // 마스터 마나 확인
+            Master master = BattleLogic.Instance.GetMaster();
+
+            if (master.CanUseCard(cardUid) == false)
+            {
+                // 원래 위치로 돌아가게 함
+                transform.position = originalPosition;
+                return;
+            }
+
             // CardType 별 동작
             switch (cardType)
             {
@@ -58,9 +68,15 @@ namespace ERang
                 case CardType.Building:
                     BoardSlot boardSlot = Board.Instance.NeareastBoardSlotSlot(transform.position, cardType);
 
+                    // 보드 슬롯에 이미 카드가 장착되어 있는 경우
+                    if (boardSlot.IsOccupied == true)
+                    {
+                        break;
+                    }
+
+                    // 보드 슬롯에 카드를 장착
                     if (boardSlot != null && boardSlot.GetCardType() == this.cardType)
                     {
-                        // 보드 슬롯에 카드를 장착
                         Actions.OnBoardSlotEquipCard?.Invoke(boardSlot, cardUid);
                     }
                     break;

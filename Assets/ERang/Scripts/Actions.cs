@@ -21,7 +21,6 @@ namespace ERang
             OnHandCardUsed += HandCardUsed;
             OnDeckCountChange += DeckCountChanged;
             OnGraveDeckCountChanged += GraveDeckCountChanged;
-            OnTurnChanged += TurnChanged;
         }
 
         void OnDisable()
@@ -30,7 +29,6 @@ namespace ERang
             OnHandCardUsed -= HandCardUsed;
             OnDeckCountChange -= DeckCountChanged;
             OnGraveDeckCountChanged -= GraveDeckCountChanged;
-            OnTurnChanged -= TurnChanged;
         }
 
         public void BoardSlotEquipCard(BoardSlot boardSlotRef, string cardUid)
@@ -45,6 +43,11 @@ namespace ERang
 
             // Master 의 handCards => boardCreatureCards or boardBuildingCards 로 이동
             Master.Instance.HandCardToBoard(cardUid, card.type);
+
+            // Master 의 mana 감소
+            Master.Instance.DecreaseMana(card.costMana);
+
+            Board.Instance.SetMaster(Master.Instance);
         }
 
         public void HandCardUsed(string cardUid)
@@ -62,6 +65,11 @@ namespace ERang
                 // Master 의 handCards => graveCards 로 이동
                 Master.Instance.HandCardToGrave(cardUid);
             }
+
+            // Master 의 mana 감소
+            Master.Instance.DecreaseMana(card.costMana);
+
+            Board.Instance.SetMaster(Master.Instance);
 
             Debug.Log($"HandCardUsed: {cardUid}");
         }
@@ -82,13 +90,6 @@ namespace ERang
         {
             int count = Master.Instance.extinctionCards.Count;
             Board.Instance.SetExtinctionDeckCount(count);
-        }
-
-        public void TurnChanged(int turn)
-        {
-            Board.Instance.SetTurn(turn);
-
-            Debug.Log($"TurnChanged: {turn}");
         }
     }
 }
