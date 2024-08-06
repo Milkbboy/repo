@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ERang.Data;
@@ -43,11 +44,30 @@ namespace ERang
 
             // draw staring card
             StartCoroutine(DrawHandDeckCard(handCardCount));
+
+            Actions.OnTurnChanged?.Invoke(turn);
         }
 
-        void TurnEnd()
+        public void TurnEnd()
         {
             turn += 1;
+
+            // 핸드 데크에 있는 카드를 모두 무덤으로 이동
+            if (master.handCards.Count > 0)
+            {
+                master.graveCards.AddRange(master.handCards);
+
+                for (int i = 0; i < master.handCards.Count; ++i)
+                {
+                    HandDeck.Instance.RemoveCard(master.handCards[i].uid);
+                }
+
+                master.handCards.Clear();
+            }
+
+            Actions.OnTurnChanged?.Invoke(turn);
+
+            TurnStart();
         }
 
         void InitMaster(int masterId)
@@ -68,6 +88,11 @@ namespace ERang
             Actions.OnDeckCountChange?.Invoke();
         }
 
+        public Master GetMaster()
+        {
+            return master;
+        }
+
         // 카드 섞기
         void ShuffleDeck(List<Card> cards)
         {
@@ -83,30 +108,39 @@ namespace ERang
         // 카드 그리기
         IEnumerator DrawHandDeckCard(int cardCount)
         {
-            for (int i = 0; i < cardCount; ++i)
+            int spawnCount = cardCount - master.handCards.Count;
+
+            Debug.Log($"DrawHandDeckCard. masterHandCardCount: {master.handCards.Count}, spawnCount: {spawnCount}");
+
+            for (int i = 0; i < spawnCount; ++i)
             {
                 if (master.deckCards.Count == 0)
                 {
                     // 덱에 카드가 없으면 무덤에 있는 카드를 덱으로 옮김
                     master.deckCards.AddRange(master.graveCards);
                     master.graveCards.Clear();
+
                     // 덱 카드 섞기
                     ShuffleDeck(master.deckCards);
                 }
 
-                Card card = master.deckCards[0];
+                if (master.deckCards.Count > 0)
+                {
+                    Card card = master.deckCards[0];
 
-                // 덱에서 카드를 뽑아 손에 추가
-                master.deckCards.RemoveAt(0);
-                master.handCards.Add(card);
+                    // 덱에서 카드를 뽑아 손에 추가
+                    master.deckCards.RemoveAt(0);
+                    master.handCards.Add(card);
 
-                HandDeck.Instance.SpawnNewCard(card);
-                HandDeck.Instance.DrawCards();
+                    HandDeck.Instance.SpawnNewCard(card);
+                    HandDeck.Instance.DrawCards();
+                }
 
                 yield return new WaitForSeconds(.2f);
             }
 
             Actions.OnDeckCountChange?.Invoke();
+            Actions.OnGraveDeckCountChanged?.Invoke();
         }
     }
 }

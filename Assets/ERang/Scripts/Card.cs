@@ -12,6 +12,7 @@ namespace ERang
         public int hp; // 체력 값
         public int atk; // 공격력 값 (공격력 값이 0인 캐릭터는 공격을 시도하지 않는다)
         public int def; // 초기 방어력 값
+        public bool isExtinction; // Bool 값으로 True 시 해당 카드는 사용 시 해당 전투에서 카드 덱에서 삭제된다.
 
         public Card(CardData cardData)
         {
@@ -23,6 +24,7 @@ namespace ERang
             hp = cardData.hp;
             atk = cardData.atk;
             def = cardData.def;
+            isExtinction = cardData.extinction;
         }
     }
 }

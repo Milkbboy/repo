@@ -11,6 +11,8 @@ namespace ERang
     public class Master
     {
         public int masterId;
+        public int hp;
+        public int atk;
         public static Master Instance { get; private set; }
         // 모든 카드
         public List<Card> allCards = new List<Card>();
@@ -91,7 +93,7 @@ namespace ERang
 
             Debug.Log($"HandCardToGrave: {cardUid}, HandCardCount: {handCards.Count}, GraveCardCount: {graveCards.Count}");
 
-            Actions.OnGraveDeckCountChange?.Invoke();
+            Actions.OnGraveDeckCountChanged?.Invoke();
         }
     }
 }

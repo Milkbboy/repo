@@ -12,14 +12,16 @@ namespace ERang
         public static UnityAction<BoardSlot, string> OnBoardSlotEquipCard;
         public static UnityAction<string> OnHandCardUsed;
         public static UnityAction OnDeckCountChange;
-        public static UnityAction OnGraveDeckCountChange;
+        public static UnityAction OnGraveDeckCountChanged;
+        public static UnityAction<int> OnTurnChanged;
 
         void OnEnable()
         {
             OnBoardSlotEquipCard += BoardSlotEquipCard;
             OnHandCardUsed += HandCardUsed;
             OnDeckCountChange += DeckCountChanged;
-            OnGraveDeckCountChange += GraveDeckCountChange;
+            OnGraveDeckCountChanged += GraveDeckCountChanged;
+            OnTurnChanged += TurnChanged;
         }
 
         void OnDisable()
@@ -27,7 +29,8 @@ namespace ERang
             OnBoardSlotEquipCard -= BoardSlotEquipCard;
             OnHandCardUsed -= HandCardUsed;
             OnDeckCountChange -= DeckCountChanged;
-            OnGraveDeckCountChange -= GraveDeckCountChange;
+            OnGraveDeckCountChanged -= GraveDeckCountChanged;
+            OnTurnChanged -= TurnChanged;
         }
 
         public void BoardSlotEquipCard(BoardSlot boardSlotRef, string cardUid)
@@ -46,13 +49,21 @@ namespace ERang
 
         public void HandCardUsed(string cardUid)
         {
-            Debug.Log($"HandCardUsed: {cardUid}");
-
             // HandDeck 에서 카드 제거
             HandDeck.Instance.RemoveCard(cardUid);
 
-            // Master 의 handCards => graveCards 로 이동
-            Master.Instance.HandCardToGrave(cardUid);
+            Card card = Master.Instance.GetHandCard(cardUid);
+
+            if (card.isExtinction)
+            {
+            }
+            else
+            {
+                // Master 의 handCards => graveCards 로 이동
+                Master.Instance.HandCardToGrave(cardUid);
+            }
+
+            Debug.Log($"HandCardUsed: {cardUid}");
         }
 
         public void DeckCountChanged()
@@ -61,10 +72,23 @@ namespace ERang
             Board.Instance.SetDeckCount(count);
         }
 
-        public void GraveDeckCountChange()
+        public void GraveDeckCountChanged()
         {
             int count = Master.Instance.graveCards.Count;
             Board.Instance.SetGraveDeckCount(count);
+        }
+
+        public void ExtinctionDeckCount()
+        {
+            int count = Master.Instance.extinctionCards.Count;
+            Board.Instance.SetExtinctionDeckCount(count);
+        }
+
+        public void TurnChanged(int turn)
+        {
+            Board.Instance.SetTurn(turn);
+
+            Debug.Log($"TurnChanged: {turn}");
         }
     }
 }

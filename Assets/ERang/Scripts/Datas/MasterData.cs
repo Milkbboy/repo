@@ -24,6 +24,9 @@ namespace ERang.Data
         public List<int> startCardIds = new List<int>(); // 마왕이 처음 스테이지에 진입 할 때 갖게되는 카드 id 리스트
         public List<int> startAbilityIds = new List<int>(); // 마왕이 선천적으로 가지고 있는 특성 id 리스트
 
+        [Header("Display")]
+        public Texture2D masterTexture;
+
         public void Initialize(MasterDataEntity entity)
         {
             master_Id = entity.Master_Id;
@@ -41,6 +44,15 @@ namespace ERang.Data
             // entity.StartCardDeck_Id 문자열을 ","로 분리하고, 결과에서 빈칸을 제거합니다.
             startCardIds.AddRange(Utils.ParseIntArray(entity.StartCardDeck_Id).Where(x => x != 0));
             startAbilityIds.AddRange(Utils.ParseIntArray(entity.StartAbility_Id).Where(x => x != 0));
+
+            // 이미지 로드
+            string texturePath = $"Textures/adventurer_female";
+            masterTexture = Resources.Load<Texture2D>(texturePath);
+
+            if (masterTexture == null)
+            {
+                Debug.LogError($"MasterData {master_Id} texture is null");
+            }
         }
 
         public static List<MasterData> master_list = new List<MasterData>();
@@ -87,6 +99,11 @@ namespace ERang.Data
         public static MasterData GetMasterData(int master_id)
         {
             return master_dict[master_id];
+        }
+
+        public Texture2D GetMasterTexture()
+        {
+            return masterTexture;
         }
     }
 }

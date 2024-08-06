@@ -10,14 +10,20 @@ namespace ERang
         // Start is called before the first frame update
         public static Board Instance { get; private set; }
 
-        public readonly CardType[] BoardSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None, CardType.None, CardType.EnemyCreature, CardType.EnemyCreature, CardType.EnemyCreature, CardType.Master };
+        public readonly CardType[] BoardSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None, CardType.None, CardType.EnemyCreature, CardType.EnemyCreature, CardType.EnemyCreature, CardType.EnemyMaster };
         public readonly CardType[] BuildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
         public BoardSlot boardSlot;
         public DeckUI deckUI;
         public DeckUI graveDeckUI;
+        public DeckUI extinctionDeckUI;
+        public TurnUI turnUI;
 
+        private BoardSlot masterSlot;
         private List<BoardSlot> creatureSlots = new List<BoardSlot>();
         private List<BoardSlot> buildingSlots = new List<BoardSlot>();
+
+        private BoardSlot enemyMasterSlot;
+        private List<BoardSlot> enemyCreatureSlots = new List<BoardSlot>();
 
         private float boardSpacing = 0.2f;
 
@@ -30,6 +36,7 @@ namespace ERang
         void Start()
         {
             CreateBoardSlots();
+
         }
 
         // Update is called once per frame
@@ -56,7 +63,34 @@ namespace ERang
                 BoardSlot slot = Instantiate(boardSlot, slotPosition, Quaternion.identity) as BoardSlot;
                 slot.CreateSlot(i, BoardSlotCardTypes[i]);
 
-                creatureSlots.Add(slot);
+                switch (BoardSlotCardTypes[i])
+                {
+                    case CardType.Master:
+                        masterSlot = slot;
+                        slot.CreateMasterSlot(i, BattleLogic.Instance.GetMaster());
+                        break;
+                    case CardType.EnemyMaster:
+                        enemyMasterSlot = slot;
+                        break;
+                    case CardType.Creature:
+                        creatureSlots.Add(slot);
+                        break;
+                }
+
+                // 액션 등록해서 설정하는 방법인 듯
+                // if (BoardSlotCardTypes[i] == CardType.Creature)
+                // {
+                //     slot.OnCardDrop += (card) =>
+                //     {
+                //         HandCard handCard = card.GetComponent<HandCard>();
+                //         BoardSlot nearestSlot = NeareastBoardSlotSlot(handCard.transform.position, handCard.CardData.cardType);
+
+                //         if (nearestSlot != null)
+                //         {
+                //             nearestSlot.SetCard(handCard);
+                //         }
+                //     };
+                // }
             }
 
             // 빌딩 보드 슬롯 구성
@@ -113,6 +147,16 @@ namespace ERang
         public void SetGraveDeckCount(int count)
         {
             graveDeckUI.SetCount(count);
+        }
+
+        public void SetExtinctionDeckCount(int count)
+        {
+            extinctionDeckUI.SetCount(count);
+        }
+
+        public void SetTurn(int turn)
+        {
+            turnUI.SetTurn(turn);
         }
     }
 }

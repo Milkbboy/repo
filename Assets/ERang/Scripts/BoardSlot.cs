@@ -57,6 +57,14 @@ namespace ERang
             this.cardType = cardType;
         }
 
+        public void CreateMasterSlot(int slot, Master master)
+        {
+            this.slot = slot;
+            this.cardType = CardType.Master;
+
+            cardUI.SetCard(master);
+        }
+
         /**
          * @brief 카드 장착
          * @param card 카드 정보
