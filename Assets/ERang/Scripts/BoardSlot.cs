@@ -62,7 +62,7 @@ namespace ERang
             this.slot = slot;
             this.cardType = CardType.Master;
 
-            cardUI.SetCard(master);
+            cardUI.SetMasterCard(master);
         }
 
         public void SetMasterStat(Master master)

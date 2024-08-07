@@ -66,7 +66,9 @@ namespace ERang
                 {
                     case CardType.Master:
                         masterSlot = slot;
-                        slot.CreateMasterSlot(i, BattleLogic.Instance.GetMaster());
+                        // todo: 이 부분 수정 필요.
+                        Master master = BattleLogic.Instance.GetMaster();
+                        slot.CreateMasterSlot(i, master);
                         break;
                     case CardType.EnemyMaster:
                         enemyMasterSlot = slot;
@@ -153,20 +155,14 @@ namespace ERang
             extinctionDeckUI.SetCount(count);
         }
 
-        public void SetTurn(int turn)
+        public void SetTurnCount(int turn)
         {
-            Master master = BattleLogic.Instance.GetMaster();
-            SetMaster(master);
-
             turnUI.SetTurn(turn);
         }
 
-        public void SetMaster(Master master)
+        public void SetMasterStat(Master master)
         {
-            if (masterSlot != null)
-            {
-                masterSlot.SetMasterStat(master);
-            }
+            masterSlot.SetMasterStat(master);
         }
     }
 }

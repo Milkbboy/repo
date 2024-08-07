@@ -14,8 +14,8 @@ namespace ERang
         public int masterId;
         public int hp;
         public int atk;
-        public int mana;
-        public int maxMana;
+        public int Mana { get; private set; }
+        public int MaxMana { get; private set; }
         public static Master Instance { get; private set; }
         // 모든 카드
         public List<Card> allCards = new List<Card>();
@@ -32,14 +32,27 @@ namespace ERang
         // 소멸한 카드
         public List<Card> extinctionCards = new List<Card>();
 
-        public Master(MasterData masterData)
+        public Master(int masterId)
         {
             Instance = this;
+
+            MasterData masterData = MasterData.GetMasterData(masterId);
+
             this.masterId = masterData.master_Id;
-            this.hp = masterData.hp;
-            this.atk = masterData.atk;
-            this.mana = masterData.startMana;
-            this.maxMana = masterData.maxMana;
+            hp = masterData.hp;
+            atk = masterData.atk;
+            Mana = masterData.startMana;
+            MaxMana = masterData.maxMana;
+
+            // 마스터 카드 생성
+            foreach (int cardId in masterData.startCardIds)
+            {
+                CardData cardData = CardData.GetCardData(cardId);
+                Card card = new Card(cardData);
+
+                allCards.Add(card);
+                deckCards.Add(card);
+            }
         }
 
         ~Master()
@@ -61,51 +74,22 @@ namespace ERang
 
         public void IncreaseMana(int value)
         {
-            mana += value;
+            Mana += value;
 
-            if (mana > maxMana)
+            if (Mana > MaxMana)
             {
-                mana = maxMana;
+                Mana = MaxMana;
             }
         }
 
         public void DecreaseMana(int value)
         {
-            mana -= value;
+            Mana -= value;
 
-            if (mana < 0)
+            if (Mana < 0)
             {
-                mana = 0;
+                Mana = 0;
             }
-        }
-
-        public int GetMana()
-        {
-            return mana;
-        }
-
-        public int GetMaxMana()
-        {
-            return maxMana;
-        }
-
-        public bool CanUseCard(string cardUid)
-        {
-            Card card = GetHandCard(cardUid);
-
-            if (card == null)
-            {
-                Debug.LogError($"CanUseCard: card is null({card.id})");
-                return false;
-            }
-
-            if (mana < card.costMana)
-            {
-                Debug.LogError($"CanUseCard: mana is not enough({card.id}, {mana} < {card.costMana})");
-                return false;
-            }
-
-            return true;
         }
 
         public void HandCardToBoard(string cardUid, CardType cardType)
@@ -114,7 +98,7 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"HandCardToBoard: card is null({cardUid})");
+                Debug.LogError($"HandCardToBoard: card is null({card.id})");
                 return;
             }
 
@@ -130,7 +114,7 @@ namespace ERang
             {
                 boardBuildingCards.Add(card);
 
-                Debug.Log($"HandCardToBoard: {cardUid}, HandCardCount: {handCards.Count}, boardBuildingCardCount: {boardBuildingCards.Count}");
+                Debug.Log($"HandCardToBoard: {card.id}, HandCardCount: {handCards.Count}, boardBuildingCardCount: {boardBuildingCards.Count}");
             }
         }
 
@@ -140,16 +124,30 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"HandCardToGrave: card is null({cardUid})");
+                Debug.LogError($"HandCardToGrave: card is null({card.id})");
                 return;
             }
 
             handCards.Remove(card);
             graveCards.Add(card);
 
-            Debug.Log($"HandCardToGrave: {cardUid}, HandCardCount: {handCards.Count}, GraveCardCount: {graveCards.Count}");
+            Debug.Log($"HandCardToGrave: {card.id}, HandCardCount: {handCards.Count}, GraveCardCount: {graveCards.Count}");
+        }
 
-            Actions.OnGraveDeckCountChanged?.Invoke();
+        public void HandCardToExtinction(string cardUid)
+        {
+            Card card = GetHandCard(cardUid);
+
+            if (card == null)
+            {
+                Debug.LogError($"HandCardToExtinction: card is null({card.id})");
+                return;
+            }
+
+            handCards.Remove(card);
+            extinctionCards.Add(card);
+
+            Debug.Log($"HandCardToExtinction: {card.id}, HandCardCount: {handCards.Count}, ExtinctionCardCount: {extinctionCards.Count}");
         }
     }
 }

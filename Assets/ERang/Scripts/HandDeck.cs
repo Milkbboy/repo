@@ -13,9 +13,11 @@ namespace ERang
         public static HandDeck Instance { get; private set; }
 
         public GameObject cardPrefab;
+        private float cardWidth = 0f;
         private float cardSpacing = 1f;
-        private List<HandCard> cards = new List<HandCard>();
-        float cardWidth = 0f;
+
+        // 핸드 카드 리스트
+        private List<HandCard> handCards = new List<HandCard>();
 
         void Awake()
         {
@@ -36,15 +38,16 @@ namespace ERang
         {
         }
 
+        // 카드 생성
         public void SpawnNewCard(Card card)
         {
             GameObject cardObj = Instantiate(cardPrefab, transform);
 
             cardObj.GetComponent<HandCard>().SetCard(card);
-            cards.Add(cardObj.GetComponent<HandCard>());
+            handCards.Add(cardObj.GetComponent<HandCard>());
         }
 
-        // 카드 최초 생성
+        // 카드 위치 설정
         public void DrawCards()
         {
             // 겹치는 정도를 조절하기 위해 cardWidth의 일부를 사용
@@ -52,30 +55,31 @@ namespace ERang
             cardSpacing = cardWidth + overlap; // 카드 간격 재조정
 
             // 카드 정렬 로직 시작
-            float totalWidth = (cards.Count - 1) * cardSpacing;
+            float totalWidth = (handCards.Count - 1) * cardSpacing;
             float startX = -totalWidth / 2;
 
-            for (int i = 0; i < cards.Count; i++)
+            for (int i = 0; i < handCards.Count; i++)
             {
                 // 카드의 X 위치 설정, Y와 Z 위치는 고정
                 float xPosition = startX + i * cardSpacing;
                 // 카드의 Z 위치를 인덱스에 따라 조정하여 위에 있는 카드가 앞으로 오도록 설정
                 // float zPosition = i * zOffset;
 
-                this.cards[i].SetDrawPostion(new Vector3(xPosition, 0, 0));
+                handCards[i].SetDrawPostion(new Vector3(xPosition, 0, 0));
             }
         }
 
+        // 핸드덱 카드 제거
         public void RemoveCard(string cardUid)
         {
-            HandCard handCard = cards.Find(x => x.GetUID() == cardUid);
+            HandCard handCard = handCards.Find(x => x.GetUID() == cardUid);
 
             if (handCard == null)
             {
                 return;
             }
 
-            cards.Remove(handCard);
+            handCards.Remove(handCard);
             Destroy(handCard.gameObject);
 
             DrawCards();

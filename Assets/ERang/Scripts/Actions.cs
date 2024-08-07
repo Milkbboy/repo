@@ -9,81 +9,20 @@ namespace ERang
     public class Actions : MonoBehaviour
     {
         // HandDeck => BoardSlot 으로 이동
-        public static UnityAction<BoardSlot, string> OnBoardSlotEquipCard;
         public static UnityAction<string> OnHandCardUsed;
-        public static UnityAction OnDeckCountChange;
-        public static UnityAction OnGraveDeckCountChanged;
-        public static UnityAction<int> OnTurnChanged;
 
         void OnEnable()
         {
-            OnBoardSlotEquipCard += BoardSlotEquipCard;
             OnHandCardUsed += HandCardUsed;
-            OnDeckCountChange += DeckCountChanged;
-            OnGraveDeckCountChanged += GraveDeckCountChanged;
         }
 
         void OnDisable()
         {
-            OnBoardSlotEquipCard -= BoardSlotEquipCard;
             OnHandCardUsed -= HandCardUsed;
-            OnDeckCountChange -= DeckCountChanged;
-            OnGraveDeckCountChanged -= GraveDeckCountChanged;
-        }
-
-        public void BoardSlotEquipCard(BoardSlot boardSlotRef, string cardUid)
-        {
-            Card card = Master.Instance.GetHandCard(cardUid);
-
-            // BoardSlot 에 카드 장착
-            boardSlotRef.EquipCard(card);
-
-            // HandDeck 에서 카드 제거
-            HandDeck.Instance.RemoveCard(cardUid);
-
-            // Master 의 handCards => boardCreatureCards or boardBuildingCards 로 이동
-            Master.Instance.HandCardToBoard(cardUid, card.type);
-
-            // Master 의 mana 감소
-            Master.Instance.DecreaseMana(card.costMana);
-
-            Board.Instance.SetMaster(Master.Instance);
         }
 
         public void HandCardUsed(string cardUid)
         {
-            // HandDeck 에서 카드 제거
-            HandDeck.Instance.RemoveCard(cardUid);
-
-            Card card = Master.Instance.GetHandCard(cardUid);
-
-            if (card.isExtinction)
-            {
-            }
-            else
-            {
-                // Master 의 handCards => graveCards 로 이동
-                Master.Instance.HandCardToGrave(cardUid);
-            }
-
-            // Master 의 mana 감소
-            Master.Instance.DecreaseMana(card.costMana);
-
-            Board.Instance.SetMaster(Master.Instance);
-
-            Debug.Log($"HandCardUsed: {cardUid}");
-        }
-
-        public void DeckCountChanged()
-        {
-            int count = Master.Instance.deckCards.Count;
-            Board.Instance.SetDeckCount(count);
-        }
-
-        public void GraveDeckCountChanged()
-        {
-            int count = Master.Instance.graveCards.Count;
-            Board.Instance.SetGraveDeckCount(count);
         }
 
         public void ExtinctionDeckCount()

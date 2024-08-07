@@ -49,8 +49,9 @@ namespace ERang
             }
         }
 
-        public void SetCard(Master master)
+        public void SetMasterCard(Master master)
         {
+            Debug.Log("CardUI SetMasterCard: " + master.masterId);
             MasterData masterData = MasterData.master_dict[master.masterId];
 
             // Debug.Log("CardUI SetCard: " + cardId);
@@ -79,7 +80,7 @@ namespace ERang
         {
             if (descText != null)
             {
-                descText.text = $"hp: {master.hp}\natk: {master.atk}\nmana: {master.mana}/{master.maxMana}";
+                descText.text = $"hp: {master.hp}\natk: {master.atk}\nmana: {master.Mana}/{master.MaxMana}";
             }
         }
     }

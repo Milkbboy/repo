@@ -9,24 +9,28 @@ namespace ERang
     public class BattleLogic : MonoBehaviour
     {
         public static BattleLogic Instance { get; private set; }
-        public HandDeck handDeck;
 
+        public HandDeck handDeck;
         public int turn = 0;
         public int masterId = 1001;
         public int handCardCount = 5;
 
-        private Master master;
+        public Master master { get; private set; }
         private System.Random random = new System.Random();
 
         void Awake()
         {
             Instance = this;
+
+            // 마스터 설정 - 시작 카드 생성
+            master = new Master(masterId);
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            InitMaster(masterId);
+            // 보드 설정 - 덱 카운트
+            Board.Instance.SetDeckCount(master.deckCards.Count);
 
             TurnStart();
         }
@@ -37,6 +41,11 @@ namespace ERang
 
         }
 
+        public Master GetMaster()
+        {
+            return master;
+        }
+
         void TurnStart()
         {
             // deck 카드 섞기
@@ -45,55 +54,31 @@ namespace ERang
             // draw staring card
             StartCoroutine(DrawHandDeckCard(handCardCount));
 
-            Board.Instance.SetTurn(turn);
+            // 보드 설정
+            Board.Instance.SetTurnCount(turn);
         }
 
         public void TurnEnd()
         {
             turn += 1;
 
-            // 핸드 데크에 있는 카드를 모두 무덤으로 이동
-            if (master.handCards.Count > 0)
+            // 핸드덱에 카드 제거
+            for (int i = 0; i < master.handCards.Count; ++i)
             {
-                master.graveCards.AddRange(master.handCards);
-
-                for (int i = 0; i < master.handCards.Count; ++i)
-                {
-                    HandDeck.Instance.RemoveCard(master.handCards[i].uid);
-                }
-
-                master.handCards.Clear();
+                HandDeck.Instance.RemoveCard(master.handCards[i].uid);
+                Master.Instance.HandCardToGrave(master.handCards[i].uid);
             }
 
-            // 마스터 마나 증가
+            // 마스터 데이타 설정 - 마나 증가
             master.IncreaseMana(2);
 
-            Board.Instance.SetTurn(turn);
+            // 보드 - 마스터
+            Board.Instance.SetMasterStat(master);
+            // 보드 - 턴 카운트
+            Board.Instance.SetTurnCount(turn);
 
+            // 턴 다시 시작
             TurnStart();
-        }
-
-        void InitMaster(int masterId)
-        {
-            MasterData masterData = MasterData.GetMasterData(masterId);
-
-            this.master = new Master(masterData);
-
-            foreach (int cardId in masterData.startCardIds)
-            {
-                CardData cardData = CardData.GetCardData(cardId);
-                Card card = new Card(cardData);
-
-                master.allCards.Add(card);
-                master.deckCards.Add(card);
-            }
-
-            Actions.OnDeckCountChange?.Invoke();
-        }
-
-        public Master GetMaster()
-        {
-            return master;
         }
 
         // 카드 섞기
@@ -142,8 +127,80 @@ namespace ERang
                 yield return new WaitForSeconds(.2f);
             }
 
-            Actions.OnDeckCountChange?.Invoke();
-            Actions.OnGraveDeckCountChanged?.Invoke();
+            // 보드 설정 - 덱 카운트
+            Board.Instance.SetDeckCount(master.deckCards.Count);
+            // 보드 설정 - 덱 카운트
+            Board.Instance.SetGraveDeckCount(master.graveCards.Count);
+        }
+
+        public bool CanHandCardUse(string cardUid)
+        {
+            Card card = master.GetHandCard(cardUid);
+
+            if (card == null)
+            {
+                Debug.LogError($"CanUseCard: card is null({card.id})");
+                return false;
+            }
+
+            if (master.Mana < card.costMana)
+            {
+                Debug.LogError($"CanUseCard: mana is not enough({card.id}, {master.Mana} < {card.costMana})");
+                return false;
+            }
+
+            return true;
+        }
+
+        public void BoardSlotEquipCard(BoardSlot boardSlotRef, string cardUid)
+        {
+            Card card = master.GetHandCard(cardUid);
+
+            // BoardSlot 에 카드 장착
+            boardSlotRef.EquipCard(card);
+
+            // HandDeck 에서 카드 제거
+            HandDeck.Instance.RemoveCard(cardUid);
+
+            // Master 의 handCards => boardCreatureCards or boardBuildingCards 로 이동
+            master.HandCardToBoard(cardUid, card.type);
+
+            // Master 의 mana 감소
+            master.DecreaseMana(card.costMana);
+
+            Board.Instance.SetMasterStat(master);
+        }
+
+        public void HandCardUse(string cardUid)
+        {
+            // HandDeck 에서 카드 제거
+            HandDeck.Instance.RemoveCard(cardUid);
+
+            Card card = master.GetHandCard(cardUid);
+
+            if (card.isExtinction)
+            {
+                // Master 의 handCards => extinctionCards 로 이동
+                master.HandCardToExtinction(cardUid);
+
+                // 보드 설정 - 소멸덱 카운트
+                Board.Instance.SetExtinctionDeckCount(master.extinctionCards.Count);
+            }
+            else
+            {
+                // Master 의 handCards => graveCards 로 이동
+                master.HandCardToGrave(cardUid);
+
+                // 보드 설정 - 그레이브덱 카운트
+                Board.Instance.SetGraveDeckCount(master.graveCards.Count);
+            }
+
+            // Master 의 mana 감소
+            master.DecreaseMana(card.costMana);
+
+            Board.Instance.SetMasterStat(master);
+
+            Debug.Log($"HandCardUsed: {cardUid}");
         }
     }
 }

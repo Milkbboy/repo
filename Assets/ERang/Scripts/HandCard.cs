@@ -52,9 +52,7 @@ namespace ERang
         void OnMouseUp()
         {
             // 마스터 마나 확인
-            Master master = BattleLogic.Instance.GetMaster();
-
-            if (master.CanUseCard(cardUid) == false)
+            if (BattleLogic.Instance.CanHandCardUse(cardUid) == false)
             {
                 // 원래 위치로 돌아가게 함
                 transform.position = originalPosition;
@@ -77,7 +75,7 @@ namespace ERang
                     // 보드 슬롯에 카드를 장착
                     if (boardSlot != null && boardSlot.GetCardType() == this.cardType)
                     {
-                        Actions.OnBoardSlotEquipCard?.Invoke(boardSlot, cardUid);
+                        BattleLogic.Instance.BoardSlotEquipCard(boardSlot, cardUid);
                     }
                     break;
                 case CardType.Curse:
@@ -88,7 +86,7 @@ namespace ERang
                     if (IsUpperCenter(screenPosition))
                     {
                         // 카드 사용
-                        Actions.OnHandCardUsed?.Invoke(cardUid);
+                        BattleLogic.Instance.HandCardUse(cardUid);
                     }
                     break;
             }
