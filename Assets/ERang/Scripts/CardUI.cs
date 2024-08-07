@@ -9,6 +9,16 @@ namespace ERang
         public MeshRenderer cardMeshRenderer;
         public TextMeshProUGUI cardTypeText;
         public TextMeshProUGUI descText;
+        public TextMeshProUGUI hpText;
+        public TextMeshProUGUI manaText;
+        public TextMeshProUGUI atkText;
+        public TextMeshProUGUI defText;
+        public GameObject statObj;
+
+        void Start()
+        {
+            // statObj.SetActive(false);
+        }
 
         public void SetCard(Card card)
         {
@@ -47,6 +57,11 @@ namespace ERang
                     descText.text += $"\natk: {card.atk}";
                 }
             }
+
+            hpText.text = card.hp.ToString();
+            manaText.text = card.costMana.ToString();
+            atkText.text = card.atk.ToString();
+            defText.text = card.def.ToString();
         }
 
         public void SetMasterCard(Master master)
@@ -82,6 +97,10 @@ namespace ERang
             {
                 descText.text = $"hp: {master.hp}\natk: {master.atk}\nmana: {master.Mana}/{master.MaxMana}";
             }
+
+            hpText.text = master.hp.ToString();
+            manaText.text = master.Mana.ToString();
+            atkText.text = master.atk.ToString();
         }
     }
 }

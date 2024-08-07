@@ -21,6 +21,7 @@ namespace ERang
         void Awake()
         {
             cardUI = GetComponent<CardUI>();
+            cardUI.statObj.SetActive(false);
         }
 
         // Start is called before the first frame update
@@ -62,6 +63,7 @@ namespace ERang
             this.slot = slot;
             this.cardType = CardType.Master;
 
+            cardUI.statObj.SetActive(true);
             cardUI.SetMasterCard(master);
         }
 
@@ -81,6 +83,7 @@ namespace ERang
             this.isOccupied = true;
             this.isOverlapCard = false;
 
+            cardUI.statObj.SetActive(true);
             cardUI.SetCard(card);
         }
 

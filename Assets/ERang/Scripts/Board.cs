@@ -41,7 +41,6 @@ namespace ERang
         // Update is called once per frame
         void Update()
         {
-
         }
 
         void CreateBoardSlots()

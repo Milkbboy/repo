@@ -145,6 +145,7 @@ namespace ERang
 
             if (master.Mana < card.costMana)
             {
+                ToastNotification.Show($"mana is not enough({master.Mana})");
                 Debug.LogError($"CanUseCard: mana is not enough({card.id}, {master.Mana} < {card.costMana})");
                 return false;
             }
