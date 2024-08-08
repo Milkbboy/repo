@@ -20,5 +20,26 @@ namespace ERang
             string shortID = base64.Replace("=", "").Replace("+", "").Replace("/", "").Substring(0, length);
             return shortID;
         }
+
+        public static CardType ConvertCardType(string cardType)
+        {
+            switch (cardType)
+            {
+                case "Magic":
+                    return CardType.Magic;
+                case "Individuality":
+                    return CardType.Individuality;
+                case "Creature":
+                    return CardType.Creature;
+                case "Building":
+                    return CardType.Building;
+                case "Charm":
+                    return CardType.Charm;
+                case "Curse":
+                    return CardType.Curse;
+                default:
+                    return CardType.None;
+            }
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -6,7 +5,7 @@ using ERang.Table;
 
 namespace ERang.Data
 {
-    public class CardData : ScriptableObject
+    public class MonsterCardData : ScriptableObject
     {
         public int card_id; // 카드의 Id 값
         public string cardNameDesc_id; // 카드의 실제 이름 String이 들어간 데이터 Id
@@ -34,7 +33,7 @@ namespace ERang.Data
         [Header("Display")]
         public Texture2D cardTexture;
 
-        public void Initialize(CardDataEntity cardEntity)
+        public void Initialize(MonsterCardDataEntity cardEntity)
         {
             card_id = cardEntity.Card_Id;
             cardNameDesc_id = cardEntity.CardNameDesc_Id;
@@ -65,13 +64,13 @@ namespace ERang.Data
             }
         }
 
-        public static List<CardData> card_list = new List<CardData>();
-        public static Dictionary<int, CardData> card_dict = new Dictionary<int, CardData>();
+        public static List<MonsterCardData> card_list = new List<MonsterCardData>();
+        public static Dictionary<int, MonsterCardData> card_dict = new Dictionary<int, MonsterCardData>();
 
         public static void Load(string path = "")
         {
             // 엑셀로 생성된 ScriptableObject 로드
-            CardDataTable cardDataTable = Resources.Load<CardDataTable>(path);
+            MonsterCardDataTable cardDataTable = Resources.Load<MonsterCardDataTable>(path);
 
             if (cardDataTable == null)
             {
@@ -81,13 +80,13 @@ namespace ERang.Data
 
             foreach (var cardEntity in cardDataTable.items)
             {
-                string assetPath = $"Assets/ERang/Resources/Cards/{cardEntity.Card_Id}.asset";
-                CardData cardData = AssetDatabase.LoadAssetAtPath<CardData>(assetPath);
+                string assetPath = $"Assets/ERang/Resources/Cards/Monster/{cardEntity.Card_Id}.asset";
+                MonsterCardData cardData = AssetDatabase.LoadAssetAtPath<MonsterCardData>(assetPath);
 
                 if (cardData == null)
                 {
                     // CardData 가 없으면 생성
-                    cardData = CreateInstance<CardData>();
+                    cardData = CreateInstance<MonsterCardData>();
                     AssetDatabase.CreateAsset(cardData, assetPath);
                 }
                 else
@@ -106,7 +105,7 @@ namespace ERang.Data
             AssetDatabase.Refresh();
         }
 
-        public static CardData GetCardData(int card_id)
+        public static MonsterCardData GetCardData(int card_id)
         {
             return card_dict[card_id];
         }

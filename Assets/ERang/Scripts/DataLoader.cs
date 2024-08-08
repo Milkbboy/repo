@@ -11,6 +11,7 @@ namespace ERang
         void Awake()
         {
             CardData.Load("TableExports/CardDataTable");
+            MonsterCardData.Load("TableExports/MonsterCardDataTable");
             MasterData.Load("TableExports/MasterDataTable");
             AiData.Load("TableExports/AiDataTable");
             AiGroupData.Load("TableExports/AiGroupDataTable");
