@@ -88,8 +88,83 @@ namespace ERang
             // 보드 - 턴 카운트
             Board.Instance.SetTurnCount(turn);
 
+            // 보드 슬롯 카드 동작
+            StartCoroutine(BoardSlotCardAction());
+
             // 턴 다시 시작
             TurnStart();
+        }
+
+        // 보드 슬롯 카드 동작
+        IEnumerator BoardSlotCardAction()
+        {
+            StartCoroutine(MasterCreatureAction());
+
+            yield return new WaitForSeconds(1f);
+
+            MonsterAction();
+        }
+
+        IEnumerator MasterCreatureAction()
+        {
+            // 보드 슬롯 인덱스 3, 2, 1 순으로 공격
+            List<BoardSlot> creatureSlots = Board.Instance.GetCreatureSlots();
+
+            for (int i = creatureSlots.Count - 1; i >= 0; --i)
+            {
+                BoardSlot creatureSlot = creatureSlots[i];
+
+                // 카드가 장착되어 있지 않으면 다음 카드로
+                if (!creatureSlot.IsOccupied)
+                {
+                    continue;
+                }
+
+                // 타겟 슬로 설정
+                BoardSlot monsterBoardSlot = Board.Instance.GetTargetMonsterBoardSlot();
+
+                if (monsterBoardSlot == null || monsterBoardSlot.IsOccupied == false)
+                {
+                    continue;
+                }
+
+                // 공격 방어 카드 얻기
+                Card creatureCard = master.GetBoardCreatureCard(creatureSlot.CardUid);
+                Card monsterCard = enemy.GetMonsterCard(monsterBoardSlot.CardUid);
+
+                Debug.Log($"MasterCreatureAction: {creatureSlot.GetSlot()} -> {monsterBoardSlot.GetSlot()}");
+
+                monsterCard.hp -= creatureCard.atk;
+
+                if (monsterCard.hp <= 0)
+                {
+                    enemy.RemoveMonsterCard(monsterCard.uid);
+                    Board.Instance.ResetBoardSlot(monsterBoardSlot.GetSlot());
+                }
+                else
+                {
+                    monsterBoardSlot.SetCardHp(monsterCard.hp);
+                }
+
+                yield return new WaitForSeconds(1f);
+            }
+        }
+
+        void MonsterAction()
+        {
+            // 보드 슬롯 인덱스 6, 7, 8 순으로 공격
+            List<BoardSlot> monsterSlots = Board.Instance.GetMonsterSlots();
+
+            for (int i = 0; i < monsterSlots.Count; ++i)
+            {
+                BoardSlot slot = monsterSlots[i];
+
+                // 카드가 장착되어 있지 않으면 다음 카드로
+                if (!slot.IsOccupied)
+                {
+                    continue;
+                }
+            }
         }
 
         // 카드 섞기
@@ -109,7 +184,7 @@ namespace ERang
         {
             int spawnCount = cardCount - master.handCards.Count;
 
-            Debug.Log($"DrawHandDeckCard. masterHandCardCount: {master.handCards.Count}, spawnCount: {spawnCount}");
+            // Debug.Log($"DrawHandDeckCard. masterHandCardCount: {master.handCards.Count}, spawnCount: {spawnCount}");
 
             for (int i = 0; i < spawnCount; ++i)
             {

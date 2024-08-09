@@ -10,7 +10,8 @@ namespace ERang
         [SerializeField] private int cardId;
         [SerializeField] private CardType cardType; // 보드에 장착할 수 있는 cardType
         [SerializeField] private int slot;
-        private string cardUid;
+
+        public string CardUid { get; private set; }
         private bool isOccupied = false; // 현재 사용 중인지 여부
         private bool isOverlapCard = false; // 카드가 올라가 있는지 여부
 
@@ -79,6 +80,7 @@ namespace ERang
         */
         public void EquipCard(Card card)
         {
+            CardUid = card.uid;
             this.cardId = card.id;
             this.cardType = card.type;
             this.isOccupied = true;
@@ -99,6 +101,25 @@ namespace ERang
         public int GetSlot()
         {
             return slot;
+        }
+
+        public void SetCardHp(int hp)
+        {
+            cardUI.SetHp(hp);
+        }
+
+        public void RemoveCard()
+        {
+            Debug.Log($"Removing card from slot {slot}");
+
+            CardUid = string.Empty;
+            cardId = 0;
+            cardType = CardType.None;
+            isOccupied = false;
+            isOverlapCard = false;
+
+            cardUI.ResetStat();
+            cardUI.statObj.SetActive(false);
         }
     }
 }

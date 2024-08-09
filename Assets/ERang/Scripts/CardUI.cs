@@ -15,9 +15,10 @@ namespace ERang
         public TextMeshProUGUI defText;
         public GameObject statObj;
 
+        private Texture2D originTexture;
+
         void Start()
         {
-            // statObj.SetActive(false);
         }
 
         public void SetCard(Card card)
@@ -34,6 +35,12 @@ namespace ERang
 
             if (cardMeshRenderer != null)
             {
+                // 원래 텍스쳐 저장
+                if (originTexture == null)
+                {
+                    originTexture = (Texture2D)cardMeshRenderer.materials[0].GetTexture("_BaseMap");
+                }
+
                 cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
             }
 
@@ -101,6 +108,25 @@ namespace ERang
             hpText.text = master.hp.ToString();
             manaText.text = master.Mana.ToString();
             atkText.text = master.atk.ToString();
+        }
+
+        public void SetHp(int hp)
+        {
+            hpText.text = hp.ToString();
+        }
+
+        public void ResetStat()
+        {
+            hpText.text = string.Empty;
+            manaText.text = string.Empty;
+            atkText.text = string.Empty;
+            defText.text = string.Empty;
+
+            // 원래 텍스쳐로 복구
+            if (originTexture != null)
+            {
+                cardMeshRenderer.materials[0].SetTexture("_BaseMap", originTexture);
+            }
         }
     }
 }

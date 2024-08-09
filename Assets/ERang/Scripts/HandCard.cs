@@ -67,7 +67,7 @@ namespace ERang
                     BoardSlot boardSlot = Board.Instance.NeareastBoardSlotSlot(transform.position, cardType);
 
                     // 보드 슬롯에 이미 카드가 장착되어 있는 경우
-                    if (boardSlot.IsOccupied == true)
+                    if (boardSlot == null || boardSlot.IsOccupied == true)
                     {
                         break;
                     }

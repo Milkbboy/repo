@@ -131,7 +131,7 @@ namespace ERang
             handCards.Remove(card);
             graveCards.Add(card);
 
-            Debug.Log($"HandCardToGrave: {card.id}, HandCardCount: {handCards.Count}, GraveCardCount: {graveCards.Count}");
+            // Debug.Log($"HandCardToGrave: {card.id}, HandCardCount: {handCards.Count}, GraveCardCount: {graveCards.Count}");
         }
 
         public void HandCardToExtinction(string cardUid)
@@ -147,7 +147,20 @@ namespace ERang
             handCards.Remove(card);
             extinctionCards.Add(card);
 
-            Debug.Log($"HandCardToExtinction: {card.id}, HandCardCount: {handCards.Count}, ExtinctionCardCount: {extinctionCards.Count}");
+            // Debug.Log($"HandCardToExtinction: {card.id}, HandCardCount: {handCards.Count}, ExtinctionCardCount: {extinctionCards.Count}");
+        }
+
+        public Card GetBoardCreatureCard(string cardUid)
+        {
+            foreach (Card card in boardCreatureCards)
+            {
+                if (card.uid == cardUid)
+                {
+                    return card;
+                }
+            }
+
+            return null;
         }
     }
 }

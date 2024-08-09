@@ -180,5 +180,39 @@ namespace ERang
         {
             masterSlot.SetMasterStat(master);
         }
+
+        public List<BoardSlot> GetCreatureSlots()
+        {
+            return creatureSlots;
+        }
+
+        public List<BoardSlot> GetMonsterSlots()
+        {
+            return monsterSlots;
+        }
+
+        public BoardSlot GetTargetMonsterBoardSlot()
+        {
+            // 몬스터 슬롯 중 가장 먼저 등장하는 몬스터 슬롯을 반환
+            foreach (BoardSlot slot in monsterSlots)
+            {
+                if (slot.IsOccupied)
+                {
+                    return slot;
+                }
+            }
+
+            return null;
+        }
+        public void ResetBoardSlot(int slot)
+        {
+            if (slot < 0 || slot >= monsterSlots.Count)
+            {
+                Debug.LogError($"Invalid slot: {slot}");
+                return;
+            }
+
+            monsterSlots[slot].RemoveCard();
+        }
     }
 }
