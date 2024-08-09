@@ -65,6 +65,37 @@ namespace ERang.Data
             }
         }
 
+        public void Initialize(MonsterCardDataEntity cardEntity)
+        {
+            card_id = cardEntity.Card_Id;
+            cardNameDesc_id = cardEntity.CardNameDesc_Id;
+            cardDesc_id = cardEntity.CardDesc_Id;
+            cardType = Utils.ConvertCardType(cardEntity.CardType);
+            aiGroup_id = cardEntity.AiGroup_id;
+            costMana = cardEntity.CostMana;
+            hp = cardEntity.Hp;
+            atk = cardEntity.Atk;
+            def = cardEntity.Def;
+            extinction = cardEntity.Extinction;
+            completeExtinction = cardEntity.CompleteExtinction;
+            level = cardEntity.Level;
+            level_1_img = cardEntity.Level_1_img;
+            level_3_img = cardEntity.Level_3_img;
+            level_5_img = cardEntity.Level_5_img;
+            handStart_Ability = cardEntity.HandStart_Ability;
+            handEnd_Ability = cardEntity.HandEnd_Ability;
+            Owner = cardEntity.Owner;
+
+            // 이미지 로드 및 cardImange 에 할당
+            string texturePath = $"Textures/{level_1_img}";
+            cardTexture = Resources.Load<Texture2D>(texturePath);
+
+            if (cardTexture == null)
+            {
+                Debug.LogError("Card Texture not found: " + texturePath);
+            }
+        }
+
         public static List<CardData> card_list = new List<CardData>();
         public static Dictionary<int, CardData> card_dict = new Dictionary<int, CardData>();
 

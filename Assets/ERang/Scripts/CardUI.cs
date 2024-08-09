@@ -23,7 +23,7 @@ namespace ERang
         public void SetCard(Card card)
         {
             // Debug.Log("CardUI SetCard: " + cardId);
-            CardData cardData = CardData.GetCardData(card.id);
+            CardData cardData = (card.type == CardType.Monster) ? MonsterCardData.GetCardData(card.id) : CardData.GetCardData(card.id);
             Texture2D cardTexture = cardData.GetCardTexture();
 
             if (!cardTexture)

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using ERang.Data;
 
 namespace ERang
 {
@@ -10,7 +11,7 @@ namespace ERang
         // Start is called before the first frame update
         public static Board Instance { get; private set; }
 
-        public readonly CardType[] BoardSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None, CardType.None, CardType.EnemyCreature, CardType.EnemyCreature, CardType.EnemyCreature, CardType.EnemyMaster };
+        public readonly CardType[] BoardSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None, CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.EnemyMaster };
         public readonly CardType[] BuildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
         public BoardSlot boardSlot;
         public DeckUI deckUI;
@@ -23,7 +24,7 @@ namespace ERang
         private List<BoardSlot> buildingSlots = new List<BoardSlot>();
 
         private BoardSlot enemyMasterSlot;
-        private List<BoardSlot> enemyCreatureSlots = new List<BoardSlot>();
+        private List<BoardSlot> monsterSlots = new List<BoardSlot>();
 
         private float boardSpacing = 0.2f;
 
@@ -36,6 +37,7 @@ namespace ERang
         void Start()
         {
             CreateBoardSlots();
+            CreateMonsterCard();
         }
 
         // Update is called once per frame
@@ -75,6 +77,9 @@ namespace ERang
                     case CardType.Creature:
                         creatureSlots.Add(slot);
                         break;
+                    case CardType.Monster:
+                        monsterSlots.Add(slot);
+                        break;
                 }
 
                 // 액션 등록해서 설정하는 방법인 듯
@@ -108,6 +113,18 @@ namespace ERang
                 buildingSlots.Add(slot);
             }
         }
+
+        void CreateMonsterCard()
+        {
+            Enemy enemy = BattleLogic.Instance.GetEnemy();
+
+            for (int i = 0; i < monsterSlots.Count; i++)
+            {
+                BoardSlot slot = monsterSlots[i];
+                slot.EquipCard(enemy.monsterCards[i]);
+            }
+        }
+
 
         public BoardSlot NeareastBoardSlotSlot(Vector3 position, CardType cardType)
         {

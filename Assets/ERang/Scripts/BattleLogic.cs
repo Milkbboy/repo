@@ -16,6 +16,8 @@ namespace ERang
         public int handCardCount = 5;
 
         public Master master { get; private set; }
+        public Enemy enemy { get; private set; }
+
         private System.Random random = new System.Random();
 
         void Awake()
@@ -24,6 +26,10 @@ namespace ERang
 
             // 마스터 설정 - 시작 카드 생성
             master = new Master(masterId);
+
+            // 적 설정 - 더미
+            enemy = new Enemy(1002);
+            // Debug.Log($"enemyId: {enemy.enemyId}, hp: {enemy.hp}, atk: {enemy.atk}, cards: {enemy.monsterCards.Count}");
         }
 
         // Start is called before the first frame update
@@ -44,6 +50,11 @@ namespace ERang
         public Master GetMaster()
         {
             return master;
+        }
+
+        public Enemy GetEnemy()
+        {
+            return enemy;
         }
 
         void TurnStart()

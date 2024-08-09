@@ -37,6 +37,8 @@ namespace ERang
                     return CardType.Charm;
                 case "Curse":
                     return CardType.Curse;
+                case "Monster":
+                    return CardType.Monster;
                 default:
                     return CardType.None;
             }

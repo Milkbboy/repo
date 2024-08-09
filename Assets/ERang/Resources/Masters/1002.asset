@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f445c99d726a45c41806cd26b5a279e3, type: 3}
   m_Name: 1002
   m_EditorClassIdentifier: 
-  master_Id: 0
-  masterNameDesc_id: 
-  masterDesc_id: 
-  masterAi_id: 0
-  hp: 0
-  atk: 0
+  master_Id: 1002
+  masterNameDesc_id: MasterName_1002
+  masterDesc_id: MasterDesc_1002
+  masterAi_id: 10002
+  hp: 20
+  atk: 4
   def: 0
-  startMana: 0
-  maxMana: 0
-  rechargeMana: 0
+  startMana: 2
+  maxMana: 5
+  rechargeMana: 2
   startCardDeckIds: 
   startArtiFact_id: 0
   StartAbilityIds: 
-  startCardIds: 
-  startAbilityIds: 
+  startCardIds: e9030000ea030000eb030000
+  startAbilityIds: 2a5889002a588900
+  masterTexture: {fileID: 2800000, guid: 7d0e779be933ad147a74d8d102175c6b, type: 3}
