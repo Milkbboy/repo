@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -6,6 +5,9 @@ using ERang.Table;
 
 namespace ERang.Data
 {
+    /// <summary>
+    /// 등장하는 모든 카드의 데이터 시트
+    /// </summary>
     public class CardData : ScriptableObject
     {
         public int card_id; // 카드의 Id 값
@@ -39,7 +41,7 @@ namespace ERang.Data
             card_id = cardEntity.Card_Id;
             cardNameDesc_id = cardEntity.CardNameDesc_Id;
             cardDesc_id = cardEntity.CardDesc_Id;
-            cardType = Utils.ConvertCardType(cardEntity.CardType);
+            cardType = ConvertCardType(cardEntity.CardType);
             aiGroup_id = cardEntity.AiGroup_id;
             costMana = cardEntity.CostMana;
             hp = cardEntity.Hp;
@@ -70,7 +72,7 @@ namespace ERang.Data
             card_id = cardEntity.Card_Id;
             cardNameDesc_id = cardEntity.CardNameDesc_Id;
             cardDesc_id = cardEntity.CardDesc_Id;
-            cardType = Utils.ConvertCardType(cardEntity.CardType);
+            cardType = ConvertCardType(cardEntity.CardType);
             aiGroup_id = cardEntity.AiGroup_id;
             costMana = cardEntity.CostMana;
             hp = cardEntity.Hp;
@@ -145,6 +147,29 @@ namespace ERang.Data
         public Texture2D GetCardTexture()
         {
             return cardTexture;
+        }
+
+        public CardType ConvertCardType(string cardType)
+        {
+            switch (cardType)
+            {
+                case "Magic":
+                    return CardType.Magic;
+                case "Individuality":
+                    return CardType.Individuality;
+                case "Creature":
+                    return CardType.Creature;
+                case "Building":
+                    return CardType.Building;
+                case "Charm":
+                    return CardType.Charm;
+                case "Curse":
+                    return CardType.Curse;
+                case "Monster":
+                    return CardType.Monster;
+                default:
+                    return CardType.None;
+            }
         }
     }
 }

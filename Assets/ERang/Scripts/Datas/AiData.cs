@@ -6,27 +6,33 @@ using ERang.Table;
 
 namespace ERang.Data
 {
+    /// <summary>
+    /// 스킬의 타겟과 행동 타입을 지정하는 데이터 시트
+    /// </summary>
     public class AiData : ScriptableObject
     {
         public int ai_Id; // Ai의 Id 값
-        public string type; // 행동의 타입을 정의
-        public string target; // 대상 혹은 복수 대상을 설정한다.
-        public string atk_Type; // 행동이 이루어지는 절차를 설정한다.
-        public string atk_Range; // 공격 범위를 설정한다.
+        public AiDataType type; // 행동의 타입을 정의
+        public AiDataTarget target; // 대상 혹은 복수 대상을 설정한다.
+        public AiDataAttackType atk_Type; // 행동이 이루어지는 절차를 설정한다.
         public int atk_Cnt; // 공격 횟수
         public float atk_Interval; // 공격 횟수가 1이 아닐 경우 공격이 진행되는 텀을 지정
         public int value; // 해당 행동의 무게 값으로 Ai Group에서 참조된다.
         public int explosion_Shock; // Type이 Explosion일 경우에만 입력
         public string ability_id; // 실질적인 효과를 주는 Ability의 Id를 입력
+        // 공격 범위를 설정한다. 
+        // - 근거리의 경우 Type를 통해 가장 근접한 적으로 이동한 이후를 기준으로 1은 바로 앞의 적을 의미하고, 2는 2칸 앞의 적을 의미한다.
+        //   (Ex 1만 입력된 경우 바로 앞의 적을 공격, 1과 2가 입력된 경우 자신의 앞과 그 뒤의 적까지 공격) 
+        // - Ranged의 경우 자신의 위치를 기준으로 지정된 값 만큼의 거리를 의미한다. 
+        //   (Ex 4의 경우 자신의 4칸 앞을 향해 공격한다는 것을 의미, 4와 5가 입력된 경우 자신의 앞 4번째 그리고 5번째 적까지 공격한다는 의미)
         public List<int> atk_Ranges = new List<int>();
 
         public void Initialize(AiDataEntity entity)
         {
             ai_Id = entity.Ai_Id;
-            type = entity.Type;
-            target = entity.Target;
-            atk_Type = entity.Atk_Type;
-            atk_Range = entity.Atk_Range;
+            type = ConvertAiDataType(entity.Type);
+            target = ConvertAiDataTarget(entity.Target);
+            atk_Type = ConvertAiDataAtackType(entity.Atk_Type);
             atk_Cnt = entity.Atk_Cnt;
             atk_Interval = entity.Atk_Interval;
             value = entity.Value;
@@ -72,6 +78,64 @@ namespace ERang.Data
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        public static AiData GetAiData(int aiId)
+        {
+            if (ai_dict.ContainsKey(aiId))
+            {
+                return ai_dict[aiId];
+            }
+
+            return null;
+        }
+
+        AiDataType ConvertAiDataType(string type)
+        {
+            switch (type)
+            {
+                case "Melee": return AiDataType.Melee;
+                case "Ranged": return AiDataType.Ranged;
+                case "Explosion": return AiDataType.Explosion;
+                case "Buff": return AiDataType.Buff;
+                case "DeBuff": return AiDataType.DeBuff;
+                default: return AiDataType.None;
+            }
+        }
+
+        AiDataTarget ConvertAiDataTarget(string target)
+        {
+            // Remove spaces from the target string
+            target = target.Replace(" ", "");
+
+            switch (target)
+            {
+                case "NearEnemy": return AiDataTarget.NearEnemy;
+                case "Enemy": return AiDataTarget.Enemy;
+                case "RandomEnemy": return AiDataTarget.RandomEnemy;
+                case "RandomEnemyCreature": return AiDataTarget.RandomEnemyCreature;
+                case "AllEnemy": return AiDataTarget.AllEnemy;
+                case "Friendly": return AiDataTarget.Friendly;
+                case "AllFriendly": return AiDataTarget.AllFriendly;
+                case "AllFriendlyCreature": return AiDataTarget.AllFriendlyCreature;
+                default: return AiDataTarget.None;
+            }
+        }
+
+        AiDataAttackType ConvertAiDataAtackType(string atkType)
+        {
+            // Remove spaces from the atkType string
+            atkType = atkType.Replace(" ", "");
+
+            switch (atkType)
+            {
+                case "Automatic": return AiDataAttackType.Automatic;
+                case "SelectEnemy": return AiDataAttackType.SelectEnemy;
+                case "SelectFriendly": return AiDataAttackType.SelectFriendly;
+                case "SelectEnemyCreature": return AiDataAttackType.SelectEnemyCreature;
+                case "SelectFriendlyCreature": return AiDataAttackType.SelectFriendlyCreature;
+                default: return AiDataAttackType.None;
+            }
         }
     }
 }

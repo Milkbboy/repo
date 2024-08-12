@@ -7,13 +7,16 @@ using ERang.Table;
 
 namespace ERang.Data
 {
+    /// <summary>
+    /// Ai와 AiGroup에서 스킬이 선택되고 대상이 선택된 후, 실질적인 효과를 지정하는 데이터
+    /// </summary>
     public class AbilityData : ScriptableObject
     {
         public int abilityData_Id;
-        public string abilityType;
+        public AbilityType abilityType;
         public int value;
         public float ratio;
-        public string type;
+        public AbilityWorkType type;
         public int duration;
         public string skillAnim;
         public string skillFx;
@@ -26,10 +29,10 @@ namespace ERang.Data
         public void Initialize(AbilityDataEntity entity)
         {
             abilityData_Id = entity.AbilityData_Id;
-            abilityType = entity.AbilityType;
+            abilityType = ConvertAbilityType(entity.AbilityType);
             value = entity.Value;
             ratio = entity.Ratio;
-            type = entity.Type;
+            type = ConvertAbilityWorkType(entity.Type);
             duration = entity.Duration;
             skillAnim = entity.SkillAnim;
             skillFx = entity.SkillFx;
@@ -68,6 +71,35 @@ namespace ERang.Data
 
                 abilityData_list.Add(abilityData);
                 abilityData_dict.Add(abilityData.abilityData_Id, abilityData);
+            }
+        }
+
+        AbilityType ConvertAbilityType(string abilityType)
+        {
+            switch (abilityType)
+            {
+                case "Damage": return AbilityType.Damage;
+                case "Heal": return AbilityType.Heal;
+                case "AtkUp": return AbilityType.AtkUp;
+                case "DefUp": return AbilityType.DefUp;
+                case "BrokenDef": return AbilityType.BrokenDef;
+                case "ChargeDamage": return AbilityType.ChargeDamage;
+                case "AddGoldPer": return AbilityType.AddGoldPer;
+                case "AddMana": return AbilityType.AddMana;
+                case "SubMana": return AbilityType.SubMana;
+                case "AddGold": return AbilityType.AddGold;
+                default: return AbilityType.None;
+            }
+        }
+
+        AbilityWorkType ConvertAbilityWorkType(string type)
+        {
+            switch (type)
+            {
+                case "Active": return AbilityWorkType.Active;
+                case "Passive": return AbilityWorkType.Passive;
+                case "OnHand": return AbilityWorkType.OnHand;
+                default: return AbilityWorkType.None;
             }
         }
     }

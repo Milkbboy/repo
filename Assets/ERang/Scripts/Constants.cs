@@ -17,4 +17,78 @@ namespace ERang
         Monster, // 적군의 크리쳐 카드로 기본적으로 체력, 공격력, 방어력이 존재한다.
         EnemyMaster, // 적군의 마스터 카드로 기본적으로 체력, 공격력, 방어력이 존재한다.
     }
+
+    // 행동 패턴의 진행 방식 지정으로 초안에서는 2개의 타입이 존재한다.
+    public enum AiGroupType
+    {
+        None = 0,
+        Repeat, // 순차적으로 AI 그룹을 호출하고, 마지막 그룹에 도달 시 최초 그룹으로 순환한다.
+        Random, // 나열된 AI 그룹 중 하나를 임의로 선택한다. (선택 확율은 별도 지정 없이 동일한다. n/1)
+    }
+
+    // 행동의 타입을 정의하며 초안으로는 총 3가지 타입이 존재함.
+    public enum AiDataType
+    {
+        None = 0,
+        Melee, // 근거리 행동으로 Melee로 설정된 경우 행동 시 가장 가까운 적이 배치된 필드로 이동한다.
+        Ranged, // 원거리 행동으로 Ranged로 설정된 경우 제자리에서 행동한다.
+        Explosion, // 폭발 공격으로 Explosion로 설정된 경우 제자리에서 행동한다.
+        Buff, // 이로운 효과를 주는 버프 행동으로 제자리에서 행동한다. (Ranged와 동일하나 데이터 가독성을 위해 분리)
+        DeBuff, // 해로운 효과를 주는 디버프 행동으로 제자리에서 행동한다. (Ranged와 동일하나 데이터 가독성을 위해 분리)
+    }
+
+    // 대상 혹은 복수 대상을 설정한다.
+    public enum AiDataTarget
+    {
+        None = 0,
+        NearEnemy, // 가장 가까운 적을 대상으로 설정한다.
+        Enemy, // 적을 대상으로 설정한다.
+        RandomEnemy, // 적 보스를 포함한 모든 적 중 임의의 대상을 선정한다.
+        RandomEnemyCreature, // 적 보스를 제외한 모든 적을 임의의 대상으로 선정한다.
+        AllEnemy, // 적 보스를 포함한 모든 적을 대상으로 한다
+        Friendly, // 아군을 대상으로 설정한다.
+        AllFriendly, // 마왕을 포함한 아군을 대상으로 한다.
+        AllFriendlyCreature, // 마왕을 제외한 아군을 대상으로 한다.
+    }
+
+    // 행동이 이루어지는 절차를 설정한다.
+    public enum AiDataAttackType
+    {
+        None = 0,
+        Automatic, // 자동으로 대상이 지정된다.
+        SelectEnemy, // 적 보스를 포함한 적군 중 하나를 대상으로 지정한다 (지정 UI 출력)
+        SelectFriendly, // 마왕을 포함한 아군 중 하나를 대상으로 지정한다 (지정 UI 출력)
+        SelectEnemyCreature, // 적 보스를 제외한 적군 중 하나를 대상으로 지정한다 (지정 UI 출력)
+        SelectFriendlyCreature, // 마왕을 제외한 아군 중 하나를 대상으로 지정한다 (지정 UI 출력)
+    }
+
+    /// <summary>
+    /// 실질적인 효과를 스킬의 효과를 타입
+    /// </summary>
+    public enum AbilityType
+    {
+        None = 0,
+        Damage, // 대상에게 Value 만큼의 데미지를 준다.
+        Heal, // 대상의 체력을 Value 만큼 회복한다.
+        AtkUp, // 대상의 공격력을 Value 만큼 Duration 턴 동안 상승시킨다.
+        DefUp, // 대상의 방어력을 Value 만큼 Duration 턴 동안 상승시킨다.
+        BrokenDef, // 대상의 방어력을 Value 만큼 Duration 턴 동안 감소시킨다.
+        ChargeDamage, // Duration 만큼 공격을 충천 후, 대상에게 Value 만큼의 데미지를 준다.
+        AddGoldPer, // Ratio에 지정된 퍼센트 만큼 획득하는 골드량이 증가한다.
+        AddMana, // 대상의 마나를 Value 만큼 Duration 턴 동안 증가시킨다.
+        SubMana, // 대상의 마나를 Value 만큼 Duration 턴 동안 감소시킨다.
+        AddGold, // Value 만큼 골드를 획득한다.
+    }
+
+    /// <summary>
+    /// 어빌리티의 적용 방식을 타입으로 지정
+    /// </summary>
+    public enum AbilityWorkType
+    {
+        None = 0,
+        Active, // 어빌리티가 호출되는 시점에 1회 발동
+        Passive, // 세션이 시작 후 세션이 종료되기 전까지 지속
+        OnHand, // 핸드에 카드가 있을 때만 효과 지속
+        Onstage, // 이번 전투에 한하여 해당 효과 지속
+    }
 }
