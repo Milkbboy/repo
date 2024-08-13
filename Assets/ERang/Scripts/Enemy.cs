@@ -46,15 +46,7 @@ namespace ERang
 
         public Card GetMonsterCard(string cardUid)
         {
-            foreach (Card card in monsterCards)
-            {
-                if (card.uid == cardUid)
-                {
-                    return card;
-                }
-            }
-
-            return null;
+            return monsterCards.Find(card => card.uid == cardUid);
         }
 
         public void RemoveMonsterCard(string cardUid)

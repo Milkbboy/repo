@@ -41,13 +41,13 @@ namespace ERang
 
             List<Card> targets = GetTargets(aiData, targetCards);
 
-            Debug.Log($"TargetLogic.CalulateTarget() - attacker {attackerCard.id} target {targets.Count} ability_Ids {aiData.ability_Ids.Count}");
-
             if (targets == null)
             {
                 Debug.LogError($"TargetLogic.CalulateTarget() - attacker {attackerCard.id} targets is null");
                 return null;
             }
+
+            Debug.Log($"TargetLogic.CalulateTarget() - attacker {attackerCard.id} target {targets.Count} ability_Ids {aiData.ability_Ids.Count}");
 
             for (int i = 0; i < aiData.ability_Ids.Count; i++)
             {

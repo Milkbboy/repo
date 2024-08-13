@@ -107,7 +107,6 @@ namespace ERang
         {
             Debug.Log($"Removing card from slot {slot}");
 
-            cardType = CardType.None;
             isOccupied = false;
             isOverlapCard = false;
 

@@ -212,26 +212,36 @@ namespace ERang
             return null;
         }
 
-        public BoardSlot GetMonsterBoardSlot(string cardUid)
+        public BoardSlot GetCreatureBoardSlot(string cardUid)
         {
-            foreach (BoardSlot slot in monsterSlots)
-            {
-                if (slot.IsOccupied && slot.CardUid == cardUid)
-                {
-                    return slot;
-                }
-            }
-
-            return null;
+            return creatureSlots.Find(slot => slot.IsOccupied && slot.CardUid == cardUid);
         }
 
-        public void ResetBoardSlot(int slot)
+        public BoardSlot GetMonsterBoardSlot(string cardUid)
+        {
+            return monsterSlots.Find(slot => slot.IsOccupied && slot.CardUid == cardUid);
+        }
+
+        public void ResetCreatureSlot(int slot)
+        {
+            BoardSlot creatureSlot = creatureSlots.Find(x => x.Slot == slot);
+
+            if (creatureSlot == null)
+            {
+                Debug.LogError($"ResetCreatureSlot Invalid slot: {slot}");
+                return;
+            }
+
+            creatureSlot.RemoveCard();
+        }
+
+        public void ResetMonsterSlot(int slot)
         {
             BoardSlot monsterSlot = monsterSlots.Find(x => x.Slot == slot);
 
             if (monsterSlot == null)
             {
-                Debug.LogError($"Invalid slot: {slot}");
+                Debug.LogError($"ResetMonsterSlot Invalid slot: {slot}");
                 return;
             }
 

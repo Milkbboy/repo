@@ -39,7 +39,7 @@ namespace ERang
          */
         public AiData GetCardAiData()
         {
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(this.aiGroupId);
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
 
             List<int> aiGroupDataIds = new List<int>();
 
@@ -64,7 +64,7 @@ namespace ERang
                 aiGroupDataIds = aiGroupData.ai_Groups[Random.Range(0, aiGroupData.ai_Groups.Count)];
             }
 
-            Debug.Log($"aiGroupDataIds: {string.Join(", ", aiGroupDataIds)}");
+            Debug.Log($"aiGroupId: {aiGroupId}, aiGroupDataIds: {string.Join(", ", aiGroupDataIds)}");
 
             // AiData의 Value값을 총합하여 비중을 선정하여 하나를 선택한다.
             AiData aiData = SelectAiDataByValue(aiGroupDataIds);

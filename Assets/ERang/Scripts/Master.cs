@@ -152,20 +152,32 @@ namespace ERang
 
         public Card GetBoardCreatureCard(string cardUid)
         {
-            foreach (Card card in boardCreatureCards)
-            {
-                if (card.uid == cardUid)
-                {
-                    return card;
-                }
-            }
-
-            return null;
+            return boardCreatureCards.Find(card => card.uid == cardUid);
         }
 
         public List<Card> GetCreatureCards()
         {
             return boardCreatureCards;
+        }
+
+        /// <summary>
+        /// 보드 크리쳐 카드를 소멸로 이동
+        /// </summary>
+        /// <param name="cardUid"></param>
+        public void BoardCreatureCardToExtinction(string cardUid)
+        {
+            Card card = GetBoardCreatureCard(cardUid);
+
+            if (card == null)
+            {
+                Debug.LogError($"BoardSlotCardToGrave: card is null({card.id})");
+                return;
+            }
+
+            boardCreatureCards.Remove(card);
+            extinctionCards.Add(card);
+
+            // Debug.Log($"BoardSlotCardToGrave: {card.id}, BoardCreatureCardCount: {boardCreatureCards.Count}, GraveCardCount: {graveCards.Count}");
         }
     }
 }
