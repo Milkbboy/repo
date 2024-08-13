@@ -74,6 +74,18 @@ namespace ERang.Data
             }
         }
 
+        public static AbilityData GetAbilityData(int abilityData_Id)
+        {
+            if (abilityData_dict.ContainsKey(abilityData_Id))
+            {
+                return abilityData_dict[abilityData_Id];
+            }
+
+            Debug.LogError($"AbilityData.GetAbilityData() - abilityData_Id {abilityData_Id} is not found");
+
+            return null;
+        }
+
         AbilityType ConvertAbilityType(string abilityType)
         {
             switch (abilityType)

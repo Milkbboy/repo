@@ -37,15 +37,17 @@ namespace ERang
         /*
          * 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
          */
-        public void GetCardAction()
+        public AiData GetCardAiData()
         {
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(this.aiGroupId);
 
             List<int> aiGroupDataIds = new List<int>();
 
             // 순차적으로 AI 그룹을 호출하고, 마지막 그룹에 도달 시 최초 그룹으로 순환한다.
             if (aiGroupData.aiGroupType == AiGroupType.Repeat)
             {
+                Debug.Log($"aiGroupIndex: {aiGroupIndex}, aiGroupData.ai_Groups.Count: {aiGroupData.ai_Groups.Count}");
+
                 if (aiGroupIndex >= aiGroupData.ai_Groups.Count)
                 {
                     aiGroupIndex = 0;
@@ -62,16 +64,18 @@ namespace ERang
                 aiGroupDataIds = aiGroupData.ai_Groups[Random.Range(0, aiGroupData.ai_Groups.Count)];
             }
 
+            Debug.Log($"aiGroupDataIds: {string.Join(", ", aiGroupDataIds)}");
+
             // AiData의 Value값을 총합하여 비중을 선정하여 하나를 선택한다.
             AiData aiData = SelectAiDataByValue(aiGroupDataIds);
 
             if (aiData == null)
             {
                 Debug.LogError($"AiData is null. aiGroupId: {aiGroupId}");
-                return;
+                return null;
             }
 
-
+            return aiData;
         }
 
         /*

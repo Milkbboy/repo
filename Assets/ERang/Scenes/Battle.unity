@@ -2092,6 +2092,7 @@ GameObject:
   - component: {fileID: 1494334407}
   - component: {fileID: 1494334406}
   - component: {fileID: 1494334408}
+  - component: {fileID: 1494334410}
   - component: {fileID: 1494334409}
   m_Layer: 0
   m_Name: BattleScene
@@ -2153,6 +2154,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e10e15c94f2e694bbb6f926c674fcc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1494334410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494334405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1391382dbfef024795109b7481288c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1524841214

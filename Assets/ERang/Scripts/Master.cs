@@ -162,5 +162,10 @@ namespace ERang
 
             return null;
         }
+
+        public List<Card> GetCreatureCards()
+        {
+            return boardCreatureCards;
+        }
     }
 }

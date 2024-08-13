@@ -204,15 +204,31 @@ namespace ERang
 
             return null;
         }
+
+        public BoardSlot GetMonsterBoardSlot(string cardUid)
+        {
+            foreach (BoardSlot slot in monsterSlots)
+            {
+                if (slot.IsOccupied && slot.CardUid == cardUid)
+                {
+                    return slot;
+                }
+            }
+
+            return null;
+        }
+
         public void ResetBoardSlot(int slot)
         {
-            if (slot < 0 || slot >= monsterSlots.Count)
+            BoardSlot monsterSlot = monsterSlots.Find(x => x.GetSlot() == slot);
+
+            if (monsterSlot == null)
             {
                 Debug.LogError($"Invalid slot: {slot}");
                 return;
             }
 
-            monsterSlots[slot].RemoveCard();
+            monsterSlot.RemoveCard();
         }
     }
 }

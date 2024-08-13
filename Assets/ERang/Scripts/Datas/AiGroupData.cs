@@ -56,12 +56,12 @@ namespace ERang.Data
             reaction_Condition_3_Ratio = entity.Reaction_Condition_3_Ratio;
             reaction_Ai_3 = entity.Reaction_Ai_3;
 
-            ai_Groups.Add(Utils.ParseIntArray(ai_Group_1).Where(x => x != 0).ToList());
-            ai_Groups.Add(Utils.ParseIntArray(ai_Group_2).Where(x => x != 0).ToList());
-            ai_Groups.Add(Utils.ParseIntArray(ai_Group_3).Where(x => x != 0).ToList());
-            ai_Groups.Add(Utils.ParseIntArray(ai_Group_4).Where(x => x != 0).ToList());
-            ai_Groups.Add(Utils.ParseIntArray(ai_Group_5).Where(x => x != 0).ToList());
-            ai_Groups.Add(Utils.ParseIntArray(ai_Group_6).Where(x => x != 0).ToList());
+            AddAiGroup(ai_Group_1);
+            AddAiGroup(ai_Group_2);
+            AddAiGroup(ai_Group_3);
+            AddAiGroup(ai_Group_4);
+            AddAiGroup(ai_Group_5);
+            AddAiGroup(ai_Group_6);
         }
 
         public static List<AiGroupData> aiGroups_list = new List<AiGroupData>();
@@ -112,6 +112,16 @@ namespace ERang.Data
             }
 
             return null;
+        }
+
+        private void AddAiGroup(string aiGroup)
+        {
+            var group = Utils.ParseIntArray(aiGroup).Where(x => x != 0).ToList();
+
+            if (group.Any())
+            {
+                ai_Groups.Add(group);
+            }
         }
     }
 }

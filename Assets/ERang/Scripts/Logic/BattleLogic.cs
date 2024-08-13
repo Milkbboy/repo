@@ -105,10 +105,22 @@ namespace ERang
             MonsterAction();
         }
 
+        /// <summary>
+        /// 크리쳐의 AiData AttckType 은 Automatic 이어야 한다.
+        /// - 유저 인풋이 있는 카드는 AttackType 에 Select 가 있다.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator MasterCreatureAction()
         {
             // 보드 슬롯 인덱스 3, 2, 1 순으로 공격
             List<BoardSlot> creatureSlots = Board.Instance.GetCreatureSlots();
+            List<Card> monsterCards = enemy.GetMonsterCards();
+
+            if (monsterCards.Count == 0)
+            {
+                Debug.Log("MasterCreatureAction: monsterCards is empty");
+                yield break;
+            }
 
             for (int i = creatureSlots.Count - 1; i >= 0; --i)
             {
@@ -120,33 +132,37 @@ namespace ERang
                     continue;
                 }
 
-                // 타겟 슬로 설정
-                BoardSlot monsterBoardSlot = Board.Instance.GetTargetMonsterBoardSlot();
-
-                if (monsterBoardSlot == null || monsterBoardSlot.IsOccupied == false)
-                {
-                    continue;
-                }
-
-                // 공격 방어 카드 얻기
+                // 공격 카드 얻기
                 Card creatureCard = master.GetBoardCreatureCard(creatureSlot.CardUid);
-                Card monsterCard = enemy.GetMonsterCard(monsterBoardSlot.CardUid);
 
-                Debug.Log($"MasterCreatureAction: {creatureSlot.GetSlot()} -> {monsterBoardSlot.GetSlot()}");
+                // 크리쳐 카드에 영향 받는 몬스터 카드 리스트
+                List<Card> affectedMonsters = TargetLogic.Instance.CalulateTarget(creatureCard, enemy.GetMonsterCards());
 
-                monsterCard.hp -= creatureCard.atk;
-
-                if (monsterCard.hp <= 0)
+                // 몬스터 카드에 데미지 적용
+                foreach (Card monsterCard in affectedMonsters)
                 {
-                    enemy.RemoveMonsterCard(monsterCard.uid);
-                    Board.Instance.ResetBoardSlot(monsterBoardSlot.GetSlot());
-                }
-                else
-                {
-                    monsterBoardSlot.SetCardHp(monsterCard.hp);
-                }
+                    BoardSlot monsterBoardSlot = Board.Instance.GetMonsterBoardSlot(monsterCard.uid);
 
-                yield return new WaitForSeconds(1f);
+                    if (monsterBoardSlot == null)
+                    {
+                        Debug.LogError($"MasterCreatureAction: monsterBoardSlot is null({monsterCard.uid})");
+                        continue;
+                    }
+
+                    if (monsterCard.hp <= 0)
+                    {
+                        enemy.RemoveMonsterCard(monsterCard.uid);
+                        Board.Instance.ResetBoardSlot(monsterBoardSlot.GetSlot());
+                    }
+                    else
+                    {
+                        monsterBoardSlot.SetCardHp(monsterCard.hp);
+                    }
+
+                    Debug.Log($"MasterCreatureAction: {creatureSlot.GetSlot()} -> {monsterBoardSlot.GetSlot()}");
+
+                    yield return new WaitForSeconds(1f);
+                }
             }
         }
 

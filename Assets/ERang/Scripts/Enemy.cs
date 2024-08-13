@@ -39,6 +39,11 @@ namespace ERang
             }
         }
 
+        public List<Card> GetMonsterCards()
+        {
+            return monsterCards;
+        }
+
         public Card GetMonsterCard(string cardUid)
         {
             foreach (Card card in monsterCards)

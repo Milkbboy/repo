@@ -19,7 +19,7 @@ namespace ERang.Data
         public float atk_Interval; // 공격 횟수가 1이 아닐 경우 공격이 진행되는 텀을 지정
         public int value; // 해당 행동의 무게 값으로 Ai Group에서 참조된다.
         public int explosion_Shock; // Type이 Explosion일 경우에만 입력
-        public string ability_id; // 실질적인 효과를 주는 Ability의 Id를 입력
+        public List<int> ability_Ids = new List<int>(); // 실질적인 효과를 주는 Ability의 Id를 입력
         // 공격 범위를 설정한다. 
         // - 근거리의 경우 Type를 통해 가장 근접한 적으로 이동한 이후를 기준으로 1은 바로 앞의 적을 의미하고, 2는 2칸 앞의 적을 의미한다.
         //   (Ex 1만 입력된 경우 바로 앞의 적을 공격, 1과 2가 입력된 경우 자신의 앞과 그 뒤의 적까지 공격) 
@@ -37,8 +37,7 @@ namespace ERang.Data
             atk_Interval = entity.Atk_Interval;
             value = entity.Value;
             explosion_Shock = entity.Explosion_Shock;
-            ability_id = entity.Ability_id;
-
+            ability_Ids.AddRange(Utils.ParseIntArray(entity.Ability_id).Where(x => x != 0));
             atk_Ranges.AddRange(Utils.ParseIntArray(entity.Atk_Range).Where(x => x != 0));
         }
 
