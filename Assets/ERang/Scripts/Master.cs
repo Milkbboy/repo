@@ -61,15 +61,7 @@ namespace ERang
 
         public Card GetHandCard(string cardUid)
         {
-            foreach (Card card in handCards)
-            {
-                if (card.uid == cardUid)
-                {
-                    return card;
-                }
-            }
-
-            return null;
+            return handCards.Find(card => card.uid == cardUid);
         }
 
         public void IncreaseMana(int value)
@@ -107,14 +99,10 @@ namespace ERang
             if (cardType == CardType.Creature)
             {
                 boardCreatureCards.Add(card);
-
-                Debug.Log($"HandCardToBoard: {cardUid}, HandCardCount: {handCards.Count}, boardCreatureCardCount: {boardCreatureCards.Count}");
             }
             else if (cardType == CardType.Building)
             {
                 boardBuildingCards.Add(card);
-
-                Debug.Log($"HandCardToBoard: {card.id}, HandCardCount: {handCards.Count}, boardBuildingCardCount: {boardBuildingCards.Count}");
             }
         }
 

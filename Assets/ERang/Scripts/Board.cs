@@ -158,7 +158,7 @@ namespace ERang
                 }
             }
 
-            Debug.Log($"cardType: {cardType}, nearestSlot: {nearestSlot?.Slot}");
+            // Debug.Log($"cardType: {cardType}, nearestSlot: {nearestSlot?.Slot}");
 
             return nearestSlot;
         }

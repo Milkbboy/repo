@@ -46,7 +46,7 @@ namespace ERang.Data
             startAbilityIds.AddRange(Utils.ParseIntArray(entity.StartAbility_Id).Where(x => x != 0));
 
             // 이미지 로드
-            string texturePath = $"Textures/adventurer_female";
+            string texturePath = $"Textures/Character_01_Lucy";
             masterTexture = Resources.Load<Texture2D>(texturePath);
 
             if (masterTexture == null)

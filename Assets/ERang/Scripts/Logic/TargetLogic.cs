@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ERang.Data;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace ERang
 {
@@ -39,15 +40,34 @@ namespace ERang
             // aiData.atk_Ranges;
             // aiData.atk_Cnt;
 
+            List<int> targetCardIds = targetCards.Select(x => x.id).ToList();
+            var logTargets = new
+            {
+                aiGroupId = attackerCard.aiGroupId,
+                targetCardIds,
+            };
+
             List<Card> targets = GetTargets(aiData, targetCards);
+            Debug.Log($"TargetLogic.CalulateTarget() attackerCard: {attackerCard.id}, {JsonConvert.SerializeObject(logTargets)}");
 
             if (targets == null)
             {
-                Debug.LogError($"TargetLogic.CalulateTarget() - attacker {attackerCard.id} targets is null");
-                return null;
+                Debug.LogError($"TargetLogic.CalulateTarget() - attacker {attackerCard.id}, targets is null. aiData: {JsonConvert.SerializeObject(aiData)}");
+                return new List<Card>();
             }
 
-            Debug.Log($"TargetLogic.CalulateTarget() - attacker {attackerCard.id} target {targets.Count} ability_Ids {aiData.ability_Ids.Count}");
+            List<int> targetIds = targets.Select(x => x.id).ToList();
+            List<int> abilityIds = aiData.ability_Ids.Select(x => x).ToList();
+
+            var logData = new
+            {
+                attacker = attackerCard.id,
+                abilityIds = abilityIds,
+                targetIds = targetIds,
+                aiData = aiData,
+            };
+
+            Logger.Log(logData);
 
             for (int i = 0; i < aiData.ability_Ids.Count; i++)
             {
@@ -59,12 +79,14 @@ namespace ERang
                     case AbilityType.Damage:
                         foreach (Card target in targets)
                         {
+                            int beforeHp = target.hp;
+
                             for (int j = 0; j < aiData.atk_Cnt; ++j)
                             {
                                 target.hp -= attackerCard.atk;
                             }
 
-                            Debug.Log($"TargetLogic.CalulateTarget() - attacker {attackerCard.id} damage {attackerCard.atk} to target {target.id} hp {target.hp}");
+                            Debug.Log($"TargetLogic.CalulateTarget() - attacker: {attackerCard.id}, damage: {attackerCard.atk}, target: {target.id}, hp: {beforeHp} => {target.hp}");
                         }
 
                         break;

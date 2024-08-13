@@ -1,10 +1,9 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using ERang.Data;
-using RogueEngine;
 using UnityEngine;
-using System;
+using Newtonsoft.Json;
 
 namespace ERang
 {
@@ -114,6 +113,12 @@ namespace ERang
         /// <returns></returns>
         IEnumerator MasterCreatureAction()
         {
+            List<int> attackerIds = Board.Instance.GetOccupiedCreatureCards().Select(x => x.id).ToList();
+            var logAttacker = new { attackerIds };
+            List<int> targetIds = Board.Instance.GetOccupiedMonsterCards().Select(x => x.id).ToList();
+            var logTarget = new { targetIds };
+            Debug.Log($"MasterCreatureAction attackerIds: {JsonConvert.SerializeObject(logAttacker)}, targetIds: {JsonConvert.SerializeObject(logTarget)}");
+
             return CreateBoardCardAction(
                 () => Board.Instance.GetOccupiedCreatureCards(),
                 () => Board.Instance.GetOccupiedMonsterCards(),
@@ -129,6 +134,12 @@ namespace ERang
         /// <returns></returns>
         IEnumerator EnemyMonsterAction()
         {
+            List<int> attackerIds = Board.Instance.GetOccupiedMonsterCards().Select(x => x.id).ToList();
+            var logAttacker = new { attackerIds };
+            List<int> targetIds = Board.Instance.GetOccupiedCreatureCards().Select(x => x.id).ToList();
+            var logTarget = new { targetIds };
+            Debug.Log($"EnemyMonsterAction attackerIds: {JsonConvert.SerializeObject(logAttacker)}, targetIds: {JsonConvert.SerializeObject(logTarget)}");
+
             return CreateBoardCardAction(
                 () => Board.Instance.GetOccupiedMonsterCards(),
                 () => Board.Instance.GetOccupiedCreatureCards(),
@@ -155,7 +166,7 @@ namespace ERang
 
                 if (targetCards.Count == 0)
                 {
-                    Debug.Log("CreatureAction: targetCards is empty");
+                    Debug.Log("BattleLogic.CreateBoardCardAction: targetCards is empty");
                     yield break;
                 }
 
@@ -166,8 +177,8 @@ namespace ERang
 
                 if (affectCards == null)
                 {
-                    Debug.Log($"CreatureAction: {attacker.id} affectCards is null");
-                    yield break;
+                    Debug.Log($"BattleLogic.CreateBoardCardAction: {attacker.id} affectCards is null");
+                    yield return null;
                 }
 
                 // 영향 받은 카드 설정
@@ -177,7 +188,7 @@ namespace ERang
 
                     if (boardSlot == null)
                     {
-                        Debug.LogError($"CreatureAction: boardSlot is null({affectedCard.uid})");
+                        Debug.LogError($"BattleLogic.CreateBoardCardAction: boardSlot is null({affectedCard.uid})");
                         continue;
                     }
 
@@ -190,8 +201,6 @@ namespace ERang
                     {
                         boardSlot.SetCardHp(affectedCard.hp);
                     }
-
-                    Debug.Log($"CreatureAction: {attacker.id} -> {affectedCard.id}");
 
                     yield return new WaitForSeconds(1f);
                 }
@@ -287,6 +296,8 @@ namespace ERang
             master.DecreaseMana(card.costMana);
 
             Board.Instance.SetMasterStat(master);
+
+            Debug.Log($"BoardSlotEquipCard: {card.id}, BoardSlot: {boardSlotRef.Slot}");
         }
 
         public void HandCardUse(string cardUid)

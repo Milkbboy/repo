@@ -73,7 +73,7 @@ namespace ERang
 
         public void SetMasterCard(Master master)
         {
-            Debug.Log("CardUI SetMasterCard: " + master.masterId);
+            // Debug.Log("CardUI SetMasterCard: " + master.masterId);
             MasterData masterData = MasterData.master_dict[master.masterId];
 
             // Debug.Log("CardUI SetCard: " + cardId);
