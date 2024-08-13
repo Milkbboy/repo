@@ -21,7 +21,7 @@ MonoBehaviour:
     CostMana: 2
     CostGold: 0
     Hp: 5
-    Atk: 3
+    Atk: 1
     Def: 0
     Extinction: 1
     CompleteExtinction: 0

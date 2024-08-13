@@ -7,18 +7,22 @@ namespace ERang
 {
     public class BoardSlot : MonoBehaviour
     {
-        [SerializeField] private int cardId;
-        [SerializeField] private CardType cardType; // 보드에 장착할 수 있는 cardType
         [SerializeField] private int slot;
+        [SerializeField] private int index;
+        [SerializeField] private CardType cardType; // 보드에 장착할 수 있는 cardType
+        [SerializeField] private bool isOccupied = false; // 현재 사용 중인지 여부
+        [SerializeField] private bool isOverlapCard = false; // 카드가 올라가 있는지 여부
 
-        public string CardUid { get; private set; }
-        private bool isOccupied = false; // 현재 사용 중인지 여부
-        private bool isOverlapCard = false; // 카드가 올라가 있는지 여부
-
+        private Card card;
         private CardUI cardUI;
 
         public bool IsOccupied { get { return isOccupied; } }
         public bool IsOverlapCard { get { return isOverlapCard; } }
+        public string CardUid { get { return card.uid; } }
+        public int Index { get { return index; } }
+        public int Slot { get { return slot; } }
+        public CardType CardType { get { return cardType; } }
+        public Card Card { get { return card; } }
 
         void Awake()
         {
@@ -60,6 +64,11 @@ namespace ERang
             this.cardType = cardType;
         }
 
+        public void SetIndex(int index)
+        {
+            this.index = index;
+        }
+
         public void CreateMasterSlot(int slot, Master master)
         {
             this.slot = slot;
@@ -80,27 +89,13 @@ namespace ERang
         */
         public void EquipCard(Card card)
         {
-            CardUid = card.uid;
-            this.cardId = card.id;
-            this.cardType = card.type;
-            this.isOccupied = true;
-            this.isOverlapCard = false;
+            this.card = card;
+
+            isOccupied = true;
+            isOverlapCard = false;
 
             cardUI.statObj.SetActive(true);
             cardUI.SetCard(card);
-        }
-
-        /**
-         * @brief 슬롯의 카드 타입 얻기
-        */
-        public CardType GetCardType()
-        {
-            return cardType;
-        }
-
-        public int GetSlot()
-        {
-            return slot;
         }
 
         public void SetCardHp(int hp)
@@ -112,11 +107,11 @@ namespace ERang
         {
             Debug.Log($"Removing card from slot {slot}");
 
-            CardUid = string.Empty;
-            cardId = 0;
             cardType = CardType.None;
             isOccupied = false;
             isOverlapCard = false;
+
+            card = null;
 
             cardUI.ResetStat();
             cardUI.statObj.SetActive(false);

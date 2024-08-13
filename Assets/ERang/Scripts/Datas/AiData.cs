@@ -66,6 +66,7 @@ namespace ERang.Data
                 }
                 else
                 {
+                    aiData.ability_Ids.Clear();
                     aiData.atk_Ranges.Clear();
                 }
 

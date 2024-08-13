@@ -73,7 +73,7 @@ namespace ERang
                     }
 
                     // 보드 슬롯에 카드를 장착
-                    if (boardSlot != null && boardSlot.GetCardType() == this.cardType)
+                    if (boardSlot != null && boardSlot.CardType == this.cardType)
                     {
                         BattleLogic.Instance.BoardSlotEquipCard(boardSlot, cardUid);
                     }

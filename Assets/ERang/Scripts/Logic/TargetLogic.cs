@@ -36,8 +36,12 @@ namespace ERang
         {
             // 공격자 카드 기준으로 대상 카드 찾기
             AiData aiData = attackerCard.GetCardAiData();
+            // aiData.atk_Ranges;
+            // aiData.atk_Cnt;
 
             List<Card> targets = GetTargets(aiData, targetCards);
+
+            Debug.Log($"TargetLogic.CalulateTarget() - attacker {attackerCard.id} target {targets.Count} ability_Ids {aiData.ability_Ids.Count}");
 
             if (targets == null)
             {
@@ -55,8 +59,14 @@ namespace ERang
                     case AbilityType.Damage:
                         foreach (Card target in targets)
                         {
-                            target.hp -= attackerCard.atk;
+                            for (int j = 0; j < aiData.atk_Cnt; ++j)
+                            {
+                                target.hp -= attackerCard.atk;
+                            }
+
+                            Debug.Log($"TargetLogic.CalulateTarget() - attacker {attackerCard.id} damage {attackerCard.atk} to target {target.id} hp {target.hp}");
                         }
+
                         break;
                 }
             }

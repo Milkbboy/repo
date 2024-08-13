@@ -1,7 +1,8 @@
-using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using ERang.Data;
+using RogueEngine;
 using UnityEngine;
 
 namespace ERang
@@ -102,7 +103,7 @@ namespace ERang
 
             yield return new WaitForSeconds(1f);
 
-            MonsterAction();
+            StartCoroutine(EnemyMonsterAction());
         }
 
         /// <summary>
@@ -112,64 +113,63 @@ namespace ERang
         /// <returns></returns>
         IEnumerator MasterCreatureAction()
         {
-            // 보드 슬롯 인덱스 3, 2, 1 순으로 공격
-            List<BoardSlot> creatureSlots = Board.Instance.GetCreatureSlots();
-            List<Card> monsterCards = enemy.GetMonsterCards();
+            // 보드 슬롯에서 공격 순서대로 크리쳐 카드 얻기
+            List<Card> attackerCards = Board.Instance.GetOccupiedCreatureCards();
+            List<Card> targetCards = Board.Instance.GetOccupiedMonsterCards();
 
-            if (monsterCards.Count == 0)
+            if (targetCards.Count == 0)
             {
                 Debug.Log("MasterCreatureAction: monsterCards is empty");
                 yield break;
             }
 
-            for (int i = creatureSlots.Count - 1; i >= 0; --i)
+            for (int i = 0; i < attackerCards.Count; ++i)
             {
-                BoardSlot creatureSlot = creatureSlots[i];
+                Card attcker = attackerCards[i];
 
-                // 카드가 장착되어 있지 않으면 다음 카드로
-                if (!creatureSlot.IsOccupied)
+                // 반사 대미지는 어떻게 하지? 공격자가 영향을 받는 상황인데
+                // 타겟이 공격자한테 영향을 주는지 확인 필요
+
+                // 공격자에 영향 받은 카드들 (멀티 타겟 가능)
+                List<Card> affectedMonsters = TargetLogic.Instance.CalulateTarget(attcker, targetCards);
+
+                // 영향 받은 카드 설정
+                foreach (Card affectedCard in affectedMonsters)
                 {
-                    continue;
-                }
+                    BoardSlot boardSlot = Board.Instance.GetMonsterBoardSlot(affectedCard.uid);
 
-                // 공격 카드 얻기
-                Card creatureCard = master.GetBoardCreatureCard(creatureSlot.CardUid);
-
-                // 크리쳐 카드에 영향 받는 몬스터 카드 리스트
-                List<Card> affectedMonsters = TargetLogic.Instance.CalulateTarget(creatureCard, enemy.GetMonsterCards());
-
-                // 몬스터 카드에 데미지 적용
-                foreach (Card monsterCard in affectedMonsters)
-                {
-                    BoardSlot monsterBoardSlot = Board.Instance.GetMonsterBoardSlot(monsterCard.uid);
-
-                    if (monsterBoardSlot == null)
+                    if (boardSlot == null)
                     {
-                        Debug.LogError($"MasterCreatureAction: monsterBoardSlot is null({monsterCard.uid})");
+                        Debug.LogError($"MasterCreatureAction: monsterBoardSlot is null({affectedCard.uid})");
                         continue;
                     }
 
-                    if (monsterCard.hp <= 0)
+                    if (affectedCard.hp <= 0)
                     {
-                        enemy.RemoveMonsterCard(monsterCard.uid);
-                        Board.Instance.ResetBoardSlot(monsterBoardSlot.GetSlot());
+                        enemy.RemoveMonsterCard(affectedCard.uid);
+                        Board.Instance.ResetBoardSlot(boardSlot.Slot);
                     }
                     else
                     {
-                        monsterBoardSlot.SetCardHp(monsterCard.hp);
+                        boardSlot.SetCardHp(affectedCard.hp);
                     }
 
-                    Debug.Log($"MasterCreatureAction: {creatureSlot.GetSlot()} -> {monsterBoardSlot.GetSlot()}");
+                    Debug.Log($"MasterCreatureAction: {attcker.id} -> {affectedCard.id}");
 
                     yield return new WaitForSeconds(1f);
                 }
             }
         }
 
-        void MonsterAction()
+        /// <summary>
+        /// 몬스터 카드의 AiData AttckType 은 Automatic 이어야 한다.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator EnemyMonsterAction()
         {
             // 보드 슬롯 인덱스 6, 7, 8 순으로 공격
             List<BoardSlot> monsterSlots = Board.Instance.GetMonsterSlots();
+            List<Card> creatureCards = master.GetCreatureCards();
 
             for (int i = 0; i < monsterSlots.Count; ++i)
             {
@@ -180,7 +180,15 @@ namespace ERang
                 {
                     continue;
                 }
+
+                // 공격 카드 얻기
+                // Card attackerCard = enemy.GetMonsterCard(slot.CardUid);
+                List<Card> targetCards = master.GetCreatureCards();
+
+                // 몬스터 카드에 영향을 받는 크리쳐 카드 리스트
             }
+
+            yield return new WaitForSeconds(1f);
         }
 
         // 카드 섞기

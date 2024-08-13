@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using ERang.Data;
+using System.Linq;
+using RogueEngine;
 
 namespace ERang
 {
@@ -55,6 +57,9 @@ namespace ERang
             float totalWidth = (BoardSlotCardTypes.Length - 1) * (boardWidth + boardSpacing);
             float startX = -totalWidth / 2;
 
+            int creatureSlotStartIndex = 3;
+            int monsterSlotStartIndex = 6;
+
             for (int i = 0; i < BoardSlotCardTypes.Length; i++)
             {
                 float xPosition = startX + i * (boardWidth + boardSpacing);
@@ -75,9 +80,11 @@ namespace ERang
                         enemyMasterSlot = slot;
                         break;
                     case CardType.Creature:
+                        slot.SetIndex(creatureSlotStartIndex - i);
                         creatureSlots.Add(slot);
                         break;
                     case CardType.Monster:
+                        slot.SetIndex(i - monsterSlotStartIndex);
                         monsterSlots.Add(slot);
                         break;
                 }
@@ -151,7 +158,7 @@ namespace ERang
                 }
             }
 
-            Debug.Log($"cardType: {cardType}, nearestSlot: {nearestSlot?.GetSlot()}");
+            Debug.Log($"cardType: {cardType}, nearestSlot: {nearestSlot?.Slot}");
 
             return nearestSlot;
         }
@@ -220,7 +227,7 @@ namespace ERang
 
         public void ResetBoardSlot(int slot)
         {
-            BoardSlot monsterSlot = monsterSlots.Find(x => x.GetSlot() == slot);
+            BoardSlot monsterSlot = monsterSlots.Find(x => x.Slot == slot);
 
             if (monsterSlot == null)
             {
@@ -229,6 +236,34 @@ namespace ERang
             }
 
             monsterSlot.RemoveCard();
+        }
+
+        /// <summary>
+        /// 크리쳐 슬롯 중에서 카드가 장착된 슬롯 인덱스 순으로 카드 반환
+        /// - 슬롯 3, 2, 1 순서
+        /// </summary>
+        /// <returns></returns>
+        public List<Card> GetOccupiedCreatureCards()
+        {
+            return creatureSlots
+                .Where(slot => slot.IsOccupied)
+                .OrderBy(slot => slot.Index)
+                .Select(slot => slot.Card)
+                .ToList();
+        }
+
+        /// <summary>
+        /// 몬스터 슬롯 중에서 카드가 장착된 슬롯을 인덱스 순으로 카드 반환
+        /// - 슬롯 6, 7, 8 순서
+        /// </summary>
+        /// <returns></returns>
+        public List<Card> GetOccupiedMonsterCards()
+        {
+            return monsterSlots
+                .Where(slot => slot.IsOccupied)
+                .OrderBy(slot => slot.Index)
+                .Select(slot => slot.Card)
+                .ToList();
         }
     }
 }
