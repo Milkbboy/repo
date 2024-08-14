@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,20 +27,49 @@ namespace ERang.Data
         public int reaction_Ai_3;
         public AiGroupType aiGroupType;
 
+        // 이중 배열
         public List<List<int>> ai_Groups = new List<List<int>>();
+
+        // 중첩 클래스 Reaction 선언
+        public class Reaction
+        {
+            public int condition;
+            public float ratio;
+            public int ai;
+
+            public Reaction(int condition, float ratio, int ai)
+            {
+                this.condition = condition;
+                this.ratio = ratio;
+                this.ai = ai;
+            }
+        }
+
+        public List<Reaction> reactions = new List<Reaction>();
 
         public void Initialize(AiGroupDataEntity entity)
         {
             aiGroup_Id = entity.AiGroup_Id;
+
             switch (entity.Type)
             {
-                case "Repeat":
-                    aiGroupType = AiGroupType.Repeat;
-                    break;
-                case "Random":
-                    aiGroupType = AiGroupType.Random;
-                    break;
+                case "Repeat": aiGroupType = AiGroupType.Repeat; break;
+                case "Random": aiGroupType = AiGroupType.Random; break;
             }
+
+            string[] aiGroups = new string[] { entity.Ai_Group_1, entity.Ai_Group_2, entity.Ai_Group_3, entity.Ai_Group_4, entity.Ai_Group_5, entity.Ai_Group_6 };
+
+            // 이중 배열에 AiData 를 그룹으로(배열) 만들어서 추가
+            // Ai_Group_1: [ 1001, 2001], Ai_Group_2: [ 1002 ], Ai_Group_3: [ 1003, 2003, 1004 ]
+            foreach (var aiGroup in aiGroups)
+            {
+                AddAiGroup(aiGroup);
+            }
+
+            AddReaction(entity.Reaction_Condition_1, entity.Reaction_Condition_1_Ratio, entity.Reaction_Ai_1);
+            AddReaction(entity.Reaction_Condition_2, entity.Reaction_Condition_2_Ratio, entity.Reaction_Ai_2);
+            AddReaction(entity.Reaction_Condition_3, entity.Reaction_Condition_3_Ratio, entity.Reaction_Ai_3);
+
             ai_Group_1 = entity.Ai_Group_1;
             ai_Group_2 = entity.Ai_Group_2;
             ai_Group_3 = entity.Ai_Group_3;
@@ -55,13 +85,6 @@ namespace ERang.Data
             reaction_Condition_3 = entity.Reaction_Condition_3;
             reaction_Condition_3_Ratio = entity.Reaction_Condition_3_Ratio;
             reaction_Ai_3 = entity.Reaction_Ai_3;
-
-            AddAiGroup(ai_Group_1);
-            AddAiGroup(ai_Group_2);
-            AddAiGroup(ai_Group_3);
-            AddAiGroup(ai_Group_4);
-            AddAiGroup(ai_Group_5);
-            AddAiGroup(ai_Group_6);
         }
 
         public static List<AiGroupData> aiGroups_list = new List<AiGroupData>();
@@ -114,14 +137,27 @@ namespace ERang.Data
             return null;
         }
 
+        /// <summary>
+        /// Ai_Group 값이 있으면 aiGroup을 추가한다.
+        /// </summary>
+        /// <param name="aiGroup"></param>
         private void AddAiGroup(string aiGroup)
         {
             var group = Utils.ParseIntArray(aiGroup).Where(x => x != 0).ToList();
 
-            if (group.Any())
-            {
-                ai_Groups.Add(group);
-            }
+            if (group.Any() == false)
+                return;
+
+            ai_Groups.Add(group);
+        }
+
+        private void AddReaction(int condition, float ratio, int ai)
+        {
+            if (condition == 0)
+                return;
+
+            Reaction reaction = new Reaction(condition, ratio, ai);
+            reactions.Add(reaction);
         }
     }
 }

@@ -91,4 +91,57 @@ namespace ERang
         OnHand, // 핸드에 카드가 있을 때만 효과 지속
         Onstage, // 이번 전투에 한하여 해당 효과 지속
     }
+
+    /// <summary>
+    /// 체크할 대상을 선정함
+    /// </summary>
+    public enum ConditionTarget
+    {
+        None = 0,
+        NearEnemy, // 가장 가까운 적
+        Self, // 자기 자신
+        Enemy1, // : 적 진형을 설정 (1: 1열, 2: 2열, 3: 3열, 4: 적 마스터)
+        Enemy2, // : 적 진형을 설정 (1: 1열, 2: 2열, 3: 3열, 4: 적 마스터)
+        Enemy3, // : 적 진형을 설정 (1: 1열, 2: 2열, 3: 3열, 4: 적 마스터)
+        Enemy4, // : 적 진형을 설정 (1: 1열, 2: 2열, 3: 3열, 4: 적 마스터)
+        FriendlyCreature, // 아군 크리쳐 모두를 대상으로
+        EnemyCreature, // 적 크리쳐 모두를 대상으로
+        Card, // 카드를 대상으로
+    }
+
+    /// <summary>
+    /// 조건 타입 입력
+    /// </summary>
+    public enum ConditionType
+    {
+        None = 0,
+        Buff, // 대상의 버프 상태 확인
+        Debuff, // 대상의 디버프 상태 확인
+        HP, // 대상의 체력 상태 확인
+        EveryTurn, // 대상의 모든 턴
+        Extinction, // 대상의 소멸 상태 확인
+        Acquisition, // 대상이 추가 될 때
+    }
+
+    /// <summary>
+    /// 조건이 발동되는 시점
+    /// </summary>
+    public enum ConditionCheckPoint
+    {
+        None = 0,
+        TurnStart, // 턴이 시작 될 때 발동
+        TurnEnd, // 턴이 종료 될 때 발동
+        Immediately, // 해당 조건이 달성되는 즉시
+    }
+
+    /// <summary>
+    /// 해당 조건의 지속 방식
+    /// </summary>
+    public enum ConditionMethod
+    {
+        None = 0,
+        Always, // 조건이 발동 된 이후에도 계속 해당 조건을 다시 체크
+        StageOneTime, // 스테이지 한 판에 한번만 발동
+        GameOneTime, // 게임 전체에 한번만 발동
+    }
 }
