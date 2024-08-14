@@ -27,7 +27,7 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 0
     Level: 1
-    Level_1_img: bull
+    Level_1_img: adventurer_female
     Level_3_img: 
     Level_5_img: 
     HandStart_Ability: 
@@ -47,7 +47,7 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 0
     Level: 1
-    Level_1_img: hound
+    Level_1_img: witch_female
     Level_3_img: 
     Level_5_img: 
     HandStart_Ability: 
@@ -67,7 +67,7 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 0
     Level: 1
-    Level_1_img: wolf_alpha
+    Level_1_img: bandit
     Level_3_img: 
     Level_5_img: 
     HandStart_Ability: 

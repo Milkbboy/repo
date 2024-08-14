@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: 21001
   m_EditorClassIdentifier: 
   aiGroup_Id: 0
-  type: 
   ai_Group_1: 
   ai_Group_2: 
   ai_Group_3: 
@@ -29,9 +28,4 @@ MonoBehaviour:
   reaction_Condition_3: 0
   reaction_Condition_3_Ratio: 0
   reaction_Ai_3: 0
-  ai_Groups_1: 
-  ai_Groups_2: 
-  ai_Groups_3: 
-  ai_Groups_4: 
-  ai_Groups_5: 
-  ai_Groups_6: 
+  aiGroupType: 0
