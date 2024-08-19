@@ -8,7 +8,7 @@ namespace ERang.Data
 {
     public class ConditionData : ScriptableObject
     {
-        public int conditionData_Id; // Condition Id를 지정한다.
+        public int id; // Condition Id를 지정한다.
         public ConditionTarget target; // 체크할 대상을 선정함
         public ConditionType type; // 조건 타입 입력
         public ConditionCheckPoint checkPoint; // 조건이 발동되는 시점
@@ -18,7 +18,7 @@ namespace ERang.Data
 
         public void Initialize(ConditionDataEntity entity)
         {
-            conditionData_Id = entity.ConditionData_Id;
+            id = entity.ConditionData_Id;
             target = ConvertSetTarget(entity.SetTarget);
             type = ConvertConditionType(entity.ConditionType);
             checkPoint = ConvertCheckPoint(entity.CheckPoint);
@@ -54,11 +54,21 @@ namespace ERang.Data
                 conditionData.Initialize(conditionEntity);
 
                 conditionData_list.Add(conditionData);
-                conditionData_dict.Add(conditionData.conditionData_Id, conditionData);
+                conditionData_dict.Add(conditionData.id, conditionData);
             }
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        public static ConditionData GetConditionData(int id)
+        {
+            if (conditionData_dict.ContainsKey(id))
+            {
+                return conditionData_dict[id];
+            }
+
+            return null;
         }
 
         private ConditionTarget ConvertSetTarget(string setTarget)
@@ -84,7 +94,7 @@ namespace ERang.Data
             {
                 case "Buff": return ConditionType.Buff;
                 case "Debuff": return ConditionType.Debuff;
-                case "HP": return ConditionType.HP;
+                case "Hp": return ConditionType.Hp;
                 case "EveryTurn": return ConditionType.EveryTurn;
                 case "Extinction": return ConditionType.Extinction;
                 case "Acquisition": return ConditionType.Acquisition;

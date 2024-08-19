@@ -33,15 +33,15 @@ namespace ERang.Data
         // 중첩 클래스 Reaction 선언
         public class Reaction
         {
-            public int condition;
+            public int conditionId;
             public float ratio;
-            public int ai;
+            public int aiDataId;
 
             public Reaction(int condition, float ratio, int ai)
             {
-                this.condition = condition;
+                this.conditionId = condition;
                 this.ratio = ratio;
-                this.ai = ai;
+                this.aiDataId = ai;
             }
         }
 

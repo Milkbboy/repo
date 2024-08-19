@@ -38,8 +38,6 @@ namespace ERang
         // Start is called before the first frame update
         void Start()
         {
-            CreateBoardSlots();
-            CreateMonsterCard();
         }
 
         // Update is called once per frame
@@ -47,7 +45,7 @@ namespace ERang
         {
         }
 
-        void CreateBoardSlots()
+        public void CreateBoardSlots()
         {
             // 크리쳐 보드 슬롯 구성
             // [ 0: Master, 1: Creature, 2: Creature, 3: Creature, 4: None, 
@@ -121,7 +119,7 @@ namespace ERang
             }
         }
 
-        void CreateMonsterCard()
+        public void CreateMonsterCard()
         {
             Enemy enemy = BattleLogic.Instance.GetEnemy();
 

@@ -20,6 +20,15 @@ namespace ERang
         // 현재 설정된 Ai 그룹의 인덱스 값
         private int aiGroupIndex = 0;
 
+        private List<int> buffIds = new List<int>();
+        private List<int> deBuffIds = new List<int>();
+
+        public int BuffCount { get { return buffIds.Count; } }
+        public int DeBuffCount { get { return deBuffIds.Count; } }
+
+        public bool HasBuff { get { return buffIds.Count > 0; } }
+        public bool HasDeBuff { get { return deBuffIds.Count > 0; } }
+
         public Card(CardData cardData)
         {
             uid = Utils.GenerateShortUniqueID();
@@ -34,9 +43,10 @@ namespace ERang
             aiGroupId = cardData.aiGroup_id;
         }
 
-        /*
-         * 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
-         */
+        /// <summary>
+        /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
+        /// </summary>
+        /// <returns></returns>
         public AiData GetCardAiData()
         {
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
@@ -80,9 +90,54 @@ namespace ERang
             return aiData;
         }
 
-        /*
-         * AiData의 Value값을 총합하여 비중을 선정하여 하나를 선택한다.
-         */
+        /// <summary>
+        /// 턴 시작 시 체크해야 하는 컨디션 데이터들 얻기
+        /// - AiGroupData 와 ConditionData 쌍으로 반환
+        /// </summary>
+        /// <returns></returns>
+        public List<(AiGroupData.Reaction, ConditionData)> GetTurnStartReaction()
+        {
+            List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new List<(AiGroupData.Reaction, ConditionData)>();
+
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
+
+            if (aiGroupData == null)
+            {
+                Debug.LogError($"Card: aiGroupData is null. cardId: {id}, aiGroupId: {aiGroupId}");
+                return reactionConditionPairs;
+            }
+
+            if (aiGroupData.reactions.Count == 0)
+            {
+                Debug.Log($"Card: reactions is empty. cardId: {id}, aiGroupId: {aiGroupId}");
+                return reactionConditionPairs;
+            }
+
+            foreach (var reaction in aiGroupData.reactions)
+            {
+                ConditionData conditionData = ConditionData.GetConditionData(reaction.conditionId);
+
+                if (conditionData == null)
+                {
+                    Debug.LogError($"Card: conditionData is null. cardId: {id}, aiGroupId: {aiGroupId}, conditionId: {reaction.conditionId}");
+                    continue;
+                }
+
+                // 턴시작 실행되는 리엑션이 아니면 패스
+                if (conditionData.checkPoint != ConditionCheckPoint.TurnStart)
+                    continue;
+
+                reactionConditionPairs.Add((reaction, conditionData));
+            }
+
+            return reactionConditionPairs;
+        }
+
+        /// <summary>
+        /// AiData의 Value값을 총합하여 비중을 선정하여 하나를 선택한다.
+        /// </summary>
+        /// <param name="aiGroupDataIds"></param>
+        /// <returns></returns>
         private AiData SelectAiDataByValue(List<int> aiGroupDataIds)
         {
             if (aiGroupDataIds.Count == 1)

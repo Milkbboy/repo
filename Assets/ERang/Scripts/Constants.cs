@@ -109,6 +109,18 @@ namespace ERang
         Card, // 카드를 대상으로
     }
 
+    public class ConditionTargetConstants
+    {
+        public static ConditionTarget[] enemies = new ConditionTarget[]
+        {
+            ConditionTarget.NearEnemy,
+            ConditionTarget.Enemy1,
+            ConditionTarget.Enemy2,
+            ConditionTarget.Enemy3,
+            ConditionTarget.Enemy4,
+        };
+    }
+
     /// <summary>
     /// 조건 타입 입력
     /// </summary>
@@ -117,7 +129,7 @@ namespace ERang
         None = 0,
         Buff, // 대상의 버프 상태 확인
         Debuff, // 대상의 디버프 상태 확인
-        HP, // 대상의 체력 상태 확인
+        Hp, // 대상의 체력 상태 확인
         EveryTurn, // 대상의 모든 턴
         Extinction, // 대상의 소멸 상태 확인
         Acquisition, // 대상이 추가 될 때

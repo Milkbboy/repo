@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using ERang.Data;
 
 namespace ERang
 {
@@ -38,6 +39,8 @@ namespace ERang
         {
             // 보드 설정 - 덱 카운트
             Board.Instance.SetDeckCount(master.deckCards.Count);
+            Board.Instance.CreateBoardSlots();
+            Board.Instance.CreateMonsterCard();
 
             TurnStart();
         }
@@ -68,6 +71,9 @@ namespace ERang
 
             // 보드 설정
             Board.Instance.SetTurnCount(turn);
+
+            // 턴 시작시 실행되는 카드의 Reaction 을 확인
+            TurnStartCardReaction();
         }
 
         public void TurnEnd()
@@ -94,6 +100,54 @@ namespace ERang
 
             // 턴 다시 시작
             TurnStart();
+        }
+
+        void TurnStartCardReaction()
+        {
+            // 리액션을 확인하는 카드들
+            List<Card> reactionCards = Board.Instance.GetOccupiedMonsterCards();
+            // 적 카드들
+            List<Card> enemyCards = Board.Instance.GetOccupiedCreatureCards();
+
+            foreach (Card reactionCard in reactionCards)
+            {
+                Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}");
+
+                // 몬스터 카드의 턴 시작 리액션 정보들. AiGroupData 의 reactionCondition 들의 조건을 확인
+                List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = reactionCard.GetTurnStartReaction();
+
+                // 리액션
+                List<string> logs = reactionConditionPairs.Select((x, index) =>
+                {
+                    return $"[{index}] reaction: {JsonConvert.SerializeObject(x.Item1)}, condition: {JsonConvert.SerializeObject(x.Item2)}";
+                }).ToList();
+
+                if (reactionConditionPairs.Count == 0)
+                {
+                    Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reactionConditionPairs is empty");
+                    continue;
+                }
+
+                Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reactionConditionPairs {string.Join("\n", logs)}");
+
+                // 즉발 행동 대상, 조건 검사. 실행할 AiData 얻기. 즉발 행동 안할 수 있음.
+                foreach (var (reaction, condition) in reactionConditionPairs)
+                {
+                    // 즉발 행동 발동에 사용되는 대상. 자신도 대상 가능.
+                    List<Card> targets = TargetLogic.Instance.GetConditionTargets(condition, reactionCard, enemyCards);
+                    int aiDataId = ConditionLogic.Instance.GetReactionConditionAiDataId(reaction, condition, targets);
+
+                    if (aiDataId == 0)
+                    {
+                        Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reaction: {reaction.conditionId}, aiDataId: {aiDataId}");
+                        continue;
+                    }
+
+                    Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reaction: {reaction.conditionId}, aiDataId: {aiDataId}");
+
+                    AiData aiData = AiData.GetAiData(aiDataId);
+                }
+            }
         }
 
         // 보드 슬롯 카드 동작

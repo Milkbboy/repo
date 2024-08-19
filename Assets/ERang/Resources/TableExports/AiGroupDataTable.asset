@@ -38,9 +38,9 @@ MonoBehaviour:
     Ai_Group_4: 
     Ai_Group_5: 
     Ai_Group_6: 
-    Reaction_Condition_1: 2001
+    Reaction_Condition_1: 1003
     Reaction_Condition_1_Ratio: 0.3
-    Reaction_Ai_1: 2003
+    Reaction_Ai_1: 3003
     Reaction_Condition_2: 0
     Reaction_Condition_2_Ratio: 0
     Reaction_Ai_2: 0
