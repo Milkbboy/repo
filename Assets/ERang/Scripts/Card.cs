@@ -7,12 +7,24 @@ namespace ERang
 {
     public class Card
     {
+        /// <summary>
+        /// 버프 클래스
+        /// </summary>
+        public class DurationAbility
+        {
+            public int aiDataId; // AiData Id
+            public int abilityId; // 어빌리티 Id
+            public int abilityValue; // 어빌리티 값
+            public int duration; // 현재 지속 시간
+        }
+
         public string uid;
         public int id;
         public CardType type;
         public int costMana; // 소환에 필요한 마나
         public int costGold; // 소환에 필요한 골드
         public int hp; // 체력 값
+        public int maxHp; // 최대 체력 값
         public int atk; // 공격력 값 (공격력 값이 0인 캐릭터는 공격을 시도하지 않는다)
         public int def; // 초기 방어력 값
         public bool isExtinction; // Bool 값으로 True 시 해당 카드는 사용 시 해당 전투에서 카드 덱에서 삭제된다.
@@ -20,14 +32,14 @@ namespace ERang
         // 현재 설정된 Ai 그룹의 인덱스 값
         private int aiGroupIndex = 0;
 
-        private List<int> buffIds = new List<int>();
-        private List<int> deBuffIds = new List<int>();
+        private List<DurationAbility> deBuffs = new List<DurationAbility>();
+        private List<DurationAbility> buffs = new List<DurationAbility>();
 
-        public int BuffCount { get { return buffIds.Count; } }
-        public int DeBuffCount { get { return deBuffIds.Count; } }
+        public int BuffCount { get { return buffs.Count; } }
+        public int DeBuffCount { get { return deBuffs.Count; } }
 
-        public bool HasBuff { get { return buffIds.Count > 0; } }
-        public bool HasDeBuff { get { return deBuffIds.Count > 0; } }
+        public bool HasBuff { get { return buffs.Count > 0; } }
+        public bool HasDeBuff { get { return deBuffs.Count > 0; } }
 
         public Card(CardData cardData)
         {
@@ -41,6 +53,83 @@ namespace ERang
             def = cardData.def;
             isExtinction = cardData.extinction;
             aiGroupId = cardData.aiGroup_id;
+        }
+
+        /// <summary>
+        /// 카드의 버프 또는 디버프를 추가한다.
+        /// - 턴 종료때 리스트를 체크하고 duration을 감소 0이 되면 리스트에서 삭제
+        /// </summary>
+        /// <param name="aiType"></param>
+        /// <param name="abilityId"></param>
+        /// <param name="abilityValue"></param>
+        /// <param name="duration"></param>
+        public void AddAbilityDuration(AiDataType aiType, int abilityId, int abilityValue, int duration)
+        {
+            DurationAbility durationAbility = new DurationAbility
+            {
+                abilityId = abilityId,
+                abilityValue = abilityValue,
+                duration = duration,
+            };
+
+            if (aiType == AiDataType.Buff)
+            {
+                buffs.Add(durationAbility);
+                Debug.Log($"AddAbilityDuration - Buff: {id}, abilityId: {abilityId}, abilityValue: {abilityValue}, duration: {duration}");
+            }
+            else if (aiType == AiDataType.DeBuff)
+            {
+                deBuffs.Add(durationAbility);
+                Debug.Log($"AddAbilityDuration - DeBuff: {id}, abilityId: {abilityId}, abilityValue: {abilityValue}, duration: {duration}");
+            }
+        }
+
+        /// <summary>
+        /// 카드의 버프 또는 디버프 확인
+        /// </summary>
+        /// <param name="aiType"></param>
+        /// <param name="abilityId"></param>
+        /// <returns></returns>
+        public DurationAbility HasAbilityDuration(AiDataType aiType, int abilityId)
+        {
+            List<DurationAbility> durationAbilities = (aiType == AiDataType.Buff) ? buffs : deBuffs;
+
+            return durationAbilities.Find(x => x.abilityId == abilityId);
+        }
+
+        /// <summary>
+        /// 카드의 체력을 증가 또는 감소시킨다.
+        /// </summary>
+        /// <param name="value"></param>
+        public void AddHp(int value)
+        {
+            hp += value;
+
+            if (hp > maxHp)
+                hp = maxHp;
+
+            if (hp <= 0)
+                hp = 0;
+        }
+
+        /// <summary>
+        /// 카드의 방어력을 증가 또는 감소시킨다.
+        /// </summary>
+        /// <param name="value"></param>
+        public void AddDef(int value)
+        {
+            def += value;
+
+            if (def < 0)
+                def = 0;
+        }
+
+        public void AddAtk(int value)
+        {
+            atk += value;
+
+            if (atk < 0)
+                atk = 0;
         }
 
         /// <summary>

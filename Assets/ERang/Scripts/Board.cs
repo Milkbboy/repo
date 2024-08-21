@@ -73,9 +73,11 @@ namespace ERang
                         // todo: 이 부분 수정 필요.
                         Master master = BattleLogic.Instance.GetMaster();
                         slot.CreateMasterSlot(i, master);
+                        slot.SetIndex(creatureSlotStartIndex - i);
                         break;
                     case CardType.EnemyMaster:
                         enemyMasterSlot = slot;
+                        slot.SetIndex(i - monsterSlotStartIndex);
                         break;
                     case CardType.Creature:
                         slot.SetIndex(creatureSlotStartIndex - i);
@@ -272,6 +274,39 @@ namespace ERang
                 .OrderBy(slot => slot.Index)
                 .Select(slot => slot.Card)
                 .ToList();
+        }
+
+        /// <summary>
+        /// 카드 UID로 슬롯 찾기
+        /// </summary>
+        /// <param name="cardUid"></param>
+        /// <returns></returns>
+        public BoardSlot FindSlotByCardUid(string cardUid)
+        {
+            BoardSlot slot = creatureSlots.Find(x => x.IsOccupied && x.CardUid == cardUid);
+
+            if (slot == null)
+            {
+                slot = monsterSlots.Find(x => x.IsOccupied && x.CardUid == cardUid);
+            }
+
+            return slot;
+        }
+
+        /// <summary>
+        /// 카드로 상대 카드 리스트 얻기
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public List<Card> GetOpponetCards(Card self)
+        {
+            if (self.type == CardType.Creature || self.type == CardType.Master)
+                return GetOccupiedMonsterCards();
+
+            if (self.type == CardType.Monster || self.type == CardType.EnemyMaster)
+                return GetOccupiedCreatureCards();
+
+            return null;
         }
     }
 }

@@ -143,49 +143,5 @@ namespace ERang
 
             return null;
         }
-
-        /// <summary>
-        /// 컨디션 조건에 맞는 대상 얻기
-        /// </summary>
-        /// <param name="conditionData"></param>
-        /// <param name="self"></param>
-        /// <param name="targetCards"></param>
-        /// <returns></returns>
-        public List<Card> GetConditionTargets(ConditionData conditionData, Card self, List<Card> targetCards)
-        {
-            List<Card> targets = new List<Card>();
-
-            switch (conditionData.target)
-            {
-                case ConditionTarget.NearEnemy:
-                    if (targetCards.Count > 0)
-                        targets.Add(targetCards.FirstOrDefault());
-                    break;
-                case ConditionTarget.Self: targets.Add(self); break;
-                case ConditionTarget.Enemy1:
-                    if (targetCards.Count > 0 && targetCards[0] != null)
-                        targets.Add(targetCards[0]);
-                    break;
-                case ConditionTarget.Enemy2:
-                    if (targetCards.Count > 1 && targetCards[1] != null)
-                        targets.Add(targetCards[1]);
-                    break;
-                case ConditionTarget.Enemy3:
-                    if (targetCards.Count > 2 && targetCards[2] != null)
-                        targets.Add(targetCards[2]);
-                    break;
-                case ConditionTarget.Enemy4:
-                    if (targetCards.Count > 3 && targetCards[3] != null)
-                        targets.Add(targetCards[3]);
-                    break;
-                case ConditionTarget.FriendlyCreature: return Board.Instance.GetOccupiedCreatureCards();
-                case ConditionTarget.EnemyCreature: return Board.Instance.GetOccupiedMonsterCards();
-                case ConditionTarget.Card:
-                    Debug.LogWarning("ConditionLogic.GetConditionTargets() - ConditionTarget.Card is not implemented yet.");
-                    break;
-            }
-
-            return targets;
-        }
     }
 }

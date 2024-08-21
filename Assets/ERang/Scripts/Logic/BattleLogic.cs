@@ -111,41 +111,49 @@ namespace ERang
 
             foreach (Card reactionCard in reactionCards)
             {
-                Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}");
+                Debug.Log($"TurnStartCardReaction. -- 턴 시작 리액션 시작 -- {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}");
 
-                // 몬스터 카드의 턴 시작 리액션 정보들. AiGroupData 의 reactionCondition 들의 조건을 확인
-                List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = reactionCard.GetTurnStartReaction();
+                // 몬스터 카드의 턴 시작 리액션 정보들. AiGroupData 의 reactionCondition 들의 조건 확인
+                List<(AiGroupData.Reaction, ConditionData)> turnStartReactionPairs = reactionCard.GetTurnStartReaction();
 
-                // 리액션
-                List<string> logs = reactionConditionPairs.Select((x, index) =>
+                // 리액션 로그 설정
+                List<string> logs = turnStartReactionPairs.Select((x, index) =>
                 {
                     return $"[{index}] reaction: {JsonConvert.SerializeObject(x.Item1)}, condition: {JsonConvert.SerializeObject(x.Item2)}";
                 }).ToList();
 
-                if (reactionConditionPairs.Count == 0)
+                if (turnStartReactionPairs.Count == 0)
                 {
-                    Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reactionConditionPairs is empty");
+                    Debug.Log($"TurnStartCardReaction. 턴 시작 리액션 데이터 없음: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, turnStartReactionPairs is empty");
                     continue;
                 }
 
-                Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reactionConditionPairs {string.Join("\n", logs)}");
+                Debug.Log($"TurnStartCardReaction. 턴 시작 리액션 데이터 있음: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, turnStartReactionPairs {string.Join("\n", logs)}");
 
                 // 즉발 행동 대상, 조건 검사. 실행할 AiData 얻기. 즉발 행동 안할 수 있음.
-                foreach (var (reaction, condition) in reactionConditionPairs)
+                foreach (var (reaction, condition) in turnStartReactionPairs)
                 {
                     // 즉발 행동 발동에 사용되는 대상. 자신도 대상 가능.
-                    List<Card> targets = TargetLogic.Instance.GetConditionTargets(condition, reactionCard, enemyCards);
-                    int aiDataId = ConditionLogic.Instance.GetReactionConditionAiDataId(reaction, condition, targets);
+                    List<Card> reactionTargets = ConditionLogic.Instance.GetConditionTargets(condition, reactionCard, enemyCards);
+                    int aiDataId = ConditionLogic.Instance.GetReactionConditionAiDataId(reaction, condition, reactionTargets);
 
                     if (aiDataId == 0)
                     {
-                        Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reaction: {reaction.conditionId}, aiDataId: {aiDataId}");
+                        Debug.Log($"TurnStartCardReaction. 턴 시작 리액션의 부합되는 즉발 행동 없음: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reaction: {reaction.conditionId}, aiDataId: {aiDataId}");
                         continue;
                     }
 
-                    Debug.Log($"TurnStartCardReaction: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reaction: {reaction.conditionId}, aiDataId: {aiDataId}");
-
                     AiData aiData = AiData.GetAiData(aiDataId);
+
+                    if (aiData == null)
+                    {
+                        Debug.LogError($"TurnStartCardReaction. 턴 시작 리액션 즉발 행동 aiData 가 테이블에 없음 - aiData is null. aiDataId: {aiDataId}");
+                        return;
+                    }
+
+                    Debug.Log($"TurnStartCardReaction. 턴 시작 리액션 즉발 행동 aiData 설정: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reaction: {reaction.conditionId}, aiDataId: {aiDataId}");
+
+                    AiLogic.Instance.AiDataAction(aiData, reactionCard);
                 }
             }
         }

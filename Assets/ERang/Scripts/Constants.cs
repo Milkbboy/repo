@@ -46,9 +46,11 @@ namespace ERang
         RandomEnemy, // 적 보스를 포함한 모든 적 중 임의의 대상을 선정한다.
         RandomEnemyCreature, // 적 보스를 제외한 모든 적을 임의의 대상으로 선정한다.
         AllEnemy, // 적 보스를 포함한 모든 적을 대상으로 한다
+        AllEnemyCreature, // 적 보스를 제외한 모든 적을 대상으로 한다.
         Friendly, // 아군을 대상으로 설정한다.
         AllFriendly, // 마왕을 포함한 아군을 대상으로 한다.
         AllFriendlyCreature, // 마왕을 제외한 아군을 대상으로 한다.
+        Self, // 자기 자신을 대상으로 설정한다.
     }
 
     // 행동이 이루어지는 절차를 설정한다.

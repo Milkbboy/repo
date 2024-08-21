@@ -14,7 +14,7 @@ namespace ERang.Data
         public int ai_Id; // Ai의 Id 값
         public AiDataType type; // 행동의 타입을 정의
         public AiDataTarget target; // 대상 혹은 복수 대상을 설정한다.
-        public AiDataAttackType atk_Type; // 행동이 이루어지는 절차를 설정한다.
+        public AiDataAttackType attackType; // 행동이 이루어지는 절차를 설정한다.
         public int atk_Cnt; // 공격 횟수
         public float atk_Interval; // 공격 횟수가 1이 아닐 경우 공격이 진행되는 텀을 지정
         public int value; // 해당 행동의 무게 값으로 Ai Group에서 참조된다.
@@ -25,20 +25,20 @@ namespace ERang.Data
         //   (Ex 1만 입력된 경우 바로 앞의 적을 공격, 1과 2가 입력된 경우 자신의 앞과 그 뒤의 적까지 공격) 
         // - Ranged의 경우 자신의 위치를 기준으로 지정된 값 만큼의 거리를 의미한다. 
         //   (Ex 4의 경우 자신의 4칸 앞을 향해 공격한다는 것을 의미, 4와 5가 입력된 경우 자신의 앞 4번째 그리고 5번째 적까지 공격한다는 의미)
-        public List<int> atk_Ranges = new List<int>();
+        public List<int> attackRanges = new List<int>();
 
         public void Initialize(AiDataEntity entity)
         {
             ai_Id = entity.Ai_Id;
             type = ConvertAiDataType(entity.Type);
             target = ConvertAiDataTarget(entity.Target);
-            atk_Type = ConvertAiDataAtackType(entity.Atk_Type);
+            attackType = ConvertAiDataAtackType(entity.Atk_Type);
             atk_Cnt = entity.Atk_Cnt;
             atk_Interval = entity.Atk_Interval;
             value = entity.Value;
             explosion_Shock = entity.Explosion_Shock;
             ability_Ids.AddRange(Utils.ParseIntArray(entity.Ability_id).Where(x => x != 0));
-            atk_Ranges.AddRange(Utils.ParseIntArray(entity.Atk_Range).Where(x => x != 0));
+            attackRanges.AddRange(Utils.ParseIntArray(entity.Atk_Range).Where(x => x != 0));
         }
 
         public static List<AiData> ai_list = new List<AiData>();
@@ -67,7 +67,7 @@ namespace ERang.Data
                 else
                 {
                     aiData.ability_Ids.Clear();
-                    aiData.atk_Ranges.Clear();
+                    aiData.attackRanges.Clear();
                 }
 
                 aiData.Initialize(aiEntity);
@@ -115,9 +115,11 @@ namespace ERang.Data
                 case "RandomEnemy": return AiDataTarget.RandomEnemy;
                 case "RandomEnemyCreature": return AiDataTarget.RandomEnemyCreature;
                 case "AllEnemy": return AiDataTarget.AllEnemy;
+                case "AllEnemyCreature": return AiDataTarget.AllEnemyCreature;
                 case "Friendly": return AiDataTarget.Friendly;
                 case "AllFriendly": return AiDataTarget.AllFriendly;
                 case "AllFriendlyCreature": return AiDataTarget.AllFriendlyCreature;
+                case "Self": return AiDataTarget.Self;
                 default: return AiDataTarget.None;
             }
         }
