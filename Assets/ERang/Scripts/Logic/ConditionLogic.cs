@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using ERang.Data;
+using RogueEngine.UI;
 
 namespace ERang
 {
@@ -30,96 +31,97 @@ namespace ERang
         }
 
         /// <summary>
+        /// 컨디션 타입별 조건 비교
+        /// </summary>
+        /// <param name="reaction"></param>
+        /// <param name="condition"></param>
+        /// <param name="targets"></param>
+        public int GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, Card selfCard, List<Card> opponentCards)
+        {
+            var (reaction, condition) = reactionPairs;
+            List<Card> targetCards = GetConditionTargets(condition, selfCard, opponentCards);
+
+            Debug.Log($"ConditionLogic.GetReactionConditionAiDataId: 리액션 컨디션 aiDataId 얻기 - reaction: {reaction.conditionId}, condition: {condition.id}, targets: {targetCards.Count}");
+
+            foreach (var targetCard in targetCards)
+            {
+                int compareValue = 0;
+
+                switch (condition.type)
+                {
+                    // 대상의 버프 상태 확인
+                    case ConditionType.Buff: compareValue = targetCard.BuffCount; break;
+                    // 대상의 디버프 상태 확인
+                    case ConditionType.Debuff: compareValue = targetCard.DeBuffCount; break;
+                    // 대상의 체력 상태 확인
+                    case ConditionType.Hp: compareValue = targetCard.hp; break;
+                    // 대상의 모든 턴
+                    case ConditionType.EveryTurn:
+                        if (ConditionRatio(reaction.ratio))
+                            return reaction.aiDataId;
+                        return 0;
+                    case ConditionType.Extinction:
+                    case ConditionType.Acquisition:
+                        Debug.LogWarning("ConditionLogic.GetReactionConditionAiDataId: ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전.");
+                        break;
+                }
+
+                // 해당 조건의 컨디션이 있으면 다음 컨디션은 검사하지 않는다.
+                if (ConditionCompare(condition, compareValue) && ConditionRatio(reaction.ratio))
+                    return reaction.aiDataId;
+            }
+
+            Debug.Log($"ConditionLogic.GetReactionConditionAiDataId: 리액션 컨디션 aiDataId 없음. cardId: {selfCard.id}, aiGroupId: {selfCard.aiGroupId}, reaction: {reaction.conditionId}");
+
+            return 0;
+        }
+
+        /// <summary>
         /// 컨디션 조건에 맞는 대상 얻기
         /// </summary>
         /// <param name="conditionData"></param>
-        /// <param name="self"></param>
-        /// <param name="enemyCards"></param>
+        /// <param name="selfCard">나(자신)</param>
+        /// <param name="opponentCards">상대(적)</param>
         /// <returns></returns>
-        public List<Card> GetConditionTargets(ConditionData conditionData, Card self, List<Card> enemyCards)
+        public List<Card> GetConditionTargets(ConditionData conditionData, Card selfCard, List<Card> opponentCards)
         {
             List<Card> targets = new List<Card>();
 
             switch (conditionData.target)
             {
                 case ConditionTarget.NearEnemy:
-                    if (enemyCards.Count > 0)
-                        targets.Add(enemyCards.FirstOrDefault());
+                    if (opponentCards.Count > 0)
+                        targets.Add(opponentCards.FirstOrDefault());
                     break;
                 case ConditionTarget.Self:
-                    targets.Add(self);
+                    targets.Add(selfCard);
                     break;
                 case ConditionTarget.Enemy1:
-                    if (enemyCards.Count > 0 && enemyCards[0] != null)
-                        targets.Add(enemyCards[0]);
+                    if (opponentCards.Count > 0 && opponentCards[0] != null)
+                        targets.Add(opponentCards[0]);
                     break;
                 case ConditionTarget.Enemy2:
-                    if (enemyCards.Count > 1 && enemyCards[1] != null)
-                        targets.Add(enemyCards[1]);
+                    if (opponentCards.Count > 1 && opponentCards[1] != null)
+                        targets.Add(opponentCards[1]);
                     break;
                 case ConditionTarget.Enemy3:
-                    if (enemyCards.Count > 2 && enemyCards[2] != null)
-                        targets.Add(enemyCards[2]);
+                    if (opponentCards.Count > 2 && opponentCards[2] != null)
+                        targets.Add(opponentCards[2]);
                     break;
                 case ConditionTarget.Enemy4:
-                    if (enemyCards.Count > 3 && enemyCards[3] != null)
-                        targets.Add(enemyCards[3]);
+                    if (opponentCards.Count > 3 && opponentCards[3] != null)
+                        targets.Add(opponentCards[3]);
                     break;
                 case ConditionTarget.FriendlyCreature:
                     return Board.Instance.GetOccupiedCreatureCards();
                 case ConditionTarget.EnemyCreature:
                     return Board.Instance.GetOccupiedMonsterCards();
                 case ConditionTarget.Card:
-                    Debug.LogWarning("ConditionLogic.GetConditionTargets() - ConditionTarget.Card is not implemented yet.");
+                    Debug.LogWarning("ConditionLogic.GetConditionTargets: 카드 대상 미구현.");
                     break;
             }
 
             return targets;
-        }
-
-        /// <summary>
-        /// 컨디션 타입별 조건 비교
-        /// </summary>
-        /// <param name="reaction"></param>
-        /// <param name="condition"></param>
-        /// <param name="targets"></param>
-        public int GetReactionConditionAiDataId(AiGroupData.Reaction reaction, ConditionData condition, List<Card> targets)
-        {
-            Debug.Log($"GetReactionConditionAiDataId. 리액션 컨디션 AiDataId 얻기 - reaction: {reaction.conditionId}, condition: {condition.id}, targets: {targets.Count}");
-
-            foreach (var target in targets)
-            {
-                if (target == null)
-                    continue;
-
-                int compareValue = 0;
-
-                switch (condition.type)
-                {
-                    // 대상의 버프 상태 확인
-                    case ConditionType.Buff: compareValue = target.BuffCount; break;
-                    // 대상의 디버프 상태 확인
-                    case ConditionType.Debuff: compareValue = target.DeBuffCount; break;
-                    // 대상의 체력 상태 확인
-                    case ConditionType.Hp: compareValue = target.hp; break;
-                    // 대상의 모든 턴
-                    case ConditionType.EveryTurn:
-                        Debug.LogWarning($"GetReactionConditionAiDataId. - ConditionType.EveryTurn 은 조건 검사 없이 리턴. aiDataId {reaction.aiDataId} return.");
-                        return reaction.aiDataId;
-                    case ConditionType.Extinction:
-                    case ConditionType.Acquisition:
-                        Debug.LogWarning("GetReactionConditionAiDataId. - ConditionType.Extinction, ConditionType.Acquisition is not implemented yet.");
-                        break;
-                }
-
-                // 해당 조건의 컨디션이 있으면 다음 컨디션은 검사하지 않는다.
-                if (ConditionCompare(condition, compareValue) && ConditionRatio(reaction.ratio))
-                {
-                    return reaction.aiDataId;
-                }
-            }
-
-            return 0;
         }
 
         /// <summary>
@@ -133,7 +135,7 @@ namespace ERang
             // 비교 조건이 없으면 true
             if (string.IsNullOrEmpty(condition.compare))
             {
-                Debug.Log($"ConditionCompare. 컨디션 조건 비교 값 없으면 무조건 성공 - condition: {condition.id}), ");
+                Debug.Log($"ConditionLogic.ConditionCompare: 컨디션 조건 비교 값 없으면 그냥 성공 - condition: {condition.id}), ");
                 return true;
             }
 
@@ -145,17 +147,23 @@ namespace ERang
                 _ => false,
             };
 
-            Debug.Log($"ConditionCompare. 컨디션 조건 비교 결과 {result} - condition: {condition.id}, value({value}) {condition.compare} condition.value({condition.value}), ");
+            Debug.Log($"ConditionLogic:ConditionCompare. 컨디션 조건 비교 결과 {result} - conditionId: {condition.id}, value({value}) {condition.compare} condition.value({condition.value}), ");
 
             return result;
         }
 
+        /// <summary>
+        /// 컨디션 발생 확률
+        /// - AiGroupData 테이블에 정의 되어 있음
+        /// </summary>
+        /// <param name="ratio"></param>
+        /// <returns></returns>
         private bool ConditionRatio(float ratio)
         {
             double randomValue = random.NextDouble();
             bool result = (ratio == 1f || randomValue <= ratio);
 
-            Debug.Log($"ConditionRatio. 컨디션 확률 판단 {result} - ratio: {ratio}, randomValue: {randomValue}");
+            Debug.Log($"ConditionLogic:ConditionRatio. 컨디션 발생 확률 결과 {result} - ratio: {ratio}, randomValue: {randomValue}");
 
             return result;
         }

@@ -249,8 +249,8 @@ namespace ERang
         }
 
         /// <summary>
-        /// 크리쳐 슬롯 중에서 카드가 장착된 슬롯 인덱스 순으로 카드 반환
-        /// - 슬롯 3, 2, 1 순서
+        /// 크리쳐 카드가 장착된 보드 슬롯 인덱스를 정렬한 카드 반화
+        /// - 슬롯 인덱스 3, 2, 1 순서
         /// </summary>
         /// <returns></returns>
         public List<Card> GetOccupiedCreatureCards()
@@ -263,8 +263,8 @@ namespace ERang
         }
 
         /// <summary>
-        /// 몬스터 슬롯 중에서 카드가 장착된 슬롯을 인덱스 순으로 카드 반환
-        /// - 슬롯 6, 7, 8 순서
+        /// 몬스터 카드가 장착된 보드 슬롯 인덱스를 정렬한 카드 반환
+        /// - 슬롯 인덱스 6, 7, 8 순서
         /// </summary>
         /// <returns></returns>
         public List<Card> GetOccupiedMonsterCards()
@@ -307,6 +307,24 @@ namespace ERang
                 return GetOccupiedCreatureCards();
 
             return null;
+        }
+
+        /// <summary>
+        /// 카드 UID로 카드 찾기
+        /// </summary>
+        /// <param name="cardUid"></param>
+        /// <returns></returns>
+        public Card GetCardByUid(string cardUid)
+        {
+            BoardSlot slot = FindSlotByCardUid(cardUid);
+
+            if (slot == null)
+            {
+                Debug.LogError($"GetCardByCardUid: cardUid {cardUid}에 해당하는 슬롯 없음");
+                return null;
+            }
+
+            return slot.Card;
         }
     }
 }

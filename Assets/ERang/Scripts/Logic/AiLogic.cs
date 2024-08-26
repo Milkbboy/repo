@@ -30,17 +30,70 @@ namespace ERang
 
         }
 
+        /// <summary>
+        /// 카드에 설정된 ability 적용
+        /// </summary>
+        /// <param name="card"></param>
+        public void AbilityAction(Card card)
+        {
+            foreach (Card.DurationAbility ability in card.Abilities)
+            {
+                ability.duration = ability.duration - 1;
+
+                if (ability.duration > 0)
+                    continue;
+
+                // duration 이 0 이면 적용을 해제하거나 다른 처리를 해야 함
+                switch (ability.abilityType)
+                {
+                    case AbilityType.AtkUp:
+                        card.AddAtk(-ability.abilityValue);
+                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, atk: {card.atk}");
+                        break;
+
+                    case AbilityType.DefUp:
+                        card.AddDef(-ability.abilityValue);
+                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, def: {card.def}");
+                        break;
+
+                    case AbilityType.BrokenDef:
+                        card.AddDef(ability.abilityValue);
+                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, def: {card.def}");
+                        break;
+
+                    case AbilityType.ChargeDamage:
+                        // target 한테 데미지를 준다.
+                        Card target = Board.Instance.GetCardByUid(ability.targetCardUid);
+                        target?.AddHp(-ability.abilityValue);
+                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, target: {target.id}, hp: {target.hp}");
+                        break;
+                    default:
+                        Debug.LogWarning($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 아직 구현되지 않음.");
+                        break;
+                }
+
+                // 어빌리티 삭제
+                card.Abilities.Remove(ability);
+            }
+        }
+
         public void AiDataAction(AiData aiData, Card self)
         {
+            // Debug.Log($"AiDataAction. aiData: {JsonConvert.SerializeObject(aiData)}, cardId: {self.id}");
+
             // 상대방 카드 리스트
             List<Card> enemyCards = Board.Instance.GetOpponetCards(self);
 
+            // Debug.Log($"AiDataAction. 상대방 카드 리스트: {JsonConvert.SerializeObject(enemyCards)}");
+
             // AiData 에 설정된 타겟 얻기
-            List<Card> aiTargetCards = GetTargets(aiData, self, enemyCards);
+            List<Card> aiTargetCards = GetAiDataTargets(aiData, self, enemyCards);
+
+            // Debug.Log($"AiDataAction. 타겟 얻기: {JsonConvert.SerializeObject(aiTargetCards)}");
 
             if (aiTargetCards.Count == 0)
             {
-                Debug.LogWarning($"AiDataAction. 타겟이 없습니다. aiData: {JsonConvert.SerializeObject(aiData)}, self: {self.id}");
+                Debug.LogWarning($"AiLogic.AiDataAction: 타겟 없음. aiData: {JsonConvert.SerializeObject(aiData)}, self: {self.id}");
                 return;
             }
 
@@ -50,6 +103,7 @@ namespace ERang
             {
                 // 이미 어빌리티가 적용 중이면 패스
                 Card.DurationAbility durationAbility = self.HasAbilityDuration(aiData.type, abilityId);
+
                 if (durationAbility != null)
                 {
                     Debug.LogWarning($"AiDataAction. 카드에 이미 어빌리티가 적용 중 - cardId: {self.id}, ability: {JsonConvert.SerializeObject(durationAbility)}");
@@ -57,6 +111,8 @@ namespace ERang
                 }
 
                 AbilityData ability = AbilityData.GetAbilityData(abilityId);
+
+                Debug.Log($"AiDataAction. {ability.abilityType.ToString()} 어빌리티 적용 전. 타겟 카드: {JsonConvert.SerializeObject(aiTargetCards)}");
 
                 // AbilityType > Damage 타입에는 데미지 값을 넣지 않을게.카드 데이터에 있는게 맞아 2024-08-12
                 switch (ability.abilityType)
@@ -92,9 +148,9 @@ namespace ERang
                             target.AddAtk(ability.value);
 
                             // AiDataType 으로 Buff, DeBuff 구분
-                            target.AddAbilityDuration(aiData.type, ability.abilityData_Id, ability.value, ability.duration);
+                            target.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, target.uid);
 
-                            Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, atk: {ability.value}, target: {target.id}, atk: {target.atk}, duration: {ability.duration}");
+                            Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, atk: {ability.value}, target: {target.id}, atk: {beforeAtk} => {target.atk}, duration: {ability.duration}");
                         }
                         break;
 
@@ -105,7 +161,7 @@ namespace ERang
                             target.AddDef(ability.value);
 
                             // AiDataType 으로 Buff, DeBuff 구분
-                            target.AddAbilityDuration(aiData.type, ability.abilityData_Id, ability.value, ability.duration);
+                            target.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, target.uid);
 
                             Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, def: {ability.value}, target: {target.id}, def: {beforeDef} => {target.def}, duration: {ability.duration}");
                         }
@@ -118,10 +174,23 @@ namespace ERang
                             target.AddDef(-ability.value);
 
                             // AiDataType 으로 Buff, DeBuff 구분
-                            target.AddAbilityDuration(aiData.type, ability.abilityData_Id, ability.value, ability.duration);
+                            target.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, target.uid);
 
                             Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, def: {ability.value}, target: {target.id}, def: {beforeDef} => {target.def}, duration: {ability.duration}");
                         }
+                        break;
+
+                    case AbilityType.ChargeDamage:
+                        // 이건 duration 이 지나면 타겟한테 데미지를 둔다. 방식이 좀 달라야 될듯
+                        // target 은 Enemy 인데 발동은 자신이라서
+                        foreach (Card target in aiTargetCards)
+                        {
+                            self.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, target.uid);
+                        }
+                        break;
+
+                    default:
+                        Debug.LogWarning($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} 아직 구현되지 않음.");
                         break;
                 }
             }
@@ -131,22 +200,22 @@ namespace ERang
         /// // AiData 에 설정된 타겟 얻기
         /// </summary>
         /// <param name="aiData"></param>
-        List<Card> GetTargets(AiData aiData, Card self, List<Card> enemyCards)
+        List<Card> GetAiDataTargets(AiData aiData, Card self, List<Card> enemyCards)
         {
             switch (aiData.target)
             {
-                case AiDataTarget.Enemy: return Enemy(aiData, self, enemyCards);
-                case AiDataTarget.NearEnemy: return NearEnemy(enemyCards);
-                case AiDataTarget.AllEnemy: return AllEnemy(enemyCards);
-                case AiDataTarget.AllEnemyCreature: return AllEnemy(enemyCards, true);
-                case AiDataTarget.RandomEnemy: return RandomEnemy(enemyCards);
-                case AiDataTarget.RandomEnemyCreature: return RandomEnemy(enemyCards, true);
+                case AiDataTarget.Enemy: return TargetEnemy(aiData, self, enemyCards);
+                case AiDataTarget.NearEnemy: return TargetNearEnemy(enemyCards);
+                case AiDataTarget.AllEnemy: return TargetAllEnemy(enemyCards);
+                case AiDataTarget.AllEnemyCreature: return TargetAllEnemy(enemyCards, true);
+                case AiDataTarget.RandomEnemy: return TargetRandomEnemy(enemyCards);
+                case AiDataTarget.RandomEnemyCreature: return TargetRandomEnemy(enemyCards, true);
             }
 
             return null;
         }
 
-        private List<Card> Enemy(AiData aiData, Card self, List<Card> targetCards)
+        private List<Card> TargetEnemy(AiData aiData, Card self, List<Card> targetCards)
         {
             List<Card> targets = new List<Card>();
 
@@ -192,7 +261,7 @@ namespace ERang
             return targetCards;
         }
 
-        private List<Card> NearEnemy(List<Card> enemyCards)
+        private List<Card> TargetNearEnemy(List<Card> enemyCards)
         {
             if (enemyCards.Count > 0)
                 return new List<Card> { enemyCards.FirstOrDefault() };
@@ -200,7 +269,7 @@ namespace ERang
             return null;
         }
 
-        private List<Card> AllEnemy(List<Card> enemyCards, bool exceptMaster = false)
+        private List<Card> TargetAllEnemy(List<Card> enemyCards, bool exceptMaster = false)
         {
             if (exceptMaster)
                 return enemyCards.Where(x => x.type != CardType.Master || x.type != CardType.EnemyMaster).ToList();
@@ -208,7 +277,7 @@ namespace ERang
             return enemyCards;
         }
 
-        private List<Card> RandomEnemy(List<Card> enemyCards, bool exceptMaster = false)
+        private List<Card> TargetRandomEnemy(List<Card> enemyCards, bool exceptMaster = false)
         {
             if (exceptMaster)
                 enemyCards = enemyCards.Where(x => (x.type != CardType.Master || x.type != CardType.EnemyMaster)).ToList();

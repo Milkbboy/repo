@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ERang.Data;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace ERang
 {
@@ -12,10 +13,12 @@ namespace ERang
         /// </summary>
         public class DurationAbility
         {
-            public int aiDataId; // AiData Id
             public int abilityId; // 어빌리티 Id
+            public AiDataType aiType; // Ai 타입
+            public AbilityType abilityType; // 어빌리티 타입
             public int abilityValue; // 어빌리티 값
             public int duration; // 현재 지속 시간
+            public string targetCardUid; // 대상 카드의 Uid
         }
 
         public string uid;
@@ -32,14 +35,14 @@ namespace ERang
         // 현재 설정된 Ai 그룹의 인덱스 값
         private int aiGroupIndex = 0;
 
-        private List<DurationAbility> deBuffs = new List<DurationAbility>();
-        private List<DurationAbility> buffs = new List<DurationAbility>();
+        private List<DurationAbility> abilities = new List<DurationAbility>();
 
-        public int BuffCount { get { return buffs.Count; } }
-        public int DeBuffCount { get { return deBuffs.Count; } }
+        public int BuffCount { get { return abilities.Count(a => a.aiType == AiDataType.Buff); } }
+        public int DeBuffCount { get { return abilities.Count(a => a.aiType == AiDataType.DeBuff); } }
+        public List<DurationAbility> Abilities { get { return abilities; } }
 
-        public bool HasBuff { get { return buffs.Count > 0; } }
-        public bool HasDeBuff { get { return deBuffs.Count > 0; } }
+        public bool HasBuff { get { return BuffCount > 0; } }
+        public bool HasDeBuff { get { return DeBuffCount > 0; } }
 
         public Card(CardData cardData)
         {
@@ -60,28 +63,25 @@ namespace ERang
         /// - 턴 종료때 리스트를 체크하고 duration을 감소 0이 되면 리스트에서 삭제
         /// </summary>
         /// <param name="aiType"></param>
+        /// <param name="abilityType"></param>
         /// <param name="abilityId"></param>
         /// <param name="abilityValue"></param>
         /// <param name="duration"></param>
-        public void AddAbilityDuration(AiDataType aiType, int abilityId, int abilityValue, int duration)
+        /// <param name="targetCardUid"></param>
+        public void AddAbilityDuration(AiDataType aiType, AbilityType abilityType, int abilityId, int abilityValue, int duration, string targetCardUid)
         {
             DurationAbility durationAbility = new DurationAbility
             {
                 abilityId = abilityId,
+                aiType = aiType,
+                abilityType = abilityType,
                 abilityValue = abilityValue,
                 duration = duration,
+                targetCardUid = targetCardUid
             };
 
-            if (aiType == AiDataType.Buff)
-            {
-                buffs.Add(durationAbility);
-                Debug.Log($"AddAbilityDuration - Buff: {id}, abilityId: {abilityId}, abilityValue: {abilityValue}, duration: {duration}");
-            }
-            else if (aiType == AiDataType.DeBuff)
-            {
-                deBuffs.Add(durationAbility);
-                Debug.Log($"AddAbilityDuration - DeBuff: {id}, abilityId: {abilityId}, abilityValue: {abilityValue}, duration: {duration}");
-            }
+            abilities.Add(durationAbility);
+            Debug.Log($"AddAbilityDuration - abilityType: {abilityType.ToString()}, abilityId: {abilityId}, abilityValue: {abilityValue}, duration: {duration}");
         }
 
         /// <summary>
@@ -92,9 +92,7 @@ namespace ERang
         /// <returns></returns>
         public DurationAbility HasAbilityDuration(AiDataType aiType, int abilityId)
         {
-            List<DurationAbility> durationAbilities = (aiType == AiDataType.Buff) ? buffs : deBuffs;
-
-            return durationAbilities.Find(x => x.abilityId == abilityId);
+            return abilities.Find(a => a.aiType == aiType && a.abilityId == abilityId);
         }
 
         /// <summary>
@@ -180,11 +178,11 @@ namespace ERang
         }
 
         /// <summary>
-        /// 턴 시작 시 체크해야 하는 컨디션 데이터들 얻기
-        /// - AiGroupData 와 ConditionData 쌍으로 반환
+        /// 카드에 설정된 리액션 데이터 쌍 리스트 얻기
+        /// - AiGroupData 테이블과 ConditionData 테이블을 참조하여 리액션 데이터를 한쌍으로 반환 (tuple 형태)
         /// </summary>
         /// <returns></returns>
-        public List<(AiGroupData.Reaction, ConditionData)> GetTurnStartReaction()
+        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(ConditionCheckPoint checkPoint)
         {
             List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new List<(AiGroupData.Reaction, ConditionData)>();
 
@@ -192,15 +190,12 @@ namespace ERang
 
             if (aiGroupData == null)
             {
-                Debug.LogError($"Card: aiGroupData is null. cardId: {id}, aiGroupId: {aiGroupId}");
+                Debug.LogError($"Card.GetTurnStartReaction: aiGroupData 데이터 없음. cardId: {id}, aiGroupId: {aiGroupId}");
                 return reactionConditionPairs;
             }
 
             if (aiGroupData.reactions.Count == 0)
-            {
-                Debug.Log($"Card: reactions is empty. cardId: {id}, aiGroupId: {aiGroupId}");
-                return reactionConditionPairs;
-            }
+                Debug.Log($"Card.GetTurnStartReaction: aiGroupData에 reaction 설정 없음. cardId: {id}, aiGroupId: {aiGroupId}");
 
             foreach (var reaction in aiGroupData.reactions)
             {
@@ -208,15 +203,24 @@ namespace ERang
 
                 if (conditionData == null)
                 {
-                    Debug.LogError($"Card: conditionData is null. cardId: {id}, aiGroupId: {aiGroupId}, conditionId: {reaction.conditionId}");
+                    Debug.LogError($"Card.GetTurnStartReaction: conditionData 없음. cardId: {id}, aiGroupId: {aiGroupId}, conditionId: {reaction.conditionId}");
                     continue;
                 }
 
-                // 턴시작 실행되는 리엑션이 아니면 패스
-                if (conditionData.checkPoint != ConditionCheckPoint.TurnStart)
+                // 리액션 조건이 아니면 패스
+                if (conditionData.checkPoint != checkPoint)
                     continue;
 
                 reactionConditionPairs.Add((reaction, conditionData));
+            }
+
+            // 리액션 로그
+            if (reactionConditionPairs.Count > 0)
+            {
+                string logs = string.Join("\n", reactionConditionPairs.Select((x, index) =>
+                $"[{index}] reaction: {JsonConvert.SerializeObject(x.Item1)}, condition: {JsonConvert.SerializeObject(x.Item2)}"));
+
+                Debug.Log($"Card.GetTurnStartReaction: 리액션 데이터 {reactionConditionPairs.Count}개 있음. cardId: {id}, aiGroupId: {aiGroupId}, turnStartReactionPairs {logs}");
             }
 
             return reactionConditionPairs;
