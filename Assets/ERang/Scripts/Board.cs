@@ -277,11 +277,11 @@ namespace ERang
         }
 
         /// <summary>
-        /// 카드 UID로 슬롯 찾기
+        /// 카드 UID로 슬롯 얻기
         /// </summary>
         /// <param name="cardUid"></param>
         /// <returns></returns>
-        public BoardSlot FindSlotByCardUid(string cardUid)
+        public BoardSlot GetSlotByCardUid(string cardUid)
         {
             BoardSlot slot = creatureSlots.Find(x => x.IsOccupied && x.CardUid == cardUid);
 
@@ -316,7 +316,7 @@ namespace ERang
         /// <returns></returns>
         public Card GetCardByUid(string cardUid)
         {
-            BoardSlot slot = FindSlotByCardUid(cardUid);
+            BoardSlot slot = GetSlotByCardUid(cardUid);
 
             if (slot == null)
             {

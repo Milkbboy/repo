@@ -1071,6 +1071,7 @@ GameObject:
   - component: {fileID: -6579194241496720873}
   - component: {fileID: -5386672416980230907}
   - component: {fileID: -4681829242462720617}
+  - component: {fileID: -5393989896994016311}
   m_Layer: 0
   m_Name: Card
   m_TagString: HandCard
@@ -1184,7 +1185,19 @@ MonoBehaviour:
   manaText: {fileID: 1935977956902000363}
   atkText: {fileID: 2937463406376378940}
   defText: {fileID: 2764430739858798895}
-  statUI: {fileID: 4308445581205464069}
+  statObj: {fileID: 0}
+--- !u!114 &-5393989896994016311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6549374021415066406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b1ab52fbaea92a4ea9d80f8c88f8339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7915364613912899930
 GameObject:
   m_ObjectHideFlags: 0

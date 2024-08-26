@@ -235,7 +235,7 @@ namespace ERang
                     break;
 
                 case AiDataType.Ranged:
-                    BoardSlot boardSlot = Board.Instance.FindSlotByCardUid(self.uid);
+                    BoardSlot boardSlot = Board.Instance.GetSlotByCardUid(self.uid);
 
                     if (boardSlot == null)
                     {

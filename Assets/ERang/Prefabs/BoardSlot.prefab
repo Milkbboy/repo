@@ -722,6 +722,7 @@ GameObject:
   - component: {fileID: 892779617036634003}
   - component: {fileID: 3157150826960349189}
   - component: {fileID: 8346777839352572465}
+  - component: {fileID: -5767874778870004737}
   m_Layer: 0
   m_Name: BoardSlot
   m_TagString: BoardSlot
@@ -826,9 +827,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5d8eb76e2474744901f9e02c22722a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardId: 0
-  cardType: 0
   slot: 0
+  index: 0
+  cardType: 0
+  isOccupied: 0
+  isOverlapCard: 0
+--- !u!114 &-5767874778870004737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312741086512756945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b1ab52fbaea92a4ea9d80f8c88f8339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5536974504596178766
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using ERang.Data;
+using System.Collections;
+using ERang.Test;
 
 namespace ERang
 {
@@ -16,9 +18,26 @@ namespace ERang
         public GameObject statObj;
 
         private Texture2D originTexture;
+        // for test
+        CardUIHelper cardUIHelper;
+
+        void Awake()
+        {
+            cardUIHelper = GetComponent<CardUIHelper>();
+        }
 
         void Start()
         {
+        }
+
+        public void StartFlashing()
+        {
+            cardUIHelper.StartFlashing();
+        }
+
+        public void StopFlashing()
+        {
+            cardUIHelper.StopFlashing();
         }
 
         public void SetCard(Card card)
@@ -42,6 +61,9 @@ namespace ERang
                 }
 
                 cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
+
+                // for test
+                cardUIHelper.Initialize(cardMeshRenderer);
             }
 
             if (cardTypeText != null)
