@@ -8,14 +8,19 @@ namespace ERang.Test
     {
         private MeshRenderer cardMeshRenderer;
         private Coroutine flashCoroutine;
+        Color color;
 
         public void Initialize(MeshRenderer meshRenderer)
         {
             cardMeshRenderer = meshRenderer;
+            color = Color.red;
         }
 
-        public void StartFlashing()
+        public void StartFlashing(Color? color = null)
         {
+            if (color.HasValue)
+                this.color = color.Value;
+
             if (flashCoroutine != null)
             {
                 StopCoroutine(flashCoroutine);
@@ -37,7 +42,7 @@ namespace ERang.Test
         {
             while (true)
             {
-                SetColor(Color.red); // 빨간색으로 변경
+                SetColor(Color.blue); // 빨간색으로 변경
                 yield return new WaitForSeconds(0.5f);
                 ResetColor(); // 원래 색으로 복구
                 yield return new WaitForSeconds(0.5f);

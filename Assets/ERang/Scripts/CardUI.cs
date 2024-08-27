@@ -30,9 +30,9 @@ namespace ERang
         {
         }
 
-        public void StartFlashing()
+        public void StartFlashing(Color? color = null)
         {
-            cardUIHelper.StartFlashing();
+            cardUIHelper.StartFlashing(color);
         }
 
         public void StopFlashing()

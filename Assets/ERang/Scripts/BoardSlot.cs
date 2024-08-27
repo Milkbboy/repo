@@ -8,7 +8,7 @@ namespace ERang
     public class BoardSlot : MonoBehaviour
     {
         [SerializeField] private int slot; // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 값
-        [SerializeField] private int index; // 0, 1, 2 값
+        [SerializeField] private int index; // 0, 1, 2, 3 값 3 은 마스터 카드
         [SerializeField] private CardType cardType; // 보드에 장착할 수 있는 cardType
         [SerializeField] private bool isOccupied = false; // 현재 사용 중인지 여부
         [SerializeField] private bool isOverlapCard = false; // 카드가 올라가 있는지 여부

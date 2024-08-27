@@ -31,20 +31,29 @@ namespace ERang
         }
 
         /// <summary>
-        /// 컨디션 타입별 조건 비교
+        /// 리액션 컨디션 aiDataId 얻기
         /// </summary>
-        /// <param name="reaction"></param>
-        /// <param name="condition"></param>
-        /// <param name="targets"></param>
-        public int GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, Card selfCard, List<Card> opponentCards)
+        /// <param name="reactionPairs"></param>
+        /// <param name="selfSlot"></param>
+        /// <param name="opponentSlots"></param>
+        /// <returns></returns>
+        public int GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
         {
+            Card selfCard = selfSlot.Card;
             var (reaction, condition) = reactionPairs;
-            List<Card> targetCards = GetConditionTargets(condition, selfCard, opponentCards);
 
-            Debug.Log($"ConditionLogic.GetReactionConditionAiDataId: 리액션 컨디션 aiDataId 얻기 - reaction: {reaction.conditionId}, condition: {condition.id}, targets: {targetCards.Count}");
+            List<BoardSlot> targetSlots = GetConditionTargets(condition, selfSlot, opponentSlots);
 
-            foreach (var targetCard in targetCards)
+            Debug.Log($"ConditionLogic.GetReactionConditionAiDataId: 리액션 컨디션 aiDataId 얻기 - reaction: {reaction.conditionId}, condition: {condition.id}, targets: {targetSlots.Count}");
+
+            foreach (var targetSlot in targetSlots)
             {
+                Card targetCard = targetSlot.Card;
+
+                // 슬롯
+                if (targetCard == null)
+                    continue;
+
                 int compareValue = 0;
 
                 switch (condition.type)
@@ -80,48 +89,56 @@ namespace ERang
         /// 컨디션 조건에 맞는 대상 얻기
         /// </summary>
         /// <param name="conditionData"></param>
-        /// <param name="selfCard">나(자신)</param>
+        /// <param name="selfSlot">내 보드 슬롯</param>
         /// <param name="opponentCards">상대(적)</param>
         /// <returns></returns>
-        public List<Card> GetConditionTargets(ConditionData conditionData, Card selfCard, List<Card> opponentCards)
+        public List<BoardSlot> GetConditionTargets(ConditionData conditionData, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
         {
-            List<Card> targets = new List<Card>();
+            List<BoardSlot> targetSlots = new List<BoardSlot>();
 
             switch (conditionData.target)
             {
                 case ConditionTarget.NearEnemy:
-                    if (opponentCards.Count > 0)
-                        targets.Add(opponentCards.FirstOrDefault());
+                    if (opponentSlots.Count > 0)
+                        targetSlots.Add(opponentSlots.FirstOrDefault());
                     break;
                 case ConditionTarget.Self:
-                    targets.Add(selfCard);
+                    targetSlots.Add(selfSlot);
                     break;
                 case ConditionTarget.Enemy1:
-                    if (opponentCards.Count > 0 && opponentCards[0] != null)
-                        targets.Add(opponentCards[0]);
+                    if (opponentSlots.Count > 0 && opponentSlots[0] != null)
+                        targetSlots.Add(opponentSlots[0]);
                     break;
                 case ConditionTarget.Enemy2:
-                    if (opponentCards.Count > 1 && opponentCards[1] != null)
-                        targets.Add(opponentCards[1]);
+                    if (opponentSlots.Count > 1 && opponentSlots[1] != null)
+                        targetSlots.Add(opponentSlots[1]);
                     break;
                 case ConditionTarget.Enemy3:
-                    if (opponentCards.Count > 2 && opponentCards[2] != null)
-                        targets.Add(opponentCards[2]);
+                    if (opponentSlots.Count > 2 && opponentSlots[2] != null)
+                        targetSlots.Add(opponentSlots[2]);
                     break;
                 case ConditionTarget.Enemy4:
-                    if (opponentCards.Count > 3 && opponentCards[3] != null)
-                        targets.Add(opponentCards[3]);
+                    if (opponentSlots.Count > 3 && opponentSlots[3] != null)
+                        targetSlots.Add(opponentSlots[3]);
                     break;
                 case ConditionTarget.FriendlyCreature:
-                    return Board.Instance.GetOccupiedCreatureCards();
+                    if (selfSlot.CardType == CardType.Creature)
+                        targetSlots = Board.Instance.GetCreatureBoardSlots();
+                    if (selfSlot.CardType == CardType.Monster)
+                        targetSlots = Board.Instance.GetMonsterBoardSlots();
+                    break;
                 case ConditionTarget.EnemyCreature:
-                    return Board.Instance.GetOccupiedMonsterCards();
+                    if (selfSlot.CardType == CardType.Creature)
+                        targetSlots = Board.Instance.GetMonsterBoardSlots();
+                    if (selfSlot.CardType == CardType.Monster)
+                        targetSlots = Board.Instance.GetCreatureBoardSlots();
+                    break;
                 case ConditionTarget.Card:
-                    Debug.LogWarning("ConditionLogic.GetConditionTargets: 카드 대상 미구현.");
+                    Debug.LogWarning("ConditionLogic.GetConditionTargetSlots: 카드 대상 미구현.");
                     break;
             }
 
-            return targets;
+            return targetSlots;
         }
 
         /// <summary>

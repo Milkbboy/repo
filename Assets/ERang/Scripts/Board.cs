@@ -132,7 +132,6 @@ namespace ERang
             }
         }
 
-
         public BoardSlot NeareastBoardSlotSlot(Vector3 position, CardType cardType)
         {
             BoardSlot nearestSlot = null;
@@ -249,15 +248,33 @@ namespace ERang
         }
 
         /// <summary>
+        /// 크리쳐 보드 슬롯 인덱스로 정렬
+        /// - 인덱스 3, 2, 1
+        /// </summary>
+        /// <returns></returns>
+        public List<BoardSlot> GetCreatureBoardSlots()
+        {
+            return creatureSlots.OrderBy(slot => slot.Index).ToList();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<BoardSlot> GetMonsterBoardSlots()
+        {
+            return monsterSlots.OrderBy(slot => slot.Index).ToList();
+        }
+
+        /// <summary>
         /// 크리쳐 카드가 장착된 보드 슬롯 인덱스를 정렬한 카드 반화
         /// - 슬롯 인덱스 3, 2, 1 순서
         /// </summary>
         /// <returns></returns>
         public List<Card> GetOccupiedCreatureCards()
         {
-            return creatureSlots
+            return GetCreatureBoardSlots()
                 .Where(slot => slot.IsOccupied)
-                .OrderBy(slot => slot.Index)
                 .Select(slot => slot.Card)
                 .ToList();
         }
@@ -269,9 +286,8 @@ namespace ERang
         /// <returns></returns>
         public List<Card> GetOccupiedMonsterCards()
         {
-            return monsterSlots
+            return GetMonsterBoardSlots()
                 .Where(slot => slot.IsOccupied)
-                .OrderBy(slot => slot.Index)
                 .Select(slot => slot.Card)
                 .ToList();
         }
@@ -305,6 +321,22 @@ namespace ERang
 
             if (self.type == CardType.Monster || self.type == CardType.EnemyMaster)
                 return GetOccupiedCreatureCards();
+
+            return null;
+        }
+
+        /// <summary>
+        /// 슬롯으로 상대 슬롯 리스트 얻기
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public List<BoardSlot> GetOpponentSlots(BoardSlot self)
+        {
+            if (self.CardType == CardType.Creature || self.CardType == CardType.Master)
+                return GetMonsterBoardSlots();
+
+            if (self.CardType == CardType.Monster || self.CardType == CardType.EnemyMaster)
+                return GetCreatureBoardSlots();
 
             return null;
         }

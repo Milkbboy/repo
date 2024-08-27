@@ -102,7 +102,8 @@ namespace ERang
             AbilityAction();
 
             // 턴 시작시 실행되는 카드의 Reaction 을 확인
-            EnqueueAction("TurnStartCardReaction", () => TurnStartCardReaction());
+            // EnqueueAction("TurnStartCardReaction", () => TurnStartCardReaction());
+            EnqueueAction("TurnStartReaction", () => TurnStartReaction());
         }
 
         public void TurnEnd()
@@ -143,40 +144,40 @@ namespace ERang
             List<Card> monsterCards = Board.Instance.GetOccupiedMonsterCards();
         }
 
-        void TurnStartCardReaction()
+        void TurnStartReaction()
         {
-            // 리액션을 확인하는 카드들
-            List<Card> reactionCards = Board.Instance.GetOccupiedMonsterCards();
-            // 상대 카드들
-            List<Card> opponentCards = Board.Instance.GetOccupiedCreatureCards();
+            List<BoardSlot> reactionSlots = Board.Instance.GetMonsterBoardSlots();
+            List<BoardSlot> opponentSlots = Board.Instance.GetCreatureBoardSlots();
 
-            // 카드별 리액션 실행
-            foreach (Card reactionCard in reactionCards)
+            foreach (BoardSlot reactionSlot in reactionSlots)
             {
-                EnqueueAction($"{reactionCard.id} 카드 리액션", () =>
+                EnqueueAction($"보드 {reactionSlot.Slot}번 슬롯 리액션", () =>
                 {
-                    BoardSlot boardSlot = Board.Instance.GetSlotByCardUid(reactionCard.uid);
-                    // for test
-                    CardUI cardUI = boardSlot.GetComponent<CardUI>();
+                    CardUI cardUI = reactionSlot.GetComponent<CardUI>();
                     cardUI.StartFlashing();
                     flashingCardUIs.Add(cardUI);
 
-                    Debug.Log($"BattleLogic.TurnStartCardReaction: -- 턴 시작 리액션 시작 -- cardId: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}");
+                    Card card = reactionSlot.Card;
 
-                    // 카드의 턴 시작 리액션 정보들
-                    List<(AiGroupData.Reaction, ConditionData)> turnStartReactionPairs = reactionCard.GetCardReactionPairs(ConditionCheckPoint.TurnStart);
-
-                    if (turnStartReactionPairs.Count == 0)
+                    if (card == null)
                     {
-                        Debug.Log($"BattleLogic.TurnStartCardReaction: 리액션 데이터 없음. cardId: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}");
+                        Debug.LogWarning($"TurnStartReaction: card is null({reactionSlot.Slot})");
                         return;
                     }
 
-                    // 리액션 컨디션 조건에 부합되는 즉발 행동 실행
+                    Debug.Log($"TurnStartReaction: -- 턴 시작 리액션 시작 -- cardId: {card.id}, aiGroupId: {card.aiGroupId}");
+
+                    List<(AiGroupData.Reaction, ConditionData)> turnStartReactionPairs = card.GetCardReactionPairs(ConditionCheckPoint.TurnStart);
+
+                    if (turnStartReactionPairs.Count == 0)
+                    {
+                        Debug.Log($"TurnStartReaction: 리액션 데이터 없음. cardId: {card.id}, aiGroupId: {card.aiGroupId}");
+                        return;
+                    }
+
                     foreach (var (reaction, condition) in turnStartReactionPairs)
                     {
-                        // 즉발 행동 대상. 자신도 대상 가능.
-                        int aiDataId = ConditionLogic.Instance.GetReactionConditionAiDataId((reaction, condition), reactionCard, opponentCards);
+                        int aiDataId = ConditionLogic.Instance.GetReactionConditionAiDataId((reaction, condition), reactionSlot, opponentSlots);
 
                         if (aiDataId == 0)
                             continue;
@@ -185,13 +186,13 @@ namespace ERang
 
                         if (aiData == null)
                         {
-                            Debug.LogError($"BattleLogic.TurnStartCardReaction: 턴 시작 리액션 aiData 없음. aiData is null. aiDataId: {aiDataId}");
+                            Debug.LogError($"TurnStartReaction: aiData is null. aiDataId: {aiDataId}");
                             continue;
                         }
 
-                        Debug.Log($"BattleLogic.TurnStartCardReaction: 턴 시작 리액션 즉발 행동 aiData 설정. cardId: {reactionCard.id}, aiGroupId: {reactionCard.aiGroupId}, reaction: {reaction.conditionId}, aiDataId: {aiDataId}");
+                        Debug.Log($"TurnStartReaction: 턴 시작 리액션 즉발 행동 aiData 설정. cardId: {card.id}, aiGroupId: {card.aiGroupId}, reaction: {reaction.conditionId}, aiDataId: {aiDataId}");
 
-                        AiLogic.Instance.AiDataAction(aiData, reactionCard);
+                        AiLogic.Instance.AiDataAction(aiData, reactionSlot);
                     }
                 });
             }
