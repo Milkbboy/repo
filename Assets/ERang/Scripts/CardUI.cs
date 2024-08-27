@@ -15,29 +15,16 @@ namespace ERang
         public TextMeshProUGUI manaText;
         public TextMeshProUGUI atkText;
         public TextMeshProUGUI defText;
-        public GameObject statObj;
+        public GameObject cardObject;
 
         private Texture2D originTexture;
-        // for test
-        CardUIHelper cardUIHelper;
 
         void Awake()
         {
-            cardUIHelper = GetComponent<CardUIHelper>();
         }
 
         void Start()
         {
-        }
-
-        public void StartFlashing(Color? color = null)
-        {
-            cardUIHelper.StartFlashing(color);
-        }
-
-        public void StopFlashing()
-        {
-            cardUIHelper.StopFlashing();
         }
 
         public void SetCard(Card card)
@@ -61,9 +48,6 @@ namespace ERang
                 }
 
                 cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
-
-                // for test
-                cardUIHelper.Initialize(cardMeshRenderer);
             }
 
             if (cardTypeText != null)

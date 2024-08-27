@@ -63,9 +63,10 @@ namespace ERang
 
                     case AbilityType.ChargeDamage:
                         // target 한테 데미지를 준다.
-                        Card target = Board.Instance.GetCardByUid(ability.targetCardUid);
-                        target?.AddHp(-ability.abilityValue);
-                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, target: {target.id}, hp: {target.hp}");
+                        BoardSlot targetSlot = Board.Instance.GetBoardSlot(ability.targetBoardSlot);
+                        Card targetCard = targetSlot?.Card;
+                        targetCard?.AddHp(-ability.abilityValue);
+                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, target: {targetCard?.id ?? 0}, hp: {targetCard?.hp ?? 0}");
                         break;
                     default:
                         Debug.LogWarning($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 아직 구현되지 않음.");
@@ -99,7 +100,7 @@ namespace ERang
                 return;
             }
 
-            Debug.Log($"AiDataAction. 타겟 얻기. aiData: {JsonConvert.SerializeObject(aiData)}, self: {self.id}, aiTargetSlots: {JsonConvert.SerializeObject(aiTargetSlots)}");
+            Debug.Log($"AiDataAction. 타겟 얻기. aiData: {JsonConvert.SerializeObject(aiData)}, self: {self.id}");
 
             foreach (int abilityId in aiData.ability_Ids)
             {
@@ -135,7 +136,7 @@ namespace ERang
                                 for (int j = 0; j < aiData.atk_Cnt; ++j)
                                     targetCard.AddHp(-self.atk);
 
-                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()}  self: {self.id}, damage: {self.atk}, target slot index: {targetSlot.Index}, hp: {beforeHp} => {targetSlot.Card.hp}");
+                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()}  self: {self.id}, damage: {self.atk}, target slot: {targetSlot.Slot}, hp: {beforeHp} => {targetSlot.Card.hp}");
                             }
                             break;
 
@@ -146,7 +147,7 @@ namespace ERang
                                 for (int j = 0; j < aiData.atk_Cnt; ++j)
                                     targetSlot.Card.AddHp(ability.value);
 
-                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, heal: {ability.value}, target slot index: {targetSlot.Index}, hp: {beforeHp} => {targetSlot.Card.hp}");
+                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, heal: {ability.value}, target slot: {targetSlot.Slot}, hp: {beforeHp} => {targetSlot.Card.hp}");
                             }
                             break;
 
@@ -156,9 +157,9 @@ namespace ERang
                                 targetSlot.Card.AddAtk(ability.value);
 
                                 // AiDataType 으로 Buff, DeBuff 구분
-                                targetSlot.Card.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Index);
+                                targetSlot.Card.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
 
-                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, atk: {ability.value}, target: {targetSlot.Card.id}, atk: {beforeAtk} => {targetSlot.Card.atk}, duration: {ability.duration}");
+                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, atk: {ability.value}, target slot: {targetSlot.Slot}, atk: {beforeAtk} => {targetSlot.Card.atk}, duration: {ability.duration}");
                             }
                             break;
 
@@ -168,9 +169,9 @@ namespace ERang
                                 targetCard.AddDef(ability.value);
 
                                 // AiDataType 으로 Buff, DeBuff 구분
-                                targetCard.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetCard.uid, targetSlot.Index);
+                                targetCard.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetCard.uid, targetSlot.Slot);
 
-                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, def: {ability.value}, target: {targetCard.id}, def: {beforeDef} => {targetCard.def}, duration: {ability.duration}");
+                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, def: {ability.value}, target slot: {targetSlot.Slot}, def: {beforeDef} => {targetCard.def}, duration: {ability.duration}");
                             }
                             break;
 
@@ -180,9 +181,9 @@ namespace ERang
                                 targetCard.AddDef(-ability.value);
 
                                 // AiDataType 으로 Buff, DeBuff 구분
-                                targetCard.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetCard.uid, targetSlot.Index);
+                                targetCard.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetCard.uid, targetSlot.Slot);
 
-                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, def: {ability.value}, target: {targetCard.id}, def: {beforeDef} => {targetCard.def}, duration: {ability.duration}");
+                                Debug.Log($"AiDataAction. 어빌리티 적용 - {ability.abilityType.ToString()} self: {self.id}, def: {ability.value}, target slot: {targetSlot.Slot}, def: {beforeDef} => {targetCard.def}, duration: {ability.duration}");
                             }
                             break;
 
@@ -191,7 +192,7 @@ namespace ERang
                             // target 은 Enemy 인데 발동은 자신이라서
                             foreach (BoardSlot target in aiTargetSlots)
                             {
-                                self.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetCard.uid, targetSlot.Index);
+                                self.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetCard.uid, targetSlot.Slot);
                             }
                             break;
 

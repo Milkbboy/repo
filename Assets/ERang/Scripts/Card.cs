@@ -19,7 +19,7 @@ namespace ERang
             public int abilityValue; // 어빌리티 값
             public int duration; // 현재 지속 시간
             public string targetCardUid; // 대상 카드의 Uid
-            public int targetSlotIndex; // 대상 카드의 슬롯 인덱스
+            public int targetBoardSlot; // 대상 보드 슬롯
         }
 
         public string uid;
@@ -69,7 +69,7 @@ namespace ERang
         /// <param name="abilityValue"></param>
         /// <param name="duration"></param>
         /// <param name="targetCardUid"></param>
-        public void AddAbilityDuration(AiDataType aiType, AbilityType abilityType, int abilityId, int abilityValue, int duration, string targetCardUid, int targetSlotIndex)
+        public void AddAbilityDuration(AiDataType aiType, AbilityType abilityType, int abilityId, int abilityValue, int duration, string targetCardUid, int targetSlot)
         {
             DurationAbility durationAbility = new DurationAbility
             {
@@ -79,7 +79,7 @@ namespace ERang
                 abilityValue = abilityValue,
                 duration = duration,
                 targetCardUid = targetCardUid,
-                targetSlotIndex = targetSlotIndex,
+                targetBoardSlot = targetSlot,
             };
 
             abilities.Add(durationAbility);

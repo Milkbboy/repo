@@ -15,10 +15,10 @@ namespace ERang
 
         private Card card;
         private CardUI cardUI;
+        private BoardSlotUI boardSlotUI;
 
         public bool IsOccupied { get { return isOccupied; } }
         public bool IsOverlapCard { get { return isOverlapCard; } }
-        public string CardUid { get { return card.uid; } }
         public int Index { get { return index; } }
         public int Slot { get { return slot; } }
         public CardType CardType { get { return cardType; } }
@@ -27,7 +27,9 @@ namespace ERang
         void Awake()
         {
             cardUI = GetComponent<CardUI>();
-            cardUI.statObj.SetActive(false);
+            cardUI.cardObject.SetActive(false);
+
+            boardSlotUI = GetComponent<BoardSlotUI>();
         }
 
         // Start is called before the first frame update
@@ -62,6 +64,8 @@ namespace ERang
         {
             this.slot = slot;
             this.cardType = cardType;
+
+            boardSlotUI.SetSlotType(cardType);
         }
 
         public void SetIndex(int index)
@@ -74,7 +78,7 @@ namespace ERang
             this.slot = slot;
             this.cardType = CardType.Master;
 
-            cardUI.statObj.SetActive(true);
+            cardUI.cardObject.SetActive(true);
             cardUI.SetMasterCard(master);
         }
 
@@ -94,7 +98,7 @@ namespace ERang
             isOccupied = true;
             isOverlapCard = false;
 
-            cardUI.statObj.SetActive(true);
+            cardUI.cardObject.SetActive(true);
             cardUI.SetCard(card);
         }
 
@@ -113,17 +117,15 @@ namespace ERang
             card = null;
 
             cardUI.ResetStat();
-            cardUI.statObj.SetActive(false);
+            cardUI.cardObject.SetActive(false);
         }
 
         public void StartFlashing(Color? color = null)
         {
-            cardUI.StartFlashing(color);
         }
 
         public void StopFlashing()
         {
-            cardUI.StopFlashing();
         }
     }
 }

@@ -222,11 +222,11 @@ namespace ERang
         // 보드 슬롯 카드 동작
         IEnumerator BoardSlotCardAction()
         {
-            StartCoroutine(MasterCreatureAction());
+            // StartCoroutine(MasterCreatureAction());
 
             yield return new WaitForSeconds(1f);
 
-            StartCoroutine(EnemyMonsterAction());
+            // StartCoroutine(EnemyMonsterAction());
         }
 
         /// <summary>
@@ -242,13 +242,15 @@ namespace ERang
             var logTarget = new { targetIds };
             Debug.Log($"MasterCreatureAction attackerIds: {JsonConvert.SerializeObject(logAttacker)}, targetIds: {JsonConvert.SerializeObject(logTarget)}");
 
-            return CreateBoardCardAction(
-                () => Board.Instance.GetOccupiedCreatureCards(),
-                () => Board.Instance.GetOccupiedMonsterCards(),
-                (cardUid) => Board.Instance.GetMonsterBoardSlot(cardUid),
-                (cardUid) => enemy.RemoveMonsterCard(cardUid),
-                (slot) => Board.Instance.ResetMonsterSlot(slot)
-            );
+            yield return new WaitForSeconds(1f);
+
+            // return CreateBoardCardAction(
+            //     () => Board.Instance.GetOccupiedCreatureCards(),
+            //     () => Board.Instance.GetOccupiedMonsterCards(),
+            //     (cardUid) => Board.Instance.GetMonsterBoardSlot(cardUid),
+            //     (cardUid) => enemy.RemoveMonsterCard(cardUid),
+            //     (slot) => Board.Instance.ResetMonsterSlot(slot)
+            // );
         }
 
         /// <summary>
@@ -263,13 +265,15 @@ namespace ERang
             var logTarget = new { targetIds };
             Debug.Log($"EnemyMonsterAction attackerIds: {JsonConvert.SerializeObject(logAttacker)}, targetIds: {JsonConvert.SerializeObject(logTarget)}");
 
-            return CreateBoardCardAction(
-                () => Board.Instance.GetOccupiedMonsterCards(),
-                () => Board.Instance.GetOccupiedCreatureCards(),
-                (cardUid) => Board.Instance.GetCreatureBoardSlot(cardUid),
-                (cardUid) => master.BoardCreatureCardToExtinction(cardUid),
-                (slot) => Board.Instance.ResetCreatureSlot(slot)
-            );
+            yield return new WaitForSeconds(1f);
+
+            // return CreateBoardCardAction(
+            //     () => Board.Instance.GetOccupiedMonsterCards(),
+            //     () => Board.Instance.GetOccupiedCreatureCards(),
+            //     (cardUid) => Board.Instance.GetCreatureBoardSlot(cardUid),
+            //     (cardUid) => master.BoardCreatureCardToExtinction(cardUid),
+            //     (slot) => Board.Instance.ResetCreatureSlot(slot)
+            // );
         }
 
         IEnumerator CreateBoardCardAction(

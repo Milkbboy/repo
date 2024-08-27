@@ -870,6 +870,51 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5575098764889313756
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3849687349238536816}
+  - component: {fileID: 6565663583163591216}
+  m_Layer: 0
+  m_Name: UIHelper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3849687349238536816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5575098764889313756}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8226192581775132206}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6565663583163591216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5575098764889313756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b1ab52fbaea92a4ea9d80f8c88f8339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 3111601430126518502}
 --- !u!1 &5654739191307086464
 GameObject:
   m_ObjectHideFlags: 0
@@ -1071,7 +1116,6 @@ GameObject:
   - component: {fileID: -6579194241496720873}
   - component: {fileID: -5386672416980230907}
   - component: {fileID: -4681829242462720617}
-  - component: {fileID: -5393989896994016311}
   m_Layer: 0
   m_Name: Card
   m_TagString: HandCard
@@ -1092,6 +1136,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.5, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3849687349238536816}
   - {fileID: 2008209769938531805}
   - {fileID: 1790611002610267393}
   m_Father: {fileID: 0}
@@ -1185,19 +1230,7 @@ MonoBehaviour:
   manaText: {fileID: 1935977956902000363}
   atkText: {fileID: 2937463406376378940}
   defText: {fileID: 2764430739858798895}
-  statObj: {fileID: 0}
---- !u!114 &-5393989896994016311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6549374021415066406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b1ab52fbaea92a4ea9d80f8c88f8339, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  cardObject: {fileID: 0}
 --- !u!1 &7915364613912899930
 GameObject:
   m_ObjectHideFlags: 0

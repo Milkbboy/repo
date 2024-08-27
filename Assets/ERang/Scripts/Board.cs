@@ -21,6 +21,8 @@ namespace ERang
         public DeckUI extinctionDeckUI;
         public TurnUI turnUI;
 
+        private List<BoardSlot> boardSlots = new List<BoardSlot>();
+
         private BoardSlot masterSlot;
         private List<BoardSlot> creatureSlots = new List<BoardSlot>();
         private List<BoardSlot> buildingSlots = new List<BoardSlot>();
@@ -58,6 +60,7 @@ namespace ERang
             int creatureSlotStartIndex = 3;
             int monsterSlotStartIndex = 6;
 
+            // 보드 슬롯 타입 별로 색상 다르게 설정
             for (int i = 0; i < BoardSlotCardTypes.Length; i++)
             {
                 float xPosition = startX + i * (boardWidth + boardSpacing);
@@ -65,6 +68,7 @@ namespace ERang
 
                 BoardSlot slot = Instantiate(boardSlot, slotPosition, Quaternion.identity) as BoardSlot;
                 slot.CreateSlot(i, BoardSlotCardTypes[i]);
+                boardSlots.Add(slot);
 
                 switch (BoardSlotCardTypes[i])
                 {
@@ -211,16 +215,6 @@ namespace ERang
             return null;
         }
 
-        public BoardSlot GetCreatureBoardSlot(string cardUid)
-        {
-            return creatureSlots.Find(slot => slot.IsOccupied && slot.CardUid == cardUid);
-        }
-
-        public BoardSlot GetMonsterBoardSlot(string cardUid)
-        {
-            return monsterSlots.Find(slot => slot.IsOccupied && slot.CardUid == cardUid);
-        }
-
         public void ResetCreatureSlot(int slot)
         {
             BoardSlot creatureSlot = creatureSlots.Find(x => x.Slot == slot);
@@ -245,6 +239,16 @@ namespace ERang
             }
 
             monsterSlot.RemoveCard();
+        }
+
+        /// <summary>
+        /// 보드 슬롯으로 보드 슬롯 반환
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public BoardSlot GetBoardSlot(int slot)
+        {
+            return boardSlots.Find(x => x.Slot == slot);
         }
 
         /// <summary>
@@ -293,23 +297,6 @@ namespace ERang
         }
 
         /// <summary>
-        /// 카드 UID로 슬롯 얻기
-        /// </summary>
-        /// <param name="cardUid"></param>
-        /// <returns></returns>
-        public BoardSlot GetSlotByCardUid(string cardUid)
-        {
-            BoardSlot slot = creatureSlots.Find(x => x.IsOccupied && x.CardUid == cardUid);
-
-            if (slot == null)
-            {
-                slot = monsterSlots.Find(x => x.IsOccupied && x.CardUid == cardUid);
-            }
-
-            return slot;
-        }
-
-        /// <summary>
         /// 카드로 상대 카드 리스트 얻기
         /// </summary>
         /// <param name="self"></param>
@@ -339,24 +326,6 @@ namespace ERang
                 return GetCreatureBoardSlots();
 
             return null;
-        }
-
-        /// <summary>
-        /// 카드 UID로 카드 찾기
-        /// </summary>
-        /// <param name="cardUid"></param>
-        /// <returns></returns>
-        public Card GetCardByUid(string cardUid)
-        {
-            BoardSlot slot = GetSlotByCardUid(cardUid);
-
-            if (slot == null)
-            {
-                Debug.LogError($"GetCardByCardUid: cardUid {cardUid}에 해당하는 슬롯 없음");
-                return null;
-            }
-
-            return slot.Card;
         }
     }
 }

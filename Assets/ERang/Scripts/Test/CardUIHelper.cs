@@ -6,17 +6,12 @@ namespace ERang.Test
 {
     public class CardUIHelper : MonoBehaviour
     {
-        private MeshRenderer cardMeshRenderer;
+        public MeshRenderer meshRenderer;
         private Coroutine flashCoroutine;
         Color color;
 
-        BoardSlot selfSlot;
-        BoardSlot targetSlot;
-
         public void SetSelfSlot(BoardSlot slot, Color? color = null)
         {
-            selfSlot = slot;
-
             if (color.HasValue)
                 this.color = color.Value;
 
@@ -25,8 +20,6 @@ namespace ERang.Test
 
         public void SetTargetSlot(BoardSlot slot, Color? color = null)
         {
-            targetSlot = slot;
-
             if (color.HasValue)
                 this.color = color.Value;
 
@@ -35,7 +28,7 @@ namespace ERang.Test
 
         public void Initialize(MeshRenderer meshRenderer)
         {
-            cardMeshRenderer = meshRenderer;
+            this.meshRenderer = meshRenderer;
             color = Color.red;
         }
 
@@ -74,17 +67,17 @@ namespace ERang.Test
 
         private void SetColor(Color color)
         {
-            if (cardMeshRenderer != null && cardMeshRenderer.materials.Length > 0)
+            if (meshRenderer != null && meshRenderer.materials.Length > 0)
             {
-                cardMeshRenderer.materials[0].color = color;
+                meshRenderer.materials[0].color = color;
             }
         }
 
         private void ResetColor()
         {
-            if (cardMeshRenderer != null && cardMeshRenderer.materials.Length > 0)
+            if (meshRenderer != null && meshRenderer.materials.Length > 0)
             {
-                cardMeshRenderer.materials[0].color = Color.white;
+                meshRenderer.materials[0].color = Color.white;
             }
         }
     }
