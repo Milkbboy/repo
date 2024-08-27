@@ -37,7 +37,7 @@ namespace ERang
         /// <param name="selfSlot"></param>
         /// <param name="opponentSlots"></param>
         /// <returns></returns>
-        public int GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
+        public (int aiDataId, List<BoardSlot> targetSlots) GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
         {
             Card selfCard = selfSlot.Card;
             var (reaction, condition) = reactionPairs;
@@ -50,7 +50,7 @@ namespace ERang
             {
                 Card targetCard = targetSlot.Card;
 
-                // 슬롯
+                // 슬롯에 카드가 없으면 패스
                 if (targetCard == null)
                     continue;
 
@@ -67,8 +67,8 @@ namespace ERang
                     // 대상의 모든 턴
                     case ConditionType.EveryTurn:
                         if (ConditionRatio(reaction.ratio))
-                            return reaction.aiDataId;
-                        return 0;
+                            return (reaction.aiDataId, targetSlots);
+                        return (0, targetSlots);
                     case ConditionType.Extinction:
                     case ConditionType.Acquisition:
                         Debug.LogWarning("ConditionLogic.GetReactionConditionAiDataId: ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전.");
@@ -77,12 +77,12 @@ namespace ERang
 
                 // 해당 조건의 컨디션이 있으면 다음 컨디션은 검사하지 않는다.
                 if (ConditionCompare(condition, compareValue) && ConditionRatio(reaction.ratio))
-                    return reaction.aiDataId;
+                    return (reaction.aiDataId, targetSlots);
             }
 
             Debug.Log($"ConditionLogic.GetReactionConditionAiDataId: 리액션 컨디션 aiDataId 없음. cardId: {selfCard.id}, aiGroupId: {selfCard.aiGroupId}, reaction: {reaction.conditionId}");
 
-            return 0;
+            return (0, targetSlots);
         }
 
         /// <summary>
@@ -99,27 +99,28 @@ namespace ERang
             switch (conditionData.target)
             {
                 case ConditionTarget.NearEnemy:
-                    if (opponentSlots.Count > 0)
-                        targetSlots.Add(opponentSlots.FirstOrDefault());
+                    BoardSlot occupiedSlot = opponentSlots.Find(slot => slot.Card != null);
+
+                    // 타겟 슬롯에 카드가 없으면 제일 첫번째 슬롯 반환 (타겟 슬롯 확인 용도)
+                    if (occupiedSlot != null)
+                        targetSlots.Add(occupiedSlot);
+                    else
+                        targetSlots.Add(opponentSlots[0]);
                     break;
                 case ConditionTarget.Self:
                     targetSlots.Add(selfSlot);
                     break;
                 case ConditionTarget.Enemy1:
-                    if (opponentSlots.Count > 0 && opponentSlots[0] != null)
-                        targetSlots.Add(opponentSlots[0]);
+                    targetSlots.Add(opponentSlots[0]);
                     break;
                 case ConditionTarget.Enemy2:
-                    if (opponentSlots.Count > 1 && opponentSlots[1] != null)
-                        targetSlots.Add(opponentSlots[1]);
+                    targetSlots.Add(opponentSlots[1]);
                     break;
                 case ConditionTarget.Enemy3:
-                    if (opponentSlots.Count > 2 && opponentSlots[2] != null)
-                        targetSlots.Add(opponentSlots[2]);
+                    targetSlots.Add(opponentSlots[2]);
                     break;
                 case ConditionTarget.Enemy4:
-                    if (opponentSlots.Count > 3 && opponentSlots[3] != null)
-                        targetSlots.Add(opponentSlots[3]);
+                    targetSlots.Add(opponentSlots[3]);
                     break;
                 case ConditionTarget.FriendlyCreature:
                     if (selfSlot.CardType == CardType.Creature)
@@ -134,7 +135,7 @@ namespace ERang
                         targetSlots = Board.Instance.GetCreatureBoardSlots();
                     break;
                 case ConditionTarget.Card:
-                    Debug.LogWarning("ConditionLogic.GetConditionTargetSlots: 카드 대상 미구현.");
+                    Debug.LogWarning("ConditionLogic.GetConditionTargets: 카드 대상 미구현.");
                     break;
             }
 

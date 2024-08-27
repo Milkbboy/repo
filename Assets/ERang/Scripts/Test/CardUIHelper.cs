@@ -10,6 +10,29 @@ namespace ERang.Test
         private Coroutine flashCoroutine;
         Color color;
 
+        BoardSlot selfSlot;
+        BoardSlot targetSlot;
+
+        public void SetSelfSlot(BoardSlot slot, Color? color = null)
+        {
+            selfSlot = slot;
+
+            if (color.HasValue)
+                this.color = color.Value;
+
+            StartFlashing();
+        }
+
+        public void SetTargetSlot(BoardSlot slot, Color? color = null)
+        {
+            targetSlot = slot;
+
+            if (color.HasValue)
+                this.color = color.Value;
+
+            StartFlashing();
+        }
+
         public void Initialize(MeshRenderer meshRenderer)
         {
             cardMeshRenderer = meshRenderer;
@@ -42,7 +65,7 @@ namespace ERang.Test
         {
             while (true)
             {
-                SetColor(Color.blue); // 빨간색으로 변경
+                SetColor(color); // 빨간색으로 변경
                 yield return new WaitForSeconds(0.5f);
                 ResetColor(); // 원래 색으로 복구
                 yield return new WaitForSeconds(0.5f);

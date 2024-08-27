@@ -25,7 +25,7 @@ namespace ERang
 
         // for test
         private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
-        private List<CardUI> flashingCardUIs = new List<CardUI>();
+        private List<BoardSlot> flashingSlots = new List<BoardSlot>();
 
         void Awake()
         {
@@ -58,14 +58,12 @@ namespace ERang
             {
                 Debug.Log($"Space key down. 큐 개수: {actionQueue.Count}");
 
-                if (flashingCardUIs.Count > 0)
+                if (flashingSlots.Count > 0)
                 {
-                    foreach (CardUI cardUI in flashingCardUIs)
-                    {
-                        cardUI.StopFlashing();
-                    }
+                    foreach (BoardSlot slot in flashingSlots)
+                        slot.StopFlashing();
 
-                    flashingCardUIs.Clear();
+                    flashingSlots.Clear();
                 }
 
                 if (actionQueue.Count > 0)
@@ -153,9 +151,10 @@ namespace ERang
             {
                 EnqueueAction($"보드 {reactionSlot.Slot}번 슬롯 리액션", () =>
                 {
-                    CardUI cardUI = reactionSlot.GetComponent<CardUI>();
-                    cardUI.StartFlashing();
-                    flashingCardUIs.Add(cardUI);
+                    // 현재 턴 슬롯 깜빡임
+                    reactionSlot.StartFlashing();
+                    Debug.Log($"reactionSlot: {reactionSlot.Slot}");
+                    flashingSlots.Add(reactionSlot);
 
                     Card card = reactionSlot.Card;
 
@@ -177,7 +176,19 @@ namespace ERang
 
                     foreach (var (reaction, condition) in turnStartReactionPairs)
                     {
-                        int aiDataId = ConditionLogic.Instance.GetReactionConditionAiDataId((reaction, condition), reactionSlot, opponentSlots);
+                        var (aiDataId, targetSlots) = ConditionLogic.Instance.GetReactionConditionAiDataId((reaction, condition), reactionSlot, opponentSlots);
+
+                        // Debug.Log($"targetSlots: {JsonConvert.SerializeObject(targetSlots)}");
+                        // Debug.Log($"targetSlots count: {targetSlots.Count}");
+
+                        // 타겟 슬롯 표시를 하기 위함인데 원하는대로 되지 않아 수정할 예정
+                        foreach (BoardSlot targetSlot in targetSlots)
+                        {
+                            Debug.Log($"targetSlot: {targetSlot.Slot}");
+
+                            targetSlot.StartFlashing(Color.red);
+                            flashingSlots.Add(targetSlot);
+                        }
 
                         if (aiDataId == 0)
                             continue;

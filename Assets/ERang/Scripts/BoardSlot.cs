@@ -115,5 +115,15 @@ namespace ERang
             cardUI.ResetStat();
             cardUI.statObj.SetActive(false);
         }
+
+        public void StartFlashing(Color? color = null)
+        {
+            cardUI.StartFlashing(color);
+        }
+
+        public void StopFlashing()
+        {
+            cardUI.StopFlashing();
+        }
     }
 }
