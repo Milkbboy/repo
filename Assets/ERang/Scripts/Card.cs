@@ -97,6 +97,11 @@ namespace ERang
             return abilities.Find(a => a.aiType == aiType && a.abilityId == abilityId);
         }
 
+        public void SetHp(int hp)
+        {
+            this.hp = hp;
+        }
+
         /// <summary>
         /// 카드의 체력을 증가 또는 감소시킨다.
         /// </summary>
@@ -172,7 +177,7 @@ namespace ERang
 
             if (aiData == null)
             {
-                Debug.LogError($"AiData is null. aiGroupId: {aiGroupId}");
+                Debug.LogWarning($"AiData is null. aiGroupId: {aiGroupId}");
                 return null;
             }
 
@@ -180,7 +185,7 @@ namespace ERang
         }
 
         /// <summary>
-        /// 카드에 설정된 리액션 데이터 쌍 리스트 얻기
+        /// 카드에 설정된 리액션 데이터 Pair 리스트 얻기
         /// - AiGroupData 테이블과 ConditionData 테이블을 참조하여 리액션 데이터를 한쌍으로 반환 (tuple 형태)
         /// </summary>
         /// <returns></returns>
@@ -188,16 +193,18 @@ namespace ERang
         {
             List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new List<(AiGroupData.Reaction, ConditionData)>();
 
+            Debug.Log($"{id} 카드. {aiGroupId} 번 AiGroupData 로 리액션 테이블 데이터 얻기 - Card.GetTurnStartReaction");
+
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
 
             if (aiGroupData == null)
             {
-                Debug.LogError($"Card.GetTurnStartReaction: aiGroupData 데이터 없음. cardId: {id}, aiGroupId: {aiGroupId}");
+                Debug.LogWarning($"{id} 카드. aiGroupData 데이터 없음 - Card.GetTurnStartReaction");
                 return reactionConditionPairs;
             }
 
             if (aiGroupData.reactions.Count == 0)
-                Debug.Log($"Card.GetTurnStartReaction: aiGroupData에 reaction 설정 없음. cardId: {id}, aiGroupId: {aiGroupId}");
+                Debug.Log($"{id} 카드. aiGroupData에 reaction 설정 없음 - Card.GetTurnStartReaction");
 
             foreach (var reaction in aiGroupData.reactions)
             {
@@ -205,7 +212,7 @@ namespace ERang
 
                 if (conditionData == null)
                 {
-                    Debug.LogError($"Card.GetTurnStartReaction: conditionData 없음. cardId: {id}, aiGroupId: {aiGroupId}, conditionId: {reaction.conditionId}");
+                    Debug.LogError($"{id} 카드. {reaction.conditionId} 번 conditionData 없음 - Card.GetTurnStartReaction");
                     continue;
                 }
 
@@ -216,13 +223,13 @@ namespace ERang
                 reactionConditionPairs.Add((reaction, conditionData));
             }
 
-            // 리액션 로그
+            // 리액션 데이터 로그
             if (reactionConditionPairs.Count > 0)
             {
                 string logs = string.Join("\n", reactionConditionPairs.Select((x, index) =>
                 $"[{index}] reaction: {JsonConvert.SerializeObject(x.Item1)}, condition: {JsonConvert.SerializeObject(x.Item2)}"));
 
-                Debug.Log($"Card.GetTurnStartReaction: 리액션 데이터 {reactionConditionPairs.Count}개 있음. cardId: {id}, aiGroupId: {aiGroupId}, turnStartReactionPairs {logs}");
+                Debug.Log($"{id} 카드. {reactionConditionPairs.Count}개 리액션 컨디션({string.Join(" ,", reactionConditionPairs.Select(pair => pair.Item2.id).ToList())}) 있음");
             }
 
             return reactionConditionPairs;

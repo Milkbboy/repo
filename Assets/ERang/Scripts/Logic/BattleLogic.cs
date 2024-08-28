@@ -101,7 +101,7 @@ namespace ERang
 
             // 턴 시작시 실행되는 카드의 Reaction 을 확인
             // EnqueueAction("TurnStartCardReaction", () => TurnStartCardReaction());
-            EnqueueAction("TurnStartReaction", () => TurnStartReaction());
+            TurnStartReaction();
         }
 
         public void TurnEnd()
@@ -149,59 +149,60 @@ namespace ERang
 
             foreach (BoardSlot reactionSlot in reactionSlots)
             {
-                EnqueueAction($"보드 {reactionSlot.Slot}번 슬롯 리액션", () =>
+                EnqueueAction($"보드 {reactionSlot.Slot}번 슬롯. -- 리액션 시작 --", () =>
                 {
-                    // 현재 턴 슬롯 깜빡임
+                    // 현재 턴 보드 슬롯 깜빡임 설정
                     reactionSlot.StartFlashing();
-                    Debug.Log($"reactionSlot: {reactionSlot.Slot}");
                     flashingSlots.Add(reactionSlot);
 
                     Card card = reactionSlot.Card;
 
                     if (card == null)
                     {
-                        Debug.LogWarning($"TurnStartReaction: card is null({reactionSlot.Slot})");
+                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 장착된 카드가 없어 리액션 패스 - BattleLogic.TurnStartReaction");
                         return;
                     }
 
-                    Debug.Log($"TurnStartReaction: -- 턴 시작 리액션 시작 -- cardId: {card.id}, aiGroupId: {card.aiGroupId}");
+                    List<(AiGroupData.Reaction, ConditionData)> reactionPairs = card.GetCardReactionPairs(ConditionCheckPoint.TurnStart);
 
-                    List<(AiGroupData.Reaction, ConditionData)> turnStartReactionPairs = card.GetCardReactionPairs(ConditionCheckPoint.TurnStart);
-
-                    if (turnStartReactionPairs.Count == 0)
+                    if (reactionPairs.Count == 0)
                     {
-                        Debug.Log($"TurnStartReaction: 리액션 데이터 없음. cardId: {card.id}, aiGroupId: {card.aiGroupId}");
+                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) AiGroupData({card.aiGroupId})에 해당하는 리액션 데이터 없음 - BattleLogic.TurnStartReaction");
                         return;
                     }
 
-                    foreach (var (reaction, condition) in turnStartReactionPairs)
+                    foreach (var (reaction, condition) in reactionPairs)
                     {
+                        // Debug.Log($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) 리액션 컨디션({condition.id}) 확인 함수 호출 - BattleLogic.TurnStartReaction");
+
                         var (aiDataId, targetSlots) = ConditionLogic.Instance.GetReactionConditionAiDataId((reaction, condition), reactionSlot, opponentSlots);
 
-                        // Debug.Log($"targetSlots: {JsonConvert.SerializeObject(targetSlots)}");
-                        // Debug.Log($"targetSlots count: {targetSlots.Count}");
-
-                        // 타겟 슬롯 표시를 하기 위함인데 원하는대로 되지 않아 수정할 예정
-                        foreach (BoardSlot targetSlot in targetSlots)
-                        {
-                            Debug.Log($"targetSlot: {targetSlot.Slot}");
-
-                            targetSlot.StartFlashing(Color.red);
-                            flashingSlots.Add(targetSlot);
-                        }
-
                         if (aiDataId == 0)
+                        {
+                            // Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) 리액션 컨디션({condition.id}) 없음 - BattleLogic.TurnStartReaction");
                             continue;
+                        }
 
                         AiData aiData = AiData.GetAiData(aiDataId);
 
                         if (aiData == null)
                         {
-                            Debug.LogError($"TurnStartReaction: aiData is null. aiDataId: {aiDataId}");
+                            Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) 리액션 컨디션({condition.id}) AiData({aiDataId}) 없음 - BattleLogic.TurnStartReaction");
                             continue;
                         }
 
-                        Debug.Log($"TurnStartReaction: 턴 시작 리액션 즉발 행동 aiData 설정. cardId: {card.id}, aiGroupId: {card.aiGroupId}, reaction: {reaction.conditionId}, aiDataId: {aiDataId}");
+                        Debug.Log($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - BattleLogic.TurnStartReaction");
+
+                        // 타겟 슬롯 표시를 하기 위함인데 원하는대로 되지 않아 수정할 예정
+                        foreach (int targetSlot in targetSlots)
+                        {
+                            Debug.Log($"{targetSlot}번 타겟 슬롯 깜박임 시작 - BattleLogic.TurnStartReaction");
+
+                            BoardSlot targetBoardSlot = Board.Instance.GetBoardSlot(targetSlot);
+
+                            targetBoardSlot.StartFlashing(Color.red);
+                            flashingSlots.Add(targetBoardSlot);
+                        }
 
                         AiLogic.Instance.AiDataAction(aiData, reactionSlot);
                     }
@@ -476,6 +477,7 @@ namespace ERang
 
         private void EnqueueAction(string name, UnityAction action)
         {
+            Debug.Log($"<color=red>EnqueueAction: {name}</color>");
             actionQueue.Enqueue(new NamedAction(name, action));
         }
     }

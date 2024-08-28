@@ -9,6 +9,7 @@ namespace ERang.Data
     /// <summary>
     /// 스킬의 타겟과 행동 타입을 지정하는 데이터 시트
     /// </summary>
+    [System.Serializable]
     public class AiData : ScriptableObject
     {
         public int ai_Id; // Ai의 Id 값

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using ERang.Data;
-using RogueEngine.UI;
+using Newtonsoft.Json;
 
 namespace ERang
 {
@@ -37,14 +37,15 @@ namespace ERang
         /// <param name="selfSlot"></param>
         /// <param name="opponentSlots"></param>
         /// <returns></returns>
-        public (int aiDataId, List<BoardSlot> targetSlots) GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
+        public (int aiDataId, List<int> targetSlots) GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
         {
-            Card selfCard = selfSlot.Card;
             var (reaction, condition) = reactionPairs;
+
+            // Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 리액션 컨디션({reaction.conditionId}) 확인 시작 - ConditionLogic.GetReactionConditionAiDataId");
 
             List<BoardSlot> targetSlots = GetConditionTargets(condition, selfSlot, opponentSlots);
 
-            Debug.Log($"ConditionLogic.GetReactionConditionAiDataId: 리액션 컨디션 aiDataId 얻기 - reaction: {reaction.conditionId}, condition: {condition.id}, targets: {targetSlots.Count}");
+            Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 리액션 컨디션({condition.id}) aiDataId({reaction.aiDataId}) 확인. targetSlots <color=yellow>Slots: {(targetSlots.Count > 0 ? string.Join(", ", targetSlots.Select(slot => slot.Slot)) : "없음")}</color> - ConditionLogic.GetReactionConditionAiDataId");
 
             foreach (var targetSlot in targetSlots)
             {
@@ -52,37 +53,45 @@ namespace ERang
 
                 // 슬롯에 카드가 없으면 패스
                 if (targetCard == null)
+                {
+                    Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 리액션 컨디션({condition.id}) 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯 장착된 카드가 없어 패스 - ConditionLogic.GetReactionConditionAiDataId");
                     continue;
+                }
 
                 int compareValue = 0;
 
                 switch (condition.type)
                 {
                     // 대상의 버프 상태 확인
-                    case ConditionType.Buff: compareValue = targetCard.BuffCount; break;
+                    case ConditionType.Buff:
+                        compareValue = targetCard.BuffCount;
+                        break;
                     // 대상의 디버프 상태 확인
-                    case ConditionType.Debuff: compareValue = targetCard.DeBuffCount; break;
+                    case ConditionType.Debuff:
+                        compareValue = targetCard.DeBuffCount;
+                        break;
                     // 대상의 체력 상태 확인
-                    case ConditionType.Hp: compareValue = targetCard.hp; break;
+                    case ConditionType.Hp:
+                        compareValue = targetCard.hp;
+                        break;
                     // 대상의 모든 턴
                     case ConditionType.EveryTurn:
-                        if (ConditionRatio(reaction.ratio))
-                            return (reaction.aiDataId, targetSlots);
-                        return (0, targetSlots);
+                        if (ConditionRatio(condition.id, reaction.ratio))
+                            return (reaction.aiDataId, new List<int> { targetSlot.Slot });
+                        break;
                     case ConditionType.Extinction:
                     case ConditionType.Acquisition:
-                        Debug.LogWarning("ConditionLogic.GetReactionConditionAiDataId: ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전.");
+                        Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전 - ConditionLogic.GetReactionConditionAiDataId");
                         break;
                 }
 
                 // 해당 조건의 컨디션이 있으면 다음 컨디션은 검사하지 않는다.
-                if (ConditionCompare(condition, compareValue) && ConditionRatio(reaction.ratio))
-                    return (reaction.aiDataId, targetSlots);
+                if (ConditionCompare(condition, compareValue) && ConditionRatio(condition.id, reaction.ratio))
+                    return (reaction.aiDataId, new List<int> { targetSlot.Slot });
             }
 
-            Debug.Log($"ConditionLogic.GetReactionConditionAiDataId: 리액션 컨디션 aiDataId 없음. cardId: {selfCard.id}, aiGroupId: {selfCard.aiGroupId}, reaction: {reaction.conditionId}");
-
-            return (0, targetSlots);
+            Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 조건을 만족하는 리액션 컨디션({condition.id}) 없음 - ConditionLogic.GetReactionConditionAiDataId");
+            return (0, new List<int>());
         }
 
         /// <summary>
@@ -135,7 +144,7 @@ namespace ERang
                         targetSlots = Board.Instance.GetCreatureBoardSlots();
                     break;
                 case ConditionTarget.Card:
-                    Debug.LogWarning("ConditionLogic.GetConditionTargets: 카드 대상 미구현.");
+                    Debug.LogWarning("{selfSlot.Slot}번 슬롯. 카드 대상 미구현 - ConditionLogic.GetConditionTargets");
                     break;
             }
 
@@ -153,7 +162,7 @@ namespace ERang
             // 비교 조건이 없으면 true
             if (string.IsNullOrEmpty(condition.compare))
             {
-                Debug.Log($"ConditionLogic.ConditionCompare: 컨디션 조건 비교 값 없으면 그냥 성공 - condition: {condition.id}), ");
+                Debug.Log($"컨디션 조건 비교 값 없으면 그냥 성공 - condition: {condition.id}) - ConditionLogic.ConditionCompare");
                 return true;
             }
 
@@ -165,7 +174,7 @@ namespace ERang
                 _ => false,
             };
 
-            Debug.Log($"ConditionLogic:ConditionCompare. 컨디션 조건 비교 결과 {result} - conditionId: {condition.id}, value({value}) {condition.compare} condition.value({condition.value}), ");
+            Debug.Log($"컨디션({condition.id}) 조건 비교 결과 {result}. target Value({value}) {condition.compare} condition.value({condition.value}) - ConditionLogic:ConditionCompare");
 
             return result;
         }
@@ -176,12 +185,12 @@ namespace ERang
         /// </summary>
         /// <param name="ratio"></param>
         /// <returns></returns>
-        private bool ConditionRatio(float ratio)
+        private bool ConditionRatio(int conditionId, float ratio)
         {
             double randomValue = random.NextDouble();
             bool result = (ratio == 1f || randomValue <= ratio);
 
-            Debug.Log($"ConditionLogic:ConditionRatio. 컨디션 발생 확률 결과 {result} - ratio: {ratio}, randomValue: {randomValue}");
+            Debug.Log($"컨디션({conditionId}) 발생 확률 결과 {result} - randomValue({randomValue:F1}) <= ratio({ratio}) - ConditionLogic:ConditionRatio");
 
             return result;
         }

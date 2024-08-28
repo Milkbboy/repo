@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace ERang
 {
+    [System.Serializable]
     public class BoardSlot : MonoBehaviour
     {
         [SerializeField] private int slot; // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 값
@@ -104,7 +105,26 @@ namespace ERang
 
         public void SetCardHp(int hp)
         {
-            cardUI.SetHp(hp);
+            card.SetHp(hp);
+            cardUI.SetHp(card.hp);
+        }
+
+        public void AddCardHp(int hp)
+        {
+            card.AddHp(hp);
+            cardUI.SetHp(card.hp);
+        }
+
+        public void AddCardAtk(int atk)
+        {
+            card.AddAtk(atk);
+            cardUI.SetAtk(card.atk);
+        }
+
+        public void AddCardDef(int def)
+        {
+            card.AddDef(def);
+            cardUI.SetDef(card.def);
         }
 
         public void RemoveCard()
@@ -122,10 +142,12 @@ namespace ERang
 
         public void StartFlashing(Color? color = null)
         {
+            boardSlotUI.StartFlashing(color);
         }
 
         public void StopFlashing()
         {
+            boardSlotUI.StopFlashing();
         }
     }
 }

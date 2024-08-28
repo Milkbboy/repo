@@ -669,7 +669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardTexture: {fileID: 0}
-  cardMeshRenderer: {fileID: 6308532741039473067}
+  meshRenderer: {fileID: 6308532741039473067}
 --- !u!1 &1450004362261749877
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,7 +754,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1759390949161180928}
-  - component: {fileID: 560608029379450683}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -779,19 +778,6 @@ Transform:
   - {fileID: 4814321510656440075}
   m_Father: {fileID: 1415771865739976040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &560608029379450683
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1602542922695894159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b1ab52fbaea92a4ea9d80f8c88f8339, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 6093997271404176024}
 --- !u!1 &1906509233343970602
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,7 +936,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2012102455775315704}
-  - component: {fileID: 5703550598967841783}
   m_Layer: 0
   m_Name: Slot
   m_TagString: Untagged
@@ -974,19 +959,6 @@ Transform:
   - {fileID: 5221170906455426742}
   m_Father: {fileID: 1415771865739976040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5703550598967841783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3177820970454390909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b1ab52fbaea92a4ea9d80f8c88f8339, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 6308532741039473067}
 --- !u!1 &3868827515990187125
 GameObject:
   m_ObjectHideFlags: 0

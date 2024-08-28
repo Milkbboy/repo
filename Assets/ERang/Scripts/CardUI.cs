@@ -121,6 +121,16 @@ namespace ERang
             hpText.text = hp.ToString();
         }
 
+        public void SetAtk(int atk)
+        {
+            atkText.text = atk.ToString();
+        }
+
+        public void SetDef(int def)
+        {
+            defText.text = def.ToString();
+        }
+
         public void ResetStat()
         {
             hpText.text = string.Empty;

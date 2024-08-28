@@ -10,22 +10,6 @@ namespace ERang.Test
         private Coroutine flashCoroutine;
         Color color;
 
-        public void SetSelfSlot(BoardSlot slot, Color? color = null)
-        {
-            if (color.HasValue)
-                this.color = color.Value;
-
-            StartFlashing();
-        }
-
-        public void SetTargetSlot(BoardSlot slot, Color? color = null)
-        {
-            if (color.HasValue)
-                this.color = color.Value;
-
-            StartFlashing();
-        }
-
         public void Initialize(MeshRenderer meshRenderer)
         {
             this.meshRenderer = meshRenderer;
