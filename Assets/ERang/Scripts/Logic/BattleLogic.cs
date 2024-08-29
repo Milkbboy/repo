@@ -54,7 +54,7 @@ namespace ERang
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
             {
                 Debug.Log($"Space key down. 큐 개수: {actionQueue.Count}");
 
@@ -69,7 +69,7 @@ namespace ERang
                 if (actionQueue.Count > 0)
                 {
                     var namedAction = actionQueue.Dequeue();
-                    Debug.Log($"Execution action: {namedAction.Name}");
+                    Debug.Log($"<color=#dd3333>Execution action</color>: {namedAction.Name}");
                     namedAction.Action?.Invoke();
                 }
             }
@@ -167,7 +167,7 @@ namespace ERang
 
                     if (reactionPairs.Count == 0)
                     {
-                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) AiGroupData({card.aiGroupId})에 해당하는 리액션 데이터 없음 - BattleLogic.TurnStartReaction");
+                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) AiGroupData({card.aiGroupId})에 해당하는 <color=red>리액션 데이터 없음<color> - BattleLogic.TurnStartReaction");
                         return;
                     }
 
@@ -477,7 +477,7 @@ namespace ERang
 
         private void EnqueueAction(string name, UnityAction action)
         {
-            Debug.Log($"<color=red>EnqueueAction: {name}</color>");
+            Debug.Log($"<color=#257dca>EnqueueAction</color>: {name}");
             actionQueue.Enqueue(new NamedAction(name, action));
         }
     }

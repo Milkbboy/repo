@@ -193,28 +193,37 @@ namespace ERang
         {
             List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new List<(AiGroupData.Reaction, ConditionData)>();
 
-            Debug.Log($"{id} 카드. {aiGroupId} 번 AiGroupData 로 리액션 테이블 데이터 얻기 - Card.GetTurnStartReaction");
-
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
+
+            string aiGroupDataTableLog = $"{id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
 
             if (aiGroupData == null)
             {
-                Debug.LogWarning($"{id} 카드. aiGroupData 데이터 없음 - Card.GetTurnStartReaction");
+                Debug.LogError($"{aiGroupDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetTurnStartReaction");
                 return reactionConditionPairs;
             }
 
+            Debug.Log($"{aiGroupDataTableLog} 성공 - Card.GetTurnStartReaction");
+
             if (aiGroupData.reactions.Count == 0)
-                Debug.Log($"{id} 카드. aiGroupData에 reaction 설정 없음 - Card.GetTurnStartReaction");
+            {
+                Debug.LogWarning($"{id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId}에 reaction 설정 없음 - Card.GetTurnStartReaction");
+                return reactionConditionPairs;
+            }
 
             foreach (var reaction in aiGroupData.reactions)
             {
                 ConditionData conditionData = ConditionData.GetConditionData(reaction.conditionId);
 
+                string conditionDataTableLog = $"{id} 카드. <color=#78d641>ConditionData</color> 테이블 {reaction.conditionId} 데이터 얻기";
+
                 if (conditionData == null)
                 {
-                    Debug.LogError($"{id} 카드. {reaction.conditionId} 번 conditionData 없음 - Card.GetTurnStartReaction");
+                    Debug.LogError($"{conditionDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetTurnStartReaction");
                     continue;
                 }
+
+                Debug.Log($"{conditionDataTableLog} 성공 - Card.GetTurnStartReaction");
 
                 // 리액션 조건이 아니면 패스
                 if (conditionData.checkPoint != checkPoint)

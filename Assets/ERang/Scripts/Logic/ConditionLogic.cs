@@ -43,9 +43,21 @@ namespace ERang
 
             // Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 리액션 컨디션({reaction.conditionId}) 확인 시작 - ConditionLogic.GetReactionConditionAiDataId");
 
+            string conditionTargetLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 리액션 컨디션({condition.id}) 타겟 {condition.target.ToString()} 슬롯 찾기";
+
             List<BoardSlot> targetSlots = GetConditionTargets(condition, selfSlot, opponentSlots);
 
-            Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 리액션 컨디션({condition.id}) aiDataId({reaction.aiDataId}) 확인. targetSlots <color=yellow>Slots: {(targetSlots.Count > 0 ? string.Join(", ", targetSlots.Select(slot => slot.Slot)) : "없음")}</color> - ConditionLogic.GetReactionConditionAiDataId");
+            if (targetSlots.Count == 0)
+            {
+                Debug.LogWarning($"{conditionTargetLog} - 실패. 대상 없음 - ConditionLogic.GetReactionConditionAiDataId");
+                return (0, new List<int>());
+            }
+
+            Debug.Log($"{conditionTargetLog} - 성공. 타겟 슬롯 <color=yellow>{string.Join(", ", targetSlots.Select(slot => slot.Slot))}</color> 에 대한 리액션 발동 확인 - ConditionLogic.GetReactionConditionAiDataId");
+
+            string conditionCheckLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}).";
+
+            var result = (0, new List<int>());
 
             foreach (var targetSlot in targetSlots)
             {
@@ -54,44 +66,66 @@ namespace ERang
                 // 슬롯에 카드가 없으면 패스
                 if (targetCard == null)
                 {
-                    Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 리액션 컨디션({condition.id}) 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯 장착된 카드가 없어 패스 - ConditionLogic.GetReactionConditionAiDataId");
+                    Debug.LogWarning($"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color>에 대한 리액션 컨디션({condition.id}) 발동 확인 - 실패. 슬롯에 장착된 카드 없음 - ConditionLogic.GetReactionConditionAiDataId");
                     continue;
                 }
 
-                int compareValue = 0;
+                string targetConditionLog = $"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color> 카드({targetCard.id})에 대한 리액션 컨디션({condition.id}) {condition.type.ToString()} 조건 비교";
 
-                switch (condition.type)
+                if (condition.type == ConditionType.EveryTurn)
                 {
-                    // 대상의 버프 상태 확인
-                    case ConditionType.Buff:
-                        compareValue = targetCard.BuffCount;
-                        break;
-                    // 대상의 디버프 상태 확인
-                    case ConditionType.Debuff:
-                        compareValue = targetCard.DeBuffCount;
-                        break;
-                    // 대상의 체력 상태 확인
-                    case ConditionType.Hp:
-                        compareValue = targetCard.hp;
-                        break;
-                    // 대상의 모든 턴
-                    case ConditionType.EveryTurn:
-                        if (ConditionRatio(condition.id, reaction.ratio))
-                            return (reaction.aiDataId, new List<int> { targetSlot.Slot });
-                        break;
-                    case ConditionType.Extinction:
-                    case ConditionType.Acquisition:
-                        Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전 - ConditionLogic.GetReactionConditionAiDataId");
-                        break;
+                    if (ConditionRatio(condition.id, reaction.ratio))
+                    {
+                        result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
+                        Debug.Log($"{targetConditionLog} - 성공 (발생 확률만 비교) 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"{targetConditionLog} - 실패 (발생 확률만 비교) - ConditionLogic.GetReactionConditionAiDataId");
+                    }
+                }
+                else
+                {
+                    int compareValue = 0;
+
+                    switch (condition.type)
+                    {
+                        // 대상의 버프 상태 확인
+                        case ConditionType.Buff:
+                            compareValue = targetCard.BuffCount;
+                            break;
+                        // 대상의 디버프 상태 확인
+                        case ConditionType.Debuff:
+                            compareValue = targetCard.DeBuffCount;
+                            break;
+                        // 대상의 체력 상태 확인
+                        case ConditionType.Hp:
+                            compareValue = targetCard.hp;
+                            break;
+                        case ConditionType.Extinction:
+                        case ConditionType.Acquisition:
+                            Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전 - ConditionLogic.GetReactionConditionAiDataId");
+                            break;
+                    }
+
+                    // 해당 조건의 컨디션이 있으면 다음 컨디션은 검사하지 않는다.
+                    if (ConditionCompare(condition, compareValue) && ConditionRatio(condition.id, reaction.ratio))
+                    {
+                        result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
+                        Debug.Log($"{targetConditionLog} - 성공 (조건 비교와 발생 확률 모두 통과). 리액션에 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"{targetConditionLog} - 실패 (조건 비교 또는 발생 확률 실패) - ConditionLogic.GetReactionConditionAiDataId");
+                    }
                 }
 
-                // 해당 조건의 컨디션이 있으면 다음 컨디션은 검사하지 않는다.
-                if (ConditionCompare(condition, compareValue) && ConditionRatio(condition.id, reaction.ratio))
-                    return (reaction.aiDataId, new List<int> { targetSlot.Slot });
+                // 리액션 조건이 성공하면 다음 조건은 검사하지 않는다.
+                if (result.Item1 != 0)
+                    break;
             }
 
-            Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 조건을 만족하는 리액션 컨디션({condition.id}) 없음 - ConditionLogic.GetReactionConditionAiDataId");
-            return (0, new List<int>());
+            return result;
         }
 
         /// <summary>
