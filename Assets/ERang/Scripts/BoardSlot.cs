@@ -96,6 +96,8 @@ namespace ERang
         {
             this.card = card;
 
+            Debug.Log($"Equipping card to slot {slot}, hp: {card.hp}, atk: {card.atk}, def: {card.def}, maxHp: {card.maxHp}");
+
             isOccupied = true;
             isOverlapCard = false;
 
@@ -107,6 +109,32 @@ namespace ERang
         {
             card.SetHp(hp);
             cardUI.SetHp(card.hp);
+        }
+
+        /// <summary>
+        /// 카드 데미지 설정
+        /// - 카드의 방어력이 0보다 크면 방어력을 먼저 깎고, 방어력이 0보다 작으면 체력을 깎는다.
+        /// </summary>
+        /// <param name="damage"></param>
+        public void SetDamage(int damage)
+        {
+            if (card.def > 0)
+            {
+                card.def -= damage;
+
+                if (card.def < 0)
+                {
+                    card.hp += card.def;
+                    card.def = 0;
+                }
+            }
+            else
+            {
+                card.hp -= damage;
+            }
+
+            cardUI.SetHp(card.hp);
+            cardUI.SetDef(card.def);
         }
 
         public void AddCardHp(int hp)

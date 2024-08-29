@@ -102,7 +102,7 @@ namespace ERang
                 return;
             }
 
-            Debug.Log($"{selfSlot.Slot}번 슬롯. AiData 에 설정된 어빌리티({string.Join(", ", aiData.ability_Ids)}) 타겟({aiData.target.ToString()}) <color=yellow>Slots: {string.Join(", ", aiTargetSlots.Select(slot => slot.Slot))}</color>에 적용 - AiLogic.AiDataAction");
+            Debug.Log($"{selfSlot.Slot}번 슬롯. AiData 에 설정된 어빌리티({string.Join(", ", aiData.ability_Ids)}) 타겟({aiData.target.ToString()}) Slots: <color=yellow>{string.Join(", ", aiTargetSlots.Select(slot => slot.Slot))}</color>번에 적용 - AiLogic.AiDataAction");
 
             foreach (int abilityId in aiData.ability_Ids)
             {
@@ -119,8 +119,6 @@ namespace ERang
 
                 foreach (BoardSlot targetSlot in aiTargetSlots)
                 {
-                    // Debug.Log($"{selfSlot.Slot} 번 슬롯. 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯에 {ability.abilityType.ToString()} 어빌리티({abilityId}) 적용 전 - AiLogic.AiDataAction");
-
                     if (targetSlot.Card == null)
                     {
                         Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯에 장착된 카드 없음 - AiLogic.AiDataAction");
@@ -134,7 +132,7 @@ namespace ERang
                                 int beforeHp = targetSlot.Card.hp;
 
                                 for (int j = 0; j < aiData.atk_Cnt; ++j)
-                                    targetSlot.AddCardHp(-selfCard.atk);
+                                    targetSlot.SetDamage(selfCard.atk);
 
                                 Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯 카드({targetSlot.Card.id}) 번에 {ability.abilityType.ToString()} 어빌리티({abilityId}) {aiData.atk_Cnt} 회 적용. damage: {selfCard.atk}, hp: {beforeHp} => {targetSlot.Card.hp}");
                             }

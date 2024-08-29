@@ -3,6 +3,7 @@ using System.Linq;
 using ERang.Data;
 using UnityEngine;
 using Newtonsoft.Json;
+using UnityEngine.Analytics;
 
 namespace ERang
 {
@@ -53,6 +54,7 @@ namespace ERang
             costMana = cardData.costMana;
             costGold = cardData.costGold;
             hp = cardData.hp;
+            maxHp = hp;
             atk = cardData.atk;
             def = cardData.def;
             isExtinction = cardData.extinction;
@@ -141,47 +143,160 @@ namespace ERang
         /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
         /// </summary>
         /// <returns></returns>
-        public AiData GetCardAiData()
+        public int GetCardAiDataId(int slot)
         {
+            string aiGroupDataTableLog = $"{slot}번 슬롯 {id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
 
-            List<int> aiGroupDataIds = new List<int>();
+            if (aiGroupData == null)
+            {
+                Debug.LogError($"{aiGroupDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetCardAiDataId");
+                return 0;
+            }
 
-            // Reaction 조건이 있으면 먼저 확인
+            List<int> aiDataIds = new List<int>();
 
             // 순차적으로 AI 그룹을 호출하고, 마지막 그룹에 도달 시 최초 그룹으로 순환한다.
             if (aiGroupData.aiGroupType == AiGroupType.Repeat)
             {
-                // Debug.Log($"aiGroupIndex: {aiGroupIndex}, aiGroupData.ai_Groups.Count: {aiGroupData.ai_Groups.Count}");
-
                 if (aiGroupIndex >= aiGroupData.ai_Groups.Count)
-                {
                     aiGroupIndex = 0;
-                }
 
-                // aiGroupIndex에 해당하는 AI 그룹의 AiData id 리스트를 가져온다.
-                aiGroupDataIds = aiGroupData.ai_Groups[aiGroupIndex];
+                aiDataIds = aiGroupData.ai_Groups[aiGroupIndex];
 
                 aiGroupIndex++;
             }
             else if (aiGroupData.aiGroupType == AiGroupType.Random)
             {
                 // 나열된 AI 그룹 중 하나를 임의로 선택한다. (선택 확율은 별도 지정 없이 동일한다. n/1)
-                aiGroupDataIds = aiGroupData.ai_Groups[Random.Range(0, aiGroupData.ai_Groups.Count)];
+                aiDataIds = aiGroupData.ai_Groups[Random.Range(0, aiGroupData.ai_Groups.Count)];
             }
 
-            // Debug.Log($"aiGroupId: {aiGroupId}, aiGroupDataIds: {string.Join(", ", aiGroupDataIds)}");
+            Debug.Log($"{aiGroupDataTableLog} 성공. aiGroupType {aiGroupData.aiGroupType.ToString()} 으로 aiDataIds [{string.Join(", ", aiDataIds)}] 중 하나 뽑기 - Card.GetCardAiDataId");
 
-            // AiData의 Value값을 총합하여 비중을 선정하여 하나를 선택한다.
-            AiData aiData = SelectAiDataByValue(aiGroupDataIds);
+            int selectedAiDataId = 0;
 
-            if (aiData == null)
+            if (aiDataIds.Count == 1)
             {
-                Debug.LogWarning($"AiData is null. aiGroupId: {aiGroupId}");
+                selectedAiDataId = aiDataIds[0];
+                Debug.Log($"{id} 카드. aiDataIds [{string.Join(", ", aiDataIds)}] 에서 {selectedAiDataId} 뽑힘 (하나만 설정되어 있음)");
+            }
+            else
+            {
+                // aiData 가중치 리스트 설정
+                int totalValue = 0;
+                List<(int aiDataId, int value)> aiDataList = new List<(int aiDataId, int value)>();
+
+                foreach (int aiDataId in aiDataIds)
+                {
+                    string aiDataTableLog = $"<color=#78d641>AiGroupData</color> 테이블 {aiDataId} 데이터 얻기";
+                    AiData aiData = AiData.GetAiData(aiDataId);
+
+                    if (aiData == null)
+                    {
+                        Debug.LogWarning($"{aiDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetCardAiDataId");
+                        continue;
+                    }
+
+                    Debug.Log($"{aiDataTableLog} 성공. 가중치({(aiDataId, aiData.value)}) 추가 - Card.GetCardAiDataId");
+                    totalValue += aiData.value;
+
+                    aiDataList.Add((aiDataId, aiData.value));
+                };
+
+                string aiDataListLog = $"{id} 카드. aiDataIds {string.Join(", ", aiDataIds)} 중 중 하나 선택";
+
+                // 가중치 리스트 중 하나 뽑기
+                int randomValue = Random.Range(0, totalValue);
+                int cumulativeValue = 0;
+
+                foreach (var aiData in aiDataList)
+                {
+                    cumulativeValue += aiData.value;
+
+                    if (randomValue < cumulativeValue)
+                    {
+                        selectedAiDataId = aiData.aiDataId;
+                        Debug.Log($"{aiDataListLog} - 총 가중치 {totalValue}, randomValue({randomValue}) < cumulativeValue({cumulativeValue}) 로 {selectedAiDataId} 선택({string.Join(", ", aiDataList.Select(x => x.value))})");
+                        break;
+                    }
+                }
+            }
+
+            return selectedAiDataId;
+        }
+
+        /// <summary>
+        /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
+        /// </summary>
+        /// <returns></returns>
+        public AiData GetCardAiData()
+        {
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
+
+            string aiGroupDataTableLog = $"{id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
+
+            if (aiGroupData == null)
+            {
+                Debug.LogError($"{aiGroupDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetCardAiData");
                 return null;
             }
 
-            return aiData;
+            List<int> aiDataIds = new List<int>();
+
+            // 순차적으로 AI 그룹을 호출하고, 마지막 그룹에 도달 시 최초 그룹으로 순환한다.
+            if (aiGroupData.aiGroupType == AiGroupType.Repeat)
+            {
+                // aiGroupIndex에 해당하는 AI 그룹의 AiData id 리스트를 가져온다.
+                aiDataIds = aiGroupData.ai_Groups[aiGroupIndex];
+                aiGroupIndex = (aiGroupIndex >= aiGroupData.ai_Groups.Count) ? 0 : aiGroupIndex + 1;
+            }
+            else if (aiGroupData.aiGroupType == AiGroupType.Random)
+            {
+                // 나열된 AI 그룹 중 하나를 임의로 선택한다. (선택 확율은 별도 지정 없이 동일한다. n/1)
+                aiDataIds = aiGroupData.ai_Groups[Random.Range(0, aiGroupData.ai_Groups.Count)];
+            }
+
+            Debug.Log($"{aiGroupDataTableLog} 성공. {aiGroupData.aiGroupType.ToString()} aiDataIds({string.Join(", ", aiDataIds)}) 얻기 - Card.GetTurnStartReaction");
+
+            string aiDataIdLog = $"{id} 카드. {string.Join(", ", aiDataIds)} 중 하나의 AiData 선택";
+
+            AiData slectedAiData = null;
+
+            if (aiDataIds.Count == 1)
+            {
+                slectedAiData = AiData.GetAiData(aiDataIds[0]);
+                Debug.Log($"{aiDataIdLog} - AiData 하나만 존재");
+            }
+            else
+            {
+                int totalValue = 0;
+                List<AiData> aiDataList = new List<AiData>();
+
+                // Calculate total value and populate aiDataList
+                foreach (int id in aiDataIds)
+                {
+                    AiData aiData = AiData.GetAiData(id);
+                    aiDataList.Add(aiData);
+                    totalValue += aiData.value;
+                }
+
+                // Generate a random value
+                int randomValue = Random.Range(0, totalValue);
+                int cumulativeValue = 0;
+
+                // Select AiData based on random value
+                foreach (var aiData in aiDataList)
+                {
+                    cumulativeValue += aiData.value;
+                    if (randomValue < cumulativeValue)
+                    {
+                        return aiData;
+                    }
+                }
+            }
+
+            return slectedAiData;
         }
 
         /// <summary>

@@ -124,7 +124,8 @@ namespace ERang
             Board.Instance.SetTurnCount(turn);
 
             // 보드 슬롯 카드 동작
-            StartCoroutine(BoardSlotCardAction());
+            MasterCreatureAction();
+            EnemyMonsterAction();
 
             // 턴 다시 시작
             TurnStart();
@@ -142,6 +143,16 @@ namespace ERang
             List<Card> monsterCards = Board.Instance.GetOccupiedMonsterCards();
         }
 
+        IEnumerator CardAbilityAction(List<Card> cards)
+        {
+            foreach (Card card in cards)
+            {
+                // 카드 어빌리티 실행
+                AiLogic.Instance.AbilityAction(card);
+                yield return new WaitForSeconds(1f);
+            }
+        }
+
         void TurnStartReaction()
         {
             List<BoardSlot> reactionSlots = Board.Instance.GetMonsterBoardSlots();
@@ -149,7 +160,7 @@ namespace ERang
 
             foreach (BoardSlot reactionSlot in reactionSlots)
             {
-                EnqueueAction($"보드 {reactionSlot.Slot}번 슬롯. -- 리액션 시작 --", () =>
+                EnqueueAction($"보드 {reactionSlot.Slot} 슬롯. -- 턴 시작 리액션 시작 --", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
                     reactionSlot.StartFlashing();
@@ -167,7 +178,7 @@ namespace ERang
 
                     if (reactionPairs.Count == 0)
                     {
-                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) AiGroupData({card.aiGroupId})에 해당하는 <color=red>리액션 데이터 없음<color> - BattleLogic.TurnStartReaction");
+                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯 카드({card.id}). AiGroupData({card.aiGroupId})에 해당하는 <color=red>리액션 데이터 없음<color> - BattleLogic.TurnStartReaction");
                         return;
                     }
 
@@ -185,13 +196,15 @@ namespace ERang
 
                         AiData aiData = AiData.GetAiData(aiDataId);
 
+                        string aiGroupDataTableLog = $"{reactionSlot.Slot}번 슬롯 {card.id} 카드. <color=#78d641>AiData</color> 테이블 {aiDataId} 데이터 얻기";
+
                         if (aiData == null)
                         {
-                            Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) 리액션 컨디션({condition.id}) AiData({aiDataId}) 없음 - BattleLogic.TurnStartReaction");
+                            Debug.LogWarning($"{aiGroupDataTableLog} - 실패. <color=red>테이블에 데이터 없음</color> - BattleLogic.TurnStartReaction");
                             continue;
                         }
 
-                        Debug.Log($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - BattleLogic.TurnStartReaction");
+                        Debug.Log($"{aiGroupDataTableLog} 성공 - {reactionSlot.Slot}번 슬롯 카드({card.id}). 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - BattleLogic.TurnStartReaction");
 
                         // 타겟 슬롯 표시를 하기 위함인데 원하는대로 되지 않아 수정할 예정
                         foreach (int targetSlot in targetSlots)
@@ -204,77 +217,57 @@ namespace ERang
                             flashingSlots.Add(targetBoardSlot);
                         }
 
+                        // 리액션 실행되면 다음 리액션은 패스
                         AiLogic.Instance.AiDataAction(aiData, reactionSlot);
+                        break;
                     }
                 });
             }
         }
 
-        IEnumerator CardAbilityAction(List<Card> cards)
+        void MasterCreatureAction()
         {
-            foreach (Card card in cards)
+            List<BoardSlot> creatureSlots = Board.Instance.GetCreatureBoardSlots();
+            List<BoardSlot> monsterSlots = Board.Instance.GetMonsterBoardSlots();
+
+            BoardCardAction(creatureSlots, monsterSlots);
+        }
+
+        void EnemyMonsterAction()
+        {
+            List<BoardSlot> monsterSlots = Board.Instance.GetMonsterBoardSlots();
+            List<BoardSlot> creatureSlots = Board.Instance.GetCreatureBoardSlots();
+
+            BoardCardAction(monsterSlots, creatureSlots);
+        }
+
+        void BoardCardAction(List<BoardSlot> actorSlots, List<BoardSlot> opponentSlots)
+        {
+            foreach (BoardSlot actorSlot in actorSlots)
             {
-                // 카드 어빌리티 실행
-                AiLogic.Instance.AbilityAction(card);
-                yield return new WaitForSeconds(1f);
+                EnqueueAction($"{actorSlot.Slot}번 슬롯 -- 턴 종료 액션 시작 --", () =>
+                {
+                    // 현재 턴 보드 슬롯 깜빡임 설정
+                    actorSlot.StartFlashing();
+                    flashingSlots.Add(actorSlot);
+
+                    Card card = actorSlot.Card;
+
+                    if (card == null)
+                    {
+                        Debug.LogWarning($"{actorSlot.Slot}번 슬롯 장착된 카드가 없어 액션 패스 - BattleLogic.BoardCardAction");
+                        return;
+                    }
+
+                    // 카드의 행동 aiData 설정
+                    int aiDataId = card.GetCardAiDataId(actorSlot.Slot);
+
+                    // ai 실행
+                    AiData aiData = AiData.GetAiData(aiDataId);
+
+                    AiLogic.Instance.AiDataAction(aiData, actorSlot);
+                });
             }
-        }
-
-        // 보드 슬롯 카드 동작
-        IEnumerator BoardSlotCardAction()
-        {
-            // StartCoroutine(MasterCreatureAction());
-
-            yield return new WaitForSeconds(1f);
-
-            // StartCoroutine(EnemyMonsterAction());
-        }
-
-        /// <summary>
-        /// 크리쳐의 AiData AttckType 은 Automatic 이어야 한다.
-        /// - 유저 인풋이 있는 카드는 AttackType 에 Select 가 있다.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator MasterCreatureAction()
-        {
-            List<int> attackerIds = Board.Instance.GetOccupiedCreatureCards().Select(x => x.id).ToList();
-            var logAttacker = new { attackerIds };
-            List<int> targetIds = Board.Instance.GetOccupiedMonsterCards().Select(x => x.id).ToList();
-            var logTarget = new { targetIds };
-            Debug.Log($"MasterCreatureAction attackerIds: {JsonConvert.SerializeObject(logAttacker)}, targetIds: {JsonConvert.SerializeObject(logTarget)}");
-
-            yield return new WaitForSeconds(1f);
-
-            // return CreateBoardCardAction(
-            //     () => Board.Instance.GetOccupiedCreatureCards(),
-            //     () => Board.Instance.GetOccupiedMonsterCards(),
-            //     (cardUid) => Board.Instance.GetMonsterBoardSlot(cardUid),
-            //     (cardUid) => enemy.RemoveMonsterCard(cardUid),
-            //     (slot) => Board.Instance.ResetMonsterSlot(slot)
-            // );
-        }
-
-        /// <summary>
-        /// 몬스터 카드의 AiData AttckType 은 Automatic 이어야 한다.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator EnemyMonsterAction()
-        {
-            List<int> attackerIds = Board.Instance.GetOccupiedMonsterCards().Select(x => x.id).ToList();
-            var logAttacker = new { attackerIds };
-            List<int> targetIds = Board.Instance.GetOccupiedCreatureCards().Select(x => x.id).ToList();
-            var logTarget = new { targetIds };
-            Debug.Log($"EnemyMonsterAction attackerIds: {JsonConvert.SerializeObject(logAttacker)}, targetIds: {JsonConvert.SerializeObject(logTarget)}");
-
-            yield return new WaitForSeconds(1f);
-
-            // return CreateBoardCardAction(
-            //     () => Board.Instance.GetOccupiedMonsterCards(),
-            //     () => Board.Instance.GetOccupiedCreatureCards(),
-            //     (cardUid) => Board.Instance.GetCreatureBoardSlot(cardUid),
-            //     (cardUid) => master.BoardCreatureCardToExtinction(cardUid),
-            //     (slot) => Board.Instance.ResetCreatureSlot(slot)
-            // );
         }
 
         IEnumerator CreateBoardCardAction(
