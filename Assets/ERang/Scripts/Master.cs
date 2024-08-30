@@ -11,12 +11,22 @@ namespace ERang
     */
     public class Master
     {
+        public static Master Instance { get; private set; }
+
         public int masterId;
         public int hp;
+        public int maxHp;
+        public int mana;
+        public int maxMana;
         public int atk;
-        public int Mana { get; private set; }
-        public int MaxMana { get; private set; }
-        public static Master Instance { get; private set; }
+        public int def;
+        public int Hp { get { return hp; } }
+        public int MaxHp { get { return maxHp; } }
+        public int Mana { get { return mana; } }
+        public int MaxMana { get { return maxMana; } }
+        public int Atk { get { return atk; } }
+        public int Def { get { return def; } }
+
         // 모든 카드
         public List<Card> allCards = new List<Card>();
         // 덱에 있는 카드
@@ -39,10 +49,11 @@ namespace ERang
             MasterData masterData = MasterData.GetMasterData(masterId);
 
             this.masterId = masterData.master_Id;
-            hp = masterData.hp;
+            maxHp = hp = masterData.hp;
+            mana = masterData.startMana;
+            maxMana = masterData.maxMana;
             atk = masterData.atk;
-            Mana = masterData.startMana;
-            MaxMana = masterData.maxMana;
+            def = masterData.def;
 
             // 마스터 카드 생성
             foreach (int cardId in masterData.startCardIds)
@@ -66,21 +77,21 @@ namespace ERang
 
         public void IncreaseMana(int value)
         {
-            Mana += value;
+            mana += value;
 
-            if (Mana > MaxMana)
+            if (mana > MaxMana)
             {
-                Mana = MaxMana;
+                mana = MaxMana;
             }
         }
 
         public void DecreaseMana(int value)
         {
-            Mana -= value;
+            mana -= value;
 
-            if (Mana < 0)
+            if (mana < 0)
             {
-                Mana = 0;
+                mana = 0;
             }
         }
 

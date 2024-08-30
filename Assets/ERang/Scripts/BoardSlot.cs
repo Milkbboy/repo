@@ -83,9 +83,18 @@ namespace ERang
             cardUI.SetMasterCard(master);
         }
 
+        public void CreateEnemyMasterSlot(int slot, Enemy enemy)
+        {
+            this.slot = slot;
+            this.cardType = CardType.EnemyMaster;
+
+            cardUI.cardObject.SetActive(true);
+            cardUI.SetEnemyMasterCard(enemy);
+        }
+
         public void SetMasterStat(Master master)
         {
-            cardUI.SetMasterStat(master);
+            cardUI.SetMasterStat(master.Hp, master.MaxHp, master.Atk, master.Def, master.Mana, master.MaxMana);
         }
 
         /**

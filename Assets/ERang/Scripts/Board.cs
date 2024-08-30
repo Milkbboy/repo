@@ -24,11 +24,13 @@ namespace ERang
         private List<BoardSlot> boardSlots = new List<BoardSlot>();
 
         private BoardSlot masterSlot;
-        private List<BoardSlot> creatureSlots = new List<BoardSlot>();
+        // 크리쳐, 아군 마스터
+        private List<BoardSlot> leftSlots = new List<BoardSlot>();
         private List<BoardSlot> buildingSlots = new List<BoardSlot>();
 
         private BoardSlot enemyMasterSlot;
-        private List<BoardSlot> monsterSlots = new List<BoardSlot>();
+        // 몬스터, 적 마스터
+        private List<BoardSlot> rightSlots = new List<BoardSlot>();
 
         private float boardSpacing = 0.2f;
 
@@ -78,18 +80,22 @@ namespace ERang
                         Master master = BattleLogic.Instance.GetMaster();
                         slot.CreateMasterSlot(i, master);
                         slot.SetIndex(creatureSlotStartIndex - i);
+                        leftSlots.Add(slot);
                         break;
                     case CardType.EnemyMaster:
                         enemyMasterSlot = slot;
+                        Enemy enemy = BattleLogic.Instance.GetEnemy();
+                        // slot.CreateEnemyMasterSlot(i, enemy);
                         slot.SetIndex(i - monsterSlotStartIndex);
+                        rightSlots.Add(slot);
                         break;
                     case CardType.Creature:
                         slot.SetIndex(creatureSlotStartIndex - i);
-                        creatureSlots.Add(slot);
+                        leftSlots.Add(slot);
                         break;
                     case CardType.Monster:
                         slot.SetIndex(i - monsterSlotStartIndex);
-                        monsterSlots.Add(slot);
+                        rightSlots.Add(slot);
                         break;
                 }
 
@@ -129,9 +135,9 @@ namespace ERang
         {
             Enemy enemy = BattleLogic.Instance.GetEnemy();
 
-            for (int i = 0; i < monsterSlots.Count; i++)
+            for (int i = 0; i < enemy.monsterCards.Count; i++)
             {
-                BoardSlot slot = monsterSlots[i];
+                BoardSlot slot = rightSlots[i];
                 slot.EquipCard(enemy.monsterCards[i]);
             }
         }
@@ -141,12 +147,10 @@ namespace ERang
             BoardSlot nearestSlot = null;
             float minDistance = float.MaxValue;
 
-            List<BoardSlot> boardSlots = cardType == CardType.Creature ? creatureSlots : buildingSlots;
+            List<BoardSlot> boardSlots = cardType == CardType.Creature ? leftSlots : buildingSlots;
 
             foreach (BoardSlot slot in boardSlots)
             {
-                // Debug.Log($"slot: {BoardSlot.slot}, isOverlapCard: {BoardSlot.isOverlapCard}");
-
                 if (slot.IsOverlapCard == false)
                 {
                     continue;
@@ -160,8 +164,6 @@ namespace ERang
                     nearestSlot = slot;
                 }
             }
-
-            // Debug.Log($"cardType: {cardType}, nearestSlot: {nearestSlot?.Slot}");
 
             return nearestSlot;
         }
@@ -193,18 +195,18 @@ namespace ERang
 
         public List<BoardSlot> GetCreatureSlots()
         {
-            return creatureSlots;
+            return leftSlots;
         }
 
         public List<BoardSlot> GetMonsterSlots()
         {
-            return monsterSlots;
+            return rightSlots;
         }
 
         public BoardSlot GetTargetMonsterBoardSlot()
         {
             // 몬스터 슬롯 중 가장 먼저 등장하는 몬스터 슬롯을 반환
-            foreach (BoardSlot slot in monsterSlots)
+            foreach (BoardSlot slot in rightSlots)
             {
                 if (slot.IsOccupied)
                 {
@@ -217,7 +219,7 @@ namespace ERang
 
         public void ResetCreatureSlot(int slot)
         {
-            BoardSlot creatureSlot = creatureSlots.Find(x => x.Slot == slot);
+            BoardSlot creatureSlot = leftSlots.Find(x => x.Slot == slot);
 
             if (creatureSlot == null)
             {
@@ -230,7 +232,7 @@ namespace ERang
 
         public void ResetMonsterSlot(int slot)
         {
-            BoardSlot monsterSlot = monsterSlots.Find(x => x.Slot == slot);
+            BoardSlot monsterSlot = rightSlots.Find(x => x.Slot == slot);
 
             if (monsterSlot == null)
             {
@@ -258,7 +260,7 @@ namespace ERang
         /// <returns></returns>
         public List<BoardSlot> GetCreatureBoardSlots()
         {
-            return creatureSlots.OrderBy(slot => slot.Index).ToList();
+            return leftSlots.OrderBy(slot => slot.Index).ToList();
         }
 
         /// <summary>
@@ -267,7 +269,7 @@ namespace ERang
         /// <returns></returns>
         public List<BoardSlot> GetMonsterBoardSlots()
         {
-            return monsterSlots.OrderBy(slot => slot.Index).ToList();
+            return rightSlots.OrderBy(slot => slot.Index).ToList();
         }
 
         /// <summary>
