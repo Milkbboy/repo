@@ -270,64 +270,6 @@ namespace ERang
             }
         }
 
-        IEnumerator CreateBoardCardAction(
-            Func<List<Card>> getAttackerCards,
-            Func<List<Card>> getTargetCards,
-            Func<string, BoardSlot> getBoardSlot,
-            Action<string> removeCard,
-            Action<int> resetSlot)
-        {
-            // 보드 슬롯에서 공격 순서대로 카드 얻기
-            List<Card> attackerCards = getAttackerCards();
-
-            for (int i = 0; i < attackerCards.Count; ++i)
-            {
-                Card attacker = attackerCards[i];
-                List<Card> targetCards = getTargetCards();
-
-                if (targetCards.Count == 0)
-                {
-                    Debug.Log("BattleLogic.CreateBoardCardAction: targetCards is empty");
-                    yield break;
-                }
-
-                // 반사 대미지는 어떻게 하지? 공격자가 영향을 받는 상황인데
-                // 타겟이 공격자한테 영향을 주는지 확인 필요
-                // 공격자에 영향 받은 카드들 (멀티 타겟 가능)
-                List<Card> affectCards = TargetLogic.Instance.CalulateTarget(attacker, targetCards);
-
-                if (affectCards == null)
-                {
-                    Debug.Log($"BattleLogic.CreateBoardCardAction: {attacker.id} affectCards is null");
-                    yield return null;
-                }
-
-                // 영향 받은 카드 설정
-                foreach (Card affectedCard in affectCards)
-                {
-                    BoardSlot boardSlot = getBoardSlot(affectedCard.uid);
-
-                    if (boardSlot == null)
-                    {
-                        Debug.LogError($"BattleLogic.CreateBoardCardAction: boardSlot is null({affectedCard.uid})");
-                        continue;
-                    }
-
-                    if (affectedCard.hp <= 0)
-                    {
-                        removeCard(affectedCard.uid);
-                        resetSlot(boardSlot.Slot);
-                    }
-                    else
-                    {
-                        boardSlot.SetCardHp(affectedCard.hp);
-                    }
-
-                    yield return new WaitForSeconds(1f);
-                }
-            }
-        }
-
         // 카드 섞기
         void ShuffleDeck(List<Card> cards)
         {

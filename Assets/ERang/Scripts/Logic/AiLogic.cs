@@ -204,6 +204,7 @@ namespace ERang
 
         /// <summary>
         /// AiData 에 설정된 타겟 얻기
+        /// - AiData 테이블 Type, Target, Atk_Range 로 타겟을 얻는다
         /// </summary>
         /// <param name="aiData"></param>
         /// <param name="self"></param>
@@ -225,7 +226,7 @@ namespace ERang
             return new List<BoardSlot>();
         }
 
-        private List<BoardSlot> TargetEnemy(AiData aiData, BoardSlot self, List<BoardSlot> targetCards)
+        private List<BoardSlot> TargetEnemy(AiData aiData, BoardSlot self, List<BoardSlot> targetBoardSlots)
         {
             List<BoardSlot> targets = new List<BoardSlot>();
 
@@ -234,39 +235,37 @@ namespace ERang
                 case AiDataType.Melee:
                     foreach (var attackRange in aiData.attackRanges)
                     {
-                        int targetCardIndex = attackRange - 1;
+                        int targetSlotIndex = attackRange - 1;
 
                         // 근접 공격 거리가 상대 카드 개수 보다 크면 패스
-                        if (targetCardIndex >= targetCards.Count)
+                        if (targetSlotIndex < 0 || targetSlotIndex >= targetBoardSlots.Count)
                             break;
 
-                        targets.Add(targetCards[targetCardIndex]);
+                        targets.Add(targetBoardSlots[targetSlotIndex]);
                     }
                     break;
 
                 case AiDataType.Ranged:
-                    if (self == null)
-                    {
-                        Debug.LogError($"{aiData.ai_Id} - boardSlot is null. boardSlot index: {self.Index} - AiLogic.TargetEnemy");
-                        return null;
-                    }
-
                     foreach (var attackRange in aiData.attackRanges)
                     {
-                        int targetCardIndex = attackRange - (self.Index + BOARD_CENTER_OFFSET);
+                        int targetSlotIndex = attackRange - (self.Index + BOARD_CENTER_OFFSET);
 
-                        if (targetCardIndex < 0 || targetCardIndex >= targetCards.Count)
+                        if (targetSlotIndex < 0 || targetSlotIndex >= targetBoardSlots.Count)
                         {
-                            Debug.LogWarning($"{aiData.ai_Id} - targetCardIndex is out of range. targetCardIndex: {targetCardIndex}, targetCards.Count: {targetCards.Count} - AiLogic.TargetEnemy");
+                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBoardSlots.Count: {targetBoardSlots.Count} - AiLogic.TargetEnemy");
                             continue;
                         }
 
-                        targets.Add(targetCards[targetCardIndex]);
+                        targets.Add(targetBoardSlots[targetSlotIndex]);
                     }
+                    break;
+
+                case AiDataType.Explosion:
+                    Debug.LogWarning($"{aiData.ai_Id} - AiDataType.Explosion 아직 구현되지 않음 - AiLogic.TargetEnemy");
                     break;
             }
 
-            return targetCards;
+            return targets;
         }
 
         private List<BoardSlot> TargetNearEnemy(List<BoardSlot> oppentSlots)
@@ -280,7 +279,7 @@ namespace ERang
         private List<BoardSlot> TargetAllEnemy(List<BoardSlot> opponentSlots, bool exceptMaster = false)
         {
             if (exceptMaster)
-                return opponentSlots.Where(x => x.Card.type != CardType.Master || x.Card.type != CardType.EnemyMaster).ToList();
+                return opponentSlots.Where(x => x.Card != null && (x.Card.type != CardType.Master || x.Card.type != CardType.EnemyMaster)).ToList();
 
             return opponentSlots;
         }
