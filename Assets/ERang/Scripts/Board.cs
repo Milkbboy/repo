@@ -188,9 +188,9 @@ namespace ERang
             turnUI.SetTurn(turn);
         }
 
-        public void SetMasterStat(Master master)
+        public void SetMasterMana(int mana)
         {
-            masterSlot.SetMasterStat(master);
+            masterSlot.SetMasterMana(mana);
         }
 
         public List<BoardSlot> GetCreatureSlots()

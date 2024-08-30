@@ -118,8 +118,8 @@ namespace ERang
             // 마스터 데이타 설정 - 마나 증가
             master.IncreaseMana(2);
 
-            // 보드 - 마스터
-            Board.Instance.SetMasterStat(master);
+            // 보드 - 마스터 마나 설정
+            Board.Instance.SetMasterMana(master.Mana);
             // 보드 - 턴 카운트
             Board.Instance.SetTurnCount(turn);
 
@@ -262,6 +262,12 @@ namespace ERang
                     // 카드의 행동 aiData 설정
                     int aiDataId = card.GetCardAiDataId(actorSlot.Slot);
 
+                    if (aiDataId == 0)
+                    {
+                        Debug.LogWarning($"{actorSlot.Slot}번 슬롯 카드({card.id}). AiGroupData({card.aiGroupId})에 해당하는 <color=red>액션 데이터 없음<color> - BattleLogic.BoardCardAction");
+                        return;
+                    }
+
                     // ai 실행
                     AiData aiData = AiData.GetAiData(aiDataId);
 
@@ -358,7 +364,7 @@ namespace ERang
             // Master 의 mana 감소
             master.DecreaseMana(card.costMana);
 
-            Board.Instance.SetMasterStat(master);
+            Board.Instance.SetMasterMana(master.Mana);
 
             Debug.Log($"BoardSlotEquipCard: {card.id}, BoardSlot: {boardSlotRef.Slot}");
         }
@@ -390,7 +396,7 @@ namespace ERang
             // Master 의 mana 감소
             master.DecreaseMana(card.costMana);
 
-            Board.Instance.SetMasterStat(master);
+            Board.Instance.SetMasterMana(master.Mana);
 
             Debug.Log($"HandCardUsed: {cardUid}");
         }

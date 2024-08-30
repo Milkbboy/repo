@@ -144,6 +144,11 @@ namespace ERang
             defText.text = def.ToString();
         }
 
+        public void SetMasterMana(int mana)
+        {
+            manaText.text = mana.ToString();
+        }
+
         public void SetHp(int hp)
         {
             hpText.text = hp.ToString();

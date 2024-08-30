@@ -61,6 +61,14 @@ namespace ERang
             aiGroupId = cardData.aiGroup_id;
         }
 
+        public Card(int hp, int maxHp, int mana, int maxMana, int atk, int def)
+        {
+            this.hp = hp;
+            this.maxHp = maxHp;
+            this.atk = atk;
+            this.def = def;
+        }
+
         /// <summary>
         /// 카드의 버프 또는 디버프를 추가한다.
         /// - 턴 종료때 리스트를 체크하고 duration을 감소 0이 되면 리스트에서 삭제
