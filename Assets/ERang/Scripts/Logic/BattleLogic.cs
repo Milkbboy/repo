@@ -136,20 +136,35 @@ namespace ERang
         /// </summary>
         void AbilityAction()
         {
-            // 내 카드
+            // 내 카드 어빌리티
             List<Card> creatureCards = Board.Instance.GetOccupiedCreatureCards();
+            CardAbilityAction(creatureCards);
 
-            // 몬스터 카드
+            // 몬스터 카드 어빌리티
             List<Card> monsterCards = Board.Instance.GetOccupiedMonsterCards();
+            CardAbilityAction(monsterCards);
         }
 
-        IEnumerator CardAbilityAction(List<Card> cards)
+        /// <summary>
+        /// // 카드 어빌리티 실행
+        /// </summary>
+        /// <param name="cards"></param>
+        void CardAbilityAction(List<Card> cards)
         {
             foreach (Card card in cards)
             {
-                // 카드 어빌리티 실행
-                AiLogic.Instance.AbilityAction(card);
-                yield return new WaitForSeconds(1f);
+                EnqueueAction($"카드({card.id}) 어빌리티 실행", () =>
+                {
+                    // 현재 카드 보드 슬롯 깜빡임 설정
+                    BoardSlot boardSlot = Board.Instance.GetBoardSlot(card.uid);
+                    if (boardSlot != null)
+                    {
+                        boardSlot.StartFlashing();
+                        flashingSlots.Add(boardSlot);
+                    }
+
+                    AiLogic.Instance.AbilityAction(card);
+                });
             }
         }
 

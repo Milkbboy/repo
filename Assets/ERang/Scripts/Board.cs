@@ -253,6 +253,11 @@ namespace ERang
             return boardSlots.Find(x => x.Slot == slot);
         }
 
+        public BoardSlot GetBoardSlot(string cardUid)
+        {
+            return boardSlots.Find(x => x.Card != null && x.Card.uid == cardUid);
+        }
+
         /// <summary>
         /// 크리쳐 보드 슬롯 인덱스로 정렬
         /// - 인덱스 3, 2, 1

@@ -36,46 +36,54 @@ namespace ERang
         /// <param name="card"></param>
         public void AbilityAction(Card card)
         {
+            // 카드가 장착된 보드 슬롯 얻기
+            BoardSlot boardSlot = Board.Instance.GetBoardSlot(card.uid);
+
+            string abilityIdsLog = card.Abilities.Count > 0 ? $"{string.Join(", ", card.Abilities.Select(ability => ability.abilityId).ToList())} 확인" : "없음";
+            Debug.LogWarning($"{boardSlot.Slot}번 슬롯 카드({card.id}) 어빌리티 {abilityIdsLog} - AiLogic.AbilityAction");
+
             foreach (Card.DurationAbility ability in card.Abilities)
             {
                 ability.duration = ability.duration - 1;
 
+                string abilityActionLog = $"{boardSlot.Slot}번 슬롯 카드({card.id}) {ability.abilityType.ToString()} 어빌리티({ability.abilityId}) 효과 지속 시간 <color=yellow>{ability.duration}</color>";
+
                 if (ability.duration > 0)
+                {
+                    Debug.LogWarning($"{abilityActionLog}. 유지 - AiLogic.AbilityAction");
                     continue;
+                }
 
                 // duration 이 0 이면 적용을 해제하거나 다른 처리를 해야 함
                 switch (ability.abilityType)
                 {
                     case AbilityType.AtkUp:
                         card.AddAtk(-ability.abilityValue);
-                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, atk: {card.atk}");
+                        Debug.Log($"{abilityActionLog} 적용 해제 - atk: {card.atk}");
                         break;
-
                     case AbilityType.DefUp:
                         card.AddDef(-ability.abilityValue);
-                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, def: {card.def}");
+                        Debug.Log($"{abilityActionLog} 적용 해제 - def: {card.def}");
                         break;
-
                     case AbilityType.BrokenDef:
                         card.AddDef(ability.abilityValue);
-                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, def: {card.def}");
+                        Debug.Log($"{abilityActionLog} 적용 해제 - def: {card.def}");
                         break;
-
                     case AbilityType.ChargeDamage:
-                        // target 한테 데미지를 준다.
+                        // target에 데미지를 준다.
                         BoardSlot targetSlot = Board.Instance.GetBoardSlot(ability.targetBoardSlot);
                         Card targetCard = targetSlot?.Card;
                         targetCard?.AddHp(-ability.abilityValue);
-                        Debug.Log($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 어빌리티 적용 해제 - cardId: {card.id}, target: {targetCard?.id ?? 0}, hp: {targetCard?.hp ?? 0}");
+                        Debug.Log($"{abilityActionLog} 실행 - target: {targetCard?.id ?? 0}, hp: {targetCard?.hp ?? 0}");
                         break;
                     default:
-                        Debug.LogWarning($"AbilityAction. cardId: {card.id}, {ability.abilityType.ToString()} 아직 구현되지 않음.");
+                        Debug.LogWarning($"{abilityActionLog} - 아직 구현되지 않음.");
                         break;
                 }
-
-                // 어빌리티 삭제
-                card.Abilities.Remove(ability);
             }
+
+            // duration 이 0 이하인 ability 제거
+            card.Abilities.RemoveAll(ability => ability.duration <= 0);
         }
 
         public void AiDataAction(AiData aiData, BoardSlot selfSlot)
@@ -121,7 +129,7 @@ namespace ERang
                 {
                     if (targetSlot.Card == null)
                     {
-                        Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯에 장착된 카드 없음 - AiLogic.AiDataAction");
+                        Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯에 장착된 카드 없어 {ability.abilityType.ToString()} 어빌리티({abilityId}) 적용 못함.  - AiLogic.AiDataAction");
                         continue;
                     }
 
