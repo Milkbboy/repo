@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using ERang.Data;
 using System.Collections;
-using ERang.Test;
+using System.Collections.Generic;
 
 namespace ERang
 {
@@ -16,8 +16,11 @@ namespace ERang
         public TextMeshProUGUI atkText;
         public TextMeshProUGUI defText;
         public GameObject cardObject;
+        public TextMeshProUGUI floatingTextPrefab;
+        public Transform floatingTextParent;
 
         private Texture2D originTexture;
+        private List<TextMeshProUGUI> floatingTextList = new List<TextMeshProUGUI>();
 
         void Awake()
         {
@@ -138,8 +141,8 @@ namespace ERang
                 descText.text = $"hp: {hp}/{maxHp}\nmana: {mana}/{maxMana}\natk: {atk}\ndef: {def}";
             }
 
-            hpText.text = $"{hp}/{maxHp}";
-            manaText.text = $"{mana}/{maxMana}";
+            hpText.text = $"{hp}";
+            manaText.text = $"{mana}";
             atkText.text = atk.ToString();
             defText.text = def.ToString();
         }
@@ -151,16 +154,19 @@ namespace ERang
 
         public void SetHp(int hp)
         {
+            ShowFloatingText("hp", hpText.text, hp.ToString());
             hpText.text = hp.ToString();
         }
 
         public void SetAtk(int atk)
         {
+            ShowFloatingText("Atk", atkText.text, atk.ToString());
             atkText.text = atk.ToString();
         }
 
         public void SetDef(int def)
         {
+            ShowFloatingText("Def", defText.text, def.ToString());
             defText.text = def.ToString();
         }
 
@@ -176,6 +182,74 @@ namespace ERang
             {
                 cardMeshRenderer.materials[0].SetTexture("_BaseMap", originTexture);
             }
+        }
+
+        private void ShowFloatingText(string stat, string oldValue, string newValue)
+        {
+            Debug.Log($"ShowFloatingText: {stat}, {oldValue}, {newValue}");
+
+            if (floatingTextPrefab == null || floatingTextParent == null)
+            {
+                Debug.LogWarning("FloatingTextPrefab or FloatingTextParent is null");
+                return;
+            }
+
+            int oldValueInt = int.Parse(oldValue);
+            int newValueInt = int.Parse(newValue);
+
+            int diff = newValueInt - oldValueInt;
+
+            if (diff == 0) return;
+
+            string diffText = diff > 0 ? $"<color=green>+{diff}</color>" : $"<color=red>{diff.ToString()}</color>";
+            TextMeshProUGUI floatingText = Instantiate(floatingTextPrefab, floatingTextParent);
+            floatingText.text = $"{stat} {diffText}";
+
+            RectTransform rectTransform = floatingText.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition += new Vector2(0, floatingTextList.Count * 25f);
+
+            floatingTextList.Add(floatingText);
+
+            StartCoroutine(BlinkFloatingText(floatingText));
+        }
+
+        private IEnumerator ScrollFloatingText(TextMeshProUGUI floatingText)
+        {
+            Vector3 startPos = floatingText.transform.position; // 시작 위치
+            Vector3 endPos = startPos + new Vector3(0, 50, 0);
+            float duration = 4f; // 지속시간
+            float elapsed = 0; // 경과 시간
+
+            while (elapsed < duration)
+            {
+                floatingText.transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            floatingTextList.Remove(floatingText);
+            Destroy(floatingText.gameObject);
+        }
+
+        private IEnumerator BlinkFloatingText(TextMeshProUGUI floatingText)
+        {
+            float duration = 3f; // 지속시간
+            float blinkInterval = 0.5f; // 깜빡이는 간격
+            float elapsed = 0; // 경과 시간
+
+            while (elapsed < duration)
+            {
+                // 투명도 변경
+                Color color = floatingText.color;
+                color.a = color.a == 1 ? 0 : 1;
+                floatingText.color = color;
+
+                elapsed += blinkInterval;
+                yield return new WaitForSeconds(blinkInterval);
+            }
+
+            floatingTextList.Remove(floatingText);
+            Destroy(floatingText.gameObject);
         }
     }
 }

@@ -59,14 +59,17 @@ namespace ERang
                 {
                     case AbilityType.AtkUp:
                         card.AddAtk(-ability.abilityValue);
+                        boardSlot.AddCardAtk(-ability.abilityValue);
                         Debug.Log($"{abilityActionLog} 적용 해제 - atk: {card.atk}");
                         break;
                     case AbilityType.DefUp:
                         card.AddDef(-ability.abilityValue);
+                        boardSlot.AddCardDef(-ability.abilityValue);
                         Debug.Log($"{abilityActionLog} 적용 해제 - def: {card.def}");
                         break;
                     case AbilityType.BrokenDef:
                         card.AddDef(ability.abilityValue);
+                        boardSlot.AddCardDef(ability.abilityValue);
                         Debug.Log($"{abilityActionLog} 적용 해제 - def: {card.def}");
                         break;
                     case AbilityType.ChargeDamage:

@@ -639,6 +639,9 @@ MonoBehaviour:
   atkText: {fileID: 6433580258405066897}
   defText: {fileID: 4775010421654350413}
   cardObject: {fileID: 1602542922695894159}
+  floatingTextPrefab: {fileID: 4789639728361502292, guid: ec99e805295420a4c9e5fc762d8a2753,
+    type: 3}
+  floatingTextParent: {fileID: 8208146719697869418}
 --- !u!114 &6059155431553465519
 MonoBehaviour:
   m_ObjectHideFlags: 0
