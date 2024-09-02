@@ -193,7 +193,7 @@ namespace ERang
 
                     if (reactionPairs.Count == 0)
                     {
-                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯 카드({card.id}). AiGroupData({card.aiGroupId})에 해당하는 <color=red>리액션 데이터 없음<color> - BattleLogic.TurnStartReaction");
+                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯 카드({card.id}). AiGroupData({card.aiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color> - BattleLogic.TurnStartReaction");
                         return;
                     }
 
