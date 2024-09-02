@@ -129,6 +129,12 @@ namespace ERang
         /// <param name="damage"></param>
         public void SetDamage(int damage)
         {
+            if (card == null)
+            {
+                Debug.LogWarning($"{slot}번 슬롯 카드 없음");
+                return;
+            }
+
             if (card.def > 0)
             {
                 card.def -= damage;
@@ -148,20 +154,62 @@ namespace ERang
             cardUI.SetDef(card.def);
         }
 
+        public void SetCardAtk(int atk)
+        {
+            if (card == null)
+            {
+                Debug.LogWarning($"{slot}번 슬롯 카드 없음");
+                return;
+            }
+
+            card.SetAtk(atk);
+            cardUI.SetAtk(card.atk);
+        }
+
+        public void SetCardDef(int def)
+        {
+            if (card == null)
+            {
+                Debug.LogWarning($"{slot}번 슬롯 카드 없음");
+                return;
+            }
+
+            card.SetDef(def);
+            cardUI.SetDef(card.def);
+        }
+
         public void AddCardHp(int hp)
         {
+            if (card == null)
+            {
+                Debug.LogWarning($"{slot}번 슬롯 카드 없음");
+                return;
+            }
+
             card.AddHp(hp);
             cardUI.SetHp(card.hp);
         }
 
         public void AddCardAtk(int atk)
         {
+            if (card == null)
+            {
+                Debug.LogWarning($"{slot}번 슬롯 카드 없음");
+                return;
+            }
+
             card.AddAtk(atk);
             cardUI.SetAtk(card.atk);
         }
 
         public void AddCardDef(int def)
         {
+            if (card == null)
+            {
+                Debug.LogWarning($"{slot}번 슬롯 카드 없음");
+                return;
+            }
+
             card.AddDef(def);
             cardUI.SetDef(card.def);
         }

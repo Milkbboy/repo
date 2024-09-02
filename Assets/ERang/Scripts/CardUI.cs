@@ -3,11 +3,13 @@ using TMPro;
 using ERang.Data;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace ERang
 {
     public class CardUI : MonoBehaviour
     {
+        public Image cardImage;
         public MeshRenderer cardMeshRenderer;
         public TextMeshProUGUI cardTypeText;
         public TextMeshProUGUI descText;
@@ -52,6 +54,10 @@ namespace ERang
 
                 cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
             }
+            else
+            {
+                cardImage.sprite = Sprite.Create(cardTexture, new Rect(0, 0, cardTexture.width, cardTexture.height), Vector2.zero);
+            }
 
             if (cardTypeText != null)
             {
@@ -86,9 +92,9 @@ namespace ERang
             MasterData masterData = MasterData.master_dict[master.masterId];
 
             // Debug.Log("CardUI SetCard: " + cardId);
-            Texture2D masterTexture = masterData.GetMasterTexture();
+            Texture2D cardTexture = masterData.GetMasterTexture();
 
-            if (!masterTexture)
+            if (!cardTexture)
             {
                 Debug.LogError($"${master.masterId} Master texture is null");
                 return;
@@ -96,7 +102,11 @@ namespace ERang
 
             if (cardMeshRenderer != null)
             {
-                cardMeshRenderer.materials[0].SetTexture("_BaseMap", masterTexture);
+                cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
+            }
+            else
+            {
+                cardImage.sprite = Sprite.Create(cardTexture, new Rect(0, 0, cardTexture.width, cardTexture.height), Vector2.zero);
             }
 
             if (cardTypeText != null)
@@ -186,7 +196,7 @@ namespace ERang
 
         private void ShowFloatingText(string stat, string oldValue, string newValue)
         {
-            Debug.Log($"ShowFloatingText: {stat}, {oldValue}, {newValue}");
+            // Debug.Log($"ShowFloatingText: {stat}, {oldValue}, {newValue}");
 
             if (floatingTextPrefab == null || floatingTextParent == null)
             {

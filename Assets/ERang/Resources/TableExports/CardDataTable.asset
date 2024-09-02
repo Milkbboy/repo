@@ -45,7 +45,7 @@ MonoBehaviour:
     Extinction: 0
     CompleteExtinction: 0
     Level: 0
-    Level_1_img: FireBall_Lv1
+    Level_1_img: Card_Illust_Magic_01
     Level_3_img: FireBall_Lv3
     Level_5_img: FireBall_Lv5
     HandStart_Ability: 
@@ -64,7 +64,7 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 1
     Level: 0
-    Level_1_img: GoldMine_Lv1
+    Level_1_img: Card_Illust_Building_01
     Level_3_img: GoldMine_Lv3
     Level_5_img: GoldMine_Lv5
     HandStart_Ability: 
@@ -83,7 +83,7 @@ MonoBehaviour:
     Extinction: 0
     CompleteExtinction: 0
     Level: 0
-    Level_1_img: Abundance_Lv1
+    Level_1_img: Card_Illust_Magic_02
     Level_3_img: Abundance_Lv3
     Level_5_img: Abundance_Lv5
     HandStart_Ability: 9000111
@@ -102,7 +102,7 @@ MonoBehaviour:
     Extinction: 0
     CompleteExtinction: 0
     Level: 0
-    Level_1_img: Protect_Lv1
+    Level_1_img: Card_Illust_Magic_03
     Level_3_img: Protect_Lv3
     Level_5_img: Protect_Lv5
     HandStart_Ability: 

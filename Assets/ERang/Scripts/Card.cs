@@ -17,6 +17,7 @@ namespace ERang
             public int abilityId; // 어빌리티 Id
             public AiDataType aiType; // Ai 타입
             public AbilityType abilityType; // 어빌리티 타입
+            public int beforeValue; // 어빌리티 적용 전 값
             public int abilityValue; // 어빌리티 값
             public int duration; // 현재 지속 시간
             public string targetCardUid; // 대상 카드의 Uid
@@ -76,16 +77,18 @@ namespace ERang
         /// <param name="aiType"></param>
         /// <param name="abilityType"></param>
         /// <param name="abilityId"></param>
+        /// <param name="beforeValue"></param>
         /// <param name="abilityValue"></param>
         /// <param name="duration"></param>
         /// <param name="targetCardUid"></param>
-        public void AddAbilityDuration(AiDataType aiType, AbilityType abilityType, int abilityId, int abilityValue, int duration, string targetCardUid, int targetSlot)
+        public void AddAbilityDuration(AiDataType aiType, AbilityType abilityType, int abilityId, int beforeValue, int abilityValue, int duration, string targetCardUid, int targetSlot)
         {
             DurationAbility durationAbility = new DurationAbility
             {
                 abilityId = abilityId,
                 aiType = aiType,
                 abilityType = abilityType,
+                beforeValue = beforeValue,
                 abilityValue = abilityValue,
                 duration = duration,
                 targetCardUid = targetCardUid,
@@ -93,7 +96,7 @@ namespace ERang
             };
 
             abilities.Add(durationAbility);
-            Debug.Log($"AddAbilityDuration - abilityType: {abilityType.ToString()}, abilityId: {abilityId}, abilityValue: {abilityValue}, duration: {duration}");
+            Debug.Log($"AddAbilityDuration - abilityType: {abilityType.ToString()}, abilityId: {abilityId}, beforeValue:{beforeValue}, abilityValue: {abilityValue}, duration: {duration}");
         }
 
         /// <summary>
@@ -110,6 +113,16 @@ namespace ERang
         public void SetHp(int hp)
         {
             this.hp = hp;
+        }
+
+        public void SetAtk(int atk)
+        {
+            this.atk = atk;
+        }
+
+        public void SetDef(int def)
+        {
+            this.def = def;
         }
 
         /// <summary>

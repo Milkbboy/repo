@@ -54,7 +54,7 @@ namespace ERang
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(1))
             {
                 Debug.Log($"Space key down. 큐 개수: {actionQueue.Count}");
 
@@ -153,7 +153,7 @@ namespace ERang
         {
             foreach (Card card in cards)
             {
-                EnqueueAction($"카드({card.id}) 어빌리티 실행", () =>
+                EnqueueAction($"카드({card.id}) !! 어빌리티 실행 !!", () =>
                 {
                     // 현재 카드 보드 슬롯 깜빡임 설정
                     BoardSlot boardSlot = Board.Instance.GetBoardSlot(card.uid);
@@ -175,7 +175,7 @@ namespace ERang
 
             foreach (BoardSlot reactionSlot in reactionSlots)
             {
-                EnqueueAction($"보드 {reactionSlot.Slot} 슬롯. -- 턴 시작 리액션 시작 --", () =>
+                EnqueueAction($"보드 {reactionSlot.Slot} 슬롯. -- 턴 시작 리액션 실행 --", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
                     reactionSlot.StartFlashing();
@@ -260,7 +260,7 @@ namespace ERang
         {
             foreach (BoardSlot actorSlot in actorSlots)
             {
-                EnqueueAction($"{actorSlot.Slot}번 슬롯 -- 턴 종료 액션 시작 --", () =>
+                EnqueueAction($"{actorSlot.Slot}번 슬롯 ** 턴 종료 액션 실행 **", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
                     actorSlot.StartFlashing();

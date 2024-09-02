@@ -46,7 +46,7 @@ namespace ERang
             {
                 ability.duration = ability.duration - 1;
 
-                string abilityActionLog = $"{boardSlot.Slot}번 슬롯 카드({card.id}) {ability.abilityType.ToString()} 어빌리티({ability.abilityId}) 효과 지속 시간 <color=yellow>{ability.duration}</color>";
+                string abilityActionLog = $"{boardSlot.Slot}번 슬롯 카드({card.id}) {ability.abilityType.ToString()} 어빌리티({ability.abilityId}) 효과 지속 시간(<color=yellow>{ability.duration}</color>)";
 
                 if (ability.duration > 0)
                 {
@@ -58,26 +58,26 @@ namespace ERang
                 switch (ability.abilityType)
                 {
                     case AbilityType.AtkUp:
-                        card.AddAtk(-ability.abilityValue);
-                        boardSlot.AddCardAtk(-ability.abilityValue);
-                        Debug.Log($"{abilityActionLog} 적용 해제 - atk: {card.atk}");
+                        {
+                            int beforeAtk = card.atk;
+                            boardSlot.SetCardAtk(ability.beforeValue);
+                            Debug.Log($"{abilityActionLog} 적용 해제 - atk: {beforeAtk} => {card.atk}");
+                        }
                         break;
                     case AbilityType.DefUp:
-                        card.AddDef(-ability.abilityValue);
-                        boardSlot.AddCardDef(-ability.abilityValue);
+                        boardSlot.SetCardDef(ability.beforeValue);
                         Debug.Log($"{abilityActionLog} 적용 해제 - def: {card.def}");
                         break;
                     case AbilityType.BrokenDef:
-                        card.AddDef(ability.abilityValue);
-                        boardSlot.AddCardDef(ability.abilityValue);
+                        boardSlot.SetCardDef(ability.beforeValue);
                         Debug.Log($"{abilityActionLog} 적용 해제 - def: {card.def}");
                         break;
                     case AbilityType.ChargeDamage:
                         // target에 데미지를 준다.
                         BoardSlot targetSlot = Board.Instance.GetBoardSlot(ability.targetBoardSlot);
-                        Card targetCard = targetSlot?.Card;
-                        targetCard?.AddHp(-ability.abilityValue);
-                        Debug.Log($"{abilityActionLog} 실행 - target: {targetCard?.id ?? 0}, hp: {targetCard?.hp ?? 0}");
+                        targetSlot.SetDamage(ability.abilityValue);
+                        string chargeDamageLog = targetSlot.Card != null ? $"데미지 {ability.abilityValue} 적용" : "적용 해제";
+                        Debug.Log($"{abilityActionLog} {chargeDamageLog} - AiLogic.AbilityAction");
                         break;
                     default:
                         Debug.LogWarning($"{abilityActionLog} - 아직 구현되지 않음.");
@@ -136,6 +136,8 @@ namespace ERang
                         continue;
                     }
 
+                    string abilityLog = $"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯 카드({targetSlot.Card.id}) 번에 {ability.abilityType.ToString()} 어빌리티({abilityId})";
+
                     switch (ability.abilityType)
                     {
                         case AbilityType.Damage:
@@ -146,7 +148,7 @@ namespace ERang
                                 for (int j = 0; j < aiData.atk_Cnt; ++j)
                                     targetSlot.SetDamage(selfCard.atk);
 
-                                Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯 카드({targetSlot.Card.id}) 번에 {ability.abilityType.ToString()} 어빌리티({abilityId}) {aiData.atk_Cnt} 회 적용. damage: {selfCard.atk}, hp: {beforeHp} => {targetSlot.Card.hp}, def: {beforeDef} => {targetSlot.Card.def}");
+                                Debug.Log($"{abilityLog} 어빌리티({abilityId}) {aiData.atk_Cnt} 회 적용. damage: {selfCard.atk}, hp: {beforeHp} => {targetSlot.Card.hp}, def: {beforeDef} => {targetSlot.Card.def}");
                             }
                             break;
 
@@ -157,7 +159,7 @@ namespace ERang
                                 for (int j = 0; j < aiData.atk_Cnt; ++j)
                                     targetSlot.AddCardHp(ability.value);
 
-                                Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯 카드({targetSlot.Card.id}) 번에 {ability.abilityType.ToString()} 어빌리티({abilityId}) {aiData.atk_Cnt} 회 적용. heal: {ability.value}, hp: {beforeHp} => {targetSlot.Card.hp}");
+                                Debug.Log($"{abilityLog} 어빌리티({abilityId}) {aiData.atk_Cnt} 회 적용. heal: {ability.value}, hp: {beforeHp} => {targetSlot.Card.hp}");
                             }
                             break;
 
@@ -167,9 +169,9 @@ namespace ERang
                                 targetSlot.AddCardAtk(ability.value);
 
                                 // AiDataType 으로 Buff, DeBuff 구분
-                                targetSlot.Card.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
+                                targetSlot.Card.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, beforeAtk, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
 
-                                Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯 카드({targetSlot.Card.id}) 번에 {ability.abilityType.ToString()} 어빌리티({abilityId}) 적용. 변화 atk: {ability.value}, atk: {beforeAtk} => {targetSlot.Card.atk}, duration: {ability.duration}");
+                                Debug.Log($"{abilityLog} 어빌리티({abilityId}) 적용. 변화 atk: {ability.value}, atk: {beforeAtk} => {targetSlot.Card.atk}, duration: {ability.duration}");
                             }
                             break;
 
@@ -179,9 +181,9 @@ namespace ERang
                                 targetSlot.AddCardDef(ability.value);
 
                                 // AiDataType 으로 Buff, DeBuff 구분
-                                targetSlot.Card.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
+                                targetSlot.Card.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, beforeDef, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
 
-                                Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯 카드({targetSlot.Card.id}) 번에 {ability.abilityType.ToString()} 어빌리티({abilityId}) 적용. 변화 def: {ability.value}, def: {beforeDef} => {targetSlot.Card.def}, duration: {ability.duration}");
+                                Debug.Log($"{abilityLog} 어빌리티({abilityId}) 적용. 변화 def: {ability.value}, def: {beforeDef} => {targetSlot.Card.def}, duration: {ability.duration}");
                             }
                             break;
 
@@ -191,23 +193,26 @@ namespace ERang
                                 targetSlot.AddCardDef(-ability.value);
 
                                 // AiDataType 으로 Buff, DeBuff 구분
-                                targetSlot.Card.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
+                                targetSlot.Card.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, beforeDef, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
 
-                                Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfCard.id}). 타겟 <color=yellow>{targetSlot.Slot}</color>번 슬롯 카드({targetSlot.Card.id}) 번에 {ability.abilityType.ToString()} 어빌리티({abilityId}) 적용. 변화 def: {-ability.value}, def: {beforeDef} => {targetSlot.Card.def}, duration: {ability.duration}");
+                                Debug.Log($"{abilityLog} 어빌리티({abilityId}) 적용. 변화 def: {-ability.value}, def: {beforeDef} => {targetSlot.Card.def}, duration: {ability.duration}");
                             }
                             break;
 
                         case AbilityType.ChargeDamage:
-                            // 이건 duration 이 지나면 타겟한테 데미지를 둔다. 방식이 좀 달라야 될듯
-                            // target 은 Enemy 인데 발동은 자신이라서
-                            foreach (BoardSlot target in aiTargetSlots)
                             {
-                                selfCard.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
+                                // 이건 duration 이 지나면 타겟한테 데미지를 둔다. 방식이 좀 달라야 될듯
+                                // target 은 Enemy 인데 발동은 자신이라서
+                                int beforeAtk = selfSlot.Card.atk;
+
+                                selfCard.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, beforeAtk, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
+
+                                Debug.Log($"{abilityLog} 어빌리티({abilityId}) 적용. 충전 데미지: {ability.value}, duration: {ability.duration}");
                             }
                             break;
 
                         default:
-                            Debug.LogWarning($"{ability.abilityType.ToString()} 어빌리티({abilityId}) 적용 아직 구현되지 않음.");
+                            Debug.LogWarning($"{abilityLog} 미 구현.");
                             break;
                     }
                 }
@@ -326,7 +331,13 @@ namespace ERang
         private List<BoardSlot> TargetAllEnemy(List<BoardSlot> opponentSlots, bool exceptMaster = false)
         {
             if (exceptMaster)
-                return opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
+            {
+                List<BoardSlot> targetSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
+
+                Debug.Log($"TargetAllEnemy - exceptMaster: {exceptMaster}, targetSlots: {string.Join(", ", targetSlots.Select(x => x.Slot))}");
+
+                return targetSlots;
+            }
 
             return opponentSlots;
         }
