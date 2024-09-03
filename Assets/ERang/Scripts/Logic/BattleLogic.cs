@@ -75,6 +75,15 @@ namespace ERang
             }
         }
 
+        public void ForTest()
+        {
+            Debug.Log("ForTest");
+            BoardSlot selfSlot = Board.Instance.GetBoardSlot(6);
+            BoardSlot targetSlot = Board.Instance.GetBoardSlot(3);
+
+            BoardLogic.Instance.AbilityDamage(AiDataType.Melee, selfSlot, targetSlot, 2, 3);
+        }
+
         public Master GetMaster()
         {
             return master;

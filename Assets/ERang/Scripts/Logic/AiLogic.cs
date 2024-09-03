@@ -91,6 +91,11 @@ namespace ERang
             card.Abilities.RemoveAll(ability => ability.duration <= 0);
         }
 
+        /// <summary>
+        /// AiData 에 설정된 어빌리티 적용
+        /// </summary>
+        /// <param name="aiData"></param>
+        /// <param name="selfSlot"></param>
         public void AiDataAction(AiData aiData, BoardSlot selfSlot)
         {
             Card selfCard = selfSlot.Card;

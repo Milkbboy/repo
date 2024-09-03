@@ -83,6 +83,12 @@ namespace ERang
         /// <param name="targetCardUid"></param>
         public void AddAbilityDuration(AiDataType aiType, AbilityType abilityType, int abilityId, int beforeValue, int abilityValue, int duration, string targetCardUid, int targetSlot)
         {
+            if (string.IsNullOrEmpty(targetCardUid))
+            {
+                Debug.LogError($"AddAbilityDuration - targetCardUid is null or empty");
+                return;
+            }
+
             DurationAbility durationAbility = new DurationAbility
             {
                 abilityId = abilityId,
