@@ -54,7 +54,7 @@ namespace ERang
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(1))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 Debug.Log($"Space key down. 큐 개수: {actionQueue.Count}");
 
@@ -69,7 +69,7 @@ namespace ERang
                 if (actionQueue.Count > 0)
                 {
                     var namedAction = actionQueue.Dequeue();
-                    Debug.Log($"<color=#dd3333>Execution action</color>: {namedAction.Name}");
+                    Debug.Log($"<color=#dd3333>Execution action</color>: {namedAction.Name} 실행");
                     namedAction.Action?.Invoke();
                 }
             }
@@ -106,6 +106,12 @@ namespace ERang
 
         public void TurnEnd()
         {
+            if (actionQueue.Count > 0)
+            {
+                ToastNotification.Show($"actionQueue remain action: {actionQueue.Count}");
+                return;
+            }
+
             turn += 1;
 
             // 핸드덱에 카드 제거
@@ -116,7 +122,7 @@ namespace ERang
             }
 
             // 마스터 데이타 설정 - 마나 증가
-            master.IncreaseMana(2);
+            master.chargeMana();
 
             // 보드 - 마스터 마나 설정
             Board.Instance.SetMasterMana(master.Mana);
@@ -126,6 +132,7 @@ namespace ERang
             // 보드 슬롯 카드 동작
             MasterCreatureAction();
             EnemyMonsterAction();
+            BuildingCardAction();
 
             // 턴 다시 시작
             TurnStart();
@@ -153,15 +160,10 @@ namespace ERang
         {
             foreach (Card card in cards)
             {
-                EnqueueAction($"카드({card.id}) !! 어빌리티 실행 !!", () =>
+                EnqueueAction($"카드({card.id}) !! 어빌리티 액션 !!", () =>
                 {
                     // 현재 카드 보드 슬롯 깜빡임 설정
-                    BoardSlot boardSlot = Board.Instance.GetBoardSlot(card.uid);
-                    if (boardSlot != null)
-                    {
-                        boardSlot.StartFlashing();
-                        flashingSlots.Add(boardSlot);
-                    }
+                    flashingCard(card.uid);
 
                     AiLogic.Instance.AbilityAction(card);
                 });
@@ -175,11 +177,10 @@ namespace ERang
 
             foreach (BoardSlot reactionSlot in reactionSlots)
             {
-                EnqueueAction($"보드 {reactionSlot.Slot} 슬롯. -- 턴 시작 리액션 실행 --", () =>
+                EnqueueAction($"보드 {reactionSlot.Slot} 슬롯. -- 턴 시작 리액션 --", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
-                    reactionSlot.StartFlashing();
-                    flashingSlots.Add(reactionSlot);
+                    flashingCard(reactionSlot);
 
                     Card card = reactionSlot.Card;
 
@@ -260,11 +261,10 @@ namespace ERang
         {
             foreach (BoardSlot actorSlot in actorSlots)
             {
-                EnqueueAction($"{actorSlot.Slot}번 슬롯 ** 턴 종료 액션 실행 **", () =>
+                EnqueueAction($"{actorSlot.Slot}번 슬롯 ** 턴 종료 액션 **", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
-                    actorSlot.StartFlashing();
-                    flashingSlots.Add(actorSlot);
+                    flashingCard(actorSlot);
 
                     Card card = actorSlot.Card;
 
@@ -287,6 +287,41 @@ namespace ERang
                     AiData aiData = AiData.GetAiData(aiDataId);
 
                     AiLogic.Instance.AiDataAction(aiData, actorSlot);
+                });
+            }
+        }
+
+        void BuildingCardAction()
+        {
+            // Debug.Log($"BuildingCardAction: {Board.Instance.GetBuildingSlots().Count}");
+            foreach (BoardSlot buildingSlot in Board.Instance.GetBuildingSlots())
+            {
+                EnqueueAction($"<color=#dd9933>건물</color> {buildingSlot.Slot}번 슬롯 ** 턴 종료 액션 **", () =>
+                {
+                    // 현재 턴 보드 슬롯 깜빡임 설정
+                    flashingCard(buildingSlot);
+
+                    Card card = buildingSlot.Card;
+
+                    if (card == null)
+                    {
+                        Debug.LogWarning($"건물 {buildingSlot.Slot}번 슬롯 장착된 카드가 없어 패스 - BattleLogic.BuildingCardAction");
+                        return;
+                    }
+
+                    // 카드의 행동 aiData 설정
+                    int aiDataId = card.GetCardAiDataId(buildingSlot.Slot);
+
+                    if (aiDataId == 0)
+                    {
+                        Debug.LogWarning($"건물 {buildingSlot.Slot}번 슬롯 카드({card.id}). AiGroupData({card.aiGroupId})에 해당하는 <color=red>액션 데이터 없음<color> - BattleLogic.BuildingCardAction");
+                        return;
+                    }
+
+                    // ai 실행
+                    AiData aiData = AiData.GetAiData(aiDataId);
+
+                    AiLogic.Instance.AiDataAction(aiData, buildingSlot);
                 });
             }
         }
@@ -416,6 +451,21 @@ namespace ERang
             Debug.Log($"HandCardUsed: {cardUid}");
         }
 
+        private void flashingCard(string cardUid)
+        {
+            BoardSlot boardSlot = Board.Instance.GetBoardSlot(cardUid);
+            flashingCard(boardSlot);
+        }
+
+        private void flashingCard(BoardSlot boardSlot)
+        {
+            if (boardSlot == null)
+                return;
+
+            boardSlot.StartFlashing();
+            flashingSlots.Add(boardSlot);
+        }
+
         /// <summary>
         /// 이름이 있는 액션을 저장하는 클래스
         /// </summary>
@@ -433,7 +483,7 @@ namespace ERang
 
         private void EnqueueAction(string name, UnityAction action)
         {
-            Debug.Log($"<color=#257dca>EnqueueAction</color>: {name}");
+            Debug.Log($"<color=#257dca>EnqueueAction</color>: {name} 추가");
             actionQueue.Enqueue(new NamedAction(name, action));
         }
     }

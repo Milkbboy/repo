@@ -222,7 +222,7 @@ namespace ERang
         private bool ConditionRatio(int conditionId, float ratio)
         {
             double randomValue = random.NextDouble();
-            bool result = (ratio == 1f || randomValue <= ratio);
+            bool result = ratio == 1f || randomValue <= ratio;
 
             Debug.Log($"컨디션({conditionId}) 발생 확률 결과 {result} - randomValue({randomValue:F1}) <= ratio({ratio}) - ConditionLogic:ConditionRatio");
 

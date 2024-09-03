@@ -64,7 +64,7 @@ namespace ERang
             {
                 case CardType.Creature:
                 case CardType.Building:
-                    BoardSlot boardSlot = Board.Instance.NeareastBoardSlotSlot(transform.position, cardType);
+                    BoardSlot boardSlot = Board.Instance.NeareastBoardSlot(transform.position, cardType);
 
                     // 보드 슬롯에 이미 카드가 장착되어 있는 경우
                     if (boardSlot == null || boardSlot.IsOccupied == true)

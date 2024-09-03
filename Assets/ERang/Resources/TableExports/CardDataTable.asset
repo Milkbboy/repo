@@ -56,7 +56,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1003
     CardType: Building
     AiGroup_id: 21003
-    CostMana: 3
+    CostMana: 1
     CostGold: 150
     Hp: 0
     Atk: 0

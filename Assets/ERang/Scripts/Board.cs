@@ -105,7 +105,7 @@ namespace ERang
                 //     slot.OnCardDrop += (card) =>
                 //     {
                 //         HandCard handCard = card.GetComponent<HandCard>();
-                //         BoardSlot nearestSlot = NeareastBoardSlotSlot(handCard.transform.position, handCard.CardData.cardType);
+                //         BoardSlot nearestSlot = NeareastBoardSlot(handCard.transform.position, handCard.CardData.cardType);
 
                 //         if (nearestSlot != null)
                 //         {
@@ -142,7 +142,7 @@ namespace ERang
             }
         }
 
-        public BoardSlot NeareastBoardSlotSlot(Vector3 position, CardType cardType)
+        public BoardSlot NeareastBoardSlot(Vector3 position, CardType cardType)
         {
             BoardSlot nearestSlot = null;
             float minDistance = float.MaxValue;
@@ -188,6 +188,11 @@ namespace ERang
             turnUI.SetTurn(turn);
         }
 
+        public void SetGold(int gold)
+        {
+            turnUI.SetGold(gold);
+        }
+
         public void SetMasterMana(int mana)
         {
             masterSlot.SetMasterMana(mana);
@@ -201,6 +206,11 @@ namespace ERang
         public List<BoardSlot> GetMonsterSlots()
         {
             return rightSlots;
+        }
+
+        public List<BoardSlot> GetBuildingSlots()
+        {
+            return buildingSlots;
         }
 
         public BoardSlot GetTargetMonsterBoardSlot()

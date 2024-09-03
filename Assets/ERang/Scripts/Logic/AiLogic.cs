@@ -5,13 +5,15 @@ using ERang.Data;
 using UnityEngine;
 using Newtonsoft.Json;
 
+
 namespace ERang
 {
     public class AiLogic : MonoBehaviour
     {
-        private const int BOARD_CENTER_OFFSET = 3;
-
         public static AiLogic Instance { get; private set; }
+
+        private const int BOARD_CENTER_OFFSET = 3;
+        private static readonly System.Random random = new System.Random();
 
         void Awake()
         {
@@ -208,6 +210,19 @@ namespace ERang
                                 selfCard.AddAbilityDuration(aiData.type, ability.abilityType, ability.abilityData_Id, beforeAtk, ability.value, ability.duration, targetSlot.Card.uid, targetSlot.Slot);
 
                                 Debug.Log($"{abilityLog} 어빌리티({abilityId}) 적용. 충전 데미지: {ability.value}, duration: {ability.duration}");
+                            }
+                            break;
+
+                        case AbilityType.AddGoldPer:
+                            {
+                                // 골드 추가 획득
+                                float gainGold = aiData.value * ability.ratio;
+                                int gold = aiData.value + (int)gainGold;
+
+                                Master.Instance.AddGold(gold);
+                                Board.Instance.SetGold(Master.Instance.gold);
+
+                                Debug.Log($"{abilityLog} 어빌리티({abilityId}) 적용. 골드 {gold} + {gainGold} 획득 - AiLogic.AiDataAction");
                             }
                             break;
 

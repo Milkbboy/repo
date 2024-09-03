@@ -6,6 +6,7 @@ using UnityEngine;
 public class TurnUI : MonoBehaviour
 {
     public TextMeshProUGUI turnCounts;
+    public TextMeshProUGUI gold;
 
     // Start is called before the first frame update
     void Start()
@@ -22,5 +23,10 @@ public class TurnUI : MonoBehaviour
     public void SetTurn(int count)
     {
         turnCounts.text = count.ToString();
+    }
+
+    public void SetGold(int gold)
+    {
+        this.gold.text = gold.ToString();
     }
 }

@@ -18,14 +18,18 @@ namespace ERang
         public int maxHp;
         public int mana;
         public int maxMana;
+        public int rechargeMana;
         public int atk;
         public int def;
+        public int gold;
         public int Hp { get { return hp; } }
         public int MaxHp { get { return maxHp; } }
         public int Mana { get { return mana; } }
         public int MaxMana { get { return maxMana; } }
+        public int RechargeMana { get { return rechargeMana; } }
         public int Atk { get { return atk; } }
         public int Def { get { return def; } }
+        public int Gold { get { return gold; } }
 
         // 모든 카드
         public List<Card> allCards = new List<Card>();
@@ -52,6 +56,7 @@ namespace ERang
             maxHp = hp = masterData.hp;
             mana = masterData.startMana;
             maxMana = masterData.maxMana;
+            rechargeMana = masterData.rechargeMana;
             atk = masterData.atk;
             def = masterData.def;
 
@@ -75,9 +80,9 @@ namespace ERang
             return handCards.Find(card => card.uid == cardUid);
         }
 
-        public void IncreaseMana(int value)
+        public void chargeMana()
         {
-            mana += value;
+            mana += rechargeMana;
 
             if (mana > MaxMana)
             {
@@ -93,6 +98,11 @@ namespace ERang
             {
                 mana = 0;
             }
+        }
+
+        public void AddGold(int gold)
+        {
+            this.gold += gold;
         }
 
         public void HandCardToBoard(string cardUid, CardType cardType)
