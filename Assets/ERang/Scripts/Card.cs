@@ -390,45 +390,5 @@ namespace ERang
 
             return reactionConditionPairs;
         }
-
-        /// <summary>
-        /// AiData의 Value값을 총합하여 비중을 선정하여 하나를 선택한다.
-        /// </summary>
-        /// <param name="aiGroupDataIds"></param>
-        /// <returns></returns>
-        private AiData SelectAiDataByValue(List<int> aiGroupDataIds)
-        {
-            if (aiGroupDataIds.Count == 1)
-            {
-                return AiData.GetAiData(aiGroupDataIds[0]);
-            }
-
-            int totalValue = 0;
-            List<AiData> aiDataList = new List<AiData>();
-
-            // Calculate total value and populate aiDataList
-            foreach (int id in aiGroupDataIds)
-            {
-                AiData aiData = AiData.GetAiData(id);
-                aiDataList.Add(aiData);
-                totalValue += aiData.value;
-            }
-
-            // Generate a random value
-            int randomValue = Random.Range(0, totalValue);
-            int cumulativeValue = 0;
-
-            // Select AiData based on random value
-            foreach (var aiData in aiDataList)
-            {
-                cumulativeValue += aiData.value;
-                if (randomValue < cumulativeValue)
-                {
-                    return aiData;
-                }
-            }
-
-            return null; // This should never happen if the input list is not empty
-        }
     }
 }

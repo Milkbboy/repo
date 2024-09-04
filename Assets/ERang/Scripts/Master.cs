@@ -59,6 +59,7 @@ namespace ERang
             rechargeMana = masterData.rechargeMana;
             atk = masterData.atk;
             def = masterData.def;
+            gold = 1000; // 임시로 1000 골드로 설정
 
             // 마스터 카드 생성
             foreach (int cardId in masterData.startCardIds)
@@ -85,9 +86,7 @@ namespace ERang
             mana += rechargeMana;
 
             if (mana > MaxMana)
-            {
                 mana = MaxMana;
-            }
         }
 
         public void DecreaseMana(int value)
@@ -95,9 +94,7 @@ namespace ERang
             mana -= value;
 
             if (mana < 0)
-            {
                 mana = 0;
-            }
         }
 
         public void AddGold(int gold)
@@ -105,25 +102,24 @@ namespace ERang
             this.gold += gold;
         }
 
-        public void HandCardToBoard(string cardUid, CardType cardType)
+        public void HandCardToBoard(string cardUid)
         {
             Card card = GetHandCard(cardUid);
 
             if (card == null)
             {
-                Debug.LogError($"HandCardToBoard: card is null({card.id})");
+                Debug.LogError($"핸드 카드덱에 카드({card.id}) 없음");
                 return;
             }
 
+            // 핸드 카드에서 카드 제거
             handCards.Remove(card);
 
-            if (cardType == CardType.Creature)
+            // 보드에 카드 추가
+            switch (card.type)
             {
-                boardCreatureCards.Add(card);
-            }
-            else if (cardType == CardType.Building)
-            {
-                boardBuildingCards.Add(card);
+                case CardType.Creature: boardCreatureCards.Add(card); break;
+                case CardType.Building: boardBuildingCards.Add(card); break;
             }
         }
 

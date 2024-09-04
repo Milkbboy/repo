@@ -44,6 +44,7 @@ namespace ERang.Data
             cardType = ConvertCardType(cardEntity.CardType);
             aiGroup_id = cardEntity.AiGroup_id;
             costMana = cardEntity.CostMana;
+            costGold = cardEntity.CostGold;
             hp = cardEntity.Hp;
             atk = cardEntity.Atk;
             def = cardEntity.Def;

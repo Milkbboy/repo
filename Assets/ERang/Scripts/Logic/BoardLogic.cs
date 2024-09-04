@@ -53,11 +53,12 @@ namespace ERang
             // 골드 추가 획득
             float gainGold = aiData.value * abilityData.ratio;
             int gold = aiData.value + (int)gainGold;
-            int beforeGold = Master.Instance.gold;
+            int beforeGold = Master.Instance.Gold;
 
             Master.Instance.AddGold(gold);
-            Board.Instance.SetGold(Master.Instance.gold);
-            selfSlot.SetGoldUI(beforeGold, gold);
+            Board.Instance.SetGold(Master.Instance.Gold);
+
+            selfSlot.SetGoldUI(beforeGold, Master.Instance.Gold);
         }
 
         /// <summary>

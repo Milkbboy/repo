@@ -209,7 +209,7 @@ namespace ERang
 
                     if (card == null)
                     {
-                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 장착된 카드가 없어 리액션 패스 - BattleLogic.TurnStartReaction");
+                        Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 장착된 카드가 없어 리액션 패스 - BattleLogic.TurnStartReaction");
                         return;
                     }
 
@@ -217,7 +217,7 @@ namespace ERang
 
                     if (reactionPairs.Count == 0)
                     {
-                        Debug.LogWarning($"{reactionSlot.Slot}번 슬롯 카드({card.id}). AiGroupData({card.aiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color> - BattleLogic.TurnStartReaction");
+                        Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} AiGroupData({card.aiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color> - BattleLogic.TurnStartReaction");
                         return;
                     }
 
@@ -398,6 +398,9 @@ namespace ERang
             Board.Instance.SetGraveDeckCount(master.graveCards.Count);
         }
 
+        /// <summary>
+        /// 핸드 카드 사용 가능 확인
+        /// </summary>
         public bool CanHandCardUse(string cardUid)
         {
             Card card = master.GetHandCard(cardUid);
@@ -408,10 +411,19 @@ namespace ERang
                 return false;
             }
 
-            if (master.Mana < card.costMana)
+            // 필요 마나 확인
+            if (card.costMana != 0 && master.Mana < card.costMana)
             {
                 ToastNotification.Show($"mana is not enough({master.Mana})");
                 Debug.LogError($"CanUseCard: mana is not enough({card.id}, {master.Mana} < {card.costMana})");
+                return false;
+            }
+
+            // 필요 골드 확인
+            if (card.costGold != 0 && master.Gold < card.costGold)
+            {
+                ToastNotification.Show($"gold is not enough({master.Gold})");
+                Debug.LogError($"CanUseCard: gold is not enough({card.id}, {master.Gold} < {card.costGold})");
                 return false;
             }
 
@@ -428,13 +440,19 @@ namespace ERang
             // HandDeck 에서 카드 제거
             HandDeck.Instance.RemoveCard(cardUid);
 
-            // Master 의 handCards => boardCreatureCards or boardBuildingCards 로 이동
-            master.HandCardToBoard(cardUid, card.type);
+            // Master handCards => boardCreatureCards or boardBuildingCards 로 이동
+            master.HandCardToBoard(cardUid);
 
-            // Master 의 mana 감소
-            master.DecreaseMana(card.costMana);
+            // 마스터 mana 감소
+            if (card.costMana > 0)
+                master.DecreaseMana(card.costMana);
+
+            // 마스터 gold 감소
+            if (card.costGold > 0)
+                master.AddGold(-card.costGold);
 
             Board.Instance.SetMasterMana(master.Mana);
+            Board.Instance.SetGold(master.Gold);
 
             Debug.Log($"BoardSlotEquipCard: {card.id}, BoardSlot: {boardSlotRef.Slot}");
         }

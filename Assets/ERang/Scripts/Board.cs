@@ -49,6 +49,9 @@ namespace ERang
         {
         }
 
+        /// <summary>
+        /// Todo: 스테이지 구성 되면 수정되야 할 부분
+        /// </summary>
         public void CreateBoardSlots()
         {
             // 크리쳐 보드 슬롯 구성
@@ -80,6 +83,7 @@ namespace ERang
                         Master master = BattleLogic.Instance.GetMaster();
                         slot.CreateMasterSlot(i, master);
                         slot.SetIndex(creatureSlotStartIndex - i);
+                        SetGold(master.Gold);
                         leftSlots.Add(slot);
                         break;
                     case CardType.EnemyMaster:
