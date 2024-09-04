@@ -263,6 +263,11 @@ namespace ERang
             return boardSlots.Find(x => x.Slot == slot);
         }
 
+        public List<BoardSlot> GetBoardSlots(List<int> slots)
+        {
+            return boardSlots.FindAll(x => slots.Contains(x.Slot));
+        }
+
         public BoardSlot GetBoardSlot(string cardUid)
         {
             return boardSlots.Find(x => x.Card != null && x.Card.uid == cardUid);

@@ -75,13 +75,28 @@ namespace ERang
             }
         }
 
-        public void ForTest()
+        public void TestMelee()
         {
-            Debug.Log("ForTest");
-            BoardSlot selfSlot = Board.Instance.GetBoardSlot(6);
-            BoardSlot targetSlot = Board.Instance.GetBoardSlot(3);
+            Debug.Log("TestMelee");
 
-            BoardLogic.Instance.AbilityDamage(AiDataType.Melee, selfSlot, targetSlot, 2, 3);
+            // 근거리 공격
+            BoardSlot meleeSlot = Board.Instance.GetBoardSlot(6);
+            List<BoardSlot> meleeTargetSlots = Board.Instance.GetBoardSlots(new List<int> { 3, 2 });
+
+            AiData meleeAiData = AiData.GetAiData(1001);
+            BoardLogic.Instance.AbilityDamage(meleeAiData, meleeSlot, meleeTargetSlots);
+        }
+
+        public void TestRanged()
+        {
+            Debug.Log("TestRanged");
+
+            // 원거리 공격
+            BoardSlot rangedSlot = Board.Instance.GetBoardSlot(7);
+            List<BoardSlot> rangedTargetSlots = Board.Instance.GetBoardSlots(new List<int> { 3, 2, 1 });
+
+            AiData rangedAiData = AiData.GetAiData(1004);
+            BoardLogic.Instance.AbilityDamage(rangedAiData, rangedSlot, rangedTargetSlots);
         }
 
         public Master GetMaster()
@@ -109,7 +124,6 @@ namespace ERang
             AbilityAction();
 
             // 턴 시작시 실행되는 카드의 Reaction 을 확인
-            // EnqueueAction("TurnStartCardReaction", () => TurnStartCardReaction());
             TurnStartReaction();
         }
 
@@ -209,19 +223,17 @@ namespace ERang
 
                     foreach (var (reaction, condition) in reactionPairs)
                     {
-                        // Debug.Log($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) 리액션 컨디션({condition.id}) 확인 함수 호출 - BattleLogic.TurnStartReaction");
-
                         var (aiDataId, targetSlots) = ConditionLogic.Instance.GetReactionConditionAiDataId((reaction, condition), reactionSlot, opponentSlots);
 
                         if (aiDataId == 0)
                         {
-                            // Debug.LogWarning($"{reactionSlot.Slot}번 슬롯. 카드({card.id}) 리액션 컨디션({condition.id}) 없음 - BattleLogic.TurnStartReaction");
+                            Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 리액션 컨디션({condition.id}) 없음 - BattleLogic.TurnStartReaction");
                             continue;
                         }
 
                         AiData aiData = AiData.GetAiData(aiDataId);
 
-                        string aiGroupDataTableLog = $"{reactionSlot.Slot}번 슬롯 {card.id} 카드. <color=#78d641>AiData</color> 테이블 {aiDataId} 데이터 얻기";
+                        string aiGroupDataTableLog = $"{Utils.BoardSlotLog(reactionSlot)} <color=#78d641>AiData</color> 테이블 {aiDataId} 데이터 얻기";
 
                         if (aiData == null)
                         {
@@ -229,13 +241,12 @@ namespace ERang
                             continue;
                         }
 
-                        Debug.Log($"{aiGroupDataTableLog} 성공 - {reactionSlot.Slot}번 슬롯 카드({card.id}). 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - BattleLogic.TurnStartReaction");
+                        Debug.Log($"{aiGroupDataTableLog} 성공 - {Utils.BoardSlotLog(reactionSlot)}. 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - BattleLogic.TurnStartReaction");
 
-                        // 타겟 슬롯 표시를 하기 위함인데 원하는대로 되지 않아 수정할 예정
+                        // 타겟 슬롯 표시
                         foreach (int targetSlot in targetSlots)
                         {
                             Debug.Log($"{targetSlot}번 타겟 슬롯 깜박임 시작 - BattleLogic.TurnStartReaction");
-
                             BoardSlot targetBoardSlot = Board.Instance.GetBoardSlot(targetSlot);
 
                             targetBoardSlot.StartFlashing(Color.red);

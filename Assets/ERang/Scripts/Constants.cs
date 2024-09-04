@@ -4,6 +4,16 @@ using UnityEngine;
 
 namespace ERang
 {
+    public enum StatType
+    {
+        None = 0,
+        Hp,
+        Atk,
+        Def,
+        Mana,
+        Gold,
+    }
+
     public enum CardType
     {
         None = 0,

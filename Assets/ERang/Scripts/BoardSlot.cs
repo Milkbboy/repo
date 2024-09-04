@@ -214,6 +214,11 @@ namespace ERang
             cardUI.SetDef(card.def);
         }
 
+        public void SetGoldUI(int beforeGlod, int afterGold)
+        {
+            cardUI.SetGold(beforeGlod, afterGold);
+        }
+
         public void RemoveCard()
         {
             Debug.Log($"Removing card from slot {slot}");

@@ -14,142 +14,82 @@ namespace ERang
             Instance = this;
         }
 
-        // Start is called before the first frame update
-        void Start()
+        public void AbilityDamage(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
         {
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        /// <summary>
-        /// 대상에게 value 만큼의 데미지를 준다.
-        /// </summary>
-        /// <param name="aiType"></param>
-        /// <param name="selfSlot"></param>
-        /// <param name="targetSlot"></param>
-        /// <param name="ackCount"></param>
-        /// <param name="damage"></param>
-        public void AbilityDamage(AiDataType aiType, BoardSlot selfSlot, BoardSlot targetSlot, int ackCount, int value)
-        {
-            switch (aiType)
+            switch (aiData.type)
             {
-                case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlot, ackCount, value)); break;
+                case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, aiData.atk_Cnt, selfSlot.Card.atk)); break;
+                case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, aiData.atk_Cnt, selfSlot.Card.atk)); break;
+                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AbilityDamage 미구현 - BoardLogic.AbilityDamage"); break;
             }
         }
 
-        /// <summary>
-        /// 대상의 체력을 value 만큼 회복한다.
-        /// </summary>
-        /// <param name="targetSlot"></param>
-        /// <param name="aiType"></param>
-        /// <param name="abilityData"></param>
-        /// <param name="originValue"></param>
-        public void AbilityHeal(BoardSlot targetSlot, AiDataType aiType, AbilityData abilityData, int originValue)
+        public void AbilityAffect(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
         {
-            int healValue = abilityData.value;
-            StartCoroutine(AffectHp(targetSlot, healValue));
+            // 효과 받기전 원래 값 설정
+            if (abilityData.duration > 0)
+            {
+                foreach (BoardSlot targetSlot in targetSlots)
+                {
+                    int originValue = GetOriginStatValue(abilityData.abilityType, targetSlot);
+                    targetSlot.Card.AddAbilityDuration(aiData.type, abilityData.abilityType, abilityData.abilityData_Id, originValue, abilityData.value, abilityData.duration, targetSlot.Card.uid, targetSlot.Slot);
+                }
+            }
 
-            // 카드 지속 어빌리티에 내용 추가
-            targetSlot.Card.AddAbilityDuration(aiType, abilityData.abilityType, abilityData.abilityData_Id, originValue, healValue, abilityData.duration, targetSlot.Card.uid, targetSlot.Slot);
+            // 효과 적용
+            switch (abilityData.abilityType)
+            {
+                case AbilityType.Heal: StartCoroutine(AffectHp(targetSlots, abilityData.value)); break;
+                case AbilityType.AtkUp: StartCoroutine(AffectAtk(targetSlots, abilityData.value)); break;
+                case AbilityType.DefUp: StartCoroutine(AffectDef(targetSlots, abilityData.value)); break;
+                case AbilityType.BrokenDef: StartCoroutine(AffectDef(targetSlots, -abilityData.value)); break;
+                case AbilityType.ChargeDamage: StartCoroutine(AffectChargeDamage(selfSlot)); break;
+            }
         }
 
-        /// <summary>
-        /// 대상의 공격력을 value 만큰 duration 턴 동안 상승시킨다.
-        /// </summary>
-        /// <param name="targetSlot"></param>
-        /// <param name="aiType"></param>
-        /// <param name="abilityData"></param>
-        /// <param name="originValue"></param>
-        public void AbilityAttakUp(BoardSlot targetSlot, AiDataType aiType, AbilityData abilityData, int originValue)
+        public void AbilityAddGoldPer(AiData aiData, AbilityData abilityData, BoardSlot selfSlot)
         {
-            int atkUpValue = abilityData.value;
+            // 골드 획득량 증가 애니메이션 로직을 여기에 추가
+            // 골드 추가 획득
+            float gainGold = aiData.value * abilityData.ratio;
+            int gold = aiData.value + (int)gainGold;
+            int beforeGold = Master.Instance.gold;
 
-            StartCoroutine(AffectAtk(targetSlot, atkUpValue));
-            targetSlot.Card.AddAbilityDuration(aiType, abilityData.abilityType, abilityData.abilityData_Id, originValue, abilityData.value, abilityData.duration, targetSlot.Card.uid, targetSlot.Slot);
-        }
-
-        /// <summary>
-        /// 대상의 방어력을 value 만큰 duration 턴 동안 상승시킨다.
-        /// </summary>
-        /// <param name="targetSlot"></param>
-        /// <param name="aiType"></param>
-        /// <param name="abilityData"></param>
-        /// <param name="originValue"></param>
-        public void AbilityDefUp(BoardSlot targetSlot, AiDataType aiType, AbilityData abilityData, int originValue)
-        {
-            int defUpValue = abilityData.value;
-
-            StartCoroutine(AffectDef(targetSlot, defUpValue));
-            targetSlot.Card.AddAbilityDuration(aiType, abilityData.abilityType, abilityData.abilityData_Id, originValue, abilityData.value, abilityData.duration, targetSlot.Card.uid, targetSlot.Slot);
-        }
-
-        /// <summary>
-        /// 대상의 방어력을 value 만큼 duration 턴 동안 감소시킨다.
-        /// </summary>
-        /// <param name="targetSlot"></param>
-        /// <param name="aiType"></param>
-        /// <param name="abilityData"></param>
-        /// <param name="originValue"></param>
-        public void AbilityBrokenDef(BoardSlot targetSlot, AiDataType aiType, AbilityData abilityData, int originValue)
-        {
-            int brokenDefValue = -abilityData.value;
-
-            targetSlot.SetCardDef(brokenDefValue);
-            targetSlot.Card.AddAbilityDuration(aiType, abilityData.abilityType, abilityData.abilityData_Id, originValue, brokenDefValue, abilityData.duration, targetSlot.Card.uid, targetSlot.Slot);
-        }
-
-        /// <summary>
-        /// duration 만큼 공격을 충전 후, 대상에게 value 만큼의 데미지를 준다.
-        /// </summary>
-        /// <param name="targetSlot"></param>
-        /// <param name="aiType"></param>
-        /// <param name="abilityData"></param>
-        /// <param name="originValue"></param>
-        public void AbilityChargeDamage(BoardSlot targetSlot, AiDataType aiType, AbilityData abilityData, int originValue)
-        {
-            int chargeDamageValue = abilityData.value;
-
-            targetSlot.SetDamage(chargeDamageValue);
-            targetSlot.Card.AddAbilityDuration(aiType, abilityData.abilityType, abilityData.abilityData_Id, originValue, chargeDamageValue, abilityData.duration, targetSlot.Card.uid, targetSlot.Slot);
+            Master.Instance.AddGold(gold);
+            Board.Instance.SetGold(Master.Instance.gold);
+            selfSlot.SetGoldUI(beforeGold, gold);
         }
 
         /// <summary>
         /// 근접 공격 효과
         /// </summary>
-        /// <param name="selfSlot"></param>
-        /// <param name="targetSlot"></param>
-        /// <param name="ackCount"></param>
-        /// <param name="damage"></param>
-        /// <returns></returns>
-        private IEnumerator MeleeAttack(BoardSlot selfSlot, BoardSlot targetSlot, int ackCount, int damage)
+        private IEnumerator MeleeAttack(BoardSlot selfSlot, List<BoardSlot> targetSlots, int ackCount, int damage)
         {
             // 원래 위치 저장
             Vector3 originalPosition = selfSlot.transform.position;
 
-            // 대상 카드로 이동
-            yield return StartCoroutine(MoveCard(selfSlot, targetSlot.transform.position));
+            // 첫번째 대상 카드로 이동
+            yield return StartCoroutine(MoveCard(selfSlot, targetSlots[0].transform.position));
 
             // 근접 공격
-            for (int i = 0; i < ackCount; i++)
+            foreach (BoardSlot targetSlot in targetSlots)
             {
-                targetSlot.SetDamage(damage);
-                yield return new WaitForSeconds(0.5f);
+                for (int i = 0; i < ackCount; i++)
+                {
+                    targetSlot.SetDamage(damage);
+                    yield return new WaitForSeconds(0.5f);
+                }
             }
 
             // 원래 자리로 이동
             yield return StartCoroutine(MoveCard(selfSlot, originalPosition));
+
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 타겟({Utils.BoardSlotNumersText(targetSlots)}) 근접 공격({damage}) {ackCount}회 완료 - BoardLogic.MeleeAttack");
         }
 
         /// <summary>
         /// 보드 슬롯 이동
         /// </summary>
-        /// <param name="fromSlot"></param>
-        /// <param name="toPosition"></param>
-        /// <returns></returns>
         private IEnumerator MoveCard(BoardSlot fromSlot, Vector3 toPosition)
         {
             // 카드 이동 애니메이션 로직을 여기에 추가
@@ -169,48 +109,166 @@ namespace ERang
         }
 
         /// <summary>
+        /// 원거리 공격
+        /// </summary>
+        private IEnumerator RangedAttack(BoardSlot selfSlot, List<BoardSlot> targetSlots, int ackCount, int damage)
+        {
+            yield return StartCoroutine(FireMissile(selfSlot, targetSlots, ackCount, damage));
+
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 타겟({Utils.BoardSlotNumersText(targetSlots)}) 원거리 공격({damage}) {ackCount}회 완료 - BoardLogic.MeleeAttack");
+        }
+
+        /// <summary>
+        /// 미사일 발사
+        /// </summary>
+        private IEnumerator FireMissile(BoardSlot selfSlot, List<BoardSlot> targetSlots, int ackCount, int damage)
+        {
+            Vector3 startPosition = selfSlot.transform.position;
+            List<(GameObject, Vector3)> missiles = new List<(GameObject, Vector3)>();
+
+            foreach (BoardSlot targetSlot in targetSlots)
+            {
+                Vector3 targetPosition = targetSlot.transform.position;
+
+                GameObject missile = GameObject.CreatePrimitive(PrimitiveType.Sphere); // 임시로 구체를 미사일로 사용
+                missile.transform.position = startPosition;
+                missile.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f); // 미사일 크기 조정
+
+                missiles.Add((missile, targetPosition));
+            }
+
+            float duration = 1f;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                float t = elapsed / duration;
+
+                foreach (var missile in missiles)
+                    missile.Item1.transform.position = CalculateParabolicPath(startPosition, missile.Item2, t);
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            for (int i = 0; i < ackCount; i++)
+            {
+                foreach (BoardSlot targetSlot in targetSlots)
+                    targetSlot.SetDamage(damage);
+                yield return new WaitForSeconds(0.5f);
+            }
+
+            foreach (var missile in missiles)
+                Destroy(missile.Item1);
+        }
+
+        private Vector3 CalculateParabolicPath(Vector3 start, Vector3 end, float t)
+        {
+            float height = 5.0f; // 포물선의 높이
+            float parabola = 4 * height * t * (1 - t);
+            Vector3 midPoint = Vector3.Lerp(start, end, t);
+            return new Vector3(midPoint.x, midPoint.y + parabola, midPoint.z);
+        }
+
+        /// <summary>
         /// 체력 효과
         /// </summary>
-        /// <param name="targetSlot"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private IEnumerator AffectHp(BoardSlot targetSlot, int value)
+        private IEnumerator AffectHp(List<BoardSlot> targetSlots, int value)
         {
             // 카드 회복 애니메이션 로직을 여기에 추가
 
-            targetSlot.AddCardHp(value);
+            var changes = new List<(int slot, int before, int after)>();
 
-            yield return new WaitForSeconds(1f);
+            foreach (BoardSlot targetSlot in targetSlots)
+            {
+                changes.Add((targetSlot.Slot, targetSlot.Card.hp, targetSlot.Card.hp + value));
+                targetSlot.AddCardHp(value);
+            }
+
+            Debug.Log($"{Utils.BoardSlotNumersText(targetSlots)} 체력 {Utils.StatChangesText(changes)} 효과 - BoardLogic.AffectHp");
+
+            yield return new WaitForSeconds(.5f);
         }
 
         /// <summary>
         /// 공격력 효과
         /// </summary>
-        /// <param name="targetSlot"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private IEnumerator AffectAtk(BoardSlot targetSlot, int value)
+        private IEnumerator AffectAtk(List<BoardSlot> targetSlots, int value)
         {
             // 공격력 증가 애니메이션 로직을 여기에 추가
 
-            targetSlot.SetCardAtk(value);
+            var changes = new List<(int slot, int before, int after)>();
 
-            yield return new WaitForSeconds(1f);
+            foreach (BoardSlot targetSlot in targetSlots)
+            {
+                changes.Add((targetSlot.Slot, targetSlot.Card.atk, targetSlot.Card.atk + value));
+                targetSlot.AddCardAtk(value);
+            }
+
+            Debug.Log($"{Utils.BoardSlotNumersText(targetSlots)} 공격력 {Utils.StatChangesText(changes)} 효과 - BoardLogic.AffectAtk");
+
+            yield return new WaitForSeconds(.5f);
         }
 
         /// <summary>
         /// 방어력 효과
         /// </summary>
-        /// <param name="targetSlot"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private IEnumerator AffectDef(BoardSlot targetSlot, int value)
+        private IEnumerator AffectDef(List<BoardSlot> targetSlots, int value)
         {
             // 방어력 증가 애니메이션 로직을 여기에 추가
 
-            targetSlot.SetCardDef(value);
+            var changes = new List<(int slot, int before, int after)>();
 
-            yield return new WaitForSeconds(1f);
+            foreach (BoardSlot targetSlot in targetSlots)
+            {
+                changes.Add((targetSlot.Slot, targetSlot.Card.def, targetSlot.Card.def + value));
+                targetSlot.AddCardDef(value);
+            }
+
+            Debug.Log($"{Utils.BoardSlotNumersText(targetSlots)} 방어력 {Utils.StatChangesText(changes)} 효과 - BoardLogic.AffectDef");
+
+            yield return new WaitForSeconds(.5f);
+        }
+
+        /// <summary>
+        /// 충전 공격 효과
+        /// </summary>
+        /// <param name="selfSlot"></param>
+        /// <returns></returns>
+        private IEnumerator AffectChargeDamage(BoardSlot selfSlot)
+        {
+            // 충전 공격 애니메이션 로직을 여기에 추가
+
+            yield return new WaitForSeconds(.5f);
+
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 충전 공격 완료 - BoardLogic.AffectChargeDamage");
+        }
+
+        /// <summary>
+        /// 어빌리티 타입에 따른 원래 값 반환
+        /// </summary>
+        /// <param name="abilityType"></param>
+        /// <param name="boardSlot"></param>
+        /// <returns></returns>
+        private int GetOriginStatValue(AbilityType abilityType, BoardSlot boardSlot)
+        {
+            int originValue = 0;
+
+            switch (abilityType)
+            {
+                case AbilityType.AtkUp:
+                    originValue = boardSlot.Card.atk;
+                    break;
+                case AbilityType.DefUp:
+                case AbilityType.BrokenDef:
+                    originValue = boardSlot.Card.def;
+                    break;
+                case AbilityType.Heal:
+                    originValue = boardSlot.Card.hp;
+                    break;
+            }
+
+            return originValue;
         }
     }
 }

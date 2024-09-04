@@ -102,7 +102,7 @@ namespace ERang
             };
 
             abilities.Add(durationAbility);
-            Debug.Log($"AddAbilityDuration - abilityType: {abilityType.ToString()}, abilityId: {abilityId}, beforeValue:{beforeValue}, abilityValue: {abilityValue}, duration: {duration}");
+            Debug.Log($"유지 시간 어빌리티 추가 - abilityType: {abilityType.ToString()}, abilityId: {abilityId}, beforeValue:{beforeValue}, abilityValue: {abilityValue}, duration: {duration}");
         }
 
         /// <summary>
@@ -114,6 +114,11 @@ namespace ERang
         public DurationAbility HasAbilityDuration(AiDataType aiType, int abilityId)
         {
             return abilities.Find(a => a.aiType == aiType && a.abilityId == abilityId);
+        }
+
+        public DurationAbility HasAbilityDuration(int abilityId)
+        {
+            return abilities.Find(a => a.abilityId == abilityId);
         }
 
         public void SetHp(int hp)
@@ -172,12 +177,12 @@ namespace ERang
         /// <returns></returns>
         public int GetCardAiDataId(int slot)
         {
-            string aiGroupDataTableLog = $"{slot}번 슬롯 {id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
+            string aiGroupDataTableLog = $"{slot}번 슬롯 카드({id}). <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
 
             if (aiGroupData == null)
             {
-                Debug.LogError($"{aiGroupDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetCardAiDataId");
+                Debug.LogError($"{aiGroupDataTableLog} 실패. <color=#ea4123>테이블 데이터 없음</color> - Card.GetCardAiDataId");
                 return 0;
             }
 
@@ -225,7 +230,7 @@ namespace ERang
                         continue;
                     }
 
-                    Debug.Log($"{aiDataTableLog} 성공. 가중치({(aiDataId, aiData.value)}) 추가 - Card.GetCardAiDataId");
+                    Debug.Log($"{aiDataTableLog} 성공. 가중치{(aiDataId, aiData.value)} 추가 - Card.GetCardAiDataId");
                     totalValue += aiData.value;
 
                     aiDataList.Add((aiDataId, aiData.value));

@@ -180,6 +180,11 @@ namespace ERang
             defText.text = def.ToString();
         }
 
+        public void SetGold(int beforeGlod, int afterGold)
+        {
+            ShowFloatingText("Gold", beforeGlod.ToString(), afterGold.ToString());
+        }
+
         public void ResetStat()
         {
             hpText.text = string.Empty;
@@ -194,7 +199,7 @@ namespace ERang
             }
         }
 
-        private void ShowFloatingText(string stat, string oldValue, string newValue)
+        private void ShowFloatingText(string text, string oldValue, string newValue)
         {
             // Debug.Log($"ShowFloatingText: {stat}, {oldValue}, {newValue}");
 
@@ -213,7 +218,7 @@ namespace ERang
 
             string diffText = diff > 0 ? $"<color=green>+{diff}</color>" : $"<color=red>{diff.ToString()}</color>";
             TextMeshProUGUI floatingText = Instantiate(floatingTextPrefab, floatingTextParent);
-            floatingText.text = $"{stat} {diffText}";
+            floatingText.text = $"{text} {diffText}";
 
             RectTransform rectTransform = floatingText.GetComponent<RectTransform>();
             rectTransform.anchoredPosition += new Vector2(0, floatingTextList.Count * 25f);

@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ERang.Data;
 using UnityEngine;
-using Newtonsoft.Json;
+using ERang.Data;
 
 namespace ERang
 {
@@ -11,137 +10,167 @@ namespace ERang
     {
         public static TargetLogic Instance { get; private set; }
 
+        private const int BOARD_CENTER_OFFSET = 3;
+        private static readonly System.Random random = new System.Random();
+
         void Awake()
         {
             Instance = this;
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         /// <summary>
-        /// 공격자 카드와 대상 카드를 비교하여 대상 카드 반환
+        /// AiData 테이블의 대상 슬롯 얻기
         /// </summary>
-        /// <param name="attackerCard"></param>
-        /// <param name="targetCards"></param>
-        public List<Card> CalulateTarget(Card attackerCard, List<Card> targetCards)
+        /// <param name="aiData"></param>
+        /// <param name="selfSlot"></param>
+        /// <returns></returns>
+        public List<BoardSlot> GetAiTargetSlots(AiData aiData, BoardSlot selfSlot)
         {
-            // 공격자 카드 기준으로 대상 카드 찾기
-            AiData aiData = attackerCard.GetCardAiData();
-            // aiData.atk_Ranges;
-            // aiData.atk_Cnt;
+            List<BoardSlot> targetSlots = new List<BoardSlot>();
 
-            List<int> targetCardIds = targetCards.Select(x => x.id).ToList();
-            var logTargets = new
+            switch (aiData.target)
             {
-                aiGroupId = attackerCard.aiGroupId,
-                targetCardIds,
-            };
-
-            List<Card> targets = GetTargets(aiData, targetCards);
-            Debug.Log($"TargetLogic.CalulateTarget() attackerCard: {attackerCard.id}, {JsonConvert.SerializeObject(logTargets)}");
-
-            if (targets == null)
-            {
-                Debug.LogError($"TargetLogic.CalulateTarget() - attacker {attackerCard.id}, targets is null. aiData: {JsonConvert.SerializeObject(aiData)}");
-                return new List<Card>();
+                case AiDataTarget.Self: return new List<BoardSlot> { selfSlot };
+                case AiDataTarget.Enemy: return TargetEnemy(aiData, selfSlot);
+                case AiDataTarget.NearEnemy: return TargetNearEnemy(aiData, selfSlot);
+                case AiDataTarget.AllEnemy: return TargetAllEnemy(selfSlot);
+                case AiDataTarget.AllEnemyCreature: return TargetAllEnemy(selfSlot, true);
+                case AiDataTarget.RandomEnemy: return TargetRandomEnemy(selfSlot);
+                case AiDataTarget.RandomEnemyCreature: return TargetRandomEnemy(selfSlot, true);
             }
 
-            List<int> targetIds = targets.Select(x => x.id).ToList();
-            List<int> abilityIds = aiData.ability_Ids.Select(x => x).ToList();
+            return targetSlots;
+        }
 
-            var logData = new
+        private List<BoardSlot> TargetEnemy(AiData aiData, BoardSlot selfSlot)
+        {
+            List<BoardSlot> targets = new List<BoardSlot>();
+
+            // 상대방 슬롯 리스트
+            List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
+
+            switch (aiData.type)
             {
-                attacker = attackerCard.id,
-                abilityIds = abilityIds,
-                targetIds = targetIds,
-                aiData = aiData,
-            };
+                case AiDataType.Melee:
+                    foreach (var attackRange in aiData.attackRanges)
+                    {
+                        int targetSlotIndex = attackRange - 1;
 
-            Logger.Log(logData);
-
-            for (int i = 0; i < aiData.ability_Ids.Count; i++)
-            {
-                AbilityData ability = AbilityData.GetAbilityData(aiData.ability_Ids[i]);
-
-                // AbilityType > Damage 타입에는 데미지 값을 넣지 않을게.카드 데이터에 있는게 맞아 2024-08-12
-                switch (ability.abilityType)
-                {
-                    case AbilityType.Damage:
-                        foreach (Card target in targets)
+                        // 근접 공격 거리가 상대 카드 개수 보다 크면 패스
+                        if (targetSlotIndex < 0 || targetSlotIndex >= opponentSlots.Count)
                         {
-                            int beforeHp = target.hp;
-
-                            for (int j = 0; j < aiData.atk_Cnt; ++j)
-                            {
-                                target.hp -= attackerCard.atk;
-                            }
-
-                            Debug.Log($"TargetLogic.CalulateTarget() - attacker: {attackerCard.id}, damage: {attackerCard.atk}, target: {target.id}, hp: {beforeHp} => {target.hp}");
+                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBoardSlots.Count: {opponentSlots.Count} - TargetLogic.TargetEnemy");
+                            continue;
                         }
 
-                        break;
-                }
+                        targets.Add(opponentSlots[targetSlotIndex]);
+                    }
+                    break;
+
+                case AiDataType.Ranged:
+                    foreach (var attackRange in aiData.attackRanges)
+                    {
+                        int targetSlotIndex = attackRange - (selfSlot.Index + BOARD_CENTER_OFFSET);
+
+                        if (targetSlotIndex < 0 || targetSlotIndex >= opponentSlots.Count)
+                        {
+                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBoardSlots.Count: {opponentSlots.Count} - TargetLogic.TargetEnemy");
+                            continue;
+                        }
+
+                        targets.Add(opponentSlots[targetSlotIndex]);
+                    }
+                    break;
+
+                case AiDataType.Explosion:
+                    Debug.LogWarning($"{aiData.ai_Id} - AiDataType.Explosion 아직 구현되지 않음 - TargetLogic.TargetEnemy");
+                    break;
             }
 
             return targets;
         }
 
         /// <summary>
-        /// // AiData 에 설정된 타겟 얻기
+        /// 카드가 장착된 첫번째 카드를 타겟으로 설정
         /// </summary>
-        /// <param name="aiData"></param>
-        List<Card> GetTargets(AiData aiData, List<Card> targetCards)
+        /// <param name="oppentSlots"></param>
+        /// <returns></returns>
+        private List<BoardSlot> TargetNearEnemy(AiData aiData, BoardSlot selfSlot)
         {
-            switch (aiData.type)
+            List<BoardSlot> targets = new List<BoardSlot>();
+
+            // 상대방 슬롯 리스트
+            List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
+
+            // 제일 근접한 타겟 찾기
+            BoardSlot targetSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
+            int targetIndex = targetSlot.Index;
+
+            Debug.Log($"{aiData.ai_Id} - 제일 근접한 타겟 슬롯 인덱스 {targetIndex} 찾고 attackRanges({(aiData.attackRanges.Count > 0 ? string.Join(", ", aiData.attackRanges) : "없음")}) 에 설정된 타겟 찾기 - TargetLogic.TargetNearEnemy");
+
+            if (aiData.attackRanges.Count == 0)
             {
-                case AiDataType.Melee:
-                    // 근거리 행동으로 Melee로 설정된 경우 행동 시 가장 가까운 적이 배치된 필드로 이동한다.
-                    return MeleeAttack(aiData, targetCards);
-                case AiDataType.Ranged:
-                    // 원거리 행동으로 Ranged로 설정된 경우 제자리에서 행동한다.
-                    break;
-                case AiDataType.Explosion:
-                    // 폭발 공격으로 Explosion로 설정된 경우 제자리에서 행동한다.
-                    break;
-                case AiDataType.Buff:
-                    // 이로운 효과를 주는 버프 행동으로 제자리에서 행동한다. (Ranged와 동일하나 데이터 가독성을 위해 분리)
-                    break;
-                case AiDataType.DeBuff:
-                    // 해로운 효과를 주는 디버프 행동으로 제자리에서 행동한다. (Ranged와 동일하나 데이터 가독성을 위해 분리)
-                    break;
+                Debug.LogWarning($"{aiData.ai_Id} - attackRanges 가 설정되지 않아서 제일 근접한 타겟만 찾음 - TargetLogic.TargetNearEnemy");
+                targets.Add(targetSlot);
+
+                return targets;
             }
 
-            return null;
+            for (int i = 0; i < aiData.attackRanges.Count; ++i)
+            {
+                int attackRange = aiData.attackRanges[i];
+                int targetSlotIndex = targetSlot.Index + (attackRange - 1);
+
+                if (targetSlotIndex < 0 || targetSlotIndex >= opponentSlots.Count)
+                {
+                    Debug.LogWarning($"{aiData.ai_Id} - {i}번째 타겟 슬롯 인덱스 {targetSlotIndex} 로 패스 (적용 범위 0 ~ 3) - TargetLogic.TargetNearEnemy");
+                    continue;
+                }
+                else
+                {
+                    Debug.Log($"{aiData.ai_Id} - {i}번째 타겟 슬롯 인덱스 {targetSlotIndex} 찾기 - TargetLogic.TargetNearEnemy");
+                }
+
+                targets.Add(opponentSlots[targetSlotIndex]);
+            }
+
+            return targets;
         }
 
-        /// <summary>
-        /// AiData 의 AtkType 은 Automatic 고정
-        /// - 지금은 나중엔 마법 카드로 크리쳐가 공격하는 경우도 있을 수 있음 2024-08-12
-        /// </summary>
-        /// <param name="aiData"></param>
-        List<Card> MeleeAttack(AiData aiData, List<Card> targetCards)
+        private List<BoardSlot> TargetAllEnemy(BoardSlot selfSlot, bool exceptMaster = false)
         {
-            switch (aiData.target)
+            // 상대방 슬롯 리스트
+            List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
+
+            if (exceptMaster)
             {
-                case AiDataTarget.NearEnemy:
-                    // 가장 가까운 적을 대상으로 설정한다.
-                    return new List<Card> { targetCards.FirstOrDefault() };
-                case AiDataTarget.AllEnemy:
-                    // 적 보스를 포함한 모든 적을 대상으로 한다.
-                    return targetCards;
+                List<BoardSlot> targetSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
+
+                Debug.Log($"TargetAllEnemy - exceptMaster: {exceptMaster}, targetSlots: {string.Join(", ", targetSlots.Select(x => x.Slot))}");
+
+                return targetSlots;
             }
 
-            return null;
+            return opponentSlots;
+        }
+
+        private List<BoardSlot> TargetRandomEnemy(BoardSlot selfSlot, bool exceptMaster = false)
+        {
+            // 상대방 슬롯 리스트
+            List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
+
+            if (exceptMaster)
+                opponentSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
+
+            int randomIndex = Random.Range(0, opponentSlots.Count);
+
+            if (randomIndex < 0 || randomIndex >= opponentSlots.Count)
+            {
+                Debug.LogError($"randomIndex is out of range. randomIndex: {randomIndex}, opponentSlots.Count: {opponentSlots.Count} - TargetLogic.TargetRandomEnemy");
+                return null;
+            }
+
+            return new List<BoardSlot> { opponentSlots[randomIndex] };
         }
     }
 }
