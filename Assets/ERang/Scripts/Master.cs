@@ -65,6 +65,13 @@ namespace ERang
             foreach (int cardId in masterData.startCardIds)
             {
                 CardData cardData = CardData.GetCardData(cardId);
+
+                if (cardData == null)
+                {
+                    Debug.LogError($"CardData 테이블에 카드({cardId}) 없음");
+                    continue;
+                }
+
                 Card card = new Card(cardData);
 
                 allCards.Add(card);

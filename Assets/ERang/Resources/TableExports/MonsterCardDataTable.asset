@@ -16,7 +16,7 @@ MonoBehaviour:
   - Card_Id: 1001
     CardNameDesc_Id: CardName_1001
     CardDesc_Id: CardDesc_1001
-    CardType: Creature
+    CardType: Monster
     AiGroup_id: 11001
     CostMana: 1
     CostGold: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 0
     Level: 1
-    Level_1_img: bull
+    Level_1_img: Crotch_Lv1
     Level_3_img: 
     Level_5_img: 
     HandStart_Ability: 
@@ -36,7 +36,7 @@ MonoBehaviour:
   - Card_Id: 1002
     CardNameDesc_Id: CardName_1002
     CardDesc_Id: CardDesc_1002
-    CardType: Creature
+    CardType: Monster
     AiGroup_id: 11002
     CostMana: 2
     CostGold: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 0
     Level: 1
-    Level_1_img: hound
+    Level_1_img: witch_female
     Level_3_img: 
     Level_5_img: 
     HandStart_Ability: 
@@ -56,7 +56,7 @@ MonoBehaviour:
   - Card_Id: 1003
     CardNameDesc_Id: CardName_1003
     CardDesc_Id: CardDesc_1003
-    CardType: Creature
+    CardType: Monster
     AiGroup_id: 11003
     CostMana: 3
     CostGold: 50
@@ -67,7 +67,7 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 0
     Level: 1
-    Level_1_img: wolf_alpha
+    Level_1_img: Character_02_Croll
     Level_3_img: 
     Level_5_img: 
     HandStart_Ability: 

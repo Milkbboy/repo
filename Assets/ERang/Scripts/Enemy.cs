@@ -33,22 +33,21 @@ namespace ERang
             atk = enemyData.atk;
             def = enemyData.def;
 
-            // 적 카드 생성
+            // 적 카드 임시 생성
+            enemyData.startCardIds = new List<int> { 1001, 1002, 1003 };
+
             foreach (int cardId in enemyData.startCardIds)
             {
                 CardData cardData = MonsterCardData.GetCardData(cardId);
 
                 if (cardData == null)
                 {
-                    Debug.LogError($"CardData 테이블에 카드({cardId}) 없음");
+                    Debug.LogError($"MonsterCardData 테이블에 카드({cardId}) 없음");
                     continue;
                 }
 
-                if (cardData.cardType == CardType.Monster)
-                {
-                    Card card = new Card(cardData);
-                    monsterCards.Add(card);
-                }
+                Card card = new Card(cardData);
+                monsterCards.Add(card);
             }
         }
 
