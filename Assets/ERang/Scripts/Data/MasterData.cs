@@ -98,7 +98,7 @@ namespace ERang.Data
 
         public static MasterData GetMasterData(int master_id)
         {
-            return master_dict[master_id];
+            return master_dict.TryGetValue(master_id, out MasterData masterData) ? masterData : null;
         }
 
         public Texture2D GetMasterTexture()

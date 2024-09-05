@@ -83,12 +83,7 @@ namespace ERang.Data
 
         public static AiData GetAiData(int aiId)
         {
-            if (ai_dict.ContainsKey(aiId))
-            {
-                return ai_dict[aiId];
-            }
-
-            return null;
+            return ai_dict.ContainsKey(aiId) ? ai_dict[aiId] : null;
         }
 
         AiDataType ConvertAiDataType(string type)

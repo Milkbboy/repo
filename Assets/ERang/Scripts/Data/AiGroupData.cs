@@ -129,12 +129,7 @@ namespace ERang.Data
 
         public static AiGroupData GetAiGroupData(int aiGroupId)
         {
-            if (aiGroups_dict.ContainsKey(aiGroupId))
-            {
-                return aiGroups_dict[aiGroupId];
-            }
-
-            return null;
+            return aiGroups_dict.TryGetValue(aiGroupId, out AiGroupData aiGroupData) ? aiGroupData : null;
         }
 
         /// <summary>

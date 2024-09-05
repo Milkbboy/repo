@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using UnityEngine;
 using ERang.Data;
 
 namespace ERang
@@ -37,6 +37,12 @@ namespace ERang
             foreach (int cardId in enemyData.startCardIds)
             {
                 CardData cardData = MonsterCardData.GetCardData(cardId);
+
+                if (cardData == null)
+                {
+                    Debug.LogError($"CardData 테이블에 카드({cardId}) 없음");
+                    continue;
+                }
 
                 if (cardData.cardType == CardType.Monster)
                 {

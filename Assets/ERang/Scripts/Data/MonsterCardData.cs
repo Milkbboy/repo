@@ -50,7 +50,7 @@ namespace ERang.Data
 
         public static CardData GetCardData(int card_id)
         {
-            return card_dict[card_id];
+            return card_dict.TryGetValue(card_id, out CardData cardData) ? cardData : null;
         }
     }
 }
