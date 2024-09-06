@@ -63,7 +63,7 @@ namespace ERang
             // Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData 에 설정된 어빌리티({string.Join(", ", aiData.ability_Ids)}) 타겟({aiData.target}) Slots: <color=yellow>{string.Join(", ", aiTargetSlots.Select(slot => slot.Slot))}</color>번에 적용 - AiLogic.AiDataAction");
 
             // 어빌리티 적용
-            AbilityLogic.Instance.SetAbility(aiData, selfSlot, aiTargetSlots);
+            AbilityLogic.Instance.SetBoardSlotAbility(aiData, selfSlot, aiTargetSlots);
         }
 
         /// <summary>

@@ -9,6 +9,22 @@ namespace ERang
     {
         public static AbilityLogic Instance { get; private set; }
 
+        public class Ability
+        {
+            public int abilityId; // 어빌리티 Id
+            public AiDataType aiType; // Ai 타입
+            public AbilityType abilityType; // 어빌리티 타입
+            public AbilityWorkType abilityWorkType; // 어빌리티 작업 타입(HandOn 찾기 위함)
+            public int beforeValue; // 어빌리티 적용 전 값
+            public int abilityValue; // 어빌리티 값
+            public int duration; // 현재 지속 시간
+            public string targetCardUid; // 대상 카드의 Uid
+            public int selfBoardSlot; // 어빌리티 발동 보드 슬롯
+            public int targetBoardSlot; // 어빌리티 대상 보드 슬롯
+        }
+
+        public List<Ability> abilities = new List<Ability>();
+
         void Awake()
         {
             Instance = this;
@@ -26,7 +42,7 @@ namespace ERang
 
         }
 
-        public void SetAbility(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
+        public void SetBoardSlotAbility(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
         {
             if (selfSlot.Card == null)
             {
@@ -47,32 +63,65 @@ namespace ERang
                     continue;
                 }
 
-                AbilityData ability = AbilityData.GetAbilityData(abilityId);
+                AbilityData abilityData = AbilityData.GetAbilityData(abilityId);
 
-                if (ability == null)
+                if (abilityData == null)
                 {
                     Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} <color=red>어빌리티 데이터 없음</color> - AbilityLogic.AbilityAction");
                     continue;
                 }
 
-                switch (ability.abilityType)
+                // duration 이 있는 어빌리티는 상태 해제를 위해 어빌리티를 저장
+                if ((aiData.type == AiDataType.Buff || aiData.type == AiDataType.DeBuff) && abilityData.duration > 0)
                 {
-                    case AbilityType.Damage:
-                        BoardLogic.Instance.AbilityDamage(aiData, selfSlot, targetSlots);
-                        break;
-                    case AbilityType.Heal:
-                    case AbilityType.AtkUp:
-                    case AbilityType.DefUp:
-                    case AbilityType.BrokenDef:
-                    case AbilityType.ChargeDamage:
-                    case AbilityType.AddMana:
-                        BoardLogic.Instance.AbilityAffect(aiData, ability, selfSlot, targetSlots);
-                        break;
-                    case AbilityType.AddGoldPer:
-                        BoardLogic.Instance.AbilityAddGoldPer(aiData, ability, selfSlot);
-                        break;
+                    foreach (BoardSlot targetSlot in targetSlots)
+                    {
+                        if (targetSlot.Card == null)
+                        {
+                            Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 타겟 슬롯 {Utils.BoardSlotLog(targetSlot)}가 없어 어빌리티 적용 패스 - AbilityLogic.AbilityAffect");
+                            continue;
+                        }
+
+                        abilities.Add(new Ability
+                        {
+                            abilityId = abilityData.abilityData_Id,
+                            aiType = aiData.type,
+                            abilityType = abilityData.abilityType,
+                            abilityWorkType = abilityData.type,
+                            beforeValue = GetOriginStatValue(abilityData.abilityType, targetSlot),
+                            abilityValue = abilityData.value,
+                            duration = abilityData.duration,
+                            targetCardUid = targetSlot.Card.uid,
+                            selfBoardSlot = selfSlot.Slot,
+                            targetBoardSlot = targetSlot.Slot
+                        });
+                    }
+                }
+
+                switch (abilityData.abilityType)
+                {
+                    case AbilityType.Damage: BoardLogic.Instance.AbilityDamage(aiData, selfSlot, targetSlots); break;
+                    case AbilityType.Heal: StartCoroutine(BoardLogic.Instance.AbilityHp(targetSlots, abilityData.value)); break;
+                    case AbilityType.AtkUp: StartCoroutine(BoardLogic.Instance.AbilityAtk(targetSlots, abilityData.value)); break;
+                    case AbilityType.DefUp: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, abilityData.value)); break;
+                    case AbilityType.BrokenDef: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, -abilityData.value)); break;
+                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(selfSlot)); break;
+                    case AbilityType.AddMana: StartCoroutine(BoardLogic.Instance.AbilityAddMana(selfSlot, abilityData.value)); break;
+                    case AbilityType.AddGoldPer: BoardLogic.Instance.AbilityAddGoldPer(aiData, abilityData, selfSlot); break;
                 }
             }
+        }
+
+        public List<Ability> GetDurationAbilities()
+        {
+            // 어빌리티 대상이 사라진 보드 슬롯
+            List<BoardSlot> removeCardSlots = abilities.Select(ability => Board.Instance.GetBoardSlot(ability.targetBoardSlot)).Where(boardSlot => boardSlot.Card == null).ToList();
+            Debug.Log($"어빌리티 대상이 사라진 보드 슬롯: {string.Join(", ", removeCardSlots.Select(boardSlot => boardSlot.Slot))}");
+
+            // 어빌리티 대상이 사라진 보드 슬롯 제거
+            abilities.RemoveAll(ability => Board.Instance.GetBoardSlot(ability.targetBoardSlot).Card == null);
+
+            return abilities;
         }
 
         /// <summary>
@@ -135,6 +184,30 @@ namespace ERang
 
             // duration 이 0 이하인 ability 제거
             card.Abilities.RemoveAll(ability => ability.duration <= 0);
+        }
+
+        /// <summary>
+        /// 어빌리티 타입에 따른 원래 stat 얻기
+        /// </summary>
+        private int GetOriginStatValue(AbilityType abilityType, BoardSlot boardSlot)
+        {
+            int originValue = 0;
+
+            switch (abilityType)
+            {
+                case AbilityType.AtkUp:
+                    originValue = boardSlot.Card.atk;
+                    break;
+                case AbilityType.DefUp:
+                case AbilityType.BrokenDef:
+                    originValue = boardSlot.Card.def;
+                    break;
+                case AbilityType.Heal:
+                    originValue = boardSlot.Card.hp;
+                    break;
+            }
+
+            return originValue;
         }
     }
 }

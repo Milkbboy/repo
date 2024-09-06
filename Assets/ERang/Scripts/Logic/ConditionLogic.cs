@@ -53,7 +53,7 @@ namespace ERang
                 return (0, new List<int>());
             }
 
-            Debug.Log($"{conditionTargetLog} - 성공. 타겟 슬롯 <color=yellow>{string.Join(", ", targetSlots.Select(slot => slot.Slot))}</color> 에 대한 리액션 발동 확인 - ConditionLogic.GetReactionConditionAiDataId");
+            // Debug.Log($"{conditionTargetLog} - 성공. 타겟 슬롯 <color=yellow>{string.Join(", ", targetSlots.Select(slot => slot.Slot))}</color> 에 대한 리액션 발동 확인 - ConditionLogic.GetReactionConditionAiDataId");
 
             string conditionCheckLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}).";
 

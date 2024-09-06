@@ -36,34 +36,112 @@ namespace ERang
             }
         }
 
-        public void AbilityAffect(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
+        /// <summary>
+        /// 체력 효과
+        /// </summary>
+        public IEnumerator AbilityHp(List<BoardSlot> targetSlots, int value)
         {
-            // 효과 받기전 원래 값 설정
-            if (abilityData.duration > 0)
+            // 카드 회복 애니메이션 로직을 여기에 추가
+
+            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
+
+            foreach (BoardSlot targetSlot in targetSlots)
             {
-                foreach (BoardSlot targetSlot in targetSlots)
+                if (targetSlot.Card == null)
                 {
-                    if (targetSlot.Card == null)
-                    {
-                        Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 타겟 슬롯 {Utils.BoardSlotLog(targetSlot)}가 없어 어빌리티 적용 패스 - BoardLogic.AbilityAffect");
-                        continue;
-                    }
-
-                    int originValue = GetOriginStatValue(abilityData.abilityType, targetSlot);
-                    targetSlot.Card.AddAbilityDuration(aiData.type, abilityData.abilityType, abilityData.abilityData_Id, originValue, abilityData.value, abilityData.duration, targetSlot.Card.uid, targetSlot.Slot);
+                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                    continue;
                 }
+
+                changes.Add((true, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.hp, targetSlot.Card.hp + value));
+                targetSlot.AddCardHp(value);
             }
 
-            // 효과 적용
-            switch (abilityData.abilityType)
+            Debug.Log($"{Utils.StatChangesText("체력", changes)} - BoardLogic.AffectHp");
+
+            yield return new WaitForSeconds(.5f);
+        }
+
+        /// <summary>
+        /// 공격력 효과
+        /// </summary>
+        public IEnumerator AbilityAtk(List<BoardSlot> targetSlots, int value)
+        {
+            // 공격력 증가 애니메이션 로직을 여기에 추가
+
+            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
+
+            foreach (BoardSlot targetSlot in targetSlots)
             {
-                case AbilityType.Heal: StartCoroutine(AffectHp(targetSlots, abilityData.value)); break;
-                case AbilityType.AtkUp: StartCoroutine(AffectAtk(targetSlots, abilityData.value)); break;
-                case AbilityType.DefUp: StartCoroutine(AffectDef(targetSlots, abilityData.value)); break;
-                case AbilityType.BrokenDef: StartCoroutine(AffectDef(targetSlots, -abilityData.value)); break;
-                case AbilityType.ChargeDamage: StartCoroutine(AffectChargeDamage(selfSlot)); break;
-                case AbilityType.AddMana: StartCoroutine(AffectAddMana(selfSlot, abilityData.value)); break;
+                if (targetSlot.Card == null)
+                {
+                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                    continue;
+                }
+
+                changes.Add((targetSlot.Card != null, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.atk, targetSlot.Card.atk + value));
+                targetSlot.AddCardAtk(value);
             }
+
+            Debug.Log($"{Utils.StatChangesText("공격력", changes)} - BoardLogic.AffectHp");
+
+            yield return new WaitForSeconds(.5f);
+        }
+
+        /// <summary>
+        /// 방어력 효과
+        /// </summary>
+        public IEnumerator AbilityDef(List<BoardSlot> targetSlots, int value)
+        {
+            // 방어력 증가 애니메이션 로직을 여기에 추가
+
+            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
+
+            foreach (BoardSlot targetSlot in targetSlots)
+            {
+                if (targetSlot.Card == null)
+                {
+                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                    continue;
+                }
+
+                changes.Add((true, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.def, targetSlot.Card.def + value));
+                targetSlot.AddCardDef(value);
+            }
+
+            Debug.Log($"{Utils.StatChangesText("방어력", changes)} - BoardLogic.AffectHp");
+
+            yield return new WaitForSeconds(.5f);
+        }
+
+        /// <summary>
+        /// 충전 공격 효과
+        /// </summary>
+        public IEnumerator AbilityChargeDamage(BoardSlot selfSlot)
+        {
+            // 충전 공격 애니메이션 로직을 여기에 추가
+
+            yield return new WaitForSeconds(.5f);
+
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 충전 공격 완료 - BoardLogic.AffectChargeDamage");
+        }
+
+        /// <summary>
+        /// 마나 추기 획득 효과
+        /// </summary>
+        public IEnumerator AbilityAddMana(BoardSlot selfSlot, int value)
+        {
+            // 마나 획득 애니메이션 로직을 여기에 추가
+
+            int beforeMana = Master.Instance.Mana;
+
+            // 마나 추가 획득
+            Master.Instance.IncreaseMana(value);
+            Board.Instance.SetMasterMana(Master.Instance.Mana);
+
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 마나 {value} 추가 획득({beforeMana} => {Master.Instance.Mana}) - BoardLogic.AffectAddMana");
+
+            yield return new WaitForSeconds(.5f);
         }
 
         public void AbilityAddGoldPer(AiData aiData, AbilityData abilityData, BoardSlot selfSlot)
@@ -188,141 +266,6 @@ namespace ERang
             float parabola = 4 * height * t * (1 - t);
             Vector3 midPoint = Vector3.Lerp(start, end, t);
             return new Vector3(midPoint.x, midPoint.y + parabola, midPoint.z);
-        }
-
-        /// <summary>
-        /// 체력 효과
-        /// </summary>
-        private IEnumerator AffectHp(List<BoardSlot> targetSlots, int value)
-        {
-            // 카드 회복 애니메이션 로직을 여기에 추가
-
-            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
-
-            foreach (BoardSlot targetSlot in targetSlots)
-            {
-                if (targetSlot.Card == null)
-                {
-                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
-                    continue;
-                }
-
-                changes.Add((true, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.hp, targetSlot.Card.hp + value));
-                targetSlot.AddCardHp(value);
-            }
-
-            Debug.Log($"{Utils.StatChangesText("체력", changes)} - BoardLogic.AffectHp");
-
-            yield return new WaitForSeconds(.5f);
-        }
-
-        /// <summary>
-        /// 공격력 효과
-        /// </summary>
-        private IEnumerator AffectAtk(List<BoardSlot> targetSlots, int value)
-        {
-            // 공격력 증가 애니메이션 로직을 여기에 추가
-
-            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
-
-            foreach (BoardSlot targetSlot in targetSlots)
-            {
-                if (targetSlot.Card == null)
-                {
-                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
-                    continue;
-                }
-
-                changes.Add((targetSlot.Card != null, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.atk, targetSlot.Card.atk + value));
-                targetSlot.AddCardAtk(value);
-            }
-
-            Debug.Log($"{Utils.StatChangesText("공격력", changes)} - BoardLogic.AffectHp");
-
-            yield return new WaitForSeconds(.5f);
-        }
-
-        /// <summary>
-        /// 방어력 효과
-        /// </summary>
-        private IEnumerator AffectDef(List<BoardSlot> targetSlots, int value)
-        {
-            // 방어력 증가 애니메이션 로직을 여기에 추가
-
-            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
-
-            foreach (BoardSlot targetSlot in targetSlots)
-            {
-                if (targetSlot.Card == null)
-                {
-                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
-                    continue;
-                }
-
-                changes.Add((true, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.def, targetSlot.Card.def + value));
-                targetSlot.AddCardDef(value);
-            }
-
-            Debug.Log($"{Utils.StatChangesText("방어력", changes)} - BoardLogic.AffectHp");
-
-            yield return new WaitForSeconds(.5f);
-        }
-
-        /// <summary>
-        /// 충전 공격 효과
-        /// </summary>
-        private IEnumerator AffectChargeDamage(BoardSlot selfSlot)
-        {
-            // 충전 공격 애니메이션 로직을 여기에 추가
-
-            yield return new WaitForSeconds(.5f);
-
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 충전 공격 완료 - BoardLogic.AffectChargeDamage");
-        }
-
-        /// <summary>
-        /// 마나 추기 획득 효과
-        /// </summary>
-        private IEnumerator AffectAddMana(BoardSlot selfSlot, int value)
-        {
-            // 마나 획득 애니메이션 로직을 여기에 추가
-
-            int beforeMana = Master.Instance.Mana;
-
-            // 마나 추가 획득
-            Master.Instance.IncreaseMana(value);
-            Board.Instance.SetMasterMana(Master.Instance.Mana);
-
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 마나 {value} 추가 획득({beforeMana} => {Master.Instance.Mana}) - BoardLogic.AffectAddMana");
-
-            yield return new WaitForSeconds(.5f);
-        }
-
-        /// <summary>
-        /// 어빌리티 타입에 따른 원래 값 반환
-        /// </summary>
-        /// <param name="abilityType"></param>
-        /// <param name="boardSlot"></param>
-        /// <returns></returns>
-        private int GetOriginStatValue(AbilityType abilityType, BoardSlot boardSlot)
-        {
-            int originValue = 0;
-
-            switch (abilityType)
-            {
-                case AbilityType.AtkUp:
-                    originValue = boardSlot.Card.atk;
-                    break;
-                case AbilityType.DefUp:
-                case AbilityType.BrokenDef:
-                    originValue = boardSlot.Card.def;
-                    break;
-                case AbilityType.Heal:
-                    originValue = boardSlot.Card.hp;
-                    break;
-            }
-
-            return originValue;
         }
     }
 }

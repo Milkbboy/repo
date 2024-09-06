@@ -116,6 +116,9 @@ namespace ERang
             // draw staring card
             yield return StartCoroutine(DrawHandDeckCard(handCardCount));
 
+            // 핸드 카드 HandOn 어빌리티 액션
+            // HandOnCardAction(master.handCards);
+
             // 지속 시간 종료 어빌리티 실행
             DurationAbilityAction();
 
@@ -154,7 +157,49 @@ namespace ERang
             BuildingCardAction();
 
             // 턴 다시 시작
-            TurnStart();
+            StartCoroutine(TurnStart());
+        }
+
+        /// <summary>
+        /// 핸드에 카드 추가
+        /// </summary>
+        IEnumerator DrawHandDeckCard(int cardCount)
+        {
+            int spawnCount = cardCount - master.handCards.Count;
+
+            Debug.Log($"DrawHandDeckCard. masterHandCardCount: {master.handCards.Count}, spawnCount: {spawnCount}");
+
+            for (int i = 0; i < spawnCount; ++i)
+            {
+                if (master.deckCards.Count == 0)
+                {
+                    // 덱에 카드가 없으면 무덤에 있는 카드를 덱으로 옮김
+                    master.deckCards.AddRange(master.graveCards);
+                    master.graveCards.Clear();
+
+                    // 덱 카드 섞기
+                    ShuffleDeck(master.deckCards);
+                }
+
+                if (master.deckCards.Count > 0)
+                {
+                    Card card = master.deckCards[0];
+
+                    // 덱에서 카드를 뽑아 손에 추가
+                    master.deckCards.RemoveAt(0);
+                    master.handCards.Add(card);
+
+                    HandDeck.Instance.SpawnNewCard(card);
+                    HandDeck.Instance.DrawCards();
+                }
+
+                yield return new WaitForSeconds(.2f);
+            }
+
+            // 보드 설정 - 덱 카운트
+            Board.Instance.SetDeckCount(master.deckCards.Count);
+            // 보드 설정 - 덱 카운트
+            Board.Instance.SetGraveDeckCount(master.graveCards.Count);
         }
 
         /// <summary>
@@ -172,7 +217,7 @@ namespace ERang
                     // AiLogic.Instance.AbilityAction(card);
                     List<BoardSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(handOnCard.aiData, masterSlot);
 
-                    AbilityLogic.Instance.SetAbility(handOnCard.aiData, masterSlot, targetSlots);
+                    // AbilityLogic.Instance.SetAbility(handOnCard.aiData, masterSlot, targetSlots);
                 });
             }
         }
@@ -182,38 +227,13 @@ namespace ERang
         /// </summary>
         void DurationAbilityAction()
         {
-            // 내 카드 어빌리티
-            List<BoardSlot> creatureBoardSlot = Board.Instance.GetCreatureBoardSlots();
-            CardDurationAbilityAction(creatureBoardSlot);
+            List<AbilityLogic.Ability> abilities = AbilityLogic.Instance.GetDurationAbilities();
 
-            // 몬스터 카드 어빌리티
-            List<BoardSlot> monsterBoardSlots = Board.Instance.GetMonsterBoardSlots();
-            CardDurationAbilityAction(monsterBoardSlots);
-        }
-
-        /// <summary>
-        /// 카드 어빌리티 실행
-        /// </summary>
-        void CardDurationAbilityAction(List<BoardSlot> boardSlots)
-        {
-            foreach (BoardSlot boardSlot in boardSlots)
+            foreach (AbilityLogic.Ability ability in abilities)
             {
-                if (boardSlot.Card == null)
+                EnqueueAction($"어빌리티({ability.abilityId}) !! 지속시간 종료 확인 !!", () =>
                 {
-                    // Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} 장착된 카드가 없어 duration 어빌리티 액션 패스 - BattleLogic.TurnStartReaction");
-                    return;
-                }
-
-                if (boardSlot.Card.HasDurationAbility() == false)
-                {
-                    // Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} 유지 어빌리티 없어 패스 - BattleLogic.TurnStartReaction");
-                    return;
-                }
-
-                EnqueueAction($"{Utils.BoardSlotLog(boardSlot)} !! duration 어빌리티 액션 !!", () =>
-                {
-                    // 현재 카드 보드 슬롯 깜빡임 설정
-                    flashingCard(boardSlot.Card.uid);
+                    BoardSlot boardSlot = Board.Instance.GetBoardSlot(ability.targetBoardSlot);
 
                     AbilityLogic.Instance.DurationAbilityAction(boardSlot);
                 });
@@ -279,7 +299,7 @@ namespace ERang
                         // 타겟 슬롯 표시
                         foreach (int targetSlot in targetSlots)
                         {
-                            Debug.Log($"{targetSlot}번 타겟 슬롯 깜박임 시작 - BattleLogic.TurnStartReaction");
+                            // Debug.Log($"{targetSlot}번 타겟 슬롯 깜박임 시작 - BattleLogic.TurnStartReaction");
                             BoardSlot targetBoardSlot = Board.Instance.GetBoardSlot(targetSlot);
 
                             targetBoardSlot.StartFlashing(Color.red);
@@ -401,48 +421,6 @@ namespace ERang
                 cards[i] = cards[randomIdex];
                 cards[randomIdex] = temp;
             }
-        }
-
-        // 카드 그리기
-        IEnumerator DrawHandDeckCard(int cardCount)
-        {
-            int spawnCount = cardCount - master.handCards.Count;
-
-            // Debug.Log($"DrawHandDeckCard. masterHandCardCount: {master.handCards.Count}, spawnCount: {spawnCount}");
-
-            for (int i = 0; i < spawnCount; ++i)
-            {
-                if (master.deckCards.Count == 0)
-                {
-                    // 덱에 카드가 없으면 무덤에 있는 카드를 덱으로 옮김
-                    master.deckCards.AddRange(master.graveCards);
-                    master.graveCards.Clear();
-
-                    // 덱 카드 섞기
-                    ShuffleDeck(master.deckCards);
-                }
-
-                if (master.deckCards.Count > 0)
-                {
-                    Card card = master.deckCards[0];
-
-                    // 덱에서 카드를 뽑아 손에 추가
-                    master.deckCards.RemoveAt(0);
-                    master.handCards.Add(card);
-
-                    HandDeck.Instance.SpawnNewCard(card);
-                    HandDeck.Instance.DrawCards();
-                }
-
-                yield return new WaitForSeconds(.2f);
-            }
-
-            HandOnCardAction(master.handCards);
-
-            // 보드 설정 - 덱 카운트
-            Board.Instance.SetDeckCount(master.deckCards.Count);
-            // 보드 설정 - 덱 카운트
-            Board.Instance.SetGraveDeckCount(master.graveCards.Count);
         }
 
         /// <summary>
