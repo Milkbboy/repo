@@ -44,8 +44,7 @@ namespace ERang
             Board.Instance.CreateBoardSlots();
             Board.Instance.CreateMonsterCard();
 
-            // TurnStart();
-            TurnStart();
+            StartCoroutine(TurnStart());
         }
 
         // Update is called once per frame
@@ -106,16 +105,16 @@ namespace ERang
             return enemy;
         }
 
-        void TurnStart()
+        private IEnumerator TurnStart()
         {
+            // 보드 설정
+            Board.Instance.SetTurnCount(turn);
+
             // deck 카드 섞기
             ShuffleDeck(master.deckCards);
 
             // draw staring card
-            StartCoroutine(DrawHandDeckCard(handCardCount));
-
-            // 보드 설정
-            Board.Instance.SetTurnCount(turn);
+            yield return StartCoroutine(DrawHandDeckCard(handCardCount));
 
             // 지속 시간 종료 어빌리티 실행
             DurationAbilityAction();
@@ -201,7 +200,13 @@ namespace ERang
             {
                 if (boardSlot.Card == null)
                 {
-                    Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} 장착된 카드가 없어 duration 어빌리티 액션 패스 - BattleLogic.TurnStartReaction");
+                    // Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} 장착된 카드가 없어 duration 어빌리티 액션 패스 - BattleLogic.TurnStartReaction");
+                    return;
+                }
+
+                if (boardSlot.Card.HasDurationAbility() == false)
+                {
+                    // Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} 유지 어빌리티 없어 패스 - BattleLogic.TurnStartReaction");
                     return;
                 }
 
@@ -224,7 +229,7 @@ namespace ERang
             {
                 if (reactionSlot.Card == null)
                 {
-                    Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 장착된 카드가 없어 리액션 패스 - BattleLogic.TurnStartReaction");
+                    // Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 장착된 카드가 없어 리액션 패스 - BattleLogic.TurnStartReaction");
                     return;
                 }
 
@@ -311,7 +316,7 @@ namespace ERang
             {
                 if (actorSlot.Card == null)
                 {
-                    Debug.LogWarning($"{actorSlot.Slot}번 슬롯 장착된 카드가 없어 액션 패스 - BattleLogic.BoardCardAction");
+                    // Debug.LogWarning($"{actorSlot.Slot}번 슬롯 장착된 카드가 없어 액션 패스 - BattleLogic.BoardCardAction");
                     return;
                 }
 

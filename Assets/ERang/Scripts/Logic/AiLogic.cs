@@ -107,7 +107,7 @@ namespace ERang
                 handOnCards.Add((handCard, handCardAiData, abilities));
             }
 
-            Debug.Log($"HandOn 어빌리티를 가진 카드 {handOnCards.Count}장({string.Join(", ", handOnCards.Select(handOnCard => handOnCard.card.id))}) 얻기 - AiLogic.GetHandOnCards");
+            Debug.Log($"HandOn 어빌리티를 가진 카드 {handOnCards.Count}장({string.Join(", ", handOnCards.Select(handOnCard => handOnCard.card.id))}) 확인 - AiLogic.GetHandOnCards");
 
             return handOnCards;
         }

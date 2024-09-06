@@ -39,7 +39,7 @@ namespace ERang
             foreach (int abilityId in aiData.ability_Ids)
             {
                 // 이미 어빌리티가 적용 중이면 패스
-                Card.DurationAbility durationAbility = selfSlot.Card.HasAbilityDuration(abilityId);
+                Card.DurationAbility durationAbility = selfSlot.Card.FindDurationAbility(abilityId);
 
                 if (durationAbility != null)
                 {

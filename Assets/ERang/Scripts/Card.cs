@@ -107,14 +107,19 @@ namespace ERang
         /// <summary>
         /// 카드의 버프 또는 디버프 확인
         /// </summary>
-        public DurationAbility HasAbilityDuration(AiDataType aiType, int abilityId)
+        public DurationAbility FindDurationAbility(AiDataType aiType, int abilityId)
         {
             return abilities.Find(a => a.aiType == aiType && a.abilityId == abilityId);
         }
 
-        public DurationAbility HasAbilityDuration(int abilityId)
+        public DurationAbility FindDurationAbility(int abilityId)
         {
             return abilities.Find(a => a.abilityId == abilityId);
+        }
+
+        public bool HasDurationAbility()
+        {
+            return abilities.Count > 0;
         }
 
         public void SetHp(int hp)

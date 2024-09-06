@@ -108,7 +108,7 @@ namespace ERang
         {
             this.card = card;
 
-            Debug.Log($"Equipping card to slot {slot}, hp: {card.hp}, atk: {card.atk}, def: {card.def}, maxHp: {card.maxHp}");
+            Debug.Log($"{slot} 슬롯에 카드 장착 hp: {card.hp}, atk: {card.atk}, def: {card.def}, maxHp: {card.maxHp}");
 
             isOccupied = true;
             isOverlapCard = false;
