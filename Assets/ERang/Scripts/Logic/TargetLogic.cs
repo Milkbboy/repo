@@ -21,9 +21,6 @@ namespace ERang
         /// <summary>
         /// AiData 테이블의 대상 슬롯 얻기
         /// </summary>
-        /// <param name="aiData"></param>
-        /// <param name="selfSlot"></param>
-        /// <returns></returns>
         public List<BoardSlot> GetAiTargetSlots(AiData aiData, BoardSlot selfSlot)
         {
             List<BoardSlot> targetSlots = new List<BoardSlot>();
@@ -37,7 +34,11 @@ namespace ERang
                 case AiDataTarget.AllEnemyCreature: return TargetAllEnemy(selfSlot, true);
                 case AiDataTarget.RandomEnemy: return TargetRandomEnemy(selfSlot);
                 case AiDataTarget.RandomEnemyCreature: return TargetRandomEnemy(selfSlot, true);
+                case AiDataTarget.AllFriendly: return TargetAllFriendly(selfSlot, true);
+                case AiDataTarget.AllFriendlyCreature: return TargetAllFriendly(selfSlot);
             }
+
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData({aiData.ai_Id})에 설정된 타겟({aiData.target.ToString()})({string.Join(", ", targetSlots.Select(slot => slot.Card.id))}) 얻기 완료 - TargetLogic.GetAiTargetSlots");
 
             return targetSlots;
         }
@@ -93,8 +94,6 @@ namespace ERang
         /// <summary>
         /// 카드가 장착된 첫번째 카드를 타겟으로 설정
         /// </summary>
-        /// <param name="oppentSlots"></param>
-        /// <returns></returns>
         private List<BoardSlot> TargetNearEnemy(AiData aiData, BoardSlot selfSlot)
         {
             List<BoardSlot> targets = new List<BoardSlot>();
@@ -143,15 +142,24 @@ namespace ERang
             List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
 
             if (exceptMaster)
-            {
-                List<BoardSlot> targetSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
+                opponentSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
 
-                Debug.Log($"TargetAllEnemy - exceptMaster: {exceptMaster}, targetSlots: {string.Join(", ", targetSlots.Select(x => x.Slot))}");
-
-                return targetSlots;
-            }
+            Debug.Log($"TargetAllEnemy - exceptMaster: {exceptMaster}, targetSlots: {string.Join(", ", opponentSlots.Select(x => x.Slot))}");
 
             return opponentSlots;
+        }
+
+        private List<BoardSlot> TargetAllFriendly(BoardSlot selfSlot, bool exceptMaster = false)
+        {
+            // 아군 슬롯 리스트
+            List<BoardSlot> friendlySlots = Board.Instance.GetFriendlySlots(selfSlot);
+
+            if (exceptMaster)
+                friendlySlots = friendlySlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
+
+            // Debug.Log($"TargetAllFriendly - exceptMaster: {exceptMaster}, targetSlots: {string.Join(", ", friendlySlots.Select(x => x.Slot))}");
+
+            return friendlySlots;
         }
 
         private List<BoardSlot> TargetRandomEnemy(BoardSlot selfSlot, bool exceptMaster = false)

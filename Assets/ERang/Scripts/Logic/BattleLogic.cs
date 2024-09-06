@@ -1,9 +1,6 @@
-using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json;
 using ERang.Data;
 using UnityEngine.Events;
 
@@ -120,8 +117,8 @@ namespace ERang
             // 보드 설정
             Board.Instance.SetTurnCount(turn);
 
-            // 카드 어빌리티 실행
-            AbilityAction();
+            // 지속 시간 종료 어빌리티 실행
+            DurationAbilityAction();
 
             // 턴 시작시 실행되는 카드의 Reaction 을 확인
             TurnStartReaction();
@@ -162,33 +159,58 @@ namespace ERang
         }
 
         /// <summary>
-        /// 보드에 있는 카드들 어빌리티 실행
+        /// 핸드에 있을때 효과가 발동되는 카드 액션
         /// </summary>
-        void AbilityAction()
+        void HandOnCardAction(List<Card> handCards)
         {
-            // 내 카드 어빌리티
-            List<Card> creatureCards = Board.Instance.GetOccupiedCreatureCards();
-            CardAbilityAction(creatureCards);
+            BoardSlot masterSlot = Board.Instance.GetMasterSlot();
+            List<(Card card, AiData aiData, List<AbilityData> abilities)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
 
-            // 몬스터 카드 어빌리티
-            List<Card> monsterCards = Board.Instance.GetOccupiedMonsterCards();
-            CardAbilityAction(monsterCards);
+            foreach (var handOnCard in handOnCards)
+            {
+                EnqueueAction($"핸드에 있는 카드({handOnCard.card.id}) !! 핸드온 어빌리티 액션 !!", () =>
+                {
+                    // AiLogic.Instance.AbilityAction(card);
+                    List<BoardSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(handOnCard.aiData, masterSlot);
+
+                    AbilityLogic.Instance.SetAbility(handOnCard.aiData, masterSlot, targetSlots);
+                });
+            }
         }
 
         /// <summary>
-        /// // 카드 어빌리티 실행
+        /// 지속시간(duration) 이 0되는 카드 어빌리티 실행
         /// </summary>
-        /// <param name="cards"></param>
-        void CardAbilityAction(List<Card> cards)
+        void DurationAbilityAction()
         {
-            foreach (Card card in cards)
+            // 내 카드 어빌리티
+            List<BoardSlot> creatureBoardSlot = Board.Instance.GetCreatureBoardSlots();
+            CardDurationAbilityAction(creatureBoardSlot);
+
+            // 몬스터 카드 어빌리티
+            List<BoardSlot> monsterBoardSlots = Board.Instance.GetMonsterBoardSlots();
+            CardDurationAbilityAction(monsterBoardSlots);
+        }
+
+        /// <summary>
+        /// 카드 어빌리티 실행
+        /// </summary>
+        void CardDurationAbilityAction(List<BoardSlot> boardSlots)
+        {
+            foreach (BoardSlot boardSlot in boardSlots)
             {
-                EnqueueAction($"카드({card.id}) !! 어빌리티 액션 !!", () =>
+                if (boardSlot.Card == null)
+                {
+                    Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} 장착된 카드가 없어 duration 어빌리티 액션 패스 - BattleLogic.TurnStartReaction");
+                    return;
+                }
+
+                EnqueueAction($"{Utils.BoardSlotLog(boardSlot)} !! duration 어빌리티 액션 !!", () =>
                 {
                     // 현재 카드 보드 슬롯 깜빡임 설정
-                    flashingCard(card.uid);
+                    flashingCard(boardSlot.Card.uid);
 
-                    AiLogic.Instance.AbilityAction(card);
+                    AbilityLogic.Instance.DurationAbilityAction(boardSlot);
                 });
             }
         }
@@ -200,6 +222,12 @@ namespace ERang
 
             foreach (BoardSlot reactionSlot in reactionSlots)
             {
+                if (reactionSlot.Card == null)
+                {
+                    Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 장착된 카드가 없어 리액션 패스 - BattleLogic.TurnStartReaction");
+                    return;
+                }
+
                 EnqueueAction($"보드 {reactionSlot.Slot} 슬롯. -- 턴 시작 리액션 --", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
@@ -241,7 +269,7 @@ namespace ERang
                             continue;
                         }
 
-                        Debug.Log($"{aiGroupDataTableLog} 성공 - {Utils.BoardSlotLog(reactionSlot)}. 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - BattleLogic.TurnStartReaction");
+                        // Debug.Log($"{aiGroupDataTableLog} 성공 - {Utils.BoardSlotLog(reactionSlot)}. 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - BattleLogic.TurnStartReaction");
 
                         // 타겟 슬롯 표시
                         foreach (int targetSlot in targetSlots)
@@ -281,6 +309,12 @@ namespace ERang
         {
             foreach (BoardSlot actorSlot in actorSlots)
             {
+                if (actorSlot.Card == null)
+                {
+                    Debug.LogWarning($"{actorSlot.Slot}번 슬롯 장착된 카드가 없어 액션 패스 - BattleLogic.BoardCardAction");
+                    return;
+                }
+
                 EnqueueAction($"{actorSlot.Slot}번 슬롯 ** 턴 종료 액션 **", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
@@ -295,11 +329,11 @@ namespace ERang
                     }
 
                     // 카드의 행동 aiData 설정
-                    int aiDataId = card.GetCardAiDataId(actorSlot.Slot);
+                    int aiDataId = card.GetCardAiDataId();
 
                     if (aiDataId == 0)
                     {
-                        Debug.LogWarning($"{actorSlot.Slot}번 슬롯 카드({card.id}). AiGroupData({card.aiGroupId})에 해당하는 <color=red>액션 데이터 없음<color> - BattleLogic.BoardCardAction");
+                        Debug.LogWarning($"{actorSlot.Slot}번 슬롯 카드({card.id}). AiGroupData({card.aiGroupId})에 해당하는 <color=red>액션 데이터 없음</color> - BattleLogic.BoardCardAction");
                         return;
                     }
 
@@ -316,6 +350,12 @@ namespace ERang
             // Debug.Log($"BuildingCardAction: {Board.Instance.GetBuildingSlots().Count}");
             foreach (BoardSlot buildingSlot in Board.Instance.GetBuildingSlots())
             {
+                if (buildingSlot.Card == null)
+                {
+                    Debug.LogWarning($"건물 {buildingSlot.Slot}번 슬롯 장착된 카드가 없어 패스 - BattleLogic.BuildingCardAction");
+                    return;
+                }
+
                 EnqueueAction($"<color=#dd9933>건물</color> {buildingSlot.Slot}번 슬롯 ** 턴 종료 액션 **", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
@@ -330,7 +370,7 @@ namespace ERang
                     }
 
                     // 카드의 행동 aiData 설정
-                    int aiDataId = card.GetCardAiDataId(buildingSlot.Slot);
+                    int aiDataId = card.GetCardAiDataId();
 
                     if (aiDataId == 0)
                     {
@@ -391,6 +431,8 @@ namespace ERang
 
                 yield return new WaitForSeconds(.2f);
             }
+
+            HandOnCardAction(master.handCards);
 
             // 보드 설정 - 덱 카운트
             Board.Instance.SetDeckCount(master.deckCards.Count);

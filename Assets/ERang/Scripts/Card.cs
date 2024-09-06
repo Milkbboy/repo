@@ -3,7 +3,6 @@ using System.Linq;
 using ERang.Data;
 using UnityEngine;
 using Newtonsoft.Json;
-using UnityEngine.Analytics;
 
 namespace ERang
 {
@@ -62,25 +61,25 @@ namespace ERang
             aiGroupId = cardData.aiGroup_id;
         }
 
-        public Card(int hp, int maxHp, int mana, int maxMana, int atk, int def)
+        public Card(int masterId, CardType type, int hp, int maxHp, int atk, int def)
         {
+            uid = Utils.GenerateShortUniqueID();
+            id = masterId;
+            this.type = type;
+            costMana = 0;
+            costGold = 0;
             this.hp = hp;
             this.maxHp = maxHp;
             this.atk = atk;
             this.def = def;
+            isExtinction = false;
+            aiGroupId = 0;
         }
 
         /// <summary>
         /// 카드의 버프 또는 디버프를 추가한다.
         /// - 턴 종료때 리스트를 체크하고 duration을 감소 0이 되면 리스트에서 삭제
         /// </summary>
-        /// <param name="aiType"></param>
-        /// <param name="abilityType"></param>
-        /// <param name="abilityId"></param>
-        /// <param name="beforeValue"></param>
-        /// <param name="abilityValue"></param>
-        /// <param name="duration"></param>
-        /// <param name="targetCardUid"></param>
         public void AddAbilityDuration(AiDataType aiType, AbilityType abilityType, int abilityId, int beforeValue, int abilityValue, int duration, string targetCardUid, int targetSlot)
         {
             if (string.IsNullOrEmpty(targetCardUid))
@@ -108,9 +107,6 @@ namespace ERang
         /// <summary>
         /// 카드의 버프 또는 디버프 확인
         /// </summary>
-        /// <param name="aiType"></param>
-        /// <param name="abilityId"></param>
-        /// <returns></returns>
         public DurationAbility HasAbilityDuration(AiDataType aiType, int abilityId)
         {
             return abilities.Find(a => a.aiType == aiType && a.abilityId == abilityId);
@@ -175,9 +171,9 @@ namespace ERang
         /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
         /// </summary>
         /// <returns></returns>
-        public int GetCardAiDataId(int slot)
+        public int GetCardAiDataId()
         {
-            string aiGroupDataTableLog = $"{slot}번 슬롯 카드({id}). <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
+            string aiGroupDataTableLog = $"카드({id}). <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
 
             if (aiGroupData == null)
@@ -204,14 +200,14 @@ namespace ERang
                 aiDataIds = aiGroupData.ai_Groups[Random.Range(0, aiGroupData.ai_Groups.Count)];
             }
 
-            Debug.Log($"{aiGroupDataTableLog} 성공. aiGroupType {aiGroupData.aiGroupType.ToString()} 으로 aiDataIds [{string.Join(", ", aiDataIds)}] 중 하나 뽑기 - Card.GetCardAiDataId");
+            // Debug.Log($"{aiGroupDataTableLog} 성공. aiGroupType {aiGroupData.aiGroupType.ToString()} 으로 aiDataIds [{string.Join(", ", aiDataIds)}] 중 하나 뽑기 - Card.GetCardAiDataId");
 
             int selectedAiDataId = 0;
 
             if (aiDataIds.Count == 1)
             {
                 selectedAiDataId = aiDataIds[0];
-                Debug.Log($"{id} 카드. aiDataIds [{string.Join(", ", aiDataIds)}] 에서 {selectedAiDataId} 뽑힘 (하나만 설정되어 있음)");
+                // Debug.Log($"{id} 카드. aiDataIds [{string.Join(", ", aiDataIds)}] 에서 {selectedAiDataId} 뽑힘 (하나만 설정되어 있음)");
             }
             else
             {
@@ -230,7 +226,7 @@ namespace ERang
                         continue;
                     }
 
-                    Debug.Log($"{aiDataTableLog} 성공. 가중치{(aiDataId, aiData.value)} 추가 - Card.GetCardAiDataId");
+                    // Debug.Log($"{aiDataTableLog} 성공. 가중치{(aiDataId, aiData.value)} 추가 - Card.GetCardAiDataId");
                     totalValue += aiData.value;
 
                     aiDataList.Add((aiDataId, aiData.value));
@@ -249,86 +245,13 @@ namespace ERang
                     if (randomValue < cumulativeValue)
                     {
                         selectedAiDataId = aiData.aiDataId;
-                        Debug.Log($"{aiDataListLog} - 총 가중치 {totalValue}, randomValue({randomValue}) < cumulativeValue({cumulativeValue}) 로 {selectedAiDataId} 선택({string.Join(", ", aiDataList.Select(x => x.value))})");
+                        // Debug.Log($"{aiDataListLog} - 총 가중치 {totalValue}, randomValue({randomValue}) < cumulativeValue({cumulativeValue}) 로 {selectedAiDataId} 선택({string.Join(", ", aiDataList.Select(x => x.value))})");
                         break;
                     }
                 }
             }
 
             return selectedAiDataId;
-        }
-
-        /// <summary>
-        /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
-        /// </summary>
-        /// <returns></returns>
-        public AiData GetCardAiData()
-        {
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
-
-            string aiGroupDataTableLog = $"{id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
-
-            if (aiGroupData == null)
-            {
-                Debug.LogError($"{aiGroupDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetCardAiData");
-                return null;
-            }
-
-            List<int> aiDataIds = new List<int>();
-
-            // 순차적으로 AI 그룹을 호출하고, 마지막 그룹에 도달 시 최초 그룹으로 순환한다.
-            if (aiGroupData.aiGroupType == AiGroupType.Repeat)
-            {
-                // aiGroupIndex에 해당하는 AI 그룹의 AiData id 리스트를 가져온다.
-                aiDataIds = aiGroupData.ai_Groups[aiGroupIndex];
-                aiGroupIndex = (aiGroupIndex >= aiGroupData.ai_Groups.Count) ? 0 : aiGroupIndex + 1;
-            }
-            else if (aiGroupData.aiGroupType == AiGroupType.Random)
-            {
-                // 나열된 AI 그룹 중 하나를 임의로 선택한다. (선택 확율은 별도 지정 없이 동일한다. n/1)
-                aiDataIds = aiGroupData.ai_Groups[Random.Range(0, aiGroupData.ai_Groups.Count)];
-            }
-
-            Debug.Log($"{aiGroupDataTableLog} 성공. {aiGroupData.aiGroupType.ToString()} aiDataIds({string.Join(", ", aiDataIds)}) 얻기 - Card.GetTurnStartReaction");
-
-            string aiDataIdLog = $"{id} 카드. {string.Join(", ", aiDataIds)} 중 하나의 AiData 선택";
-
-            AiData slectedAiData = null;
-
-            if (aiDataIds.Count == 1)
-            {
-                slectedAiData = AiData.GetAiData(aiDataIds[0]);
-                Debug.Log($"{aiDataIdLog} - AiData 하나만 존재");
-            }
-            else
-            {
-                int totalValue = 0;
-                List<AiData> aiDataList = new List<AiData>();
-
-                // Calculate total value and populate aiDataList
-                foreach (int id in aiDataIds)
-                {
-                    AiData aiData = AiData.GetAiData(id);
-                    aiDataList.Add(aiData);
-                    totalValue += aiData.value;
-                }
-
-                // Generate a random value
-                int randomValue = Random.Range(0, totalValue);
-                int cumulativeValue = 0;
-
-                // Select AiData based on random value
-                foreach (var aiData in aiDataList)
-                {
-                    cumulativeValue += aiData.value;
-                    if (randomValue < cumulativeValue)
-                    {
-                        return aiData;
-                    }
-                }
-            }
-
-            return slectedAiData;
         }
 
         /// <summary>
@@ -350,7 +273,7 @@ namespace ERang
                 return reactionConditionPairs;
             }
 
-            Debug.Log($"{aiGroupDataTableLog} 성공 - Card.GetTurnStartReaction");
+            // Debug.Log($"{aiGroupDataTableLog} 성공 - Card.GetTurnStartReaction");
 
             if (aiGroupData.reactions.Count == 0)
             {
@@ -370,7 +293,7 @@ namespace ERang
                     continue;
                 }
 
-                Debug.Log($"{conditionDataTableLog} 성공 - Card.GetTurnStartReaction");
+                // Debug.Log($"{conditionDataTableLog} 성공 - Card.GetTurnStartReaction");
 
                 // 리액션 조건이 아니면 패스
                 if (conditionData.checkPoint != checkPoint)

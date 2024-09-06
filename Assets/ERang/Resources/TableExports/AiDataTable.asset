@@ -302,7 +302,7 @@ MonoBehaviour:
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 
+    Ability_id: 90004
   - Ai_Id: 90005
     Type: DeBuff
     Target: All Friendly Creature
@@ -312,7 +312,7 @@ MonoBehaviour:
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 
+    Ability_id: 90005
   - Ai_Id: 90006
     Type: Buff
     Target: Self

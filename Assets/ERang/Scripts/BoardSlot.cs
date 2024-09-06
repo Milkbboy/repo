@@ -77,12 +77,13 @@ namespace ERang
         public void CreateMasterSlot(int slot, Master master)
         {
             this.slot = slot;
-            this.cardType = CardType.Master;
+            isOccupied = true;
+            cardType = CardType.Master;
 
             cardUI.cardObject.SetActive(true);
             cardUI.SetMasterCard(master);
 
-            this.card = new Card(master.Hp, master.MaxHp, master.Mana, master.MaxMana, master.Atk, master.Def);
+            card = new Card(master.masterId, CardType.Master, master.Hp, master.MaxHp, master.Atk, master.Def);
         }
 
         public void CreateEnemyMasterSlot(int slot, Enemy enemy)
@@ -221,6 +222,12 @@ namespace ERang
 
         public void RemoveCard()
         {
+            if (card == null)
+            {
+                Debug.LogWarning($"{slot}번 슬롯 카드 없음");
+                return;
+            }
+
             Debug.Log($"Removing card from slot {slot}");
 
             isOccupied = false;

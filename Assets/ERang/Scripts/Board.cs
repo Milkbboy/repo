@@ -202,6 +202,11 @@ namespace ERang
             masterSlot.SetMasterMana(mana);
         }
 
+        public BoardSlot GetMasterSlot()
+        {
+            return masterSlot;
+        }
+
         public List<BoardSlot> GetCreatureSlots()
         {
             return leftSlots;
@@ -279,7 +284,7 @@ namespace ERang
 
         /// <summary>
         /// 크리쳐 보드 슬롯 인덱스로 정렬
-        /// - 인덱스 3, 2, 1
+        /// - 슬롯 3, 2, 1, 0 순서
         /// </summary>
         /// <returns></returns>
         public List<BoardSlot> GetCreatureBoardSlots()
@@ -288,7 +293,7 @@ namespace ERang
         }
 
         /// <summary>
-        /// 
+        /// - 슬롯 6, 7, 8, 9 순서
         /// </summary>
         /// <returns></returns>
         public List<BoardSlot> GetMonsterBoardSlots()
@@ -341,8 +346,6 @@ namespace ERang
         /// <summary>
         /// 슬롯으로 상대 슬롯 리스트 얻기
         /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
         public List<BoardSlot> GetOpponentSlots(BoardSlot self)
         {
             if (self.CardType == CardType.Creature || self.CardType == CardType.Master)
@@ -351,7 +354,21 @@ namespace ERang
             if (self.CardType == CardType.Monster || self.CardType == CardType.EnemyMaster)
                 return GetCreatureBoardSlots();
 
-            return null;
+            return new List<BoardSlot>();
+        }
+
+        /// <summary>
+        /// 슬롯으로 친구 슬롯 리스트 얻기
+        /// </summary>
+        public List<BoardSlot> GetFriendlySlots(BoardSlot self)
+        {
+            if (self.CardType == CardType.Creature || self.CardType == CardType.Master)
+                return GetCreatureBoardSlots();
+
+            if (self.CardType == CardType.Monster || self.CardType == CardType.EnemyMaster)
+                return GetMonsterBoardSlots();
+
+            return new List<BoardSlot>();
         }
     }
 }

@@ -96,6 +96,11 @@ namespace ERang
                 mana = MaxMana;
         }
 
+        public void IncreaseMana(int value)
+        {
+            mana += value;
+        }
+
         public void DecreaseMana(int value)
         {
             mana -= value;

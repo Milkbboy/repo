@@ -159,6 +159,7 @@ namespace ERang
 
         public void SetMasterMana(int mana)
         {
+            ShowFloatingText("mana", manaText.text, mana.ToString());
             manaText.text = mana.ToString();
         }
 

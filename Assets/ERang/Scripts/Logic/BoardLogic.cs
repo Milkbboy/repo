@@ -14,6 +14,18 @@ namespace ERang
             Instance = this;
         }
 
+        // Start is called before the first frame update
+        void Start()
+        {
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
         public void AbilityDamage(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
         {
             switch (aiData.type)
@@ -31,6 +43,12 @@ namespace ERang
             {
                 foreach (BoardSlot targetSlot in targetSlots)
                 {
+                    if (targetSlot.Card == null)
+                    {
+                        Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 타겟 슬롯 {Utils.BoardSlotLog(targetSlot)}가 없어 어빌리티 적용 패스 - BoardLogic.AbilityAffect");
+                        continue;
+                    }
+
                     int originValue = GetOriginStatValue(abilityData.abilityType, targetSlot);
                     targetSlot.Card.AddAbilityDuration(aiData.type, abilityData.abilityType, abilityData.abilityData_Id, originValue, abilityData.value, abilityData.duration, targetSlot.Card.uid, targetSlot.Slot);
                 }
@@ -44,6 +62,7 @@ namespace ERang
                 case AbilityType.DefUp: StartCoroutine(AffectDef(targetSlots, abilityData.value)); break;
                 case AbilityType.BrokenDef: StartCoroutine(AffectDef(targetSlots, -abilityData.value)); break;
                 case AbilityType.ChargeDamage: StartCoroutine(AffectChargeDamage(selfSlot)); break;
+                case AbilityType.AddMana: StartCoroutine(AffectAddMana(selfSlot, abilityData.value)); break;
             }
         }
 
@@ -178,15 +197,21 @@ namespace ERang
         {
             // 카드 회복 애니메이션 로직을 여기에 추가
 
-            var changes = new List<(int slot, int before, int after)>();
+            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
 
             foreach (BoardSlot targetSlot in targetSlots)
             {
-                changes.Add((targetSlot.Slot, targetSlot.Card.hp, targetSlot.Card.hp + value));
+                if (targetSlot.Card == null)
+                {
+                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                    continue;
+                }
+
+                changes.Add((true, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.hp, targetSlot.Card.hp + value));
                 targetSlot.AddCardHp(value);
             }
 
-            Debug.Log($"{Utils.BoardSlotNumersText(targetSlots)} 체력 {Utils.StatChangesText(changes)} 효과 - BoardLogic.AffectHp");
+            Debug.Log($"{Utils.StatChangesText("체력", changes)} - BoardLogic.AffectHp");
 
             yield return new WaitForSeconds(.5f);
         }
@@ -198,15 +223,21 @@ namespace ERang
         {
             // 공격력 증가 애니메이션 로직을 여기에 추가
 
-            var changes = new List<(int slot, int before, int after)>();
+            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
 
             foreach (BoardSlot targetSlot in targetSlots)
             {
-                changes.Add((targetSlot.Slot, targetSlot.Card.atk, targetSlot.Card.atk + value));
+                if (targetSlot.Card == null)
+                {
+                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                    continue;
+                }
+
+                changes.Add((targetSlot.Card != null, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.atk, targetSlot.Card.atk + value));
                 targetSlot.AddCardAtk(value);
             }
 
-            Debug.Log($"{Utils.BoardSlotNumersText(targetSlots)} 공격력 {Utils.StatChangesText(changes)} 효과 - BoardLogic.AffectAtk");
+            Debug.Log($"{Utils.StatChangesText("공격력", changes)} - BoardLogic.AffectHp");
 
             yield return new WaitForSeconds(.5f);
         }
@@ -218,15 +249,21 @@ namespace ERang
         {
             // 방어력 증가 애니메이션 로직을 여기에 추가
 
-            var changes = new List<(int slot, int before, int after)>();
+            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
 
             foreach (BoardSlot targetSlot in targetSlots)
             {
-                changes.Add((targetSlot.Slot, targetSlot.Card.def, targetSlot.Card.def + value));
+                if (targetSlot.Card == null)
+                {
+                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                    continue;
+                }
+
+                changes.Add((true, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.def, targetSlot.Card.def + value));
                 targetSlot.AddCardDef(value);
             }
 
-            Debug.Log($"{Utils.BoardSlotNumersText(targetSlots)} 방어력 {Utils.StatChangesText(changes)} 효과 - BoardLogic.AffectDef");
+            Debug.Log($"{Utils.StatChangesText("방어력", changes)} - BoardLogic.AffectHp");
 
             yield return new WaitForSeconds(.5f);
         }
@@ -234,8 +271,6 @@ namespace ERang
         /// <summary>
         /// 충전 공격 효과
         /// </summary>
-        /// <param name="selfSlot"></param>
-        /// <returns></returns>
         private IEnumerator AffectChargeDamage(BoardSlot selfSlot)
         {
             // 충전 공격 애니메이션 로직을 여기에 추가
@@ -243,6 +278,24 @@ namespace ERang
             yield return new WaitForSeconds(.5f);
 
             Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 충전 공격 완료 - BoardLogic.AffectChargeDamage");
+        }
+
+        /// <summary>
+        /// 마나 추기 획득 효과
+        /// </summary>
+        private IEnumerator AffectAddMana(BoardSlot selfSlot, int value)
+        {
+            // 마나 획득 애니메이션 로직을 여기에 추가
+
+            int beforeMana = Master.Instance.Mana;
+
+            // 마나 추가 획득
+            Master.Instance.IncreaseMana(value);
+            Board.Instance.SetMasterMana(Master.Instance.Mana);
+
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 마나 {value} 추가 획득({beforeMana} => {Master.Instance.Mana}) - BoardLogic.AffectAddMana");
+
+            yield return new WaitForSeconds(.5f);
         }
 
         /// <summary>

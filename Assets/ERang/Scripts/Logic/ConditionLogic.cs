@@ -77,11 +77,11 @@ namespace ERang
                     if (ConditionRatio(condition.id, reaction.ratio))
                     {
                         result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
-                        Debug.Log($"{targetConditionLog} - 성공 (발생 확률만 비교) 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
+                        // Debug.Log($"{targetConditionLog} - 성공 (발생 확률만 비교) 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                     else
                     {
-                        Debug.LogWarning($"{targetConditionLog} - 실패 (발생 확률만 비교) - ConditionLogic.GetReactionConditionAiDataId");
+                        // Debug.LogWarning($"{targetConditionLog} - 실패 (발생 확률만 비교) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                 }
                 else
@@ -112,11 +112,11 @@ namespace ERang
                     if (ConditionCompare(condition, compareValue) && ConditionRatio(condition.id, reaction.ratio))
                     {
                         result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
-                        Debug.Log($"{targetConditionLog} - 성공 (조건 비교와 발생 확률 모두 통과). 리액션에 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
+                        // Debug.Log($"{targetConditionLog} - 성공 (조건 비교와 발생 확률 모두 통과). 리액션에 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                     else
                     {
-                        Debug.LogWarning($"{targetConditionLog} - 실패 (조건 비교 또는 발생 확률 실패) - ConditionLogic.GetReactionConditionAiDataId");
+                        // Debug.LogWarning($"{targetConditionLog} - 실패 (조건 비교 또는 발생 확률 실패) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                 }
 
@@ -208,7 +208,7 @@ namespace ERang
                 _ => false,
             };
 
-            Debug.Log($"컨디션({condition.id}) 조건 비교 결과 {result}. target Value({value}) {condition.compare} condition.value({condition.value}) - ConditionLogic:ConditionCompare");
+            // Debug.Log($"컨디션({condition.id}) 조건 비교 결과 {result}. target Value({value}) {condition.compare} condition.value({condition.value}) - ConditionLogic:ConditionCompare");
 
             return result;
         }
@@ -224,7 +224,7 @@ namespace ERang
             double randomValue = random.NextDouble();
             bool result = ratio == 1f || randomValue <= ratio;
 
-            Debug.Log($"컨디션({conditionId}) 발생 확률 결과 {result} - randomValue({randomValue:F1}) <= ratio({ratio}) - ConditionLogic:ConditionRatio");
+            // Debug.Log($"컨디션({conditionId}) 발생 확률 결과 {result} - randomValue({randomValue:F1}) <= ratio({ratio}) - ConditionLogic:ConditionRatio");
 
             return result;
         }

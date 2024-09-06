@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 
 namespace ERang
 {
@@ -24,7 +25,12 @@ namespace ERang
 
         public static string BoardSlotLog(BoardSlot boardSlot)
         {
-            return $"{boardSlot.Slot}번 슬롯 {GetCardType(boardSlot.CardType)} 카드({boardSlot?.Card.id ?? 0})";
+            return $"{boardSlot.Slot}번 슬롯 {GetCardType(boardSlot.CardType)} 카드({boardSlot?.Card?.id ?? 0})";
+        }
+
+        public static string CardLog(Card card)
+        {
+            return $"{GetCardType(card.type)} 카드({card.id})";
         }
 
         public static string BoardSlotNumersText(List<BoardSlot> boardSlots)
@@ -37,9 +43,9 @@ namespace ERang
             return $"<color=#ea4123>{string.Join(", ", numbers)}</color>";
         }
 
-        public static string StatChangesText(List<(int slot, int before, int after)> changes)
+        public static string StatChangesText(string statText, List<(bool isAffect, int slot, int cardId, int before, int after)> changes)
         {
-            return $"{string.Join(", ", changes.Select(change => $"{change.slot}번 슬롯 <color=#ea4123>{change.before} => {change.after}</color>"))}";
+            return $"{string.Join(", ", changes.Select(change => $"{change.slot}번 슬롯 {statText} {(change.isAffect ? $"<color=#00ff00>{change.before} => {change.after}</color>" : "")} 효과 {(change.isAffect ? "적용" : "미적용")}"))}";
         }
 
         private static string GetCardType(CardType cardType)
