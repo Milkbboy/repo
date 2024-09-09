@@ -94,7 +94,7 @@ namespace ERang.Data
                 case "Ranged": return AiDataType.Ranged;
                 case "Explosion": return AiDataType.Explosion;
                 case "Buff": return AiDataType.Buff;
-                case "DeBuff": return AiDataType.DeBuff;
+                case "DeBuff": return AiDataType.Debuff;
                 default: return AiDataType.None;
             }
         }

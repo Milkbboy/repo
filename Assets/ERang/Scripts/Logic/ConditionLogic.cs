@@ -92,11 +92,11 @@ namespace ERang
                     {
                         // 대상의 버프 상태 확인
                         case ConditionType.Buff:
-                            compareValue = targetCard.BuffCount;
+                            compareValue = AbilityLogic.Instance.GetBuffCount(targetCard.uid);
                             break;
                         // 대상의 디버프 상태 확인
                         case ConditionType.Debuff:
-                            compareValue = targetCard.DeBuffCount;
+                            compareValue = AbilityLogic.Instance.GetDebuffCount(targetCard.uid);
                             break;
                         // 대상의 체력 상태 확인
                         case ConditionType.Hp:

@@ -100,6 +100,22 @@ namespace ERang
         }
 
         /// <summary>
+        /// 카드 버프 개수 얻기
+        /// </summary>
+        public int GetBuffCount(string cardUid)
+        {
+            return abilities.Count(ability => ability.ownerCardUid == cardUid && ability.aiType == AiDataType.Buff);
+        }
+
+        /// <summary>
+        /// 카드 디버프 개수 얻기
+        /// </summary>
+        public int GetDebuffCount(string cardUid)
+        {
+            return abilities.Count(ability => ability.ownerCardUid == cardUid && ability.aiType == AiDataType.Debuff);
+        }
+
+        /// <summary>
         /// aiData 에 설정된 어빌리티들 적용
         /// </summary>
         public void SetBoardSlotAbility(AbilityWhereFrom whereFrom, AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots)

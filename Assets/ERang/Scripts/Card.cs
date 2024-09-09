@@ -32,19 +32,11 @@ namespace ERang
         public int maxHp; // 최대 체력 값
         public int atk; // 공격력 값 (공격력 값이 0인 캐릭터는 공격을 시도하지 않는다)
         public int def; // 초기 방어력 값
+        public bool inUse; // 카드 사용 가능 여부
         public bool isExtinction; // Bool 값으로 True 시 해당 카드는 사용 시 해당 전투에서 카드 덱에서 삭제된다.
         public int aiGroupId; // 해당 카드가 가지고 있는 Ai 그룹의 Id 값
         // 현재 설정된 Ai 그룹의 인덱스 값
         private int aiGroupIndex = 0;
-
-        private List<DurationAbility> abilities = new List<DurationAbility>();
-
-        public int BuffCount { get { return abilities.Count(a => a.aiType == AiDataType.Buff); } }
-        public int DeBuffCount { get { return abilities.Count(a => a.aiType == AiDataType.DeBuff); } }
-        public List<DurationAbility> Abilities { get { return abilities; } }
-
-        public bool HasBuff { get { return BuffCount > 0; } }
-        public bool HasDeBuff { get { return DeBuffCount > 0; } }
 
         public Card(CardData cardData)
         {
@@ -57,6 +49,7 @@ namespace ERang
             maxHp = hp;
             atk = cardData.atk;
             def = cardData.def;
+            inUse = cardData.inUse;
             isExtinction = cardData.extinction;
             aiGroupId = cardData.aiGroup_id;
         }
@@ -74,52 +67,6 @@ namespace ERang
             this.def = def;
             isExtinction = false;
             aiGroupId = 0;
-        }
-
-        /// <summary>
-        /// 카드의 버프 또는 디버프를 추가한다.
-        /// - 턴 종료때 리스트를 체크하고 duration을 감소 0이 되면 리스트에서 삭제
-        /// </summary>
-        public void AddAbilityDuration(AiDataType aiType, AbilityType abilityType, int abilityId, int beforeValue, int abilityValue, int duration, string targetCardUid, int targetSlot)
-        {
-            if (string.IsNullOrEmpty(targetCardUid))
-            {
-                Debug.LogError($"AddAbilityDuration - targetCardUid is null or empty");
-                return;
-            }
-
-            DurationAbility durationAbility = new DurationAbility
-            {
-                abilityId = abilityId,
-                aiType = aiType,
-                abilityType = abilityType,
-                beforeValue = beforeValue,
-                abilityValue = abilityValue,
-                duration = duration,
-                targetCardUid = targetCardUid,
-                targetBoardSlot = targetSlot,
-            };
-
-            abilities.Add(durationAbility);
-            Debug.Log($"유지 시간 어빌리티 추가 - abilityType: {abilityType.ToString()}, abilityId: {abilityId}, beforeValue:{beforeValue}, abilityValue: {abilityValue}, duration: {duration}");
-        }
-
-        /// <summary>
-        /// 카드의 버프 또는 디버프 확인
-        /// </summary>
-        public DurationAbility FindDurationAbility(AiDataType aiType, int abilityId)
-        {
-            return abilities.Find(a => a.aiType == aiType && a.abilityId == abilityId);
-        }
-
-        public DurationAbility FindDurationAbility(int abilityId)
-        {
-            return abilities.Find(a => a.abilityId == abilityId);
-        }
-
-        public bool HasDurationAbility()
-        {
-            return abilities.Count > 0;
         }
 
         public void SetHp(int hp)

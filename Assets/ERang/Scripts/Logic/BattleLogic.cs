@@ -371,17 +371,17 @@ namespace ERang
             BoardCardAction(monsterSlots, creatureSlots);
         }
 
+        /// <summary>
+        /// 보드 슬롯 카드 액션
+        /// </summary>
         void BoardCardAction(List<BoardSlot> actorSlots, List<BoardSlot> opponentSlots)
         {
             foreach (BoardSlot actorSlot in actorSlots)
             {
                 if (actorSlot.Card == null)
-                {
-                    // Debug.LogWarning($"{actorSlot.Slot}번 슬롯 장착된 카드가 없어 액션 패스 - BattleLogic.BoardCardAction");
-                    return;
-                }
+                    continue;
 
-                EnqueueAction($"{actorSlot.Slot}번 슬롯 ** 턴 종료 액션 **", () =>
+                EnqueueAction($"** {actorSlot.Slot}번 슬롯 카드 액션 **", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
                     flashingCard(actorSlot);
@@ -423,16 +423,15 @@ namespace ERang
             }
         }
 
+        /// <summary>
+        /// 건물 카드 액션
+        /// </summary>
         void BuildingCardAction()
         {
-            // Debug.Log($"BuildingCardAction: {Board.Instance.GetBuildingSlots().Count}");
             foreach (BoardSlot buildingSlot in Board.Instance.GetBuildingSlots())
             {
                 if (buildingSlot.Card == null)
-                {
-                    Debug.LogWarning($"건물 {buildingSlot.Slot}번 슬롯 장착된 카드가 없어 패스 - BattleLogic.BuildingCardAction");
-                    return;
-                }
+                    continue; ;
 
                 EnqueueAction($"<color=#dd9933>건물</color> {buildingSlot.Slot}번 슬롯 ** 턴 종료 액션 **", () =>
                 {
@@ -497,23 +496,30 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"CanUseCard: card is null({card.id})");
+                Debug.LogError($"핸드 카드({card.id}) 마스터한테 없음 - BattleLogic.CanHandCardUse");
+                return false;
+            }
+
+            if (card.inUse == false)
+            {
+                ToastNotification.Show($"card({card.id}) is not in use");
+                Debug.LogWarning($"핸드 카드({card.id}) 사용 불가능 - BattleLogic.CanHandCardUse");
                 return false;
             }
 
             // 필요 마나 확인
             if (card.costMana != 0 && master.Mana < card.costMana)
             {
-                ToastNotification.Show($"mana is not enough({master.Mana})");
-                Debug.LogError($"CanUseCard: mana is not enough({card.id}, {master.Mana} < {card.costMana})");
+                ToastNotification.Show($"mana({master.Mana}) is not enough");
+                Debug.LogWarning($"핸드 카드({card.id}) 마나 부족으로 사용 불가능({master.Mana} < {card.costMana}) - BattleLogic.CanHandCardUse");
                 return false;
             }
 
             // 필요 골드 확인
             if (card.costGold != 0 && master.Gold < card.costGold)
             {
-                ToastNotification.Show($"gold is not enough({master.Gold})");
-                Debug.LogError($"CanUseCard: gold is not enough({card.id}, {master.Gold} < {card.costGold})");
+                ToastNotification.Show($"gold({master.Gold}) is not enough");
+                Debug.LogWarning($"핸드 카드({card.id}) 골드 부족으로 사용 불가능({master.Gold} < {card.costGold}) - BattleLogic.CanHandCardUse");
                 return false;
             }
 
