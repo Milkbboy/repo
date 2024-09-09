@@ -83,7 +83,7 @@ namespace ERang
             cardUI.cardObject.SetActive(true);
             cardUI.SetMasterCard(master);
 
-            card = new Card(master.masterId, CardType.Master, master.Hp, master.MaxHp, master.Atk, master.Def);
+            card = new Card(master.MasterId, CardType.Master, master.Hp, master.MaxHp, master.Atk, master.Def);
         }
 
         public void CreateEnemyMasterSlot(int slot, Enemy enemy)

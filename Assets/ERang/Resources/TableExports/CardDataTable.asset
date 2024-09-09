@@ -23,6 +23,7 @@ MonoBehaviour:
     Hp: 5
     Atk: 3
     Def: 0
+    InUse: 1
     Extinction: 1
     CompleteExtinction: 0
     Level: 1
@@ -42,6 +43,7 @@ MonoBehaviour:
     Hp: 0
     Atk: 0
     Def: 0
+    InUse: 1
     Extinction: 0
     CompleteExtinction: 0
     Level: 0
@@ -61,6 +63,7 @@ MonoBehaviour:
     Hp: 0
     Atk: 0
     Def: 0
+    InUse: 1
     Extinction: 1
     CompleteExtinction: 1
     Level: 0
@@ -80,6 +83,7 @@ MonoBehaviour:
     Hp: 0
     Atk: 0
     Def: 0
+    InUse: 0
     Extinction: 0
     CompleteExtinction: 0
     Level: 0
@@ -99,6 +103,7 @@ MonoBehaviour:
     Hp: 0
     Atk: 0
     Def: 0
+    InUse: 0
     Extinction: 0
     CompleteExtinction: 0
     Level: 0
@@ -118,6 +123,7 @@ MonoBehaviour:
     Hp: 0
     Atk: 0
     Def: 0
+    InUse: 1
     Extinction: 1
     CompleteExtinction: 1
     Level: 0

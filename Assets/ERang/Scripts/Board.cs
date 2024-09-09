@@ -49,6 +49,30 @@ namespace ERang
         {
         }
 
+        public void ManaCharge()
+        {
+            Master master = BattleLogic.Instance.GetMaster();
+
+            int beforeMana = master.Mana;
+            master.chargeMana();
+
+            SetMasterMana(master.Mana);
+
+            Debug.Log($"<color=#257dca>ManaCharge: {beforeMana} -> {master.Mana}</color>");
+        }
+
+        public void ManaReset()
+        {
+            Master master = BattleLogic.Instance.GetMaster();
+
+            int beforeMana = master.Mana;
+            master.resetMana();
+
+            SetMasterMana(master.Mana);
+
+            Debug.Log($"<color=#257dca>ManaReset: {beforeMana} -> {master.Mana}</color>");
+        }
+
         /// <summary>
         /// Todo: 스테이지 구성 되면 수정되야 할 부분
         /// </summary>

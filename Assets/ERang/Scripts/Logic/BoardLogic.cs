@@ -139,7 +139,7 @@ namespace ERang
             Master.Instance.IncreaseMana(value);
             Board.Instance.SetMasterMana(Master.Instance.Mana);
 
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 마나 {value} 추가 획득({beforeMana} => {Master.Instance.Mana}) - BoardLogic.AffectAddMana");
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} <color=#257dca>마나 {value} 추가 획득</color>({beforeMana} => {Master.Instance.Mana}) - BoardLogic.AffectAddMana");
 
             yield return new WaitForSeconds(.5f);
         }

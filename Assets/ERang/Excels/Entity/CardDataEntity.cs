@@ -13,6 +13,7 @@ namespace ERang
         public int Hp; // 체력 값
         public int Atk; // 공격력 값 (공격력 값이 0인 캐릭터는 공격을 시도하지 않는다)
         public int Def; // 초기 방어력 값
+        public bool InUse; // 해당 카드 사용 여부
         public bool Extinction; // Bool 값으로 True 시 해당 카드는 사용 시 해당 전투에서 카드 덱에서 삭제된다.
         public bool CompleteExtinction; // Extinction 값이 TRUE일 경우에만 동작한다. 해당 값이 TRUE일 경우 해당 카드는 사용 시 다음 전투에서도 삭제된다. (1회성 카드)
         public int Level; // 기본 레벨 값

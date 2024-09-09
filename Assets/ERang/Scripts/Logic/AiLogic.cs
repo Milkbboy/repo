@@ -34,39 +34,6 @@ namespace ERang
         }
 
         /// <summary>
-        /// AiData 에 설정된 어빌리티 적용
-        /// </summary>
-        public void AiDataAction(AiData aiData, BoardSlot selfSlot)
-        {
-            Card selfCard = selfSlot.Card;
-
-            if (selfCard == null)
-            {
-                Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} 장착된 카드 없음 - AiLogic.AiDataAction");
-                return;
-            }
-
-            // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
-
-            // Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData({aiData.ai_Id})에 설정된 타겟({aiData.target}) 얻기 시작 - AiLogic.AiDataAction");
-
-            // AiData 에 설정된 타겟 얻기
-            List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot);
-
-            if (aiTargetSlots.Count == 0)
-            {
-                Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 설정 타겟({aiData.target}) 없음 - AiLogic.AiDataAction");
-                return;
-            }
-
-            // Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData 에 설정된 어빌리티({string.Join(", ", aiData.ability_Ids)}) 타겟({aiData.target}) Slots: <color=yellow>{string.Join(", ", aiTargetSlots.Select(slot => slot.Slot))}</color>번에 적용 - AiLogic.AiDataAction");
-
-            // 어빌리티 적용
-            AbilityLogic.Instance.SetBoardSlotAbility(aiData, selfSlot, aiTargetSlots);
-        }
-
-        /// <summary>
         /// HandOn 어빌리티를 가진 카드 얻기
         /// </summary>
         public List<(Card card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(List<Card> handCards)

@@ -11,7 +11,6 @@ namespace ERang
         public static TargetLogic Instance { get; private set; }
 
         private const int BOARD_CENTER_OFFSET = 3;
-        private static readonly System.Random random = new System.Random();
 
         void Awake()
         {
@@ -36,9 +35,13 @@ namespace ERang
                 case AiDataTarget.RandomEnemyCreature: return TargetRandomEnemy(selfSlot, true);
                 case AiDataTarget.AllFriendly: return TargetAllFriendly(selfSlot, true);
                 case AiDataTarget.AllFriendlyCreature: return TargetAllFriendly(selfSlot);
+                case AiDataTarget.None:
+                default:
+                    Debug.LogWarning($"{aiData.ai_Id} - 대상이 없음 - TargetLogic.GetAiTargetSlots");
+                    break;
             }
 
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData({aiData.ai_Id})에 설정된 타겟({aiData.target.ToString()})({string.Join(", ", targetSlots.Select(slot => slot.Card.id))}) 얻기 완료 - TargetLogic.GetAiTargetSlots");
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData({aiData.ai_Id})에 설정된 타겟({aiData.target})({string.Join(", ", targetSlots.Select(slot => slot.Card.id))}) 얻기 완료 - TargetLogic.GetAiTargetSlots");
 
             return targetSlots;
         }

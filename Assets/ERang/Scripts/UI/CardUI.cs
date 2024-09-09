@@ -89,14 +89,14 @@ namespace ERang
         public void SetMasterCard(Master master)
         {
             // Debug.Log("CardUI SetMasterCard: " + master.masterId);
-            MasterData masterData = MasterData.master_dict[master.masterId];
+            MasterData masterData = MasterData.master_dict[master.MasterId];
 
             // Debug.Log("CardUI SetCard: " + cardId);
             Texture2D cardTexture = masterData.GetMasterTexture();
 
             if (!cardTexture)
             {
-                Debug.LogError($"${master.masterId} Master texture is null");
+                Debug.LogError($"${master.MasterId} Master texture is null");
                 return;
             }
 

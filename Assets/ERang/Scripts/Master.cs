@@ -13,15 +13,16 @@ namespace ERang
     {
         public static Master Instance { get; private set; }
 
-        public int masterId;
-        public int hp;
-        public int maxHp;
-        public int mana;
-        public int maxMana;
-        public int rechargeMana;
-        public int atk;
-        public int def;
-        public int gold;
+        private int masterId;
+        private int hp;
+        private int maxHp;
+        private int mana;
+        private int maxMana;
+        private int rechargeMana;
+        private int atk;
+        private int def;
+        private int gold;
+        public int MasterId { get { return masterId; } }
         public int Hp { get { return hp; } }
         public int MaxHp { get { return maxHp; } }
         public int Mana { get { return mana; } }
@@ -54,7 +55,7 @@ namespace ERang
 
             this.masterId = masterData.master_Id;
             maxHp = hp = masterData.hp;
-            mana = masterData.startMana;
+            mana = 0;
             maxMana = masterData.maxMana;
             rechargeMana = masterData.rechargeMana;
             atk = masterData.atk;
@@ -94,6 +95,11 @@ namespace ERang
 
             if (mana > MaxMana)
                 mana = MaxMana;
+        }
+
+        public void resetMana()
+        {
+            mana = 0;
         }
 
         public void IncreaseMana(int value)

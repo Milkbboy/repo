@@ -22,6 +22,7 @@ namespace ERang.Data
         public int atk; // 공격력 값 (공격력 값이 0인 캐릭터는 공격을 시도하지 않는다)
         public int def; // 초기 방어력 값
         public string ability_id; // 해당 카드가 가진 어빌리티 값으로 복수 지정이 가능하다.
+        public bool inUse; // 해당 카드가 사용 여부
         public bool extinction; // Bool 값으로 True 시 해당 카드는 사용 시 해당 전투에서 카드 덱에서 삭제된다.
         public bool completeExtinction; // Extinction 값이 TRUE일 경우에만 동작한다. 해당 값이 TRUE일 경우 해당 카드는 사용 시 다음 전투에서도 삭제된다. (1회성 카드)
         public int level; // 기본 레벨 값

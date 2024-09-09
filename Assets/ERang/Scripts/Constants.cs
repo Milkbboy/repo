@@ -75,6 +75,20 @@ namespace ERang
     }
 
     /// <summary>
+    /// 어디서 발동된 어빌리티인지 확인
+    /// </summary>
+    public enum AbilityWhereFrom
+    {
+        None = 0,
+        BoardSlot, // 필드에 있는 카드가 발동
+        TurnStarHandOn, // 턴 시작 핸드 온 액션
+        TurnStartReaction, // 턴시작 리액션 발동
+        TurnEndBoardSlot, // 턴 종료 필드 슬롯 액션
+        TurnEndBuilding, // 턴 종료 건물 액션
+        OnStage, // 필드에 있는 카드가 발동
+    }
+
+    /// <summary>
     /// 실질적인 효과를 스킬의 효과를 타입
     /// </summary>
     public enum AbilityType
