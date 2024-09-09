@@ -45,7 +45,7 @@ namespace ERang
             Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
-            transform.position = new Vector3(objPosition.x, objPosition.y, originalPosition.z - 0.05f);
+            transform.position = new Vector3(objPosition.x, objPosition.y, originalPosition.z - 0.15f);
             drag = false;
         }
 
@@ -59,13 +59,13 @@ namespace ERang
                 return;
             }
 
+            BoardSlot boardSlot = Board.Instance.NeareastBoardSlot(transform.position);
+
             // CardType 별 동작
             switch (cardType)
             {
                 case CardType.Creature:
                 case CardType.Building:
-                    BoardSlot boardSlot = Board.Instance.NeareastBoardSlot(transform.position, cardType);
-
                     // 보드 슬롯에 이미 카드가 장착되어 있는 경우
                     if (boardSlot == null || boardSlot.IsOccupied == true)
                     {
@@ -83,11 +83,9 @@ namespace ERang
                 case CardType.Magic:
                 case CardType.Individuality:
                     Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
-                    if (IsUpperCenter(screenPosition))
-                    {
-                        // 카드 사용
-                        BattleLogic.Instance.HandCardUse(cardUid);
-                    }
+
+                    // 카드 사용
+                    BattleLogic.Instance.HandCardUse(cardUid, boardSlot);
                     break;
             }
 
@@ -126,6 +124,8 @@ namespace ERang
 
             // Define the upper center area (e.g., top 50% of the screen and middle 50% width)
             float upperHeight = screenHeight * 0.5f;
+
+            Debug.Log($"screenPosition.y({screenPosition.y}) > screenHeight({screenHeight}) - upperHeight({upperHeight}): {screenPosition.y > screenHeight - upperHeight}");
 
             return screenPosition.y > screenHeight - upperHeight;
         }

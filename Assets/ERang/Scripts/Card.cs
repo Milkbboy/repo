@@ -265,5 +265,25 @@ namespace ERang
 
             return reactionConditionPairs;
         }
+
+        public (bool IsSelectAttackType, AiData) GetAiAttackInfo()
+        {
+            int aiDataId = GetCardAiDataId();
+
+            if (aiDataId == 0)
+                return (false, null);
+
+            AiData aiData = AiData.GetAiData(aiDataId);
+
+            var selectTypes = new[]
+            {
+                AiDataAttackType.SelectEnemy,
+                AiDataAttackType.SelectEnemyCreature,
+                AiDataAttackType.SelectFriendly,
+                AiDataAttackType.SelectFriendlyCreature,
+            };
+
+            return (selectTypes.Contains(aiData.attackType), aiData);
+        }
     }
 }

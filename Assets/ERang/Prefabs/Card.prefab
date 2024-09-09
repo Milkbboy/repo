@@ -1168,7 +1168,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1, z: 4}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &-6579194241496720873
 Rigidbody:
@@ -1223,6 +1223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f0adb72dd00da6409802d76aa018221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardImage: {fileID: 0}
   cardMeshRenderer: {fileID: 3111601430126518502}
   cardTypeText: {fileID: 4252308859526660259}
   descText: {fileID: 978401443610042965}
@@ -1231,6 +1232,8 @@ MonoBehaviour:
   atkText: {fileID: 2937463406376378940}
   defText: {fileID: 2764430739858798895}
   cardObject: {fileID: 0}
+  floatingTextPrefab: {fileID: 0}
+  floatingTextParent: {fileID: 0}
 --- !u!1 &7915364613912899930
 GameObject:
   m_ObjectHideFlags: 0

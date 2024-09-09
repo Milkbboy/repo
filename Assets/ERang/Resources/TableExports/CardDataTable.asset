@@ -123,7 +123,7 @@ MonoBehaviour:
     Hp: 0
     Atk: 0
     Def: 0
-    InUse: 1
+    InUse: 0
     Extinction: 1
     CompleteExtinction: 1
     Level: 0

@@ -523,6 +523,8 @@ namespace ERang
                 return false;
             }
 
+            Debug.Log($"핸드 카드({card.id}) 사용 가능 - BattleLogic.CanHandCardUse");
+
             return true;
         }
 
@@ -553,12 +555,43 @@ namespace ERang
             Debug.Log($"BoardSlotEquipCard: {card.id}, BoardSlot: {boardSlotRef.Slot}");
         }
 
-        public void HandCardUse(string cardUid)
+        /// <summary>
+        /// 핸드 카드 사용
+        /// </summary>
+        public void HandCardUse(string cardUid, BoardSlot targetSlot)
         {
+            Card card = master.GetHandCard(cardUid);
+
+            // 타겟 설정 카드인가 확인
+            var (isSelectAttackType, aiData) = card.GetAiAttackInfo();
+
+            Debug.Log($"핸드 카드({card.id}) 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData?.ai_Id ?? 0}, targetSlot: {targetSlot?.Slot ?? -1} - BattleLogic.HandCardUse");
+
+            if (isSelectAttackType)
+            {
+                if (targetSlot == null)
+                {
+                    Debug.LogWarning($"핸드 카드({card.id}) 타겟 슬롯이 없어 카드 사용 불가 - BattleLogic.HandCardUse");
+                    return;
+                }
+
+                List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetSelectAttackTypeTargetSlot(aiData.attackType);
+
+                if (aiTargetSlots.Contains(targetSlot))
+                {
+                    Debug.Log($"핸드 카드({card.id}) 사용 - BattleLogic.HandCardUse");
+                    BoardSlot masterSlot = Board.Instance.GetMasterSlot();
+                    AbilityLogic.Instance.HandUseAbilityAction(AbilityWhereFrom.HandUse, aiData, masterSlot, new List<BoardSlot> { targetSlot });
+                }
+                else
+                {
+                    Debug.LogWarning($"핸드 카드({card.id}) 타겟 슬롯이 아님 - BattleLogic.HandCardUse");
+                    return;
+                }
+            }
+
             // HandDeck 에서 카드 제거
             HandDeck.Instance.RemoveCard(cardUid);
-
-            Card card = master.GetHandCard(cardUid);
 
             if (card.isExtinction)
             {
@@ -577,12 +610,10 @@ namespace ERang
                 Board.Instance.SetGraveDeckCount(master.graveCards.Count);
             }
 
-            // Master 의 mana 감소
-            master.DecreaseMana(card.costMana);
+            // mana 사용
+            Board.Instance.ManaUse(card.costMana);
 
-            Board.Instance.SetMasterMana(master.Mana);
-
-            Debug.Log($"HandCardUsed: {cardUid}");
+            Debug.Log($"핸드 카드({card.id}) 사용 - BattleLogic.HandCardUse");
         }
 
         private void flashingCard(BoardSlot boardSlot)

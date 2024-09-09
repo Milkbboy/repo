@@ -274,7 +274,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 90001
   - Ai_Id: 90002
-    Type: Enemy
+    Type: Ranged
     Target: Select Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1

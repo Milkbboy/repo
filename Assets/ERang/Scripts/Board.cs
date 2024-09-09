@@ -73,6 +73,18 @@ namespace ERang
             Debug.Log($"<color=#257dca>ManaReset: {beforeMana} -> {master.Mana}</color>");
         }
 
+        public void ManaUse(int mana)
+        {
+            Master master = BattleLogic.Instance.GetMaster();
+
+            int beforeMana = master.Mana;
+            master.DecreaseMana(mana);
+
+            SetMasterMana(master.Mana);
+
+            Debug.Log($"<color=#257dca>ManaUse: {beforeMana} -> {master.Mana}</color>");
+        }
+
         /// <summary>
         /// Todo: 스테이지 구성 되면 수정되야 할 부분
         /// </summary>
@@ -170,12 +182,12 @@ namespace ERang
             }
         }
 
-        public BoardSlot NeareastBoardSlot(Vector3 position, CardType cardType)
+        public BoardSlot NeareastBoardSlot(Vector3 position)
         {
             BoardSlot nearestSlot = null;
             float minDistance = float.MaxValue;
 
-            List<BoardSlot> boardSlots = cardType == CardType.Creature ? leftSlots : buildingSlots;
+            List<BoardSlot> boardSlots = leftSlots.Concat(rightSlots).Concat(buildingSlots).ToList();
 
             foreach (BoardSlot slot in boardSlots)
             {

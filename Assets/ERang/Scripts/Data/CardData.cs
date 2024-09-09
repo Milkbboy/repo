@@ -49,6 +49,7 @@ namespace ERang.Data
             hp = cardEntity.Hp;
             atk = cardEntity.Atk;
             def = cardEntity.Def;
+            inUse = cardEntity.InUse;
             extinction = cardEntity.Extinction;
             completeExtinction = cardEntity.CompleteExtinction;
             level = cardEntity.Level;

@@ -85,6 +85,7 @@ namespace ERang
         TurnStartReaction, // 턴시작 리액션 발동
         TurnEndBoardSlot, // 턴 종료 필드 슬롯 액션
         TurnEndBuilding, // 턴 종료 건물 액션
+        HandUse, // 핸드에 있는 카드가 발동
         OnStage, // 필드에 있는 카드가 발동
     }
 

@@ -26,13 +26,26 @@ namespace ERang
 
         }
 
+        /// <summary>
+        /// 카드 atk 수치로 공격
+        /// </summary>
         public void AbilityDamage(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
         {
             switch (aiData.type)
             {
                 case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, aiData.atk_Cnt, selfSlot.Card.atk)); break;
                 case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, aiData.atk_Cnt, selfSlot.Card.atk)); break;
-                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AbilityDamage 미구현 - BoardLogic.AbilityDamage"); break;
+                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AbilityDamage {aiData.type} 미구현 - BoardLogic.AbilityDamage"); break;
+            }
+        }
+
+        public void AbilityDamage(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots, int damage)
+        {
+            switch (aiData.type)
+            {
+                case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
+                case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
+                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AbilityDamage {aiData.type} 미구현 - BoardLogic.AbilityDamage"); break;
             }
         }
 
