@@ -1430,6 +1430,7 @@ GameObject:
   - component: {fileID: -6579194241496720873}
   - component: {fileID: -5386672416980230907}
   - component: {fileID: -4681829242462720617}
+  - component: {fileID: 2059939002152910137}
   - component: {fileID: -5393989896994016311}
   m_Layer: 0
   m_Name: P_Card_Creature
@@ -1551,6 +1552,21 @@ MonoBehaviour:
   floatingTextPrefab: {fileID: 4789639728361502292, guid: ec99e805295420a4c9e5fc762d8a2753,
     type: 3}
   floatingTextParent: {fileID: 781496829609371711}
+--- !u!114 &2059939002152910137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6549374021415066406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54b6cb1889cce574296b258dfaa5fddf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverHeight: 0.2
+  animationDuration: 0.2
+  scaleFactor: 1.1
 --- !u!114 &-5393989896994016311
 MonoBehaviour:
   m_ObjectHideFlags: 0
