@@ -187,7 +187,9 @@ namespace ERang
             Vector3 originalPosition = selfSlot.transform.position;
 
             // 첫번째 대상 카드로 이동
-            yield return StartCoroutine(MoveCard(selfSlot, targetSlots[0].transform.position));
+            // yield return StartCoroutine(MoveCard(selfSlot, targetSlots[0].transform.position));
+
+            selfSlot.AniAttack();
 
             // 근접 공격
             foreach (BoardSlot targetSlot in targetSlots)
@@ -195,12 +197,13 @@ namespace ERang
                 for (int i = 0; i < ackCount; i++)
                 {
                     targetSlot.SetDamage(damage);
+                    targetSlot.AniDamaged();
                     yield return new WaitForSeconds(0.5f);
                 }
             }
 
             // 원래 자리로 이동
-            yield return StartCoroutine(MoveCard(selfSlot, originalPosition));
+            // yield return StartCoroutine(MoveCard(selfSlot, originalPosition));
 
             Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 타겟({Utils.BoardSlotNumersText(targetSlots)}) 근접 공격({damage}) {ackCount}회 완료 - BoardLogic.MeleeAttack");
         }
@@ -231,6 +234,8 @@ namespace ERang
         /// </summary>
         private IEnumerator RangedAttack(BoardSlot selfSlot, List<BoardSlot> targetSlots, int ackCount, int damage)
         {
+            selfSlot.AniAttack();
+
             yield return StartCoroutine(FireMissile(selfSlot, targetSlots, ackCount, damage));
 
             Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 타겟({Utils.BoardSlotNumersText(targetSlots)}) 원거리 공격({damage}) {ackCount}회 완료 - BoardLogic.MeleeAttack");
@@ -272,7 +277,10 @@ namespace ERang
             for (int i = 0; i < ackCount; i++)
             {
                 foreach (BoardSlot targetSlot in targetSlots)
+                {
+                    targetSlot.AniDamaged();
                     targetSlot.SetDamage(damage);
+                }
                 yield return new WaitForSeconds(0.5f);
             }
 

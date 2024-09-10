@@ -547,6 +547,8 @@ GameObject:
   - component: {fileID: 4038839773667613204}
   - component: {fileID: 8061116020154105915}
   - component: {fileID: 6059155431553465519}
+  - component: {fileID: 7502175075377915236}
+  - component: {fileID: 4134953683027126951}
   - component: {fileID: 5497657589539843228}
   m_Layer: 0
   m_Name: BoardSlot
@@ -661,6 +663,41 @@ MonoBehaviour:
   cardType: 0
   isOccupied: 0
   isOverlapCard: 0
+--- !u!114 &7502175075377915236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322504842112133182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b18e0a004d53eb468b6ec967c85c0af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originPoint: {fileID: 1415771865739976040}
+  moveBackward: -0.3
+  moveForward: 1.5
+  moveDuration: 0.1
+  scaleMultiplier: 1.3
+  scaleDuration: 0.1
+  isAttackingFromLeft: 1
+--- !u!114 &4134953683027126951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322504842112133182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5efdf9f5a14cf5947b47ea7e5529318f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bounceDuration: 0.2
+  effectPrefab: {fileID: 7052257666040929376, guid: 652afd06281fa8e499bac51b38b531d7,
+    type: 3}
+  effectSpawnPoint: {fileID: 1415771865739976040}
 --- !u!114 &5497657589539843228
 MonoBehaviour:
   m_ObjectHideFlags: 0

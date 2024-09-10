@@ -138,7 +138,7 @@ namespace ERang
                         masterSlot = slot;
                         // todo: 이 부분 수정 필요.
                         Master master = BattleLogic.Instance.GetMaster();
-                        slot.CreateMasterSlot(i, master);
+                        slot.SetMasterSlot(master);
                         slot.SetIndex(creatureSlotStartIndex - i);
                         SetGold(master.Gold);
                         leftSlots.Add(slot);
@@ -146,7 +146,7 @@ namespace ERang
                     case CardType.EnemyMaster:
                         enemyMasterSlot = slot;
                         Enemy enemy = BattleLogic.Instance.GetEnemy();
-                        // slot.CreateEnemyMasterSlot(i, enemy);
+                        // slot.SetEnemyMasterSlot(enemy);
                         slot.SetIndex(i - monsterSlotStartIndex);
                         rightSlots.Add(slot);
                         break;

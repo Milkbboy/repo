@@ -17,6 +17,8 @@ namespace ERang
         private Card card;
         private CardUI cardUI;
         private BoardSlotUI boardSlotUI;
+        private Ani_Attack aniAttack;
+        private Ani_Damaged aniDamaged;
 
         public bool IsOccupied { get { return isOccupied; } }
         public bool IsOverlapCard { get { return isOverlapCard; } }
@@ -31,6 +33,9 @@ namespace ERang
             cardUI.cardObject.SetActive(false);
 
             boardSlotUI = GetComponent<BoardSlotUI>();
+
+            aniAttack = GetComponent<Ani_Attack>();
+            aniDamaged = GetComponent<Ani_Damaged>();
         }
 
         // Start is called before the first frame update
@@ -67,6 +72,8 @@ namespace ERang
             this.cardType = cardType;
 
             boardSlotUI.SetSlotType(cardType);
+
+            aniAttack.isAttackingFromLeft = cardType == CardType.Master || cardType == CardType.Creature;
         }
 
         public void SetIndex(int index)
@@ -74,11 +81,9 @@ namespace ERang
             this.index = index;
         }
 
-        public void CreateMasterSlot(int slot, Master master)
+        public void SetMasterSlot(Master master)
         {
-            this.slot = slot;
             isOccupied = true;
-            cardType = CardType.Master;
 
             cardUI.cardObject.SetActive(true);
             cardUI.SetMasterCard(master);
@@ -86,11 +91,8 @@ namespace ERang
             card = new Card(master.MasterId, CardType.Master, master.Hp, master.MaxHp, master.Atk, master.Def);
         }
 
-        public void CreateEnemyMasterSlot(int slot, Enemy enemy)
+        public void SetEnemyMasterSlot(Enemy enemy)
         {
-            this.slot = slot;
-            cardType = CardType.EnemyMaster;
-
             cardUI.cardObject.SetActive(true);
             cardUI.SetEnemyMasterCard(enemy);
         }
@@ -248,6 +250,16 @@ namespace ERang
         public void StopFlashing()
         {
             boardSlotUI.StopFlashing();
+        }
+
+        public void AniAttack()
+        {
+            aniAttack.PlaySequence();
+        }
+
+        public void AniDamaged()
+        {
+            aniDamaged.PlaySequence();
         }
     }
 }

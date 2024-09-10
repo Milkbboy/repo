@@ -116,6 +116,8 @@ namespace ERang
             // 마나 충전
             EnqueueAction("턴 시작 마나 충전", () => { Board.Instance.ManaCharge(); });
 
+            Debug.Log($"TurnStart. handCards: {master.handCards.Count}");
+
             // deck 카드 섞기
             ShuffleDeck(master.deckCards);
 
@@ -150,8 +152,10 @@ namespace ERang
             for (int i = 0; i < master.handCards.Count; ++i)
             {
                 HandDeck.Instance.RemoveCard(master.handCards[i].uid);
-                Master.Instance.RemoveHandCard(master.handCards[i].uid);
+                Master.Instance.RemoveTurnEndHandCard(master.handCards[i].uid);
             }
+
+            DeckCountUpdate();
 
             // 마스터 마나 리셋
             EnqueueAction("턴 종료 마나 리셋", () => { Board.Instance.ManaReset(); });
@@ -639,11 +643,17 @@ namespace ERang
             Board.Instance.ManaUse(card.costMana);
 
             // 마스터 핸드 카드 제거
-            master.RemoveHandCard(cardUid);
+            master.RemoveUsedHandCard(cardUid);
             // HandDeck 에서 카드 제거
             HandDeck.Instance.RemoveCard(cardUid);
 
             DeckCountUpdate();
+        }
+
+        public void ExtinctionCards()
+        {
+            string extinctionCardIds = string.Join(", ", master.extinctionCards.Select(card => card.id));
+            ToastNotification.Show($"extinctionCardIds: {extinctionCardIds}");
         }
 
         private void flashingCard(BoardSlot boardSlot)

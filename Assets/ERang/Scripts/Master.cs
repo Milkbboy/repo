@@ -142,15 +142,32 @@ namespace ERang
         }
 
         /// <summary>
-        /// 핸드 카드 제거
+        /// 턴 종료 핸드 카드 제거
         /// </summary>
-        public void RemoveHandCard(string cardUid)
+        public void RemoveTurnEndHandCard(string cardUid)
         {
             Card card = handCards.Find(card => card.uid == cardUid);
 
             if (card == null)
             {
                 Debug.LogError($"핸드에 {card.id} 카드 없음 - RemoveHandCard");
+                return;
+            }
+
+            handCards.Remove(card);
+            graveCards.Add(card);
+        }
+
+        /// <summary>
+        /// 사용한 핸드 카드 제거
+        /// </summary>
+        public void RemoveUsedHandCard(string cardUid)
+        {
+            Card card = handCards.Find(card => card.uid == cardUid);
+
+            if (card == null)
+            {
+                Debug.LogError($"핸드에 {card.id} 카드 없음 - RemoveHandUseCard");
                 return;
             }
 
