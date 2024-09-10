@@ -5,58 +5,58 @@ using DG.Tweening;
 
 public class Ani_Attack : MonoBehaviour
 {
-    public Transform originPoint;  // ÃÊ±â À§Ä¡¸¦ ÂüÁ¶ÇÒ º¯¼ö
-    public float moveBackward = -0.3f;  // ¿ŞÂÊÀ¸·Î ÀÌµ¿ÇÒ °Å¸®
-    public float moveForward = 1.5f;  // ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ÇÒ °Å¸®
-    public float moveDuration = 0.1f;  // ÀÌµ¿ÇÏ´Â ½Ã°£
-    public float scaleMultiplier = 1.3f;  // ÇÁ¸®ÆéÀÌ Ä¿Áö´Â ¹èÀ²
-    public float scaleDuration = 0.1f;  // Å©±â º¯È­ ½Ã°£
+    public Transform originPoint;  // ì´ˆê¸° ìœ„ì¹˜ë¥¼ ì°¸ì¡°í•  ë³€ìˆ˜
+    public float moveBackward = -0.3f;  // ì™¼ìª½ìœ¼ë¡œ ì´ë™í•  ê±°ë¦¬
+    public float moveForward = 1.5f;  // ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™í•  ê±°ë¦¬
+    public float moveDuration = 0.1f;  // ì´ë™í•˜ëŠ” ì‹œê°„
+    public float scaleMultiplier = 1.3f;  // í”„ë¦¬í©ì´ ì»¤ì§€ëŠ” ë°°ìœ¨
+    public float scaleDuration = 0.1f;  // í¬ê¸° ë³€í™” ì‹œê°„
 
-    private Vector3 originalPosition;  // originPoint ÀÇ À§Ä¡¸¦ ¿ø·¡ À§Ä¡·Î »ç¿ë
-    private Vector3 originalScale;     // ¿ø·¡ Å©±â ÀúÀå
-    public bool isAttackingFromLeft = true;  // ¿ŞÂÊ¿¡¼­ °ø°İÇÏ´ÂÁö ¿©ºÎ¸¦ °áÁ¤ÇÏ´Â º¯¼ö
+    private Vector3 originalPosition;  // originPoint ì˜ ìœ„ì¹˜ë¥¼ ì›ë˜ ìœ„ì¹˜ë¡œ ì‚¬ìš©
+    private Vector3 originalScale;     // ì›ë˜ í¬ê¸° ì €ì¥
+    public bool isAttackingFromLeft = true;  // ì™¼ìª½ì—ì„œ ê³µê²©í•˜ëŠ”ì§€ ì—¬ë¶€ë¥¼ ê²°ì •í•˜ëŠ” ë³€ìˆ˜
 
     void Start()
     {
-        // originPoint ÀÇ À§Ä¡¸¦ ½ºÆù À§Ä¡·Î ¼³Á¤ 
+        // originPoint ì˜ ìœ„ì¹˜ë¥¼ ìŠ¤í° ìœ„ì¹˜ë¡œ ì„¤ì • 
         if (originPoint != null)
         {
-            // ¿ÀºêÁ§Æ®ÀÇ À§Ä¡¸¦ Æ¯Á¤ ¿ÀºêÁ§Æ®ÀÇ À§Ä¡·Î ¼³Á¤ (½ºÆù)
+            // ì˜¤ë¸Œì íŠ¸ì˜ ìœ„ì¹˜ë¥¼ íŠ¹ì • ì˜¤ë¸Œì íŠ¸ì˜ ìœ„ì¹˜ë¡œ ì„¤ì • (ìŠ¤í°)
             transform.position = originPoint.position;
-            originalPosition = originPoint.position;  // originPointÀÇ À§Ä¡¸¦ ¿ø·¡ À§Ä¡·Î ¼³Á¤
+            originalPosition = originPoint.position;  // originPointì˜ ìœ„ì¹˜ë¥¼ ì›ë˜ ìœ„ì¹˜ë¡œ ì„¤ì •
         }
         else
         {
-            originalPosition = transform.position;  // ÂüÁ¶ÇÒ ¿ÀºêÁ§Æ®°¡ ¾øÀ¸¸é ÇöÀç À§Ä¡¸¦ »ç¿ë
+            originalPosition = transform.position;  // ì°¸ì¡°í•  ì˜¤ë¸Œì íŠ¸ê°€ ì—†ìœ¼ë©´ í˜„ì¬ ìœ„ì¹˜ë¥¼ ì‚¬ìš©
         }
 
-        originalScale = transform.localScale;   // Ã³À½ Å©±â ÀúÀå
+        originalScale = transform.localScale;   // ì²˜ìŒ í¬ê¸° ì €ì¥
     }
 
     public void PlaySequence()
     {
-        // ½ÃÄö½º »ı¼º
+        // ì‹œí€€ìŠ¤ ìƒì„±
         Sequence sequence = DOTween.Sequence();
 
-        // 1. ÇÁ¸®ÆéÀÌ z¸¸Å­ Ä¿Áö´Â ¾Ö´Ï¸ŞÀÌ¼Ç
+        // 1. í”„ë¦¬í©ì´ zë§Œí¼ ì»¤ì§€ëŠ” ì• ë‹ˆë©”ì´ì…˜
         sequence.Append(transform.DOScale(originalScale * scaleMultiplier, scaleDuration));
 
-        // 2. °ø°İ ¹æÇâ¿¡ µû¸¥ XÃà ÀÌµ¿ °Å¸® ¼³Á¤
-        float directionMultiplier = isAttackingFromLeft ? 1 : -1;  // ¿ŞÂÊ¿¡¼­ °ø°İÇÏ¸é -1, ¿À¸¥ÂÊ¿¡¼­ °ø°İÇÏ¸é 1
+        // 2. ê³µê²© ë°©í–¥ì— ë”°ë¥¸ Xì¶• ì´ë™ ê±°ë¦¬ ì„¤ì •
+        float directionMultiplier = isAttackingFromLeft ? 1 : -1;  // ì™¼ìª½ì—ì„œ ê³µê²©í•˜ë©´ -1, ì˜¤ë¥¸ìª½ì—ì„œ ê³µê²©í•˜ë©´ 1
 
-        // 3. ÇÁ¸®ÆéÀ» ¿ŞÂÊÀ¸·Î X¸¸Å­ ÀÌµ¿
+        // 3. í”„ë¦¬í©ì„ ì™¼ìª½ìœ¼ë¡œ Xë§Œí¼ ì´ë™
         sequence.Append(transform.DOMoveX(originalPosition.x + moveBackward * directionMultiplier, moveDuration));
 
-        // 4. ÇÁ¸®ÆéÀ» ¿À¸¥ÂÊÀ¸·Î Y¸¸Å­ ÀÌµ¿
+        // 4. í”„ë¦¬í©ì„ ì˜¤ë¥¸ìª½ìœ¼ë¡œ Yë§Œí¼ ì´ë™
         sequence.Append(transform.DOMoveX(originalPosition.x + moveForward * directionMultiplier, moveDuration));
 
-        // 5. ¿ø·¡ À§Ä¡·Î µ¹¾Æ¿È
+        // 5. ì›ë˜ ìœ„ì¹˜ë¡œ ëŒì•„ì˜´
         sequence.Append(transform.DOMove(originalPosition, moveDuration));
 
-        // 6. ÇÁ¸®Æé Å©±â¸¦ ¿ø·¡´ë·Î µÇµ¹¸®´Â ¾Ö´Ï¸ŞÀÌ¼Ç
+        // 6. í”„ë¦¬í© í¬ê¸°ë¥¼ ì›ë˜ëŒ€ë¡œ ë˜ëŒë¦¬ëŠ” ì• ë‹ˆë©”ì´ì…˜
         sequence.Append(transform.DOScale(originalScale, scaleDuration));
 
-        // ½ÃÄö½º ½ÇÇà
+        // ì‹œí€€ìŠ¤ ì‹¤í–‰
         sequence.Play();
     }
 }

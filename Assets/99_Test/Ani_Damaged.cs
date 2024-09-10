@@ -7,27 +7,27 @@ public class Ani_Damaged : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public float bounceDuration = 0.2f;  // ¹Ù¿î½º ¾Ö´Ï¸ŞÀÌ¼Ç ½Ã°£
-    public GameObject effectPrefab;  // Ãâ·ÂÇÒ ÀÌÆåÆ® ÇÁ¸®ÆÕ
+    public float bounceDuration = 0.2f;  // ë°”ìš´ìŠ¤ ì• ë‹ˆë©”ì´ì…˜ ì‹œê°„
+    public GameObject effectPrefab;  // ì¶œë ¥í•  ì´í™íŠ¸ í”„ë¦¬íŒ¹
     public Transform effectSpawnPoint;
 
 
     public void PlaySequence()
     {
-        // ½ÃÄö½º »ı¼º
+        // ì‹œí€€ìŠ¤ ìƒì„±
         Sequence sequence = DOTween.Sequence();
 
-        // 1. ¹Ù¿î½º ¾Ö´Ï¸ŞÀÌ¼Ç
+        // 1. ë°”ìš´ìŠ¤ ì• ë‹ˆë©”ì´ì…˜
         sequence.Append(transform.DOShakePosition(bounceDuration, strength: new Vector3(0.5f, 0, 0), vibrato: 40, randomness: 90, snapping: false, fadeOut: true));
         sequence.AppendCallback(SpawnEffect);
 
-        // ½ÃÄö½º ½ÇÇà
+        // ì‹œí€€ìŠ¤ ì‹¤í–‰
         sequence.Play();
     }
 
     void SpawnEffect()
     {
-        // ÀÌÆåÆ® ÇÁ¸®ÆÕÀ» ÁöÁ¤µÈ À§Ä¡¿¡ Ãâ·Â
+        // ì´í™íŠ¸ í”„ë¦¬íŒ¹ì„ ì§€ì •ëœ ìœ„ì¹˜ì— ì¶œë ¥
         if (effectPrefab != null && effectSpawnPoint != null)
         {
             Instantiate(effectPrefab, effectSpawnPoint.position, Quaternion.identity);
