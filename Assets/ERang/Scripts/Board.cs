@@ -21,13 +21,12 @@ namespace ERang
         public DeckUI extinctionDeckUI;
         public TurnUI turnUI;
 
+        // 전체 슬롯
         private List<BoardSlot> boardSlots = new List<BoardSlot>();
-
-        private BoardSlot masterSlot;
-        // 크리쳐, 아군 마스터
         private List<BoardSlot> leftSlots = new List<BoardSlot>();
         private List<BoardSlot> buildingSlots = new List<BoardSlot>();
 
+        private BoardSlot masterSlot;
         private BoardSlot enemyMasterSlot;
         // 몬스터, 적 마스터
         private List<BoardSlot> rightSlots = new List<BoardSlot>();
@@ -47,6 +46,28 @@ namespace ERang
         // Update is called once per frame
         void Update()
         {
+        }
+
+        /// <summary>
+        /// 보드 슬롯에서 카드 제거
+        /// </summary>
+        public void RemoveCard(string cardUid)
+        {
+            foreach (var boardSlot in boardSlots)
+            {
+                if (boardSlot.Card != null && boardSlot.Card.uid == cardUid)
+                {
+                    Debug.Log($"boardSlot: {boardSlot.Slot} RemoveCard: {boardSlot.Card.id}");
+                    boardSlot.RemoveCard();
+                    break;
+                }
+            }
+
+            // foreach (var boardSlot in leftSlots)
+            //     Debug.Log($"leftSlot: {boardSlot.Slot} 확인 카드: {boardSlot?.Card?.id ?? 0}");
+
+            // foreach (var boardSlot in rightSlots)
+            //     Debug.Log($"leftSlot: {boardSlot.Slot} 확인 카드: {boardSlot?.Card?.id ?? 0}");
         }
 
         public void ManaCharge()

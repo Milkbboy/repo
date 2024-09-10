@@ -108,13 +108,13 @@ namespace ERang
 
         private IEnumerator TurnStart()
         {
+            ToastNotification.Show($"!! TURN START !! ({turnCount})");
+
             // 보드 설정
             Board.Instance.SetTurnCount(turnCount);
 
             // 마나 충전
             EnqueueAction("턴 시작 마나 충전", () => { Board.Instance.ManaCharge(); });
-
-            ToastNotification.Show($"!! TURN START !!({turnCount})");
 
             // deck 카드 섞기
             ShuffleDeck(master.deckCards);
@@ -150,7 +150,7 @@ namespace ERang
             for (int i = 0; i < master.handCards.Count; ++i)
             {
                 HandDeck.Instance.RemoveCard(master.handCards[i].uid);
-                Master.Instance.HandCardToGrave(master.handCards[i].uid);
+                Master.Instance.RemoveHandCard(master.handCards[i].uid);
             }
 
             // 마스터 마나 리셋
@@ -210,6 +210,39 @@ namespace ERang
             Board.Instance.SetGraveDeckCount(master.graveCards.Count);
         }
 
+        public void RemoveBoardCard(BoardSlot boardSlot)
+        {
+            if (boardSlot == null)
+            {
+                Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없음 - BattleLogic.RemoveBoardCard");
+                return;
+            }
+
+            Debug.Log($"{boardSlot.Slot}번 슬롯 카드 제거 - BattleLogic.RemoveBoardCard");
+
+            // 카드 어빌리티 제거
+            AbilityLogic.Instance.RemoveAbility(boardSlot.Card.uid);
+
+            // 마스터에서 카드 제거
+            if (boardSlot.Card.type != CardType.Monster)
+                master.RemoveBoardCard(boardSlot.Card.uid);
+
+            // 보드에서 카드 제거 - 제일 마지막에 실행
+            Board.Instance.RemoveCard(boardSlot.Card.uid);
+
+            DeckCountUpdate();
+
+            // 배틀 종료 확인. 마스터 카드 제거. 몬스터 카드 + 적 마스터 카드 제거
+            int monsterCount = Board.Instance.GetMonsterSlots().Count(slot => slot.Card != null);
+
+            if (monsterCount == 0 || boardSlot.Slot == 0)
+            {
+                Debug.Log($"배틀 종료. monsterCount: {monsterCount}, Slot: {boardSlot.Slot} - BattleLogic.RemoveBoardCard");
+                GameObject nextScene = GameObject.Find("Scene Manager");
+                nextScene.GetComponent<NextScene>().Play();
+            }
+        }
+
         /// <summary>
         /// 핸드에 있을때 효과가 발동되는 카드 액션
         /// </summary>
@@ -245,13 +278,18 @@ namespace ERang
                 if (ability.whereFrom == AbilityWhereFrom.TurnStarHandOn || ability.duration > 0)
                     continue;
 
-                EnqueueAction($"어빌리티({ability.abilityId}) !! 지속시간 종료 확인 !!", () =>
+                EnqueueAction($"!! 어빌리티({ability.abilityId}) 지속시간 종료 확인 !!", () =>
                 {
                     BoardSlot boardSlot = Board.Instance.GetBoardSlot(ability.ownerBoardSlot);
 
                     AbilityLogic.Instance.AbilityAction(boardSlot, ability);
                 });
             }
+
+            EnqueueAction($"지속시간 0인 어빌리티 삭제", () =>
+            {
+                AbilityLogic.Instance.ClearDurationAbilities();
+            });
         }
 
         void TurnStartReaction()
@@ -347,11 +385,16 @@ namespace ERang
             {
                 foreach (var handOnAbility in handOnAbilities)
                 {
-                    EnqueueAction($"카드({handOnAbility.ownerCardId}) !! 핸드온 어빌리티 액션 해제!!", () =>
+                    EnqueueAction($"!! 카드({handOnAbility.ownerCardId}) 핸드온 어빌리티 액션 해제!!", () =>
                     {
                         AbilityLogic.Instance.HandOnAbilityCut(handOnAbility);
                     });
                 }
+
+                EnqueueAction($"해제된 핸드온 어빌리티 삭제", () =>
+                {
+                    AbilityLogic.Instance.ClearHandOnAbilities();
+                });
             }
         }
 
@@ -579,7 +622,7 @@ namespace ERang
 
                 if (aiTargetSlots.Contains(targetSlot))
                 {
-                    Debug.Log($"핸드 카드({card.id}) 사용 - BattleLogic.HandCardUse");
+                    Debug.Log($"타겟 슬롯 {targetSlot.Slot}에 핸드 카드({card.id}) 사용 - BattleLogic.HandCardUse");
                     BoardSlot masterSlot = Board.Instance.GetMasterSlot();
                     AbilityLogic.Instance.HandUseAbilityAction(AbilityWhereFrom.HandUse, aiData, masterSlot, new List<BoardSlot> { targetSlot });
                 }
@@ -590,30 +633,17 @@ namespace ERang
                 }
             }
 
-            // HandDeck 에서 카드 제거
-            HandDeck.Instance.RemoveCard(cardUid);
-
-            if (card.isExtinction)
-            {
-                // Master 의 handCards => extinctionCards 로 이동
-                master.HandCardToExtinction(cardUid);
-
-                // 보드 설정 - 소멸덱 카운트
-                Board.Instance.SetExtinctionDeckCount(master.extinctionCards.Count);
-            }
-            else
-            {
-                // Master 의 handCards => graveCards 로 이동
-                master.HandCardToGrave(cardUid);
-
-                // 보드 설정 - 그레이브덱 카운트
-                Board.Instance.SetGraveDeckCount(master.graveCards.Count);
-            }
+            Debug.Log($"핸드 카드({card.id}) 사용 - BattleLogic.HandCardUse");
 
             // mana 사용
             Board.Instance.ManaUse(card.costMana);
 
-            Debug.Log($"핸드 카드({card.id}) 사용 - BattleLogic.HandCardUse");
+            // 마스터 핸드 카드 제거
+            master.RemoveHandCard(cardUid);
+            // HandDeck 에서 카드 제거
+            HandDeck.Instance.RemoveCard(cardUid);
+
+            DeckCountUpdate();
         }
 
         private void flashingCard(BoardSlot boardSlot)
@@ -623,6 +653,14 @@ namespace ERang
 
             boardSlot.StartFlashing();
             flashingSlots.Add(boardSlot);
+        }
+
+        private void DeckCountUpdate()
+        {
+            // 보드 설정 - 소멸덱 카운트
+            Board.Instance.SetExtinctionDeckCount(master.extinctionCards.Count);
+            // 보드 설정 - 그레이브덱 카운트
+            Board.Instance.SetGraveDeckCount(master.graveCards.Count);
         }
 
         /// <summary>

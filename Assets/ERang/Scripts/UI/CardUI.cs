@@ -171,12 +171,18 @@ namespace ERang
 
         public void SetAtk(int atk)
         {
+            if (atk < 0)
+                atk = 0;
+
             ShowFloatingText("Atk", atkText.text, atk.ToString());
             atkText.text = atk.ToString();
         }
 
         public void SetDef(int def)
         {
+            if (def < 0)
+                def = 0;
+
             ShowFloatingText("Def", defText.text, def.ToString());
             defText.text = def.ToString();
         }

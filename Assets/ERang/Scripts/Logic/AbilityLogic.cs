@@ -65,6 +65,13 @@ namespace ERang
             return abilities.Count(ability => ability.ownerCardUid == cardUid && ability.aiType == AiDataType.Debuff);
         }
 
+        /// <summary>
+        /// 카드 어빌리티 제거 - card uid
+        /// </summary>
+        public void RemoveAbility(string cardUid)
+        {
+            abilities.RemoveAll(ability => ability.ownerCardUid == cardUid);
+        }
 
         /// <summary>
         /// 핸드 온 어빌리티 동작
@@ -79,7 +86,7 @@ namespace ERang
                 {
                     if (targetSlot.Card == null)
                     {
-                        Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 타겟 슬롯 {Utils.BoardSlotLog(targetSlot)}가 없어 어빌리티 적용 패스 - AbilityLogic.AbilityAffect");
+                        // Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 타겟 슬롯 {Utils.BoardSlotLog(targetSlot)}가 없어 어빌리티 적용 패스 - AbilityLogic.AbilityAffect");
                         continue;
                     }
 
@@ -93,7 +100,7 @@ namespace ERang
                     case AbilityType.AtkUp: StartCoroutine(BoardLogic.Instance.AbilityAtk(targetSlots, abilityData.value)); break;
                     case AbilityType.DefUp: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, abilityData.value)); break;
                     case AbilityType.BrokenDef: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, -abilityData.value)); break;
-                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(selfSlot)); break;
+                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(aiData, selfSlot, targetSlots, abilityData.value)); break;
                     case AbilityType.AddMana: StartCoroutine(BoardLogic.Instance.AbilityAddMana(selfSlot, abilityData.value)); break;
                     case AbilityType.AddGoldPer: BoardLogic.Instance.AbilityAddGoldPer(aiData, abilityData, selfSlot); break;
                 }
@@ -167,7 +174,7 @@ namespace ERang
                     case AbilityType.AtkUp: StartCoroutine(BoardLogic.Instance.AbilityAtk(targetSlots, abilityData.value)); break;
                     case AbilityType.DefUp: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, abilityData.value)); break;
                     case AbilityType.BrokenDef: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, -abilityData.value)); break;
-                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(selfSlot)); break;
+                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(aiData, selfSlot, targetSlots, abilityData.value)); break;
                     case AbilityType.AddMana: StartCoroutine(BoardLogic.Instance.AbilityAddMana(selfSlot, abilityData.value)); break;
                     case AbilityType.AddGoldPer: BoardLogic.Instance.AbilityAddGoldPer(aiData, abilityData, selfSlot); break;
                 }
@@ -228,7 +235,7 @@ namespace ERang
                     case AbilityType.AtkUp: StartCoroutine(BoardLogic.Instance.AbilityAtk(targetSlots, abilityData.value)); break;
                     case AbilityType.DefUp: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, abilityData.value)); break;
                     case AbilityType.BrokenDef: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, -abilityData.value)); break;
-                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(selfSlot)); break;
+                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(aiData, selfSlot, targetSlots, abilityData.value)); break;
                     case AbilityType.AddMana: StartCoroutine(BoardLogic.Instance.AbilityAddMana(selfSlot, abilityData.value)); break;
                     case AbilityType.AddGoldPer: BoardLogic.Instance.AbilityAddGoldPer(aiData, abilityData, selfSlot); break;
                 }
@@ -274,7 +281,7 @@ namespace ERang
                     break;
                 case AbilityType.BrokenDef:
                     boardSlot.AddCardDef(ability.abilityValue);
-                    Debug.Log($"{abilityActionLog} 적용 해제 - def: {card.def}");
+                    Debug.Log($"{abilityActionLog} 적용 해제 - beforeValue: {ability.beforeValue} def: {card.def}");
                     break;
                 case AbilityType.ChargeDamage:
                     BoardSlot targetSlot = Board.Instance.GetBoardSlot(ability.ownerBoardSlot);
@@ -291,6 +298,28 @@ namespace ERang
                     Debug.LogWarning($"{abilityActionLog} - 아직 구현되지 않음.");
                     break;
             }
+        }
+
+        public void ClearHandOnAbilities()
+        {
+            var removedAbilities = abilities.Where(ability => ability.whereFrom == AbilityWhereFrom.TurnStarHandOn).ToList();
+            foreach (var ability in removedAbilities)
+            {
+                Debug.Log($"HandOn 어빌리티 제거 - 타입: {ability.abilityType}, 값: {ability.abilityValue}");
+            }
+
+            abilities.RemoveAll(ability => ability.whereFrom == AbilityWhereFrom.TurnStarHandOn);
+        }
+
+        public void ClearDurationAbilities()
+        {
+            var removedAbilities = abilities.Where(ability => ability.duration <= 0).ToList();
+            foreach (var ability in removedAbilities)
+            {
+                Debug.Log($"Duration 어빌리티 제거 - 타입: {ability.abilityType}, 값: {ability.abilityValue}");
+            }
+
+            abilities.RemoveAll(ability => ability.duration <= 0);
         }
 
         /// <summary>
@@ -319,10 +348,11 @@ namespace ERang
 
         private Ability MakeAbility(AbilityData abilityData, AiData aiData, BoardSlot selfSlot, BoardSlot targetSlot, AbilityWhereFrom whereFrom)
         {
+            Debug.Log($"어빌리티 추가. beforeValue: {GetOriginStatValue(abilityData.abilityType, targetSlot)}, abilityValue: {abilityData.value}");
             return new Ability
             {
                 abilityId = abilityData.abilityData_Id,
-                whereFrom = AbilityWhereFrom.TurnStarHandOn,
+                whereFrom = whereFrom,
                 aiType = aiData.type,
                 abilityType = abilityData.abilityType,
                 abilityWorkType = abilityData.type,

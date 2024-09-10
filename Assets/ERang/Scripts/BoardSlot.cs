@@ -89,7 +89,7 @@ namespace ERang
         public void CreateEnemyMasterSlot(int slot, Enemy enemy)
         {
             this.slot = slot;
-            this.cardType = CardType.EnemyMaster;
+            cardType = CardType.EnemyMaster;
 
             cardUI.cardObject.SetActive(true);
             cardUI.SetEnemyMasterCard(enemy);
@@ -153,6 +153,9 @@ namespace ERang
 
             cardUI.SetHp(card.hp);
             cardUI.SetDef(card.def);
+
+            if (card.hp <= 0)
+                BattleLogic.Instance.RemoveBoardCard(this);
         }
 
         public void SetCardAtk(int atk)
@@ -227,8 +230,6 @@ namespace ERang
                 Debug.LogWarning($"{slot}번 슬롯 카드 없음");
                 return;
             }
-
-            Debug.Log($"Removing card from slot {slot}");
 
             isOccupied = false;
             isOverlapCard = false;

@@ -35,7 +35,7 @@ namespace ERang
             {
                 case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, aiData.atk_Cnt, selfSlot.Card.atk)); break;
                 case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, aiData.atk_Cnt, selfSlot.Card.atk)); break;
-                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AbilityDamage {aiData.type} 미구현 - BoardLogic.AbilityDamage"); break;
+                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AiDataType {aiData.type} 미구현(Card.atk) - BoardLogic.AbilityDamage"); break;
             }
         }
 
@@ -45,7 +45,7 @@ namespace ERang
             {
                 case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
                 case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
-                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AbilityDamage {aiData.type} 미구현 - BoardLogic.AbilityDamage"); break;
+                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AiDataType {aiData.type} 미구현(damate) - BoardLogic.AbilityDamage"); break;
             }
         }
 
@@ -70,7 +70,7 @@ namespace ERang
                 targetSlot.AddCardHp(value);
             }
 
-            Debug.Log($"{Utils.StatChangesText("체력", changes)} - BoardLogic.AffectHp");
+            Debug.Log($"{Utils.StatChangesText("체력", changes)} - BoardLogic.AbilityHp");
 
             yield return new WaitForSeconds(.5f);
         }
@@ -96,7 +96,7 @@ namespace ERang
                 targetSlot.AddCardAtk(value);
             }
 
-            Debug.Log($"{Utils.StatChangesText("공격력", changes)} - BoardLogic.AffectHp");
+            Debug.Log($"{Utils.StatChangesText("공격력", changes)} - BoardLogic.AbilityAtk");
 
             yield return new WaitForSeconds(.5f);
         }
@@ -122,7 +122,7 @@ namespace ERang
                 targetSlot.AddCardDef(value);
             }
 
-            Debug.Log($"{Utils.StatChangesText("방어력", changes)} - BoardLogic.AffectHp");
+            Debug.Log($"{Utils.StatChangesText("방어력", changes)} - BoardLogic.AbilityDef");
 
             yield return new WaitForSeconds(.5f);
         }
@@ -130,13 +130,20 @@ namespace ERang
         /// <summary>
         /// 충전 공격 효과
         /// </summary>
-        public IEnumerator AbilityChargeDamage(BoardSlot selfSlot)
+        public IEnumerator AbilityChargeDamage(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots, int damage)
         {
             // 충전 공격 애니메이션 로직을 여기에 추가
 
+            switch (aiData.type)
+            {
+                case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
+                case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
+                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AiDataType {aiData.type} 미구현 - BoardLogic.AbilityChargeDamage"); break;
+            }
+
             yield return new WaitForSeconds(.5f);
 
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 충전 공격 완료 - BoardLogic.AffectChargeDamage");
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 충전 공격 완료 - BoardLogic.AbilityChargeDamage");
         }
 
         /// <summary>

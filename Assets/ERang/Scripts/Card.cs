@@ -101,22 +101,21 @@ namespace ERang
 
         /// <summary>
         /// 카드의 방어력을 증가 또는 감소시킨다.
+        /// - 실제 데이터는 음수 값까지 허용하지만, UI에 표시할 때는 0 이상으로 표시한다.
+        ///   어빌리티 적용 방식때문에 음수까지 허용
         /// </summary>
-        /// <param name="value"></param>
         public void AddDef(int value)
         {
             def += value;
-
-            if (def < 0)
-                def = 0;
         }
 
+        /// <summary>
+        /// 공격력을 증가 또는 감소시킨다.
+        /// - 실제 데이터는 음수 값까지 허용하지만, UI에 표시할 때는 0 이상으로 표시한다.
+        /// </summary>
         public void AddAtk(int value)
         {
             atk += value;
-
-            if (atk < 0)
-                atk = 0;
         }
 
         /// <summary>

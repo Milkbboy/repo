@@ -141,66 +141,57 @@ namespace ERang
             }
         }
 
-        public void HandCardToGrave(string cardUid)
+        /// <summary>
+        /// 핸드 카드 제거
+        /// </summary>
+        public void RemoveHandCard(string cardUid)
         {
-            Card card = GetHandCard(cardUid);
+            Card card = handCards.Find(card => card.uid == cardUid);
 
             if (card == null)
             {
-                Debug.LogError($"HandCardToGrave: card is null({card.id})");
+                Debug.LogError($"핸드에 {card.id} 카드 없음 - RemoveHandCard");
                 return;
             }
 
             handCards.Remove(card);
-            graveCards.Add(card);
 
-            // Debug.Log($"HandCardToGrave: {card.id}, HandCardCount: {handCards.Count}, GraveCardCount: {graveCards.Count}");
-        }
-
-        public void HandCardToExtinction(string cardUid)
-        {
-            Card card = GetHandCard(cardUid);
-
-            if (card == null)
-            {
-                Debug.LogError($"HandCardToExtinction: card is null({card.id})");
-                return;
-            }
-
-            handCards.Remove(card);
-            extinctionCards.Add(card);
-
-            // Debug.Log($"HandCardToExtinction: {card.id}, HandCardCount: {handCards.Count}, ExtinctionCardCount: {extinctionCards.Count}");
-        }
-
-        public Card GetBoardCreatureCard(string cardUid)
-        {
-            return boardCreatureCards.Find(card => card.uid == cardUid);
-        }
-
-        public List<Card> GetCreatureCards()
-        {
-            return boardCreatureCards;
+            if (card.isExtinction)
+                extinctionCards.Add(card);
+            else
+                graveCards.Add(card);
         }
 
         /// <summary>
-        /// 보드 크리쳐 카드를 소멸로 이동
+        /// 크리쳐 카드에서 먼저 찾고 없으면 건물 카드에서 찾기
         /// </summary>
-        /// <param name="cardUid"></param>
-        public void BoardCreatureCardToExtinction(string cardUid)
+        public void RemoveBoardCard(string cardUid)
         {
-            Card card = GetBoardCreatureCard(cardUid);
+            Card card = boardCreatureCards.Find(card => card.uid == cardUid) ?? boardBuildingCards.Find(card => card.uid == cardUid);
 
             if (card == null)
             {
-                Debug.LogError($"BoardSlotCardToGrave: card is null({card.id})");
+                Debug.LogError($"보드 슬롯에 {cardUid} 카드 없음 - RemoveBoardCard");
                 return;
             }
 
-            boardCreatureCards.Remove(card);
-            extinctionCards.Add(card);
+            switch (card.type)
+            {
+                case CardType.Creature:
+                    boardCreatureCards.Remove(card);
+                    break;
+                case CardType.Building:
+                    boardBuildingCards.Remove(card);
+                    break;
+                default:
+                    Debug.LogError($"보드 슬롯에 {card.type} 카드 타입 없음 - RemoveBoardCard");
+                    break;
+            }
 
-            // Debug.Log($"BoardSlotCardToGrave: {card.id}, BoardCreatureCardCount: {boardCreatureCards.Count}, GraveCardCount: {graveCards.Count}");
+            if (card.isExtinction)
+                extinctionCards.Add(card);
+            else
+                graveCards.Add(card);
         }
     }
 }

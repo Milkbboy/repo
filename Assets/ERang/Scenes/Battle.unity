@@ -2511,7 +2511,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handDeck: {fileID: 2105079287}
-  turn: 0
+  turnCount: 1
   masterId: 1001
   handCardCount: 5
 --- !u!114 &1494334409
