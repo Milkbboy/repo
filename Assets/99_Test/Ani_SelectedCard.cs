@@ -13,6 +13,8 @@ public class Ani_SelectedCard : MonoBehaviour
     private Vector3 originalPosition;
     private Vector3 originalScale;
 
+    public bool isDrag = false;
+
     void Start()
     {
         originalPosition = transform.position;
@@ -21,12 +23,18 @@ public class Ani_SelectedCard : MonoBehaviour
 
     void OnMouseEnter()
     {
+        if (isDrag)
+            return;
+
         transform.DOMoveY(originalPosition.y + hoverHeight, animationDuration);
         transform.DOScale(originalScale * scaleFactor, animationDuration);
     }
 
     void OnMouseExit()
     {
+        if (isDrag)
+            return;
+
         transform.DOMoveY(originalPosition.y, animationDuration);
         transform.DOScale(originalScale, animationDuration);
     }

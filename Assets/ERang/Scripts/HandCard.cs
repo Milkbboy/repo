@@ -10,11 +10,13 @@ namespace ERang
         private CardUI cardUI;
         private Vector3 originalPosition;
         private bool drag = false;
+        private Ani_SelectedCard aniSelectedCard;
 
         // Start is called before the first frame update
         void Awake()
         {
             cardUI = GetComponent<CardUI>();
+            aniSelectedCard = GetComponent<Ani_SelectedCard>();
         }
 
         // 카드 hp, atk, def, costMana, costGold 등은 cardData 의 기본 값에서 해당 카드의 ability 로 최종 값을 결정하자.
@@ -35,6 +37,8 @@ namespace ERang
         {
             // Debug.Log("OnMouseDown card: " + cardId);
             drag = true;
+
+            aniSelectedCard.isDrag = true;
         }
 
         void OnMouseDrag()
@@ -48,6 +52,9 @@ namespace ERang
 
         void OnMouseUp()
         {
+            drag = false;
+            aniSelectedCard.isDrag = false;
+
             // 마스터 마나 확인
             if (BattleLogic.Instance.CanHandCardUse(cardUid) == false)
             {
