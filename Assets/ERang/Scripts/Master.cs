@@ -55,7 +55,7 @@ namespace ERang
             if (mana > MaxMana)
                 mana = MaxMana;
 
-            Debug.Log($"<color=#257dca>Charge {rechargeMana} Mana: {beforeMana} -> {mana}</color>");
+            Debug.Log($"<color=#257dca>Charge Mana({rechargeMana}): {beforeMana} -> {mana}</color>");
         }
 
         public void ResetMana()
@@ -79,7 +79,7 @@ namespace ERang
             if (mana > MaxMana)
                 mana = MaxMana;
 
-            Debug.Log($"<color=#257dca>Add {value} Mana: {beforeMana} -> {mana}</color>");
+            Debug.Log($"<color=#257dca>Add Mana({value}): {beforeMana} -> {mana}</color>");
         }
 
         public void AddGold(int gold)
@@ -88,7 +88,7 @@ namespace ERang
 
             this.gold += gold;
 
-            Debug.Log($"<color=#257dca>Add {gold} Gold: {beforeGold} -> {this.gold}</color>");
+            Debug.Log($"<color=#257dca>Add Gold({gold}): {beforeGold} -> {this.gold}</color>");
         }
     }
 }

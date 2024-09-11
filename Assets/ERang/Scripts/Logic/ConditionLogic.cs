@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using ERang.Data;
-using Newtonsoft.Json;
 
 namespace ERang
 {
@@ -66,22 +63,22 @@ namespace ERang
                 // 슬롯에 카드가 없으면 패스
                 if (targetCard == null)
                 {
-                    Debug.LogWarning($"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color>에 대한 리액션 컨디션({condition.id}) 발동 확인 - 실패. 슬롯에 장착된 카드 없음 - ConditionLogic.GetReactionConditionAiDataId");
+                    Debug.LogWarning($"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color>에 대한 리액션 컨디션({condition.id}) 발동 확인 - 실패. {targetSlot.Slot} 슬롯에 장착된 카드 없음 - ConditionLogic.GetReactionConditionAiDataId");
                     continue;
                 }
 
-                string targetConditionLog = $"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color> 카드({targetCard.id})에 대한 리액션 컨디션({condition.id}) {condition.type.ToString()} 조건 비교";
+                string targetConditionLog = $"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color> 카드({targetCard.id})에 대한 리액션 컨디션({condition.id}) {condition.type} 조건 비교";
 
                 if (condition.type == ConditionType.EveryTurn)
                 {
                     if (ConditionRatio(condition.id, reaction.ratio))
                     {
                         result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
-                        // Debug.Log($"{targetConditionLog} - 성공 (발생 확률만 비교) 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
+                        Debug.Log($"{targetConditionLog} - 성공 (발생 확률만 비교) 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                     else
                     {
-                        // Debug.LogWarning($"{targetConditionLog} - 실패 (발생 확률만 비교) - ConditionLogic.GetReactionConditionAiDataId");
+                        Debug.LogWarning($"{targetConditionLog} - 실패 (발생 확률만 비교) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                 }
                 else
@@ -112,11 +109,11 @@ namespace ERang
                     if (ConditionCompare(condition, compareValue) && ConditionRatio(condition.id, reaction.ratio))
                     {
                         result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
-                        // Debug.Log($"{targetConditionLog} - 성공 (조건 비교와 발생 확률 모두 통과). 리액션에 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
+                        Debug.Log($"{targetConditionLog} - 성공 (조건 비교와 발생 확률 모두 통과). 리액션에 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                     else
                     {
-                        // Debug.LogWarning($"{targetConditionLog} - 실패 (조건 비교 또는 발생 확률 실패) - ConditionLogic.GetReactionConditionAiDataId");
+                        Debug.LogWarning($"{targetConditionLog} - 실패 (조건 비교 또는 발생 확률 실패) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                 }
 

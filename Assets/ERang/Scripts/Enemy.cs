@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
@@ -32,9 +30,6 @@ namespace ERang
             maxHp = hp = enemyData.hp;
             atk = enemyData.atk;
             def = enemyData.def;
-
-            // 적 카드 임시 생성
-            enemyData.startCardIds = new List<int> { 1001, 1002, 1003 };
 
             foreach (int cardId in enemyData.startCardIds)
             {

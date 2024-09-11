@@ -85,8 +85,8 @@ namespace ERang
             // 핸드 카드 HandOn 어빌리티 액션
             HandOnCardAbilityAction(deckSystem.HandCards);
 
-            // 지속 시간 종료 어빌리티 실행
-            DurationAbilityAction();
+            // 지속 시간 종료 어빌리티 해제
+            BoardSlotCardAbilityRelease();
 
             // 턴 시작시 실행되는 카드의 Reaction 을 확인
             TurnStartReaction();
@@ -115,10 +115,15 @@ namespace ERang
             // 핸드 온 카드 어빌리티 해제
             HandOnCardAbilityCut();
 
-            // 보드 슬롯 카드 동작
-            MasterCreatureAction();
-            EnemyMonsterAction();
-            BuildingCardAction();
+            // 카드 액션
+            List<BoardSlot> creatureSlots = boardSystem.GetCreatureBoardSlots();
+            BoardCardAction(creatureSlots);
+
+            List<BoardSlot> monsterSlots = boardSystem.GetMonsterBoardSlots();
+            BoardCardAction(monsterSlots);
+
+            List<BoardSlot> buildingSlots = boardSystem.GetBuildingBoardSlots();
+            BoardCardAction(buildingSlots);
 
             // 턴 다시 시작
             StartCoroutine(TurnStart());
@@ -139,40 +144,54 @@ namespace ERang
                 {
                     List<BoardSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(handOnCard.aiData, masterSlot);
 
-                    AbilityLogic.Instance.HandOnAbilityAction(handOnCard.aiData, masterSlot, targetSlots, handOnCard.abilityDatas);
+                    AbilityLogic.Instance.SetHandOnAbility(handOnCard.aiData, masterSlot, targetSlots, handOnCard.abilityDatas);
+                });
+            }
+        }
+
+        void HandOnCardAbilityCut()
+        {
+            List<AbilityLogic.Ability> abilities = AbilityLogic.Instance.GetAbilities();
+
+            foreach (var ability in abilities)
+            {
+                if (ability.whereFrom != AbilityWhereFrom.TurnStarHandOn)
+                    continue;
+
+                EnqueueAction($"!! 카드({ability.targetCardId}) 핸드온 어빌리티 액션 해제!!", () =>
+                {
+                    AbilityLogic.Instance.RemoveHandOnAbility(ability);
                 });
             }
         }
 
         /// <summary>
-        /// 지속시간(duration) 이 0되는 카드 어빌리티 실행
+        /// 지속시간(duration) 이 0되는 카드 어빌리티 해제
         /// </summary>
-        void DurationAbilityAction()
+        void BoardSlotCardAbilityRelease()
         {
-            List<AbilityLogic.Ability> abilities = AbilityLogic.Instance.GetDurationAbilities();
+            List<AbilityLogic.Ability> abilities = AbilityLogic.Instance.GetAbilities();
 
             foreach (AbilityLogic.Ability ability in abilities)
             {
-                // 지속 시간이 0이 되는 어빌리티 실행
                 ability.duration = ability.duration - 1;
 
                 if (ability.whereFrom == AbilityWhereFrom.TurnStarHandOn || ability.duration > 0)
                     continue;
 
-                EnqueueAction($"!! 어빌리티({ability.abilityId}) 지속시간 종료 확인 !!", () =>
+                EnqueueAction($"!! 어빌리티({ability.abilityId}) 지속시간 종료({ability.duration}) 확인 !!", () =>
                 {
-                    BoardSlot boardSlot = boardSystem.GetBoardSlot(ability.ownerBoardSlot);
+                    BoardSlot selfBoardSlot = boardSystem.GetBoardSlot(ability.selfBoardSlot);
+                    BoardSlot targetBoardSlot = boardSystem.GetBoardSlot(ability.targetBoardSlot);
 
-                    AbilityLogic.Instance.AbilityAction(boardSlot, ability);
+                    AbilityLogic.Instance.AbilityRelease(selfBoardSlot, targetBoardSlot, ability);
                 });
             }
-
-            EnqueueAction($"지속시간 0 어빌리티 삭제", () =>
-            {
-                AbilityLogic.Instance.ClearDurationAbilities();
-            });
         }
 
+        /// <summary>
+        /// 턴 시작 리액션
+        /// </summary>
         void TurnStartReaction()
         {
             List<BoardSlot> reactionSlots = boardSystem.GetMonsterBoardSlots();
@@ -181,115 +200,31 @@ namespace ERang
             foreach (BoardSlot reactionSlot in reactionSlots)
             {
                 if (reactionSlot.Card == null)
-                {
-                    // Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 장착된 카드가 없어 리액션 패스 - BattleLogic.TurnStartReaction");
                     return;
-                }
 
                 EnqueueAction($"보드 {reactionSlot.Slot} 슬롯. -- 턴 시작 리액션 --", () =>
                 {
                     FlashingCard(reactionSlot);
 
-                    Card card = reactionSlot.Card;
+                    (AiData aiData, List<BoardSlot> targetSlots) = AiLogic.Instance.GetReacationAiData(reactionSlot, opponentSlots);
 
-                    if (card == null)
+                    if (aiData == null)
                     {
-                        Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 장착된 카드가 없어 리액션 패스 - BattleLogic.TurnStartReaction");
+                        Debug.Log($"{Utils.BoardSlotLog(reactionSlot)} 이번 턴 시작 리액션 없음 - BattleLogic.TurnStartReaction");
                         return;
                     }
 
-                    List<(AiGroupData.Reaction, ConditionData)> reactionPairs = card.GetCardReactionPairs(ConditionCheckPoint.TurnStart);
-
-                    if (reactionPairs.Count == 0)
+                    if (targetSlots.Count == 0)
                     {
-                        Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} AiGroupData({card.aiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color> - BattleLogic.TurnStartReaction");
+                        Debug.Log($"{Utils.BoardSlotLog(reactionSlot)} 이번 턴 시작 리액션 타겟 없음 - BattleLogic.TurnStartReaction");
                         return;
                     }
 
-                    foreach (var (reaction, condition) in reactionPairs)
-                    {
-                        //reactionTargetSlots 은 화면 표시를 위해 사용 - 실제 타겟은 AiData 에서 얻음
-                        var (aiDataId, reactionTargetSlots) = ConditionLogic.Instance.GetReactionConditionAiDataId((reaction, condition), reactionSlot, opponentSlots);
-
-                        if (aiDataId == 0)
-                        {
-                            Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 리액션 컨디션({condition.id}) 없음 - BattleLogic.TurnStartReaction");
-                            continue;
-                        }
-
-                        AiData aiData = AiData.GetAiData(aiDataId);
-
-                        string aiGroupDataTableLog = $"{Utils.BoardSlotLog(reactionSlot)} <color=#78d641>AiData</color> 테이블 {aiDataId} 데이터 얻기";
-
-                        if (aiData == null)
-                        {
-                            Debug.LogWarning($"{aiGroupDataTableLog} - 실패. <color=red>테이블에 데이터 없음</color> - BattleLogic.TurnStartReaction");
-                            continue;
-                        }
-
-                        // Debug.Log($"{aiGroupDataTableLog} 성공 - {Utils.BoardSlotLog(reactionSlot)}. 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - BattleLogic.TurnStartReaction");
-
-                        // 리액션하는 슬롯 표시
-                        foreach (int targetSlot in reactionTargetSlots)
-                        {
-                            // Debug.Log($"{targetSlot}번 타겟 슬롯 깜박임 시작 - BattleLogic.TurnStartReaction");
-                            BoardSlot targetBoardSlot = boardSystem.GetBoardSlot(targetSlot);
-
-                            targetBoardSlot.StartFlashing(Color.red);
-                            flashingSlots.Add(targetBoardSlot);
-                        }
-
-                        // 리액션 실행되면 다음 리액션은 패스
-                        // AiData 에 설정된 타겟 얻기
-                        List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, reactionSlot);
-
-                        if (aiTargetSlots.Count == 0)
-                        {
-                            Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 설정 타겟({aiData.target}) 없음 - BattleLogic.TurnStartReaction");
-                            return;
-                        }
-
-                        // 어빌리티 적용
-                        AbilityLogic.Instance.SetBoardSlotAbility(AbilityWhereFrom.TurnStartReaction, aiData, reactionSlot, aiTargetSlots);
-                        break;
-                    }
+                    // 다음 리액션은 패스
+                    AbilityLogic.Instance.SetBoardSlotAbility(AbilityWhereFrom.TurnStartReaction, aiData, reactionSlot, targetSlots);
+                    return;
                 });
             }
-        }
-
-        void HandOnCardAbilityCut()
-        {
-            List<AbilityLogic.Ability> handOnAbilities = AbilityLogic.Instance.GetHandOnAbilities();
-
-            if (handOnAbilities.Count > 0)
-            {
-                foreach (var handOnAbility in handOnAbilities)
-                {
-                    EnqueueAction($"!! 카드({handOnAbility.ownerCardId}) 핸드온 어빌리티 액션 해제!!", () =>
-                    {
-                        AbilityLogic.Instance.HandOnAbilityCut(handOnAbility);
-                    });
-                }
-
-                EnqueueAction($"해제된 핸드온 어빌리티 삭제", () =>
-                {
-                    AbilityLogic.Instance.ClearHandOnAbilities();
-                });
-            }
-        }
-
-        void MasterCreatureAction()
-        {
-            List<BoardSlot> creatureSlots = boardSystem.GetCreatureBoardSlots();
-
-            BoardCardAction(creatureSlots);
-        }
-
-        void EnemyMonsterAction()
-        {
-            List<BoardSlot> monsterSlots = boardSystem.GetMonsterBoardSlots();
-
-            BoardCardAction(monsterSlots);
         }
 
         /// <summary>
@@ -340,58 +275,6 @@ namespace ERang
 
                     // 어빌리티 적용
                     AbilityLogic.Instance.SetBoardSlotAbility(AbilityWhereFrom.TurnEndBoardSlot, aiData, actorSlot, aiTargetSlots);
-                });
-            }
-        }
-
-        /// <summary>
-        /// 건물 카드 액션
-        /// </summary>
-        void BuildingCardAction()
-        {
-            foreach (BoardSlot buildingSlot in boardSystem.GetBuildingBoardSlots())
-            {
-                if (buildingSlot.Card == null)
-                    continue; ;
-
-                EnqueueAction($"<color=#dd9933>건물</color> {buildingSlot.Slot}번 슬롯 ** 턴 종료 액션 **", () =>
-                {
-                    // 현재 턴 보드 슬롯 깜빡임 설정
-                    FlashingCard(buildingSlot);
-
-                    Card card = buildingSlot.Card;
-
-                    if (card == null)
-                    {
-                        Debug.LogWarning($"건물 {buildingSlot.Slot}번 슬롯 장착된 카드가 없어 패스 - BattleLogic.BuildingCardAction");
-                        return;
-                    }
-
-                    // 카드의 행동 aiData 설정
-                    int aiDataId = card.GetCardAiDataId();
-
-                    if (aiDataId == 0)
-                    {
-                        Debug.LogWarning($"건물 {buildingSlot.Slot}번 슬롯 카드({card.id}). AiGroupData({card.aiGroupId})에 해당하는 <color=red>액션 데이터 없음<color> - BattleLogic.BuildingCardAction");
-                        return;
-                    }
-
-                    // ai 실행
-                    AiData aiData = AiData.GetAiData(aiDataId);
-
-                    // AiData 에 설정된 타겟 얻기
-                    List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, buildingSlot);
-
-                    if (aiTargetSlots.Count == 0)
-                    {
-                        Debug.LogWarning($"{Utils.BoardSlotLog(buildingSlot)} 설정 타겟({aiData.target}) 없음 - BattleLogic.BuildingCardAction");
-                        return;
-                    }
-
-                    // Debug.Log($"{Utils.BoardSlotLog(buildingSlot)} AiData 에 설정된 어빌리티({string.Join(", ", aiData.ability_Ids)}) 타겟({aiData.target}) Slots: <color=yellow>{string.Join(", ", aiTargetSlots.Select(slot => slot.Slot))}</color>번에 적용 - BattleLogic.BuildingCardAction");
-
-                    // 어빌리티 적용
-                    AbilityLogic.Instance.SetBoardSlotAbility(AbilityWhereFrom.TurnEndBuilding, aiData, buildingSlot, aiTargetSlots);
                 });
             }
         }
@@ -485,7 +368,7 @@ namespace ERang
                 {
                     Debug.Log($"타겟 슬롯 {targetSlot.Slot}에 핸드 카드({card.id}) 사용 - BattleLogic.HandCardUse");
                     BoardSlot masterSlot = boardSystem.GetBoardSlot(0);
-                    AbilityLogic.Instance.HandUseAbilityAction(AbilityWhereFrom.HandUse, aiData, masterSlot, new List<BoardSlot> { targetSlot });
+                    AbilityLogic.Instance.SetHandCardUseAbility(AbilityWhereFrom.HandUse, aiData, masterSlot, new List<BoardSlot> { targetSlot });
                 }
                 else
                 {
@@ -553,7 +436,7 @@ namespace ERang
             List<BoardSlot> meleeTargetSlots = boardSystem.GetBoardSlots(new List<int> { 3, 2 });
 
             AiData meleeAiData = AiData.GetAiData(1001);
-            BoardLogic.Instance.AbilityDamage(meleeAiData, meleeSlot, meleeTargetSlots);
+            BoardLogic.Instance.AbilityDamage(meleeAiData.type, meleeAiData.atk_Cnt, meleeSlot, meleeTargetSlots);
         }
 
         /// <summary>
@@ -565,7 +448,7 @@ namespace ERang
             List<BoardSlot> rangedTargetSlots = boardSystem.GetBoardSlots(new List<int> { 3, 2, 1 });
 
             AiData rangedAiData = AiData.GetAiData(1004);
-            BoardLogic.Instance.AbilityDamage(rangedAiData, rangedSlot, rangedTargetSlots);
+            BoardLogic.Instance.AbilityDamage(rangedAiData.type, rangedAiData.atk_Cnt, rangedSlot, rangedTargetSlots);
         }
 
         /// <summary>
@@ -639,7 +522,7 @@ namespace ERang
 
         private void EnqueueAction(string name, UnityAction action)
         {
-            Debug.Log($"<color=#257dca>EnqueueAction</color>: {name} 추가");
+            Debug.Log($"<color=#257dca>EnqueueAction</color>: {name}");
             actionQueue.Enqueue(new NamedAction(name, action));
         }
 
@@ -661,7 +544,7 @@ namespace ERang
             if (actionQueue.Count > 0)
             {
                 var namedAction = actionQueue.Dequeue();
-                Debug.Log($"<color=#dd3333>Execution action</color>: {namedAction.Name} 실행");
+                Debug.Log($"<color=#dd3333>Execution action</color>: {namedAction.Name}");
                 namedAction.Action?.Invoke();
             }
         }

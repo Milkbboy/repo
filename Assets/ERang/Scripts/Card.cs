@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ERang.Data;
 using UnityEngine;
-using Newtonsoft.Json;
 
 namespace ERang
 {
@@ -203,66 +202,6 @@ namespace ERang
             }
 
             return selectedAiDataId;
-        }
-
-        /// <summary>
-        /// 카드에 설정된 리액션 데이터 Pair 리스트 얻기
-        /// - AiGroupData 테이블과 ConditionData 테이블을 참조하여 리액션 데이터를 한쌍으로 반환 (tuple 형태)
-        /// </summary>
-        /// <returns></returns>
-        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(ConditionCheckPoint checkPoint)
-        {
-            List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new List<(AiGroupData.Reaction, ConditionData)>();
-
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
-
-            string aiGroupDataTableLog = $"{id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
-
-            if (aiGroupData == null)
-            {
-                Debug.LogError($"{aiGroupDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetTurnStartReaction");
-                return reactionConditionPairs;
-            }
-
-            // Debug.Log($"{aiGroupDataTableLog} 성공 - Card.GetTurnStartReaction");
-
-            if (aiGroupData.reactions.Count == 0)
-            {
-                Debug.LogWarning($"{id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId}에 reaction 설정 없음 - Card.GetTurnStartReaction");
-                return reactionConditionPairs;
-            }
-
-            foreach (var reaction in aiGroupData.reactions)
-            {
-                ConditionData conditionData = ConditionData.GetConditionData(reaction.conditionId);
-
-                string conditionDataTableLog = $"{id} 카드. <color=#78d641>ConditionData</color> 테이블 {reaction.conditionId} 데이터 얻기";
-
-                if (conditionData == null)
-                {
-                    Debug.LogError($"{conditionDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetTurnStartReaction");
-                    continue;
-                }
-
-                // Debug.Log($"{conditionDataTableLog} 성공 - Card.GetTurnStartReaction");
-
-                // 리액션 조건이 아니면 패스
-                if (conditionData.checkPoint != checkPoint)
-                    continue;
-
-                reactionConditionPairs.Add((reaction, conditionData));
-            }
-
-            // 리액션 데이터 로그
-            if (reactionConditionPairs.Count > 0)
-            {
-                string logs = string.Join("\n", reactionConditionPairs.Select((x, index) =>
-                $"[{index}] reaction: {JsonConvert.SerializeObject(x.Item1)}, condition: {JsonConvert.SerializeObject(x.Item2)}"));
-
-                // Debug.Log($"{id} 카드. {reactionConditionPairs.Count}개 리액션 컨디션({string.Join(" ,", reactionConditionPairs.Select(pair => pair.Item2.id).ToList())}) 있음");
-            }
-
-            return reactionConditionPairs;
         }
 
         public (bool IsSelectAttackType, AiData) GetAiAttackInfo()

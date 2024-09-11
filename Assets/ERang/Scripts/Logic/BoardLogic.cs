@@ -29,23 +29,23 @@ namespace ERang
         /// <summary>
         /// 카드 atk 수치로 공격
         /// </summary>
-        public void AbilityDamage(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
+        public void AbilityDamage(AiDataType aiType, int atkCount, BoardSlot selfSlot, List<BoardSlot> targetSlots)
         {
-            switch (aiData.type)
+            switch (aiType)
             {
-                case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, aiData.atk_Cnt, selfSlot.Card.atk)); break;
-                case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, aiData.atk_Cnt, selfSlot.Card.atk)); break;
-                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AiDataType {aiData.type} 미구현(Card.atk) - BoardLogic.AbilityDamage"); break;
+                case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, atkCount, selfSlot.Card.atk)); break;
+                case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, atkCount, selfSlot.Card.atk)); break;
+                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AiDataType {aiType} 미구현(Card.atk) - BoardLogic.AbilityDamage"); break;
             }
         }
 
-        public void AbilityDamage(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots, int damage)
+        public void AbilityDamage(AiDataType aiType, int atkCount, BoardSlot selfSlot, List<BoardSlot> targetSlots, int damage)
         {
-            switch (aiData.type)
+            switch (aiType)
             {
-                case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
-                case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
-                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AiDataType {aiData.type} 미구현(damate) - BoardLogic.AbilityDamage"); break;
+                case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, atkCount, damage)); break;
+                case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, atkCount, damage)); break;
+                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AiDataType {aiType} 미구현(damate) - BoardLogic.AbilityDamage"); break;
             }
         }
 
@@ -128,22 +128,17 @@ namespace ERang
         }
 
         /// <summary>
-        /// 충전 공격 효과
+        /// 충전 효과
         /// </summary>
         public IEnumerator AbilityChargeDamage(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots, int damage)
         {
-            // 충전 공격 애니메이션 로직을 여기에 추가
-
-            switch (aiData.type)
-            {
-                case AiDataType.Melee: StartCoroutine(MeleeAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
-                case AiDataType.Ranged: StartCoroutine(RangedAttack(selfSlot, targetSlots, aiData.atk_Cnt, damage)); break;
-                default: Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} AiDataType {aiData.type} 미구현 - BoardLogic.AbilityChargeDamage"); break;
-            }
+            // 충전 애니메이션 로직을 여기에 추가
+            // 임시로 공격 애니메이션으로 대체
+            selfSlot.AniAttack();
 
             yield return new WaitForSeconds(.5f);
 
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 충전 공격 완료 - BoardLogic.AbilityChargeDamage");
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 충전 완료 - BoardLogic.AbilityChargeDamage");
         }
 
         /// <summary>
@@ -181,12 +176,6 @@ namespace ERang
         /// </summary>
         private IEnumerator MeleeAttack(BoardSlot selfSlot, List<BoardSlot> targetSlots, int ackCount, int damage)
         {
-            // 원래 위치 저장
-            Vector3 originalPosition = selfSlot.transform.position;
-
-            // 첫번째 대상 카드로 이동
-            // yield return StartCoroutine(MoveCard(selfSlot, targetSlots[0].transform.position));
-
             selfSlot.AniAttack();
 
             // 근접 공격
@@ -196,35 +185,12 @@ namespace ERang
                 {
                     targetSlot.SetDamage(damage);
                     targetSlot.AniDamaged();
+
                     yield return new WaitForSeconds(0.5f);
                 }
             }
 
-            // 원래 자리로 이동
-            // yield return StartCoroutine(MoveCard(selfSlot, originalPosition));
-
             Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 타겟({Utils.BoardSlotNumersText(targetSlots)}) 근접 공격({damage}) {ackCount}회 완료 - BoardLogic.MeleeAttack");
-        }
-
-        /// <summary>
-        /// 보드 슬롯 이동
-        /// </summary>
-        private IEnumerator MoveCard(BoardSlot fromSlot, Vector3 toPosition)
-        {
-            // 카드 이동 애니메이션 로직을 여기에 추가
-            // 예를 들어, 카드가 특정 위치로 이동하는 애니메이션
-            Vector3 startPosition = fromSlot.transform.position;
-            float duration = 1.0f; // 애니메이션 지속 시간
-
-            float elapsed = 0f;
-            while (elapsed < duration)
-            {
-                fromSlot.transform.position = Vector3.Lerp(startPosition, toPosition, elapsed / duration);
-                elapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            fromSlot.transform.position = toPosition;
         }
 
         /// <summary>
