@@ -15,10 +15,9 @@ namespace ERang
 
         public readonly CardType[] BoardSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None, CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.EnemyMaster };
         public readonly CardType[] BuildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
+
         public BoardSlot boardSlot;
-        public DeckUI deckUI;
-        public DeckUI graveDeckUI;
-        public DeckUI extinctionDeckUI;
+
         public TurnUI turnUI;
 
         // 전체 슬롯
@@ -72,7 +71,7 @@ namespace ERang
 
         public void ManaCharge()
         {
-            Master master = BattleLogic.Instance.GetMaster();
+            Master master = BattleLogic.Instance.Master;
 
             int beforeMana = master.Mana;
             master.chargeMana();
@@ -84,7 +83,7 @@ namespace ERang
 
         public void ManaReset()
         {
-            Master master = BattleLogic.Instance.GetMaster();
+            Master master = BattleLogic.Instance.Master;
 
             int beforeMana = master.Mana;
             master.resetMana();
@@ -96,7 +95,7 @@ namespace ERang
 
         public void ManaUse(int mana)
         {
-            Master master = BattleLogic.Instance.GetMaster();
+            Master master = BattleLogic.Instance.Master;
 
             int beforeMana = master.Mana;
             master.DecreaseMana(mana);
@@ -137,7 +136,7 @@ namespace ERang
                     case CardType.Master:
                         masterSlot = slot;
                         // todo: 이 부분 수정 필요.
-                        Master master = BattleLogic.Instance.GetMaster();
+                        Master master = BattleLogic.Instance.Master;
                         slot.SetMasterSlot(master);
                         slot.SetIndex(creatureSlotStartIndex - i);
                         SetGold(master.Gold);
@@ -145,7 +144,7 @@ namespace ERang
                         break;
                     case CardType.EnemyMaster:
                         enemyMasterSlot = slot;
-                        Enemy enemy = BattleLogic.Instance.GetEnemy();
+                        Enemy enemy = BattleLogic.Instance.Enemy;
                         // slot.SetEnemyMasterSlot(enemy);
                         slot.SetIndex(i - monsterSlotStartIndex);
                         rightSlots.Add(slot);
@@ -194,7 +193,7 @@ namespace ERang
 
         public void CreateMonsterCard()
         {
-            Enemy enemy = BattleLogic.Instance.GetEnemy();
+            Enemy enemy = BattleLogic.Instance.Enemy;
 
             for (int i = 0; i < enemy.monsterCards.Count; i++)
             {
@@ -227,21 +226,6 @@ namespace ERang
             }
 
             return nearestSlot;
-        }
-
-        public void SetDeckCount(int count)
-        {
-            deckUI.SetCount(count);
-        }
-
-        public void SetGraveDeckCount(int count)
-        {
-            graveDeckUI.SetCount(count);
-        }
-
-        public void SetExtinctionDeckCount(int count)
-        {
-            extinctionDeckUI.SetCount(count);
         }
 
         public void SetTurnCount(int turn)

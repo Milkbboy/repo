@@ -27,8 +27,6 @@ namespace ERang
 
         public void ExtinctionDeckCount()
         {
-            int count = Master.Instance.extinctionCards.Count;
-            Board.Instance.SetExtinctionDeckCount(count);
         }
     }
 }
