@@ -24,7 +24,6 @@ namespace ERang
         private System.Random random = new System.Random();
 
         private DeckSystem deckSystem;
-        private DeckUI deckUI;
 
         // for test
         private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
@@ -34,10 +33,9 @@ namespace ERang
         {
             Instance = this;
 
-            deckUI = GetComponent<DeckUI>();
             deckSystem = GetComponent<DeckSystem>();
             // deckUI 주입
-            deckSystem.SetDeckUI(deckUI);
+            deckSystem.SetDeckUI(GetComponent<DeckUI>());
 
             // 마스터, 적 객체 생성
             MasterData masterData = MasterData.GetMasterData(masterId);
@@ -52,7 +50,6 @@ namespace ERang
         void Start()
         {
             deckSystem.CreateMasterCards(master.StartCardIds);
-            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
 
             Board.Instance.CreateBoardSlots();
             Board.Instance.CreateMonsterCard();
