@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using ERang.Data;
 
 namespace ERang
@@ -10,7 +11,7 @@ namespace ERang
         public int MasterId { get { return masterId; } }
         public int Hp { get { return hp; } set { hp = value; } }
         public int MaxHp { get { return maxHp; } set { maxHp = value; } }
-        public int Mana { get { return mana; } set { mana = value; } }
+        public int Mana { get { return mana; } }
         public int MaxMana { get { return maxMana; } set { maxMana = value; } }
         public int RechargeMana { get { return rechargeMana; } set { rechargeMana = value; } }
         public int Atk { get { return atk; } set { atk = value; } }
@@ -45,35 +46,49 @@ namespace ERang
             startCardIds = masterData.startCardIds;
         }
 
-        public void chargeMana()
+        public void ChargeMana()
         {
+            int beforeMana = mana;
+
             mana += rechargeMana;
 
             if (mana > MaxMana)
                 mana = MaxMana;
+
+            Debug.Log($"<color=#257dca>Charge {rechargeMana} Mana: {beforeMana} -> {mana}</color>");
         }
 
-        public void resetMana()
+        public void ResetMana()
         {
+            int beforeMana = mana;
+
             mana = 0;
+
+            Debug.Log($"<color=#257dca>Reset Mana: {beforeMana} -> {mana}</color>");
         }
 
-        public void IncreaseMana(int value)
+        public void AddMana(int value)
         {
+            int beforeMana = mana;
+
             mana += value;
-        }
-
-        public void DecreaseMana(int value)
-        {
-            mana -= value;
 
             if (mana < 0)
                 mana = 0;
+
+            if (mana > MaxMana)
+                mana = MaxMana;
+
+            Debug.Log($"<color=#257dca>Add {value} Mana: {beforeMana} -> {mana}</color>");
         }
 
         public void AddGold(int gold)
         {
+            int beforeGold = this.gold;
+
             this.gold += gold;
+
+            Debug.Log($"<color=#257dca>Add {gold} Gold: {beforeGold} -> {this.gold}</color>");
         }
     }
 }

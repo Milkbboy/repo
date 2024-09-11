@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace ERang
 {
     public enum StatType
@@ -134,18 +130,6 @@ namespace ERang
         FriendlyCreature, // 아군 크리쳐 모두를 대상으로
         EnemyCreature, // 적 크리쳐 모두를 대상으로
         Card, // 카드를 대상으로
-    }
-
-    public class ConditionTargetConstants
-    {
-        public static ConditionTarget[] enemies = new ConditionTarget[]
-        {
-            ConditionTarget.NearEnemy,
-            ConditionTarget.Enemy1,
-            ConditionTarget.Enemy2,
-            ConditionTarget.Enemy3,
-            ConditionTarget.Enemy4,
-        };
     }
 
     /// <summary>

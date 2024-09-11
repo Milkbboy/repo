@@ -1707,8 +1707,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 798606271}
-  - component: {fileID: 798606272}
-  - component: {fileID: 798606273}
   m_Layer: 0
   m_Name: Turn
   m_TagString: Untagged
@@ -1738,32 +1736,6 @@ RectTransform:
   m_AnchoredPosition: {x: 615, y: -371}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &798606272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 798606270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9060db474c9a22b4294b27f324882fc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &798606273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 798606270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17391adba460ad749a82950186cfe0ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  turnCounts: {fileID: 816965881}
-  gold: {fileID: 86170081}
 --- !u!1 &816965879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1776,7 +1748,7 @@ GameObject:
   - component: {fileID: 816965882}
   - component: {fileID: 816965881}
   m_Layer: 0
-  m_Name: Count
+  m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2530,7 +2502,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1244142440}
   m_Layer: 0
-  m_Name: Extinction
+  m_Name: ExtinctionCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2689,7 +2661,7 @@ GameObject:
   - component: {fileID: 1361047918}
   - component: {fileID: 1361047920}
   m_Layer: 0
-  m_Name: Deck
+  m_Name: DeckCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2734,7 +2706,7 @@ GameObject:
   - component: {fileID: 1408640871}
   - component: {fileID: 1408640873}
   m_Layer: 0
-  m_Name: GraveDeck
+  m_Name: GraveDeckCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2959,7 +2931,9 @@ GameObject:
   - component: {fileID: 1494334413}
   - component: {fileID: 1494334415}
   - component: {fileID: 1494334416}
+  - component: {fileID: 1494334418}
   - component: {fileID: 1494334409}
+  - component: {fileID: 1494334419}
   m_Layer: 0
   m_Name: BattleScene
   m_TagString: Untagged
@@ -3109,6 +3083,35 @@ MonoBehaviour:
   extinctionCardCountText: {fileID: 1025752001}
   cardPrefab: {fileID: 6549374021415066406, guid: f113c0640259a3f489b4e53ec9ae8d3d,
     type: 3}
+  handDeckObject: {fileID: 1119929278}
+--- !u!114 &1494334418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494334405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c93f7c450cf4254e9b768ddc1f478a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardSlot: {fileID: 6059155431553465519, guid: 51fc6f33ec500a9408464164a276c513,
+    type: 3}
+--- !u!114 &1494334419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494334405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60f9cf37b74126444bbdc170520687af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnCount: {fileID: 816965881}
+  gold: {fileID: 86170081}
 --- !u!1001 &1510285748
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3191,7 +3194,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1524841215}
-  - component: {fileID: 1524841217}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -3216,21 +3218,6 @@ Transform:
   - {fileID: 1810951886}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1524841217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1524841214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69093b0146ccc3c42a0f9a19b3a6fc5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boardSlot: {fileID: 6059155431553465519, guid: 51fc6f33ec500a9408464164a276c513,
-    type: 3}
-  turnUI: {fileID: 798606273}
 --- !u!1 &1530854997
 GameObject:
   m_ObjectHideFlags: 0
@@ -3756,7 +3743,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1988741002
 Transform:
   m_ObjectHideFlags: 0
@@ -4146,7 +4133,7 @@ PrefabInstance:
     - target: {fileID: 4443172627180614986, guid: ec99e805295420a4c9e5fc762d8a2753,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 4443172627180614986, guid: ec99e805295420a4c9e5fc762d8a2753,
         type: 3}
@@ -4191,12 +4178,12 @@ PrefabInstance:
     - target: {fileID: 4443172627180614986, guid: ec99e805295420a4c9e5fc762d8a2753,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 4443172627180614986, guid: ec99e805295420a4c9e5fc762d8a2753,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100
+      value: 113
       objectReference: {fileID: 0}
     - target: {fileID: 4443172627180614986, guid: ec99e805295420a4c9e5fc762d8a2753,
         type: 3}
@@ -4231,6 +4218,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 274036656808761751, guid: 51fc6f33ec500a9408464164a276c513,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1322504842112133182, guid: 51fc6f33ec500a9408464164a276c513,
         type: 3}
       propertyPath: m_Name
@@ -4239,7 +4231,7 @@ PrefabInstance:
     - target: {fileID: 1322504842112133182, guid: 51fc6f33ec500a9408464164a276c513,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1415771865739976040, guid: 51fc6f33ec500a9408464164a276c513,
         type: 3}
@@ -4291,11 +4283,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1602542922695894159, guid: 51fc6f33ec500a9408464164a276c513,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4823375493246122045, guid: 51fc6f33ec500a9408464164a276c513,
         type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 6308532741039473067, guid: 51fc6f33ec500a9408464164a276c513,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dc13058d00f4db14484806d9b4ebf8b0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

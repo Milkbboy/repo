@@ -36,7 +36,7 @@ namespace ERang
             this.deckUI = deckUI;
         }
 
-        public Card GetHandCard(string cardUid)
+        public Card FindHandCard(string cardUid)
         {
             return handCards.Find(card => card.uid == cardUid);
         }

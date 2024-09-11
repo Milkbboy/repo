@@ -35,8 +35,10 @@ namespace ERang
         {
             GameObject cardObject = Instantiate(cardPrefab, handDeckObject.transform);
 
-            cardObject.GetComponent<HandCard>().SetCard(card);
-            handCards.Add(cardObject.GetComponent<HandCard>());
+            HandCard handCard = cardObject.GetComponent<HandCard>();
+            handCard.SetCard(card);
+
+            handCards.Add(handCard);
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace ERang
         /// <param name="cardUid"></param>
         public void RemoveHandCard(string cardUid)
         {
-            HandCard handCard = handCards.Find(x => x.GetUID() == cardUid);
+            HandCard handCard = handCards.Find(x => x.CardUid == cardUid);
 
             if (handCard == null)
             {

@@ -24,6 +24,7 @@ namespace ERang
         private System.Random random = new System.Random();
 
         private DeckSystem deckSystem;
+        private BoardSystem boardSystem;
 
         // for test
         private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
@@ -33,9 +34,13 @@ namespace ERang
         {
             Instance = this;
 
+            // 시스템 생성
             deckSystem = GetComponent<DeckSystem>();
-            // deckUI 주입
+            boardSystem = GetComponent<BoardSystem>();
+
+            // UI 주입
             deckSystem.SetDeckUI(GetComponent<DeckUI>());
+            boardSystem.SetBoardUI(GetComponent<BoardUI>());
 
             // 마스터, 적 객체 생성
             MasterData masterData = MasterData.GetMasterData(masterId);
@@ -51,8 +56,8 @@ namespace ERang
         {
             deckSystem.CreateMasterCards(master.StartCardIds);
 
-            Board.Instance.CreateBoardSlots();
-            Board.Instance.CreateMonsterCard();
+            boardSystem.CreateBoardSlots(master, enemy);
+            boardSystem.CreateMonsterBoardSlots(enemy.monsterCards);
 
             StartCoroutine(TurnStart());
         }
@@ -64,13 +69,15 @@ namespace ERang
 
         public IEnumerator TurnStart()
         {
+            yield return new WaitForSeconds(1f);
+
             ToastNotification.Show($"!! TURN START !! ({turnCount})");
 
-            // 보드 설정
-            Board.Instance.SetTurnCount(turnCount);
+            // 턴 카운트 설정
+            boardSystem.SetTurnCount(turnCount);
 
             // 마나 충전
-            EnqueueAction("턴 시작 마나 충전", () => { Board.Instance.ManaCharge(); });
+            EnqueueAction("마나 충전", () => { boardSystem.ChargeMana(master); });
 
             // 핸드 카드 만들기
             yield return StartCoroutine(deckSystem.MakeHandCards());
@@ -97,13 +104,13 @@ namespace ERang
 
             // 보드 - 턴 카운트
             turnCount += 1;
-            Board.Instance.SetTurnCount(turnCount);
+            boardSystem.SetTurnCount(turnCount);
 
             // 핸드덱에 카드 제거
             deckSystem.RemoveTurnEndHandCard();
 
             // 마스터 마나 리셋
-            EnqueueAction("턴 종료 마나 리셋", () => { Board.Instance.ManaReset(); });
+            EnqueueAction("마나 리셋", () => { boardSystem.ResetMana(master); });
 
             // 핸드 온 카드 어빌리티 해제
             HandOnCardAbilityCut();
@@ -123,7 +130,7 @@ namespace ERang
         void HandOnCardAbilityAction(List<Card> handCards)
         {
             // 핸드 온 카드 액션의 주체는 마스터 슬롯
-            BoardSlot masterSlot = Board.Instance.GetMasterSlot();
+            BoardSlot masterSlot = boardSystem.GetBoardSlot(0);
             List<(Card card, AiData aiData, List<AbilityData> abilityDatas)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
 
             foreach (var handOnCard in handOnCards)
@@ -154,7 +161,7 @@ namespace ERang
 
                 EnqueueAction($"!! 어빌리티({ability.abilityId}) 지속시간 종료 확인 !!", () =>
                 {
-                    BoardSlot boardSlot = Board.Instance.GetBoardSlot(ability.ownerBoardSlot);
+                    BoardSlot boardSlot = boardSystem.GetBoardSlot(ability.ownerBoardSlot);
 
                     AbilityLogic.Instance.AbilityAction(boardSlot, ability);
                 });
@@ -168,8 +175,8 @@ namespace ERang
 
         void TurnStartReaction()
         {
-            List<BoardSlot> reactionSlots = Board.Instance.GetMonsterBoardSlots();
-            List<BoardSlot> opponentSlots = Board.Instance.GetCreatureBoardSlots();
+            List<BoardSlot> reactionSlots = boardSystem.GetMonsterBoardSlots();
+            List<BoardSlot> opponentSlots = boardSystem.GetCreatureBoardSlots();
 
             foreach (BoardSlot reactionSlot in reactionSlots)
             {
@@ -181,8 +188,7 @@ namespace ERang
 
                 EnqueueAction($"보드 {reactionSlot.Slot} 슬롯. -- 턴 시작 리액션 --", () =>
                 {
-                    // 현재 턴 보드 슬롯 깜빡임 설정
-                    flashingCard(reactionSlot);
+                    FlashingCard(reactionSlot);
 
                     Card card = reactionSlot.Card;
 
@@ -227,7 +233,7 @@ namespace ERang
                         foreach (int targetSlot in reactionTargetSlots)
                         {
                             // Debug.Log($"{targetSlot}번 타겟 슬롯 깜박임 시작 - BattleLogic.TurnStartReaction");
-                            BoardSlot targetBoardSlot = Board.Instance.GetBoardSlot(targetSlot);
+                            BoardSlot targetBoardSlot = boardSystem.GetBoardSlot(targetSlot);
 
                             targetBoardSlot.StartFlashing(Color.red);
                             flashingSlots.Add(targetBoardSlot);
@@ -274,24 +280,22 @@ namespace ERang
 
         void MasterCreatureAction()
         {
-            List<BoardSlot> creatureSlots = Board.Instance.GetCreatureBoardSlots();
-            List<BoardSlot> monsterSlots = Board.Instance.GetMonsterBoardSlots();
+            List<BoardSlot> creatureSlots = boardSystem.GetCreatureBoardSlots();
 
-            BoardCardAction(creatureSlots, monsterSlots);
+            BoardCardAction(creatureSlots);
         }
 
         void EnemyMonsterAction()
         {
-            List<BoardSlot> monsterSlots = Board.Instance.GetMonsterBoardSlots();
-            List<BoardSlot> creatureSlots = Board.Instance.GetCreatureBoardSlots();
+            List<BoardSlot> monsterSlots = boardSystem.GetMonsterBoardSlots();
 
-            BoardCardAction(monsterSlots, creatureSlots);
+            BoardCardAction(monsterSlots);
         }
 
         /// <summary>
         /// 보드 슬롯 카드 액션
         /// </summary>
-        void BoardCardAction(List<BoardSlot> actorSlots, List<BoardSlot> opponentSlots)
+        void BoardCardAction(List<BoardSlot> actorSlots)
         {
             foreach (BoardSlot actorSlot in actorSlots)
             {
@@ -301,7 +305,7 @@ namespace ERang
                 EnqueueAction($"** {actorSlot.Slot}번 슬롯 카드 액션 **", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
-                    flashingCard(actorSlot);
+                    FlashingCard(actorSlot);
 
                     Card card = actorSlot.Card;
 
@@ -345,7 +349,7 @@ namespace ERang
         /// </summary>
         void BuildingCardAction()
         {
-            foreach (BoardSlot buildingSlot in Board.Instance.GetBuildingSlots())
+            foreach (BoardSlot buildingSlot in boardSystem.GetBuildingBoardSlots())
             {
                 if (buildingSlot.Card == null)
                     continue; ;
@@ -353,7 +357,7 @@ namespace ERang
                 EnqueueAction($"<color=#dd9933>건물</color> {buildingSlot.Slot}번 슬롯 ** 턴 종료 액션 **", () =>
                 {
                     // 현재 턴 보드 슬롯 깜빡임 설정
-                    flashingCard(buildingSlot);
+                    FlashingCard(buildingSlot);
 
                     Card card = buildingSlot.Card;
 
@@ -397,7 +401,7 @@ namespace ERang
         /// </summary>
         public bool CanHandCardUse(string cardUid)
         {
-            Card card = deckSystem.GetHandCard(cardUid);
+            Card card = deckSystem.FindHandCard(cardUid);
 
             if (card == null)
             {
@@ -435,7 +439,13 @@ namespace ERang
 
         public void BoardSlotEquipCard(BoardSlot boardSlotRef, string cardUid)
         {
-            Card card = deckSystem.GetHandCard(cardUid);
+            Card card = deckSystem.FindHandCard(cardUid);
+
+            if (card == null)
+            {
+                Debug.LogError($"핸드에 {cardUid} 카드 없음 - BattleLogic.BoardSlotEquipCard");
+                return;
+            }
 
             // BoardSlot 에 카드 장착
             boardSlotRef.EquipCard(card);
@@ -443,16 +453,8 @@ namespace ERang
             // Master handCards => boardCreatureCards or boardBuildingCards 로 이동
             deckSystem.HandCardToBoard(cardUid);
 
-            // 마스터 mana 감소
-            if (card.costMana > 0)
-                master.DecreaseMana(card.costMana);
-
-            // 마스터 gold 감소
-            if (card.costGold > 0)
-                master.AddGold(-card.costGold);
-
-            Board.Instance.SetMasterMana(master.Mana);
-            Board.Instance.SetGold(master.Gold);
+            // 카드 비용 소모
+            boardSystem.CardCost(master, card);
 
             Debug.Log($"BoardSlotEquipCard: {card.id}, BoardSlot: {boardSlotRef.Slot}");
         }
@@ -462,7 +464,7 @@ namespace ERang
         /// </summary>
         public void HandCardUse(string cardUid, BoardSlot targetSlot)
         {
-            Card card = deckSystem.GetHandCard(cardUid);
+            Card card = deckSystem.FindHandCard(cardUid);
 
             // 타겟 설정 카드인가 확인
             var (isSelectAttackType, aiData) = card.GetAiAttackInfo();
@@ -482,7 +484,7 @@ namespace ERang
                 if (aiTargetSlots.Contains(targetSlot))
                 {
                     Debug.Log($"타겟 슬롯 {targetSlot.Slot}에 핸드 카드({card.id}) 사용 - BattleLogic.HandCardUse");
-                    BoardSlot masterSlot = Board.Instance.GetMasterSlot();
+                    BoardSlot masterSlot = boardSystem.GetBoardSlot(0);
                     AbilityLogic.Instance.HandUseAbilityAction(AbilityWhereFrom.HandUse, aiData, masterSlot, new List<BoardSlot> { targetSlot });
                 }
                 else
@@ -494,8 +496,8 @@ namespace ERang
 
             Debug.Log($"핸드 카드({card.id}) 사용 - BattleLogic.HandCardUse");
 
-            // mana 사용
-            Board.Instance.ManaUse(card.costMana);
+            // 카드 비용 소모
+            boardSystem.CardCost(master, card);
 
             // 마스터 핸드 카드 제거
             deckSystem.RemoveUsedHandCard(cardUid);
@@ -519,10 +521,10 @@ namespace ERang
                 deckSystem.RemoveBoardCard(boardSlot.Card.uid);
 
             // 보드에서 카드 제거 - 제일 마지막에 실행
-            Board.Instance.RemoveCard(boardSlot.Card.uid);
+            boardSystem.RemoveCard(boardSlot.Card.uid);
 
             // 배틀 종료 확인. 마스터 카드 제거. 몬스터 카드 + 적 마스터 카드 제거
-            int monsterCount = Board.Instance.GetMonsterSlots().Count(slot => slot.Card != null);
+            int monsterCount = boardSystem.GetMonsterBoardSlots().Count(slot => slot.Card != null);
 
             if (monsterCount == 0 || boardSlot.Slot == 0)
             {
@@ -547,8 +549,8 @@ namespace ERang
         public void TestMelee()
         {
             // 근거리 공격
-            BoardSlot meleeSlot = Board.Instance.GetBoardSlot(6);
-            List<BoardSlot> meleeTargetSlots = Board.Instance.GetBoardSlots(new List<int> { 3, 2 });
+            BoardSlot meleeSlot = boardSystem.GetBoardSlot(6);
+            List<BoardSlot> meleeTargetSlots = boardSystem.GetBoardSlots(new List<int> { 3, 2 });
 
             AiData meleeAiData = AiData.GetAiData(1001);
             BoardLogic.Instance.AbilityDamage(meleeAiData, meleeSlot, meleeTargetSlots);
@@ -559,14 +561,59 @@ namespace ERang
         /// </summary>
         public void TestRanged()
         {
-            BoardSlot rangedSlot = Board.Instance.GetBoardSlot(7);
-            List<BoardSlot> rangedTargetSlots = Board.Instance.GetBoardSlots(new List<int> { 3, 2, 1 });
+            BoardSlot rangedSlot = boardSystem.GetBoardSlot(7);
+            List<BoardSlot> rangedTargetSlots = boardSystem.GetBoardSlots(new List<int> { 3, 2, 1 });
 
             AiData rangedAiData = AiData.GetAiData(1004);
             BoardLogic.Instance.AbilityDamage(rangedAiData, rangedSlot, rangedTargetSlots);
         }
 
-        private void flashingCard(BoardSlot boardSlot)
+        /// <summary>
+        /// 다른 Logic 에서 호출해서 어쩔 수 없이 BattleLogic 에 임시로 추가한 함수.
+        /// 코드 리펙토링 진행하면서 수정될 코드
+        /// </summary>
+        /// <param name="mana"></param>
+        public void AddMasterMana(int mana)
+        {
+            boardSystem.AddMana(master, mana);
+        }
+
+        public void AddMasterGold(int gold)
+        {
+            boardSystem.AddGold(master, gold);
+        }
+
+        public BoardSlot GetBoardSlot(int slot)
+        {
+            return boardSystem.GetBoardSlot(slot);
+        }
+
+        public List<BoardSlot> GetOpponentSlots(BoardSlot selfSlot)
+        {
+            return boardSystem.GetOpponentSlots(selfSlot);
+        }
+
+        public List<BoardSlot> GetFriendlySlots(BoardSlot selfSlot)
+        {
+            return boardSystem.GetFriendlySlots(selfSlot);
+        }
+
+        public List<BoardSlot> GetCreatureBoardSlots()
+        {
+            return boardSystem.GetCreatureBoardSlots();
+        }
+
+        public List<BoardSlot> GetMonsterBoardSlots()
+        {
+            return boardSystem.GetMonsterBoardSlots();
+        }
+
+        public BoardSlot NeareastBoardSlot(Vector3 position)
+        {
+            return boardSystem.NeareastBoardSlot(position);
+        }
+
+        private void FlashingCard(BoardSlot boardSlot)
         {
             if (boardSlot == null)
                 return;

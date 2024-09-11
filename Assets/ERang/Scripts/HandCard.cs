@@ -4,6 +4,8 @@ namespace ERang
 {
     public class HandCard : MonoBehaviour
     {
+        public string CardUid { get { return cardUid; } }
+
         [SerializeField] private int cardId;
         [SerializeField] private CardType cardType;
         private string cardUid;
@@ -12,42 +14,26 @@ namespace ERang
         private bool drag = false;
         private Ani_SelectedCard aniSelectedCard;
 
-        // Start is called before the first frame update
         void Awake()
         {
             cardUI = GetComponent<CardUI>();
             aniSelectedCard = GetComponent<Ani_SelectedCard>();
         }
 
-        // 카드 hp, atk, def, costMana, costGold 등은 cardData 의 기본 값에서 해당 카드의 ability 로 최종 값을 결정하자.
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         void OnMouseDown()
         {
-            // Debug.Log("OnMouseDown card: " + cardId);
             drag = true;
-
             aniSelectedCard.isDrag = true;
         }
 
         void OnMouseDrag()
         {
+            drag = false;
+
             Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
             transform.position = new Vector3(objPosition.x, objPosition.y, originalPosition.z - 0.15f);
-            drag = false;
         }
 
         void OnMouseUp()
@@ -63,7 +49,7 @@ namespace ERang
                 return;
             }
 
-            BoardSlot boardSlot = Board.Instance.NeareastBoardSlot(transform.position);
+            BoardSlot boardSlot = BattleLogic.Instance.NeareastBoardSlot(transform.position);
 
             // CardType 별 동작
             switch (cardType)

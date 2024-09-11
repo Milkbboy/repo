@@ -112,7 +112,7 @@ namespace ERang
         /// </summary>
         public void HandOnAbilityCut(Ability ability)
         {
-            BoardSlot targetSlot = Board.Instance.GetBoardSlot(ability.ownerBoardSlot);
+            BoardSlot targetSlot = BattleLogic.Instance.GetBoardSlot(ability.ownerBoardSlot);
 
             if (targetSlot.Card == null)
             {
@@ -245,12 +245,12 @@ namespace ERang
         public List<Ability> GetDurationAbilities()
         {
             // 어빌리티 대상이 사라진 보드 슬롯
-            List<BoardSlot> removeCardSlots = abilities.Select(ability => Board.Instance.GetBoardSlot(ability.ownerBoardSlot)).Where(boardSlot => boardSlot.Card == null).ToList();
+            List<BoardSlot> removeCardSlots = abilities.Select(ability => BattleLogic.Instance.GetBoardSlot(ability.ownerBoardSlot)).Where(boardSlot => boardSlot.Card == null).ToList();
             if (removeCardSlots.Count > 0)
                 Debug.Log($"어빌리티 대상이 사라진 보드 슬롯: {string.Join(", ", removeCardSlots.Select(boardSlot => boardSlot.Slot))}");
 
             // 어빌리티 대상이 사라진 보드 슬롯 제거
-            abilities.RemoveAll(ability => Board.Instance.GetBoardSlot(ability.ownerBoardSlot).Card == null);
+            abilities.RemoveAll(ability => BattleLogic.Instance.GetBoardSlot(ability.ownerBoardSlot).Card == null);
 
             return abilities;
         }
@@ -284,14 +284,13 @@ namespace ERang
                     Debug.Log($"{abilityActionLog} 적용 해제 - beforeValue: {ability.beforeValue} def: {card.def}");
                     break;
                 case AbilityType.ChargeDamage:
-                    BoardSlot targetSlot = Board.Instance.GetBoardSlot(ability.ownerBoardSlot);
+                    BoardSlot targetSlot = BattleLogic.Instance.GetBoardSlot(ability.ownerBoardSlot);
                     targetSlot.SetDamage(ability.abilityValue);
                     string chargeDamageLog = targetSlot.Card != null ? $"데미지 {ability.abilityValue} 적용" : "적용 해제";
                     Debug.Log($"{abilityActionLog} {chargeDamageLog} - AiLogic.AbilityAction");
                     break;
                 case AbilityType.AddMana:
-                    Master.Instance.DecreaseMana(ability.abilityValue);
-                    boardSlot.SetMasterMana(Master.Instance.Mana);
+                    BattleLogic.Instance.AddMasterMana(ability.abilityValue * -1);
                     Debug.Log($"{abilityActionLog} 적용 해제 - <color=#257dca>mana: {Master.Instance.Mana}</color>");
                     break;
                 default:

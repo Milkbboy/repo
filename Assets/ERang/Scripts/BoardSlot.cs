@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using ERang.Data;
 using UnityEngine;
 
 namespace ERang
@@ -8,6 +5,13 @@ namespace ERang
     [System.Serializable]
     public class BoardSlot : MonoBehaviour
     {
+        public bool IsOccupied { get { return isOccupied; } }
+        public bool IsOverlapCard { get { return isOverlapCard; } }
+        public int Index { get { return index; } }
+        public int Slot { get { return slot; } }
+        public CardType CardType { get { return cardType; } }
+        public Card Card { get { return card; } }
+
         [SerializeField] private int slot; // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 값
         [SerializeField] private int index; // 0, 1, 2, 3 값 3 은 마스터 카드
         [SerializeField] private CardType cardType; // 보드에 장착할 수 있는 cardType
@@ -20,20 +24,12 @@ namespace ERang
         private Ani_Attack aniAttack;
         private Ani_Damaged aniDamaged;
 
-        public bool IsOccupied { get { return isOccupied; } }
-        public bool IsOverlapCard { get { return isOverlapCard; } }
-        public int Index { get { return index; } }
-        public int Slot { get { return slot; } }
-        public CardType CardType { get { return cardType; } }
-        public Card Card { get { return card; } }
-
         void Awake()
         {
             cardUI = GetComponent<CardUI>();
             cardUI.cardObject.SetActive(false);
 
             boardSlotUI = GetComponent<BoardSlotUI>();
-
             aniAttack = GetComponent<Ani_Attack>();
             aniDamaged = GetComponent<Ani_Damaged>();
         }

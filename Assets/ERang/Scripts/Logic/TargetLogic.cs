@@ -58,11 +58,11 @@ namespace ERang
             {
                 case AiDataAttackType.SelectEnemy:
                 case AiDataAttackType.SelectEnemyCreature:
-                    targetSlots = Board.Instance.GetMonsterBoardSlots();
+                    targetSlots = BattleLogic.Instance.GetMonsterBoardSlots();
                     break;
                 case AiDataAttackType.SelectFriendly:
                 case AiDataAttackType.SelectFriendlyCreature:
-                    targetSlots = Board.Instance.GetCreatureBoardSlots();
+                    targetSlots = BattleLogic.Instance.GetCreatureBoardSlots();
                     break;
             }
 
@@ -74,7 +74,7 @@ namespace ERang
             List<BoardSlot> targets = new List<BoardSlot>();
 
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
+            List<BoardSlot> opponentSlots = BattleLogic.Instance.GetOpponentSlots(selfSlot);
 
             switch (aiData.type)
             {
@@ -125,7 +125,7 @@ namespace ERang
             List<BoardSlot> targets = new List<BoardSlot>();
 
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
+            List<BoardSlot> opponentSlots = BattleLogic.Instance.GetOpponentSlots(selfSlot);
 
             // 제일 근접한 타겟 찾기
             BoardSlot targetSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
@@ -165,7 +165,7 @@ namespace ERang
         private List<BoardSlot> TargetAllEnemy(BoardSlot selfSlot, bool exceptMaster = false)
         {
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
+            List<BoardSlot> opponentSlots = BattleLogic.Instance.GetOpponentSlots(selfSlot);
 
             if (exceptMaster)
                 opponentSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
@@ -178,7 +178,7 @@ namespace ERang
         private List<BoardSlot> TargetAllFriendly(BoardSlot selfSlot, bool exceptMaster = false)
         {
             // 아군 슬롯 리스트
-            List<BoardSlot> friendlySlots = Board.Instance.GetFriendlySlots(selfSlot);
+            List<BoardSlot> friendlySlots = BattleLogic.Instance.GetFriendlySlots(selfSlot);
 
             if (exceptMaster)
                 friendlySlots = friendlySlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
@@ -191,7 +191,7 @@ namespace ERang
         private List<BoardSlot> TargetRandomEnemy(BoardSlot selfSlot, bool exceptMaster = false)
         {
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = Board.Instance.GetOpponentSlots(selfSlot);
+            List<BoardSlot> opponentSlots = BattleLogic.Instance.GetOpponentSlots(selfSlot);
 
             if (exceptMaster)
                 opponentSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();

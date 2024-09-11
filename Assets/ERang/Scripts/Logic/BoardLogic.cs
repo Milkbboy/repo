@@ -156,8 +156,7 @@ namespace ERang
             int beforeMana = Master.Instance.Mana;
 
             // 마나 추가 획득
-            Master.Instance.IncreaseMana(value);
-            Board.Instance.SetMasterMana(Master.Instance.Mana);
+            BattleLogic.Instance.AddMasterMana(value);
 
             Debug.Log($"{Utils.BoardSlotLog(selfSlot)} <color=#257dca>마나 {value} 추가 획득</color>({beforeMana} => {Master.Instance.Mana}) - BoardLogic.AffectAddMana");
 
@@ -172,8 +171,7 @@ namespace ERang
             int gold = aiData.value + (int)gainGold;
             int beforeGold = Master.Instance.Gold;
 
-            Master.Instance.AddGold(gold);
-            Board.Instance.SetGold(Master.Instance.Gold);
+            BattleLogic.Instance.AddMasterGold(gold);
 
             selfSlot.SetGoldUI(beforeGold, Master.Instance.Gold);
         }
