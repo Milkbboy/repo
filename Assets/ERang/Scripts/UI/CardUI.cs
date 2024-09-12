@@ -157,7 +157,7 @@ namespace ERang
             defText.text = def.ToString();
         }
 
-        public void SetMasterMana(int mana)
+        public void SetMana(int mana)
         {
             ShowFloatingText("mana", manaText.text, mana.ToString());
             manaText.text = mana.ToString();
@@ -187,7 +187,7 @@ namespace ERang
             defText.text = def.ToString();
         }
 
-        public void SetGold(int beforeGlod, int afterGold)
+        public void SetFloatingGold(int beforeGlod, int afterGold)
         {
             ShowFloatingText("Gold", beforeGlod.ToString(), afterGold.ToString());
         }

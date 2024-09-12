@@ -19,31 +19,11 @@ namespace ERang
         [SerializeField] private bool isOverlapCard = false; // 카드가 올라가 있는지 여부
 
         private Card card;
-        private CardUI cardUI;
         private BoardSlotUI boardSlotUI;
-        private Ani_Attack aniAttack;
-        private Ani_Damaged aniDamaged;
 
         void Awake()
         {
-            cardUI = GetComponent<CardUI>();
-            cardUI.cardObject.SetActive(false);
-
             boardSlotUI = GetComponent<BoardSlotUI>();
-            aniAttack = GetComponent<Ani_Attack>();
-            aniDamaged = GetComponent<Ani_Damaged>();
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         void OnTriggerEnter(Collider other)
@@ -68,8 +48,6 @@ namespace ERang
             this.cardType = cardType;
 
             boardSlotUI.SetSlotType(cardType);
-
-            aniAttack.isAttackingFromLeft = cardType == CardType.Master || cardType == CardType.Creature;
         }
 
         public void SetIndex(int index)
@@ -80,45 +58,51 @@ namespace ERang
         public void SetMasterSlot(Master master)
         {
             isOccupied = true;
-
-            cardUI.cardObject.SetActive(true);
-            cardUI.SetMasterCard(master);
-
             card = new Card(master.MasterId, CardType.Master, master.Hp, master.MaxHp, master.Atk, master.Def);
+
+            boardSlotUI.SetMasterCard(master);
         }
 
         public void SetEnemyMasterSlot(Enemy enemy)
         {
-            cardUI.cardObject.SetActive(true);
-            cardUI.SetEnemyMasterCard(enemy);
+            boardSlotUI.SetEnemyMasterCard(enemy);
         }
 
-        public void SetMasterMana(int mana)
+        public void SetMana(int mana)
         {
-            cardUI.SetMasterMana(mana);
+            boardSlotUI.SetMana(mana);
         }
 
-        /**
-         * @brief 카드 장착
-         * @param card 카드 정보
-        */
+        /// <summary>
+        /// 카드 장착
+        /// </summary>
+        /// <param name="card"></param>
         public void EquipCard(Card card)
         {
             this.card = card;
 
-            Debug.Log($"{slot} 슬롯에 카드 장착 hp: {card.hp}, atk: {card.atk}, def: {card.def}, maxHp: {card.maxHp}");
-
             isOccupied = true;
             isOverlapCard = false;
 
-            cardUI.cardObject.SetActive(true);
-            cardUI.SetCard(card);
+            boardSlotUI.SetCard(card);
+
+            Debug.Log($"{slot} 슬롯에 카드 장착 hp: {card.hp}, atk: {card.atk}, def: {card.def}, maxHp: {card.maxHp}");
         }
 
+        /// <summary>
+        /// 카드 hp 설정
+        /// </summary>
+        /// <param name="hp"></param>
         public void SetCardHp(int hp)
         {
+            if (card == null)
+            {
+                Debug.LogWarning($"{slot}번 슬롯 카드 없음");
+                return;
+            }
+
             card.SetHp(hp);
-            cardUI.SetHp(card.hp);
+            boardSlotUI.SetHp(hp);
         }
 
         /// <summary>
@@ -149,9 +133,9 @@ namespace ERang
                 card.hp -= damage;
             }
 
-            cardUI.SetHp(card.hp);
-            cardUI.SetDef(card.def);
+            boardSlotUI.SetHpDef(card.hp, card.def);
 
+            // hp 0 으로 카드 제거
             if (card.hp <= 0)
                 BattleLogic.Instance.RemoveBoardCard(this);
         }
@@ -165,7 +149,7 @@ namespace ERang
             }
 
             card.SetAtk(atk);
-            cardUI.SetAtk(card.atk);
+            boardSlotUI.SetAtk(card.atk);
         }
 
         public void SetCardDef(int def)
@@ -177,7 +161,7 @@ namespace ERang
             }
 
             card.SetDef(def);
-            cardUI.SetDef(card.def);
+            boardSlotUI.SetDef(card.def);
         }
 
         public void AddCardHp(int hp)
@@ -189,7 +173,7 @@ namespace ERang
             }
 
             card.AddHp(hp);
-            cardUI.SetHp(card.hp);
+            boardSlotUI.SetHp(card.hp);
         }
 
         public void AddCardAtk(int atk)
@@ -201,7 +185,7 @@ namespace ERang
             }
 
             card.AddAtk(atk);
-            cardUI.SetAtk(card.atk);
+            boardSlotUI.SetAtk(card.atk);
         }
 
         public void AddCardDef(int def)
@@ -213,12 +197,12 @@ namespace ERang
             }
 
             card.AddDef(def);
-            cardUI.SetDef(card.def);
+            boardSlotUI.SetDef(card.def);
         }
 
-        public void SetGoldUI(int beforeGlod, int afterGold)
+        public void SetFloatingGold(int beforeGlod, int afterGold)
         {
-            cardUI.SetGold(beforeGlod, afterGold);
+            boardSlotUI.SetFloatingGold(beforeGlod, afterGold);
         }
 
         public void RemoveCard()
@@ -234,28 +218,27 @@ namespace ERang
 
             card = null;
 
-            cardUI.ResetStat();
-            cardUI.cardObject.SetActive(false);
+            boardSlotUI.SetResetStat();
         }
 
-        public void StartFlashing(Color? color = null)
+        public void AniAttack()
         {
-            boardSlotUI.StartFlashing(color);
+            boardSlotUI.AniAttack();
+        }
+
+        public void AniDamaged()
+        {
+            boardSlotUI.AniDamaged();
+        }
+
+        public void StartFlashing()
+        {
+            boardSlotUI.StartFlashing();
         }
 
         public void StopFlashing()
         {
             boardSlotUI.StopFlashing();
-        }
-
-        public void AniAttack()
-        {
-            aniAttack.PlaySequence();
-        }
-
-        public void AniDamaged()
-        {
-            aniDamaged.PlaySequence();
         }
     }
 }

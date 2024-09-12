@@ -121,7 +121,7 @@ namespace ERang
         {
             master.ChargeMana();
 
-            boardSlots[0].SetMasterMana(master.Mana);
+            boardSlots[0].SetMana(master.Mana);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace ERang
         {
             master.ResetMana();
 
-            boardSlots[0].SetMasterMana(master.Mana);
+            boardSlots[0].SetMana(master.Mana);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace ERang
         {
             master.AddMana(mana);
 
-            boardSlots[0].SetMasterMana(master.Mana);
+            boardSlots[0].SetMana(master.Mana);
         }
 
         /// <summary>

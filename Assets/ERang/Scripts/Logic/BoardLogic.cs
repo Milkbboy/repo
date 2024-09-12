@@ -168,7 +168,8 @@ namespace ERang
 
             BattleLogic.Instance.AddMasterGold(gold);
 
-            selfSlot.SetGoldUI(beforeGold, Master.Instance.Gold);
+            // 골드 획득량 표시
+            selfSlot.SetFloatingGold(beforeGold, Master.Instance.Gold);
         }
 
         /// <summary>

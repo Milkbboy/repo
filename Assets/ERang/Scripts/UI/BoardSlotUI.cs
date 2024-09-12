@@ -10,19 +10,20 @@ namespace ERang
         public Texture2D cardTexture;
         public MeshRenderer meshRenderer;
 
+        private CardUI cardUI;
+        private Ani_Attack aniAttack;
+        private Ani_Damaged aniDamaged;
+
         private Coroutine flashCoroutine;
-        private Color flashColor;
+        private Color flashColor = Color.blue;
 
-        // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
-            flashColor = Color.blue;
-        }
+            cardUI = GetComponent<CardUI>();
+            cardUI.cardObject.SetActive(false);
 
-        // Update is called once per frame
-        void Update()
-        {
-
+            aniAttack = GetComponent<Ani_Attack>();
+            aniDamaged = GetComponent<Ani_Damaged>();
         }
 
         public void StartFlashing(Color? color = null)
@@ -62,6 +63,73 @@ namespace ERang
 
             if (cardTexture != null)
                 meshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
+
+            aniAttack.isAttackingFromLeft = cardType == CardType.Master || cardType == CardType.Creature;
+        }
+
+        public void SetCard(Card card)
+        {
+            cardUI.cardObject.SetActive(true);
+            cardUI.SetCard(card);
+        }
+
+        public void SetMasterCard(Master master)
+        {
+            cardUI.cardObject.SetActive(true);
+            cardUI.SetMasterCard(master);
+        }
+
+        public void SetEnemyMasterCard(Enemy enemy)
+        {
+            cardUI.cardObject.SetActive(true);
+            cardUI.SetEnemyMasterCard(enemy);
+        }
+
+        public void SetMana(int mana)
+        {
+            cardUI.SetMana(mana);
+        }
+
+        public void SetHp(int hp)
+        {
+            cardUI.SetHp(hp);
+        }
+
+        public void SetAtk(int atk)
+        {
+            cardUI.SetAtk(atk);
+        }
+
+        public void SetDef(int def)
+        {
+            cardUI.SetDef(def);
+        }
+
+        public void SetHpDef(int hp, int def)
+        {
+            cardUI.SetHp(hp);
+            cardUI.SetDef(def);
+        }
+
+        public void SetFloatingGold(int beforeGold, int afterGold)
+        {
+            cardUI.SetFloatingGold(beforeGold, afterGold);
+        }
+
+        public void SetResetStat()
+        {
+            cardUI.ResetStat();
+            cardUI.cardObject.SetActive(false);
+        }
+
+        public void AniAttack()
+        {
+            aniAttack.PlaySequence();
+        }
+
+        public void AniDamaged()
+        {
+            aniDamaged.PlaySequence();
         }
 
         private IEnumerator FlashRoutine()
