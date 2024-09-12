@@ -31,14 +31,14 @@ namespace ERang
 
         private DeckUI deckUI;
 
-        public void SetDeckUI(DeckUI deckUI)
+        void Awake()
         {
-            this.deckUI = deckUI;
+            deckUI = GetComponent<DeckUI>();
         }
 
         public Card FindHandCard(string cardUid)
         {
-            return handCards.Find(card => card.uid == cardUid);
+            return handCards.Find(card => card.Uid == cardUid);
         }
 
         /// <summary>
@@ -109,11 +109,11 @@ namespace ERang
         /// </summary>
         public void HandCardToBoard(string cardUid)
         {
-            Card card = handCards.Find(card => card.uid == cardUid);
+            Card card = handCards.Find(card => card.Uid == cardUid);
 
             if (card == null)
             {
-                Debug.LogError($"핸드덱에 {card.id} 카드 없음");
+                Debug.LogError($"핸드덱에 {card.Id} 카드 없음");
                 return;
             }
 
@@ -122,7 +122,7 @@ namespace ERang
             deckUI.RemoveHandCard(cardUid);
 
             // 카드 타입별로 보드에 추가
-            switch (card.type)
+            switch (card.Type)
             {
                 case CardType.Creature: creatureCards.Add(card); break;
                 case CardType.Building: buildingCards.Add(card); break;
@@ -165,11 +165,11 @@ namespace ERang
         /// </summary>
         public void RemoveUsedHandCard(string cardUid)
         {
-            Card card = handCards.Find(card => card.uid == cardUid);
+            Card card = handCards.Find(card => card.Uid == cardUid);
 
             if (card == null)
             {
-                Debug.LogError($"핸드에 {card.id} 카드 없음 - RemoveHandUseCard");
+                Debug.LogError($"핸드에 {card.Id} 카드 없음 - RemoveHandUseCard");
                 return;
             }
 
@@ -185,7 +185,7 @@ namespace ERang
         public void RemoveBoardCard(string cardUid)
         {
             // 크리쳐 먼저 찾고 없으면 건물 찾기
-            Card card = creatureCards.Find(card => card.uid == cardUid) ?? buildingCards.Find(card => card.uid == cardUid);
+            Card card = creatureCards.Find(card => card.Uid == cardUid) ?? buildingCards.Find(card => card.Uid == cardUid);
 
             if (card == null)
             {
@@ -193,7 +193,7 @@ namespace ERang
                 return;
             }
 
-            switch (card.type)
+            switch (card.Type)
             {
                 case CardType.Creature:
                     creatureCards.Remove(card);
@@ -202,7 +202,7 @@ namespace ERang
                     buildingCards.Remove(card);
                     break;
                 default:
-                    Debug.LogError($"보드 슬롯에 {card.id} 카드 {card.type} 타입 없음 - RemoveBoardCard");
+                    Debug.LogError($"보드 슬롯에 {card.Id} 카드 {card.Type} 타입 없음 - RemoveBoardCard");
                     break;
             }
 

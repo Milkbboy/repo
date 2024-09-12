@@ -35,7 +35,7 @@ namespace ERang
         public void SetCard(Card card)
         {
             // Debug.Log("CardUI SetCard: " + cardId);
-            CardData cardData = (card.type == CardType.Monster) ? MonsterCardData.GetCardData(card.id) : CardData.GetCardData(card.id);
+            CardData cardData = (card.Type == CardType.Monster) ? MonsterCardData.GetCardData(card.Id) : CardData.GetCardData(card.Id);
             Texture2D cardTexture = cardData.GetCardTexture();
 
             if (!cardTexture)
@@ -61,7 +61,7 @@ namespace ERang
 
             if (cardTypeText != null)
             {
-                cardTypeText.text = card.type.ToString();
+                cardTypeText.text = card.Type.ToString();
             }
 
             // 카드 정보 표시

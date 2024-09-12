@@ -53,7 +53,7 @@ namespace ERang
 
         public Card GetMonsterCard(string cardUid)
         {
-            return monsterCards.Find(card => card.uid == cardUid);
+            return monsterCards.Find(card => card.Uid == cardUid);
         }
 
         public void RemoveMonsterCard(string cardUid)

@@ -38,9 +38,9 @@ namespace ERang
         {
             var (reaction, condition) = reactionPairs;
 
-            // Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 리액션 컨디션({reaction.conditionId}) 확인 시작 - ConditionLogic.GetReactionConditionAiDataId");
+            // Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({reaction.conditionId}) 확인 시작 - ConditionLogic.GetReactionConditionAiDataId");
 
-            string conditionTargetLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). 리액션 컨디션({condition.id}) 타겟 {condition.target.ToString()} 슬롯 찾기";
+            string conditionTargetLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({condition.id}) 타겟 {condition.target.ToString()} 슬롯 찾기";
 
             List<BoardSlot> targetSlots = GetConditionTargets(condition, selfSlot, opponentSlots);
 
@@ -52,7 +52,7 @@ namespace ERang
 
             // Debug.Log($"{conditionTargetLog} - 성공. 타겟 슬롯 <color=yellow>{string.Join(", ", targetSlots.Select(slot => slot.Slot))}</color> 에 대한 리액션 발동 확인 - ConditionLogic.GetReactionConditionAiDataId");
 
-            string conditionCheckLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}).";
+            string conditionCheckLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}).";
 
             var result = (0, new List<int>());
 
@@ -67,7 +67,7 @@ namespace ERang
                     continue;
                 }
 
-                string targetConditionLog = $"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color> 카드({targetCard.id})에 대한 리액션 컨디션({condition.id}) {condition.type} 조건 비교";
+                string targetConditionLog = $"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color> 카드({targetCard.Id})에 대한 리액션 컨디션({condition.id}) {condition.type} 조건 비교";
 
                 if (condition.type == ConditionType.EveryTurn)
                 {
@@ -89,11 +89,11 @@ namespace ERang
                     {
                         // 대상의 버프 상태 확인
                         case ConditionType.Buff:
-                            compareValue = AbilityLogic.Instance.GetBuffCount(targetCard.uid);
+                            compareValue = AbilityLogic.Instance.GetBuffCount(targetCard.Uid);
                             break;
                         // 대상의 디버프 상태 확인
                         case ConditionType.Debuff:
-                            compareValue = AbilityLogic.Instance.GetDebuffCount(targetCard.uid);
+                            compareValue = AbilityLogic.Instance.GetDebuffCount(targetCard.Uid);
                             break;
                         // 대상의 체력 상태 확인
                         case ConditionType.Hp:
@@ -101,7 +101,7 @@ namespace ERang
                             break;
                         case ConditionType.Extinction:
                         case ConditionType.Acquisition:
-                            Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.id}). ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전 - ConditionLogic.GetReactionConditionAiDataId");
+                            Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}). ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전 - ConditionLogic.GetReactionConditionAiDataId");
                             break;
                     }
 

@@ -18,6 +18,113 @@ namespace ERang
         }
 
         /// <summary>
+        /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
+        /// </summary>
+        /// <returns></returns>
+        public int GetCardAiDataId(Card card)
+        {
+            string aiGroupDataTableLog = $"카드({card.Id}). <color=#78d641>AiGroupData</color> 테이블 {card.AiGroupId} 데이터 얻기";
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
+
+            if (aiGroupData == null)
+            {
+                Debug.LogError($"{aiGroupDataTableLog} 실패. <color=#ea4123>테이블 데이터 없음</color> - Card.GetCardAiDataId");
+                return 0;
+            }
+
+            List<int> aiDataIds = new List<int>();
+
+            // 순차적으로 AI 그룹을 호출하고, 마지막 그룹에 도달 시 최초 그룹으로 순환한다.
+            if (aiGroupData.aiGroupType == AiGroupType.Repeat)
+            {
+                if (card.AiGroupIndex >= aiGroupData.ai_Groups.Count)
+                    card.AiGroupIndex = 0;
+
+                aiDataIds = aiGroupData.ai_Groups[card.AiGroupIndex];
+
+                card.AiGroupIndex++;
+            }
+            else if (aiGroupData.aiGroupType == AiGroupType.Random)
+            {
+                // 나열된 AI 그룹 중 하나를 임의로 선택한다. (선택 확율은 별도 지정 없이 동일한다. n/1)
+                aiDataIds = aiGroupData.ai_Groups[Random.Range(0, aiGroupData.ai_Groups.Count)];
+            }
+
+            // Debug.Log($"{aiGroupDataTableLog} 성공. aiGroupType {aiGroupData.aiGroupType.ToString()} 으로 aiDataIds [{string.Join(", ", aiDataIds)}] 중 하나 뽑기 - Card.GetCardAiDataId");
+
+            int selectedAiDataId = 0;
+
+            if (aiDataIds.Count == 1)
+            {
+                selectedAiDataId = aiDataIds[0];
+                // Debug.Log($"{id} 카드. aiDataIds [{string.Join(", ", aiDataIds)}] 에서 {selectedAiDataId} 뽑힘 (하나만 설정되어 있음)");
+            }
+            else
+            {
+                // aiData 가중치 리스트 설정
+                int totalValue = 0;
+                List<(int aiDataId, int value)> aiDataList = new List<(int aiDataId, int value)>();
+
+                foreach (int aiDataId in aiDataIds)
+                {
+                    string aiDataTableLog = $"<color=#78d641>AiGroupData</color> 테이블 {aiDataId} 데이터 얻기";
+                    AiData aiData = AiData.GetAiData(aiDataId);
+
+                    if (aiData == null)
+                    {
+                        Debug.LogWarning($"{aiDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetCardAiDataId");
+                        continue;
+                    }
+
+                    // Debug.Log($"{aiDataTableLog} 성공. 가중치{(aiDataId, aiData.value)} 추가 - Card.GetCardAiDataId");
+                    totalValue += aiData.value;
+
+                    aiDataList.Add((aiDataId, aiData.value));
+                };
+
+                string aiDataListLog = $"{card.Id} 카드. aiDataIds {string.Join(", ", aiDataIds)} 중 중 하나 선택";
+
+                // 가중치 리스트 중 하나 뽑기
+                int randomValue = Random.Range(0, totalValue);
+                int cumulativeValue = 0;
+
+                foreach (var aiData in aiDataList)
+                {
+                    cumulativeValue += aiData.value;
+
+                    if (randomValue < cumulativeValue)
+                    {
+                        selectedAiDataId = aiData.aiDataId;
+                        // Debug.Log($"{aiDataListLog} - 총 가중치 {totalValue}, randomValue({randomValue}) < cumulativeValue({cumulativeValue}) 로 {selectedAiDataId} 선택({string.Join(", ", aiDataList.Select(x => x.value))})");
+                        break;
+                    }
+                }
+            }
+
+            return selectedAiDataId;
+        }
+
+        public (bool IsSelectAttackType, AiData) GetAiAttackInfo(Card card)
+        {
+            int aiDataId = GetCardAiDataId(card);
+
+            if (aiDataId == 0)
+                return (false, null);
+
+            AiData aiData = AiData.GetAiData(aiDataId);
+
+            var selectTypes = new[]
+            {
+                AiDataAttackType.SelectEnemy,
+                AiDataAttackType.SelectEnemyCreature,
+                AiDataAttackType.SelectFriendly,
+                AiDataAttackType.SelectFriendlyCreature,
+            };
+
+            return (selectTypes.Contains(aiData.attackType), aiData);
+        }
+
+        /// <summary>
         /// HandOn 어빌리티를 가진 카드 얻기
         /// </summary>
         public List<(Card card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(List<Card> handCards)
@@ -26,7 +133,7 @@ namespace ERang
 
             foreach (Card handCard in handCards)
             {
-                int aiDataId = handCard.GetCardAiDataId();
+                int aiDataId = GetCardAiDataId(handCard);
 
                 AiData handCardAiData = AiData.GetAiData(aiDataId);
 
@@ -58,7 +165,7 @@ namespace ERang
                 handOnCards.Add((handCard, handCardAiData, abilities));
             }
 
-            Debug.Log($"HandOn 어빌리티를 가진 카드 {handOnCards.Count}장({string.Join(", ", handOnCards.Select(handOnCard => handOnCard.card.id))}) 확인 - AiLogic.GetHandOnCards");
+            Debug.Log($"HandOn 어빌리티를 가진 카드 {handOnCards.Count}장({string.Join(", ", handOnCards.Select(handOnCard => handOnCard.card.Id))}) 확인 - AiLogic.GetHandOnCards");
 
             return handOnCards;
         }
@@ -85,7 +192,7 @@ namespace ERang
 
             if (reactionPairs.Count == 0)
             {
-                Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} AiGroupData({card.aiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color> - AiLogic.TurnStartReaction");
+                Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} AiGroupData({card.AiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color> - AiLogic.TurnStartReaction");
                 return reactionAiData;
             }
 
@@ -132,13 +239,11 @@ namespace ERang
         /// <returns></returns>
         public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(Card card, ConditionCheckPoint checkPoint)
         {
-            int aiGroupId = card.aiGroupId;
+            List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new();
 
-            List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new List<(AiGroupData.Reaction, ConditionData)>();
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
 
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
-
-            string aiGroupDataTableLog = $"{card.id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
+            string aiGroupDataTableLog = $"{card.Id} 카드. <color=#78d641>AiGroupData</color> 테이블 {card.AiGroupId} 데이터 얻기";
 
             if (aiGroupData == null)
             {
@@ -150,7 +255,7 @@ namespace ERang
 
             if (aiGroupData.reactions.Count == 0)
             {
-                Debug.LogWarning($"{card.id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId}에 reaction 설정 없음 - AiLogic.GetTurnStartReaction");
+                Debug.LogWarning($"{card.Id} 카드. <color=#78d641>AiGroupData</color> 테이블 {card.AiGroupId}에 reaction 설정 없음 - AiLogic.GetTurnStartReaction");
                 return reactionConditionPairs;
             }
 
@@ -158,7 +263,7 @@ namespace ERang
             {
                 ConditionData conditionData = ConditionData.GetConditionData(reaction.conditionId);
 
-                string conditionDataTableLog = $"{card.id} 카드. <color=#78d641>ConditionData</color> 테이블 {reaction.conditionId} 데이터 얻기";
+                string conditionDataTableLog = $"{card.Id} 카드. <color=#78d641>ConditionData</color> 테이블 {reaction.conditionId} 데이터 얻기";
 
                 if (conditionData == null)
                 {

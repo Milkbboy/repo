@@ -18,9 +18,9 @@ namespace ERang
         private readonly List<BoardSlot> leftSlots = new(); // 왼쪽 보드 슬롯. 마스터, 크리쳐
         private readonly List<BoardSlot> rightSlots = new(); // 오른쪽 보드 슬롯. 몬스터, 적 마스터
 
-        public void SetBoardUI(BoardUI boardUI)
+        void Awake()
         {
-            this.boardUI = boardUI;
+            boardUI = GetComponent<BoardUI>();
         }
 
         /// <summary>
@@ -179,9 +179,9 @@ namespace ERang
         {
             foreach (var boardSlot in boardSlots)
             {
-                if (boardSlot.Card != null && boardSlot.Card.uid == cardUid)
+                if (boardSlot.Card != null && boardSlot.Card.Uid == cardUid)
                 {
-                    Debug.Log($"boardSlot: {boardSlot.Slot} RemoveCard: {boardSlot.Card.id}");
+                    Debug.Log($"boardSlot: {boardSlot.Slot} RemoveCard: {boardSlot.Card.Id}");
                     boardSlot.RemoveCard();
                     break;
                 }
@@ -206,7 +206,7 @@ namespace ERang
 
         public BoardSlot GetBoardSlot(string cardUid)
         {
-            return boardSlots.Find(x => x.Card != null && x.Card.uid == cardUid);
+            return boardSlots.Find(x => x.Card != null && x.Card.Uid == cardUid);
         }
 
         /// <summary>
@@ -262,10 +262,10 @@ namespace ERang
         /// <param name="self"></param>
         public List<Card> GetOpponetCards(Card self)
         {
-            if (self.type == CardType.Creature || self.type == CardType.Master)
+            if (self.Type == CardType.Creature || self.Type == CardType.Master)
                 return GetOccupiedMonsterCards();
 
-            if (self.type == CardType.Monster || self.type == CardType.EnemyMaster)
+            if (self.Type == CardType.Monster || self.Type == CardType.EnemyMaster)
                 return GetOccupiedCreatureCards();
 
             return null;

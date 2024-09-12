@@ -85,9 +85,9 @@ namespace ERang
 
         public void SetCard(Card card)
         {
-            cardUid = card.uid;
-            cardId = card.id;
-            cardType = card.type;
+            cardUid = card.Uid;
+            cardId = card.Id;
+            cardType = card.Type;
 
             cardUI.SetCard(card);
         }

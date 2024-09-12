@@ -42,7 +42,7 @@ namespace ERang
             }
 
             if (targetSlots.Count > 0)
-                Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData({aiData.ai_Id})에 설정된 타겟({aiData.target})({string.Join(", ", targetSlots.Select(slot => slot.Card.id))}) 얻기 완료 - TargetLogic.GetAiTargetSlots");
+                Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData({aiData.ai_Id})에 설정된 타겟({aiData.target})({string.Join(", ", targetSlots.Select(slot => slot.Card.Id))}) 얻기 완료 - TargetLogic.GetAiTargetSlots");
 
             return targetSlots;
         }

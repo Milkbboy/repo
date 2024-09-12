@@ -66,7 +66,7 @@ namespace ERang
                     continue;
                 }
 
-                changes.Add((true, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.hp, targetSlot.Card.hp + value));
+                changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.Card.hp, targetSlot.Card.hp + value));
                 targetSlot.AddCardHp(value);
             }
 
@@ -92,7 +92,7 @@ namespace ERang
                     continue;
                 }
 
-                changes.Add((targetSlot.Card != null, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.atk, targetSlot.Card.atk + value));
+                changes.Add((targetSlot.Card != null, targetSlot.Slot, targetSlot.Card.Id, targetSlot.Card.atk, targetSlot.Card.atk + value));
                 targetSlot.AddCardAtk(value);
             }
 
@@ -118,7 +118,7 @@ namespace ERang
                     continue;
                 }
 
-                changes.Add((true, targetSlot.Slot, targetSlot.Card.id, targetSlot.Card.def, targetSlot.Card.def + value));
+                changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.Card.def, targetSlot.Card.def + value));
                 targetSlot.AddCardDef(value);
             }
 

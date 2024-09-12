@@ -343,9 +343,9 @@ namespace ERang
                 abilityValue = abilityData.value,
                 duration = abilityData.duration,
                 selfBoardSlot = selfSlot.Slot,
-                targetCardId = targetSlot.Card?.id ?? 0,
+                targetCardId = targetSlot.Card?.Id ?? 0,
                 targetBoardSlot = targetSlot.Slot,
-                targetCardUid = targetSlot.Card?.uid ?? string.Empty
+                targetCardUid = targetSlot.Card?.Uid ?? string.Empty
             };
         }
     }

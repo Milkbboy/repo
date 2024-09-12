@@ -25,12 +25,12 @@ namespace ERang
 
         public static string BoardSlotLog(BoardSlot boardSlot)
         {
-            return $"{boardSlot.Slot}번 슬롯 {GetCardType(boardSlot.CardType)} 카드({boardSlot?.Card?.id ?? 0})";
+            return $"{boardSlot.Slot}번 슬롯 {GetCardType(boardSlot.CardType)} 카드({boardSlot?.Card?.Id ?? 0})";
         }
 
         public static string CardLog(Card card)
         {
-            return $"{GetCardType(card.type)} 카드({card.id})";
+            return $"{GetCardType(card.Type)} 카드({card.Id})";
         }
 
         public static string BoardSlotNumersText(List<BoardSlot> boardSlots)

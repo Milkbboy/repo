@@ -36,7 +36,7 @@ MonoBehaviour:
     StartMana: 2
     MaxMana: 5
     RechargeMana: 2
-    StartCardDeck_Id: 1002
+    StartCardDeck_Id: 1001, 1002, 1003
     StartArtiFact_Id: 0
     StartAbility_Id: 9001002, 9001002
   - Master_Id: 1003
