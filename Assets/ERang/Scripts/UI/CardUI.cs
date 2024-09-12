@@ -262,9 +262,9 @@ namespace ERang
             while (elapsed < duration)
             {
                 // 투명도 변경
-                Color color = floatingText.color;
-                color.a = color.a == 1 ? 0 : 1;
-                floatingText.color = color;
+                // Color color = floatingText.color;
+                // color.a = color.a == 1 ? 0 : 1;
+                // floatingText.color = color;
 
                 elapsed += blinkInterval;
                 yield return new WaitForSeconds(blinkInterval);

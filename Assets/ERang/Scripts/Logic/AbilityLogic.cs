@@ -26,7 +26,7 @@ namespace ERang
             public string targetCardUid; // 어빌리티 소유자 카드 Uid
         }
 
-        public List<Ability> abilities = new List<Ability>();
+        public List<Ability> abilities = new();
 
         void Awake()
         {
