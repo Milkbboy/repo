@@ -49,7 +49,7 @@ namespace ERang
                 return;
             }
 
-            BoardSlot boardSlot = BattleLogic.Instance.NeareastBoardSlot(transform.position);
+            BoardSlot boardSlot = BoardSystem.Instance.NeareastBoardSlot(transform.position);
 
             // CardType 별 동작
             switch (cardType)

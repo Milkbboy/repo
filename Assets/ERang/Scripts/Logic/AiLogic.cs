@@ -10,8 +10,6 @@ namespace ERang
     {
         public static AiLogic Instance { get; private set; }
 
-        private static readonly System.Random random = new System.Random();
-
         void Awake()
         {
             Instance = this;
@@ -104,6 +102,11 @@ namespace ERang
             return selectedAiDataId;
         }
 
+        /// <summary>
+        /// 타겟 선택 카드 타입 확인
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
         public (bool IsSelectAttackType, AiData) GetAiAttackInfo(Card card)
         {
             int aiDataId = GetCardAiDataId(card);

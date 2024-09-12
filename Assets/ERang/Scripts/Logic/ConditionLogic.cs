@@ -164,15 +164,15 @@ namespace ERang
                     break;
                 case ConditionTarget.FriendlyCreature:
                     if (selfSlot.CardType == CardType.Creature)
-                        targetSlots = BattleLogic.Instance.GetCreatureBoardSlots();
+                        targetSlots = BoardSystem.Instance.GetCreatureBoardSlots();
                     if (selfSlot.CardType == CardType.Monster)
-                        targetSlots = BattleLogic.Instance.GetMonsterBoardSlots();
+                        targetSlots = BoardSystem.Instance.GetMonsterBoardSlots();
                     break;
                 case ConditionTarget.EnemyCreature:
                     if (selfSlot.CardType == CardType.Creature)
-                        targetSlots = BattleLogic.Instance.GetMonsterBoardSlots();
+                        targetSlots = BoardSystem.Instance.GetMonsterBoardSlots();
                     if (selfSlot.CardType == CardType.Monster)
-                        targetSlots = BattleLogic.Instance.GetCreatureBoardSlots();
+                        targetSlots = BoardSystem.Instance.GetCreatureBoardSlots();
                     break;
                 case ConditionTarget.Card:
                     Debug.LogWarning("{selfSlot.Slot}번 슬롯. 카드 대상 미구현 - ConditionLogic.GetConditionTargets");

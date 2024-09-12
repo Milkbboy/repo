@@ -101,8 +101,8 @@ namespace ERang
         /// </summary>
         public void RemoveHandOnAbility(Ability ability)
         {
-            BoardSlot selfSlot = BattleLogic.Instance.GetBoardSlot(ability.selfBoardSlot);
-            BoardSlot targetSlot = BattleLogic.Instance.GetBoardSlot(ability.targetBoardSlot);
+            BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(ability.selfBoardSlot);
+            BoardSlot targetSlot = BoardSystem.Instance.GetBoardSlot(ability.targetBoardSlot);
 
             if (targetSlot.Card == null)
             {
@@ -274,7 +274,7 @@ namespace ERang
                 case AbilityType.AddMana:
                     {
                         int beforeMana = Master.Instance.Mana;
-                        BattleLogic.Instance.AddMasterMana(ability.abilityValue * -1);
+                        BoardSystem.Instance.AddMana(Master.Instance, ability.abilityValue * -1);
                         Debug.Log($"{abilityActionLog} 해제 - <color=#257dca>mana: {beforeMana} => {Master.Instance.Mana}</color>");
                     }
                     break;

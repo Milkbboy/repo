@@ -6,6 +6,7 @@ namespace ERang
 {
     public class BoardSystem : MonoBehaviour
     {
+        public static BoardSystem Instance { get; private set; }
         public readonly CardType[] boardSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None, CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.EnemyMaster };
         public readonly CardType[] buildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
 
@@ -20,6 +21,8 @@ namespace ERang
 
         void Awake()
         {
+            Instance = this;
+
             boardUI = GetComponent<BoardUI>();
         }
 
