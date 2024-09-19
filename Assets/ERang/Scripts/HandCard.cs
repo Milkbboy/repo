@@ -41,7 +41,7 @@ namespace ERang
             drag = false;
             aniSelectedCard.isDrag = false;
 
-            // 마스터 마나 확인
+            // 카드 사용 여부 확인
             if (BattleLogic.Instance.CanHandCardUse(cardUid) == false)
             {
                 // 원래 위치로 돌아가게 함

@@ -70,7 +70,7 @@ namespace ERang
 
                     if (aiData == null)
                     {
-                        Debug.LogWarning($"{aiDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetCardAiDataId");
+                        Debug.LogError($"{aiDataTableLog} 실패. <color=red>테이블 데이터 없음</color> - Card.GetCardAiDataId");
                         continue;
                     }
 
@@ -116,15 +116,7 @@ namespace ERang
 
             AiData aiData = AiData.GetAiData(aiDataId);
 
-            var selectTypes = new[]
-            {
-                AiDataAttackType.SelectEnemy,
-                AiDataAttackType.SelectEnemyCreature,
-                AiDataAttackType.SelectFriendly,
-                AiDataAttackType.SelectFriendlyCreature,
-            };
-
-            return (selectTypes.Contains(aiData.attackType), aiData);
+            return (Constants.SelectAttackTypes.Contains(aiData.attackType), aiData);
         }
 
         /// <summary>
@@ -158,7 +150,7 @@ namespace ERang
                         continue;
                     }
 
-                    if (ability.type == AbilityWorkType.OnHand)
+                    if (ability.workType == AbilityWorkType.OnHand)
                         abilities.Add(ability);
                 }
 
@@ -223,7 +215,10 @@ namespace ERang
                 List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, reactionSlot);
 
                 if (aiTargetSlots.Count == 0)
+                {
+                    Debug.LogWarning($"{aiGroupDataTableLog} - 실패. 대상 슬롯 없음 - AiLogic.TurnStartReaction");
                     continue;
+                }
 
                 Debug.Log($"{aiGroupDataTableLog} 성공 - {Utils.BoardSlotLog(reactionSlot)}. 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - AiLogic.TurnStartReaction");
 
@@ -232,6 +227,58 @@ namespace ERang
             }
 
             return reactionAiData;
+        }
+
+        /// <summary>
+        /// 턴 시작 액션 AiData id 얻기
+        /// </summary>
+        public int GetTurnStartActionAiDataId(BoardSlot selfSlot, List<BoardSlot> opponentSlots)
+        {
+            Card card = selfSlot.Card;
+
+            List<(AiGroupData.Reaction, ConditionData)> reactionPairs = GetCardReactionPairs(card, ConditionCheckPoint.TurnStart);
+
+            if (reactionPairs.Count == 0)
+            {
+                Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} AiGroupData({card.AiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color> - AiLogic.TurnStartReaction");
+                return 0;
+            }
+
+            foreach (var (reaction, condition) in reactionPairs)
+            {
+                // reactionTargetSlots 은 화면 표시를 위해 사용 - 실제 타겟은 AiData 에서 얻음
+                var (aiDataId, reactionTargetSlots) = ConditionLogic.Instance.GetReactionConditionAiDataId((reaction, condition), selfSlot, opponentSlots);
+
+                if (aiDataId == 0)
+                {
+                    Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 이번 턴 리액션 컨디션({condition.id}) 없음 - AiLogic.TurnStartReaction");
+                    continue;
+                }
+
+                AiData aiData = AiData.GetAiData(aiDataId);
+
+                string aiGroupDataTableLog = $"{Utils.BoardSlotLog(selfSlot)} <color=#78d641>AiData</color> 테이블 {aiDataId} 데이터 얻기";
+
+                if (aiData == null)
+                {
+                    Debug.LogWarning($"{aiGroupDataTableLog} - 실패. <color=red>테이블에 데이터 없음</color> - AiLogic.TurnStartReaction");
+                    continue;
+                }
+
+                List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot);
+
+                if (aiTargetSlots.Count == 0)
+                {
+                    Debug.LogWarning($"{aiGroupDataTableLog} - 실패. 대상 슬롯 없음 - AiLogic.TurnStartReaction");
+                    continue;
+                }
+
+                Debug.Log($"{aiGroupDataTableLog} 성공 - {Utils.BoardSlotLog(selfSlot)}. 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동 - AiLogic.TurnStartReaction");
+
+                return aiData.ai_Id;
+            }
+
+            return 0;
         }
 
         /// <summary>
@@ -293,6 +340,30 @@ namespace ERang
             }
 
             return reactionConditionPairs;
+        }
+
+        /// <summary>
+        /// 어빌리티 데이터 얻기
+        /// </summary>
+        /// <param name="abilityIds"></param>
+        public List<AbilityData> GetAbilityDatas(List<int> abilityIds)
+        {
+            List<AbilityData> abilityDatas = new();
+
+            foreach (int abilityId in abilityIds)
+            {
+                AbilityData abilityData = AbilityData.GetAbilityData(abilityId);
+
+                if (abilityData == null)
+                {
+                    Debug.LogError($"AbilityData({abilityId}) <color=red>테이블에 데이터 없음</color> - BattleLogic.TurnStartReaction");
+                    continue;
+                }
+
+                abilityDatas.Add(abilityData);
+            }
+
+            return abilityDatas;
         }
     }
 }

@@ -18,14 +18,5 @@ namespace ERang
             ConditionData.Load("TableExports/ConditionDataTable");
             AbilityData.Load("TableExports/AbilityDataTable");
         }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-        }
-
-        void Update()
-        {
-        }
     }
 }

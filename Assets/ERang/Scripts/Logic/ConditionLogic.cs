@@ -15,18 +15,6 @@ namespace ERang
             Instance = this;
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         /// <summary>
         /// 리액션 컨디션 aiDataId 얻기
         /// </summary>

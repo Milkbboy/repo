@@ -1,30 +1,33 @@
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
 
 namespace ERang
 {
+    public class Ability
+    {
+        public AbilityWhereFrom whereFrom; // 어빌리티 적용 위치
+        public int atkCount; // 공격 횟수
+        public AiDataType aiType; // Ai 타입
+        public AiDataAttackType aiAttackType; // Ai 공격 타입
+        public int abilityId; // 어빌리티 Id
+        public AbilityType abilityType; // 어빌리티 타입
+        public AbilityWorkType abilityWorkType; // 어빌리티 작업 타입(HandOn 찾기 위함)
+        public int beforeValue; // 어빌리티 적용 전 값
+        public int abilityValue; // 어빌리티 값
+        public int duration; // 현재 지속 시간
+        public int selfBoardSlot; // 어빌리티 발동 보드 슬롯
+        public string selfCardUid; // 어빌리티 발동 카드 Uid
+        public int targetBoardSlot; // 어빌리티 대상 보드 슬롯
+        public int targetCardId; // 어빌리티 대상 카드 Id
+        public string targetCardUid; // 어빌리티 대상 카드 Uid
+    }
+
     public class AbilityLogic : MonoBehaviour
     {
         public static AbilityLogic Instance { get; private set; }
-
-        public class Ability
-        {
-            public int abilityId; // 어빌리티 Id
-            public AbilityWhereFrom whereFrom; // 어빌리티 적용 위치
-            public AiDataType aiType; // Ai 타입
-            public AbilityType abilityType; // 어빌리티 타입
-            public AbilityWorkType abilityWorkType; // 어빌리티 작업 타입(HandOn 찾기 위함)
-            public int atkCount; // 공격 횟수
-            public int beforeValue; // 어빌리티 적용 전 값
-            public int abilityValue; // 어빌리티 값
-            public int duration; // 현재 지속 시간
-            public int selfBoardSlot; // 어빌리티 발동 보드 슬롯
-            public int targetCardId; // 어빌리티 소유자 카드 Id
-            public int targetBoardSlot; // 어빌리티 소유자 보드 슬롯
-            public string targetCardUid; // 어빌리티 소유자 카드 Uid
-        }
 
         public List<Ability> abilities = new();
 
@@ -63,186 +66,177 @@ namespace ERang
         }
 
         /// <summary>
-        /// 핸드 온 어빌리티 동작
+        /// 핸드 온 어빌리티 추가
         /// </summary>
-        public void SetHandOnAbility(AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots, List<AbilityData> abilityDatas)
+        public void AddHandOnAbility(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots, AbilityWhereFrom whereFrom)
         {
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 핸드 온 어빌리티({Utils.NumbersText(aiData.ability_Ids)}) 적용 - AbilityLogic.HandOnAbilityAction");
-
-            foreach (AbilityData abilityData in abilityDatas)
+            // 핸드 온 어빌리티는 턴 종료시 해제되기 때문에 모두 저장
+            foreach (BoardSlot targetSlot in targetSlots)
             {
-                foreach (BoardSlot targetSlot in targetSlots)
-                {
-                    if (targetSlot.Card == null)
-                    {
-                        // Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 타겟 슬롯 {Utils.BoardSlotLog(targetSlot)}가 없어 어빌리티 적용 패스 - AbilityLogic.AbilityAffect");
-                        continue;
-                    }
+                if (targetSlot.Card == null)
+                    continue;
 
-                    abilities.Add(MakeAbility(abilityData, aiData, selfSlot, targetSlot, AbilityWhereFrom.TurnStarHandOn));
-                }
-
-                switch (abilityData.abilityType)
-                {
-                    case AbilityType.Damage: BoardLogic.Instance.AbilityDamage(aiData.type, aiData.atk_Cnt, selfSlot, targetSlots); break;
-                    case AbilityType.Heal: StartCoroutine(BoardLogic.Instance.AbilityHp(targetSlots, abilityData.value)); break;
-                    case AbilityType.AtkUp: StartCoroutine(BoardLogic.Instance.AbilityAtk(targetSlots, abilityData.value)); break;
-                    case AbilityType.DefUp: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, abilityData.value)); break;
-                    case AbilityType.BrokenDef: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, -abilityData.value)); break;
-                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(aiData, selfSlot, targetSlots, abilityData.value)); break;
-                    case AbilityType.AddMana: StartCoroutine(BoardLogic.Instance.AbilityAddMana(selfSlot, abilityData.value)); break;
-                    case AbilityType.AddGoldPer: BoardLogic.Instance.AbilityAddGoldPer(aiData, abilityData, selfSlot); break;
-                }
+                AddAbility(aiData, abilityData, selfSlot, targetSlot, whereFrom);
             }
         }
 
         /// <summary>
-        /// 핸드 온 어빌리티 해제
+        /// 어빌리티 추가
         /// </summary>
-        public void RemoveHandOnAbility(Ability ability)
+        public void AddAbility(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots, AbilityWhereFrom whereFrom)
         {
-            BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(ability.selfBoardSlot);
-            BoardSlot targetSlot = BoardSystem.Instance.GetBoardSlot(ability.targetBoardSlot);
-
-            if (targetSlot.Card == null)
+            foreach (BoardSlot targetSlot in targetSlots)
             {
-                Debug.LogWarning($"{Utils.BoardSlotLog(targetSlot)} 어빌리티 대상이 없어 어빌리티 적용 해제 패스 - AbilityLogic.HandOnAbilityCut");
-                return;
-            }
+                Ability durationAbility = abilities.Find(a => a.abilityId == abilityData.abilityId && a.targetBoardSlot == targetSlot.Slot);
 
-            AbilityRelease(selfSlot, targetSlot, ability);
-        }
-
-        /// <summary>
-        /// 핸드 카드 사용 어빌리티 동작
-        /// </summary>
-        public void SetHandCardUseAbility(AbilityWhereFrom whereFrom, AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
-        {
-            if (selfSlot.Card == null)
-            {
-                Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} 장착된 카드 없음 - AbilityLogic.SetHandCardAbility");
-                return;
-            }
-
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 어빌리티({Utils.NumbersText(aiData.ability_Ids)}) 적용 - AbilityLogic.SetHandCardAbility");
-
-            foreach (int abilityId in aiData.ability_Ids)
-            {
                 // 이미 어빌리티가 적용 중이면 패스
-                Ability durationAbility = abilities.Find(a => a.abilityId == abilityId);
-
                 if (durationAbility != null)
                 {
-                    Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 이미 {durationAbility.abilityType} 어빌리티({abilityId})가 적용 중으로 해당 어빌리티 패스 - AbilityLogic.SetHandCardAbility");
+                    Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 이미 {durationAbility.abilityType} 어빌리티({abilityData.abilityId})가 적용 중으로 해당 어빌리티 패스 - AbilityLogic.AddAbility");
                     continue;
                 }
 
-                AbilityData abilityData = AbilityData.GetAbilityData(abilityId);
-
-                if (abilityData == null)
-                {
-                    Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} <color=red>어빌리티 데이터 없음</color> - AbilityLogic.SetHandCardAbility");
+                // 효과 지속 시간이 있는 어빌리티만 추가
+                if (abilityData.duration <= 0)
                     continue;
-                }
 
-                // duration 이 있는 어빌리티는 상태 해제를 위해 어빌리티를 저장
-                if (abilityData.duration > 0)
-                {
+                AddAbility(aiData, abilityData, selfSlot, targetSlot, whereFrom);
+            }
+        }
+
+        /// <summary>
+        /// 어빌리티 실행
+        /// </summary>
+        public IEnumerator AbilityAction(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
+        {
+            int value = abilityData.value;
+            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
+
+            switch (abilityData.abilityType)
+            {
+                case AbilityType.Damage:
+                    yield return StartCoroutine(AttackAbility(aiData.type, aiData.attackType, selfSlot, targetSlots, aiData.atk_Cnt, abilityData.value));
+                    break;
+
+                case AbilityType.Heal:
                     foreach (BoardSlot targetSlot in targetSlots)
                     {
                         if (targetSlot.Card == null)
                         {
-                            // Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 타겟 슬롯 {Utils.BoardSlotLog(targetSlot)}가 없어 어빌리티 적용 패스 - AbilityLogic.SetHandCardAbility");
+                            changes.Add((false, targetSlot.Slot, 0, 0, 0));
                             continue;
                         }
 
-                        abilities.Add(MakeAbility(abilityData, aiData, selfSlot, targetSlot, whereFrom));
+                        changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.Card.hp, targetSlot.Card.hp + abilityData.value));
+
+                        targetSlot.AddCardHp(value);
+
+                        Debug.Log($"{Utils.StatChangesText("hp", changes)} - {AbilityType.Heal} 어빌리티 적용 - AbilityLogic.AbilityAction");
                     }
-                }
+                    break;
 
-                switch (abilityData.abilityType)
-                {
-                    case AbilityType.Damage: BoardLogic.Instance.AbilityDamage(aiData.type, aiData.atk_Cnt, selfSlot, targetSlots, abilityData.value); break;
-                    case AbilityType.Heal: StartCoroutine(BoardLogic.Instance.AbilityHp(targetSlots, abilityData.value)); break;
-                    case AbilityType.AtkUp: StartCoroutine(BoardLogic.Instance.AbilityAtk(targetSlots, abilityData.value)); break;
-                    case AbilityType.DefUp: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, abilityData.value)); break;
-                    case AbilityType.BrokenDef: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, -abilityData.value)); break;
-                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(aiData, selfSlot, targetSlots, abilityData.value)); break;
-                    case AbilityType.AddMana: StartCoroutine(BoardLogic.Instance.AbilityAddMana(selfSlot, abilityData.value)); break;
-                    case AbilityType.AddGoldPer: BoardLogic.Instance.AbilityAddGoldPer(aiData, abilityData, selfSlot); break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// aiData 에 설정된 어빌리티들 적용
-        /// </summary>
-        public void SetBoardSlotAbility(AbilityWhereFrom whereFrom, AiData aiData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
-        {
-            if (selfSlot.Card == null)
-            {
-                Debug.LogError($"{Utils.BoardSlotLog(selfSlot)} 장착된 카드 없음 - AbilityLogic.AbilityAction");
-                return;
-            }
-
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} 어빌리티({Utils.NumbersText(aiData.ability_Ids)}) 적용 - AbilityLogic.AbilityAction");
-
-            foreach (int abilityId in aiData.ability_Ids)
-            {
-                // 이미 어빌리티가 적용 중이면 패스
-                Ability durationAbility = abilities.Find(a => a.abilityId == abilityId);
-
-                if (durationAbility != null)
-                {
-                    Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 이미 {durationAbility.abilityType} 어빌리티({abilityId})가 적용 중으로 해당 어빌리티 패스 - AbilityLogic.AbilityAction");
-                    continue;
-                }
-
-                AbilityData abilityData = AbilityData.GetAbilityData(abilityId);
-
-                if (abilityData == null)
-                {
-                    Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} <color=red>어빌리티 데이터 없음</color> - AbilityLogic.AbilityAction");
-                    continue;
-                }
-
-                // duration 이 있는 어빌리티는 상태 해제를 위해 어빌리티를 저장
-                if (abilityData.duration > 0)
-                {
+                case AbilityType.AtkUp:
                     foreach (BoardSlot targetSlot in targetSlots)
                     {
-                        // if (targetSlot.Card == null)
-                        // {
-                        //     Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 타겟 슬롯 {Utils.BoardSlotLog(targetSlot)}가 없어 어빌리티 적용 패스 - AbilityLogic.AbilityAffect");
-                        //     continue;
-                        // }
+                        if (targetSlot.Card == null)
+                        {
+                            changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                            continue;
+                        }
 
-                        abilities.Add(MakeAbility(abilityData, aiData, selfSlot, targetSlot, whereFrom));
+                        changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.Card.atk, targetSlot.Card.atk + value));
+
+                        targetSlot.AddCardAtk(value);
+
+                        Debug.Log($"{Utils.StatChangesText("atk", changes)} - {AbilityType.AtkUp} 어빌리티 적용 - AbilityLogic.AbilityAction");
                     }
-                }
+                    break;
 
-                switch (abilityData.abilityType)
-                {
-                    case AbilityType.Damage: BoardLogic.Instance.AbilityDamage(aiData.type, aiData.atk_Cnt, selfSlot, targetSlots); break;
-                    case AbilityType.Heal: StartCoroutine(BoardLogic.Instance.AbilityHp(targetSlots, abilityData.value)); break;
-                    case AbilityType.AtkUp: StartCoroutine(BoardLogic.Instance.AbilityAtk(targetSlots, abilityData.value)); break;
-                    case AbilityType.DefUp: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, abilityData.value)); break;
-                    case AbilityType.BrokenDef: StartCoroutine(BoardLogic.Instance.AbilityDef(targetSlots, -abilityData.value)); break;
-                    case AbilityType.ChargeDamage: StartCoroutine(BoardLogic.Instance.AbilityChargeDamage(aiData, selfSlot, targetSlots, abilityData.value)); break;
-                    case AbilityType.AddMana: StartCoroutine(BoardLogic.Instance.AbilityAddMana(selfSlot, abilityData.value)); break;
-                    case AbilityType.AddGoldPer: BoardLogic.Instance.AbilityAddGoldPer(aiData, abilityData, selfSlot); break;
-                }
+                case AbilityType.DefUp:
+                    foreach (BoardSlot targetSlot in targetSlots)
+                    {
+                        if (targetSlot.Card == null)
+                        {
+                            changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                            continue;
+                        }
+
+                        changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.Card.def, targetSlot.Card.def + value));
+
+                        targetSlot.AddCardDef(value);
+
+                        Debug.Log($"{Utils.StatChangesText("def", changes)} - {AbilityType.DefUp} 어빌리티 적용 - AbilityLogic.AbilityAction");
+                    }
+                    break;
+
+                case AbilityType.BrokenDef:
+                    foreach (BoardSlot targetSlot in targetSlots)
+                    {
+                        if (targetSlot.Card == null)
+                        {
+                            changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                            continue;
+                        }
+
+                        changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.Card.def, targetSlot.Card.def - value));
+
+                        targetSlot.AddCardDef(-value);
+
+                        Debug.Log($"{Utils.StatChangesText("def", changes)} - {AbilityType.BrokenDef} 어빌리티 적용 - AbilityLogic.AbilityAction");
+                    }
+                    break;
+
+                case AbilityType.ChargeDamage:
+                    // 차징 애니메이션
+                    selfSlot.AniAttack();
+                    break;
+
+                case AbilityType.AddMana:
+                    int beforeMana = Master.Instance.Mana;
+
+                    // 마나 추가 획득
+                    BoardSystem.Instance.AddMana(Master.Instance, value);
+
+                    Debug.Log($"{Utils.BoardSlotLog(selfSlot)} <color=#257dca>마나 {value} 추가 획득</color>({beforeMana} => {Master.Instance.Mana}) - BoardLogic.AffectAddMana");
+                    break;
+
+                case AbilityType.AddGoldPer:
+                    {
+                        float gainGold = aiData.value * abilityData.ratio;
+                        int gold = aiData.value + (int)gainGold;
+                        int beforeGold = Master.Instance.Gold;
+
+                        BoardSystem.Instance.AddGold(Master.Instance, gold);
+
+                        // 골드 획득량 표시
+                        selfSlot.SetFloatingGold(beforeGold, Master.Instance.Gold);
+                    }
+                    break;
+
+                default:
+                    Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} 어빌리티 타입({abilityData.abilityType})에 대한 동작이 없음 - AbilityLogic.AbilityAction");
+                    break;
             }
         }
 
         /// <summary>
         /// 보드 슬롯에 장착된 카드 ability 해제
         /// </summary>
-        public void AbilityRelease(BoardSlot selfSlot, BoardSlot targetSlot, Ability ability)
+        public IEnumerator AbilityRelease(Ability ability, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             string abilityActionLog = $"{Utils.BoardSlotLog(selfSlot)} {ability.abilityType} 어빌리티({ability.abilityId}) 효과 지속 시간(<color=yellow>{ability.duration}</color>)";
 
             Card card = targetSlot.Card;
+
+            if (card == null)
+            {
+                Debug.LogWarning($"{abilityActionLog} - 카드 없음. 어빌리티 삭제 - AbilityLogic.AbilityRelease");
+
+                abilities.Remove(ability);
+                yield break;
+            }
+
+            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
 
             // 버프, 디버프는 해제, 차징 공격은 타겟 슬롯에 데미지 적용
             switch (ability.abilityType)
@@ -250,40 +244,48 @@ namespace ERang
                 case AbilityType.AtkUp:
                     {
                         int beforeAtk = card.atk;
+
                         targetSlot.AddCardAtk(-ability.abilityValue);
-                        Debug.Log($"{abilityActionLog} 해제 - atk: {beforeAtk} => {card.atk}");
+
+                        changes.Add((true, targetSlot.Slot, card.Id, beforeAtk, card.atk));
                     }
                     break;
 
                 case AbilityType.DefUp:
                     {
                         int beforeDef = card.def;
+
                         targetSlot.AddCardDef(-ability.abilityValue);
-                        Debug.Log($"{abilityActionLog} 해제 - def: {beforeDef} => {card.def}");
+
+                        changes.Add((true, targetSlot.Slot, card.Id, beforeDef, card.def));
                     }
                     break;
 
                 case AbilityType.BrokenDef:
                     {
                         int beforeDef = card.def;
+
                         targetSlot.AddCardDef(ability.abilityValue);
-                        Debug.Log($"{abilityActionLog} 해제 - def: {beforeDef} => {card.def}");
+
+                        changes.Add((true, targetSlot.Slot, card.Id, beforeDef, card.def));
                     }
                     break;
 
                 case AbilityType.AddMana:
                     {
                         int beforeMana = Master.Instance.Mana;
+
                         BoardSystem.Instance.AddMana(Master.Instance, ability.abilityValue * -1);
-                        Debug.Log($"{abilityActionLog} 해제 - <color=#257dca>mana: {beforeMana} => {Master.Instance.Mana}</color>");
+
+                        Debug.Log($"{abilityActionLog} <color=#257dca>마나 {ability.abilityValue} 감소</color>({beforeMana} => {Master.Instance.Mana}) - AbilityLogic.AbilityRelease");
                     }
                     break;
 
                 case AbilityType.ChargeDamage:
                     {
-                        BoardLogic.Instance.AbilityDamage(ability.aiType, ability.atkCount, selfSlot, new List<BoardSlot> { targetSlot }, ability.abilityValue);
-                        string chargeDamageLog = targetSlot.Card != null ? $"데미지 {ability.abilityValue} 적용" : "해제";
-                        Debug.Log($"{abilityActionLog} {chargeDamageLog} - AiLogic.AbilityAction");
+                        yield return StartCoroutine(AttackAbility(ability.aiType, ability.aiAttackType, selfSlot, new List<BoardSlot> { targetSlot }, ability.atkCount, ability.abilityValue));
+
+                        Debug.Log($"{abilityActionLog} {(targetSlot.Card != null ? $"데미지 {ability.abilityValue} 적용" : "해제")} - AiLogic.AbilityAction");
                     }
                     break;
 
@@ -292,8 +294,78 @@ namespace ERang
                     break;
             }
 
-            // 해제된 어빌리티 제거
+            if (changes.Count > 0)
+                Debug.Log($"{abilityActionLog} 어빌리티 해제 {Utils.StatChangesText("hp", changes)} - AbilityLogic.AbilityRelease");
+
             abilities.Remove(ability);
+        }
+
+        /// <summary>
+        /// 공격 어빌리티
+        /// </summary>
+        private IEnumerator AttackAbility(AiDataType aiDatyType, AiDataAttackType aiAttackType, BoardSlot selfSlot, List<BoardSlot> targetSlots, int atkCount, int abilityValue)
+        {
+            var changes = new List<(bool isAffect, int slot, int cardId, int before, int after)>();
+
+            selfSlot.AniAttack();
+
+            // 카드 선택 공격 타입이면 어빌리티 데미지 값으로 설정
+            int damage = Constants.SelectAttackTypes.Contains(aiAttackType) ? abilityValue : selfSlot.Card.atk;
+
+            // 원거리 미사일 발사
+            if (aiDatyType == AiDataType.Ranged)
+                yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, targetSlots, atkCount, damage));
+
+            foreach (BoardSlot targetSlot in targetSlots)
+            {
+                if (targetSlot.Card == null)
+                {
+                    changes.Add((false, targetSlot.Slot, 0, 0, 0));
+                    continue;
+                }
+
+                changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.Card.hp, targetSlot.Card.hp - (damage * atkCount)));
+
+                for (int i = 0; i < atkCount; i++)
+                {
+                    targetSlot.SetDamage(damage);
+                    targetSlot.AniDamaged();
+
+                    yield return new WaitForSeconds(0.5f);
+                }
+            }
+
+            Debug.Log($"{Utils.StatChangesText("hp", changes)} - {AbilityType.Damage} 어빌리티 적용 - AbilityLogic.AttackAbility");
+        }
+
+        /// <summary>
+        /// 어빌리티 추가
+        /// </summary>
+        private void AddAbility(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, BoardSlot targetSlot, AbilityWhereFrom whereFrom)
+        {
+            int beforeValue = GetOriginStatValue(abilityData.abilityType, targetSlot);
+            Debug.Log($"어빌리티 추가. beforeValue: {beforeValue}, abilityValue: {abilityData.value}, 시전자 슬로: {selfSlot.Slot}, 대상 슬롯: {targetSlot.Slot}");
+
+            Ability ability = new()
+            {
+                whereFrom = whereFrom,
+                aiType = aiData.type,
+                aiAttackType = aiData.attackType,
+                atkCount = aiData.atk_Cnt,
+                abilityId = abilityData.abilityId,
+                abilityType = abilityData.abilityType,
+                abilityWorkType = abilityData.workType,
+                abilityValue = abilityData.value,
+                duration = abilityData.duration,
+                beforeValue = beforeValue,
+                selfBoardSlot = selfSlot.Slot,
+                selfCardUid = selfSlot.Card?.Uid ?? string.Empty,
+                targetBoardSlot = targetSlot.Slot,
+                targetCardId = targetSlot.Card?.Id ?? 0,
+                targetCardUid = targetSlot.Card?.Uid ?? string.Empty
+            };
+
+            abilities.Add(ability);
         }
 
         /// <summary>
@@ -301,51 +373,18 @@ namespace ERang
         /// </summary>
         private int GetOriginStatValue(AbilityType abilityType, BoardSlot boardSlot)
         {
-            int originValue = 0;
-
             if (boardSlot.Card == null)
             {
-                Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} 어빌리티 적용 대상이 없어 원래 값 얻기 실패 - AbilityLogic.GetOriginStatValue");
-                return originValue;
+                Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} 어빌리티 적용 슬롯 카드 없음 - AbilityLogic.GetOriginStatValue");
+                return 0;
             }
 
-            switch (abilityType)
+            return abilityType switch
             {
-                case AbilityType.AtkUp:
-                    originValue = boardSlot.Card.atk;
-                    break;
-                case AbilityType.DefUp:
-                case AbilityType.BrokenDef:
-                    originValue = boardSlot.Card.def;
-                    break;
-                case AbilityType.Heal:
-                    originValue = boardSlot.Card.hp;
-                    break;
-            }
-
-            return originValue;
-        }
-
-        private Ability MakeAbility(AbilityData abilityData, AiData aiData, BoardSlot selfSlot, BoardSlot targetSlot, AbilityWhereFrom whereFrom)
-        {
-            int beforeValue = GetOriginStatValue(abilityData.abilityType, targetSlot);
-            Debug.Log($"어빌리티 추가. beforeValue: {beforeValue}, abilityValue: {abilityData.value}, 시전자 슬로: {selfSlot.Slot}, 대상 슬롯: {targetSlot.Slot}");
-
-            return new Ability
-            {
-                abilityId = abilityData.abilityData_Id,
-                whereFrom = whereFrom,
-                aiType = aiData.type,
-                abilityType = abilityData.abilityType,
-                abilityWorkType = abilityData.type,
-                atkCount = aiData.atk_Cnt,
-                beforeValue = beforeValue,
-                abilityValue = abilityData.value,
-                duration = abilityData.duration,
-                selfBoardSlot = selfSlot.Slot,
-                targetCardId = targetSlot.Card?.Id ?? 0,
-                targetBoardSlot = targetSlot.Slot,
-                targetCardUid = targetSlot.Card?.Uid ?? string.Empty
+                AbilityType.AtkUp => boardSlot.Card.atk,
+                AbilityType.DefUp or AbilityType.BrokenDef => boardSlot.Card.def,
+                AbilityType.Heal => boardSlot.Card.hp,
+                _ => 0,
             };
         }
     }

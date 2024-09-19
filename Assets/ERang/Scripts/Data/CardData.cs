@@ -32,10 +32,13 @@ namespace ERang.Data
         public string handStart_Ability; // 핸드에 해당 카드가 들어 온 순간 발동되는 어빌티리 (Ex. 전쟁의 가호 : 모든 크리쳐 공격력 1턴 동안 1 증가)
         public string handEnd_Ability; // 해당 카드가 핸드에서 무덤으로 들어가는 순간 발동되는 어빌티리 (Ex. 부패 : 핸드에 남은 카드 개수 당 2의 데미지를 마왕이 받는다)
         public int Owner; // 개성 카드에만 입력. 해당 카드를 소유한 마스터의 Id를 입력
-        public List<int> abilityIds = new List<int>();
+        public List<int> abilityIds = new();
 
         [Header("Display")]
         public Texture2D cardTexture;
+
+        public static List<CardData> card_list = new();
+        public static Dictionary<int, CardData> card_dict = new();
 
         public void Initialize(CardDataEntity cardEntity)
         {
@@ -101,9 +104,6 @@ namespace ERang.Data
             }
         }
 
-        public static List<CardData> card_list = new List<CardData>();
-        public static Dictionary<int, CardData> card_dict = new Dictionary<int, CardData>();
-
         public static void Load(string path = "")
         {
             // 엑셀로 생성된 ScriptableObject 로드
@@ -154,25 +154,17 @@ namespace ERang.Data
 
         public CardType ConvertCardType(string cardType)
         {
-            switch (cardType)
+            return cardType switch
             {
-                case "Magic":
-                    return CardType.Magic;
-                case "Individuality":
-                    return CardType.Individuality;
-                case "Creature":
-                    return CardType.Creature;
-                case "Building":
-                    return CardType.Building;
-                case "Charm":
-                    return CardType.Charm;
-                case "Curse":
-                    return CardType.Curse;
-                case "Monster":
-                    return CardType.Monster;
-                default:
-                    return CardType.None;
-            }
+                "Magic" => CardType.Magic,
+                "Individuality" => CardType.Individuality,
+                "Creature" => CardType.Creature,
+                "Building" => CardType.Building,
+                "Charm" => CardType.Charm,
+                "Curse" => CardType.Curse,
+                "Monster" => CardType.Monster,
+                _ => CardType.None,
+            };
         }
     }
 }

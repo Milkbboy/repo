@@ -12,11 +12,11 @@ namespace ERang.Data
     /// </summary>
     public class AbilityData : ScriptableObject
     {
-        public int abilityData_Id;
+        public int abilityId;
         public AbilityType abilityType;
         public int value;
         public float ratio;
-        public AbilityWorkType type;
+        public AbilityWorkType workType;
         public int duration;
         public string skillAnim;
         public string skillFx;
@@ -28,11 +28,11 @@ namespace ERang.Data
 
         public void Initialize(AbilityDataEntity entity)
         {
-            abilityData_Id = entity.AbilityData_Id;
+            abilityId = entity.AbilityData_Id;
             abilityType = ConvertAbilityType(entity.AbilityType);
             value = entity.Value;
             ratio = entity.Ratio;
-            type = ConvertAbilityWorkType(entity.Type);
+            workType = ConvertAbilityWorkType(entity.Type);
             duration = entity.Duration;
             skillAnim = entity.SkillAnim;
             skillFx = entity.SkillFx;
@@ -70,7 +70,7 @@ namespace ERang.Data
                 abilityData.Initialize(abilityEntity);
 
                 abilityData_list.Add(abilityData);
-                abilityData_dict.Add(abilityData.abilityData_Id, abilityData);
+                abilityData_dict.Add(abilityData.abilityId, abilityData);
             }
         }
 
@@ -81,31 +81,31 @@ namespace ERang.Data
 
         AbilityType ConvertAbilityType(string abilityType)
         {
-            switch (abilityType)
+            return abilityType switch
             {
-                case "Damage": return AbilityType.Damage;
-                case "Heal": return AbilityType.Heal;
-                case "AtkUp": return AbilityType.AtkUp;
-                case "DefUp": return AbilityType.DefUp;
-                case "BrokenDef": return AbilityType.BrokenDef;
-                case "ChargeDamage": return AbilityType.ChargeDamage;
-                case "AddGoldPer": return AbilityType.AddGoldPer;
-                case "AddMana": return AbilityType.AddMana;
-                case "SubMana": return AbilityType.SubMana;
-                case "AddGold": return AbilityType.AddGold;
-                default: return AbilityType.None;
-            }
+                "Damage" => AbilityType.Damage,
+                "Heal" => AbilityType.Heal,
+                "AtkUp" => AbilityType.AtkUp,
+                "DefUp" => AbilityType.DefUp,
+                "BrokenDef" => AbilityType.BrokenDef,
+                "ChargeDamage" => AbilityType.ChargeDamage,
+                "AddGoldPer" => AbilityType.AddGoldPer,
+                "AddMana" => AbilityType.AddMana,
+                "SubMana" => AbilityType.SubMana,
+                "AddGold" => AbilityType.AddGold,
+                _ => AbilityType.None,
+            };
         }
 
         AbilityWorkType ConvertAbilityWorkType(string type)
         {
-            switch (type)
+            return type switch
             {
-                case "Active": return AbilityWorkType.Active;
-                case "Passive": return AbilityWorkType.Passive;
-                case "OnHand": return AbilityWorkType.OnHand;
-                default: return AbilityWorkType.None;
-            }
+                "Active" => AbilityWorkType.Active,
+                "Passive" => AbilityWorkType.Passive,
+                "OnHand" => AbilityWorkType.OnHand,
+                _ => AbilityWorkType.None,
+            };
         }
     }
 }

@@ -78,7 +78,7 @@ namespace ERang
         None = 0,
         BoardSlot, // 필드에 있는 카드가 발동
         TurnStarHandOn, // 턴 시작 핸드 온 액션
-        TurnStartReaction, // 턴시작 리액션 발동
+        TurnStartAction, // 턴시작 액션 발동
         TurnEndBoardSlot, // 턴 종료 필드 슬롯 액션
         TurnEndBuilding, // 턴 종료 건물 액션
         HandUse, // 핸드에 있는 카드가 발동
@@ -166,5 +166,19 @@ namespace ERang
         Always, // 조건이 발동 된 이후에도 계속 해당 조건을 다시 체크
         StageOneTime, // 스테이지 한 판에 한번만 발동
         GameOneTime, // 게임 전체에 한번만 발동
+    }
+
+    /// <summary>
+    /// 대상 선택 공격 타입
+    /// </summary>
+    public static class Constants
+    {
+        public static readonly AiDataAttackType[] SelectAttackTypes = new[]
+        {
+            AiDataAttackType.SelectEnemy,
+            AiDataAttackType.SelectEnemyCreature,
+            AiDataAttackType.SelectFriendly,
+            AiDataAttackType.SelectFriendlyCreature,
+        };
     }
 }
