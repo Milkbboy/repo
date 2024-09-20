@@ -77,7 +77,7 @@ namespace ERang
 
             int spawnCount = maxHandCardCount - HandCardCount;
 
-            Debug.Log($"DrawHandDeckCard. masterHandCardCount: {HandCardCount}, spawnCount: {spawnCount}");
+            // Debug.Log($"DrawHandDeckCard. masterHandCardCount: {HandCardCount}, spawnCount: {spawnCount}");
 
             for (int i = 0; i < spawnCount; ++i)
             {
@@ -169,7 +169,7 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"핸드에 {card.Id} 카드 없음 - RemoveHandUseCard");
+                Debug.LogError($"핸드에 {card.Id} 카드 없음");
                 return;
             }
 
@@ -189,7 +189,7 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"보드 슬롯에 {cardUid} 카드 없음 - RemoveBoardCard");
+                Debug.LogError($"보드 슬롯에 {cardUid} 카드 없음");
                 return;
             }
 
@@ -202,7 +202,7 @@ namespace ERang
                     buildingCards.Remove(card);
                     break;
                 default:
-                    Debug.LogError($"보드 슬롯에 {card.Id} 카드 {card.Type} 타입 없음 - RemoveBoardCard");
+                    Debug.LogError($"보드 슬롯에 {card.Id} 카드 {card.Type} 타입 없음");
                     break;
             }
 

@@ -16,8 +16,7 @@ namespace ERang
         public float boardCardActionDelay = .5f;
         public float abilityReleaseDelay = .5f;
 
-        public Master Master
-        { get { return master; } }
+        public Master Master { get { return master; } }
         public Enemy Enemy { get { return enemy; } }
 
         public int masterId = 1001;
@@ -67,7 +66,8 @@ namespace ERang
         {
             yield return new WaitForSeconds(.3f);
 
-            ToastNotification.Show($"!! TURN START !! ({turnCount})");
+            // ToastNotification.Show($"!! TURN START !! ({turnCount})");
+            Debug.Log($"----------------- {turnCount} TURN START -----------------");
 
             // 턴 카운트 설정
             BoardSystem.Instance.SetTurnCount(turnCount);
@@ -91,14 +91,21 @@ namespace ERang
 
         public void TurnEnd()
         {
-            ToastNotification.Show($"!! TURN END !!({turnCount})");
+            // ToastNotification.Show($"!! TURN END !!({turnCount})");
 
-            if (actionQueue.Count > 0)
-            {
-                ToastNotification.Show($"actionQueue remain action: {actionQueue.Count}");
-                return;
-            }
+            // if (actionQueue.Count > 0)
+            // {
+            //     ToastNotification.Show($"actionQueue remain action: {actionQueue.Count}");
+            //     return;
+            // }
 
+            Debug.Log($"----------------- {turnCount} TURN END -----------------");
+
+            StartCoroutine(TrunEndProcess());
+        }
+
+        private IEnumerator TrunEndProcess()
+        {
             // 보드 - 턴 카운트
             turnCount += 1;
             BoardSystem.Instance.SetTurnCount(turnCount);
@@ -111,10 +118,10 @@ namespace ERang
             BoardSystem.Instance.ResetMana(master);
 
             // 핸드 온 카드 어빌리티 해제
-            StartCoroutine(HandOnCardAbilityRelease());
+            yield return StartCoroutine(HandOnCardAbilityRelease());
 
             // 카드 액션
-            StartCoroutine(CardAction());
+            yield return StartCoroutine(CardAction());
 
             // 턴 다시 시작
             StartCoroutine(TurnStart());
@@ -170,7 +177,7 @@ namespace ERang
 
                 if (card == null)
                 {
-                    Debug.LogWarning($"{boardSlot.Slot}번 슬롯 장착된 카드가 없어 액션 패스 - BattleLogic.TurnStartAction");
+                    // Debug.LogWarning($"{boardSlot.Slot}번 슬롯 장착된 카드가 없어 액션 패스");
                     continue;
                 }
 
@@ -179,7 +186,7 @@ namespace ERang
 
                 if (aiDataId == 0)
                 {
-                    Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} AiGroupData({card.AiGroupId})에서 턴 시작 액션 aiDataId 얻기 실패 - BattleLogic.TurnStartAction");
+                    Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} AiGroupData({card.AiGroupId})에 대한 이번 턴({turnCount}) 시작 리액션 안함");
                     continue;
                 }
 
@@ -200,7 +207,13 @@ namespace ERang
 
                 if (card == null)
                 {
-                    Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스 - BattleLogic.BoardCardAction");
+                    // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
+                    continue;
+                }
+
+                if (card.AiGroupId == 0)
+                {
+                    Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} AiGroupId 가 {Utils.RedText(card.AiGroupId)}이라서 카드 액션 패스");
                     continue;
                 }
 
@@ -209,7 +222,7 @@ namespace ERang
 
                 if (aiDataId == 0)
                 {
-                    Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} AiGroupData({card.AiGroupId})에 해당하는 aiDataId 얻기 실패 - BattleLogic.BoardCardAction");
+                    Debug.LogWarning($"{Utils.BoardSlotLog(boardSlot)} AiGroupData({card.AiGroupId})에 해당하는 aiDataId 얻기 실패");
                     continue;
                 }
 
@@ -229,13 +242,13 @@ namespace ERang
             // 타겟 설정 카드인가 확인
             var (isSelectAttackType, aiData) = AiLogic.Instance.GetAiAttackInfo(card);
 
-            Debug.Log($"핸드 카드({card.Id}) 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData?.ai_Id ?? 0}, targetSlot: {targetSlot?.Slot ?? -1} - BattleLogic.HandCardUse");
+            Debug.Log($"핸드 카드({card.Id}) 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData?.ai_Id ?? 0}, targetSlot: {targetSlot?.Slot ?? -1}");
 
             if (isSelectAttackType)
             {
                 if (targetSlot == null)
                 {
-                    Debug.LogWarning($"핸드 카드({card.Id}) 타겟 슬롯이 없어 카드 사용 불가 - BattleLogic.HandCardUse");
+                    Debug.LogWarning($"핸드 카드({card.Id}) 타겟 슬롯이 없어 카드 사용 불가");
                     return;
                 }
 
@@ -244,7 +257,7 @@ namespace ERang
                 // 타겟 슬롯에 대상 슬롯에 포함되어 있으면 카드 사용
                 if (selectTypeTargetSlots.Contains(targetSlot))
                 {
-                    Debug.Log($"타겟 슬롯 {targetSlot.Slot} 에 핸드 카드({card.Id}) 사용 - BattleLogic.HandCardUse");
+                    Debug.Log($"타겟 슬롯 {targetSlot.Slot} 에 핸드 카드({card.Id}) 사용");
                     BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
 
                     List<BoardSlot> targetSlots = new() { targetSlot };
@@ -264,12 +277,12 @@ namespace ERang
                 }
                 else
                 {
-                    Debug.LogWarning($"핸드 카드({card.Id}) 타겟 아님 - BattleLogic.HandCardUse");
+                    Debug.LogWarning($"핸드 카드({card.Id}) 타겟 아님");
                     return;
                 }
             }
 
-            Debug.Log($"핸드 카드({card.Id}) 사용 - BattleLogic.HandCardUse");
+            Debug.Log($"핸드 카드({card.Id}) 사용");
 
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, card);
@@ -283,22 +296,36 @@ namespace ERang
         /// </summary>
         IEnumerator HandOnCardAbilityRelease()
         {
-            List<Ability> abilities = AbilityLogic.Instance.GetAbilities();
+            List<Ability> abilities = AbilityLogic.Instance.GetHandOnAbilities();
+
+            if (abilities.Count == 0)
+                yield break;
+
+            Debug.Log($"핸드 온 어빌리티 해제 시작");
 
             for (int i = 0; i < abilities.Count; i++)
             {
                 Ability ability = abilities[i];
 
+                CardType cardType = BoardSystem.Instance.GetBoardSlot(ability.targetBoardSlot)?.CardType ?? CardType.None;
+
                 if (ability.whereFrom != AbilityWhereFrom.TurnStarHandOn)
+                {
+                    Debug.Log($"{Utils.AbilityLog(ability)}는 핸드 온 어빌리티가 아니라서 패스. {ability.whereFrom} 어빌리티");
                     continue;
+                }
+
+                Debug.Log($"{Utils.BoardSlotLog(ability.targetBoardSlot, cardType, ability.targetCardId)} {Utils.AbilityLog(ability)} Duration: {ability.duration} 으로 해제");
 
                 BoardSlot selfBoardSlot = BoardSystem.Instance.GetBoardSlot(ability.selfBoardSlot);
                 BoardSlot targetBoardSlot = BoardSystem.Instance.GetBoardSlot(ability.targetBoardSlot);
 
-                AbilityLogic.Instance.AbilityRelease(ability, selfBoardSlot, targetBoardSlot);
+                StartCoroutine(AbilityLogic.Instance.AbilityRelease(ability, selfBoardSlot, targetBoardSlot));
 
                 yield return new WaitForSeconds(abilityReleaseDelay);
             }
+
+            Debug.Log($"핸드 온 어빌리티 해제 완료");
         }
 
         /// <summary>
@@ -306,7 +333,12 @@ namespace ERang
         /// </summary>
         IEnumerator BoardSlotCardAbilityRelease()
         {
-            List<Ability> abilities = AbilityLogic.Instance.GetAbilities();
+            List<Ability> abilities = AbilityLogic.Instance.GetBoardSlotCardAbilities();
+
+            if (abilities.Count == 0)
+                yield break;
+
+            Debug.Log($"보드 슬롯 어빌리티 해제 시작");
 
             for (int i = 0; i < abilities.Count; ++i)
             {
@@ -314,16 +346,31 @@ namespace ERang
 
                 ability.duration = ability.duration - 1;
 
-                if (ability.whereFrom == AbilityWhereFrom.TurnStarHandOn || ability.duration > 0)
+                CardType cardType = BoardSystem.Instance.GetBoardSlot(ability.targetBoardSlot)?.CardType ?? CardType.None;
+
+                if (ability.whereFrom == AbilityWhereFrom.TurnStarHandOn)
+                {
+                    Debug.Log($"{Utils.AbilityLog(ability)}는 보드 슬롯 카드 어빌리티가 아니라서 패스. {ability.whereFrom} 어빌리티");
                     continue;
+                }
+
+                if (ability.duration > 0)
+                {
+                    Debug.Log($"{Utils.BoardSlotLog(ability.targetBoardSlot, cardType, ability.targetCardId)} {Utils.AbilityLog(ability)}는 Duration: {ability.duration} 남아서 패스");
+                    continue;
+                }
+
+                // Debug.Log($"{Utils.BoardSlotLog(ability.targetBoardSlot, cardType, ability.targetCardId)} {Utils.AbilityLog(ability)} Duration: {ability.duration} 으로 해제");
 
                 BoardSlot selfBoardSlot = BoardSystem.Instance.GetBoardSlot(ability.selfBoardSlot);
                 BoardSlot targetBoardSlot = BoardSystem.Instance.GetBoardSlot(ability.targetBoardSlot);
 
-                AbilityLogic.Instance.AbilityRelease(ability, selfBoardSlot, targetBoardSlot);
+                StartCoroutine(AbilityLogic.Instance.AbilityRelease(ability, selfBoardSlot, targetBoardSlot));
 
                 yield return new WaitForSeconds(abilityReleaseDelay);
             }
+
+            Debug.Log($"보드 슬롯 어빌리티 해제 완료");
         }
 
         /// <summary>
@@ -335,14 +382,14 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"핸드에 카드({card.Id}) 없음 - BattleLogic.CanHandCardUse");
+                Debug.LogError($"핸드에 카드({card.Id}) 없음");
                 return false;
             }
 
             if (card.inUse == false)
             {
                 ToastNotification.Show($"card({card.Id}) is not in use");
-                Debug.LogWarning($"사용할 수 없는 카드({card.Id}) InUse: false 설정 - BattleLogic.CanHandCardUse");
+                Debug.LogWarning($"사용할 수 없는 카드({card.Id}) InUse: false 설정");
                 return false;
             }
 
@@ -350,7 +397,7 @@ namespace ERang
             if (card.costMana != 0 && master.Mana < card.costMana)
             {
                 ToastNotification.Show($"mana({master.Mana}) is not enough");
-                Debug.LogWarning($"핸드 카드({card.Id}) 마나 부족으로 사용 불가능({master.Mana} < {card.costMana}) - BattleLogic.CanHandCardUse");
+                Debug.LogWarning($"핸드 카드({card.Id}) 마나 부족으로 사용 불가능({master.Mana} < {card.costMana})");
                 return false;
             }
 
@@ -358,11 +405,11 @@ namespace ERang
             if (card.costGold != 0 && master.Gold < card.costGold)
             {
                 ToastNotification.Show($"gold({master.Gold}) is not enough");
-                Debug.LogWarning($"핸드 카드({card.Id}) 골드 부족으로 사용 불가능({master.Gold} < {card.costGold}) - BattleLogic.CanHandCardUse");
+                Debug.LogWarning($"핸드 카드({card.Id}) 골드 부족으로 사용 불가능({master.Gold} < {card.costGold})");
                 return false;
             }
 
-            Debug.Log($"핸드 카드({card.Id}) 사용 가능 - BattleLogic.CanHandCardUse");
+            Debug.Log($"핸드 카드({card.Id}) 사용 가능");
 
             return true;
         }
@@ -378,7 +425,7 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"핸드에 {cardUid} 카드 없음 - BattleLogic.BoardSlotEquipCard");
+                Debug.LogError($"핸드에 {cardUid} 카드 없음");
                 return;
             }
 
@@ -391,18 +438,18 @@ namespace ERang
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, card);
 
-            Debug.Log($"보드 슬롯 {boardSlot.Slot} 에 카드({card.Id}) 장착 - BattleLogic.BoardSlotEquipCard");
+            Debug.Log($"보드 슬롯 {boardSlot.Slot} 에 카드({card.Id}) 장착");
         }
 
         public void RemoveBoardCard(BoardSlot boardSlot)
         {
             if (boardSlot == null)
             {
-                Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없음 - BattleLogic.RemoveBoardCard");
+                Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없음");
                 return;
             }
 
-            Debug.Log($"{boardSlot.Slot}번 슬롯 카드 제거 - BattleLogic.RemoveBoardCard");
+            Debug.Log($"{boardSlot.Slot}번 슬롯 카드 제거");
 
             // 카드 어빌리티 제거
             AbilityLogic.Instance.RemoveAbility(boardSlot.Card.Uid);
@@ -419,7 +466,7 @@ namespace ERang
 
             if (monsterCount == 0 || boardSlot.Slot == 0)
             {
-                Debug.Log($"배틀 종료. monsterCount: {monsterCount}, Slot: {boardSlot.Slot} - BattleLogic.RemoveBoardCard");
+                Debug.Log($"배틀 종료. monsterCount: {monsterCount}, Slot: {boardSlot.Slot}");
                 GameObject nextScene = GameObject.Find("Scene Manager");
                 nextScene.GetComponent<NextScene>().Play();
             }
@@ -492,10 +539,10 @@ namespace ERang
             foreach (AbilityData abilityData in abilityDatas)
             {
                 // 어빌리티 효과 제거를 위한 저장
-                AbilityLogic.Instance.AddAbility(aiData, abilityData, boardSlot, targetSlots, whereFrom);
+                // AbilityLogic.Instance.AddAbility(aiData, abilityData, boardSlot, targetSlots, whereFrom);
 
                 // 어빌리티 적용
-                StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, boardSlot, targetSlots));
+                StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, boardSlot, targetSlots, whereFrom));
             }
         }
 

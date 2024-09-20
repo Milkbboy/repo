@@ -28,7 +28,7 @@ namespace ERang
 
             // Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({reaction.conditionId}) 확인 시작 - ConditionLogic.GetReactionConditionAiDataId");
 
-            string conditionTargetLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({condition.id}) 타겟 {condition.target.ToString()} 슬롯 찾기";
+            string conditionTargetLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({condition.id}) 타겟 {condition.target} 슬롯 찾기";
 
             List<BoardSlot> targetSlots = GetConditionTargets(condition, selfSlot, opponentSlots);
 
@@ -62,11 +62,11 @@ namespace ERang
                     if (ConditionRatio(condition.id, reaction.ratio))
                     {
                         result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
-                        Debug.Log($"{targetConditionLog} - 성공 (발생 확률만 비교) 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
+                        // Debug.Log($"{targetConditionLog} - 성공 (발생 확률만 비교) 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                     else
                     {
-                        Debug.LogWarning($"{targetConditionLog} - 실패 (발생 확률만 비교) - ConditionLogic.GetReactionConditionAiDataId");
+                        // Debug.LogWarning($"{targetConditionLog} - 실패 (발생 확률만 비교) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                 }
                 else
@@ -97,11 +97,11 @@ namespace ERang
                     if (ConditionCompare(condition, compareValue) && ConditionRatio(condition.id, reaction.ratio))
                     {
                         result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
-                        Debug.Log($"{targetConditionLog} - 성공 (조건 비교와 발생 확률 모두 통과). 리액션에 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
+                        // Debug.Log($"{targetConditionLog} - 성공 (조건 비교와 발생 확률 모두 통과). 리액션에 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                     else
                     {
-                        Debug.LogWarning($"{targetConditionLog} - 실패 (조건 비교 또는 발생 확률 실패) - ConditionLogic.GetReactionConditionAiDataId");
+                        // Debug.LogWarning($"{targetConditionLog} - 실패 (조건 비교 또는 발생 확률 실패) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                 }
 

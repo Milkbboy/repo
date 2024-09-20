@@ -1,15 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
+using ERang.Data;
 
 namespace ERang
 {
     public static class Utils
     {
+        public static string RedText(object text)
+        {
+            return $"<color=#ea4123>{text}</color>";
+        }
+
         public static int[] ParseIntArray(string intArray)
         {
-            return intArray.Split(new[] { "," }, System.StringSplitOptions.RemoveEmptyEntries)
+            return intArray.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
                           .Select(s => int.Parse(s.Trim()))
                           .ToArray();
         }
@@ -25,12 +30,35 @@ namespace ERang
 
         public static string BoardSlotLog(BoardSlot boardSlot)
         {
-            return $"{boardSlot.Slot}번 슬롯 {GetCardType(boardSlot.CardType)} 카드({boardSlot?.Card?.Id ?? 0})";
+            if (boardSlot == null)
+                return "보드 슬롯 없음";
+
+            return BoardSlotLog(boardSlot.Slot, boardSlot.Card.Type, boardSlot.Card?.Id ?? 0);
+        }
+
+        public static string BoardSlotLog(int slot, CardType cardType, int cardId)
+        {
+            return $"{slot}번 슬롯 {(cardType == CardType.None ? "" : GetCardType(cardType))} 카드({(cardId != 0 ? cardId : "없음")})";
         }
 
         public static string CardLog(Card card)
         {
             return $"{GetCardType(card.Type)} 카드({card.Id})";
+        }
+
+        public static string AbilityLog(Ability ability)
+        {
+            return AbilityLog(ability.abilityType, ability.abilityId);
+        }
+
+        public static string AbilityLog(AbilityData ability)
+        {
+            return AbilityLog(ability.abilityType, ability.abilityId);
+        }
+
+        public static string AbilityLog(AbilityType abilityType, int abilityId)
+        {
+            return $"<color=#f4872e>{abilityType} 어빌리티({abilityId})</color>";
         }
 
         public static string BoardSlotNumersText(List<BoardSlot> boardSlots)
@@ -43,26 +71,37 @@ namespace ERang
             return $"<color=#ea4123>{string.Join(", ", numbers)}</color>";
         }
 
-        public static string StatChangesText(string statText, List<(bool isAffect, int slot, int cardId, int before, int after)> changes)
+        public static string StatChangesText(AbilityType abilityType, List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> changes)
         {
-            return $"{string.Join(", ", changes.Select(change => $"{change.slot}번 슬롯 {statText} {(change.isAffect ? $"<color=#00ff00>{change.before} => {change.after}</color>" : "")} 효과 {(change.isAffect ? "적용" : "미적용")}"))}";
+            string statText = abilityType switch
+            {
+                AbilityType.Damage => "hp",
+                AbilityType.Heal => "hp",
+                AbilityType.ChargeDamage => "hp",
+                AbilityType.AtkUp => "atk",
+                AbilityType.DefUp => "def",
+                AbilityType.BrokenDef => "def",
+                _ => "스탯",
+            };
+
+            return $"{string.Join(", ", changes.Select(change => $"{change.slot}번 슬롯 {GetCardType(change.cardType)} 카드 {statText} {(change.isAffect ? $"<color=#00ff00>{change.before} => {change.after}</color>" : "")} 효과 {(change.isAffect ? "적용" : "미적용")}. 변화량: {change.changeValue}"))}";
         }
 
         private static string GetCardType(CardType cardType)
         {
-            switch (cardType)
+            return cardType switch
             {
-                case CardType.Master: return "마스터";
-                case CardType.Magic: return "마법";
-                case CardType.Individuality: return "전용 마법";
-                case CardType.Creature: return "크리쳐";
-                case CardType.Building: return "건물";
-                case CardType.Charm: return "축복";
-                case CardType.Curse: return "저주";
-                case CardType.Monster: return "몬스터";
-                case CardType.EnemyMaster: return "적 마스터";
-                default: return "없음";
-            }
+                CardType.Master => "마스터",
+                CardType.Magic => "마법",
+                CardType.Individuality => "전용 마법",
+                CardType.Creature => "크리쳐",
+                CardType.Building => "건물",
+                CardType.Charm => "축복",
+                CardType.Curse => "저주",
+                CardType.Monster => "몬스터",
+                CardType.EnemyMaster => "적 마스터",
+                _ => "없음",
+            };
         }
     }
 }

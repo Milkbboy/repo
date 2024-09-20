@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -73,55 +72,55 @@ namespace ERang.Data
 
         private ConditionTarget ConvertSetTarget(string setTarget)
         {
-            switch (setTarget)
+            return setTarget switch
             {
-                case "NearEnemy": return ConditionTarget.NearEnemy;
-                case "Self": return ConditionTarget.Self;
-                case "Enemy1": return ConditionTarget.Enemy1;
-                case "Enemy2": return ConditionTarget.Enemy2;
-                case "Enemy3": return ConditionTarget.Enemy3;
-                case "Enemy4": return ConditionTarget.Enemy4;
-                case "FriendlyCreature": return ConditionTarget.FriendlyCreature;
-                case "EnemyCreature": return ConditionTarget.EnemyCreature;
-                case "Card": return ConditionTarget.Card;
-                default: return ConditionTarget.None;
-            }
+                "NearEnemy" => ConditionTarget.NearEnemy,
+                "Self" => ConditionTarget.Self,
+                "Enemy1" => ConditionTarget.Enemy1,
+                "Enemy2" => ConditionTarget.Enemy2,
+                "Enemy3" => ConditionTarget.Enemy3,
+                "Enemy4" => ConditionTarget.Enemy4,
+                "FriendlyCreature" => ConditionTarget.FriendlyCreature,
+                "EnemyCreature" => ConditionTarget.EnemyCreature,
+                "Card" => ConditionTarget.Card,
+                _ => ConditionTarget.None,
+            };
         }
 
         private ConditionType ConvertConditionType(string type)
         {
-            switch (type)
+            return type switch
             {
-                case "Buff": return ConditionType.Buff;
-                case "Debuff": return ConditionType.Debuff;
-                case "Hp": return ConditionType.Hp;
-                case "EveryTurn": return ConditionType.EveryTurn;
-                case "Extinction": return ConditionType.Extinction;
-                case "Acquisition": return ConditionType.Acquisition;
-                default: return ConditionType.None;
-            }
+                "Buff" => ConditionType.Buff,
+                "Debuff" => ConditionType.Debuff,
+                "Hp" => ConditionType.Hp,
+                "EveryTurn" => ConditionType.EveryTurn,
+                "Extinction" => ConditionType.Extinction,
+                "Acquisition" => ConditionType.Acquisition,
+                _ => ConditionType.None,
+            };
         }
 
         private ConditionCheckPoint ConvertCheckPoint(string checkPoint)
         {
-            switch (checkPoint)
+            return checkPoint switch
             {
-                case "TurnStart": return ConditionCheckPoint.TurnStart;
-                case "TurnEnd": return ConditionCheckPoint.TurnEnd;
-                case "Immediately": return ConditionCheckPoint.Immediately;
-                default: return ConditionCheckPoint.None;
-            }
+                "TurnStart" => ConditionCheckPoint.TurnStart,
+                "TurnEnd" => ConditionCheckPoint.TurnEnd,
+                "Immediately" => ConditionCheckPoint.Immediately,
+                _ => ConditionCheckPoint.None,
+            };
         }
 
         private ConditionMethod ConvertConditionMethod(string method)
         {
-            switch (method)
+            return method switch
             {
-                case "Always": return ConditionMethod.Always;
-                case "StageOneTime": return ConditionMethod.StageOneTime;
-                case "GameOneTime": return ConditionMethod.GameOneTime;
-                default: return ConditionMethod.None;
-            }
+                "Always" => ConditionMethod.Always,
+                "StageOneTime" => ConditionMethod.StageOneTime,
+                "GameOneTime" => ConditionMethod.GameOneTime,
+                _ => ConditionMethod.None,
+            };
         }
     }
 }

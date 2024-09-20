@@ -88,15 +88,15 @@ namespace ERang.Data
 
         AiDataType ConvertAiDataType(string type)
         {
-            switch (type)
+            return type switch
             {
-                case "Melee": return AiDataType.Melee;
-                case "Ranged": return AiDataType.Ranged;
-                case "Explosion": return AiDataType.Explosion;
-                case "Buff": return AiDataType.Buff;
-                case "DeBuff": return AiDataType.Debuff;
-                default: return AiDataType.None;
-            }
+                "Melee" => AiDataType.Melee,
+                "Ranged" => AiDataType.Ranged,
+                "Explosion" => AiDataType.Explosion,
+                "Buff" => AiDataType.Buff,
+                "DeBuff" => AiDataType.Debuff,
+                _ => AiDataType.None,
+            };
         }
 
         AiDataTarget ConvertAiDataTarget(string target)
@@ -104,20 +104,20 @@ namespace ERang.Data
             // Remove spaces from the target string
             target = target.Replace(" ", "");
 
-            switch (target)
+            return target switch
             {
-                case "NearEnemy": return AiDataTarget.NearEnemy;
-                case "Enemy": return AiDataTarget.Enemy;
-                case "RandomEnemy": return AiDataTarget.RandomEnemy;
-                case "RandomEnemyCreature": return AiDataTarget.RandomEnemyCreature;
-                case "AllEnemy": return AiDataTarget.AllEnemy;
-                case "AllEnemyCreature": return AiDataTarget.AllEnemyCreature;
-                case "Friendly": return AiDataTarget.Friendly;
-                case "AllFriendly": return AiDataTarget.AllFriendly;
-                case "AllFriendlyCreature": return AiDataTarget.AllFriendlyCreature;
-                case "Self": return AiDataTarget.Self;
-                default: return AiDataTarget.None;
-            }
+                "NearEnemy" => AiDataTarget.NearEnemy,
+                "Enemy" => AiDataTarget.Enemy,
+                "RandomEnemy" => AiDataTarget.RandomEnemy,
+                "RandomEnemyCreature" => AiDataTarget.RandomEnemyCreature,
+                "AllEnemy" => AiDataTarget.AllEnemy,
+                "AllEnemyCreature" => AiDataTarget.AllEnemyCreature,
+                "Friendly" => AiDataTarget.Friendly,
+                "AllFriendly" => AiDataTarget.AllFriendly,
+                "AllFriendlyCreature" => AiDataTarget.AllFriendlyCreature,
+                "Self" => AiDataTarget.Self,
+                _ => AiDataTarget.None,
+            };
         }
 
         AiDataAttackType ConvertAiDataAtackType(string atkType)
@@ -125,15 +125,15 @@ namespace ERang.Data
             // Remove spaces from the atkType string
             atkType = atkType.Replace(" ", "");
 
-            switch (atkType)
+            return atkType switch
             {
-                case "Automatic": return AiDataAttackType.Automatic;
-                case "SelectEnemy": return AiDataAttackType.SelectEnemy;
-                case "SelectFriendly": return AiDataAttackType.SelectFriendly;
-                case "SelectEnemyCreature": return AiDataAttackType.SelectEnemyCreature;
-                case "SelectFriendlyCreature": return AiDataAttackType.SelectFriendlyCreature;
-                default: return AiDataAttackType.None;
-            }
+                "Automatic" => AiDataAttackType.Automatic,
+                "SelectEnemy" => AiDataAttackType.SelectEnemy,
+                "SelectFriendly" => AiDataAttackType.SelectFriendly,
+                "SelectEnemyCreature" => AiDataAttackType.SelectEnemyCreature,
+                "SelectFriendlyCreature" => AiDataAttackType.SelectFriendlyCreature,
+                _ => AiDataAttackType.None,
+            };
         }
     }
 }

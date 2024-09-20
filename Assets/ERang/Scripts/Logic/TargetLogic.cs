@@ -37,12 +37,12 @@ namespace ERang
                 case AiDataTarget.AllFriendlyCreature: return TargetAllFriendly(selfSlot);
                 case AiDataTarget.None:
                 default:
-                    Debug.LogWarning($"{aiData.ai_Id} - 대상이 없음 - TargetLogic.GetAiTargetSlots");
+                    Debug.LogWarning($"{aiData.ai_Id} - 대상이 없음");
                     break;
             }
 
             if (targetSlots.Count > 0)
-                Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData({aiData.ai_Id})에 설정된 타겟({aiData.target})({string.Join(", ", targetSlots.Select(slot => slot.Card.Id))}) 얻기 완료 - TargetLogic.GetAiTargetSlots");
+                Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData({aiData.ai_Id})에 설정된 타겟({aiData.target})({string.Join(", ", targetSlots.Select(slot => slot.Card.Id))}) 얻기 완료");
 
             return targetSlots;
         }
@@ -86,7 +86,7 @@ namespace ERang
                         // 근접 공격 거리가 상대 카드 개수 보다 크면 패스
                         if (targetSlotIndex < 0 || targetSlotIndex >= opponentSlots.Count)
                         {
-                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBoardSlots.Count: {opponentSlots.Count} - TargetLogic.TargetEnemy");
+                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBoardSlots.Count: {opponentSlots.Count}");
                             continue;
                         }
 
@@ -101,7 +101,7 @@ namespace ERang
 
                         if (targetSlotIndex < 0 || targetSlotIndex >= opponentSlots.Count)
                         {
-                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBoardSlots.Count: {opponentSlots.Count} - TargetLogic.TargetEnemy");
+                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBoardSlots.Count: {opponentSlots.Count}");
                             continue;
                         }
 
@@ -110,7 +110,7 @@ namespace ERang
                     break;
 
                 case AiDataType.Explosion:
-                    Debug.LogWarning($"{aiData.ai_Id} - AiDataType.Explosion 아직 구현되지 않음 - TargetLogic.TargetEnemy");
+                    Debug.LogWarning($"{aiData.ai_Id} - AiDataType.Explosion 아직 구현되지 않음");
                     break;
             }
 
@@ -131,11 +131,11 @@ namespace ERang
             BoardSlot targetSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
             int targetIndex = targetSlot.Index;
 
-            Debug.Log($"{aiData.ai_Id} - 제일 근접한 타겟 슬롯 인덱스 {targetIndex} 찾고 attackRanges({(aiData.attackRanges.Count > 0 ? string.Join(", ", aiData.attackRanges) : "없음")}) 에 설정된 타겟 찾기 - TargetLogic.TargetNearEnemy");
+            // Debug.Log($"{aiData.ai_Id} - 제일 근접한 타겟 슬롯 인덱스 {targetIndex} 찾고 attackRanges({(aiData.attackRanges.Count > 0 ? string.Join(", ", aiData.attackRanges) : "없음")}) 에 설정된 타겟 찾기");
 
             if (aiData.attackRanges.Count == 0)
             {
-                Debug.LogWarning($"{aiData.ai_Id} - attackRanges 가 설정되지 않아서 제일 근접한 타겟만 찾음 - TargetLogic.TargetNearEnemy");
+                // Debug.LogWarning($"{aiData.ai_Id} - attackRanges 가 설정되지 않아서 제일 근접한 타겟만 찾음");
                 targets.Add(targetSlot);
 
                 return targets;
@@ -148,12 +148,12 @@ namespace ERang
 
                 if (targetSlotIndex < 0 || targetSlotIndex >= opponentSlots.Count)
                 {
-                    Debug.LogWarning($"{aiData.ai_Id} - {i}번째 타겟 슬롯 인덱스 {targetSlotIndex} 로 패스 (적용 범위 0 ~ 3) - TargetLogic.TargetNearEnemy");
+                    // Debug.LogWarning($"{aiData.ai_Id} - {i}번째 타겟 슬롯 인덱스 {targetSlotIndex} 로 패스 (적용 범위 0 ~ 3)");
                     continue;
                 }
                 else
                 {
-                    Debug.Log($"{aiData.ai_Id} - {i}번째 타겟 슬롯 인덱스 {targetSlotIndex} 찾기 - TargetLogic.TargetNearEnemy");
+                    // Debug.Log($"{aiData.ai_Id} - {i}번째 타겟 슬롯 인덱스 {targetSlotIndex} 찾기");
                 }
 
                 targets.Add(opponentSlots[targetSlotIndex]);
@@ -170,7 +170,7 @@ namespace ERang
             if (exceptMaster)
                 opponentSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
 
-            Debug.Log($"TargetAllEnemy - exceptMaster: {exceptMaster}, targetSlots: {string.Join(", ", opponentSlots.Select(x => x.Slot))}");
+            // Debug.Log($"TargetAllEnemy - exceptMaster: {exceptMaster}, targetSlots: {string.Join(", ", opponentSlots.Select(x => x.Slot))}");
 
             return opponentSlots;
         }
@@ -200,7 +200,7 @@ namespace ERang
 
             if (randomIndex < 0 || randomIndex >= opponentSlots.Count)
             {
-                Debug.LogError($"randomIndex is out of range. randomIndex: {randomIndex}, opponentSlots.Count: {opponentSlots.Count} - TargetLogic.TargetRandomEnemy");
+                Debug.LogError($"randomIndex is out of range. randomIndex: {randomIndex}, opponentSlots.Count: {opponentSlots.Count}");
                 return null;
             }
 

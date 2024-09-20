@@ -94,6 +94,9 @@ namespace ERang
         public void AddDef(int value)
         {
             def += value;
+
+            if (def < 0)
+                def = 0;
         }
 
         /// <summary>
@@ -103,6 +106,9 @@ namespace ERang
         public void AddAtk(int value)
         {
             atk += value;
+
+            if (atk < 0)
+                atk = 0;
         }
     }
 }
