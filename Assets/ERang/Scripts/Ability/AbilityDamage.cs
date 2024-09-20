@@ -26,7 +26,7 @@ namespace ERang
             if (aiDataType == AiDataType.Ranged)
                 yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, targetSlots, atkCount, damage));
 
-            Debug.Log($"targetSlots: {string.Join(", ", targetSlots.Select(x => x.Slot))}");
+            // Debug.Log($"targetSlots: {string.Join(", ", targetSlots.Select(x => x.Slot))}");
 
             foreach (BoardSlot targetSlot in targetSlots)
             {
@@ -36,6 +36,7 @@ namespace ERang
                     continue;
                 }
 
+                int cardId = targetSlot.Card.Id;
                 int before = targetSlot.Card.hp;
 
                 for (int i = 0; i < atkCount; i++)
@@ -46,7 +47,15 @@ namespace ERang
                     yield return new WaitForSeconds(0.5f);
                 }
 
-                Changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.CardType, before, targetSlot.Card.hp, damage * atkCount));
+                // targetSlot.SetDamage 으로 hp 가 0 이 되면 카드 제거로 Card 가 null 이 됨
+                if (targetSlot.Card == null)
+                {
+                    Changes.Add((false, targetSlot.Slot, cardId, targetSlot.CardType, 0, 0, 0));
+                    continue;
+                }
+
+                // 카드가 hp 0 으로 제거되는 경우도 있음
+                Changes.Add((true, targetSlot.Slot, cardId, targetSlot.CardType, before, targetSlot.Card.hp, damage * atkCount));
             }
         }
 

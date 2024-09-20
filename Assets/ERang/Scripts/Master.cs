@@ -79,7 +79,7 @@ namespace ERang
             if (mana > MaxMana)
                 mana = MaxMana;
 
-            Debug.Log($"<color=#257dca>Add Mana({value}): {beforeMana} -> {mana}</color>");
+            // Debug.Log($"<color=#257dca>Add Mana({value}): {beforeMana} -> {mana}</color>");
         }
 
         public void AddGold(int gold)

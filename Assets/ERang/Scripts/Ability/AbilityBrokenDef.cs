@@ -24,7 +24,7 @@ namespace ERang
 
                 targetSlot.AddCardDef(change);
 
-                Changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.CardType, before, targetSlot.Card.hp, change));
+                Changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.CardType, before, targetSlot.Card.def, change));
             }
 
             yield return new WaitForSeconds(0.1f);

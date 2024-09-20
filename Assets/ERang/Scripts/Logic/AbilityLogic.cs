@@ -196,6 +196,9 @@ namespace ERang
 
             yield return StartCoroutine(abilityAction.Apply(aiData, abilityData, selfSlot, targetSlots));
 
+            if (abilityAction.Changes.Count == 0)
+                yield break;
+
             Debug.Log($"{Utils.BoardSlotLog(selfSlot)} {Utils.AbilityLog(abilityData)}로 {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityData.abilityType, abilityAction.Changes)}");
             abilityAction.Changes.Clear();
         }
@@ -205,18 +208,6 @@ namespace ERang
         /// </summary>
         public IEnumerator AbilityRelease(Ability ability, BoardSlot selfSlot, BoardSlot targetSlot)
         {
-            string abilityActionLog = $"{Utils.BoardSlotLog(targetSlot)} {Utils.AbilityLog(ability.abilityType, ability.abilityId)} 효과 지속 시간(<color=yellow>{ability.duration}</color>)";
-
-            Card card = targetSlot.Card;
-
-            if (card == null)
-            {
-                Debug.LogWarning($"{abilityActionLog} - 카드 없음. 어빌리티 삭제");
-
-                abilities.Remove(ability);
-                yield break;
-            }
-
             IAbility abilityAction = abilityActions.TryGetValue(ability.abilityType, out IAbility action) ? action : null;
 
             if (abilityAction == null)
@@ -225,7 +216,23 @@ namespace ERang
                 yield break;
             }
 
+            string abilityActionLog = $"{Utils.BoardSlotLog(targetSlot)} {Utils.AbilityLog(ability.abilityType, ability.abilityId)} 효과 지속 시간(<color=yellow>{ability.duration}</color>)";
+
+            Card card = targetSlot.Card;
+
+            if (card == null)
+            {
+                Debug.LogWarning($"{abilityActionLog} - 카드 없음. 어빌리티 삭제");
+
+                abilityAction.Changes.Clear();
+                abilities.Remove(ability);
+                yield break;
+            }
+
             yield return StartCoroutine(abilityAction.Release(ability, selfSlot, targetSlot));
+
+            if (abilityAction.Changes.Count == 0)
+                yield break;
 
             Debug.Log($"{abilityActionLog} 해제. {Utils.StatChangesText(ability.abilityType, abilityAction.Changes)}");
             abilityAction.Changes.Clear();

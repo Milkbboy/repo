@@ -457,11 +457,11 @@ namespace ERang
         {
             if (boardSlot == null)
             {
-                Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없음");
+                Debug.LogError($"{boardSlot.Slot}번 보드 슬롯 없음");
                 return;
             }
 
-            Debug.Log($"{boardSlot.Slot}번 슬롯 카드 제거");
+            Debug.Log($"{Utils.BoardSlotLog(boardSlot)} <color=#f52d2d>카드 제거</color>");
 
             // 카드 어빌리티 제거
             AbilityLogic.Instance.RemoveAbility(boardSlot.Card.Uid);
