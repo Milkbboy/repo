@@ -26,6 +26,8 @@ namespace ERang
 
         private DeckSystem deckSystem;
 
+        private bool isTruenEndProcessing = false;
+
         // for test
         private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
         private List<BoardSlot> flashingSlots = new List<BoardSlot>();
@@ -91,6 +93,14 @@ namespace ERang
 
         public void TurnEnd()
         {
+            if (isTruenEndProcessing)
+            {
+                Debug.LogWarning("이미 턴 종료 처리 중");
+                return;
+            }
+
+            isTruenEndProcessing = true;
+
             // ToastNotification.Show($"!! TURN END !!({turnCount})");
 
             // if (actionQueue.Count > 0)
@@ -125,6 +135,8 @@ namespace ERang
 
             // 턴 다시 시작
             StartCoroutine(TurnStart());
+
+            isTruenEndProcessing = false;
         }
 
         IEnumerator CardAction()

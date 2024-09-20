@@ -30,10 +30,39 @@ namespace ERang
         public static AbilityLogic Instance { get; private set; }
 
         public List<Ability> abilities = new();
+        public Dictionary<AbilityType, IAbility> abilityActions = new();
 
         void Awake()
         {
             Instance = this;
+        }
+
+        void Start()
+        {
+            // 어빌리티 오브젝트들을 딕셔너리에 추가
+            var abilities = new (AbilityType, IAbility)[]
+            {
+                (AbilityType.Damage, GetComponentInChildren<AbilityDamage>()),
+                (AbilityType.Heal, GetComponentInChildren<AbilityHeal>()),
+                (AbilityType.AtkUp, GetComponentInChildren<AbilityAtkUp>()),
+                (AbilityType.ChargeDamage, GetComponentInChildren<AbilityChargeDamage>()),
+                (AbilityType.DefUp, GetComponentInChildren<AbilityDefUp>()),
+                (AbilityType.BrokenDef, GetComponentInChildren<AbilityBrokenDef>()),
+                (AbilityType.AddMana, GetComponentInChildren<AbilityAddMana>()),
+                (AbilityType.AddGoldPer, GetComponentInChildren<AbilityAddGoldPer>())
+            };
+
+            foreach (var (type, ability) in abilities)
+            {
+                if (ability != null)
+                {
+                    abilityActions.Add(type, ability);
+                }
+                else
+                {
+                    Debug.LogWarning($"Ability of type {type} is not found on the GameObject.");
+                }
+            }
         }
 
         public List<Ability> GetAbilities()
@@ -157,125 +186,18 @@ namespace ERang
         /// </summary>
         public IEnumerator AbilityAction(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
         {
-            int value = abilityData.value;
-            var changes = new List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)>();
+            IAbility abilityAction = abilityActions.TryGetValue(abilityData.abilityType, out IAbility action) ? action : null;
 
-            foreach (BoardSlot targetSlot in targetSlots)
+            if (abilityAction == null)
             {
-                if (targetSlot.Card == null)
-                    changes.Add((false, targetSlot.Slot, 0, targetSlot.CardType, 0, 0, 0));
+                Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} {Utils.AbilityLog(abilityData)} 에 대한 동작이 없음");
+                yield break;
             }
 
-            int beforeValue = 0;
-            int afterValue = 0;
-            int changeValue = 0;
+            yield return StartCoroutine(abilityAction.Apply(aiData, abilityData, selfSlot, targetSlots));
 
-            switch (abilityData.abilityType)
-            {
-                case AbilityType.Damage:
-                    yield return StartCoroutine(AttackAbility(aiData.type, aiData.attackType, abilityData.abilityType, selfSlot, targetSlots, aiData.atk_Cnt, abilityData.value));
-                    break;
-
-                case AbilityType.Heal:
-                    foreach (BoardSlot targetSlot in targetSlots)
-                    {
-                        if (targetSlot.Card == null)
-                            continue;
-
-                        beforeValue = targetSlot.Card.hp;
-                        afterValue = targetSlot.Card.hp + abilityData.value;
-                        changeValue = abilityData.value;
-
-                        targetSlot.AddCardHp(value);
-
-                        // Debug.Log($"{Utils.StatChangesText("hp", changes)} - <color=#f4872e>{AbilityType.Heal} 어빌리티</color> 적용");
-                    }
-                    break;
-
-                case AbilityType.AtkUp:
-                    foreach (BoardSlot targetSlot in targetSlots)
-                    {
-                        if (targetSlot.Card == null)
-                            continue;
-
-                        beforeValue = targetSlot.Card.atk;
-                        afterValue = targetSlot.Card.atk + abilityData.value;
-                        changeValue = abilityData.value;
-
-                        targetSlot.AddCardAtk(value);
-
-                        // Debug.Log($"{Utils.StatChangesText("atk", changes)} - <color=#f4872e>{AbilityType.AtkUp} 어빌리티</color> 적용");
-                    }
-                    break;
-
-                case AbilityType.DefUp:
-                    foreach (BoardSlot targetSlot in targetSlots)
-                    {
-                        if (targetSlot.Card == null)
-                            continue;
-
-                        beforeValue = targetSlot.Card.def;
-                        afterValue = targetSlot.Card.def + abilityData.value;
-                        changeValue = abilityData.value;
-
-                        targetSlot.AddCardDef(value);
-
-                        // Debug.Log($"{Utils.StatChangesText("def", changes)} - <color=#f4872e>{AbilityType.DefUp} 어빌리티</color> 적용");
-                    }
-                    break;
-
-                case AbilityType.BrokenDef:
-                    foreach (BoardSlot targetSlot in targetSlots)
-                    {
-                        if (targetSlot.Card == null)
-                            continue;
-
-                        beforeValue = targetSlot.Card.def;
-                        afterValue = targetSlot.Card.def - value;
-                        changeValue = -value;
-
-                        targetSlot.AddCardDef(-value);
-                        // Debug.Log($"{Utils.StatChangesText("def", changes)} - <color=#f4872e>{AbilityType.BrokenDef} 어빌리티</color> 적용");
-                    }
-                    break;
-
-                case AbilityType.ChargeDamage:
-                    // 차징 애니메이션
-                    selfSlot.AniAttack();
-                    break;
-
-                case AbilityType.AddMana:
-                    int beforeMana = Master.Instance.Mana;
-
-                    // 마나 추가 획득
-                    BoardSystem.Instance.AddMana(Master.Instance, value);
-                    Debug.Log($"{Utils.BoardSlotLog(selfSlot)} <color=#257dca>마나 {value} 추가 획득</color>({beforeMana} => {Master.Instance.Mana})");
-                    break;
-
-                case AbilityType.AddGoldPer:
-                    {
-                        float gainGold = aiData.value * abilityData.ratio;
-                        int gold = aiData.value + (int)gainGold;
-                        int beforeGold = Master.Instance.Gold;
-
-                        BoardSystem.Instance.AddGold(Master.Instance, gold);
-
-                        // 골드 획득량 표시
-                        selfSlot.SetFloatingGold(beforeGold, Master.Instance.Gold);
-                    }
-                    break;
-
-                default:
-                    Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} {Utils.AbilityLog(abilityData)} 에 대한 동작이 없음");
-                    break;
-            }
-
-            if (beforeValue != 0 || afterValue != 0 || changeValue != 0)
-                changes.Add((true, selfSlot.Slot, selfSlot.Card.Id, selfSlot.CardType, beforeValue, afterValue, changeValue));
-
-            // Damage 는 내부 함수에서 출력
-            if (changes.Count > 0 && abilityData.abilityType != AbilityType.Damage)
-                Debug.Log($"{Utils.BoardSlotLog(selfSlot)} {Utils.AbilityLog(abilityData)}로 {Utils.StatChangesText(abilityData.abilityType, changes)}");
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} {Utils.AbilityLog(abilityData)}로 {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityData.abilityType, abilityAction.Changes)}");
+            abilityAction.Changes.Clear();
         }
 
         /// <summary>
@@ -295,117 +217,20 @@ namespace ERang
                 yield break;
             }
 
-            var changes = new List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)>();
+            IAbility abilityAction = abilityActions.TryGetValue(ability.abilityType, out IAbility action) ? action : null;
 
-            int beforeValue = 0;
-            int afterValue = 0;
-            int changeValue = 0;
-
-            // 버프, 디버프는 해제, 차징 공격은 타겟 슬롯에 데미지 적용
-            switch (ability.abilityType)
+            if (abilityAction == null)
             {
-                case AbilityType.AtkUp:
-                    {
-                        beforeValue = card.atk;
-
-                        targetSlot.AddCardAtk(-ability.abilityValue);
-
-                        afterValue = card.atk;
-                        changeValue = -ability.abilityValue;
-                    }
-                    break;
-
-                case AbilityType.DefUp:
-                    {
-                        beforeValue = card.def;
-
-                        targetSlot.AddCardDef(-ability.abilityValue);
-
-                        afterValue = card.def;
-                        changeValue = -ability.abilityValue;
-                    }
-                    break;
-
-                case AbilityType.BrokenDef:
-                    {
-                        beforeValue = card.def;
-
-                        targetSlot.AddCardDef(ability.abilityValue);
-
-                        afterValue = card.def;
-                        changeValue = ability.abilityValue;
-                    }
-                    break;
-
-                case AbilityType.AddMana:
-                    {
-                        int beforeMana = Master.Instance.Mana;
-
-                        BoardSystem.Instance.AddMana(Master.Instance, ability.abilityValue * -1);
-
-                        Debug.Log($"{abilityActionLog} <color=#257dca>마나 {ability.abilityValue} 감소</color>({beforeMana} => {Master.Instance.Mana})");
-                    }
-                    break;
-
-                case AbilityType.ChargeDamage:
-                    {
-                        yield return StartCoroutine(AttackAbility(ability.aiType, ability.aiAttackType, ability.abilityType, selfSlot, new List<BoardSlot> { targetSlot }, ability.atkCount, ability.abilityValue));
-
-                        Debug.Log($"{abilityActionLog} {(targetSlot.Card != null ? $"데미지 {ability.abilityValue} 적용" : "해제")} - AiLogic.AbilityAction");
-                    }
-                    break;
-
-                default:
-                    Debug.LogWarning($"{abilityActionLog} - 아직 구현되지 않음.");
-                    break;
+                Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} {Utils.AbilityLog(ability.abilityType, ability.abilityId)} 에 대한 해제 없음");
+                yield break;
             }
 
-            changes.Add((true, targetSlot.Slot, card.Id, targetSlot.CardType, beforeValue, afterValue, changeValue));
+            yield return StartCoroutine(abilityAction.Release(ability, selfSlot, targetSlot));
 
-            if (changes.Count > 0)
-                Debug.Log($"{abilityActionLog} 해제. {Utils.StatChangesText(ability.abilityType, changes)}");
+            Debug.Log($"{abilityActionLog} 해제. {Utils.StatChangesText(ability.abilityType, abilityAction.Changes)}");
+            abilityAction.Changes.Clear();
 
             abilities.Remove(ability);
-        }
-
-        /// <summary>
-        /// 공격 어빌리티
-        /// </summary>
-        private IEnumerator AttackAbility(AiDataType aiDatyType, AiDataAttackType aiAttackType, AbilityType abilityType, BoardSlot selfSlot, List<BoardSlot> targetSlots, int atkCount, int abilityValue)
-        {
-            var changes = new List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)>();
-
-            selfSlot.AniAttack();
-
-            // 카드 선택 공격 타입이면 어빌리티 데미지 값으로 설정
-            int damage = Constants.SelectAttackTypes.Contains(aiAttackType) ? abilityValue : selfSlot.Card.atk;
-
-            // 원거리 미사일 발사
-            if (aiDatyType == AiDataType.Ranged)
-                yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, targetSlots, atkCount, damage));
-
-            foreach (BoardSlot targetSlot in targetSlots)
-            {
-                if (targetSlot.Card == null)
-                {
-                    changes.Add((false, targetSlot.Slot, 0, targetSlot.CardType, 0, 0, 0));
-                    continue;
-                }
-
-                int beforeValue = targetSlot.Card.hp;
-
-                for (int i = 0; i < atkCount; i++)
-                {
-                    targetSlot.SetDamage(damage);
-                    targetSlot.AniDamaged();
-
-                    yield return new WaitForSeconds(0.5f);
-                }
-
-                changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.CardType, beforeValue, targetSlot.Card.hp, damage * atkCount));
-            }
-
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} <color=#f4872e>{abilityType} 어빌리티</color>로 {Utils.StatChangesText(abilityType, changes)}");
         }
 
         /// <summary>

@@ -239,8 +239,10 @@ namespace ERang
 
         IEnumerator DrawHandDeck()
         {
-            foreach (Card card in handCards)
+            for (int i = 0; i < handCards.Count; ++i)
             {
+                Card card = handCards[i];
+
                 deckUI.SpawnHandCard(card);
                 deckUI.DrawHandCards();
 

@@ -45,6 +45,28 @@ namespace ERang
         Debuff, // 해로운 효과를 주는 디버프 행동으로 제자리에서 행동한다. (Ranged와 동일하나 데이터 가독성을 위해 분리)
     }
 
+    public enum Target
+    {
+        None = 0,
+        NearEnemy, // 가장 가까운 적을 대상으로 설정한다.
+        Enemy, // 적을 대상으로 설정한다.
+        RandomEnemy, // 적 보스를 포함한 모든 적 중 임의의 대상을 선정한다.
+        RandomEnemyCreature, // 적 보스를 제외한 모든 적을 임의의 대상으로 선정한다.
+        AllEnemy, // 적 보스를 포함한 모든 적을 대상으로 한다
+        AllEnemyCreature, // 적 보스를 제외한 모든 적을 대상으로 한다.
+        Friendly, // 아군을 대상으로 설정한다.
+        AllFriendly, // 마왕을 포함한 아군을 대상으로 한다.
+        AllFriendlyCreature, // 마왕을 제외한 아군을 대상으로 한다.
+        Self, // 자기 자신을 대상으로 설정한다.
+        Enemy1, // : 적 진형을 설정 (1: 1열, 2: 2열, 3: 3열, 4: 적 마스터)
+        Enemy2, // : 적 진형을 설정 (1: 1열, 2: 2열, 3: 3열, 4: 적 마스터)
+        Enemy3, // : 적 진형을 설정 (1: 1열, 2: 2열, 3: 3열, 4: 적 마스터)
+        Enemy4, // : 적 진형을 설정 (1: 1열, 2: 2열, 3: 3열, 4: 적 마스터)
+        FriendlyCreature, // 아군 크리쳐 모두를 대상으로
+        EnemyCreature, // 적 크리쳐 모두를 대상으로
+        Card, // 카드를 대상으로
+    }
+
     // 대상 혹은 복수 대상을 설정한다.
     public enum AiDataTarget
     {

@@ -33,7 +33,7 @@ namespace ERang
             if (boardSlot == null)
                 return "보드 슬롯 없음";
 
-            return BoardSlotLog(boardSlot.Slot, boardSlot.Card.Type, boardSlot.Card?.Id ?? 0);
+            return BoardSlotLog(boardSlot.Slot, boardSlot.Card?.Type ?? CardType.None, boardSlot.Card?.Id ?? 0);
         }
 
         public static string BoardSlotLog(int slot, CardType cardType, int cardId)
@@ -71,6 +71,11 @@ namespace ERang
             return $"<color=#ea4123>{string.Join(", ", numbers)}</color>";
         }
 
+        public static string TargetText(AiDataTarget target)
+        {
+            return $"<color=#ed6ddc>{GetTarget(target)}</color>";
+        }
+
         public static string StatChangesText(AbilityType abilityType, List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> changes)
         {
             string statText = abilityType switch
@@ -100,6 +105,31 @@ namespace ERang
                 CardType.Curse => "저주",
                 CardType.Monster => "몬스터",
                 CardType.EnemyMaster => "적 마스터",
+                _ => "없음",
+            };
+        }
+
+        private static string GetTarget(AiDataTarget target)
+        {
+            return target switch
+            {
+                AiDataTarget.NearEnemy => "가장 가까운 적",
+                AiDataTarget.Enemy => "적",
+                AiDataTarget.RandomEnemy => "임의의 적",
+                AiDataTarget.RandomEnemyCreature => "임의의 적 크리쳐",
+                AiDataTarget.AllEnemy => "모든 적",
+                AiDataTarget.AllEnemyCreature => "모든 적 크리쳐",
+                AiDataTarget.Friendly => "아군",
+                AiDataTarget.AllFriendly => "모든 아군",
+                AiDataTarget.AllFriendlyCreature => "모든 아군 크리쳐",
+                AiDataTarget.Self => "자신",
+                // AiDataTarget.Enemy1 => "적 1열",
+                // AiDataTarget.Enemy2 => "적 2열",
+                // AiDataTarget.Enemy3 => "적 3열",
+                // AiDataTarget.Enemy4 => "적 마스터",
+                // AiDataTarget.FriendlyCreature => "모든 아군 크리쳐",
+                // AiDataTarget.EnemyCreature => "모든 적 크리쳐",
+                // AiDataTarget.Card => "카드",
                 _ => "없음",
             };
         }
