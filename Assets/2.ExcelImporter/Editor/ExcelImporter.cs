@@ -115,7 +115,16 @@ public class ExcelImporter : AssetPostprocessor
 		{
 			var cell = headerRow.GetCell(i);
 			if (cell == null || cell.CellType == CellType.Blank) break;
-			fieldNames.Add(cell.StringCellValue);
+
+			// cell.StringCellValue 값을 가져옵니다.
+			string cellValue = cell.StringCellValue;
+
+			// # 문자를 제거합니다.
+			string cleanedCellValue = cellValue.Replace("#", "");
+
+			// Debug.Log($"cell.StringCellValue: {cell.StringCellValue} => {cleanedCellValue}");
+
+			fieldNames.Add(cleanedCellValue);
 		}
 		return fieldNames;
 	}
@@ -154,10 +163,6 @@ public class ExcelImporter : AssetPostprocessor
 		for (int i = 0; i < columnNames.Count; i++)
 		{
 			// Debug.Log($"columnName[{i}]: {columnNames[i]}");
-			if (columnNames[i].StartsWith("#"))
-			{
-				continue;
-			}
 
 			FieldInfo entityField = entityType.GetField(
 				columnNames[i],
@@ -171,7 +176,6 @@ public class ExcelImporter : AssetPostprocessor
 
 			try
 			{
-				// Debug.Log(columnNames[i]);
 				object fieldValue = CellToFieldObject(cell, entityField);
 				entityField.SetValue(entity, fieldValue);
 			}
@@ -199,9 +203,6 @@ public class ExcelImporter : AssetPostprocessor
 
 			ICell entryCell = row.GetCell(0);
 			if (entryCell == null || entryCell.CellType == CellType.Blank) break;
-
-			// skip comment row
-			if (entryCell.CellType == CellType.String && entryCell.StringCellValue.StartsWith("#")) continue;
 
 			var entity = CreateEntityFromRow(row, excelColumnNames, entityType, sheet.SheetName);
 			listAddMethod.Invoke(list, new object[] { entity });

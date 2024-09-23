@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c94935ddf8c77f34984a9739af004aa4, type: 3}
+  m_Name: ActDataTable
+  m_EditorClassIdentifier: 
+  items:
+  - ActID: 1001
+    NameDesc: "\uC561\uD2B8_01"
+    AreaID: 100101, 100102, 100103, 100104, 100105
+  - ActID: 1002
+    NameDesc: "\uC561\uD2B8_02"
+    AreaID: 100201, 100202, 100203, 100204, 100205
+  - ActID: 1003
+    NameDesc: "\uC561\uD2B8_03"
+    AreaID: 100301, 100302, 100303, 100304, 100305
