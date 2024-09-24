@@ -50,6 +50,11 @@ namespace ERang.Data
             AssetDatabase.Refresh();
         }
 
+        public static List<ActData> GetActDatas()
+        {
+            return actDatas;
+        }
+
         public static ActData GetActData(int actID)
         {
             return actDataDict.TryGetValue(actID, out ActData actData) ? actData : null;
