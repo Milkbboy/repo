@@ -71,23 +71,23 @@ namespace ERang.Data
             foreach (var MasterEntity in masterDataTable.items)
             {
                 string assetPath = $"Assets/ERang/Resources/Masters/{MasterEntity.Master_Id}.asset";
-                MasterData MasterData = AssetDatabase.LoadAssetAtPath<MasterData>(assetPath);
+                MasterData masterData = AssetDatabase.LoadAssetAtPath<MasterData>(assetPath);
 
-                if (MasterData == null)
+                if (masterData == null)
                 {
-                    MasterData = CreateInstance<MasterData>();
-                    AssetDatabase.CreateAsset(MasterData, assetPath);
+                    masterData = CreateInstance<MasterData>();
+                    AssetDatabase.CreateAsset(masterData, assetPath);
                 }
                 else
                 {
-                    MasterData.startCardIds.Clear();
-                    MasterData.startAbilityIds.Clear();
+                    masterData.startCardIds.Clear();
+                    masterData.startAbilityIds.Clear();
                 }
 
-                MasterData.Initialize(MasterEntity);
+                masterData.Initialize(MasterEntity);
 
-                master_list.Add(MasterData);
-                master_dict.Add(MasterData.master_Id, MasterData);
+                master_list.Add(masterData);
+                master_dict.Add(masterData.master_Id, masterData);
 
                 // Debug.Log("MasterData loaded: " + MasterData.championName + " " + MasterData.uid + " " + MasterData.atk + " " + MasterData.hp + " " + MasterData.def + " " + MasterData.mana + " " + MasterData.startCardIds.Count);
             }

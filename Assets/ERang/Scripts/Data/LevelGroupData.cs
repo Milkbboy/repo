@@ -14,19 +14,16 @@ namespace ERang.Data
             levelID = entity.LevelID;
             nameDesc = entity.NameDesc;
             spawnRatio = entity.SpawnRatio;
-            pos01_CardId = entity.Pos01_CardID;
-            pos02_CardId = entity.Pos02_CardID;
-            pos03_CardId = entity.Pos03_CardID;
-            pos04_CardId = entity.MasterID;
+            cardIds.Add(entity.Pos01_CardID);
+            cardIds.Add(entity.Pos02_CardID);
+            cardIds.Add(entity.Pos03_CardID);
+            cardIds.Add(entity.MasterID);
         }
 
         public int levelID;
         public string nameDesc;
         public int spawnRatio;
-        public int pos01_CardId;
-        public int pos02_CardId;
-        public int pos03_CardId;
-        public int pos04_CardId;
+        public List<int> cardIds = new();
     }
 
     public class LevelGroupData : ScriptableObject
@@ -52,26 +49,33 @@ namespace ERang.Data
                 if (!levelGroupDictionary.TryGetValue(levelGroupEntity.LevelGroupID, out LevelGroupData levelGroupData))
                 {
                     string assetPath = $"Assets/ERang/Resources/LevelGroup/{levelGroupEntity.LevelGroupID}.asset";
-
-                    levelGroupData = Resources.Load<LevelGroupData>(assetPath);
+                    levelGroupData = AssetDatabase.LoadAssetAtPath<LevelGroupData>(assetPath);
 
                     if (levelGroupData == null)
                     {
                         levelGroupData = CreateInstance<LevelGroupData>();
                         AssetDatabase.CreateAsset(levelGroupData, assetPath);
                     }
+                    else
+                    {
+                        levelGroupData.levelDatas.Clear();
+                    }
 
-                    levelGroupData.Initialize(levelGroupEntity);
                     levelGroupDictionary[levelGroupEntity.LevelGroupID] = levelGroupData;
                 }
 
-                LevelData levelData = new(levelGroupEntity);
+                levelGroupData.Initialize(levelGroupEntity);
 
-                levelGroupData.levelDatas.Add(levelData);
+                EditorUtility.SetDirty(levelGroupData); // 데이터가 변경되었음을 Unity에 알림
             }
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        public static LevelGroupData GetLevelGroupData(int levelGroupID)
+        {
+            return levelGroupDictionary.TryGetValue(levelGroupID, out LevelGroupData levelGroupData) ? levelGroupData : null;
         }
 
         public void Initialize(LevelGroupDataEntity entity)

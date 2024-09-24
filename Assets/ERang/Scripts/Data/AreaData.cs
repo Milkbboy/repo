@@ -12,7 +12,7 @@ namespace ERang.Data
         public string nameDesc;
         public bool isEnd;
         public int floorMax;
-        public int levelGroupID;
+        public int levelGroupId;
 
         public static List<AreaData> areaDatas = new();
         public static Dictionary<int, AreaData> areaDataDict = new();
@@ -59,7 +59,7 @@ namespace ERang.Data
             nameDesc = entity.NameDesc;
             isEnd = entity.isEnd;
             floorMax = entity.FloorMax;
-            levelGroupID = entity.LevelGroupID;
+            levelGroupId = entity.LevelGroupID;
         }
     }
 }

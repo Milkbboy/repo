@@ -10,7 +10,7 @@ namespace ERang.Data
     {
         public int actID;
         public string nameDesc;
-        public List<int> areaIDs = new();
+        public List<int> areaIds = new();
 
         public static List<ActData> actDatas = new();
         public static Dictionary<int, ActData> actDataDict = new();
@@ -37,7 +37,7 @@ namespace ERang.Data
                 }
                 else
                 {
-                    actData.areaIDs.Clear();
+                    actData.areaIds.Clear();
                 }
 
                 actData.Initialize(actEntity);
@@ -64,7 +64,7 @@ namespace ERang.Data
         {
             actID = entity.ActID;
             nameDesc = entity.NameDesc;
-            areaIDs = Utils.ParseIntArray(entity.AreaID).ToList();
+            areaIds = Utils.ParseIntArray(entity.AreaID).ToList();
         }
     }
 }

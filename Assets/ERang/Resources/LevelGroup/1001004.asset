@@ -12,5 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc7f054a3baab194988fc0dd38107e0b, type: 3}
   m_Name: 1001004
   m_EditorClassIdentifier: 
-  levelGroupID: 0
-  levelDatas: []
+  levelGroupID: 1001004
+  levelDatas:
+  - levelID: 100100401
+    nameDesc: "\uC561\uD2B8 1 3\uAD6C\uC5ED \uAD11\uC804\uC0AC 3"
+    spawnRatio: 100
+    cardIds: eb030000eb030000eb03000000000000
+  - levelID: 100100402
+    nameDesc: "\uC561\uD2B8 1 3\uAD6C\uC5ED \uC18C\uB4DC\uB9E8 1 + \uAD11\uC804\uC0AC2"
+    spawnRatio: 100
+    cardIds: e9030000eb030000eb03000000000000
+  - levelID: 100100403
+    nameDesc: "\uC561\uD2B8 1 3\uAD6C\uC5ED \uC18C\uB4DC\uB9E8+ \uAD11\uC804\uC0AC
+      + \uC544\uCCD0"
+    spawnRatio: 50
+    cardIds: e9030000eb030000ea03000000000000
