@@ -1864,11 +1864,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: LobbyMaster
       objectReference: {fileID: 0}
-    - target: {fileID: 3635217459175966857, guid: bdb357c3f162bfb4db518e124ccfe619,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
