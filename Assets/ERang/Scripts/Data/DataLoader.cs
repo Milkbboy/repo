@@ -10,6 +10,9 @@ namespace ERang
     {
         void Awake()
         {
+            ActData.Load("TableExports/ActDataTable");
+            AreaData.Load("TableExports/AreaDataTable");
+            LevelGroupData.Load("TableExports/LevelGroupDataTable");
             CardData.Load("TableExports/CardDataTable");
             MonsterCardData.Load("TableExports/MonsterCardDataTable");
             MasterData.Load("TableExports/MasterDataTable");

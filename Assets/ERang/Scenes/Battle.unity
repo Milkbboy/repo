@@ -3352,14 +3352,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ada468444586aec419b33469fb493fa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityDamage: {fileID: 773213220}
-  abilityHeal: {fileID: 1269680478}
-  abilityAtkUp: {fileID: 1166330370}
-  abilityChargeDamage: {fileID: 352384853}
-  abilityDefUp: {fileID: 1320037431}
-  abilityBrokenDef: {fileID: 417366541}
-  abilityAddMana: {fileID: 1928633737}
-  abilityAddGoldPer: {fileID: 1151378674}
 --- !u!114 &1494334415
 MonoBehaviour:
   m_ObjectHideFlags: 0

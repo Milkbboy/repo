@@ -27,7 +27,10 @@ namespace ERang.Data
         public AiGroupType aiGroupType;
 
         // 이중 배열
-        public List<List<int>> ai_Groups = new List<List<int>>();
+        public List<List<int>> ai_Groups = new();
+
+        public static List<AiGroupData> aiGroups_list = new();
+        public static Dictionary<int, AiGroupData> aiGroups_dict = new();
 
         // 중첩 클래스 Reaction 선언
         public class Reaction
@@ -38,13 +41,13 @@ namespace ERang.Data
 
             public Reaction(int condition, float ratio, int ai)
             {
-                this.conditionId = condition;
+                conditionId = condition;
                 this.ratio = ratio;
-                this.aiDataId = ai;
+                aiDataId = ai;
             }
         }
 
-        public List<Reaction> reactions = new List<Reaction>();
+        public List<Reaction> reactions = new();
 
         public void Initialize(AiGroupDataEntity entity)
         {
@@ -85,9 +88,6 @@ namespace ERang.Data
             reaction_Condition_3_Ratio = entity.Reaction_Condition_3_Ratio;
             reaction_Ai_3 = entity.Reaction_Ai_3;
         }
-
-        public static List<AiGroupData> aiGroups_list = new List<AiGroupData>();
-        public static Dictionary<int, AiGroupData> aiGroups_dict = new Dictionary<int, AiGroupData>();
 
         public static void Load(string path = "")
         {
@@ -150,7 +150,7 @@ namespace ERang.Data
             if (condition == 0)
                 return;
 
-            Reaction reaction = new Reaction(condition, ratio, ai);
+            Reaction reaction = new(condition, ratio, ai);
             reactions.Add(reaction);
         }
     }
