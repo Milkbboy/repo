@@ -56,6 +56,9 @@ namespace ERang.Data
 
             foreach (var abilityEntity in abilityDataTable.items)
             {
+                if (abilityData_dict.ContainsKey(abilityEntity.AbilityData_Id))
+                    continue;
+
                 string assetPath = $"Assets/ERang/Resources/Abilities/{abilityEntity.AbilityData_Id}.asset";
                 AbilityData abilityData = AssetDatabase.LoadAssetAtPath<AbilityData>(assetPath);
 

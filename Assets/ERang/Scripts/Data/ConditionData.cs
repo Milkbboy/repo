@@ -41,6 +41,9 @@ namespace ERang.Data
 
             foreach (var conditionEntity in conditionDataTable.items)
             {
+                if (conditionData_dict.ContainsKey(conditionEntity.ConditionData_Id))
+                    continue;
+
                 string assetPath = $"Assets/ERang/Resources/Conditions/{conditionEntity.ConditionData_Id}.asset";
                 ConditionData conditionData = AssetDatabase.LoadAssetAtPath<ConditionData>(assetPath);
 

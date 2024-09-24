@@ -23,6 +23,9 @@ namespace ERang.Data
 
             foreach (var cardEntity in cardDataTable.items)
             {
+                if (card_dict.ContainsKey(cardEntity.Card_Id))
+                    continue;
+
                 string assetPath = $"Assets/ERang/Resources/Cards/Monster/{cardEntity.Card_Id}.asset";
                 CardData cardData = AssetDatabase.LoadAssetAtPath<CardData>(assetPath);
 

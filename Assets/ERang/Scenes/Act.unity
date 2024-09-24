@@ -337,7 +337,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.00002861023}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &712602018
@@ -749,6 +749,7 @@ MonoBehaviour:
   actButtonParent: {fileID: 712602018}
   areaButtonParent: {fileID: 992460555}
   scrollViewContent: {fileID: 615314340}
+  contentPrefab: {fileID: 0}
 --- !u!1 &1236289514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,7 +1421,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 311277286}
   m_HandleRect: {fileID: 311277285}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

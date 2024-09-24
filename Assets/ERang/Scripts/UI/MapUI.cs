@@ -175,7 +175,10 @@ namespace ERang
 
                     LevelData selectedLevelData = SelectRandomLevelData(levelGroupData.levelDatas);
 
+                    var levelIds = levelGroupData.levelDatas.Select(levelData => levelData.levelID == selectedLevelData.levelID ? $"<color=red>{levelData.levelID}</color>" : levelData.levelID.ToString()).ToList();
+
                     // 카드 배치 구하기
+                    Debug.Log($"{string.Join(", ", levelIds)}. 카드 배치: {string.Join(", ", selectedLevelData.cardIds)}");
                 });
             }
         }

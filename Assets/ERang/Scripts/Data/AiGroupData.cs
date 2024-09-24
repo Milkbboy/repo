@@ -101,6 +101,9 @@ namespace ERang.Data
 
             foreach (var aiGroupEntity in aiGroupDataTable.items)
             {
+                if (aiGroups_dict.ContainsKey(aiGroupEntity.AiGroup_Id))
+                    continue;
+
                 string assetPath = $"Assets/ERang/Resources/AiGroups/{aiGroupEntity.AiGroup_Id}.asset";
                 AiGroupData aiGroupData = AssetDatabase.LoadAssetAtPath<AiGroupData>(assetPath);
 

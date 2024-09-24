@@ -27,6 +27,9 @@ namespace ERang.Data
 
             foreach (var actEntity in actDataTable.items)
             {
+                if (actDataDict.ContainsKey(actEntity.ActID))
+                    continue;
+
                 string assetPath = $"Assets/ERang/Resources/Act/{actEntity.ActID}.asset";
                 ActData actData = AssetDatabase.LoadAssetAtPath<ActData>(assetPath);
 

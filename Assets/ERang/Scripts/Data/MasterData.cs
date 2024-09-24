@@ -46,7 +46,7 @@ namespace ERang.Data
             startAbilityIds.AddRange(Utils.ParseIntArray(entity.StartAbility_Id).Where(x => x != 0));
 
             // 이미지 로드
-            string texturePath = $"Textures/Character_01_Lucy";
+            string texturePath = $"Textures/{master_Id}";
             masterTexture = Resources.Load<Texture2D>(texturePath);
 
             if (masterTexture == null)
@@ -70,6 +70,9 @@ namespace ERang.Data
 
             foreach (var MasterEntity in masterDataTable.items)
             {
+                if (master_dict.ContainsKey(MasterEntity.Master_Id))
+                    continue;
+
                 string assetPath = $"Assets/ERang/Resources/Masters/{MasterEntity.Master_Id}.asset";
                 MasterData masterData = AssetDatabase.LoadAssetAtPath<MasterData>(assetPath);
 
@@ -99,6 +102,11 @@ namespace ERang.Data
         public static MasterData GetMasterData(int master_id)
         {
             return master_dict.TryGetValue(master_id, out MasterData masterData) ? masterData : null;
+        }
+
+        public static List<MasterData> GetDatas()
+        {
+            return master_list;
         }
 
         public Texture2D GetMasterTexture()
