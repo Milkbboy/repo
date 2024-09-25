@@ -108,6 +108,12 @@ namespace ERang
             return drag;
         }
 
+        public void DiscardAnimation(Transform discardPos)
+        {
+            DiscardAnimation discardAnimation = GetComponent<DiscardAnimation>();
+            discardAnimation.PlaySequence(discardPos);
+        }
+
         private bool IsUpperCenter(Vector3 screenPosition)
         {
             float screenHeight = Screen.height;

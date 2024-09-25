@@ -276,7 +276,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -599.3, y: 75}
+  m_AnchoredPosition: {x: -313, y: 32}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &267789816
@@ -531,7 +531,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 578.5, y: 75}
+  m_AnchoredPosition: {x: 319, y: 32}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &415785286
@@ -798,7 +798,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.0000038146973, y: 75}
+  m_AnchoredPosition: {x: -0.0000038146973, y: 32}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &774376730
@@ -1623,16 +1623,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DiscardPos: {fileID: 832814016}
   FX_Pos: {fileID: 2143844047}
-  scaleUpAmount: 1.5
-  scaleDownAmount: 0.7
-  scaleDuration: 0.3
-  rotationAmount: 360
-  moveDuration: 0.3
   effectPrefab: {fileID: 8207343968682951967, guid: bbb824979bdea5241802469f9ba78f20,
     type: 3}
-  effectDelay: 0
-  shrinkAmount: 0.5
-  destroyDelay: 2
 --- !u!1 &1505432211
 GameObject:
   m_ObjectHideFlags: 0

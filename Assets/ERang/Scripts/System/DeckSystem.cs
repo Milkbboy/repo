@@ -155,7 +155,7 @@ namespace ERang
                 graveCards.Add(card);
             }
 
-            deckUI.RemoveTurnEndHandCard();
+            deckUI.TurnEndRemoveHandCard();
 
             UpdateDeckCardCountUI();
         }

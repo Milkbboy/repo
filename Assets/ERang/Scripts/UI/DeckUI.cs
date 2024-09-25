@@ -68,10 +68,12 @@ namespace ERang
         /// <summary>
         /// 턴 종료 핸드 카드 모두 제거
         /// </summary>
-        public void RemoveTurnEndHandCard()
+        public void TurnEndRemoveHandCard()
         {
             foreach (HandCard handCard in handCards)
-                Destroy(handCard.gameObject);
+            {
+                handCard.DiscardAnimation(extinctionCardCountText.rectTransform);
+            }
 
             handCards.Clear();
         }
@@ -85,9 +87,7 @@ namespace ERang
             HandCard handCard = handCards.Find(x => x.CardUid == cardUid);
 
             if (handCard == null)
-            {
                 return;
-            }
 
             handCards.Remove(handCard);
             Destroy(handCard.gameObject);

@@ -26,15 +26,3 @@ MonoBehaviour:
     nameDesc: "\uC561\uD2B8 1 1\uAD6C\uC5ED \uC18C\uB4DC\uB9E8 + \uAD11\uC804\uC0AC"
     spawnRatio: 50
     cardIds: e9030000eb0300000000000000000000
-  - levelID: 100100201
-    nameDesc: "\uC561\uD2B8 1 1\uAD6C\uC5ED \uC18C\uB4DC\uB9E8 + \uC544\uCCD0"
-    spawnRatio: 100
-    cardIds: e9030000ea0300000000000000000000
-  - levelID: 100100202
-    nameDesc: "\uC561\uD2B8 1 1\uAD6C\uC5ED \uAD11\uC804\uC0AC + \uC544\uCCD0"
-    spawnRatio: 100
-    cardIds: eb030000ea0300000000000000000000
-  - levelID: 100100203
-    nameDesc: "\uC561\uD2B8 1 1\uAD6C\uC5ED \uC18C\uB4DC\uB9E8 + \uAD11\uC804\uC0AC"
-    spawnRatio: 50
-    cardIds: e9030000eb0300000000000000000000

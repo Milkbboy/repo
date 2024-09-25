@@ -8,6 +8,7 @@ namespace ERang
 {
     public class AbilityDamage : MonoBehaviour, IAbility
     {
+        public AbilityType AbilityType { get { return AbilityType.Damage; } }
         public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
 
         public IEnumerator Apply(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)

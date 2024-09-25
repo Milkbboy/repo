@@ -35,34 +35,36 @@ namespace ERang
         void Awake()
         {
             Instance = this;
+
+            // 현재 게임 오브젝트와 모든 자식 게임 오브젝트의 Transform 컴포넌트를 얻음
+            Transform[] abilities = GetComponentsInChildren<Transform>();
+
+            // 자식 객체의 이름을 출력
+            foreach (Transform abilityTransform in abilities)
+            {
+                // 현재 게임 오브젝트 자신은 제외
+                if (abilityTransform == this.transform)
+                    continue;
+
+                IAbility ability = abilityTransform.GetComponent<IAbility>();
+
+                Debug.Log($"Ability Object: {abilityTransform.gameObject.name}");
+                abilityActions.Add(ability.AbilityType, ability);
+            }
+
+            // abilityActions 딕셔너리의 값들이 null 확인
+            foreach (var kvp in abilityActions)
+            {
+                if (kvp.Value != null)
+                    Debug.Log($"AbilityAction[{kvp.Key}] found: {kvp.Value.AbilityType}");
+                else
+                    Debug.LogError($"AbilityAction[{kvp.Key}] is null.");
+            }
         }
 
         void Start()
         {
-            // 어빌리티 오브젝트들을 딕셔너리에 추가
-            var abilities = new (AbilityType, IAbility)[]
-            {
-                (AbilityType.Damage, GetComponentInChildren<AbilityDamage>()),
-                (AbilityType.Heal, GetComponentInChildren<AbilityHeal>()),
-                (AbilityType.AtkUp, GetComponentInChildren<AbilityAtkUp>()),
-                (AbilityType.ChargeDamage, GetComponentInChildren<AbilityChargeDamage>()),
-                (AbilityType.DefUp, GetComponentInChildren<AbilityDefUp>()),
-                (AbilityType.BrokenDef, GetComponentInChildren<AbilityBrokenDef>()),
-                (AbilityType.AddMana, GetComponentInChildren<AbilityAddMana>()),
-                (AbilityType.AddGoldPer, GetComponentInChildren<AbilityAddGoldPer>())
-            };
 
-            foreach (var (type, ability) in abilities)
-            {
-                if (ability != null)
-                {
-                    abilityActions.Add(type, ability);
-                }
-                else
-                {
-                    Debug.LogWarning($"Ability of type {type} is not found on the GameObject.");
-                }
-            }
         }
 
         public List<Ability> GetAbilities()

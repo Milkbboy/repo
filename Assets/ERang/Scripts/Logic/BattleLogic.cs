@@ -453,6 +453,10 @@ namespace ERang
             Debug.Log($"보드 슬롯 {boardSlot.Slot} 에 카드({card.Id}) 장착");
         }
 
+        /// <summary>
+        /// 보드 슬롯에 장착된 카드 제거
+        /// </summary>
+        /// <param name="boardSlot"></param>
         public void RemoveBoardCard(BoardSlot boardSlot)
         {
             if (boardSlot == null)

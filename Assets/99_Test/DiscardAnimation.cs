@@ -25,6 +25,13 @@ public class DiscardAnimation : MonoBehaviour
 
     }
 
+    public void PlaySequence(Transform disCardPos)
+    {
+        DiscardPos = disCardPos;
+
+        PlaySequence();
+    }
+
     public void PlaySequence()
     {
         // 시퀀스 생성
