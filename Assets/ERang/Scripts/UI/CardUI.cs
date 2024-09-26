@@ -216,8 +216,19 @@ namespace ERang
                 return;
             }
 
-            int oldValueInt = int.Parse(oldValue);
-            int newValueInt = int.Parse(newValue);
+            if (!int.TryParse(oldValue, out int oldValueInt))
+            {
+                Debug.LogWarning("oldValue is not int");
+                return;
+            }
+
+
+            if (!int.TryParse(newValue, out int newValueInt))
+            {
+                Debug.LogWarning("newValue is not int");
+                return;
+            }
+
 
             int diff = newValueInt - oldValueInt;
 

@@ -162,17 +162,27 @@ namespace ERang
             bool isWin = monsterCount == 0;
             resultText.text = isWin ? "YOU WIN" : "YOU LOSE";
 
-            // 이기면 레벨 증가
-            if (isWin)
-                PlayerPrefs.SetInt("Floor", floor + 1);
+            // 이기면 층 증가
+            int nextFloor = isWin ? floor + 1 : 0;
+            PlayerPrefs.SetInt("Floor", nextFloor);
+
+            // 지면 초기화
+            if (isWin == false)
+            {
+                PlayerPrefs.SetInt("MasterId", 0);
+                PlayerPrefs.SetInt("AreaId", 0);
+                PlayerPrefs.SetInt("LevelId", 0);
+            }
 
             yield return new WaitForSeconds(2f);
 
             GameObject nextSceneObject = GameObject.Find("Scene Manager");
-            nextSceneObject.TryGetComponent<NextScene>(out NextScene nextScene);
 
-            string nextSceneName = isWin ? "Act" : "Lobby";
-            nextScene.Play(nextSceneName);
+            if (nextSceneObject.TryGetComponent<NextScene>(out NextScene nextScene))
+            {
+                string nextSceneName = isWin ? "Act" : "Lobby";
+                nextScene.Play(nextSceneName);
+            }
         }
 
         /// <summary>
