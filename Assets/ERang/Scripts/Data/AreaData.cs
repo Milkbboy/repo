@@ -11,6 +11,7 @@ namespace ERang.Data
         public int areaID;
         public string nameDesc;
         public bool isEnd;
+        public int floorStart;
         public int floorMax;
         public int levelGroupId;
 
@@ -27,6 +28,8 @@ namespace ERang.Data
                 return;
             }
 
+            int prevFloorMax = 0;
+
             foreach (var areaEntity in areaDataTable.items)
             {
                 if (areaDataDict.ContainsKey(areaEntity.AreaID))
@@ -41,7 +44,9 @@ namespace ERang.Data
                     AssetDatabase.CreateAsset(areaData, assetPath);
                 }
 
-                areaData.Initialize(areaEntity);
+                areaData.Initialize(areaEntity, prevFloorMax);
+
+                prevFloorMax = areaData.floorMax;
 
                 areaDatas.Add(areaData);
                 areaDataDict.Add(areaData.areaID, areaData);
@@ -56,12 +61,18 @@ namespace ERang.Data
             return areaDataDict.TryGetValue(areaID, out AreaData areaData) ? areaData : null;
         }
 
-        private void Initialize(AreaDataEntity entity)
+        public static List<AreaData> GetAreaDatas()
+        {
+            return areaDatas;
+        }
+
+        private void Initialize(AreaDataEntity entity, int prevFloorMax)
         {
             areaID = entity.AreaID;
             nameDesc = entity.NameDesc;
             isEnd = entity.isEnd;
-            floorMax = entity.FloorMax;
+            floorStart = prevFloorMax + 1;
+            floorMax = entity.isEnd ? floorStart : entity.FloorMax;
             levelGroupId = entity.LevelGroupID;
         }
     }

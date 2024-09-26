@@ -14,16 +14,51 @@ namespace ERang
         public GameObject actButtonParent;
         public GameObject areaButtonParent;
         public GameObject scrollViewContent;
-        public GameObject contentPrefab;
+        public TextMeshProUGUI levelIDText;
+        public TextMeshProUGUI monsterIdsText;
+
+        private int actId;
+        private int areaId;
+        private int floor;
+        private int levelId;
 
         // Start is called before the first frame update
         void Start()
         {
+            // 선택된 MasterId를 PlayerPrefs에 저장
+            actId = PlayerPrefs.GetInt("ActId", 0);
+            areaId = PlayerPrefs.GetInt("AreaId", 0);
+            floor = PlayerPrefs.GetInt("Floor", 0);
+            levelId = PlayerPrefs.GetInt("LevelId", 0);
+
             // 액트 버튼 부모 설정
-            VerticalLayoutGroup layoutGroup = actButtonParent.GetComponent<VerticalLayoutGroup>();
+            SetupLayoutGroup(actButtonParent);
+
+            // Area 버튼 부모 설정
+            SetupLayoutGroup(areaButtonParent);
+
+            // ScrollViewContent 설정
+            SetupLayoutGroup(scrollViewContent);
+
+            if (!scrollViewContent.TryGetComponent<ContentSizeFitter>(out var contentSizeFitter))
+                contentSizeFitter = scrollViewContent.AddComponent<ContentSizeFitter>();
+
+            contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            ActData currentActData = ActData.GetActData(actId);
+
+            if (actId == 0)
+                currentActData = ActData.GetActDatas().First();
+
+            MakeActButton(currentActData);
+        }
+
+        void SetupLayoutGroup(GameObject parent)
+        {
+            VerticalLayoutGroup layoutGroup = parent.GetComponent<VerticalLayoutGroup>();
 
             if (layoutGroup == null)
-                layoutGroup = actButtonParent.AddComponent<VerticalLayoutGroup>();
+                layoutGroup = parent.AddComponent<VerticalLayoutGroup>();
 
             layoutGroup.childForceExpandHeight = false;
             layoutGroup.childForceExpandWidth = false;
@@ -31,107 +66,52 @@ namespace ERang
             layoutGroup.childControlWidth = true;
             layoutGroup.childAlignment = TextAnchor.UpperCenter;
             layoutGroup.spacing = 10;
-
-            // Area 버튼 부모 설정
-            VerticalLayoutGroup areaLayoutGroup = areaButtonParent.GetComponent<VerticalLayoutGroup>();
-
-            if (areaLayoutGroup == null)
-                areaLayoutGroup = areaButtonParent.AddComponent<VerticalLayoutGroup>();
-
-            areaLayoutGroup.childForceExpandHeight = false;
-            areaLayoutGroup.childForceExpandWidth = false;
-            areaLayoutGroup.childControlHeight = true;
-            areaLayoutGroup.childControlWidth = true;
-            areaLayoutGroup.childAlignment = TextAnchor.UpperCenter;
-            areaLayoutGroup.spacing = 10;
-
-            // ScrollViewContent 설정
-            VerticalLayoutGroup scrollViewLayoutGroup = scrollViewContent.GetComponent<VerticalLayoutGroup>();
-
-            if (scrollViewLayoutGroup == null)
-                scrollViewLayoutGroup = scrollViewContent.AddComponent<VerticalLayoutGroup>();
-
-            scrollViewLayoutGroup.childForceExpandHeight = false;
-            scrollViewLayoutGroup.childForceExpandWidth = false;
-            scrollViewLayoutGroup.childControlHeight = true;
-            scrollViewLayoutGroup.childControlWidth = true;
-            scrollViewLayoutGroup.childAlignment = TextAnchor.UpperCenter;
-            scrollViewLayoutGroup.spacing = 10;
-
-            ContentSizeFitter contentSizeFitter = scrollViewContent.GetComponent<ContentSizeFitter>();
-
-            if (contentSizeFitter == null)
-                contentSizeFitter = scrollViewContent.AddComponent<ContentSizeFitter>();
-
-            contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-            // 액트 버튼 생성
-            List<ActData> actDatas = ActData.GetActDatas();
-
-            foreach (ActData actData in actDatas)
-            {
-                Button button = Instantiate(mapButton, actButtonParent.transform);
-
-                if (button == null)
-                {
-                    Debug.LogError("Button is null");
-                    return;
-                }
-
-                // RectTransform rectTransform = button.GetComponent<RectTransform>();
-                // rectTransform.sizeDelta = new Vector2(160, 30);
-
-                LayoutElement layoutElement = button.GetComponent<LayoutElement>();
-                if (layoutElement == null)
-                    layoutElement = button.gameObject.AddComponent<LayoutElement>();
-
-                layoutElement.preferredWidth = 160;
-                layoutElement.preferredHeight = 30;
-
-                button.GetComponentInChildren<TextMeshProUGUI>().text = actData.nameDesc;
-
-                button.onClick.AddListener(() =>
-                {
-                    Debug.Log($"{actData.nameDesc}: {actData.actID}, {string.Join(", ", actData.areaIds)}");
-
-                    MakeFloor(actData);
-                });
-            }
         }
 
-        // Update is called once per frame
-        void Update()
+        void MakeActButton(ActData actData)
         {
+            Button button = Instantiate(mapButton, actButtonParent.transform);
 
+            if (button == null)
+            {
+                Debug.LogError("Button is null");
+                return;
+            }
+
+            if (!button.TryGetComponent<LayoutElement>(out var layoutElement))
+                layoutElement = button.gameObject.AddComponent<LayoutElement>();
+
+            layoutElement.preferredWidth = 160;
+            layoutElement.preferredHeight = 30;
+
+            button.GetComponentInChildren<TextMeshProUGUI>().text = actData.nameDesc;
+
+            button.onClick.AddListener(() =>
+            {
+                Debug.Log($"{actData.nameDesc}: {actData.actID}, {string.Join(", ", actData.areaIds)}");
+
+                MakeFloor(actData);
+            });
         }
 
+        /// <summary>
+        /// 층 만들기
+        /// </summary>
+        /// <param name="actData"></param>
         void MakeFloor(ActData actData)
         {
-            int floor = 0;
+            AreaData areaData = AreaData.GetAreaData(areaId);
+
+            if (areaId == 0)
+                areaData = AreaData.GetAreaDatas().First();
 
             List<(int, int, int, int)> areaFloors = new();
 
-            foreach (int areaId in actData.areaIds)
+            for (int i = areaData.floorStart; i <= areaData.floorMax; ++i)
             {
-                AreaData areaData = AreaData.GetAreaData(areaId);
-
-                if (areaData == null) continue;
-
-                for (int i = floor; i < areaData.floorMax; ++i)
-                {
-                    floor += 1;
-                    areaFloors.Add((actData.actID, areaId, floor, areaData.levelGroupId));
-                }
-
-                // 마지막 층
-                if (areaData.isEnd == true)
-                {
-                    floor += 1;
-                    areaFloors.Add((actData.actID, areaId, floor, areaData.levelGroupId));
-                }
+                areaFloors.Add((actData.actID, areaData.areaID, i, areaData.levelGroupId));
             }
 
-            // Debug.Log($"AreaFloors: {string.Join(", ", areaFloors)}");
             CreateFloorButtons(areaFloors);
         }
 
@@ -143,9 +123,7 @@ namespace ERang
         {
             // 기존에 생성된 버튼들을 제거
             foreach (Transform child in scrollViewContent.transform)
-            {
                 Destroy(child.gameObject);
-            }
 
             // areaIds에 해당하는 버튼들을 생성
             foreach ((int actId, int areaId, int floor, int levelGroupId) in floors)
@@ -158,9 +136,7 @@ namespace ERang
                     return;
                 }
 
-                LayoutElement layoutElement = button.GetComponent<LayoutElement>();
-
-                if (layoutElement == null)
+                if (!button.TryGetComponent<LayoutElement>(out var layoutElement))
                     layoutElement = button.gameObject.AddComponent<LayoutElement>();
 
                 layoutElement.preferredWidth = 160;
@@ -175,10 +151,43 @@ namespace ERang
 
                     LevelData selectedLevelData = SelectRandomLevelData(levelGroupData.levelDatas);
 
-                    var levelIds = levelGroupData.levelDatas.Select(levelData => levelData.levelID == selectedLevelData.levelID ? $"<color=red>{levelData.levelID}</color>" : levelData.levelID.ToString()).ToList();
+                    var levelIds = levelGroupData.levelDatas.Select(levelData => levelData.levelId == selectedLevelData.levelId ? $"<color=#dd3333>{levelData.levelId}</color> <= 선택" : levelData.levelId.ToString()).ToList();
 
                     // 카드 배치 구하기
-                    Debug.Log($"{string.Join(", ", levelIds)}. 카드 배치: {string.Join(", ", selectedLevelData.cardIds)}");
+                    // Debug.Log($"{string.Join(", ", levelIds)}. 카드 배치: {string.Join(", ", selectedLevelData.cardIds)}");
+
+                    levelIDText.text = $"Level ID\n{string.Join("\n", levelIds)}";
+
+                    List<(int, string, int)> cardDataList = new();
+
+                    for (int i = 0; i < selectedLevelData.cardIds.Count(); ++i)
+                    {
+                        int pos = i + 1;
+                        int cardId = selectedLevelData.cardIds[i];
+
+                        if (cardId == 0)
+                        {
+                            cardDataList.Add((pos, "빈자리", 0));
+                            continue;
+                        }
+
+                        CardData monsterCardData = MonsterCardData.GetCardData(cardId);
+
+                        if (monsterCardData == null)
+                        {
+                            Debug.LogError($"카드 데이터 없음: {cardId}");
+                            continue;
+                        }
+
+                        cardDataList.Add((pos, monsterCardData.nameDesc, monsterCardData.card_id));
+                    }
+
+                    monsterIdsText.text = $"등장 카드들 \n{string.Join("\n", cardDataList.Select(x => $"{x.Item1}: {x.Item2}({x.Item3})").ToList())}";
+
+                    PlayerPrefs.SetInt("ActId", actId);
+                    PlayerPrefs.SetInt("AreaId", areaId);
+                    PlayerPrefs.SetInt("Floor", floor);
+                    PlayerPrefs.SetInt("LevelId", selectedLevelData.levelId);
                 });
             }
         }

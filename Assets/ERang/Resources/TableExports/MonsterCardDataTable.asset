@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - Card_Id: 1001
+    NameDesc: "\uC18C\uB4DC\uB9E8_Lv1"
     CardNameDesc_Id: CardName_1001
     CardDesc_Id: CardDesc_1001
     CardType: Monster
@@ -34,6 +35,7 @@ MonoBehaviour:
     HandEnd_Ability: 
     Owner: 0
   - Card_Id: 1002
+    NameDesc: "\uC544\uCCD0_Lv1"
     CardNameDesc_Id: CardName_1002
     CardDesc_Id: CardDesc_1002
     CardType: Monster
@@ -54,6 +56,7 @@ MonoBehaviour:
     HandEnd_Ability: 
     Owner: 0
   - Card_Id: 1003
+    NameDesc: "\uAD11\uC804\uC0AC_Lv1"
     CardNameDesc_Id: CardName_1003
     CardDesc_Id: CardDesc_1003
     CardType: Monster

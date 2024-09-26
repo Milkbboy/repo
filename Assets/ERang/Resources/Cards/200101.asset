@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 200101
   m_EditorClassIdentifier: 
   card_id: 0
+  nameDesc: 
   cardNameDesc_id: 
   cardDesc_id: 
   cardType: 0
@@ -24,6 +25,7 @@ MonoBehaviour:
   atk: 0
   def: 0
   ability_id: 
+  inUse: 0
   extinction: 0
   completeExtinction: 0
   level: 0

@@ -11,7 +11,7 @@ namespace ERang.Data
     {
         public LevelData(LevelGroupDataEntity entity)
         {
-            levelID = entity.LevelID;
+            levelId = entity.LevelID;
             nameDesc = entity.NameDesc;
             spawnRatio = entity.SpawnRatio;
             cardIds.Add(entity.Pos01_CardID);
@@ -20,7 +20,7 @@ namespace ERang.Data
             cardIds.Add(entity.MasterID);
         }
 
-        public int levelID;
+        public int levelId;
         public string nameDesc;
         public int spawnRatio;
         public List<int> cardIds = new();
@@ -33,6 +33,7 @@ namespace ERang.Data
 
         public static List<LevelGroupData> levelGroupDatas = new();
         public static Dictionary<int, LevelGroupData> levelGroupDictionary = new();
+        public static Dictionary<int, LevelData> levelDataDictionary = new();
 
         public static void Load(string path = "")
         {
@@ -78,12 +79,19 @@ namespace ERang.Data
             return levelGroupDictionary.TryGetValue(levelGroupID, out LevelGroupData levelGroupData) ? levelGroupData : null;
         }
 
+        public static LevelData GetLevelData(int levelId)
+        {
+            return levelDataDictionary.TryGetValue(levelId, out LevelData levelData) ? levelData : null;
+        }
+
         public void Initialize(LevelGroupDataEntity entity)
         {
             levelGroupID = entity.LevelGroupID;
 
             LevelData levelData = new(entity);
             levelDatas.Add(levelData);
+
+            levelDataDictionary[levelData.levelId] = levelData;
         }
     }
 }

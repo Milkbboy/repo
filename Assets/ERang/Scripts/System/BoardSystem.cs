@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using ERang.Data;
 
 namespace ERang
 {
@@ -33,7 +34,7 @@ namespace ERang
         /// </summary>
         /// <param name="master"></param>
         /// <param name="enemy"></param>
-        public void CreateBoardSlots(Master master, Enemy enemy)
+        public void CreateBoardSlots(Master master)
         {
             float boardSpacing = 0.2f;
             float boardWidth = boardSlot.GetComponent<BoxCollider>().size.x * boardSlot.transform.localScale.x;
@@ -101,6 +102,30 @@ namespace ERang
             for (int i = 0; i < monsterCards.Count; i++)
             {
                 Card monsterCard = monsterCards[i];
+                BoardSlot slot = rightSlots[i];
+
+                slot.EquipCard(monsterCard);
+            }
+        }
+
+        public void CreateMonsterBoardSlots(List<int> cardIds)
+        {
+            for (int i = 0; i < cardIds.Count; i++)
+            {
+                int cardId = cardIds[i];
+
+                if (cardId == 0)
+                    continue;
+
+                CardData cardData = MonsterCardData.GetCardData(cardId);
+
+                if (cardData == null)
+                {
+                    Debug.LogError($"카드({cardId}) {Utils.RedText("MonsterCardData 테이블 데이터 없음")}");
+                    continue;
+                }
+
+                Card monsterCard = new(cardData);
                 BoardSlot slot = rightSlots[i];
 
                 slot.EquipCard(monsterCard);

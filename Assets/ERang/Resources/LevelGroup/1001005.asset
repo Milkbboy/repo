@@ -14,11 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelGroupID: 1001005
   levelDatas:
-  - levelID: 100100501
+  - levelId: 100100501
     nameDesc: "\uC561\uD2B8 1 \uBCF4\uC2A4 (\uC784\uC2DC \uB8E8\uC2DC)"
     spawnRatio: 100
     cardIds: e9030000eb030000ea030000e9030000
-  - levelID: 100100502
+  - levelId: 100100502
+    nameDesc: "\uC561\uD2B8 1 \uBCF4\uC2A4 (\uC784\uC2DC \uD06C\uB864)"
+    spawnRatio: 100
+    cardIds: eb030000eb03000000000000ea030000
+  - levelId: 100100501
+    nameDesc: "\uC561\uD2B8 1 \uBCF4\uC2A4 (\uC784\uC2DC \uB8E8\uC2DC)"
+    spawnRatio: 100
+    cardIds: e9030000eb030000ea030000e9030000
+  - levelId: 100100502
     nameDesc: "\uC561\uD2B8 1 \uBCF4\uC2A4 (\uC784\uC2DC \uD06C\uB864)"
     spawnRatio: 100
     cardIds: eb030000eb03000000000000ea030000

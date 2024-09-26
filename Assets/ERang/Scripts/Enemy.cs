@@ -17,8 +17,8 @@ namespace ERang
         public int Atk { get { return atk; } }
         public int Def { get { return def; } }
 
-        // 모든 카드
-        public List<Card> monsterCards = new List<Card>();
+        // 카드 슬롯, 카드
+        public List<(int, Card)> monsterCards = new();
 
         public Enemy(int enemyId)
         {
@@ -31,8 +31,10 @@ namespace ERang
             atk = enemyData.atk;
             def = enemyData.def;
 
-            foreach (int cardId in enemyData.startCardIds)
+            for (int i = 0; i < enemyData.startCardIds.Count; ++i)
             {
+                int cardId = enemyData.startCardIds[i];
+
                 CardData cardData = MonsterCardData.GetCardData(cardId);
 
                 if (cardData == null)
@@ -41,25 +43,51 @@ namespace ERang
                     continue;
                 }
 
-                Card card = new Card(cardData);
-                monsterCards.Add(card);
+                Card card = new(cardData);
+                monsterCards.Add((i, card));
             }
         }
 
-        public List<Card> GetMonsterCards()
+        public Enemy(List<int> cardIds)
         {
-            return monsterCards;
+            for (int i = 0; i < cardIds.Count; ++i)
+            {
+                int cardId = cardIds[i];
+
+                if (cardId == 0)
+                {
+                    monsterCards.Add((i, null));
+                    continue;
+                }
+
+                CardData cardData = MonsterCardData.GetCardData(cardId);
+
+                if (cardData == null)
+                {
+                    Debug.LogError($"MonsterCardData 테이블에 카드({cardId}) 없음");
+                    continue;
+                }
+
+                Card card = new(cardData);
+                monsterCards.Add((i, card));
+            }
         }
 
         public Card GetMonsterCard(string cardUid)
         {
-            return monsterCards.Find(card => card.Uid == cardUid);
+            var cardTuple = monsterCards.Find(card => card.Item2 != null && card.Item2.Uid == cardUid);
+
+            return cardTuple.Item2;
         }
 
         public void RemoveMonsterCard(string cardUid)
         {
-            Card card = GetMonsterCard(cardUid);
-            monsterCards.Remove(card);
+            var cardTuple = monsterCards.Find(card => card.Item2 != null && card.Item2.Uid == cardUid);
+
+            if (cardTuple.Item2 != null)
+            {
+                monsterCards.Remove(cardTuple);
+            }
         }
     }
 }

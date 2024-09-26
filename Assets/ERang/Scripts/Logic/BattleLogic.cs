@@ -17,12 +17,13 @@ namespace ERang
         public float abilityReleaseDelay = .5f;
 
         public Master Master { get { return master; } }
-        public Enemy Enemy { get { return enemy; } }
+        // public Enemy Enemy { get { return enemy; } }
 
         public int masterId = 1001;
+        public int levelId = 1;
 
         private Master master;
-        private Enemy enemy;
+        // private Enemy enemy;
 
         private DeckSystem deckSystem;
 
@@ -36,25 +37,41 @@ namespace ERang
         {
             Instance = this;
 
+            masterId = PlayerPrefs.GetInt("MasterId", 1001);
+            levelId = PlayerPrefs.GetInt("LevelId", 1);
+
             // 시스템 생성
             deckSystem = GetComponent<DeckSystem>();
 
-            // 마스터, 적 객체 생성
+            // 마스터
             MasterData masterData = MasterData.GetMasterData(masterId);
 
             if (masterData == null)
-                throw new System.Exception($"MasterData 테이블에 {masterId} 마스터 데이터 없음");
+            {
+                Debug.LogError($"마스터({masterId}) MasterData {Utils.RedText("테이블 데이터 없음")}");
+                return;
+            }
 
             master = new Master(masterData);
-            enemy = new Enemy(1002);
         }
 
         void Start()
         {
             deckSystem.CreateMasterCards(master.StartCardIds);
 
-            BoardSystem.Instance.CreateBoardSlots(master, enemy);
-            BoardSystem.Instance.CreateMonsterBoardSlots(enemy.monsterCards);
+            // 마스터 생성
+            BoardSystem.Instance.CreateBoardSlots(master);
+
+            // 몬스터 카드 생성
+            LevelData levelData = LevelGroupData.GetLevelData(levelId);
+
+            if (levelData == null)
+            {
+                Debug.LogError($"레벨({levelId}) LevelGroupData {Utils.RedText("테이블 데이터 없음")}");
+                return;
+            }
+
+            BoardSystem.Instance.CreateMonsterBoardSlots(levelData.cardIds);
 
             StartCoroutine(TurnStart());
         }

@@ -11,6 +11,7 @@ namespace ERang.Data
     public class CardData : ScriptableObject
     {
         public int card_id; // 카드의 Id 값
+        public string nameDesc; // 카드의 실제 이름
         public string cardNameDesc_id; // 카드의 실제 이름 String이 들어간 데이터 Id
         public string cardDesc_id; // 카드에 대한 설명을 담은 String이 들어간 데이터 Id
         public CardType cardType; // 해당 카드의 타입을 입력 (타입은 초안에서 총 6개의 타입으로 구분)
@@ -43,6 +44,7 @@ namespace ERang.Data
         public void Initialize(CardDataEntity cardEntity)
         {
             card_id = cardEntity.Card_Id;
+            nameDesc = cardEntity.NameDesc;
             cardNameDesc_id = cardEntity.CardNameDesc_Id;
             cardDesc_id = cardEntity.CardDesc_Id;
             cardType = ConvertCardType(cardEntity.CardType);
@@ -76,6 +78,7 @@ namespace ERang.Data
         public void Initialize(MonsterCardDataEntity cardEntity)
         {
             card_id = cardEntity.Card_Id;
+            nameDesc = cardEntity.NameDesc;
             cardNameDesc_id = cardEntity.CardNameDesc_Id;
             cardDesc_id = cardEntity.CardDesc_Id;
             cardType = ConvertCardType(cardEntity.CardType);
