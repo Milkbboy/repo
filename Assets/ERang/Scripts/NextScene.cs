@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; // ¾À ÀüÈ¯ ±â´ÉÀ» »ç¿ëÇÏ±â À§ÇØ Ãß°¡
+using UnityEngine.SceneManagement; // ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 
 public class NextScene : MonoBehaviour
 {
     [SerializeField]
-    private string nextSceneName; // ´ÙÀ½ ¾ÀÀÇ ÀÌ¸§ (ÀÎ½ºÆåÅÍ¿¡¼­ ¼³Á¤ °¡´É)
+    private string nextSceneName; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ (ï¿½Î½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 
-    
     public void Play()
     {
         SceneManager.LoadScene(nextSceneName);
-        
     }
 
+    public void Play(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
 }

@@ -42,7 +42,7 @@ namespace ERang
 
                 for (int i = 0; i < atkCount; i++)
                 {
-                    targetSlot.SetDamage(damage);
+                    yield return StartCoroutine(targetSlot.SetDamage(damage));
                     targetSlot.AniDamaged();
 
                     yield return new WaitForSeconds(0.5f);

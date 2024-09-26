@@ -47,19 +47,17 @@ namespace ERang
                     continue;
 
                 IAbility ability = abilityTransform.GetComponent<IAbility>();
-
-                Debug.Log($"Ability Object: {abilityTransform.gameObject.name}");
                 abilityActions.Add(ability.AbilityType, ability);
             }
 
             // abilityActions 딕셔너리의 값들이 null 확인
-            foreach (var kvp in abilityActions)
-            {
-                if (kvp.Value != null)
-                    Debug.Log($"AbilityAction[{kvp.Key}] found: {kvp.Value.AbilityType}");
-                else
-                    Debug.LogError($"AbilityAction[{kvp.Key}] is null.");
-            }
+            // foreach (var kvp in abilityActions)
+            // {
+            //     if (kvp.Value != null)
+            //         Debug.Log($"AbilityAction[{kvp.Key}] found: {kvp.Value.AbilityType}");
+            //     else
+            //         Debug.LogError($"AbilityAction[{kvp.Key}] is null.");
+            // }
         }
 
         void Start()
@@ -233,11 +231,11 @@ namespace ERang
 
             yield return StartCoroutine(abilityAction.Release(ability, selfSlot, targetSlot));
 
-            if (abilityAction.Changes.Count == 0)
-                yield break;
-
-            Debug.Log($"{abilityActionLog} 해제. {Utils.StatChangesText(ability.abilityType, abilityAction.Changes)}");
-            abilityAction.Changes.Clear();
+            if (abilityAction.Changes.Count > 0)
+            {
+                Debug.Log($"{abilityActionLog} 해제. {Utils.StatChangesText(ability.abilityType, abilityAction.Changes)}");
+                abilityAction.Changes.Clear();
+            }
 
             abilities.Remove(ability);
         }

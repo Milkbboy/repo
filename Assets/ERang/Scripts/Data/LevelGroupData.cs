@@ -89,7 +89,9 @@ namespace ERang.Data
             levelGroupID = entity.LevelGroupID;
 
             LevelData levelData = new(entity);
-            levelDatas.Add(levelData);
+
+            if (levelDatas.Any(data => data.levelId == levelData.levelId) == false)
+                levelDatas.Add(levelData);
 
             levelDataDictionary[levelData.levelId] = levelData;
         }

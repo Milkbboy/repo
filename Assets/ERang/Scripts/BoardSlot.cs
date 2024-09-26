@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace ERang
@@ -110,12 +111,12 @@ namespace ERang
         /// - 카드의 방어력이 0보다 크면 방어력을 먼저 깎고, 방어력이 0보다 작으면 체력을 깎는다.
         /// </summary>
         /// <param name="damage"></param>
-        public void SetDamage(int damage)
+        public IEnumerator SetDamage(int damage)
         {
             if (card == null)
             {
                 Debug.LogWarning($"{slot}번 슬롯 카드 없음");
-                return;
+                yield break;
             }
 
             if (card.def > 0)
@@ -137,7 +138,9 @@ namespace ERang
 
             // hp 0 으로 카드 제거
             if (card.hp <= 0)
-                BattleLogic.Instance.RemoveBoardCard(this);
+                yield return StartCoroutine(BattleLogic.Instance.RemoveBoardCard(this));
+
+            yield return null;
         }
 
         public void SetCardAtk(int atk)

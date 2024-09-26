@@ -16,6 +16,7 @@ namespace ERang
         public GameObject scrollViewContent;
         public TextMeshProUGUI levelIDText;
         public TextMeshProUGUI monsterIdsText;
+        public TextMeshProUGUI floorText;
 
         private int actId;
         private int areaId;
@@ -31,6 +32,8 @@ namespace ERang
             floor = PlayerPrefs.GetInt("Floor", 0);
             levelId = PlayerPrefs.GetInt("LevelId", 0);
 
+            floorText.text = $"{floor} 층 할 차례";
+
             // 액트 버튼 부모 설정
             SetupLayoutGroup(actButtonParent);
 
@@ -45,27 +48,12 @@ namespace ERang
 
             contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            ActData currentActData = ActData.GetActData(actId);
+            ActData actData = ActData.GetActData(actId);
 
             if (actId == 0)
-                currentActData = ActData.GetActDatas().First();
+                actData = ActData.GetActDatas().First();
 
-            MakeActButton(currentActData);
-        }
-
-        void SetupLayoutGroup(GameObject parent)
-        {
-            VerticalLayoutGroup layoutGroup = parent.GetComponent<VerticalLayoutGroup>();
-
-            if (layoutGroup == null)
-                layoutGroup = parent.AddComponent<VerticalLayoutGroup>();
-
-            layoutGroup.childForceExpandHeight = false;
-            layoutGroup.childForceExpandWidth = false;
-            layoutGroup.childControlHeight = true;
-            layoutGroup.childControlWidth = true;
-            layoutGroup.childAlignment = TextAnchor.UpperCenter;
-            layoutGroup.spacing = 10;
+            MakeActButton(actData);
         }
 
         void MakeActButton(ActData actData)
@@ -88,10 +76,12 @@ namespace ERang
 
             button.onClick.AddListener(() =>
             {
-                Debug.Log($"{actData.nameDesc}: {actData.actID}, {string.Join(", ", actData.areaIds)}");
-
+                // Debug.Log($"{actData.nameDesc}: {actData.actID}, {string.Join(", ", actData.areaIds)}");
                 MakeFloor(actData);
             });
+
+            if (actData.actID == actId)
+                button.onClick.Invoke();
         }
 
         /// <summary>
@@ -100,7 +90,7 @@ namespace ERang
         /// <param name="actData"></param>
         void MakeFloor(ActData actData)
         {
-            AreaData areaData = AreaData.GetAreaData(areaId);
+            AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
 
             if (areaId == 0)
                 areaData = AreaData.GetAreaDatas().First();
@@ -146,7 +136,7 @@ namespace ERang
 
                 button.onClick.AddListener(() =>
                 {
-                    Debug.Log($"Area {floor}: {levelGroupId} clicked");
+                    // Debug.Log($"Area {floor}: {levelGroupId} clicked");
                     LevelGroupData levelGroupData = LevelGroupData.GetLevelGroupData(levelGroupId);
 
                     LevelData selectedLevelData = SelectRandomLevelData(levelGroupData.levelDatas);
@@ -189,6 +179,12 @@ namespace ERang
                     PlayerPrefs.SetInt("Floor", floor);
                     PlayerPrefs.SetInt("LevelId", selectedLevelData.levelId);
                 });
+
+                // 현재 층과 같은 층의 버튼을 깜빡이게 설정
+                if (floor == this.floor)
+                {
+                    StartCoroutine(BlinkButton(button));
+                }
             }
         }
 
@@ -208,6 +204,37 @@ namespace ERang
 
             // 기본적으로 첫 번째 levelData 반환 (안전장치)
             return levelDatas[0];
+        }
+
+        private void SetupLayoutGroup(GameObject parent)
+        {
+            if (!parent.TryGetComponent<VerticalLayoutGroup>(out var layoutGroup))
+                layoutGroup = parent.AddComponent<VerticalLayoutGroup>();
+
+            layoutGroup.childForceExpandHeight = false;
+            layoutGroup.childForceExpandWidth = false;
+            layoutGroup.childControlHeight = true;
+            layoutGroup.childControlWidth = true;
+            layoutGroup.childAlignment = TextAnchor.UpperCenter;
+            layoutGroup.spacing = 10;
+        }
+
+        IEnumerator BlinkButton(Button button)
+        {
+            var buttonImage = button.GetComponent<Image>();
+            if (buttonImage == null)
+                yield break;
+
+            Color originalColor = buttonImage.color;
+            Color blinkColor = Color.green; // 깜빡일 때 사용할 색상
+
+            while (true)
+            {
+                buttonImage.color = blinkColor;
+                yield return new WaitForSeconds(0.5f);
+                buttonImage.color = originalColor;
+                yield return new WaitForSeconds(0.5f);
+            }
         }
     }
 }

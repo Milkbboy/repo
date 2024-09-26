@@ -100,7 +100,7 @@ namespace ERang
                 return;
 
             selectedMasterId = masterId;
-            Debug.Log("Selected Master: " + selectedMasterId);
+            // Debug.Log("Selected Master: " + selectedMasterId);
         }
 
         public void NextScene()

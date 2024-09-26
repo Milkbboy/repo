@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
 using UnityEngine.Events;
+using TMPro;
 
 namespace ERang
 {
@@ -15,11 +16,14 @@ namespace ERang
         public float turnStartActionDelay = .5f;
         public float boardCardActionDelay = .5f;
         public float abilityReleaseDelay = .5f;
+        public TextMeshProUGUI floorText;
+        public TextMeshProUGUI resultText;
 
         public Master Master { get { return master; } }
         // public Enemy Enemy { get { return enemy; } }
 
         public int masterId = 1001;
+        public int floor = 1;
         public int levelId = 1;
 
         private Master master;
@@ -38,6 +42,7 @@ namespace ERang
             Instance = this;
 
             masterId = PlayerPrefs.GetInt("MasterId", 1001);
+            floor = PlayerPrefs.GetInt("Floor", 1);
             levelId = PlayerPrefs.GetInt("LevelId", 1);
 
             // 시스템 생성
@@ -71,7 +76,10 @@ namespace ERang
                 return;
             }
 
+            Debug.Log($"----------------- BATTLE START -----------------");
             BoardSystem.Instance.CreateMonsterBoardSlots(levelData.cardIds);
+
+            floorText.text = $"{floor} 층";
 
             StartCoroutine(TurnStart());
         }
@@ -118,14 +126,6 @@ namespace ERang
 
             isTruenEndProcessing = true;
 
-            // ToastNotification.Show($"!! TURN END !!({turnCount})");
-
-            // if (actionQueue.Count > 0)
-            // {
-            //     ToastNotification.Show($"actionQueue remain action: {actionQueue.Count}");
-            //     return;
-            // }
-
             Debug.Log($"----------------- {turnCount} TURN END -----------------");
 
             StartCoroutine(TrunEndProcess());
@@ -148,7 +148,7 @@ namespace ERang
             yield return StartCoroutine(HandOnCardAbilityRelease());
 
             // 카드 액션
-            yield return StartCoroutine(CardAction());
+            yield return StartCoroutine(TurnEndCardAction());
 
             // 턴 다시 시작
             StartCoroutine(TurnStart());
@@ -156,40 +156,23 @@ namespace ERang
             isTruenEndProcessing = false;
         }
 
-        IEnumerator CardAction()
+        IEnumerator BattleEnd(int monsterCount, BoardSlot removeCardBoardSlot)
         {
-            List<BoardSlot> creatureSlots = BoardSystem.Instance.GetCreatureBoardSlots();
-            yield return StartCoroutine(BoardCardAction(creatureSlots));
+            // 배틀 종료 확인. 마스터 카드 제거. 몬스터 카드 + 적 마스터 카드 제거
+            bool isWin = monsterCount == 0;
+            resultText.text = isWin ? "YOU WIN" : "YOU LOSE";
 
-            List<BoardSlot> monsterSlots = BoardSystem.Instance.GetMonsterBoardSlots();
-            yield return StartCoroutine(BoardCardAction(monsterSlots));
+            // 이기면 레벨 증가
+            if (isWin)
+                PlayerPrefs.SetInt("Floor", floor + 1);
 
-            List<BoardSlot> buildingSlots = BoardSystem.Instance.GetBuildingBoardSlots();
-            yield return StartCoroutine(BoardCardAction(buildingSlots));
-        }
+            yield return new WaitForSeconds(2f);
 
-        /// <summary>
-        /// 핸드에 있을때 효과가 발동되는 카드 액션
-        /// </summary>
-        void HandOnCardAbilityAction(List<Card> handCards)
-        {
-            // 핸드 온 카드 액션의 주체는 마스터 슬롯
-            BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
-            List<(Card card, AiData aiData, List<AbilityData> abilityDatas)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
+            GameObject nextSceneObject = GameObject.Find("Scene Manager");
+            nextSceneObject.TryGetComponent<NextScene>(out NextScene nextScene);
 
-            foreach (var (card, aiData, abilityDatas) in handOnCards)
-            {
-                List<BoardSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot);
-
-                foreach (AbilityData abilityData in abilityDatas)
-                {
-                    // 어빌리티 효과 제거를 위한 저장
-                    AbilityLogic.Instance.AddHandOnAbility(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.TurnStarHandOn);
-
-                    // 어빌리티 적용
-                    StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
-                }
-            }
+            string nextSceneName = isWin ? "Act" : "Lobby";
+            nextScene.Play(nextSceneName);
         }
 
         /// <summary>
@@ -225,6 +208,18 @@ namespace ERang
             }
         }
 
+        IEnumerator TurnEndCardAction()
+        {
+            List<BoardSlot> creatureSlots = BoardSystem.Instance.GetCreatureBoardSlots();
+            yield return StartCoroutine(BoardCardAction(creatureSlots));
+
+            List<BoardSlot> monsterSlots = BoardSystem.Instance.GetMonsterBoardSlots();
+            yield return StartCoroutine(BoardCardAction(monsterSlots));
+
+            List<BoardSlot> buildingSlots = BoardSystem.Instance.GetBuildingBoardSlots();
+            yield return StartCoroutine(BoardCardAction(buildingSlots));
+        }
+
         /// <summary>
         /// 턴 종료 보드 슬롯 카드 액션
         /// </summary>
@@ -258,6 +253,30 @@ namespace ERang
                 AiAbilityProcess(aiDataId, boardSlot, AbilityWhereFrom.TurnEndBoardSlot);
 
                 yield return new WaitForSeconds(boardCardActionDelay);
+            }
+        }
+
+        /// <summary>
+        /// 핸드에 있을때 효과가 발동되는 카드 액션
+        /// </summary>
+        void HandOnCardAbilityAction(List<Card> handCards)
+        {
+            // 핸드 온 카드 액션의 주체는 마스터 슬롯
+            BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
+            List<(Card card, AiData aiData, List<AbilityData> abilityDatas)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
+
+            foreach (var (card, aiData, abilityDatas) in handOnCards)
+            {
+                List<BoardSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot);
+
+                foreach (AbilityData abilityData in abilityDatas)
+                {
+                    // 어빌리티 효과 제거를 위한 저장
+                    AbilityLogic.Instance.AddHandOnAbility(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.TurnStarHandOn);
+
+                    // 어빌리티 적용
+                    StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
+                }
             }
         }
 
@@ -330,7 +349,7 @@ namespace ERang
             if (abilities.Count == 0)
                 yield break;
 
-            Debug.Log($"핸드 온 어빌리티 해제 시작");
+            Debug.Log($"핸드 온 어빌리티 해제 시작. 어빌리티 개수: {abilities.Count}");
 
             for (int i = 0; i < abilities.Count; i++)
             {
@@ -344,7 +363,7 @@ namespace ERang
                     continue;
                 }
 
-                Debug.Log($"{Utils.BoardSlotLog(ability.targetBoardSlot, cardType, ability.targetCardId)} {Utils.AbilityLog(ability)} Duration: {ability.duration} 으로 해제");
+                // Debug.Log($"{Utils.BoardSlotLog(ability.targetBoardSlot, cardType, ability.targetCardId)} {Utils.AbilityLog(ability)} Duration: {ability.duration} 으로 해제");
 
                 BoardSlot selfBoardSlot = BoardSystem.Instance.GetBoardSlot(ability.selfBoardSlot);
                 BoardSlot targetBoardSlot = BoardSystem.Instance.GetBoardSlot(ability.targetBoardSlot);
@@ -474,12 +493,12 @@ namespace ERang
         /// 보드 슬롯에 장착된 카드 제거
         /// </summary>
         /// <param name="boardSlot"></param>
-        public void RemoveBoardCard(BoardSlot boardSlot)
+        public IEnumerator RemoveBoardCard(BoardSlot boardSlot)
         {
             if (boardSlot == null)
             {
                 Debug.LogError($"{boardSlot.Slot}번 보드 슬롯 없음");
-                return;
+                yield break;
             }
 
             Debug.Log($"{Utils.BoardSlotLog(boardSlot)} <color=#f52d2d>카드 제거</color>");
@@ -494,15 +513,11 @@ namespace ERang
             // 보드에서 카드 제거 - 제일 마지막에 실행
             BoardSystem.Instance.RemoveCard(boardSlot.Card.Uid);
 
-            // 배틀 종료 확인. 마스터 카드 제거. 몬스터 카드 + 적 마스터 카드 제거
             int monsterCount = BoardSystem.Instance.GetMonsterBoardSlots().Count(slot => slot.Card != null);
 
+            // 배틀 종료
             if (monsterCount == 0 || boardSlot.Slot == 0)
-            {
-                Debug.Log($"배틀 종료. monsterCount: {monsterCount}, Slot: {boardSlot.Slot}");
-                GameObject nextScene = GameObject.Find("Scene Manager");
-                nextScene.GetComponent<NextScene>().Play();
-            }
+                yield return StartCoroutine(BattleEnd(monsterCount, boardSlot));
         }
 
         /// <summary>

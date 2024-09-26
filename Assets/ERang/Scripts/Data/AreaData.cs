@@ -56,6 +56,11 @@ namespace ERang.Data
             AssetDatabase.Refresh();
         }
 
+        public static AreaData GetAreaDataFromFloor(int floor)
+        {
+            return areaDatas.Find(areaData => areaData.floorStart <= floor && floor <= areaData.floorMax);
+        }
+
         public static AreaData GetAreaData(int areaID)
         {
             return areaDataDict.TryGetValue(areaID, out AreaData areaData) ? areaData : null;
