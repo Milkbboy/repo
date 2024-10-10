@@ -14,6 +14,7 @@ namespace RogueEngine
         public int index;
 
         public string evt_id;
+        public List<(int, string)> directions = new();
 
         public bool explored;
 
@@ -30,10 +31,13 @@ namespace RogueEngine
             this.evt_id = evt != null ? evt.id : "";
         }
 
-        public void AddAdjacent(MapLocation loc)
+        public void AddAdjacent(MapLocation loc, string direction = "")
         {
             if (loc != null && !adjacency.Contains(loc.ID))
+            {
                 adjacency.Add(loc.ID);
+                directions.Add((loc.ID, direction));
+            }
         }
 
         public bool IsAdjacent(MapLocation loc)
@@ -48,7 +52,7 @@ namespace RogueEngine
 
         public static int GetID(int d, int i)
         {
-            return d *100 + i;
+            return d * 100 + i;
         }
     }
 }

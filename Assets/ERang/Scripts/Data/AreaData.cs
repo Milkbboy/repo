@@ -13,6 +13,7 @@ namespace ERang.Data
         public bool isEnd;
         public int floorStart;
         public int floorMax;
+        public int floorCount;
         public int levelGroupId;
 
         public static List<AreaData> areaDatas = new();
@@ -78,6 +79,7 @@ namespace ERang.Data
             isEnd = entity.isEnd;
             floorStart = prevFloorMax + 1;
             floorMax = entity.isEnd ? floorStart : entity.FloorMax;
+            floorCount = floorMax - floorStart + 1;
             levelGroupId = entity.LevelGroupID;
         }
     }

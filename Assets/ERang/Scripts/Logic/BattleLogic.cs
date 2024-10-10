@@ -41,9 +41,9 @@ namespace ERang
         {
             Instance = this;
 
-            masterId = PlayerPrefs.GetInt("MasterId", 1001);
-            floor = PlayerPrefs.GetInt("Floor", 1);
-            levelId = PlayerPrefs.GetInt("LevelId", 1);
+            masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
+            floor = PlayerPrefsUtility.GetInt("Floor", 1);
+            levelId = PlayerPrefsUtility.GetInt("LevelId", 1);
 
             // 시스템 생성
             deckSystem = GetComponent<DeckSystem>();
@@ -164,14 +164,14 @@ namespace ERang
 
             // 이기면 층 증가
             int nextFloor = isWin ? floor + 1 : 0;
-            PlayerPrefs.SetInt("Floor", nextFloor);
+            PlayerPrefsUtility.SetInt("Floor", nextFloor);
 
             // 지면 초기화
             if (isWin == false)
             {
-                PlayerPrefs.SetInt("MasterId", 0);
-                PlayerPrefs.SetInt("AreaId", 0);
-                PlayerPrefs.SetInt("LevelId", 0);
+                PlayerPrefsUtility.SetInt("MasterId", 0);
+                PlayerPrefsUtility.SetInt("AreaId", 0);
+                PlayerPrefsUtility.SetInt("LevelId", 0);
             }
 
             yield return new WaitForSeconds(2f);

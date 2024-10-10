@@ -16,9 +16,9 @@ MonoBehaviour:
   title: Forest
   map_scene: Map
   battle_scene: BattleForest
-  depth: 12
-  width_min: 3
-  width_max: 5
+  depth: 3
+  width_min: 1
+  width_max: 3
   fork_probability: 0.25
   events:
   - {fileID: 11400000, guid: 0d1e65b3c87f99444b1308e1fb408477, type: 2}

@@ -21,6 +21,8 @@ namespace RogueEngine
 
         public virtual void GenerateMap(World world)
         {
+            Debug.Log($"Generating map <color=red>{map_id}</color> with seed {seed}");
+
             MapData mdata = MapData.Get(map_id);
             System.Random seed_rand = new System.Random(seed);                          //Use a separate rand to generate seeds, so they stay consistant across versioning if generation logic get changed
             System.Random gen_rand = new System.Random(seed + map_id.GetHashCode());    //Add arbitrary value so the two rand aren't generating the same numbers
@@ -56,6 +58,8 @@ namespace RogueEngine
                 bool prev_diag = false; //Prevent overlapping lines
                 double diag_prob = mdata.fork_probability;
 
+                Debug.Log($"Depth {depth} to {depth_next} : {nb_index_cur} to {nb_index_next} with offset {offset}");
+
                 for (int i = start; i < nb_index; i++)
                 {
                     int ci = Mathf.Clamp(i, 0, nb_index_cur - 1);
@@ -70,13 +74,13 @@ namespace RogueEngine
                     MapLocation adj = GetLocation(depth_next, ni);
                     if (!loc.IsAdjacent(adj))
                     {
-                        loc.AddAdjacent(adj);
+                        loc.AddAdjacent(adj, "직선");
 
                         //Link to left
                         if (!prev_diag && ni > 0 && gen_rand.NextDouble() < diag_prob)
                         {
                             MapLocation adjL = GetLocation(depth_next, ni - 1);
-                            loc.AddAdjacent(adjL);
+                            loc.AddAdjacent(adjL, "왼쪽");
                         }
 
                         //Link to right
@@ -84,9 +88,14 @@ namespace RogueEngine
                         if (i <= ni_val && ni < (nb_index_next - 1) && gen_rand.NextDouble() < diag_prob)
                         {
                             MapLocation adjR = GetLocation(depth_next, ni + 1);
-                            loc.AddAdjacent(adjR);
+                            loc.AddAdjacent(adjR, "오른쪽");
                             prev_diag = true;
                         }
+                    }
+
+                    for (int j = 0; j < loc.directions.Count; j++)
+                    {
+                        Debug.Log($"Depth {depth} Index {ci} : {loc.directions[j].Item2} -> {GetLocation(loc.directions[j].Item1).ID}");
                     }
                 }
             }

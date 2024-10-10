@@ -27,10 +27,10 @@ namespace ERang
         void Start()
         {
             // 선택된 MasterId를 PlayerPrefs에 저장
-            actId = PlayerPrefs.GetInt("ActId", 0);
-            areaId = PlayerPrefs.GetInt("AreaId", 0);
-            floor = PlayerPrefs.GetInt("Floor", 0);
-            levelId = PlayerPrefs.GetInt("LevelId", 0);
+            actId = PlayerPrefsUtility.GetInt("ActId", 0);
+            areaId = PlayerPrefsUtility.GetInt("AreaId", 0);
+            floor = PlayerPrefsUtility.GetInt("Floor", 1);
+            levelId = PlayerPrefsUtility.GetInt("LevelId", 0);
 
             floorText.text = $"{floor} 층 할 차례";
 
@@ -174,10 +174,10 @@ namespace ERang
 
                     monsterIdsText.text = $"등장 카드들 \n{string.Join("\n", cardDataList.Select(x => $"{x.Item1}: {x.Item2}({x.Item3})").ToList())}";
 
-                    PlayerPrefs.SetInt("ActId", actId);
-                    PlayerPrefs.SetInt("AreaId", areaId);
-                    PlayerPrefs.SetInt("Floor", floor);
-                    PlayerPrefs.SetInt("LevelId", selectedLevelData.levelId);
+                    PlayerPrefsUtility.SetInt("ActId", actId);
+                    PlayerPrefsUtility.SetInt("AreaId", areaId);
+                    PlayerPrefsUtility.SetInt("Floor", floor);
+                    PlayerPrefsUtility.SetInt("LevelId", selectedLevelData.levelId);
                 });
 
                 // 현재 층과 같은 층의 버튼을 깜빡이게 설정

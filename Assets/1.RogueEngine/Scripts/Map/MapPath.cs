@@ -11,7 +11,7 @@ namespace RogueEngine.Client
         private MapLocation source_loc;
         private MapLocation dest_loc;
 
-        private LineRenderer line; 
+        private LineRenderer line;
 
         void Awake()
         {
@@ -59,7 +59,7 @@ namespace RogueEngine.Client
 
         public void SetAlpha(float alpha)
         {
-            if(!Mathf.Approximately(line.material.color.a, alpha))
+            if (!Mathf.Approximately(line.material.color.a, alpha))
                 line.material.color = new Color(line.material.color.r, line.material.color.g, line.material.color.b, alpha);
         }
     }
