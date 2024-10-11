@@ -57,7 +57,7 @@ namespace ERang
         private int actId;
         private int areaId;
         private int floor;
-        private int currentLocationId;
+        private int lastLocationId;
         private System.Random random = new();
 
         private MapViewer viewer;
@@ -71,20 +71,22 @@ namespace ERang
             actId = PlayerPrefsUtility.GetInt("ActId", 0);
             areaId = PlayerPrefsUtility.GetInt("AreaId", 0);
             floor = PlayerPrefsUtility.GetInt("Floor", 1);
-            currentLocationId = PlayerPrefsUtility.GetInt("CurrentLocationId", 0);
+            lastLocationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
 
             viewer = GetComponent<MapViewer>();
             withMin = 3;
             withMax = 5;
 
             AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
-            Debug.Log($"LoadMap Success. floor: {floor}, savedArea: {areaId}, areaDataId: {areaData.areaID}");
 
             LoadMapData();
 
+            Debug.Log($"LoadMap Success. floor: {floor}, areaId: {areaId}, areaData.areaID: {areaData.areaID}, locations.Count: {locations.Count}");
+
             if (floor != 2 && (areaId != areaData.areaID || locations.Count == 0))
             {
-                Debug.Log("---------- 맵 생성!!! ----------");
+                // 맵 새로 생성되면 처음 부터 시작
+                lastLocationId = 0;
                 GenerateMap();
             }
 
@@ -93,7 +95,7 @@ namespace ERang
                 int depth = depthEntry.Key;
                 int index = depthEntry.Value;
 
-                Debug.Log($"Selected Depth: {depth}, Index: {index}");
+                // Debug.Log($"Selected Depth: {depth}, Index: {index}");
             }
 
             viewer.DrawMap(floor, depthIndies);
@@ -109,10 +111,10 @@ namespace ERang
             int floor = locationId / 100;
             int floorIndex = locationId % 100;
 
-            Debug.Log($"Clicked on {locationId} floor: {floor} index: {floorIndex}");
-
             if (floor != this.floor)
+            {
                 return;
+            }
 
             locations.TryGetValue(locationId, out MapLocation loc);
 
@@ -122,9 +124,9 @@ namespace ERang
                 return;
             }
 
-            Debug.Log($"Current Location: {currentLocationId}, Clicked Location: {locationId}");
+            Debug.Log($"Click Location: {locationId}, lastLocationId: {lastLocationId}, floor: {floor}, floorIndex: {floorIndex}");
 
-            if (locations.TryGetValue(currentLocationId, out MapLocation currentLoc))
+            if (locations.TryGetValue(lastLocationId, out MapLocation currentLoc))
             {
                 if (!currentLoc.adjacency.Contains(locationId))
                 {
@@ -134,7 +136,7 @@ namespace ERang
             }
 
             viewer.SelectFloorIndex(floor, floorIndex);
-            depthIndies[locationId] = floorIndex;
+            depthIndies[floor] = floorIndex;
 
             AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
 
@@ -148,7 +150,7 @@ namespace ERang
             PlayerPrefsUtility.SetInt("AreaId", areaData.areaID);
             PlayerPrefsUtility.SetInt("Floor", floor);
             PlayerPrefsUtility.SetInt("LevelId", randomLevelData.levelId);
-            PlayerPrefsUtility.SetInt("CurrentLocationId", locationId);
+            PlayerPrefsUtility.SetInt("LastLocationId", locationId);
 
             // Save depthIndies
             string depthIndiesJson = JsonConvert.SerializeObject(depthIndies);
@@ -213,15 +215,13 @@ namespace ERang
 
                 depthWidth[d] = locationCount;
 
+                Debug.Log($"Depth {d} : {depthWidth[d]} locations: {locationCount}");
+
                 for (int i = 0; i < locationCount; i++)
                 {
                     MapLocation loc = new(seedRand.Next(), d, i);
-
-                    if (!locations.ContainsKey(loc.ID))
-                        locations.Add(loc.ID, loc);
+                    locations.Add(loc.ID, loc);
                 }
-
-                // Debug.Log($"Depth {d} : {depthWidth[d]} locations: {locationCount}");
             }
 
             for (int d = floorStart; d <= floorEnd - 1; d++)
@@ -237,13 +237,14 @@ namespace ERang
                 bool prevDiag = false;
                 double diagProb = 0.25f;
 
-                for (int i = start; i < locationCount; i++)
+                for (int i = start; i <= locationCount; i++)
                 {
                     int ci = Mathf.Clamp(i, 0, currLocationCount - 1);
                     MapLocation loc = GetLocation(depth, ci);
 
                     int niVal = i + offset;
                     int ni = Mathf.Clamp(niVal, 0, nextLocationCount - 1);
+
                     if (ni != niVal)
                         prevDiag = true;
 
@@ -272,8 +273,10 @@ namespace ERang
                         }
                     }
 
+                    // Debug.Log($"loc.adjacency.Count: {loc.adjacency.Count}, loc.directions.Count: {loc.directions.Count}");
+
                     // for (int j = 0; j < loc.directions.Count; j++)
-                    //     Debug.Log($"Depth {depth} Index {ci} : {loc.directions[j].Item2} -> {GetLocation(loc.directions[j].Item1).ID}");
+                    //     Debug.Log($"Depth {depth} locId: {loc.ID} Index {ci} : {loc.directions[j].Item2} -> {GetLocation(loc.directions[j].Item1).ID}");
                 }
             }
 
@@ -293,14 +296,14 @@ namespace ERang
             return GetLocation(id);
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         private void SaveMapData()
         {
+            AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
+
+            PlayerPrefsUtility.SetInt("ActId", actId);
+            PlayerPrefsUtility.SetInt("AreaId", areaData.areaID);
+            PlayerPrefsUtility.SetInt("Floor", floor);
+
             // Save depthWidth
             string depthWidthJson = JsonConvert.SerializeObject(depthWidth);
             PlayerPrefs.SetString("depthWidth", depthWidthJson);

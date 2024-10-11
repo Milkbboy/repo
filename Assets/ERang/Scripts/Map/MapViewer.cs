@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace ERang
@@ -8,6 +9,8 @@ namespace ERang
     {
         public GameObject mapDotPrefab;
         public GameObject mapPathPrefab;
+        public Canvas mapCanvas;
+        public TextMeshProUGUI floorTextPrefab;
 
         [Header("Layout")]
         public Transform scrollTrans;
@@ -55,10 +58,11 @@ namespace ERang
         void Update()
         {
             bool drag = Input.GetMouseButton(0);
+
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             moveVect = Vector3.zero;
 
-            //Move mouse
+            // Move mouse
             if (Input.GetMouseButtonDown(0))
                 dragStart = worldPosition;
 
@@ -69,7 +73,7 @@ namespace ERang
                 dragStart = worldPosition;
             }
 
-            //Move keyboard
+            // Move keyboard
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
                 moveVect = Vector3.left * scrollSpeedKey * Time.deltaTime;
 
@@ -138,13 +142,25 @@ namespace ERang
 
                     mapPaths.Add(line);
                 }
-
-                if (depthIndies.TryGetValue(loc.ID, out int floorIndex))
-                {
-                    locList[floorIndex].SetCurrent(true);
-                    // Debug.Log($"DrawMap Selected floorIndex: {floorIndex}");
-                }
             }
+
+            foreach (var depthEntry in depthIndies)
+            {
+                int depth = depthEntry.Key;
+                int index = depthEntry.Value;
+
+                if (mapLocationDic.TryGetValue(depth, out List<MapLocationDot> locList))
+                    locList[index].SetCurrent(true);
+            }
+
+            // if (depthIndies.TryGetValue(loc.ID, out int floorIndex))
+            // {
+            //     locList[floorIndex].SetCurrent(true);
+            //     // Debug.Log($"DrawMap Selected floorIndex: {floorIndex}");
+            // }
+
+            // 층 텍스트 표시
+            DisplayFloorTexts();
         }
 
         public void SelectFloorIndex(int floor, int floorIndex)
@@ -193,6 +209,43 @@ namespace ERang
             Vector3 position = edge + new Vector3(location.depth * rowSpacing, location.index * indexSpacing - offset, 0f);
 
             return position;
+        }
+
+        private void DisplayFloorTexts()
+        {
+            // 층의 위치를 계산합니다.
+            Dictionary<int, Vector3> floorPositions = new Dictionary<int, Vector3>();
+
+            foreach (KeyValuePair<int, MapLocation> pair in map.locations)
+            {
+                MapLocation loc = pair.Value;
+
+                if (!floorPositions.ContainsKey(loc.depth))
+                {
+                    floorPositions[loc.depth] = GetPosition(map, loc);
+                }
+            }
+
+            // 층 텍스트를 생성하고 배치합니다.
+            foreach (KeyValuePair<int, Vector3> pair in floorPositions)
+            {
+                int floorNumber = pair.Key;
+                Vector3 worldPosition = pair.Value;
+
+                // 월드 좌표를 스크린 좌표로 변환합니다.
+                Vector2 screenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPosition);
+
+                // 스크린 좌표를 캔버스 좌표로 변환합니다.
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(mapCanvas.transform as RectTransform, screenPosition, Camera.main, out Vector2 canvasPosition);
+
+                TextMeshProUGUI floorText = Instantiate(floorTextPrefab);
+                floorText.text = $"{floorNumber}F";
+
+                floorText.transform.SetParent(mapCanvas.transform, false);
+                floorText.rectTransform.anchoredPosition = new Vector2(canvasPosition.x, -150); // 위치 조정
+
+                // Debug.Log($"Floor {floorNumber} position: {canvasPosition}");
+            }
         }
     }
 }
