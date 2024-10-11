@@ -63,8 +63,10 @@ namespace ERang
                 string masterId = PlayerPrefsUtility.GetString("MasterId", "");
                 string depthWidthJson = PlayerPrefs.GetString("depthWidth", null);
                 string locationsJson = PlayerPrefs.GetString("locations", null);
+                string depthIndiesJson = PlayerPrefsUtility.GetString("depthIndies", null);
+                int currentLocationId = PlayerPrefsUtility.GetInt("CurrentLocationId", 0);
 
-                Debug.Log($"ActId: {actId}, AreaId: {areaId}, Floor: {floor}, LevelId: {levelId}, MasterId: {masterId}, depthWidthJson: {depthWidthJson}, locationsJson: {locationsJson}");
+                Debug.Log($"ActId: {actId}, AreaId: {areaId}, Floor: {floor}, LevelId: {levelId}, MasterId: {masterId}, depthWidthJson: {depthWidthJson}, locationsJson: {locationsJson}, depthIndiesJson: {depthIndiesJson}, currentLocationId: {currentLocationId}");
 
                 // Repaint();
             }

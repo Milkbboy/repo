@@ -52,12 +52,12 @@ namespace ERang
         public Dictionary<int, MapLocation> locations = new();
         public Dictionary<int, int> depthWidth = new();
         // 층에서 고른 인덱스 (표시용)
-        public Dictionary<int, int> depthIndex = new();
+        public Dictionary<int, int> depthIndies = new();
 
         private int actId;
         private int areaId;
         private int floor;
-        private int floorIndex;
+        private int currentLocationId;
         private System.Random random = new();
 
         private MapViewer viewer;
@@ -71,30 +71,32 @@ namespace ERang
             actId = PlayerPrefsUtility.GetInt("ActId", 0);
             areaId = PlayerPrefsUtility.GetInt("AreaId", 0);
             floor = PlayerPrefsUtility.GetInt("Floor", 1);
-            floorIndex = PlayerPrefsUtility.GetInt("FloorIndex", 0);
+            currentLocationId = PlayerPrefsUtility.GetInt("CurrentLocationId", 0);
 
             viewer = GetComponent<MapViewer>();
             withMin = 3;
             withMax = 5;
 
-            if (LoadMapData())
+            AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
+            Debug.Log($"LoadMap Success. floor: {floor}, savedArea: {areaId}, areaDataId: {areaData.areaID}");
+
+            LoadMapData();
+
+            if (floor != 2 && (areaId != areaData.areaID || locations.Count == 0))
             {
-                AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
-
-                Debug.Log($"LoadMap Success. floor: {floor}, savedArea: {areaId}, areaDataId: {areaData.areaID}");
-
-                if (floor != 2 && (areaId != areaData.areaID || locations.Count == 0))
-                {
-                    Debug.Log("---------- 맵 생성!!! ----------");
-                    GenerateMap();
-                }
-
-                viewer.DrawMap(floor);
-            }
-            else
-            {
+                Debug.Log("---------- 맵 생성!!! ----------");
                 GenerateMap();
             }
+
+            foreach (var depthEntry in depthIndies)
+            {
+                int depth = depthEntry.Key;
+                int index = depthEntry.Value;
+
+                Debug.Log($"Selected Depth: {depth}, Index: {index}");
+            }
+
+            viewer.DrawMap(floor, depthIndies);
         }
 
         void OnDisable()
@@ -112,7 +114,27 @@ namespace ERang
             if (floor != this.floor)
                 return;
 
+            locations.TryGetValue(locationId, out MapLocation loc);
+
+            if (loc == null)
+            {
+                Debug.LogError($"Location not found: {locationId}");
+                return;
+            }
+
+            Debug.Log($"Current Location: {currentLocationId}, Clicked Location: {locationId}");
+
+            if (locations.TryGetValue(currentLocationId, out MapLocation currentLoc))
+            {
+                if (!currentLoc.adjacency.Contains(locationId))
+                {
+                    Debug.LogError($"Not adjacent location: {locationId}");
+                    return;
+                }
+            }
+
             viewer.SelectFloorIndex(floor, floorIndex);
+            depthIndies[locationId] = floorIndex;
 
             AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
 
@@ -120,13 +142,17 @@ namespace ERang
                 areaData = AreaData.GetAreaDatas().First();
 
             LevelGroupData levelGroupData = LevelGroupData.GetLevelGroupData(areaData.levelGroupId);
-
             LevelData randomLevelData = GetRandomLevelData(levelGroupData.levelDatas);
 
             PlayerPrefsUtility.SetInt("ActId", actId);
             PlayerPrefsUtility.SetInt("AreaId", areaData.areaID);
             PlayerPrefsUtility.SetInt("Floor", floor);
             PlayerPrefsUtility.SetInt("LevelId", randomLevelData.levelId);
+            PlayerPrefsUtility.SetInt("CurrentLocationId", locationId);
+
+            // Save depthIndies
+            string depthIndiesJson = JsonConvert.SerializeObject(depthIndies);
+            PlayerPrefsUtility.SetString("depthIndies", depthIndiesJson);
 
             // for logging
             List<(int, string, int)> cardDataList = new();
@@ -190,7 +216,9 @@ namespace ERang
                 for (int i = 0; i < locationCount; i++)
                 {
                     MapLocation loc = new(seedRand.Next(), d, i);
-                    locations.Add(loc.ID, loc);
+
+                    if (!locations.ContainsKey(loc.ID))
+                        locations.Add(loc.ID, loc);
                 }
 
                 // Debug.Log($"Depth {d} : {depthWidth[d]} locations: {locationCount}");
@@ -244,14 +272,12 @@ namespace ERang
                         }
                     }
 
-                    for (int j = 0; j < loc.directions.Count; j++)
-                        Debug.Log($"Depth {depth} Index {ci} : {loc.directions[j].Item2} -> {GetLocation(loc.directions[j].Item1).ID}");
+                    // for (int j = 0; j < loc.directions.Count; j++)
+                    //     Debug.Log($"Depth {depth} Index {ci} : {loc.directions[j].Item2} -> {GetLocation(loc.directions[j].Item1).ID}");
                 }
             }
 
-            // 맵 그리기
-            MapViewer viewer = GetComponent<MapViewer>();
-            viewer.DrawMap(floor);
+            SaveMapData();
         }
 
         public MapLocation GetLocation(int locationId)
@@ -307,6 +333,11 @@ namespace ERang
             locations = JsonConvert.DeserializeObject<Dictionary<int, MapLocation>>(locationsJson);
 
             Debug.Log($"Loaded depthWidth: {depthWidth.Count}, locations: {locations.Count}");
+
+            string depthIndiesJson = PlayerPrefs.GetString("depthIndies", null);
+
+            if (!string.IsNullOrEmpty(depthIndiesJson))
+                depthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(depthIndiesJson);
 
             return true;
         }

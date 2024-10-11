@@ -27,10 +27,14 @@ namespace ERang
         private bool isGenerated = false;
 
         private float camWidth;
-        private float maxScroll = 20f;
+        private float maxScroll = 100f;
         private float tScroll = 0f;
         private Vector3 moveVect;
         private Vector3 dragStart;
+        private float moveSpeed = 1f;
+
+        private MapLocationDot moveTarget = null;
+        private Vector3 moveTargetOffset;
 
         private List<MapLocationDot> mapLocs = new();
         private List<MapPath> mapPaths = new();
@@ -48,7 +52,50 @@ namespace ERang
             camWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
         }
 
-        public void DrawMap(int floor)
+        void Update()
+        {
+            bool drag = Input.GetMouseButton(0);
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            moveVect = Vector3.zero;
+
+            //Move mouse
+            if (Input.GetMouseButtonDown(0))
+                dragStart = worldPosition;
+
+            if (drag)
+            {
+                float sspeed = scrollSpeedMouse;
+                moveVect = (worldPosition - dragStart) * -sspeed;
+                dragStart = worldPosition;
+            }
+
+            //Move keyboard
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+                moveVect = Vector3.left * scrollSpeedKey * Time.deltaTime;
+
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+                moveVect = Vector3.right * scrollSpeedKey * Time.deltaTime;
+
+            if (Input.mouseScrollDelta.magnitude > 0.1f)
+                moveVect = Vector3.right * scrollSpeedWheel * Input.mouseScrollDelta.y * Time.deltaTime;
+
+            if (moveTarget != null && maxScroll > 0.01f)
+            {
+                Vector3 dir = moveTarget.transform.localPosition + moveTargetOffset;
+                dir.x = Mathf.Clamp(dir.x, 0f, maxScroll);
+                moveVect = dir.normalized * scrollSpeedAuto * moveSpeed * Time.deltaTime;
+
+                if (tScroll >= (dir.x - 0.1f))
+                    moveTarget = null;
+            }
+
+            // Do scrolling
+            tScroll += moveVect.x;
+            tScroll = Mathf.Clamp(tScroll, 0f, maxScroll);
+            scrollTrans.position = Vector3.Lerp(scrollTrans.position, transform.position + Vector3.left * tScroll, scrollAccel * Time.deltaTime);
+        }
+
+        public void DrawMap(int floor, Dictionary<int, int> depthIndies)
         {
             Debug.Log($"DrawMap {map.locations.Count} floor {floor}");
 
@@ -91,6 +138,12 @@ namespace ERang
 
                     mapPaths.Add(line);
                 }
+
+                if (depthIndies.TryGetValue(loc.ID, out int floorIndex))
+                {
+                    locList[floorIndex].SetCurrent(true);
+                    // Debug.Log($"DrawMap Selected floorIndex: {floorIndex}");
+                }
             }
         }
 
@@ -110,6 +163,20 @@ namespace ERang
                 dot.SetCurrent(dot.index == floorIndex);
                 dot.SetHightlight(dot.index != floorIndex);
             }
+        }
+
+        public void MoveTo(MapLocationDot point)
+        {
+            Vector3 teleport = point.transform.localPosition + Vector3.right * autoScrollOffset * 2f;
+            tScroll = teleport.x;
+            MoveToward(point);
+        }
+
+        public void MoveToward(MapLocationDot point, float speed = 2f)
+        {
+            moveTarget = point;
+            moveTargetOffset = Vector3.right * -autoScrollOffset;
+            moveSpeed = speed;
         }
 
         public Vector3 GetPosition(Map map, MapLocation location)
