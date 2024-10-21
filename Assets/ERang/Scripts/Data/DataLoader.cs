@@ -21,6 +21,7 @@ namespace ERang
             ConditionData.Load("TableExports/ConditionDataTable");
             AbilityData.Load("TableExports/AbilityDataTable");
             EventsData.Load("TableExports/EventsDataTable");
+            RandomEventsData.Load("TableExports/RandomEventsDataTable");
         }
     }
 }

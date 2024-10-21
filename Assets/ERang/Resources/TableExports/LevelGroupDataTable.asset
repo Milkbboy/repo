@@ -118,3 +118,35 @@ MonoBehaviour:
     Pos02_CardID: 1003
     Pos03_CardID: 0
     MasterID: 1002
+  - LevelGroupID: 1001006
+    LevelID: 100100601
+    NameDesc: "\uC561\uD2B8 1 \uC568\uB9AC\uD2B8 \uC804\uD22C (\uAE30\uC0AC\uB2E8\uC7A5)"
+    SpawnRatio: 100
+    Pos01_CardID: 1001
+    Pos02_CardID: 1001
+    Pos03_CardID: 1001
+    MasterID: 1001
+  - LevelGroupID: 1001006
+    LevelID: 100100602
+    NameDesc: "\uC561\uD2B8 1 \uC568\uB9AC\uD2B8 \uC804\uD22C ()"
+    SpawnRatio: 100
+    Pos01_CardID: 1001
+    Pos02_CardID: 1001
+    Pos03_CardID: 1001
+    MasterID: 1002
+  - LevelGroupID: 1001006
+    LevelID: 100100603
+    NameDesc: "\uC561\uD2B8 1 \uC568\uB9AC\uD2B8 \uC804\uD22C (\uC2AC\uB77C\uC784)"
+    SpawnRatio: 100
+    Pos01_CardID: 1001
+    Pos02_CardID: 1001
+    Pos03_CardID: 1001
+    MasterID: 1003
+  - LevelGroupID: 1001007
+    LevelID: 100100701
+    NameDesc: "\uC774\uBCA4\uD2B8 \uC804\uD22C "
+    SpawnRatio: 100
+    Pos01_CardID: 1001
+    Pos02_CardID: 1001
+    Pos03_CardID: 1001
+    MasterID: 0
