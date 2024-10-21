@@ -2,40 +2,65 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Newtonsoft.Json;
+using System.Text; // Newtonsoft.Json 라이브러리 추가
 
 namespace ERang
 {
     public class PlayerPrefsViewer : EditorWindow
     {
         private Vector2 scrollPosition;
-        private string newKey = "";
-        private string newValue = "";
-        private Dictionary<string, string> playerPrefsValues = new Dictionary<string, string>();
+        private Dictionary<string, object> playerPrefsValues = new();
+        private Dictionary<int, List<LocationData>> locationsByDepth = new();
+        Dictionary<int, int> selectedDepthIndies = new();
 
         [MenuItem("ERang/PlayerPrefs Viewer")]
         public static void ShowWindow()
         {
-            GetWindow<PlayerPrefsViewer>("PlayerPrefs Viewer");
+            var window = GetWindow<PlayerPrefsViewer>("PlayerPrefs Viewer");
+            window.LoadPlayerPrefs();
+        }
 
-            // Set initial values for testing
-            // PlayerPrefsUtility.SetInt("ActId", 0);
-            // PlayerPrefsUtility.SetInt("AreaId", 0);
-            // PlayerPrefsUtility.SetInt("Floor", 0);
-            // PlayerPrefsUtility.SetInt("LevelId", 0);
+        private void LoadPlayerPrefs()
+        {
+            playerPrefsValues.Clear(); // 기존 값을 지웁니다.
+            locationsByDepth.Clear(); // 층별 데이터 초기화
 
-            int actId = PlayerPrefsUtility.GetInt("ActId", 0);
-            int areaId = PlayerPrefsUtility.GetInt("AreaId", 0);
-            int floor = PlayerPrefsUtility.GetInt("Floor", 0);
-            int levelId = PlayerPrefsUtility.GetInt("LevelId", 0);
-            string masterId = PlayerPrefsUtility.GetString("MasterId", "");
+            foreach (var key in PlayerPrefsUtility.PrefIntKeys)
+            {
+                if (PlayerPrefsUtility.HasKey(key))
+                {
+                    int intValue = PlayerPrefsUtility.GetInt(key);
+                    playerPrefsValues[key] = intValue;
+                }
+            }
 
-            Debug.Log($"ActId: {actId}, AreaId: {areaId}, Floor: {floor}, LevelId: {levelId}, MasterId: {masterId}");
+            foreach (var key in PlayerPrefsUtility.PrefStringKeys)
+            {
+                if (PlayerPrefsUtility.HasKey(key))
+                {
+                    string stringValue = PlayerPrefsUtility.GetString(key);
+                    playerPrefsValues[key] = stringValue;
+
+                    if (key == "Locations")
+                    {
+                        ParseLocations(stringValue);
+                    }
+
+                    if (key == "SelectedDepthIndies")
+                    {
+                        selectedDepthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(stringValue);
+                    }
+                }
+            }
         }
 
         private void OnEnable()
         {
             // Load PlayerPrefs values into the dictionary
             string keysString = PlayerPrefsUtility.GetString("PlayerPrefsKeys", "");
+            Debug.Log($"keysString: {keysString}");
+
             foreach (var key in keysString.Split(';'))
             {
                 if (string.IsNullOrEmpty(key)) continue;
@@ -49,80 +74,96 @@ namespace ERang
 
             if (GUILayout.Button("Refresh"))
             {
-                // PlayerPrefsUtility.SetInt("ActId", 0);
-                // PlayerPrefsUtility.SetInt("AreaId", 0);
-                // PlayerPrefsUtility.SetInt("Floor", 0);
-                // PlayerPrefsUtility.SetInt("LevelId", 0);
-
+                // LoadPlayerPrefs();
                 PlayerPrefs.DeleteAll();
-
-                int actId = PlayerPrefsUtility.GetInt("ActId", 0);
-                int areaId = PlayerPrefsUtility.GetInt("AreaId", 0);
-                int floor = PlayerPrefsUtility.GetInt("Floor", 0);
-                int levelId = PlayerPrefsUtility.GetInt("LevelId", 0);
-                string masterId = PlayerPrefsUtility.GetString("MasterId", "");
-                string depthWidthJson = PlayerPrefs.GetString("depthWidth", null);
-                string locationsJson = PlayerPrefs.GetString("locations", null);
-                string depthIndiesJson = PlayerPrefsUtility.GetString("depthIndies", null);
-                int currentLocationId = PlayerPrefsUtility.GetInt("CurrentLocationId", 0);
-
-                Debug.Log($"ActId: {actId}, AreaId: {areaId}, Floor: {floor}, LevelId: {levelId}, MasterId: {masterId}, depthWidthJson: {depthWidthJson}, locationsJson: {locationsJson}, depthIndiesJson: {depthIndiesJson}, currentLocationId: {currentLocationId}");
-
-                // Repaint();
             }
-
-            return;
 
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
-            foreach (var key in playerPrefsValues.Keys.ToList())
+            foreach (var kvp in playerPrefsValues)
             {
-                string value = playerPrefsValues[key];
-                Debug.Log($"key: {key}, value: {value}");
+                if (kvp.Key == "DepthWidths")
+                    continue;
 
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(key, GUILayout.Width(200));
-                string newValue = EditorGUILayout.TextField(value, GUILayout.Width(200));
+                EditorGUILayout.LabelField(kvp.Key, GUILayout.Width(200));
 
-                if (newValue != value)
+                if (kvp.Value is int intValue)
                 {
-                    playerPrefsValues[key] = newValue;
-                    SetPlayerPrefValue(key, newValue);
+                    int newValue = EditorGUILayout.IntField(intValue, GUILayout.Width(200));
+                    if (newValue != intValue)
+                    {
+                        playerPrefsValues[kvp.Key] = newValue;
+                        PlayerPrefsUtility.SetInt(kvp.Key, newValue);
+                    }
                 }
-
-                if (GUILayout.Button("Delete", GUILayout.Width(60)))
+                else if (kvp.Value is string stringValue)
                 {
-                    PlayerPrefsUtility.DeleteKey(key);
-                    playerPrefsValues.Remove(key);
-                    Repaint();
-                }
+                    if (kvp.Key == "Locations")
+                    {
+                        // Locations 데이터를 층별로 표시
+                        foreach (var depth in locationsByDepth.Keys.OrderBy(d => d))
+                        {
+                            EditorGUILayout.BeginVertical("box");
 
-                EditorGUILayout.EndHorizontal();
+                            GUILayout.Label($"{depth} 층", EditorStyles.boldLabel, GUILayout.Width(200));
+
+                            foreach (var location in locationsByDepth[depth])
+                            {
+                                GUIStyle style = new GUIStyle(GUI.skin.textField);
+
+                                if (selectedDepthIndies.TryGetValue(depth, out int selectedIndex) && location.index == selectedIndex)
+                                    style.normal.textColor = new Color(0.5f, 1.0f, 0.5f); // 선택된 인덱스의 텍스트 색상을 연한 녹색으로 변경
+
+                                string locationJson = JsonConvert.SerializeObject(location);
+                                string linkText = string.Join(", ", location.adjacency.Select(ad => $"{location.ID} -> {ad}"));
+
+                                EditorGUILayout.TextField(linkText, style, GUILayout.Width(400));
+                            }
+
+                            EditorGUILayout.EndVertical();
+                        }
+                    }
+                    else if (kvp.Key == "SelectedDepthIndies")
+                    {
+                        List<(int, int)> selectedDepthIndiesList = selectedDepthIndies.Select(kvp => (kvp.Key, kvp.Value)).ToList();
+
+                        string selectedFloorIndexText = string.Join(", ", selectedDepthIndiesList.Select(kvp => $"{kvp.Item1} 층 {kvp.Item2}"));
+                        EditorGUILayout.TextField(selectedFloorIndexText, GUILayout.Width(400));
+                    }
+                    else
+                    {
+                        string newValue = EditorGUILayout.TextField(stringValue, GUILayout.Width(200));
+                        if (newValue != stringValue)
+                        {
+                            playerPrefsValues[kvp.Key] = newValue;
+                            PlayerPrefsUtility.SetString(kvp.Key, newValue);
+                        }
+                    }
+                }
             }
 
             EditorGUILayout.EndScrollView();
+        }
 
-            GUILayout.Space(20);
-            GUILayout.Label("Add New PlayerPref", EditorStyles.boldLabel);
-            newKey = EditorGUILayout.TextField("Key", newKey);
-            newValue = EditorGUILayout.TextField("Value", newValue);
-
-            if (GUILayout.Button("Add"))
+        private void ParseLocations(string json)
+        {
+            try
             {
-                if (!string.IsNullOrEmpty(newKey))
+                var locations = JsonConvert.DeserializeObject<Dictionary<string, LocationData>>(json);
+
+                foreach (var location in locations.Values)
                 {
-                    SetPlayerPrefValue(newKey, newValue);
-                    playerPrefsValues[newKey] = newValue;
-                    string keys = PlayerPrefsUtility.GetString("PlayerPrefsKeys", "");
-                    if (!keys.Contains(newKey))
+                    if (!locationsByDepth.ContainsKey(location.depth))
                     {
-                        keys += newKey + ";";
-                        PlayerPrefsUtility.SetString("PlayerPrefsKeys", keys);
+                        locationsByDepth[location.depth] = new List<LocationData>();
                     }
-                    newKey = "";
-                    newValue = "";
-                    Repaint();
+
+                    locationsByDepth[location.depth].Add(location);
                 }
+            }
+            catch
+            {
+                Debug.LogError("Failed to parse Locations JSON.");
             }
         }
 
@@ -132,27 +173,20 @@ namespace ERang
             {
                 // 기본값을 빈 문자열로 설정
                 string storedValue = PlayerPrefsUtility.GetString(key, "");
-                Debug.Log($"GetPlayerPrefValue - key: {key}, storedValue: {storedValue}");
 
+                // 값이 없을 때만 기본값을 설정
                 if (string.IsNullOrEmpty(storedValue))
-                {
-                    // 값이 없을 때만 기본값을 설정
                     return "0";
-                }
 
                 if (int.TryParse(storedValue, out int intValue))
-                {
                     return intValue.ToString();
-                }
-                else if (float.TryParse(storedValue, out float floatValue))
-                {
+
+                if (float.TryParse(storedValue, out float floatValue))
                     return floatValue.ToString();
-                }
-                else
-                {
-                    return storedValue;
-                }
+
+                return storedValue;
             }
+
             return "0"; // 키가 존재하지 않을 때 기본값 반환
         }
 
@@ -164,14 +198,26 @@ namespace ERang
             {
                 PlayerPrefsUtility.SetInt(key, intValue);
             }
-            else if (float.TryParse(value, out float floatValue))
-            {
-                PlayerPrefsUtility.SetFloat(key, floatValue);
-            }
             else
             {
                 PlayerPrefsUtility.SetString(key, value);
             }
+        }
+
+        private class LocationData
+        {
+            public int seed;
+            public int depth;
+            public int index;
+            public List<Direction> directions;
+            public List<int> adjacency;
+            public int ID;
+        }
+
+        private class Direction
+        {
+            public int Item1;
+            public string Item2;
         }
     }
 }

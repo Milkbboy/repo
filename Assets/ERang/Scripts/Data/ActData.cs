@@ -10,7 +10,12 @@ namespace ERang.Data
     {
         public int actID;
         public string nameDesc;
+        public int mapSizeMin;
+        public int mapSizeMax;
+        public int widthMin;
+        public int widthMax;
         public List<int> areaIds = new();
+        public List<int> eventIds = new();
 
         public static List<ActData> actDatas = new();
         public static Dictionary<int, ActData> actDataDict = new();
@@ -41,6 +46,7 @@ namespace ERang.Data
                 else
                 {
                     actData.areaIds.Clear();
+                    actData.eventIds.Clear();
                 }
 
                 actData.Initialize(actEntity);
@@ -67,7 +73,12 @@ namespace ERang.Data
         {
             actID = entity.ActID;
             nameDesc = entity.NameDesc;
+            mapSizeMin = entity.HeightMin;
+            mapSizeMax = entity.HeightMax;
+            widthMin = entity.WidthMin;
+            widthMax = entity.WidthMax;
             areaIds = Utils.ParseIntArray(entity.AreaID).ToList();
+            eventIds = Utils.ParseIntArray(entity.EventID).ToList();
         }
     }
 }

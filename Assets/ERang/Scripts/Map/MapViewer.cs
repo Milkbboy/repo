@@ -27,7 +27,6 @@ namespace ERang
         public float autoScrollOffset = -3f;
 
         private Map map;
-        private bool isGenerated = false;
 
         private float camWidth;
         private float maxScroll = 100f;
@@ -199,7 +198,7 @@ namespace ERang
         {
             Vector3 edge = transform.position - new Vector3(rowOffset + rowSpacing, 0f, 0f);
 
-            int locationIndex = map.depthWidth[location.depth];
+            int locationIndex = map.depthWidths[location.depth];
             int halfIndex = locationIndex / 2;
             float offset = halfIndex * indexSpacing;
 

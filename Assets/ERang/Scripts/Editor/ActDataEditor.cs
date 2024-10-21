@@ -9,12 +9,14 @@ namespace ERang
         private SerializedProperty actID;
         private SerializedProperty nameDesc;
         private SerializedProperty areaIds;
+        private SerializedProperty eventIds;
 
         private void OnEnable()
         {
             actID = serializedObject.FindProperty("actID");
             nameDesc = serializedObject.FindProperty("nameDesc");
             areaIds = serializedObject.FindProperty("areaIds");
+            eventIds = serializedObject.FindProperty("eventIds");
         }
 
         public override void OnInspectorGUI()
@@ -24,6 +26,7 @@ namespace ERang
             EditorGUILayout.PropertyField(actID);
             EditorGUILayout.PropertyField(nameDesc);
             EditorGUILayout.PropertyField(areaIds, true);
+            EditorGUILayout.PropertyField(eventIds, true);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Act Datas", EditorStyles.boldLabel);

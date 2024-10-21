@@ -20,6 +20,7 @@ namespace ERang
             AiGroupData.Load("TableExports/AiGroupDataTable");
             ConditionData.Load("TableExports/ConditionDataTable");
             AbilityData.Load("TableExports/AbilityDataTable");
+            EventsData.Load("TableExports/EventsDataTable");
         }
     }
 }

@@ -193,6 +193,17 @@ namespace ERang
     }
 
     /// <summary>
+    /// 맵 이벤트 타입
+    /// </summary>
+    public enum EventType
+    {
+        None = 0,
+        Store,  // 상점
+        EliteBattle, // 앨리트 보스
+        RandomEvent, // 랜덤 이벤트
+    }
+
+    /// <summary>
     /// 대상 선택 공격 타입
     /// </summary>
     public static class Constants

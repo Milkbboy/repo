@@ -50,19 +50,18 @@ namespace ERang
         public static Map Instance { get; private set; }
 
         public Dictionary<int, MapLocation> locations = new();
-        public Dictionary<int, int> depthWidth = new();
+        public Dictionary<int, int> depthWidths = new();
         // 층에서 고른 인덱스 (표시용)
-        public Dictionary<int, int> depthIndies = new();
+        public Dictionary<int, int> selectedDepthIndies = new();
 
         private int actId;
         private int areaId;
         private int floor;
+        private int maxFloor;
         private int lastLocationId;
         private System.Random random = new();
 
         private MapViewer viewer;
-        private int withMin;
-        private int withMax;
 
         void Start()
         {
@@ -71,11 +70,10 @@ namespace ERang
             actId = PlayerPrefsUtility.GetInt("ActId", 0);
             areaId = PlayerPrefsUtility.GetInt("AreaId", 0);
             floor = PlayerPrefsUtility.GetInt("Floor", 1);
+            maxFloor = PlayerPrefsUtility.GetInt("MaxFloor", 0);
             lastLocationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
 
             viewer = GetComponent<MapViewer>();
-            withMin = 3;
-            withMax = 5;
 
             AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
 
@@ -90,7 +88,7 @@ namespace ERang
                 GenerateMap();
             }
 
-            foreach (var depthEntry in depthIndies)
+            foreach (var depthEntry in selectedDepthIndies)
             {
                 int depth = depthEntry.Key;
                 int index = depthEntry.Value;
@@ -98,7 +96,7 @@ namespace ERang
                 // Debug.Log($"Selected Depth: {depth}, Index: {index}");
             }
 
-            viewer.DrawMap(floor, depthIndies);
+            viewer.DrawMap(floor, selectedDepthIndies);
         }
 
         void OnDisable()
@@ -124,7 +122,7 @@ namespace ERang
                 return;
             }
 
-            Debug.Log($"Click Location: {locationId}, lastLocationId: {lastLocationId}, floor: {floor}, floorIndex: {floorIndex}");
+            // Debug.Log($"Click Location: {locationId}, lastLocationId: {lastLocationId}, floor: {floor}, floorIndex: {floorIndex}");
 
             if (locations.TryGetValue(lastLocationId, out MapLocation currentLoc))
             {
@@ -136,7 +134,7 @@ namespace ERang
             }
 
             viewer.SelectFloorIndex(floor, floorIndex);
-            depthIndies[floor] = floorIndex;
+            selectedDepthIndies[floor] = floorIndex;
 
             AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
 
@@ -153,8 +151,8 @@ namespace ERang
             PlayerPrefsUtility.SetInt("LastLocationId", locationId);
 
             // Save depthIndies
-            string depthIndiesJson = JsonConvert.SerializeObject(depthIndies);
-            PlayerPrefsUtility.SetString("depthIndies", depthIndiesJson);
+            string selectedDepthIndiesJson = JsonConvert.SerializeObject(selectedDepthIndies, Formatting.None);
+            PlayerPrefsUtility.SetString("SelectedDepthIndies", selectedDepthIndiesJson);
 
             // for logging
             List<(int, string, int)> cardDataList = new();
@@ -181,9 +179,7 @@ namespace ERang
                 cardDataList.Add((pos, monsterCardData.nameDesc, monsterCardData.card_id));
             }
 
-            string cardIdsString = $"등장 카드들 {string.Join(", ", cardDataList.Select(x => $"{x.Item1}: {x.Item2}({x.Item3})").ToList())}";
-
-            Debug.Log($"Level ID: {randomLevelData.levelId}. {cardIdsString}");
+            Debug.Log($"Level ID: {randomLevelData.levelId}. 등장 카드들 {string.Join(", ", cardDataList.Select(x => $"{x.Item1}: {x.Item2}({x.Item3})").ToList())}");
         }
 
         public void GenerateMap()
@@ -191,16 +187,9 @@ namespace ERang
             ActData actData = actId == 0 ? ActData.GetActDatas().First() : ActData.GetActData(actId);
             AreaData areaData = areaId == 0 ? AreaData.areaDatas.First() : AreaData.GetAreaDataFromFloor(floor);
 
-            int floorStart = areaData.floorStart;
-            int floorEnd = areaData.floorMax;
-            int floorCount = areaData.floorCount;
-
-            // 1층 데이터면 2층꺼 AreaData로 변경
-            if (floorStart == 1)
-            {
-                floorCount = AreaData.areaDatas[0].floorCount + AreaData.areaDatas[1].floorCount;
-                floorEnd = AreaData.areaDatas[1].floorMax;
-            }
+            int floorStart = 1;
+            int floorEnd = Random.Range(actData.mapSizeMin, actData.mapSizeMax);
+            int floorCount = floorEnd - floorEnd + 1;
 
             Debug.Log($"GenerateMap areaID: {areaData.areaID}, floorStart: {floorStart}, floorEnd: {floorEnd} floorCount: {floorCount}");
 
@@ -211,11 +200,11 @@ namespace ERang
 
             for (int d = floorStart; d <= floorEnd; d++)
             {
-                int locationCount = genRand.Next(withMin, withMax + 1);
+                int locationCount = genRand.Next(actData.widthMin, actData.widthMax + 1);
 
-                depthWidth[d] = locationCount;
+                depthWidths[d] = locationCount;
 
-                Debug.Log($"Depth {d} : {depthWidth[d]} locations: {locationCount}");
+                // Debug.Log($"Depth {d} : {depthWidths[d]} locations: {locationCount}");
 
                 for (int i = 0; i < locationCount; i++)
                 {
@@ -228,8 +217,8 @@ namespace ERang
             {
                 int depth = d;
                 int nextDepth = d + 1;
-                int currLocationCount = depthWidth[depth];
-                int nextLocationCount = depthWidth[nextDepth];
+                int currLocationCount = depthWidths[depth];
+                int nextLocationCount = depthWidths[nextDepth];
                 int locationCount = Mathf.Max(currLocationCount, nextLocationCount);
                 int offset = (currLocationCount - locationCount) / 2;
                 int start = -Mathf.Abs(offset);
@@ -303,44 +292,45 @@ namespace ERang
             PlayerPrefsUtility.SetInt("ActId", actId);
             PlayerPrefsUtility.SetInt("AreaId", areaData.areaID);
             PlayerPrefsUtility.SetInt("Floor", floor);
+            PlayerPrefsUtility.SetInt("MaxFloor", maxFloor);
 
             // Save depthWidth
-            string depthWidthJson = JsonConvert.SerializeObject(depthWidth);
-            PlayerPrefs.SetString("depthWidth", depthWidthJson);
+            string depthWidthJson = JsonConvert.SerializeObject(depthWidths, Formatting.None);
+            PlayerPrefsUtility.SetString("DepthWidths", depthWidthJson);
 
             // Save locations
             string locationsJson = JsonConvert.SerializeObject(locations);
-            PlayerPrefs.SetString("locations", locationsJson);
+            PlayerPrefsUtility.SetString("Locations", locationsJson);
 
-            PlayerPrefs.Save();
+            PlayerPrefsUtility.Save();
 
-            Debug.Log($"Saved floor Count: {depthWidth.Count}, locations: {locations.Count}");
+            Debug.Log($"Saved floor Count: {depthWidths.Count}, locations: {locations.Count}");
         }
 
         private bool LoadMapData()
         {
             // Load depthWidth
-            string depthWidthJson = PlayerPrefs.GetString("depthWidth", null);
+            string depthWidthsJson = PlayerPrefsUtility.GetString("DepthWidths", null);
 
-            if (string.IsNullOrEmpty(depthWidthJson))
+            if (string.IsNullOrEmpty(depthWidthsJson))
                 return false;
 
-            depthWidth = JsonConvert.DeserializeObject<Dictionary<int, int>>(depthWidthJson);
+            depthWidths = JsonConvert.DeserializeObject<Dictionary<int, int>>(depthWidthsJson);
 
             // Load locations
-            string locationsJson = PlayerPrefs.GetString("locations", null);
+            string locationsJson = PlayerPrefsUtility.GetString("Locations", null);
 
             if (string.IsNullOrEmpty(locationsJson))
                 return false;
 
             locations = JsonConvert.DeserializeObject<Dictionary<int, MapLocation>>(locationsJson);
 
-            Debug.Log($"Loaded depthWidth: {depthWidth.Count}, locations: {locations.Count}");
+            Debug.Log($"Loaded depthWidths: {depthWidths.Count}, locations: {locations.Count}");
 
-            string depthIndiesJson = PlayerPrefs.GetString("depthIndies", null);
+            string seletedDepthIndiesJson = PlayerPrefsUtility.GetString("SelectedDepthIndies", null);
 
-            if (!string.IsNullOrEmpty(depthIndiesJson))
-                depthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(depthIndiesJson);
+            if (!string.IsNullOrEmpty(seletedDepthIndiesJson))
+                selectedDepthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(seletedDepthIndiesJson);
 
             return true;
         }
