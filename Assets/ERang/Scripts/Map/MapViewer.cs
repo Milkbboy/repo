@@ -113,6 +113,7 @@ namespace ERang
                 // dot.mapId = map.mapId;
                 dot.locationId = loc.ID;
                 dot.index = loc.index;
+                dot.SetIcon(loc.eventType);
                 dot.SetHightlight(floor);
 
                 mapLocs.Add(dot);

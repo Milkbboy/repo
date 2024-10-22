@@ -37,7 +37,7 @@ MonoBehaviour:
     RandomEventID: 
   - EventsID: 1003
     NameDesc: "\uC561\uD2B81 \uB79C\uB364 \uC774\uBCA4\uD2B8"
-    EventType: Random Event
+    EventType: RandomEvent
     ExcludeFloor: 1
     ExcludeEndFloor: 1
     IncludeFloor: 

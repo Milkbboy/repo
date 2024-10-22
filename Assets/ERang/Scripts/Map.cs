@@ -12,17 +12,19 @@ namespace ERang
         public int seed;
         public int depth;
         public int index;
+        public EventType eventType;
 
         public List<(int, string)> directions = new();
         public List<int> adjacency = new();
 
         public int ID { get { return GetID(depth, index); } }
 
-        public MapLocation(int seed, int depth, int index)
+        public MapLocation(int seed, int depth, int index, EventType eventType = EventType.None)
         {
             this.seed = seed;
             this.depth = depth;
             this.index = index;
+            this.eventType = eventType;
         }
 
         public void AddAdjacent(MapLocation loc, string direction = "")
@@ -191,7 +193,60 @@ namespace ERang
             int floorEnd = Random.Range(actData.mapSizeMin, actData.mapSizeMax);
             int floorCount = floorEnd - floorEnd + 1;
 
-            Debug.Log($"GenerateMap areaID: {areaData.areaID}, floorStart: {floorStart}, floorEnd: {floorEnd} floorCount: {floorCount}");
+            Debug.Log($"GenerateMap areaID: {areaData.areaID}, floorStart: {floorStart}, floorEnd: {floorEnd} floorCount: {floorCount}, eventIds: {string.Join(", ", actData.eventIds)}");
+
+            Dictionary<int, List<EventType>> depthEventsMap = new();
+
+            for (int i = 0; i < actData.eventIds.Count; i++)
+            {
+                int eventsId = actData.eventIds[i];
+
+                // 맵 이벤트 순서대로 필요한 이벤트 뽑기
+                EventsData eventsData = EventsData.GetEventsData(eventsId);
+
+                // 이벤트 개수 뽑기
+                int eventCount = Random.Range(eventsData.minValue, eventsData.maxValue + 1);
+                // Debug.Log($"<color={Colors.Yellow}>{eventsId} 이벤트</color>는 <color={Colors.Red}>{eventCount}</color>개 생성됩니다.");
+
+                // 이벤트 배치할 층 뽑기 (excludeFloors, 마지막 층 제외)
+                List<int> availableFloors = Enumerable.Range(1, floorEnd - 1).Except(eventsData.excludeFloors).ToList();
+
+                if (availableFloors.Count == 0)
+                {
+                    Debug.LogError($"<color={Colors.Yellow}>{eventsId} 이벤트</color>는 모든 층이 제외되었습니다.");
+                    continue;
+                }
+
+                // 층 리스트에서 랜덤으로 뽑기
+                for (int j = 0; j < eventCount; j++)
+                {
+                    int randomFloor = 0;
+
+                    if (j < eventsData.includeFloors.Count)
+                    {
+                        randomFloor = eventsData.includeFloors[j];
+                        // Debug.Log($"<color={Colors.Yellow}>{eventsId} 이벤트</color>는 <color={Colors.Green}>{randomFloor}</color> 층에 고정되었습니다.");
+                    }
+                    else
+                    {
+                        randomFloor = availableFloors[Random.Range(0, availableFloors.Count)];
+                        // Debug.Log($"<color={Colors.Yellow}>{eventsId} 이벤트</color>는 <color={Colors.Green}>{randomFloor}</color> 층에 랜덤으로 배치되었습니다.");
+                    }
+
+                    if (depthEventsMap.TryGetValue(randomFloor, out List<EventType> eventDatas))
+                        eventDatas.Add(eventsData.eventType);
+                    else
+                        depthEventsMap.Add(randomFloor, new List<EventType> { eventsData.eventType });
+                }
+            }
+
+            // var sortedDepthEventsMap = depthEventsMap.OrderBy(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            // foreach (var kvp in sortedDepthEventsMap)
+            // {
+            //     int d = kvp.Key;
+            //     List<EventType> events = kvp.Value;
+            //     Debug.Log($"확인 {Utils.FloorText(d)} 이벤트 <color={Colors.Red}>{events.Count()}</color>개 {string.Join(", ", events)}");
+            // }
 
             int seed = random.Next(int.MinValue, int.MaxValue);
 
@@ -200,19 +255,62 @@ namespace ERang
 
             for (int d = floorStart; d <= floorEnd; d++)
             {
-                int locationCount = genRand.Next(actData.widthMin, actData.widthMax + 1);
+                // 마지막 층은 보스 층 설정
+                if (d == floorEnd)
+                {
+                    depthWidths[d] = 1;
+                    MapLocation loc = new(seedRand.Next(), d, 0, EventType.BossBattle);
+                    locations.Add(loc.ID, loc);
 
+                    continue;
+                }
+
+                // 층별 위치 개수 랜덤 뽑기
+                int locationCount = genRand.Next(actData.widthMin, actData.widthMax + 1);
                 depthWidths[d] = locationCount;
 
-                // Debug.Log($"Depth {d} : {depthWidths[d]} locations: {locationCount}");
-
-                for (int i = 0; i < locationCount; i++)
+                // 해당 층의 이벤트가 있는 경우
+                if (depthEventsMap.TryGetValue(d, out List<EventType> events))
                 {
-                    MapLocation loc = new(seedRand.Next(), d, i);
-                    locations.Add(loc.ID, loc);
+                    // Debug.Log($"{Utils.FloorText(d)} 위치는 <color={Colors.Yellow}>{depthWidths[d]}</color> 개. 이벤트는 <color={Colors.Red}>{events.Count}</color>개 {string.Join(", ", events)}");
+
+                    // 이벤트 개수가 뽑힌 위치 개수보다 많으면 위치 개수를 이벤트 개수로 변경
+                    if (events.Count > locationCount)
+                    {
+                        depthWidths[d] = locationCount = events.Count;
+                    }
+                    else
+                    {
+                        // 이벤트 개수가 적으면 locationCount 개수 만큼 events 에 EventType.None 추가
+                        for (int i = events.Count; i < locationCount; i++)
+                            events.Add(EventType.None);
+                    }
+
+                    // 이벤트 랜덤 섞기
+                    Utils.Shuffle(events);
+
+                    // Debug.Log($"{Utils.FloorText(d)} 이벤트 랜덤 섞기: {string.Join(", ", events)}");
+
+                    for (int i = 0; i < events.Count; i++)
+                    {
+                        EventType locationEvent = events[i];
+                        // Debug.Log($"{Utils.FloorText(d)} {i}번째 위치에 <color={Colors.Red}>{locationEvent}</color> 이벤트 배치");
+
+                        MapLocation loc = new(seedRand.Next(), d, i, locationEvent);
+                        locations.Add(loc.ID, loc);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < locationCount; i++)
+                    {
+                        MapLocation loc = new(seedRand.Next(), d, i);
+                        locations.Add(loc.ID, loc);
+                    }
                 }
             }
 
+            // 층 연결 설정
             for (int d = floorStart; d <= floorEnd - 1; d++)
             {
                 int depth = d;

@@ -201,6 +201,7 @@ namespace ERang
         Store,  // 상점
         EliteBattle, // 앨리트 보스
         RandomEvent, // 랜덤 이벤트
+        BossBattle, // 보스
     }
 
     /// <summary>

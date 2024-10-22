@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,6 +34,31 @@ namespace ERang
         private void OnDestroy()
         {
             locations.Remove(this);
+        }
+
+        public void SetIcon(EventType eventType)
+        {
+            string spritePath = eventType switch
+            {
+                EventType.Store => "Sprites/Shop",
+                EventType.EliteBattle => "Sprites/Elite",
+                EventType.RandomEvent => "Sprites/Random",
+                EventType.BossBattle => "Sprites/Boss",
+                _ => "Sprites/swords"
+            };
+
+            // Debug.Log($"spritePath: {spritePath}");
+
+            Sprite sprite = Resources.Load<Sprite>(spritePath);
+
+            if (sprite != null)
+            {
+                icon.sprite = sprite;
+            }
+            else
+            {
+                Debug.LogWarning($"Sprite not found at path: {spritePath}");
+            }
         }
 
         public void SetHightlight(int floor)

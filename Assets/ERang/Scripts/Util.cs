@@ -5,11 +5,40 @@ using ERang.Data;
 
 namespace ERang
 {
+    /// <summary>
+    /// 컬러 상수 클래스
+    /// </summary>
+    public static class Colors
+    {
+        public static string Red { get; } = "#dd3333";
+        public static string Green { get; } = "#81d742";
+        public static string Blue { get; } = "#1e73be";
+        public static string Yellow { get; } = "#eeee22";
+    }
+
+    /// <summary>
+    /// 유틸리티 클래스
+    /// </summary>
     public static class Utils
     {
-        public static string RedText(object text)
+        private static Random random = new Random();
+
+        /// <summary>
+        /// Fisher-Yates shuffle (피셔 예이츠)알고리즘
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        public static void Shuffle<T>(this IList<T> list)
         {
-            return $"<color=#ea4123>{text}</color>";
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = random.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
 
         public static int[] ParseIntArray(string intArray)
@@ -74,6 +103,16 @@ namespace ERang
         public static string TargetText(AiDataTarget target)
         {
             return $"<color=#ed6ddc>{GetTarget(target)}</color>";
+        }
+
+        public static string RedText(object text)
+        {
+            return $"<color={Colors.Red}>{text}</color>";
+        }
+
+        public static string FloorText(int floor)
+        {
+            return $"<color={Colors.Green}>{floor}</color>층";
         }
 
         public static string StatChangesText(AbilityType abilityType, List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> changes)
