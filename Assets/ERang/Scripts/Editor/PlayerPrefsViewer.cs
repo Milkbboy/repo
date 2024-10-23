@@ -74,8 +74,9 @@ namespace ERang
 
             if (GUILayout.Button("Refresh"))
             {
-                // LoadPlayerPrefs();
                 PlayerPrefs.DeleteAll();
+
+                LoadPlayerPrefs();
             }
 
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);

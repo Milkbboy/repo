@@ -29,7 +29,7 @@ namespace ERang
                 missiles.Add((missile, targetPosition));
             }
 
-            float duration = 1f;
+            float duration = .2f;
             float elapsed = 0f;
 
             while (elapsed < duration)

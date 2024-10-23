@@ -72,6 +72,16 @@ namespace ERang.Data
             return areaDatas;
         }
 
+        /// <summary>
+        /// 보스 배틀이 있는 지역 데이터 찾기
+        /// </summary>
+        /// <param name="areaIds"></param>
+        /// <returns></returns>
+        public static AreaData FindBossBattleAreaData(List<int> areaIds)
+        {
+            return areaDatas.Find(areaData => areaIds.Contains(areaData.areaID) && areaData.isEnd);
+        }
+
         private void Initialize(AreaDataEntity entity, int prevFloorMax)
         {
             areaID = entity.AreaID;

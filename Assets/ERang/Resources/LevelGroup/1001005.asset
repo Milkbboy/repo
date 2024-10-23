@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc7f054a3baab194988fc0dd38107e0b, type: 3}
   m_Name: 1001005
   m_EditorClassIdentifier: 
-  levelGroupID: 1001005
+  levelGroupId: 1001005
   levelDatas:
   - levelId: 100100501
     nameDesc: "\uC561\uD2B8 1 \uBCF4\uC2A4 (\uC784\uC2DC \uB8E8\uC2DC)"

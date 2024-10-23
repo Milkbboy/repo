@@ -28,7 +28,7 @@ namespace ERang.Data
 
     public class LevelGroupData : ScriptableObject
     {
-        public int levelGroupID;
+        public int levelGroupId;
         public List<LevelData> levelDatas = new();
 
         public static List<LevelGroupData> levelGroupDatas = new();
@@ -74,9 +74,9 @@ namespace ERang.Data
             AssetDatabase.Refresh();
         }
 
-        public static LevelGroupData GetLevelGroupData(int levelGroupID)
+        public static LevelGroupData GetLevelGroupData(int levelGroupId)
         {
-            return levelGroupDictionary.TryGetValue(levelGroupID, out LevelGroupData levelGroupData) ? levelGroupData : null;
+            return levelGroupDictionary.TryGetValue(levelGroupId, out LevelGroupData levelGroupData) ? levelGroupData : null;
         }
 
         public static LevelData GetLevelData(int levelId)
@@ -84,9 +84,19 @@ namespace ERang.Data
             return levelDataDictionary.TryGetValue(levelId, out LevelData levelData) ? levelData : null;
         }
 
+        /// <summary>
+        /// 레벨 그룹 아이디로 레벨 데이터들 가져오기
+        /// </summary>
+        /// <param name="levelGroupId"></param>
+        /// <returns></returns>
+        public static List<LevelData> GetLevelDatas(int levelGroupId)
+        {
+            return levelGroupDictionary.TryGetValue(levelGroupId, out LevelGroupData levelGroupData) ? levelGroupData.levelDatas : null;
+        }
+
         public void Initialize(LevelGroupDataEntity entity)
         {
-            levelGroupID = entity.LevelGroupID;
+            levelGroupId = entity.LevelGroupID;
 
             LevelData levelData = new(entity);
 

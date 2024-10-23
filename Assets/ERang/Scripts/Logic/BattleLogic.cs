@@ -5,6 +5,7 @@ using UnityEngine;
 using ERang.Data;
 using UnityEngine.Events;
 using TMPro;
+using Newtonsoft.Json;
 
 namespace ERang
 {
@@ -79,7 +80,7 @@ namespace ERang
             Debug.Log($"----------------- BATTLE START -----------------");
             BoardSystem.Instance.CreateMonsterBoardSlots(levelData.cardIds);
 
-            floorText.text = $"{floor} 층";
+            floorText.text = $"{floor} 층 ({levelId})";
 
             StartCoroutine(TurnStart());
         }
@@ -166,8 +167,30 @@ namespace ERang
             int nextFloor = isWin ? floor + 1 : 0;
             PlayerPrefsUtility.SetInt("Floor", nextFloor);
 
-            // 지면 초기화
-            if (isWin == false)
+            int locationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
+
+            Debug.Log($"배틀 종료 {isWin}, loastLocationId: {locationId}, nextFloor: {nextFloor}");
+
+            // 마지막에 선택한 층 인덱스 저장 (지면 초기화)
+            PlayerPrefsUtility.SetInt("LastLocationId", isWin ? locationId : 0);
+
+            // 배틀 클리어 후 다음 층으로 이동할 수 있도록 선택된 층 인덱스 저장
+
+            if (isWin)
+            {
+                string seletedDepthIndiesJson = PlayerPrefsUtility.GetString("SelectedDepthIndies", null);
+
+                if (!string.IsNullOrEmpty(seletedDepthIndiesJson))
+                {
+                    Dictionary<int, int> selectedDepthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(seletedDepthIndiesJson);
+
+                    selectedDepthIndies[floor] = locationId % 100;
+                    string selectedDepthIndiesJson = JsonConvert.SerializeObject(selectedDepthIndies, Formatting.None);
+
+                    PlayerPrefsUtility.SetString("SelectedDepthIndies", selectedDepthIndiesJson);
+                }
+            }
+            else
             {
                 PlayerPrefsUtility.SetInt("MasterId", 0);
                 PlayerPrefsUtility.SetInt("AreaId", 0);
@@ -180,8 +203,7 @@ namespace ERang
 
             if (nextSceneObject.TryGetComponent<NextScene>(out NextScene nextScene))
             {
-                string nextSceneName = isWin ? "Act" : "Lobby";
-                nextScene.Play(nextSceneName);
+                nextScene.Play(isWin ? "Act" : "Lobby");
             }
         }
 

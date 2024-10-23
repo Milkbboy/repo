@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
@@ -59,8 +58,9 @@ namespace ERang
         private int actId;
         private int areaId;
         private int floor;
-        private int maxFloor;
-        private int lastLocationId;
+        private int selectLoactionId = 0;
+        private int lastLocationId = 0;
+        private int levelId = 0;
         private System.Random random = new();
 
         private MapViewer viewer;
@@ -69,26 +69,10 @@ namespace ERang
         {
             Instance = this;
 
-            actId = PlayerPrefsUtility.GetInt("ActId", 0);
-            areaId = PlayerPrefsUtility.GetInt("AreaId", 0);
-            floor = PlayerPrefsUtility.GetInt("Floor", 1);
-            maxFloor = PlayerPrefsUtility.GetInt("MaxFloor", 0);
-            lastLocationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
-
             viewer = GetComponent<MapViewer>();
 
-            AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
-
-            LoadMapData();
-
-            Debug.Log($"LoadMap Success. floor: {floor}, areaId: {areaId}, areaData.areaID: {areaData.areaID}, locations.Count: {locations.Count}");
-
-            if (floor != 2 && (areaId != areaData.areaID || locations.Count == 0))
-            {
-                // 맵 새로 생성되면 처음 부터 시작
-                lastLocationId = 0;
+            if (!LoadMapData())
                 GenerateMap();
-            }
 
             foreach (var depthEntry in selectedDepthIndies)
             {
@@ -108,55 +92,126 @@ namespace ERang
 
         public void ClickLocation(int locationId)
         {
+            selectLoactionId = locationId;
+
             int floor = locationId / 100;
             int floorIndex = locationId % 100;
 
+            locations.TryGetValue(locationId, out MapLocation selectedLocation);
+
+            if (selectedLocation == null)
+            {
+                Debug.LogError($"맵 위치 <color={Colors.Green}>{locationId}</color> 가 locations 에 없음.");
+                return;
+            }
+
+            Debug.Log($"{Utils.FloorText(floor)} <color={Colors.Yellow}>{floorIndex}</color> 번째 위치 <color={Colors.Red}>{selectedLocation.eventType}</color> 이벤트 클릭. lastLocationId: {lastLocationId}");
+
+            // 현재 층 위치가 아닌 경우 리턴
             if (floor != this.floor)
-            {
                 return;
-            }
 
-            locations.TryGetValue(locationId, out MapLocation loc);
-
-            if (loc == null)
-            {
-                Debug.LogError($"Location not found: {locationId}");
-                return;
-            }
-
-            // Debug.Log($"Click Location: {locationId}, lastLocationId: {lastLocationId}, floor: {floor}, floorIndex: {floorIndex}");
-
+            // 마지막 위치와 연결된 위치가 아닌 경우 리턴
             if (locations.TryGetValue(lastLocationId, out MapLocation currentLoc))
             {
                 if (!currentLoc.adjacency.Contains(locationId))
                 {
-                    Debug.LogError($"Not adjacent location: {locationId}");
+                    Debug.LogError($"맵 위치 <color={Colors.Green}>{locationId}</color> 는 마지막 위치 <color={Colors.Green}>{lastLocationId}</color> 와 연결되지 않음.");
                     return;
                 }
             }
 
+            // 맵 뷰어에서 선택된 위치 표시
             viewer.SelectFloorIndex(floor, floorIndex);
+
+            // 현재 액트의 이벤트 중 엘리트 배틀 이벤트 얻기
+            ActData actData = ActData.GetActData(actId);
+
+            if (actData == null)
+            {
+                Debug.LogError($"{actId} 액트 데이터 없음");
+                return;
+            }
+
+            int levelGroupId = 0;
+
+            // 이벤트 씬으로 이동 (상점도 이벤트 씬에 만들자)
+            if (selectedLocation.eventType == EventType.RandomEvent || selectedLocation.eventType == EventType.Store)
+            {
+                Debug.Log("이벤트 씬으로 이동");
+
+                // 이 값들은 스테이지 클리어 성공했을때 저장해야 겠는걸
+                AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
+
+                if (areaData == null)
+                    areaData = AreaData.GetAreaDatas().First();
+
+                levelGroupId = areaData.levelGroupId;
+            }
+
+            if (selectedLocation.eventType == EventType.BossBattle)
+            {
+                Debug.Log("보스 배틀");
+
+                AreaData areaData = AreaData.FindBossBattleAreaData(actData.areaIds);
+
+                levelGroupId = areaData.levelGroupId;
+            }
+
+            // 엘리트 배틀 이벤트인 경우
+            if (selectedLocation.eventType == EventType.EliteBattle)
+            {
+                Debug.Log("엘리트 배틀");
+
+                EventsData eventData = EventsData.FindEliteBattleEventsData(actData.eventIds);
+
+                if (eventData == null)
+                {
+                    Debug.LogError($"{actId} 액트 {string.Join(", ", actData.eventIds)} 이벤트 중 엘리트 배틀 이벤트 데이터 없음");
+                    return;
+                }
+
+                levelGroupId = eventData.eliteBattleLevelGroupID;
+            }
+
+            if (selectedLocation.eventType == EventType.None)
+            {
+                // 이 값들은 스테이지 클리어 성공했을때 저장해야 겠는걸
+                AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
+
+                if (areaData == null)
+                    areaData = AreaData.GetAreaDatas().First();
+
+                levelGroupId = areaData.levelGroupId;
+            }
+
+            if (levelGroupId == 0)
+            {
+                Debug.LogError($"레벨 그룹 Id 없음");
+                return;
+            }
+
+            List<LevelData> levelDatas = LevelGroupData.GetLevelDatas(levelGroupId);
+
+            if (levelDatas == null)
+            {
+                Debug.LogError($"{selectedLocation.eventType} 타입 레벨 그룹 Id {levelGroupId} 에 해당하는 levelDatas 없음");
+                return;
+            }
+
+            LevelData randomLevelData = GetRandomLevelData(levelDatas);
+
+            if (randomLevelData == null)
+            {
+                Debug.LogError($"랜덤 레벨 데이터 뽑기 실패");
+                return;
+            }
+
+            levelId = randomLevelData.levelId;
+            // 배틀 클리어 후 다음 층으로 이동할 수 있도록 선택된 층 인덱스 저장
             selectedDepthIndies[floor] = floorIndex;
 
-            AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
-
-            if (areaData == null)
-                areaData = AreaData.GetAreaDatas().First();
-
-            LevelGroupData levelGroupData = LevelGroupData.GetLevelGroupData(areaData.levelGroupId);
-            LevelData randomLevelData = GetRandomLevelData(levelGroupData.levelDatas);
-
-            PlayerPrefsUtility.SetInt("ActId", actId);
-            PlayerPrefsUtility.SetInt("AreaId", areaData.areaID);
-            PlayerPrefsUtility.SetInt("Floor", floor);
-            PlayerPrefsUtility.SetInt("LevelId", randomLevelData.levelId);
-            PlayerPrefsUtility.SetInt("LastLocationId", locationId);
-
-            // Save depthIndies
-            string selectedDepthIndiesJson = JsonConvert.SerializeObject(selectedDepthIndies, Formatting.None);
-            PlayerPrefsUtility.SetString("SelectedDepthIndies", selectedDepthIndiesJson);
-
-            // for logging
+            // 로그 용
             List<(int, string, int)> cardDataList = new();
 
             for (int i = 0; i < randomLevelData.cardIds.Count(); ++i)
@@ -187,13 +242,22 @@ namespace ERang
         public void GenerateMap()
         {
             ActData actData = actId == 0 ? ActData.GetActDatas().First() : ActData.GetActData(actId);
+
+            if (actData == null)
+            {
+                Debug.LogError($"GenerateMap actId {actId} 데이터 없음");
+                return;
+            }
+
+            actId = actData.actID;
+
             AreaData areaData = areaId == 0 ? AreaData.areaDatas.First() : AreaData.GetAreaDataFromFloor(floor);
 
             int floorStart = 1;
             int floorEnd = Random.Range(actData.mapSizeMin, actData.mapSizeMax);
             int floorCount = floorEnd - floorEnd + 1;
 
-            Debug.Log($"GenerateMap areaID: {areaData.areaID}, floorStart: {floorStart}, floorEnd: {floorEnd} floorCount: {floorCount}, eventIds: {string.Join(", ", actData.eventIds)}");
+            Debug.Log($"맵 생성 areaID: {areaData.areaID}, floorStart: {floorStart}, floorEnd: {floorEnd} floorCount: {floorCount}, eventIds: {string.Join(", ", actData.eventIds)}");
 
             Dictionary<int, List<EventType>> depthEventsMap = new();
 
@@ -367,7 +431,13 @@ namespace ERang
                 }
             }
 
-            SaveMapData();
+            // 생성된 맵 너비 저장
+            string depthWidthJson = JsonConvert.SerializeObject(depthWidths, Formatting.None);
+            PlayerPrefsUtility.SetString("DepthWidths", depthWidthJson);
+
+            // 생성된 맵 위치 저장
+            string locationsJson = JsonConvert.SerializeObject(locations);
+            PlayerPrefsUtility.SetString("Locations", locationsJson);
         }
 
         public MapLocation GetLocation(int locationId)
@@ -385,28 +455,27 @@ namespace ERang
 
         private void SaveMapData()
         {
-            AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
-
             PlayerPrefsUtility.SetInt("ActId", actId);
-            PlayerPrefsUtility.SetInt("AreaId", areaData.areaID);
             PlayerPrefsUtility.SetInt("Floor", floor);
-            PlayerPrefsUtility.SetInt("MaxFloor", maxFloor);
+            PlayerPrefsUtility.SetInt("LevelId", levelId);
+            PlayerPrefsUtility.SetInt("LastLocationId", selectLoactionId);
 
-            // Save depthWidth
-            string depthWidthJson = JsonConvert.SerializeObject(depthWidths, Formatting.None);
-            PlayerPrefsUtility.SetString("DepthWidths", depthWidthJson);
-
-            // Save locations
-            string locationsJson = JsonConvert.SerializeObject(locations);
-            PlayerPrefsUtility.SetString("Locations", locationsJson);
+            // 선택한 위치
+            string selectedDepthIndiesJson = JsonConvert.SerializeObject(selectedDepthIndies, Formatting.None);
+            PlayerPrefsUtility.SetString("SelectedDepthIndies", selectedDepthIndiesJson);
 
             PlayerPrefsUtility.Save();
 
-            Debug.Log($"Saved floor Count: {depthWidths.Count}, locations: {locations.Count}");
+            Debug.Log($"맵 저장 {actId} 액트 {floor} 층, lastLocationId: {selectLoactionId}, depthWidths: {depthWidths.Count}, locations: {locations.Count}");
         }
 
         private bool LoadMapData()
         {
+            actId = PlayerPrefsUtility.GetInt("ActId", 0);
+            floor = PlayerPrefsUtility.GetInt("Floor", 1);
+            levelId = PlayerPrefsUtility.GetInt("LevelId", 0);
+            lastLocationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
+
             // Load depthWidth
             string depthWidthsJson = PlayerPrefsUtility.GetString("DepthWidths", null);
 
@@ -423,12 +492,12 @@ namespace ERang
 
             locations = JsonConvert.DeserializeObject<Dictionary<int, MapLocation>>(locationsJson);
 
-            Debug.Log($"Loaded depthWidths: {depthWidths.Count}, locations: {locations.Count}");
-
             string seletedDepthIndiesJson = PlayerPrefsUtility.GetString("SelectedDepthIndies", null);
 
             if (!string.IsNullOrEmpty(seletedDepthIndiesJson))
                 selectedDepthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(seletedDepthIndiesJson);
+
+            Debug.Log($"맵 로드 actId: {actId}, floor: {floor}, lastLoactionId: {lastLocationId}, depthWidths: {depthWidths.Count}, locations: {locations.Count}");
 
             return true;
         }

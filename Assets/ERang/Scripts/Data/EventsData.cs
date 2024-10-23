@@ -106,6 +106,11 @@ namespace ERang.Data
             return eventsDataDict.TryGetValue(eventsId, out EventsData eventsData) ? eventsData : null;
         }
 
+        public static EventsData FindEliteBattleEventsData(List<int> eventsIds)
+        {
+            return eventsDatas.Find(x => x.eventType == EventType.EliteBattle && eventsIds.Contains(x.eventsID));
+        }
+
         private void Initialize(EventsDataEntity entity)
         {
             eventsID = entity.EventsID;
