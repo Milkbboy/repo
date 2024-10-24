@@ -23,16 +23,14 @@ namespace ERang
         public Master Master { get { return master; } }
         // public Enemy Enemy { get { return enemy; } }
 
-        public int masterId = 1001;
-        public int floor = 1;
-        public int levelId = 1;
+        public int masterId;
+        public int floor;
+        public int levelId;
 
         private Master master;
-        // private Enemy enemy;
-
         private DeckSystem deckSystem;
-
         private bool isTruenEndProcessing = false;
+        private MapLocation selectLocation;
 
         // for test
         private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
@@ -45,6 +43,11 @@ namespace ERang
             masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
             floor = PlayerPrefsUtility.GetInt("Floor", 1);
             levelId = PlayerPrefsUtility.GetInt("LevelId", 1);
+
+            string selectLocationJson = PlayerPrefsUtility.GetString("SelectLocation", null);
+
+            if (selectLocationJson != null)
+                selectLocation = JsonConvert.DeserializeObject<MapLocation>(selectLocationJson);
 
             // 시스템 생성
             deckSystem = GetComponent<DeckSystem>();
@@ -80,7 +83,7 @@ namespace ERang
             Debug.Log($"----------------- BATTLE START -----------------");
             BoardSystem.Instance.CreateMonsterBoardSlots(levelData.cardIds);
 
-            floorText.text = $"{floor} 층 ({levelId})";
+            floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation.eventType}";
 
             StartCoroutine(TurnStart());
         }
@@ -174,23 +177,7 @@ namespace ERang
             // 마지막에 선택한 층 인덱스 저장 (지면 초기화)
             PlayerPrefsUtility.SetInt("LastLocationId", isWin ? locationId : 0);
 
-            // 배틀 클리어 후 다음 층으로 이동할 수 있도록 선택된 층 인덱스 저장
-
-            if (isWin)
-            {
-                string seletedDepthIndiesJson = PlayerPrefsUtility.GetString("SelectedDepthIndies", null);
-
-                if (!string.IsNullOrEmpty(seletedDepthIndiesJson))
-                {
-                    Dictionary<int, int> selectedDepthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(seletedDepthIndiesJson);
-
-                    selectedDepthIndies[floor] = locationId % 100;
-                    string selectedDepthIndiesJson = JsonConvert.SerializeObject(selectedDepthIndies, Formatting.None);
-
-                    PlayerPrefsUtility.SetString("SelectedDepthIndies", selectedDepthIndiesJson);
-                }
-            }
-            else
+            if (!isWin)
             {
                 PlayerPrefsUtility.SetInt("MasterId", 0);
                 PlayerPrefsUtility.SetInt("AreaId", 0);

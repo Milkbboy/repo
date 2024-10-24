@@ -6,6 +6,10 @@ using UnityEngine;
 
 namespace ERang.Data
 {
+    /// <summary>
+    /// 레벨 데이터
+    /// - 사용하기 편하게 하기 위해 Entity를 이용하여 데이터를 가공
+    /// </summary>
     [System.Serializable]
     public class LevelData
     {
@@ -92,6 +96,33 @@ namespace ERang.Data
         public static List<LevelData> GetLevelDatas(int levelGroupId)
         {
             return levelGroupDictionary.TryGetValue(levelGroupId, out LevelGroupData levelGroupData) ? levelGroupData.levelDatas : null;
+        }
+
+        public static LevelData GetRandomLevelData(int levelGroupId)
+        {
+            List<LevelData> levelDatas = GetLevelDatas(levelGroupId);
+
+            if (levelDatas == null || levelDatas.Count == 0)
+            {
+                Debug.LogError($"LevelData 를 찾지 못해 <color={Colors.Red}>null</color> 반환");
+                return null;
+            }
+
+            float totalRatio = levelDatas.Sum(x => x.spawnRatio);
+            float randomValue = Random.Range(0, totalRatio);
+            float cumulativeRatio = 0;
+
+            foreach (var levelData in levelDatas)
+            {
+                cumulativeRatio += levelData.spawnRatio;
+
+                if (randomValue < cumulativeRatio)
+                    return levelData;
+            }
+
+            Debug.LogWarning($"LevelData 뽑기 실패로 <color={Colors.Red}>안전장치 발동</color>. 첫번째 LevelData 반환");
+
+            return levelDatas[0];
         }
 
         public void Initialize(LevelGroupDataEntity entity)

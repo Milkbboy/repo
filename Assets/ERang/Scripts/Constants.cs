@@ -205,6 +205,21 @@ namespace ERang
     }
 
     /// <summary>
+    /// 맵 RandomEvent 구분
+    /// </summary>
+    public enum RandomEventType
+    {
+        None = 0,
+        RandomBattle,
+        RandomBattleFix,
+        Roulette,
+        Matching,
+        DecreaseHp,
+        GetRelics,
+        GetCards,
+    }
+
+    /// <summary>
     /// 대상 선택 공격 타입
     /// </summary>
     public static class Constants

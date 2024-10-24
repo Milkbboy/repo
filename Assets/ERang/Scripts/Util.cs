@@ -131,6 +131,32 @@ namespace ERang
             return $"{string.Join(", ", changes.Select(change => $"{change.slot}번 슬롯 {GetCardType(change.cardType)} 카드 {statText} {(change.isAffect ? $"<color=#00ff00>{change.before} => {change.after}</color>" : "")} 효과 {(change.isAffect ? "적용" : "미적용")}. 변화량: {change.changeValue}"))}";
         }
 
+        public static string LevelDataText(LevelData levelData)
+        {
+            List<(int, string, int)> cardDataList = new();
+
+            for (int i = 0; i < levelData.cardIds.Count(); ++i)
+            {
+                int pos = i + 1;
+                int cardId = levelData.cardIds[i];
+
+                if (cardId == 0)
+                {
+                    cardDataList.Add((pos, "빈자리", 0));
+                    continue;
+                }
+
+                CardData monsterCardData = MonsterCardData.GetCardData(cardId);
+
+                if (monsterCardData == null)
+                    cardDataList.Add((pos, $"카드 데이터 없음: {cardId}", cardId));
+                else
+                    cardDataList.Add((pos, monsterCardData.nameDesc, monsterCardData.card_id));
+            }
+
+            return $"Level ID: {levelData.levelId}. 등장 카드들 {string.Join(", ", cardDataList.Select(x => $"{x.Item1}: {x.Item2}({x.Item3})").ToList())}";
+        }
+
         private static string GetCardType(CardType cardType)
         {
             return cardType switch
