@@ -23,12 +23,11 @@ namespace ERang
             locations.Add(this);
             highlightCurrent.enabled = false;
             highlightNext.enabled = false;
-            // icon.enabled = false;
         }
 
         public void OnMouseDown()
         {
-            Map.Instance.ClickLocation(locationId);
+            MapLogic.Instance.ClickLocation(locationId);
         }
 
         private void OnDestroy()

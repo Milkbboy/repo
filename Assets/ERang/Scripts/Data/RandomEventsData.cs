@@ -31,7 +31,7 @@ namespace ERang.Data
         /// <summary>
         /// 랜덤 이벤트 중 전투 발생 시 입력 (입력이 없을 경우 해당 Area의 배치 데이터를 그대로 사용)
         /// </summary>
-        public int levelGroupID;
+        public int levelGroupId;
         /// <summary>
         /// 랜덤 이벤트 타입
         /// </summary>
@@ -138,7 +138,7 @@ namespace ERang.Data
             prefab = entity.Prefab;
             ratioValue = entity.RatioValue;
             reductionValue = entity.ReductionValue;
-            levelGroupID = entity.LevelGroupID;
+            levelGroupId = entity.LevelGroupID;
             eventType = ConvertRandomEventType(entity.RandomEventsID);
         }
 

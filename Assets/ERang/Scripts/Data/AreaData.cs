@@ -82,6 +82,13 @@ namespace ERang.Data
             return areaDatas.Find(areaData => areaIds.Contains(areaData.areaID) && areaData.isEnd);
         }
 
+        public static AreaData FindBossBattleAreaData(int actId)
+        {
+            ActData actData = ActData.GetActData(actId);
+
+            return FindBossBattleAreaData(actData.areaIds);
+        }
+
         private void Initialize(AreaDataEntity entity, int prevFloorMax)
         {
             areaID = entity.AreaID;

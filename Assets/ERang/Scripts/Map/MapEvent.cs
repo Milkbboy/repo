@@ -47,7 +47,7 @@ namespace ERang
         public void ChangeScene()
         {
             NextScene nextScene = GetComponent<NextScene>();
-            nextScene.Play("Act");
+            nextScene.Play("Map");
         }
     }
 }

@@ -98,6 +98,19 @@ namespace ERang.Data
             return levelGroupDictionary.TryGetValue(levelGroupId, out LevelGroupData levelGroupData) ? levelGroupData.levelDatas : null;
         }
 
+        public static int GetRandomLevelId(int levelGroupId)
+        {
+            LevelData levelData = GetRandomLevelData(levelGroupId);
+
+            if (levelData == null)
+            {
+                Debug.LogError($"LevelData 를 찾지 못해 <color={Colors.Red}>0</color> 반환");
+                return 0;
+            }
+
+            return levelData.levelId;
+        }
+
         public static LevelData GetRandomLevelData(int levelGroupId)
         {
             List<LevelData> levelDatas = GetLevelDatas(levelGroupId);
@@ -106,6 +119,12 @@ namespace ERang.Data
             {
                 Debug.LogError($"LevelData 를 찾지 못해 <color={Colors.Red}>null</color> 반환");
                 return null;
+            }
+
+            if (levelDatas.Count == 1)
+            {
+                Debug.Log($"LevelData 1개인 경우 {levelDatas[0].levelId}. levelDatas.Count: {levelDatas.Count}");
+                return levelDatas[0];
             }
 
             float totalRatio = levelDatas.Sum(x => x.spawnRatio);
@@ -117,7 +136,10 @@ namespace ERang.Data
                 cumulativeRatio += levelData.spawnRatio;
 
                 if (randomValue < cumulativeRatio)
+                {
+                    Debug.Log($"LevelData 뽑기 성공: {levelData.levelId}. totalRatio: {totalRatio}, randomValue: {randomValue}, cumulativeRatio: {cumulativeRatio}");
                     return levelData;
+                }
             }
 
             Debug.LogWarning($"LevelData 뽑기 실패로 <color={Colors.Red}>안전장치 발동</color>. 첫번째 LevelData 반환");

@@ -42,7 +42,7 @@ namespace ERang
 
             masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
             floor = PlayerPrefsUtility.GetInt("Floor", 1);
-            levelId = PlayerPrefsUtility.GetInt("LevelId", 1);
+            levelId = PlayerPrefsUtility.GetInt("LevelId", 100100101);
 
             string selectLocationJson = PlayerPrefsUtility.GetString("SelectLocation", null);
 
@@ -190,7 +190,7 @@ namespace ERang
 
             if (nextSceneObject.TryGetComponent<NextScene>(out NextScene nextScene))
             {
-                nextScene.Play(isWin ? "Act" : "Lobby");
+                nextScene.Play(isWin ? "Map" : "Lobby");
             }
         }
 

@@ -26,7 +26,7 @@ namespace ERang
         public float scrollSpeedAuto = 4f;
         public float autoScrollOffset = -3f;
 
-        private Map map;
+        private MapSystem map;
 
         private float camWidth;
         private float maxScroll = 100f;
@@ -45,7 +45,7 @@ namespace ERang
 
         void Awake()
         {
-            map = GetComponent<Map>();
+            map = GetComponent<MapSystem>();
         }
 
         void Start()
@@ -131,7 +131,7 @@ namespace ERang
 
                 foreach (int adj in loc.adjacency)
                 {
-                    MapLocation adjLoc = map.GetLocation(adj);
+                    MapLocation adjLoc = MapLogic.Instance.GetLocation(adj);
                     Vector3 apos = GetPosition(map, adjLoc);
                     GameObject lineObject = Instantiate(mapPathPrefab, scrollTrans);
                     MapPath line = lineObject.GetComponent<MapPath>();
@@ -195,7 +195,7 @@ namespace ERang
             moveSpeed = speed;
         }
 
-        public Vector3 GetPosition(Map map, MapLocation location)
+        public Vector3 GetPosition(MapSystem map, MapLocation location)
         {
             Vector3 edge = transform.position - new Vector3(rowOffset + rowSpacing, 0f, 0f);
 

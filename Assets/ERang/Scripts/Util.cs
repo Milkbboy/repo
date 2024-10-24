@@ -115,6 +115,14 @@ namespace ERang
             return $"<color={Colors.Green}>{floor}</color>층";
         }
 
+        public static string MapLocationText(int locationId)
+        {
+            int floor = locationId / 100;
+            int floorIndex = locationId % 100;
+
+            return $"<color={Colors.Green}>{floor}</color>층 <color={Colors.Yellow}>{floorIndex}</color> 번째";
+        }
+
         public static string StatChangesText(AbilityType abilityType, List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> changes)
         {
             string statText = abilityType switch

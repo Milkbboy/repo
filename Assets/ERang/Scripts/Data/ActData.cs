@@ -69,6 +69,13 @@ namespace ERang.Data
             return actDataDict.TryGetValue(actID, out ActData actData) ? actData : null;
         }
 
+        public static int GetFirstActDataId()
+        {
+            ActData actData = actDatas.FirstOrDefault();
+
+            return actData == null ? 0 : actData.actID;
+        }
+
         private void Initialize(ActDataEntity entity)
         {
             actID = entity.ActID;
