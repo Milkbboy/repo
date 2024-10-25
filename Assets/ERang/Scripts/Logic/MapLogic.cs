@@ -21,6 +21,9 @@ namespace ERang
         private MapSystem mapSystem;
         private MapViewer mapViewer;
 
+        private AudioSource audioSource;
+        private AudioClip backSound;
+
         private Dictionary<int, int> selectedDepthIndies = new();
         /// <summary>
         /// 뽑힌 랜덤 이벤트 리스트. 뽑힐 확률 조정을 위해 저장
@@ -53,6 +56,25 @@ namespace ERang
 
         void Start()
         {
+            // AudioSource 컴포넌트를 추가하고 숨김니다.
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.loop = true;
+
+            backSound = Resources.Load<AudioClip>("Audio/8-bit-arcade-music");
+
+            // 오디오를 재생합니다.
+            if (backSound != null)
+            {
+                audioSource.volume = 0.2f;
+                audioSource.clip = backSound;
+                audioSource.Play();
+            }
+            else
+            {
+                Debug.LogWarning("backSound 파일을 찾을 수 없습니다.");
+            }
+
             if (!mapSystem.LoadMapData())
             {
                 if (actId == 0)
