@@ -18,6 +18,9 @@ namespace ERang
 
         private static List<MapLocationDot> locations = new();
 
+        private AudioSource audioSource;
+        private AudioClip clickSound;
+
         void Awake()
         {
             locations.Add(this);
@@ -25,8 +28,23 @@ namespace ERang
             highlightNext.enabled = false;
         }
 
+        void Start()
+        {
+            // AudioSource 컴포넌트를 추가하고 숨김니다.
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+
+            // 오디오 클립을 로드합니다.
+            clickSound = Resources.Load<AudioClip>("Audio/MapClick");
+        }
+
         public void OnMouseDown()
         {
+            if (clickSound != null)
+                audioSource.PlayOneShot(clickSound);
+            else
+                Debug.LogWarning("MapClick.mp3 파일을 찾을 수 없습니다.");
+
             MapLogic.Instance.ClickLocation(locationId);
         }
 
