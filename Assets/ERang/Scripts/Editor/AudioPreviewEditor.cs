@@ -41,11 +41,16 @@ namespace ERang
             // GUI.enabled를 true로 설정하여 버튼을 활성화
             GUI.enabled = true;
 
+            // 수평 레이아웃 시작
+            GUILayout.BeginHorizontal();
+
             if (GUILayout.Button("Play"))
                 PlayAudioClip(audioClip);
 
             if (GUILayout.Button("Stop"))
                 StopAudioClip();
+
+            GUILayout.EndHorizontal();
         }
 
         private void PlayAudioClip(AudioClip clip)

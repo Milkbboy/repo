@@ -88,7 +88,10 @@ namespace ERang
 
             // 층 확인
             if (floor != this.floor)
+            {
+                Debug.LogError($"층이 다름. 현재 층: {this.floor}, 클릭 층: {floor}");
                 return;
+            }
 
             // 층 연결 확인
             MapLocation lastLocation = mapSystem.GetLocation(lastLocationId);
@@ -108,6 +111,8 @@ namespace ERang
                 AreaData areaData = AreaData.GetAreaDataFromFloor(floor);
 
                 levelId = LevelGroupData.GetRandomLevelId(areaData.levelGroupId);
+
+                Debug.Log($"{Utils.FloorText(floor)} 일반 배틀 레벨 ID: {levelId}");
             }
 
             // 엘리트 배틀

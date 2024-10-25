@@ -243,12 +243,9 @@ namespace ERang
             {
                 Card card = handCards[i];
 
-                deckUI.SpawnHandCard(card);
-                deckUI.DrawHandCards();
+                yield return deckUI.SpawnHandCard(card);
 
                 UpdateDeckCardCountUI();
-
-                yield return new WaitForSeconds(.2f);
             }
         }
 

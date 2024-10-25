@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -18,6 +19,9 @@ namespace ERang
         private float cardWidth = 0f;
         private float cardSpacing = 1f;
 
+        private AudioSource audioSource;
+        private AudioClip flipSound;
+
         // 핸드 카드 리스트
         private readonly List<HandCard> handCards = new();
 
@@ -27,11 +31,21 @@ namespace ERang
             cardWidth = cardPrefab.GetComponent<BoxCollider>().size.x;
         }
 
+        void Start()
+        {
+            // AudioSource 컴포넌트를 추가하고 숨김니다.
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+
+            // 오디오 클립을 로드합니다.
+            flipSound = Resources.Load<AudioClip>("Audio/flipcard");
+        }
+
         /// <summary>
         /// 카드 생성
         /// </summary>
         /// <param name="card"></param>
-        public void SpawnHandCard(Card card)
+        public IEnumerator SpawnHandCard(Card card)
         {
             GameObject cardObject = Instantiate(cardPrefab, handDeckObject.transform);
 
@@ -39,6 +53,21 @@ namespace ERang
             handCard.SetCard(card);
 
             handCards.Add(handCard);
+
+            DrawHandCards();
+
+            // 오디오를 재생합니다.
+            if (flipSound != null)
+            {
+                audioSource.pitch = 3f; // 재생 속도를 1.5배로 설정
+                audioSource.PlayOneShot(flipSound);
+                yield return new WaitForSeconds(flipSound.length / audioSource.pitch);
+            }
+            else
+            {
+                Debug.LogWarning("flipcard.mp3 파일을 찾을 수 없습니다.");
+                yield return null;
+            }
         }
 
         /// <summary>
