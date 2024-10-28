@@ -13,7 +13,7 @@ namespace ERang
         public List<(int, string)> directions = new();
         public List<int> adjacency = new();
 
-        public int ID { get { return GetID(depth, index); } }
+        public int ID => GetID(depth, index);
 
         public MapLocation(int seed, int depth, int index, EventType eventType = EventType.None)
         {

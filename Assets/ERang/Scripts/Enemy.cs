@@ -6,12 +6,13 @@ namespace ERang
 {
     public class Enemy
     {
+        public static Enemy Instance { get; private set; }
+
         public int enemyId;
         public int hp;
         public int maxHp;
         public int atk;
         public int def;
-        public static Enemy Instance { get; private set; }
         public int Hp => hp;
         public int MaxHp => maxHp;
         public int Atk => atk;

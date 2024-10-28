@@ -4,7 +4,7 @@ namespace ERang
 {
     public class Card
     {
-        public int AiGroupIndex { get { return aiGroupIndex; } set { aiGroupIndex = value; } }
+        public int AiGroupIndex { get => aiGroupIndex; set => aiGroupIndex = value; }
         public string Uid => uid;
         public int Id => id;
         public CardType Type => type;

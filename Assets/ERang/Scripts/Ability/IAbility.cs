@@ -7,7 +7,6 @@ namespace ERang
 {
     public interface IAbility
     {
-        public AbilityType AbilityType { get; }
         public List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> Changes { get; set; }
 
         IEnumerator Apply(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots);
