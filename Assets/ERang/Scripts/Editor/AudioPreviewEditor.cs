@@ -9,6 +9,8 @@ namespace ERang
     public class AudioPreviewEditor : Editor
     {
         private AudioSource audioSource;
+        private float playbackPosition = 0f;
+        private bool isDraggingSlider = false;
 
         private void OnEnable()
         {
@@ -51,6 +53,24 @@ namespace ERang
                 StopAudioClip();
 
             GUILayout.EndHorizontal();
+
+            if (audioSource.clip != null)
+            {
+                EditorGUI.BeginChangeCheck();
+                playbackPosition = EditorGUILayout.Slider("Playback Pos", playbackPosition, 0f, audioSource.clip.length);
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    isDraggingSlider = true;
+                    audioSource.time = playbackPosition;
+                }
+
+                if (audioSource.isPlaying && !isDraggingSlider)
+                {
+                    playbackPosition = audioSource.time;
+                    Repaint(); // 슬라이더를 실시간으로 업데이트
+                }
+            }
         }
 
         private void PlayAudioClip(AudioClip clip)

@@ -5,10 +5,10 @@ namespace ERang
     public class Card
     {
         public int AiGroupIndex { get { return aiGroupIndex; } set { aiGroupIndex = value; } }
-        public string Uid { get { return uid; } }
-        public int Id { get { return id; } }
-        public CardType Type { get { return type; } }
-        public int AiGroupId { get { return aiGroupId; } }
+        public string Uid => uid;
+        public int Id => id;
+        public CardType Type => type;
+        public int AiGroupId => aiGroupId;
 
         public int costMana; // 소환에 필요한 마나
         public int costGold; // 소환에 필요한 골드

@@ -6,12 +6,12 @@ namespace ERang
     [System.Serializable]
     public class BoardSlot : MonoBehaviour
     {
-        public bool IsOccupied { get { return isOccupied; } }
-        public bool IsOverlapCard { get { return isOverlapCard; } }
-        public int Index { get { return index; } }
-        public int Slot { get { return slot; } }
-        public CardType CardType { get { return cardType; } }
-        public Card Card { get { return card; } }
+        public bool IsOccupied => isOccupied;
+        public bool IsOverlapCard => isOverlapCard;
+        public int Index => index;
+        public int Slot => slot;
+        public CardType CardType => cardType;
+        public Card Card => card;
 
         [SerializeField] private int slot; // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 값
         [SerializeField] private int index; // 0, 1, 2, 3 값 3 은 마스터 카드

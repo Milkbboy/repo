@@ -7,15 +7,15 @@ namespace ERang
 {
     public class DeckSystem : MonoBehaviour
     {
-        public int DeckCardCount { get { return deckCards.Count; } }
-        public int HandCardCount { get { return handCards.Count; } }
-        public int ExtinctionCardCount { get { return extinctionCards.Count; } }
-        public int GraveCardCount { get { return graveCards.Count; } }
+        public int DeckCardCount => deckCards.Count;
+        public int HandCardCount => handCards.Count;
+        public int ExtinctionCardCount => extinctionCards.Count;
+        public int GraveCardCount => graveCards.Count;
 
-        public List<Card> DeckCards { get { return deckCards; } }
-        public List<Card> HandCards { get { return handCards; } }
-        public List<Card> GraveCards { get { return graveCards; } }
-        public List<Card> ExtinctionCards { get { return extinctionCards; } }
+        public List<Card> DeckCards => deckCards;
+        public List<Card> HandCards => handCards;
+        public List<Card> GraveCards => graveCards;
+        public List<Card> ExtinctionCards => extinctionCards;
 
         private readonly int maxHandCardCount = 5;
         private readonly System.Random random = new();

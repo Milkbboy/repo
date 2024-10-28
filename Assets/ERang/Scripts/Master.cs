@@ -8,16 +8,16 @@ namespace ERang
     {
         public static Master Instance { get; private set; }
 
-        public int MasterId { get { return masterId; } }
+        public int MasterId => masterId;
         public int Hp { get { return hp; } set { hp = value; } }
         public int MaxHp { get { return maxHp; } set { maxHp = value; } }
-        public int Mana { get { return mana; } }
+        public int Mana => mana;
         public int MaxMana { get { return maxMana; } set { maxMana = value; } }
         public int RechargeMana { get { return rechargeMana; } set { rechargeMana = value; } }
         public int Atk { get { return atk; } set { atk = value; } }
         public int Def { get { return def; } set { def = value; } }
         public int Gold { get { return gold; } set { gold = value; } }
-        public List<int> StartCardIds { get { return startCardIds; } }
+        public List<int> StartCardIds => startCardIds;
 
         private readonly int masterId;
         private readonly List<int> startCardIds = new();

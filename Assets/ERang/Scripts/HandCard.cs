@@ -4,7 +4,7 @@ namespace ERang
 {
     public class HandCard : MonoBehaviour
     {
-        public string CardUid { get { return cardUid; } }
+        public string CardUid => cardUid;
 
         [SerializeField] private int cardId;
         [SerializeField] private CardType cardType;

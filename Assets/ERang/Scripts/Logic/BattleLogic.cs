@@ -20,8 +20,7 @@ namespace ERang
         public TextMeshProUGUI floorText;
         public TextMeshProUGUI resultText;
 
-        public Master Master { get { return master; } }
-        // public Enemy Enemy { get { return enemy; } }
+        public Master Master => master;
 
         public int masterId;
         public int floor;

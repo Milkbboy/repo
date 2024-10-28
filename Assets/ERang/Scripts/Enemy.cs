@@ -12,10 +12,10 @@ namespace ERang
         public int atk;
         public int def;
         public static Enemy Instance { get; private set; }
-        public int Hp { get { return hp; } }
-        public int MaxHp { get { return maxHp; } }
-        public int Atk { get { return atk; } }
-        public int Def { get { return def; } }
+        public int Hp => hp;
+        public int MaxHp => maxHp;
+        public int Atk => atk;
+        public int Def => def;
 
         // 카드 슬롯, 카드
         public List<(int, Card)> monsterCards = new();
