@@ -17,6 +17,7 @@ namespace ERang
         public int Atk { get => atk; set => atk = value; }
         public int Def { get => def; set => def = value; }
         public int Gold { get => gold; set => gold = value; }
+        public int CreatureSlots => creatureSlots;
         public List<int> StartCardIds => startCardIds;
 
         private readonly int masterId;
@@ -30,6 +31,7 @@ namespace ERang
         private int atk;
         private int def;
         private int gold;
+        private int creatureSlots;
 
         public Master(MasterData masterData)
         {
@@ -43,6 +45,7 @@ namespace ERang
             atk = masterData.atk;
             def = masterData.def;
             gold = 1000; // 임시
+            creatureSlots = masterData.creatureSlots;
             startCardIds = masterData.startCardIds;
         }
 

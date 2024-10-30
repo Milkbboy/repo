@@ -8,7 +8,8 @@ namespace ERang
     public class BoardSystem : MonoBehaviour
     {
         public static BoardSystem Instance { get; private set; }
-        public readonly CardType[] boardSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None, CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.EnemyMaster };
+        public readonly CardType[] leftSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None };
+        public readonly CardType[] rightSlotCardTypes = { CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.EnemyMaster };
         public readonly CardType[] buildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
 
         public BoardSlot boardSlot;
@@ -36,45 +37,93 @@ namespace ERang
         /// <param name="enemy"></param>
         public void CreateBoardSlots(Master master)
         {
-            float boardSpacing = 0.2f;
-            float boardWidth = boardSlot.GetComponent<BoxCollider>().size.x * boardSlot.transform.localScale.x;
-            float totalWidth = (boardSlotCardTypes.Length - 1) * (boardWidth + boardSpacing);
-            float startX = -totalWidth / 2;
-
+            int totalBoardSlotCount = leftSlotCardTypes.Length + rightSlotCardTypes.Length; ;
+            int creatureSlotCount = master.CreatureSlots;
             int leftSlotStartIndex = 3;
             int rightSlotStartIndex = 6;
 
-            // 크리쳐, 몬스터 보드 슬롯 구성
-            for (int i = 0; i < boardSlotCardTypes.Length; i++)
+            // 마스터 보드 슬롯 구성
+            for (int i = 0; i < leftSlotCardTypes.Length; ++i)
+            {
+                BoardSlot slot = Instantiate(boardSlot);
+
+                CardType cardType = CardType.None;
+
+                if (i == 0)
+                {
+                    cardType = CardType.Master;
+                }
+                else
+                {
+                    if (creatureSlotCount > 0)
+                        cardType = CardType.Creature;
+
+                    creatureSlotCount--;
+                }
+
+                slot.CreateSlot(i, cardType);
+
+                if (cardType == CardType.Master)
+                    slot.SetMasterSlot(master);
+
+                if (cardType != CardType.None)
+                    slot.SetIndex(leftSlotStartIndex - i);
+
+                leftSlots.Add(slot);
+                boardSlots.Add(slot);
+            }
+
+            // 몬스터 보드 슬롯 구성
+            for (int i = 0; i < rightSlotCardTypes.Length; ++i)
+            {
+                BoardSlot slot = Instantiate(boardSlot);
+                slot.CreateSlot(i, rightSlotCardTypes[i]);
+
+                if (rightSlotCardTypes[i] != CardType.None)
+                    slot.SetIndex(i - rightSlotStartIndex);
+
+                rightSlots.Add(slot);
+                boardSlots.Add(slot);
+            }
+
+            float boardSpacing = 0.2f;
+            float boardWidth = boardSlot.GetComponent<BoxCollider>().size.x * boardSlot.transform.localScale.x;
+            float totalWidth = (totalBoardSlotCount - 1) * (boardWidth + boardSpacing);
+            float startX = -totalWidth / 2;
+
+            // 보드 슬롯 위치 설정
+            for (int i = 0; i < boardSlots.Count; i++)
             {
                 float xPosition = startX + i * (boardWidth + boardSpacing);
                 Vector3 slotPosition = new(xPosition, boardSlot.transform.position.y, boardSlot.transform.position.z);
 
-                BoardSlot slot = Instantiate(boardSlot, slotPosition, Quaternion.identity);
-                slot.CreateSlot(i, boardSlotCardTypes[i]);
+                boardSlots[i].transform.position = slotPosition;
 
-                boardSlots.Add(slot);
+                // BoardSlot slot = Instantiate(boardSlot, slotPosition, Quaternion.identity);
+                // slot.CreateSlot(i, boardSlotCardTypes[i]);
 
-                switch (boardSlotCardTypes[i])
-                {
-                    case CardType.Master:
-                        slot.SetMasterSlot(master);
-                        slot.SetIndex(leftSlotStartIndex - i);
-                        leftSlots.Add(slot);
-                        break;
-                    case CardType.Creature:
-                        slot.SetIndex(leftSlotStartIndex - i);
-                        leftSlots.Add(slot);
-                        break;
-                    case CardType.EnemyMaster:
-                        slot.SetIndex(i - rightSlotStartIndex);
-                        rightSlots.Add(slot);
-                        break;
-                    case CardType.Monster:
-                        slot.SetIndex(i - rightSlotStartIndex);
-                        rightSlots.Add(slot);
-                        break;
-                }
+                // boardSlots.Add(slot);
+
+                // switch (boardSlotCardTypes[i])
+                // {
+                //     case CardType.Master:
+                //         slot.SetMasterSlot(master);
+                //         slot.SetIndex(leftSlotStartIndex - i);
+                //         leftSlots.Add(slot);
+                //         break;
+                //     case CardType.Creature:
+                //         slot.SetIndex(leftSlotStartIndex - i);
+                //         leftSlots.Add(slot);
+                //         break;
+                //     case CardType.EnemyMaster:
+                //         slot.SetIndex(i - rightSlotStartIndex);
+                //         rightSlots.Add(slot);
+                //         break;
+                //     case CardType.Monster:
+                //         slot.SetIndex(i - rightSlotStartIndex);
+                //         rightSlots.Add(slot);
+                //         break;
+                // }
             }
 
             // 빌딩 보드 슬롯 구성

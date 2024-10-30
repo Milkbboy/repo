@@ -21,6 +21,7 @@ namespace ERang.Data
         public string startCardDeckIds; // 마왕이 처음 스테이지에 진입 할 때 갖게되는 카드의 복수 값
         public int startArtiFact_id; // 마왕이 처음 시작 시 갖고 있는 아티팩트의 id 값
         public string StartAbilityIds; // 마왕이 선천적으로 가지고 있는 특성 id 값
+        public int creatureSlots; // 마왕이 소환할 수 있는 크리쳐의 슬롯 개수
         public List<int> startCardIds = new List<int>(); // 마왕이 처음 스테이지에 진입 할 때 갖게되는 카드 id 리스트
         public List<int> startAbilityIds = new List<int>(); // 마왕이 선천적으로 가지고 있는 특성 id 리스트
 
@@ -39,6 +40,7 @@ namespace ERang.Data
             startMana = entity.StartMana;
             maxMana = entity.MaxMana;
             rechargeMana = entity.RechargeMana;
+            creatureSlots = entity.CreatureSlots;
             startArtiFact_id = entity.StartArtiFact_Id;
 
             // entity.StartCardDeck_Id 문자열을 ","로 분리하고, 결과에서 빈칸을 제거합니다.
