@@ -49,6 +49,7 @@ namespace ERang
             this.cardType = cardType;
 
             boardSlotUI.SetSlotType(cardType);
+            boardSlotUI.SetDesc(Slot, Index);
         }
 
         public void SetIndex(int index)

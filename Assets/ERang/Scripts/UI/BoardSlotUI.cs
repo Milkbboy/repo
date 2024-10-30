@@ -73,6 +73,11 @@ namespace ERang
             cardUI.SetCard(card);
         }
 
+        public void SetDesc(int slot, int index)
+        {
+            cardUI.SetDesc($"Slot: {slot}, Index: {index}");
+        }
+
         public void SetMasterCard(Master master)
         {
             cardUI.cardObject.SetActive(true);

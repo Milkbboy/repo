@@ -66,8 +66,7 @@ namespace ERang
                 if (cardType == CardType.Master)
                     slot.SetMasterSlot(master);
 
-                if (cardType != CardType.None)
-                    slot.SetIndex(leftSlotStartIndex - i);
+                slot.SetIndex(leftSlotStartIndex - i);
 
                 leftSlots.Add(slot);
                 boardSlots.Add(slot);
@@ -76,11 +75,13 @@ namespace ERang
             // 몬스터 보드 슬롯 구성
             for (int i = 0; i < rightSlotCardTypes.Length; ++i)
             {
-                BoardSlot slot = Instantiate(boardSlot);
-                slot.CreateSlot(i, rightSlotCardTypes[i]);
+                int slotNum = i + rightSlotCardTypes.Length;
+                CardType cardType = rightSlotCardTypes[i];
 
-                if (rightSlotCardTypes[i] != CardType.None)
-                    slot.SetIndex(i - rightSlotStartIndex);
+                BoardSlot slot = Instantiate(boardSlot);
+                slot.CreateSlot(slotNum, cardType);
+
+                slot.SetIndex(slotNum - rightSlotStartIndex);
 
                 rightSlots.Add(slot);
                 boardSlots.Add(slot);
@@ -98,32 +99,7 @@ namespace ERang
                 Vector3 slotPosition = new(xPosition, boardSlot.transform.position.y, boardSlot.transform.position.z);
 
                 boardSlots[i].transform.position = slotPosition;
-
-                // BoardSlot slot = Instantiate(boardSlot, slotPosition, Quaternion.identity);
-                // slot.CreateSlot(i, boardSlotCardTypes[i]);
-
-                // boardSlots.Add(slot);
-
-                // switch (boardSlotCardTypes[i])
-                // {
-                //     case CardType.Master:
-                //         slot.SetMasterSlot(master);
-                //         slot.SetIndex(leftSlotStartIndex - i);
-                //         leftSlots.Add(slot);
-                //         break;
-                //     case CardType.Creature:
-                //         slot.SetIndex(leftSlotStartIndex - i);
-                //         leftSlots.Add(slot);
-                //         break;
-                //     case CardType.EnemyMaster:
-                //         slot.SetIndex(i - rightSlotStartIndex);
-                //         rightSlots.Add(slot);
-                //         break;
-                //     case CardType.Monster:
-                //         slot.SetIndex(i - rightSlotStartIndex);
-                //         rightSlots.Add(slot);
-                //         break;
-                // }
+                // Debug.Log($"Slot: {boardSlots[i].Slot} Index: {boardSlots[i].Index} Type: {boardSlots[i].CardType}");
             }
 
             // 빌딩 보드 슬롯 구성
@@ -159,12 +135,30 @@ namespace ERang
 
         public void CreateMonsterBoardSlots(List<int> cardIds)
         {
-            for (int i = 0; i < cardIds.Count; i++)
+            // Debug.Log($"CreateMonsterBoardSlots: {cardIds.Count}, {string.Join(", ", cardIds)}");
+
+            for (int i = 0; i < rightSlots.Count; ++i)
             {
-                int cardId = cardIds[i];
+                BoardSlot slot = rightSlots[i];
+
+                // Debug.Log($"CreateMonsterBoardSlots: {i}, Slot: {slot.Slot}, Index: {slot.Index} {slot.CardType}");
+
+                if (slot.CardType == CardType.None)
+                    continue;
+
+                if (i > cardIds.Count || slot.Index < 0)
+                {
+                    // Debug.LogWarning($"카드 데이터 없음: {i}, cardIds.Count: {cardIds.Count}");
+                    continue;
+                }
+
+                int cardId = cardIds[slot.Index];
 
                 if (cardId == 0)
+                {
+                    // Debug.LogWarning($"카드 데이터 없음: {i}, cardId: {cardId}");
                     continue;
+                }
 
                 CardData cardData = MonsterCardData.GetCardData(cardId);
 
@@ -175,7 +169,6 @@ namespace ERang
                 }
 
                 Card monsterCard = new(cardData);
-                BoardSlot slot = rightSlots[i];
 
                 slot.EquipCard(monsterCard);
             }

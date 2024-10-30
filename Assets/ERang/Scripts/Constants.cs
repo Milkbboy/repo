@@ -81,6 +81,8 @@ namespace ERang
         AllFriendly, // 마왕을 포함한 아군을 대상으로 한다.
         AllFriendlyCreature, // 마왕을 제외한 아군을 대상으로 한다.
         Self, // 자기 자신을 대상으로 설정한다.
+        FirstEnemy, // 가장 앞에 있는 적을 공격한다. (Atk_Range 무시)
+        SecondEnemy, // 첫번째 적을 건너뛰고 뒤에 있는 적을 공격한다. (Atk_Range 무시) 해당 타겟이 없다면, 첫번째 적을 타겟으로 한다.
     }
 
     // 행동이 이루어지는 절차를 설정한다.

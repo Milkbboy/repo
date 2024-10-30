@@ -79,7 +79,7 @@ namespace ERang
                 return;
             }
 
-            Debug.Log($"----------------- BATTLE START -----------------");
+            Debug.Log($"----------------- BATTLE START {floor} 층 ({levelId}) -----------------");
             BoardSystem.Instance.CreateMonsterBoardSlots(levelData.cardIds);
 
             floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation.eventType}";
@@ -548,17 +548,25 @@ namespace ERang
         }
 
         /// <summary>
-        /// 테스트용 근거리
+        /// 테스트
         /// </summary>
-        public void TestMelee()
+        public void Test()
         {
-            BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(6);
-            List<BoardSlot> targetSlots = BoardSystem.Instance.GetBoardSlots(new List<int> { 3, 2 });
+            // BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(6);
+            // List<BoardSlot> targetSlots = BoardSystem.Instance.GetBoardSlots(new List<int> { 3, 2 });
 
-            AiData aiData = AiData.GetAiData(1001);
-            AbilityData abilityData = AbilityData.GetAbilityData(70001); // 기본 근거리 공격
+            // AiData aiData = AiData.GetAiData(1001);
+            // AbilityData abilityData = AbilityData.GetAbilityData(70001); // 기본 근거리 공격
 
-            StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
+            // StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
+
+            BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
+
+            List<BoardSlot> firstSlots = TargetLogic.Instance.TargetFirstEnemy(selfSlot);
+            Debug.Log($"TargetFirstEnemy - first Slot: {firstSlots[0].Slot}, index: {firstSlots[0].Index}");
+
+            List<BoardSlot> secondsSlots = TargetLogic.Instance.TargetSecondEnemy(selfSlot);
+            Debug.Log($"TargetSecondEnemy - first Slot: {secondsSlots[0].Slot}, index: {secondsSlots[0].Index}");
         }
 
         /// <summary>

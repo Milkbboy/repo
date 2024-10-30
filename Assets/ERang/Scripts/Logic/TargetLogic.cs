@@ -35,6 +35,8 @@ namespace ERang
                 case AiDataTarget.RandomEnemyCreature: return TargetRandomEnemy(selfSlot, true);
                 case AiDataTarget.AllFriendly: return TargetAllFriendly(selfSlot, true);
                 case AiDataTarget.AllFriendlyCreature: return TargetAllFriendly(selfSlot);
+                case AiDataTarget.FirstEnemy: return TargetFirstEnemy(selfSlot);
+                case AiDataTarget.SecondEnemy: return TargetSecondEnemy(selfSlot);
                 case AiDataTarget.None:
                 default:
                     Debug.LogWarning($"{aiData.ai_Id} - 대상이 없음");
@@ -205,6 +207,48 @@ namespace ERang
             }
 
             return new List<BoardSlot> { opponentSlots[randomIndex] };
+        }
+
+        /// <summary>
+        /// 첫번째 적 타겟 설정
+        /// </summary>
+        /// <param name="slefSlot"></param>
+        /// <returns></returns>
+        public List<BoardSlot> TargetFirstEnemy(BoardSlot slefSlot)
+        {
+            // 상대방 슬롯 리스트
+            List<BoardSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(slefSlot);
+
+            BoardSlot targetSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
+
+            Debug.Log($"TargetFirstEnemy - targetSlot: {targetSlot.Slot}, opponentSlots: {string.Join(", ", opponentSlots.Select(x => x.Slot))}");
+
+            return new List<BoardSlot> { targetSlot };
+        }
+
+        /// <summary>
+        /// 두번째 적 타겟 설정
+        /// </summary>
+        /// <param name="slefSlot"></param>
+        /// <returns></returns>
+        public List<BoardSlot> TargetSecondEnemy(BoardSlot slefSlot)
+        {
+            // 상대방 슬롯 리스트
+            List<BoardSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(slefSlot);
+
+            // 슬롯에 장착된 두 번째 카드
+            BoardSlot secondSlot = opponentSlots.Where(x => x.Card != null).ElementAtOrDefault(1);
+
+            // 두 번째 카드가 없으면 첫 번째 카드
+            if (secondSlot == null)
+            {
+                secondSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
+            }
+
+            Debug.Log($"TargetFirstEnemy - secondSlot: {secondSlot.Slot}, opponentSlots: {string.Join(", ", opponentSlots.Select(x => x.Slot))}");
+
+            // 첫 번째 카드도 없으면 null 반환
+            return new List<BoardSlot> { secondSlot };
         }
     }
 }

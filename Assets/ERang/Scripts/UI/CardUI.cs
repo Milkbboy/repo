@@ -67,17 +67,17 @@ namespace ERang
             // 카드 정보 표시
             if (descText != null)
             {
-                descText.text = $"gold: {card.costGold.ToString()}\nmana: {card.costMana.ToString()}";
+                // descText.text = $"gold: {card.costGold.ToString()}\nmana: {card.costMana.ToString()}";
 
-                if (card.hp > 0)
-                {
-                    descText.text += $"\nhp: {card.hp}";
-                }
+                // if (card.hp > 0)
+                // {
+                //     descText.text += $"\nhp: {card.hp}";
+                // }
 
-                if (card.atk > 0)
-                {
-                    descText.text += $"\natk: {card.atk}";
-                }
+                // if (card.atk > 0)
+                // {
+                //     descText.text += $"\natk: {card.atk}";
+                // }
             }
 
             hpText.text = card.hp.ToString();
@@ -146,10 +146,8 @@ namespace ERang
 
         public void SetMasterStat(int hp, int maxHp, int atk, int def, int mana = 0, int maxMana = 0)
         {
-            if (descText != null)
-            {
-                descText.text = $"hp: {hp}/{maxHp}\nmana: {mana}/{maxMana}\natk: {atk}\ndef: {def}";
-            }
+            // if (descText != null)
+            //     descText.text = $"hp: {hp}/{maxHp}\nmana: {mana}/{maxMana}\natk: {atk}\ndef: {def}";
 
             hpText.text = $"{hp}";
             manaText.text = $"{mana}";
@@ -204,6 +202,11 @@ namespace ERang
             {
                 cardMeshRenderer.materials[0].SetTexture("_BaseMap", originTexture);
             }
+        }
+
+        public void SetDesc(string desc)
+        {
+            descText.text = desc;
         }
 
         private void ShowFloatingText(string text, string oldValue, string newValue)
