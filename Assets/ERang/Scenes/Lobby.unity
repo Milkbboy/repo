@@ -436,7 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b32addfc0a604341849bd0f71997b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: Act
+  nextSceneName: Map
 --- !u!4 &913905325
 Transform:
   m_ObjectHideFlags: 0
