@@ -233,5 +233,7 @@ namespace ERang
             AiDataAttackType.SelectFriendly,
             AiDataAttackType.SelectFriendlyCreature,
         };
+
+        public static readonly int BoardSlotCount = 10;
     }
 }

@@ -17,8 +17,9 @@ namespace ERang
         public int Atk { get => atk; set => atk = value; }
         public int Def { get => def; set => def = value; }
         public int Gold { get => gold; set => gold = value; }
-        public int CreatureSlots => creatureSlots;
+        public int CreatureSlotCount => creatureSlots;
         public List<int> StartCardIds => startCardIds;
+        public Texture2D CardImage => masterTexture;
 
         private readonly int masterId;
         private readonly List<int> startCardIds = new();
@@ -32,6 +33,7 @@ namespace ERang
         private int def;
         private int gold;
         private int creatureSlots;
+        private Texture2D masterTexture;
 
         public Master(MasterData masterData)
         {
@@ -39,7 +41,7 @@ namespace ERang
 
             masterId = masterData.master_Id;
             maxHp = hp = masterData.hp;
-            mana = 0;
+            mana = masterData.startMana;
             maxMana = masterData.maxMana;
             rechargeMana = masterData.rechargeMana;
             atk = masterData.atk;
@@ -47,6 +49,7 @@ namespace ERang
             gold = 1000; // 임시
             creatureSlots = masterData.creatureSlots;
             startCardIds = masterData.startCardIds;
+            masterTexture = masterData.masterTexture;
         }
 
         public void ChargeMana()
@@ -70,20 +73,7 @@ namespace ERang
             Debug.Log($"<color=#257dca>Reset Mana: {beforeMana} -> {mana}</color>");
         }
 
-        public void AddMana(int value)
-        {
-            int beforeMana = mana;
 
-            mana += value;
-
-            if (mana < 0)
-                mana = 0;
-
-            if (mana > MaxMana)
-                mana = MaxMana;
-
-            // Debug.Log($"<color=#257dca>Add Mana({value}): {beforeMana} -> {mana}</color>");
-        }
 
         public void AddGold(int gold)
         {

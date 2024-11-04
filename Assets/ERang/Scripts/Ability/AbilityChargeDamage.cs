@@ -11,43 +11,51 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.ChargeDamage;
         public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
+        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
             // 차징 애니메이션
-            selfSlot.AniAttack();
+            selfSlot.ApplyDamageAnimation();
 
             yield return new WaitForSeconds(0.1f);
         }
 
-        public IEnumerator Release(Ability ability, BoardSlot selfSlot, BoardSlot targetSlot)
+        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
-            AiDataAttackType aiAttackType = ability.aiAttackType;
-            int abilityValue = ability.abilityValue;
-            int atkCount = ability.atkCount;
-            AiDataType aiDataType = ability.aiType;
+            AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
+            AiData aiData = AiData.GetAiData(ability.aiDataId);
 
-            selfSlot.AniAttack();
+            int atkCount = aiData.atk_Cnt;
+
+            selfSlot.ApplyDamageAnimation();
 
             // 카드 선택 공격 타입이면 어빌리티 데미지 값으로 설정
-            int damage = Constants.SelectAttackTypes.Contains(aiAttackType) ? abilityValue : selfSlot.Card.atk;
+            int damage = 0;
+
+            if (selfSlot.Card is CreatureCard)
+                damage = (selfSlot.Card as CreatureCard).Atk;
+
+            if (Constants.SelectAttackTypes.Contains(aiData.attackType))
+                damage = abilityData.value;
 
             // 원거리 미사일 발사
-            if (aiDataType == AiDataType.Ranged)
-                yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, new List<BoardSlot> { targetSlot }, atkCount, damage));
+            if (aiData.type == AiDataType.Ranged)
+                yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, new List<BSlot> { targetSlot }, atkCount, damage));
 
-            if (targetSlot.Card == null)
+            if (targetSlot.Card == null || targetSlot.Card is not CreatureCard)
             {
-                Changes.Add((false, targetSlot.Slot, 0, targetSlot.CardType, 0, 0, 0));
+                Changes.Add((false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
                 yield break;
             }
 
-            int cardId = targetSlot.Card.Id;
-            int before = targetSlot.Card.hp;
+            CreatureCard creatureCard = targetSlot.Card as CreatureCard;
+
+            int cardId = creatureCard.Id;
+            int before = creatureCard.Hp;
 
             for (int i = 0; i < atkCount; i++)
             {
-                yield return StartCoroutine(targetSlot.SetDamage(damage));
-                targetSlot.AniDamaged();
+                yield return StartCoroutine(targetSlot.TakeDamage(damage));
+                targetSlot.TakeDamageAnimation();
 
                 yield return new WaitForSeconds(0.5f);
             }
@@ -55,11 +63,11 @@ namespace ERang
             // targetSlot.SetDamage 으로 hp 가 0 이 되면 카드 제거로 Card 가 null 이 됨
             if (targetSlot.Card == null)
             {
-                Changes.Add((false, targetSlot.Slot, cardId, targetSlot.CardType, 0, 0, 0));
+                Changes.Add((false, targetSlot.SlotNum, cardId, targetSlot.SlotCardType, 0, 0, 0));
                 yield break;
             }
 
-            Changes.Add((true, targetSlot.Slot, cardId, targetSlot.CardType, before, targetSlot.Card.hp, damage * atkCount));
+            Changes.Add((true, targetSlot.SlotNum, cardId, targetSlot.SlotCardType, before, creatureCard.Hp, damage * atkCount));
         }
     }
 }

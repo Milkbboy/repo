@@ -19,9 +19,9 @@ namespace ERang
         /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
         /// </summary>
         /// <returns></returns>
-        public int GetCardAiDataId(Card card)
+        public int GetCardAiDataId(BaseCard card)
         {
-            BoardSlot boardSlot = BoardSystem.Instance.GetBoardSlot(card.Uid);
+            BSlot boardSlot = BoardSystem.Instance.GetBoardSlot(card.Uid);
 
             string aiGroupDataTableLog = $"{(boardSlot != null ? Utils.BoardSlotLog(boardSlot) : $"카드({card.Id})")}. <color=#78d641>AiGroupData</color> 테이블 {card.AiGroupId} 데이터 얻기";
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
@@ -109,7 +109,7 @@ namespace ERang
         /// </summary>
         /// <param name="card"></param>
         /// <returns></returns>
-        public (bool IsSelectAttackType, AiData) GetAiAttackInfo(Card card)
+        public (bool IsSelectAttackType, AiData) GetAiAttackInfo(BaseCard card)
         {
             int aiDataId = GetCardAiDataId(card);
 
@@ -124,11 +124,11 @@ namespace ERang
         /// <summary>
         /// HandOn 어빌리티를 가진 카드 얻기
         /// </summary>
-        public List<(Card card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(List<Card> handCards)
+        public List<(BaseCard card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(List<BaseCard> handCards)
         {
-            List<(Card card, AiData aiData, List<AbilityData> abilities)> handOnCards = new List<(Card, AiData, List<AbilityData>)>();
+            List<(BaseCard card, AiData aiData, List<AbilityData> abilities)> handOnCards = new List<(BaseCard, AiData, List<AbilityData>)>();
 
-            foreach (Card handCard in handCards)
+            foreach (BaseCard handCard in handCards)
             {
                 int aiDataId = GetCardAiDataId(handCard);
 
@@ -174,11 +174,11 @@ namespace ERang
         /// <param name="reactionSlot"></param>
         /// <param name="opponentSlots"></param>
         /// <returns></returns>
-        public (AiData aiData, List<BoardSlot> targetSlots) GetReacationAiData(BoardSlot reactionSlot, List<BoardSlot> opponentSlots)
+        public (AiData aiData, List<BSlot> targetSlots) GetReacationAiData(BSlot reactionSlot, List<BSlot> opponentSlots)
         {
-            var reactionAiData = (default(AiData), default(List<BoardSlot>));
+            var reactionAiData = (default(AiData), default(List<BSlot>));
 
-            Card card = reactionSlot.Card;
+            BaseCard card = reactionSlot.Card;
 
             if (card == null)
             {
@@ -215,7 +215,7 @@ namespace ERang
                     continue;
                 }
 
-                List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, reactionSlot);
+                List<BSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, reactionSlot, "GetReacationAiData");
 
                 if (aiTargetSlots.Count == 0)
                 {
@@ -235,16 +235,16 @@ namespace ERang
         /// <summary>
         /// 턴 시작 액션 AiData id 얻기
         /// </summary>
-        public int GetTurnStartActionAiDataId(BoardSlot selfSlot, List<BoardSlot> opponentSlots)
+        public (AiData, List<BSlot>) GetTurnStartActionAiDataId(BSlot selfSlot, List<BSlot> opponentSlots)
         {
-            Card card = selfSlot.Card;
+            BaseCard card = selfSlot.Card;
 
             List<(AiGroupData.Reaction, ConditionData)> reactionPairs = GetCardReactionPairs(card, ConditionCheckPoint.TurnStart);
 
             if (reactionPairs.Count == 0)
             {
                 Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} AiGroupData({card.AiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color>");
-                return 0;
+                return (null, new List<BSlot>());
             }
 
             foreach (var (reaction, condition) in reactionPairs)
@@ -268,7 +268,7 @@ namespace ERang
                     continue;
                 }
 
-                List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot);
+                List<BSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "GetTurnStartActionAiDataId");
 
                 if (aiTargetSlots.Count == 0)
                 {
@@ -278,10 +278,10 @@ namespace ERang
 
                 Debug.Log($"{aiGroupDataTableLog} 성공 - 리액션 컨디션({condition.id})에 해당하는 AiData({aiDataId})의 <color=#f4872e>어빌리티({string.Join(", ", aiData.ability_Ids)})</color>{(aiData.ability_Ids.Count > 1 ? " 중 하나" : "")} 작동");
 
-                return aiData.ai_Id;
+                return (aiData, aiTargetSlots);
             }
 
-            return 0;
+            return (null, new List<BSlot>());
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace ERang
         /// <param name="card"></param>
         /// <param name="checkPoint"></param>
         /// <returns></returns>
-        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(Card card, ConditionCheckPoint checkPoint)
+        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(BaseCard card, ConditionCheckPoint checkPoint)
         {
             List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new();
 

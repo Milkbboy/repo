@@ -10,28 +10,30 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.Heal;
         public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
+        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
-            foreach (BoardSlot targetSlot in targetSlots)
+            foreach (BSlot targetSlot in targetSlots)
             {
-                if (targetSlot.Card == null)
+                if (targetSlot.Card == null || targetSlot.Card is not CreatureCard)
                 {
-                    Changes.Add((false, targetSlot.Slot, 0, targetSlot.CardType, 0, 0, 0));
+                    Changes.Add((false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
                     continue;
                 }
 
-                int before = targetSlot.Card.hp;
+                CreatureCard creatureCard = targetSlot.Card as CreatureCard;
 
-                targetSlot.AddCardHp(abilityData.value);
+                int before = creatureCard.Hp;
 
-                Changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.CardType, before, targetSlot.Card.hp, abilityData.value));
+                creatureCard.RestoreHealth(abilityData.value);
+
+                Changes.Add((true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, creatureCard.Hp, abilityData.value));
             }
 
             yield return new WaitForSeconds(0.1f);
         }
 
         // 즉시 효과는 해제 불필요
-        public IEnumerator Release(Ability ability, BoardSlot selfSlot, BoardSlot targetSlot)
+        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
             yield break;
         }

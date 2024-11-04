@@ -24,6 +24,8 @@ namespace ERang.Data
         public string skillViewIcon;
         public string fxSound;
 
+        public string LogText => Utils.AbilityLog(abilityType, abilityId);
+
         public void Initialize(AbilityDataEntity entity)
         {
             abilityId = entity.AbilityData_Id;

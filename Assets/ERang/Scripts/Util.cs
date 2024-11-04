@@ -11,9 +11,11 @@ namespace ERang
     public static class Colors
     {
         public static string Red { get; } = "#dd3333";
-        public static string Green { get; } = "#81d742";
-        public static string Blue { get; } = "#1e73be";
+        public static string Green { get; } = "#00ff00";
+        public static string Blue { get; } = "#257dca";
         public static string Yellow { get; } = "#eeee22";
+        public static string Orange { get; } = "#e78a27";
+        public static string Puple { get; } = "#ed6ddc";
     }
 
     /// <summary>
@@ -21,7 +23,23 @@ namespace ERang
     /// </summary>
     public static class Utils
     {
-        private static Random random = new Random();
+        private static Random random = new();
+
+        public static BaseCard MakeCard(CardData cardData)
+        {
+            BaseCard card = cardData.cardType switch
+            {
+                CardType.Creature => new CreatureCard(cardData),
+                CardType.Monster => new CreatureCard(cardData),
+                CardType.Building => new BuildingCard(cardData),
+                CardType.Charm => new MagicCard(cardData),
+                CardType.Curse => new MagicCard(cardData),
+                CardType.Magic => new MagicCard(cardData),
+                _ => new BaseCard(cardData),
+            };
+
+            return card;
+        }
 
         /// <summary>
         /// Fisher-Yates shuffle (피셔 예이츠)알고리즘
@@ -57,22 +75,27 @@ namespace ERang
             return shortID;
         }
 
-        public static string BoardSlotLog(BoardSlot boardSlot)
+        public static string BoardSlotLog(BSlot boardSlot)
         {
             if (boardSlot == null)
                 return "보드 슬롯 없음";
 
-            return BoardSlotLog(boardSlot.Slot, boardSlot.Card?.Type ?? CardType.None, boardSlot.Card?.Id ?? 0);
+            return BoardSlotLog(boardSlot.SlotNum, boardSlot.Card?.CardType ?? CardType.None, boardSlot.Card?.Id ?? 0);
         }
 
         public static string BoardSlotLog(int slot, CardType cardType, int cardId)
         {
-            return $"{slot}번 슬롯 {(cardType == CardType.None ? "" : GetCardType(cardType))} 카드({(cardId != 0 ? cardId : "없음")})";
+            return $"<color={(slot > 5 ? Colors.Red : Colors.Green)}>{slot}</color>번 슬롯 {(cardType == CardType.None ? "" : GetCardType(cardType))} 카드({(cardId != 0 ? cardId : "없음")})";
         }
 
-        public static string CardLog(Card card)
+        public static string CardLog(HCard card)
         {
-            return $"{GetCardType(card.Type)} 카드({card.Id})";
+            return $"{GetCardType(card.Card.CardType)} 카드({card.Card.Id})";
+        }
+
+        public static string CardLog(BaseCard card)
+        {
+            return $"{GetCardType(card.CardType)} 카드({card.Id})";
         }
 
         public static string AbilityLog(Ability ability)
@@ -90,9 +113,9 @@ namespace ERang
             return $"<color=#f4872e>{abilityType} 어빌리티({abilityId})</color>";
         }
 
-        public static string BoardSlotNumersText(List<BoardSlot> boardSlots)
+        public static string BoardSlotNumersText(List<BSlot> boardSlots)
         {
-            return $"<color=#ea4123>{string.Join(", ", boardSlots.Select(boardSlot => boardSlot.Slot).ToList())}</color>";
+            return $"<color=#ea4123>{string.Join(", ", boardSlots.Select(boardSlot => boardSlot.SlotNum).ToList())}</color>";
         }
 
         public static string NumbersText(List<int> numbers)
@@ -135,6 +158,9 @@ namespace ERang
                 AbilityType.BrokenDef => "def",
                 _ => "스탯",
             };
+
+            if (changes.Count == 0)
+                return $"changes.Count == 0 으로 변화 없음";
 
             return $"{string.Join(", ", changes.Select(change => $"{change.slot}번 슬롯 {GetCardType(change.cardType)} 카드 {statText} {(change.isAffect ? $"<color=#00ff00>{change.before} => {change.after}</color>" : "")} 효과 {(change.isAffect ? "적용" : "미적용")}. 변화량: {change.changeValue}"))}";
         }

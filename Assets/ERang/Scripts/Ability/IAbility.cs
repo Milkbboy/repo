@@ -9,7 +9,7 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.None;
         public List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> Changes { get; set; }
 
-        IEnumerator Apply(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots);
-        IEnumerator Release(Ability ability, BoardSlot selfSlot, BoardSlot targetSlot);
+        IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots);
+        IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot);
     }
 }

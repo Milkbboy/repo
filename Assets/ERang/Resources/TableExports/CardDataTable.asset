@@ -139,3 +139,24 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 0
+  - Card_Id: 100201
+    NameDesc: "\uD14C\uC2A4\uD2B8\uC544\uCCD0"
+    CardNameDesc_Id: CardName_1001
+    CardDesc_Id: CardDesc_1001
+    CardType: Creature
+    AiGroup_id: 11002
+    CostMana: 0
+    CostGold: 0
+    Hp: 5
+    Atk: 3
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: bull
+    Level_3_img: Crotch_Lv3
+    Level_5_img: Crotch_Lv5
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001

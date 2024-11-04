@@ -7,6 +7,13 @@ using UnityEngine.UI;
 
 namespace ERang
 {
+    [System.Serializable]
+    public class StatObjectPair
+    {
+        public StatType statType;
+        public GameObject gameObject;
+    }
+
     public class CardUI : MonoBehaviour
     {
         public Image cardImage;
@@ -17,40 +24,83 @@ namespace ERang
         public TextMeshProUGUI manaText;
         public TextMeshProUGUI atkText;
         public TextMeshProUGUI defText;
-        public GameObject cardObject;
         public TextMeshProUGUI floatingTextPrefab;
         public Transform floatingTextParent;
+        public Dictionary<StatType, GameObject> statObjects = new();
+
+        [SerializeField]
+        private List<StatObjectPair> statObjectPairs = new List<StatObjectPair>();
 
         private Texture2D originTexture;
-        private List<TextMeshProUGUI> floatingTextList = new List<TextMeshProUGUI>();
+        private List<TextMeshProUGUI> floatingTextList = new();
 
         void Awake()
         {
-        }
-
-        void Start()
-        {
-        }
-
-        public void SetCard(Card card)
-        {
-            // Debug.Log("CardUI SetCard: " + cardId);
-            CardData cardData = (card.Type == CardType.Monster) ? MonsterCardData.GetCardData(card.Id) : CardData.GetCardData(card.Id);
-            Texture2D cardTexture = cardData.GetCardTexture();
-
-            if (!cardTexture)
+            foreach (var pair in statObjectPairs)
             {
-                Debug.LogError($"${cardData.card_id} Card texture is null");
-                return;
+                if (!statObjects.ContainsKey(pair.statType))
+                    statObjects.Add(pair.statType, pair.gameObject);
             }
+        }
+
+        public void SetCard(BaseCard card)
+        {
+            foreach (var pair in statObjectPairs)
+            {
+                pair.gameObject.SetActive(false);
+            }
+
+            if (card is CreatureCard creatureCard)
+            {
+                ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Atk, StatType.Def }, true);
+
+                hpText.text = creatureCard.Hp.ToString();
+                manaText.text = creatureCard.Mana.ToString();
+                atkText.text = creatureCard.Atk.ToString();
+                defText.text = creatureCard.Def.ToString();
+            }
+
+            if (card is MasterCard masterCard)
+            {
+                ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Def }, true);
+
+                hpText.text = masterCard.Hp.ToString();
+                manaText.text = masterCard.Mana.ToString();
+                defText.text = masterCard.Def.ToString();
+            }
+
+            if (card is MagicCard magicCard)
+            {
+                List<StatType> statTypes = new List<StatType> { StatType.Mana, StatType.Atk };
+
+                if (magicCard.Atk > 0)
+                    statTypes.Add(StatType.Atk);
+
+                ActiveStatObjects(statTypes, true);
+
+                hpText.text = string.Empty;
+                manaText.text = magicCard.Mana.ToString();
+                atkText.text = magicCard.Atk.ToString();
+                defText.text = string.Empty;
+            }
+
+            if (card is BuildingCard buildingCard)
+            {
+                ActiveStatObjects(new List<StatType> { StatType.Mana, StatType.Gold }, true);
+
+                hpText.text = string.Empty;
+                manaText.text = buildingCard.Gold.ToString();
+                atkText.text = string.Empty;
+                defText.text = string.Empty;
+            }
+
+            Texture2D cardTexture = card.CardImage;
 
             if (cardMeshRenderer != null)
             {
                 // 원래 텍스쳐 저장
                 if (originTexture == null)
-                {
                     originTexture = (Texture2D)cardMeshRenderer.materials[0].GetTexture("_BaseMap");
-                }
 
                 cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
             }
@@ -58,63 +108,6 @@ namespace ERang
             {
                 cardImage.sprite = Sprite.Create(cardTexture, new Rect(0, 0, cardTexture.width, cardTexture.height), Vector2.zero);
             }
-
-            if (cardTypeText != null)
-            {
-                cardTypeText.text = card.Type.ToString();
-            }
-
-            // 카드 정보 표시
-            if (descText != null)
-            {
-                // descText.text = $"gold: {card.costGold.ToString()}\nmana: {card.costMana.ToString()}";
-
-                // if (card.hp > 0)
-                // {
-                //     descText.text += $"\nhp: {card.hp}";
-                // }
-
-                // if (card.atk > 0)
-                // {
-                //     descText.text += $"\natk: {card.atk}";
-                // }
-            }
-
-            hpText.text = card.hp.ToString();
-            manaText.text = card.costMana.ToString();
-            atkText.text = card.atk.ToString();
-            defText.text = card.def.ToString();
-        }
-
-        public void SetMasterCard(Master master)
-        {
-            // Debug.Log("CardUI SetMasterCard: " + master.masterId);
-            MasterData masterData = MasterData.master_dict[master.MasterId];
-
-            // Debug.Log("CardUI SetCard: " + cardId);
-            Texture2D cardTexture = masterData.GetMasterTexture();
-
-            if (!cardTexture)
-            {
-                Debug.LogError($"${master.MasterId} Master texture is null");
-                return;
-            }
-
-            if (cardMeshRenderer != null)
-            {
-                cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
-            }
-            else
-            {
-                cardImage.sprite = Sprite.Create(cardTexture, new Rect(0, 0, cardTexture.width, cardTexture.height), Vector2.zero);
-            }
-
-            if (cardTypeText != null)
-            {
-                cardTypeText.text = "Master";
-            }
-
-            SetMasterStat(master.Hp, master.MaxHp, master.Atk, master.Def, master.Mana, master.MaxMana);
         }
 
         public void SetEnemyMasterCard(Enemy enemy)
@@ -207,6 +200,17 @@ namespace ERang
         public void SetDesc(string desc)
         {
             descText.text = desc;
+        }
+
+        private void ActiveStatObjects(List<StatType> statTypes, bool activate)
+        {
+            foreach (var pair in statObjectPairs)
+            {
+                if (statTypes.Contains(pair.statType))
+                {
+                    pair.gameObject.SetActive(activate);
+                }
+            }
         }
 
         private void ShowFloatingText(string text, string oldValue, string newValue)

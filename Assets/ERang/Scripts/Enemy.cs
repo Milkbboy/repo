@@ -19,7 +19,7 @@ namespace ERang
         public int Def => def;
 
         // 카드 슬롯, 카드
-        public List<(int, Card)> monsterCards = new();
+        public List<(int, HCard)> monsterCards = new();
 
         public Enemy(int enemyId)
         {
@@ -44,8 +44,8 @@ namespace ERang
                     continue;
                 }
 
-                Card card = new(cardData);
-                monsterCards.Add((i, card));
+                // HCard card = new(cardData);
+                // monsterCards.Add((i, card));
             }
         }
 
@@ -69,26 +69,26 @@ namespace ERang
                     continue;
                 }
 
-                Card card = new(cardData);
-                monsterCards.Add((i, card));
+                // Card card = new(cardData);
+                // monsterCards.Add((i, card));
             }
         }
 
-        public Card GetMonsterCard(string cardUid)
-        {
-            var cardTuple = monsterCards.Find(card => card.Item2 != null && card.Item2.Uid == cardUid);
+        // public HCard GetMonsterCard(string cardUid)
+        // {
+        //     var cardTuple = monsterCards.Find(card => card.Item2 != null && card.Item2.Uid == cardUid);
 
-            return cardTuple.Item2;
-        }
+        //     return cardTuple.Item2;
+        // }
 
-        public void RemoveMonsterCard(string cardUid)
-        {
-            var cardTuple = monsterCards.Find(card => card.Item2 != null && card.Item2.Uid == cardUid);
+        // public void RemoveMonsterCard(string cardUid)
+        // {
+        //     var cardTuple = monsterCards.Find(card => card.Item2 != null && card.Item2.Uid == cardUid);
 
-            if (cardTuple.Item2 != null)
-            {
-                monsterCards.Remove(cardTuple);
-            }
-        }
+        //     if (cardTuple.Item2 != null)
+        //     {
+        //         monsterCards.Remove(cardTuple);
+        //     }
+        // }
     }
 }

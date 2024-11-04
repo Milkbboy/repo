@@ -7,36 +7,40 @@ namespace ERang
 {
     public class DeckSystem : MonoBehaviour
     {
+        public static DeckSystem Instance { get; private set; }
+
         public int DeckCardCount => deckCards.Count;
         public int HandCardCount => handCards.Count;
         public int ExtinctionCardCount => extinctionCards.Count;
         public int GraveCardCount => graveCards.Count;
 
-        public List<Card> DeckCards => deckCards;
-        public List<Card> HandCards => handCards;
-        public List<Card> GraveCards => graveCards;
-        public List<Card> ExtinctionCards => extinctionCards;
+        public List<BaseCard> DeckCards => deckCards;
+        public List<BaseCard> HandCards => handCards;
+        public List<BaseCard> GraveCards => graveCards;
+        public List<BaseCard> ExtinctionCards => extinctionCards;
 
         private readonly int maxHandCardCount = 5;
         private readonly System.Random random = new();
 
-        private readonly List<Card> allCards = new();
-        private readonly List<Card> deckCards = new(); // 뽑을 카드덱
-        private readonly List<Card> handCards = new();
-        private readonly List<Card> graveCards = new(); // 무덤 카드
-        private readonly List<Card> extinctionCards = new(); // 소멸 카드
-        // 이 녀석들은 보드에서 관리해 볼까?
-        private readonly List<Card> creatureCards = new(); // 마스터 크리쳐 카드
-        private readonly List<Card> buildingCards = new(); // 건물 카드
+        private readonly List<BaseCard> creatureCards = new(); // 마스터 크리쳐 카드
+        private readonly List<BaseCard> buildingCards = new(); // 건물 카드
+
+        private readonly List<BaseCard> allCards = new();
+        private readonly List<BaseCard> deckCards = new();
+        private readonly List<BaseCard> handCards = new();
+        private readonly List<BaseCard> graveCards = new();
+        private readonly List<BaseCard> extinctionCards = new();
 
         private DeckUI deckUI;
 
         void Awake()
         {
+            Instance = this;
+
             deckUI = GetComponent<DeckUI>();
         }
 
-        public Card FindHandCard(string cardUid)
+        public BaseCard FindHandCard(string cardUid)
         {
             return handCards.Find(card => card.Uid == cardUid);
         }
@@ -52,13 +56,13 @@ namespace ERang
 
                 if (cardData == null)
                 {
-                    Debug.LogError($"CardData 테이블에 <color=red>{cardId}</color> 카드 없음");
+                    Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
                     continue;
                 }
 
-                // new 식 단순화(IDE0090). https://learn.microsoft.com/ko-kr/dotnet/fundamentals/code-analysis/style-rules/ide0090
-                Card card = new(cardData);
+                BaseCard card = Utils.MakeCard(cardData);
 
+                // 카드 타입별로 생성
                 allCards.Add(card);
                 deckCards.Add(card);
             }
@@ -93,7 +97,7 @@ namespace ERang
 
                 if (deckCards.Count > 0)
                 {
-                    Card card = deckCards[0];
+                    BaseCard card = deckCards[0];
 
                     // 덱에서 카드를 뽑아 손에 추가
                     deckCards.RemoveAt(0);
@@ -104,12 +108,32 @@ namespace ERang
             yield return StartCoroutine(DrawHandDeck());
         }
 
+        public void HandCardToBoard(BaseCard card)
+        {
+            // 핸드 카드 제거
+            handCards.Remove(card);
+            deckUI.RemoveHandCard(card.Uid);
+
+            switch (card)
+            {
+                case CreatureCard creatureCard:
+                    creatureCards.Add(creatureCard);
+                    break;
+
+                case BuildingCard buildingCard:
+                    buildingCards.Add(buildingCard);
+                    break;
+            }
+
+            UpdateDeckCardCountUI();
+        }
+
         /// <summary>
         /// 핸드 카드 보드에 놓기
         /// </summary>
         public void HandCardToBoard(string cardUid)
         {
-            Card card = handCards.Find(card => card.Uid == cardUid);
+            BaseCard card = handCards.Find(card => card.Uid == cardUid);
 
             if (card == null)
             {
@@ -121,11 +145,15 @@ namespace ERang
             handCards.Remove(card);
             deckUI.RemoveHandCard(cardUid);
 
-            // 카드 타입별로 보드에 추가
-            switch (card.Type)
+            switch (card)
             {
-                case CardType.Creature: creatureCards.Add(card); break;
-                case CardType.Building: buildingCards.Add(card); break;
+                case CreatureCard creatureCard:
+                    creatureCards.Add(creatureCard);
+                    break;
+
+                case BuildingCard buildingCard:
+                    buildingCards.Add(buildingCard);
+                    break;
             }
 
             UpdateDeckCardCountUI();
@@ -149,7 +177,7 @@ namespace ERang
 
             for (int i = handCards.Count - 1; i >= 0; i--)
             {
-                Card card = handCards[i];
+                BaseCard card = handCards[i];
 
                 handCards.RemoveAt(i);
                 graveCards.Add(card);
@@ -165,7 +193,7 @@ namespace ERang
         /// </summary>
         public void RemoveUsedHandCard(string cardUid)
         {
-            Card card = handCards.Find(card => card.Uid == cardUid);
+            BaseCard card = handCards.Find(card => card.Uid == cardUid);
 
             if (card == null)
             {
@@ -185,25 +213,12 @@ namespace ERang
         public void RemoveBoardCard(string cardUid)
         {
             // 크리쳐 먼저 찾고 없으면 건물 찾기
-            Card card = creatureCards.Find(card => card.Uid == cardUid) ?? buildingCards.Find(card => card.Uid == cardUid);
+            BaseCard card = creatureCards.Find(card => card.Uid == cardUid) ?? buildingCards.Find(card => card.Uid == cardUid);
 
             if (card == null)
             {
                 Debug.LogError($"보드 슬롯에 {cardUid} 카드 없음");
                 return;
-            }
-
-            switch (card.Type)
-            {
-                case CardType.Creature:
-                    creatureCards.Remove(card);
-                    break;
-                case CardType.Building:
-                    buildingCards.Remove(card);
-                    break;
-                default:
-                    Debug.LogError($"보드 슬롯에 {card.Id} 카드 {card.Type} 타입 없음");
-                    break;
             }
 
             RemoveCardProcess(card);
@@ -213,11 +228,11 @@ namespace ERang
         /// 카드 랜덤 섞기
         /// </summary>
         /// <param name="cards">카드 리스트</param>
-        private void ShuffleCards(List<Card> cards)
+        private void ShuffleCards(List<BaseCard> cards)
         {
             for (int i = 0; i < cards.Count; ++i)
             {
-                Card temp = cards[i];
+                BaseCard temp = cards[i];
                 int randomIdex = random.Next(i, cards.Count);
                 cards[i] = cards[randomIdex];
                 cards[randomIdex] = temp;
@@ -227,9 +242,9 @@ namespace ERang
         /// <summary>
         /// 제거된 카드 설정
         /// </summary>
-        private void RemoveCardProcess(Card card)
+        private void RemoveCardProcess(BaseCard card)
         {
-            if (card.isExtinction)
+            if (card.IsExtinction)
                 extinctionCards.Add(card);
             else
                 graveCards.Add(card);
@@ -241,7 +256,7 @@ namespace ERang
         {
             for (int i = 0; i < handCards.Count; ++i)
             {
-                Card card = handCards[i];
+                BaseCard card = handCards[i];
 
                 yield return deckUI.SpawnHandCard(card);
 
