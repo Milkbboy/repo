@@ -19,7 +19,7 @@ namespace ERang
         /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
         /// </summary>
         /// <returns></returns>
-        public int GetCardAiDataId(Card card)
+        public int GetCardAiDataId(BaseCard card)
         {
             BoardSlot boardSlot = BoardSystem.Instance.GetBoardSlot(card.Uid);
 
@@ -109,7 +109,7 @@ namespace ERang
         /// </summary>
         /// <param name="card"></param>
         /// <returns></returns>
-        public (bool IsSelectAttackType, AiData) GetAiAttackInfo(Card card)
+        public (bool IsSelectAttackType, AiData) GetAiAttackInfo(BaseCard card)
         {
             int aiDataId = GetCardAiDataId(card);
 
@@ -124,11 +124,11 @@ namespace ERang
         /// <summary>
         /// HandOn 어빌리티를 가진 카드 얻기
         /// </summary>
-        public List<(Card card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(List<Card> handCards)
+        public List<(BaseCard card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(List<BaseCard> handCards)
         {
-            List<(Card card, AiData aiData, List<AbilityData> abilities)> handOnCards = new List<(Card, AiData, List<AbilityData>)>();
+            List<(BaseCard card, AiData aiData, List<AbilityData> abilities)> handOnCards = new List<(BaseCard, AiData, List<AbilityData>)>();
 
-            foreach (Card handCard in handCards)
+            foreach (BaseCard handCard in handCards)
             {
                 int aiDataId = GetCardAiDataId(handCard);
 

@@ -75,6 +75,11 @@ namespace ERang
             return $"{GetCardType(card.Type)} 카드({card.Id})";
         }
 
+        public static string CardLog(BaseCard card)
+        {
+            return $"{GetCardType(card.CardType)} 카드({card.Id})";
+        }
+
         public static string AbilityLog(Ability ability)
         {
             return AbilityLog(ability.abilityType, ability.abilityId);

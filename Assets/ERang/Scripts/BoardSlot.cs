@@ -12,6 +12,7 @@ namespace ERang
         public int Slot => slot;
         public CardType CardType => cardType;
         public Card Card => card;
+        public BaseCard BaseCard => baseCard;
 
         [SerializeField] private int slot; // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 값
         [SerializeField] private int index; // 0, 1, 2, 3 값 3 은 마스터 카드
@@ -19,6 +20,7 @@ namespace ERang
         [SerializeField] private bool isOccupied = false; // 현재 사용 중인지 여부
         [SerializeField] private bool isOverlapCard = false; // 카드가 올라가 있는지 여부
 
+        private BaseCard baseCard;
         private Card card;
         private BoardSlotUI boardSlotUI;
 
@@ -73,6 +75,16 @@ namespace ERang
         public void SetMana(int mana)
         {
             boardSlotUI.SetMana(mana);
+        }
+
+        public void EquipCard(BaseCard card)
+        {
+            this.baseCard = card;
+
+            isOccupied = true;
+            isOverlapCard = false;
+
+            boardSlotUI.SetCard(card);
         }
 
         /// <summary>

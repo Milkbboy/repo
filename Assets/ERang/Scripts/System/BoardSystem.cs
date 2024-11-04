@@ -233,13 +233,29 @@ namespace ERang
         /// </summary>
         /// <param name="master"></param>
         /// <param name="card"></param>
-        public void CardCost(Master master, Card card)
+        public void CardCost(Master master, BaseCard card)
         {
-            if (card.costMana > 0)
-                AddMana(master, -card.costMana);
+            switch (card)
+            {
+                case CreatureCard creatureCard:
+                    AddMana(master, -creatureCard.Mana);
+                    break;
+                case MagicCard magicCard:
+                    AddMana(master, -magicCard.Mana);
+                    break;
+                case BuildingCard buildingCard:
+                    AddGold(master, -buildingCard.Gold);
+                    break;
+                default:
+                    Debug.LogWarning("Unhandled card type");
+                    break;
+            }
 
-            if (card.costGold > 0)
-                AddGold(master, -card.costGold);
+            // if (card.costMana > 0)
+            //     AddMana(master, -card.costMana);
+
+            // if (card.costGold > 0)
+            //     AddGold(master, -card.costGold);
         }
 
         /// <summary>

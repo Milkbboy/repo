@@ -4,6 +4,7 @@ using ERang.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 namespace ERang
 {
@@ -24,12 +25,53 @@ namespace ERang
         private Texture2D originTexture;
         private List<TextMeshProUGUI> floatingTextList = new List<TextMeshProUGUI>();
 
-        void Awake()
+        public void SetCard(BaseCard card)
         {
-        }
+            if (card is CreatureCard creatureCard)
+            {
+                hpText.text = creatureCard.Hp.ToString();
+                manaText.text = creatureCard.Mana.ToString();
+                atkText.text = creatureCard.Atk.ToString();
+                defText.text = creatureCard.Def.ToString();
+            }
 
-        void Start()
-        {
+            if (card is MagicCard magicCard)
+            {
+                hpText.text = string.Empty;
+                manaText.text = magicCard.Mana.ToString();
+                atkText.text = magicCard.Atk.ToString();
+                defText.text = string.Empty;
+            }
+
+            if (card is BuildingCard buildingCard)
+            {
+                hpText.text = string.Empty;
+                manaText.text = buildingCard.Gold.ToString();
+                atkText.text = string.Empty;
+                defText.text = string.Empty;
+            }
+
+            CardData cardData = CardData.GetCardData(card.Id);
+            Texture2D cardTexture = cardData.GetCardTexture();
+
+            if (!cardTexture)
+            {
+                Debug.LogError($"${cardData.card_id} Card texture is null");
+                return;
+            }
+
+            if (cardMeshRenderer != null)
+            {
+                // 원래 텍스쳐 저장
+                if (originTexture == null)
+                    originTexture = (Texture2D)cardMeshRenderer.materials[0].GetTexture("_BaseMap");
+
+                cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
+            }
+            else
+            {
+                cardImage.sprite = Sprite.Create(cardTexture, new Rect(0, 0, cardTexture.width, cardTexture.height), Vector2.zero);
+            }
         }
 
         public void SetCard(Card card)

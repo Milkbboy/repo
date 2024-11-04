@@ -67,6 +67,12 @@ namespace ERang
             aniAttack.isAttackingFromLeft = cardType == CardType.Master || cardType == CardType.Creature;
         }
 
+        public void SetCard(BaseCard card)
+        {
+            cardUI.cardObject.SetActive(true);
+            cardUI.SetCard(card);
+        }
+
         public void SetCard(Card card)
         {
             cardUI.cardObject.SetActive(true);

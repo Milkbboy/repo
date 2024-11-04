@@ -82,7 +82,7 @@ namespace ERang
             Debug.Log($"----------------- BATTLE START {floor} 층 ({levelId}) -----------------");
             BoardSystem.Instance.CreateMonsterBoardSlots(levelData.cardIds);
 
-            floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation.eventType}";
+            floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation?.eventType ?? EventType.None}";
 
             StartCoroutine(TurnStart());
         }
@@ -110,7 +110,7 @@ namespace ERang
             yield return StartCoroutine(deckSystem.MakeHandCards());
 
             // 핸드 카드 HandOn 어빌리티 액션
-            HandOnCardAbilityAction(deckSystem.HandCards);
+            // HandOnCardAbilityAction(deckSystem.HandCards);
 
             // 지속 시간 종료 어빌리티 해제
             yield return StartCoroutine(BoardSlotCardAbilityRelease());
@@ -245,7 +245,7 @@ namespace ERang
         {
             foreach (BoardSlot boardSlot in actorSlots)
             {
-                Card card = boardSlot.Card;
+                BaseCard card = boardSlot.BaseCard;
 
                 if (card == null)
                 {
@@ -277,11 +277,11 @@ namespace ERang
         /// <summary>
         /// 핸드에 있을때 효과가 발동되는 카드 액션
         /// </summary>
-        void HandOnCardAbilityAction(List<Card> handCards)
+        void HandOnCardAbilityAction(List<BaseCard> handCards)
         {
             // 핸드 온 카드 액션의 주체는 마스터 슬롯
             BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
-            List<(Card card, AiData aiData, List<AbilityData> abilityDatas)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
+            List<(BaseCard card, AiData aiData, List<AbilityData> abilityDatas)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
 
             foreach (var (card, aiData, abilityDatas) in handOnCards)
             {
@@ -303,7 +303,7 @@ namespace ERang
         /// </summary>
         public void HandCardUse(string cardUid, BoardSlot targetSlot)
         {
-            Card card = deckSystem.FindHandCard(cardUid);
+            BaseCard card = deckSystem.FindHandCard(cardUid);
 
             // 타겟 설정 카드인가 확인
             var (isSelectAttackType, aiData) = AiLogic.Instance.GetAiAttackInfo(card);
@@ -444,7 +444,7 @@ namespace ERang
         /// </summary>
         public bool CanHandCardUse(string cardUid)
         {
-            Card card = deckSystem.FindHandCard(cardUid);
+            BaseCard card = deckSystem.FindHandCard(cardUid);
 
             if (card == null)
             {
@@ -460,18 +460,18 @@ namespace ERang
             }
 
             // 필요 마나 확인
-            if (card.costMana != 0 && master.Mana < card.costMana)
+            if (card is MagicCard magicCard && master.Mana < magicCard.Mana)
             {
                 ToastNotification.Show($"mana({master.Mana}) is not enough");
-                Debug.LogWarning($"핸드 카드({card.Id}) 마나 부족으로 사용 불가능({master.Mana} < {card.costMana})");
+                Debug.LogWarning($"핸드 카드({magicCard.Id}) 마나 부족으로 사용 불가능({master.Mana} < {magicCard.Mana})");
                 return false;
             }
 
             // 필요 골드 확인
-            if (card.costGold != 0 && master.Gold < card.costGold)
+            if (card is BuildingCard buildingCard && master.Gold < buildingCard.Gold)
             {
                 ToastNotification.Show($"gold({master.Gold}) is not enough");
-                Debug.LogWarning($"핸드 카드({card.Id}) 골드 부족으로 사용 불가능({master.Gold} < {card.costGold})");
+                Debug.LogWarning($"핸드 카드({buildingCard.Id}) 골드 부족으로 사용 불가능({master.Gold} < {buildingCard.Gold})");
                 return false;
             }
 
@@ -487,7 +487,7 @@ namespace ERang
         /// <param name="cardUid"></param>
         public void BoardSlotEquipCard(BoardSlot boardSlot, string cardUid)
         {
-            Card card = deckSystem.FindHandCard(cardUid);
+            BaseCard card = deckSystem.FindHandCard(cardUid);
 
             if (card == null)
             {

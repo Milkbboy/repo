@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 812122114921084965}
   - component: {fileID: 8854631176919736411}
   - component: {fileID: 2263032535085037248}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 7300516290255278449}
   - component: {fileID: 6227546882924870049}
   - component: {fileID: 4775010421654350413}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: TextDef
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -411,7 +411,7 @@ GameObject:
   - component: {fileID: 3880174764662725786}
   - component: {fileID: 7708995006882815856}
   - component: {fileID: 2059349257720845561}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: TextHp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -550,7 +550,7 @@ GameObject:
   - component: {fileID: 7502175075377915236}
   - component: {fileID: 4134953683027126951}
   - component: {fileID: 5497657589539843228}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BoardSlot
   m_TagString: BoardSlot
   m_Icon: {fileID: 0}
@@ -620,7 +620,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 6.1232336e-17}
+  m_Size: {x: 1.24, y: 1.73, z: 0.21}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8061116020154105915
 MonoBehaviour:
@@ -723,7 +723,7 @@ GameObject:
   - component: {fileID: 7482736128247410525}
   - component: {fileID: 7440395335883730934}
   - component: {fileID: 3498099808081231798}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -829,7 +829,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5830792039957719311}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: mana
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -868,7 +868,7 @@ GameObject:
   - component: {fileID: 4183917524644611598}
   - component: {fileID: 2560573600816006547}
   - component: {fileID: 2404714048279919036}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -941,7 +941,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3424870196012370422}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: atk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1012,7 +1012,7 @@ GameObject:
   - component: {fileID: 1971745646296132266}
   - component: {fileID: 4743877005761001211}
   - component: {fileID: 6433580258405066897}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: TextAtk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1146,7 +1146,7 @@ GameObject:
   - component: {fileID: 6638396224396655960}
   - component: {fileID: 679918168762976539}
   - component: {fileID: 260357064451443272}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1221,7 +1221,7 @@ GameObject:
   - component: {fileID: 60924303416224682}
   - component: {fileID: 511445837668046917}
   - component: {fileID: 6271212188920013235}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: TextMana
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1705,7 +1705,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4487061499860793663}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Illust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1743,7 +1743,7 @@ GameObject:
   - component: {fileID: 7767250425793666075}
   - component: {fileID: 1687243278410391449}
   - component: {fileID: 4480655975532486916}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Illust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1848,7 +1848,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4517703190638325120}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: hp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1885,7 +1885,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8303620211400162240}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: def
   m_TagString: Untagged
   m_Icon: {fileID: 0}
