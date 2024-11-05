@@ -8,18 +8,23 @@ namespace ERang
     public class BoardSystem : MonoBehaviour
     {
         public static BoardSystem Instance { get; private set; }
+
         public readonly CardType[] leftSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None };
         public readonly CardType[] rightSlotCardTypes = { CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.EnemyMaster };
         public readonly CardType[] buildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
 
-        public BoardSlot boardSlot;
+        // public BoardSlot boardSlot;
+        public BSlot bSlotPrefab;
 
         private BoardUI boardUI;
 
-        private readonly List<BoardSlot> boardSlots = new();
-        private readonly List<BoardSlot> buildingSlots = new();
-        private readonly List<BoardSlot> leftSlots = new(); // 왼쪽 보드 슬롯. 마스터, 크리쳐
-        private readonly List<BoardSlot> rightSlots = new(); // 오른쪽 보드 슬롯. 몬스터, 적 마스터
+        // private readonly List<BoardSlot> boardSlots = new();
+        // private readonly List<BoardSlot> buildingSlots = new();
+
+        private readonly List<BSlot> bSlots = new();
+        private readonly List<BSlot> leftBSlots = new();
+        private readonly List<BSlot> rightBSlots = new();
+        private readonly List<BSlot> buildingSlots = new();
 
         void Awake()
         {
@@ -45,8 +50,6 @@ namespace ERang
             // 마스터 보드 슬롯 구성
             for (int i = 0; i < leftSlotCardTypes.Length; ++i)
             {
-                BoardSlot slot = Instantiate(boardSlot);
-
                 CardType cardType = CardType.None;
 
                 if (i == 0)
@@ -61,15 +64,12 @@ namespace ERang
                     creatureSlotCount--;
                 }
 
-                slot.CreateSlot(i, cardType);
+                // 새로운 슬롯
+                BSlot bSlot = Instantiate(bSlotPrefab);
+                bSlot.CreateSlot(i, leftSlotStartIndex - i, cardType);
 
-                if (cardType == CardType.Master)
-                    slot.SetMasterSlot(master);
-
-                slot.SetIndex(leftSlotStartIndex - i);
-
-                leftSlots.Add(slot);
-                boardSlots.Add(slot);
+                bSlots.Add(bSlot);
+                leftBSlots.Add(bSlot);
             }
 
             // 몬스터 보드 슬롯 구성
@@ -78,27 +78,25 @@ namespace ERang
                 int slotNum = i + rightSlotCardTypes.Length;
                 CardType cardType = rightSlotCardTypes[i];
 
-                BoardSlot slot = Instantiate(boardSlot);
-                slot.CreateSlot(slotNum, cardType);
+                BSlot bSlot = Instantiate(bSlotPrefab);
+                bSlot.CreateSlot(slotNum, slotNum - rightSlotStartIndex, cardType);
 
-                slot.SetIndex(slotNum - rightSlotStartIndex);
-
-                rightSlots.Add(slot);
-                boardSlots.Add(slot);
+                bSlots.Add(bSlot);
+                rightBSlots.Add(bSlot);
             }
 
             float boardSpacing = 0.2f;
-            float boardWidth = boardSlot.GetComponent<BoxCollider>().size.x * boardSlot.transform.localScale.x;
+            float boardWidth = bSlotPrefab.GetComponent<BoxCollider>().size.x * bSlotPrefab.transform.localScale.x;
             float totalWidth = (totalBoardSlotCount - 1) * (boardWidth + boardSpacing);
             float startX = -totalWidth / 2;
 
             // 보드 슬롯 위치 설정
-            for (int i = 0; i < boardSlots.Count; i++)
+            for (int i = 0; i < bSlots.Count; i++)
             {
                 float xPosition = startX + i * (boardWidth + boardSpacing);
-                Vector3 slotPosition = new(xPosition, boardSlot.transform.position.y, boardSlot.transform.position.z);
+                Vector3 slotPosition = new(xPosition, bSlotPrefab.transform.position.y, bSlotPrefab.transform.position.z);
 
-                boardSlots[i].transform.position = slotPosition;
+                bSlots[i].transform.position = slotPosition;
                 // Debug.Log($"Slot: {boardSlots[i].Slot} Index: {boardSlots[i].Index} Type: {boardSlots[i].CardType}");
             }
 
@@ -109,12 +107,12 @@ namespace ERang
             for (int i = 0; i < buildingSlotCardTypes.Length; i++)
             {
                 float xPosition = startX + i * (boardWidth + boardSpacing);
-                Vector3 slotPosition = new(xPosition, startY, boardSlot.transform.position.z);
+                Vector3 slotPosition = new(xPosition, startY, bSlotPrefab.transform.position.z);
 
-                BoardSlot slot = Instantiate(boardSlot, slotPosition, Quaternion.identity);
-                slot.CreateSlot(i, buildingSlotCardTypes[i]);
+                BSlot bSlot = Instantiate(bSlotPrefab, slotPosition, Quaternion.identity);
+                bSlot.CreateSlot(i, i, buildingSlotCardTypes[i]);
 
-                buildingSlots.Add(slot);
+                buildingSlots.Add(bSlot);
             }
         }
 
@@ -122,12 +120,12 @@ namespace ERang
         /// 몬스터 카드 보드 슬롯에 생성
         /// </summary>
         /// <param name="monsterCards"></param>
-        public void CreateMonsterBoardSlots(List<Card> monsterCards)
+        public void CreateMonsterBoardSlots(List<BaseCard> monsterCards)
         {
             for (int i = 0; i < monsterCards.Count; i++)
             {
-                Card monsterCard = monsterCards[i];
-                BoardSlot slot = rightSlots[i];
+                BaseCard monsterCard = monsterCards[i];
+                BSlot slot = rightBSlots[i];
 
                 slot.EquipCard(monsterCard);
             }
@@ -137,13 +135,13 @@ namespace ERang
         {
             // Debug.Log($"CreateMonsterBoardSlots: {cardIds.Count}, {string.Join(", ", cardIds)}");
 
-            for (int i = 0; i < rightSlots.Count; ++i)
+            for (int i = 0; i < rightBSlots.Count; ++i)
             {
-                BoardSlot slot = rightSlots[i];
+                BSlot slot = rightBSlots[i];
 
                 // Debug.Log($"CreateMonsterBoardSlots: {i}, Slot: {slot.Slot}, Index: {slot.Index} {slot.CardType}");
 
-                if (slot.CardType == CardType.None)
+                if (slot.SlotCardType == CardType.None)
                     continue;
 
                 if (i > cardIds.Count || slot.Index < 0)
@@ -168,7 +166,7 @@ namespace ERang
                     continue;
                 }
 
-                Card monsterCard = new(cardData);
+                BaseCard monsterCard = new(cardData);
 
                 slot.EquipCard(monsterCard);
             }
@@ -191,7 +189,8 @@ namespace ERang
         {
             master.ChargeMana();
 
-            boardSlots[0].SetMana(master.Mana);
+            // if (bSlots.Count > 0)
+            //     bSlots[0]?.SetMana(master.Mana);
         }
 
         /// <summary>
@@ -202,7 +201,7 @@ namespace ERang
         {
             master.ResetMana();
 
-            boardSlots[0].SetMana(master.Mana);
+            // bSlots[0].SetMana(master.Mana);
         }
 
         /// <summary>
@@ -214,7 +213,8 @@ namespace ERang
         {
             master.AddMana(mana);
 
-            boardSlots[0].SetMana(master.Mana);
+            // if (bSlots.Count > 0)
+            //     bSlots[0]?.SetMana(master.Mana);
         }
 
         /// <summary>
@@ -263,56 +263,56 @@ namespace ERang
         /// </summary>
         public void RemoveCard(string cardUid)
         {
-            foreach (var boardSlot in boardSlots)
+            foreach (var boardSlot in bSlots)
             {
                 if (boardSlot.Card != null && boardSlot.Card.Uid == cardUid)
                 {
-                    Debug.Log($"boardSlot: {boardSlot.Slot} RemoveCard: {boardSlot.Card.Id}");
-                    boardSlot.RemoveCard();
+                    Debug.Log($"boardSlot: {boardSlot.SlotNum} RemoveCard: {boardSlot.Card.Id}");
+                    // boardSlot.RemoveCard();
                     break;
                 }
             }
 
             // foreach (var boardSlot in leftSlots)
-            //     Debug.Log($"leftSlot: {boardSlot.Slot} 확인 카드: {boardSlot?.Card?.id ?? 0}");
+            //     Debug.Log($"leftSlot: {boardSlot.SlotNum} 확인 카드: {boardSlot?.Card?.id ?? 0}");
 
             // foreach (var boardSlot in rightSlots)
-            //     Debug.Log($"leftSlot: {boardSlot.Slot} 확인 카드: {boardSlot?.Card?.id ?? 0}");
+            //     Debug.Log($"leftSlot: {boardSlot.SlotNum} 확인 카드: {boardSlot?.Card?.id ?? 0}");
         }
 
-        public BoardSlot GetBoardSlot(int slot)
+        public BSlot GetBoardSlot(int slotNum)
         {
-            return boardSlots.Find(x => x.Slot == slot);
+            return bSlots.Find(x => x.SlotNum == slotNum);
         }
 
-        public List<BoardSlot> GetBoardSlots(List<int> slots)
+        public List<BSlot> GetBoardSlots(List<int> slots)
         {
-            return boardSlots.FindAll(x => slots.Contains(x.Slot));
+            return bSlots.FindAll(x => slots.Contains(x.SlotNum));
         }
 
-        public BoardSlot GetBoardSlot(string cardUid)
+        public BSlot GetBoardSlot(string cardUid)
         {
-            return boardSlots.Find(x => x.Card != null && x.Card.Uid == cardUid);
+            return bSlots.Find(x => x.Card != null && x.Card.Uid == cardUid);
         }
 
         /// <summary>
         /// 크리쳐 보드 슬롯 인덱스로 정렬
         /// - 슬롯 3, 2, 1, 0 순서
         /// </summary>
-        public List<BoardSlot> GetCreatureBoardSlots()
+        public List<BSlot> GetCreatureBoardSlots()
         {
-            return leftSlots.OrderBy(slot => slot.Index).ToList();
+            return leftBSlots.OrderBy(slot => slot.Index).ToList();
         }
 
         /// <summary>
         /// - 슬롯 6, 7, 8, 9 순서
         /// </summary>
-        public List<BoardSlot> GetMonsterBoardSlots()
+        public List<BSlot> GetMonsterBoardSlots()
         {
-            return rightSlots.OrderBy(slot => slot.Index).ToList();
+            return rightBSlots.OrderBy(slot => slot.Index).ToList();
         }
 
-        public List<BoardSlot> GetBuildingBoardSlots()
+        public List<BSlot> GetBuildingBoardSlots()
         {
             return buildingSlots;
         }
@@ -322,10 +322,10 @@ namespace ERang
         /// - 슬롯 인덱스 3, 2, 1 순서
         /// </summary>
         /// <returns></returns>
-        public List<Card> GetOccupiedCreatureCards()
+        public List<BaseCard> GetOccupiedCreatureCards()
         {
             return GetCreatureBoardSlots()
-                .Where(slot => slot.IsOccupied)
+                .Where(slot => slot.Card != null)
                 .Select(slot => slot.Card)
                 .ToList();
         }
@@ -334,10 +334,10 @@ namespace ERang
         /// 몬스터 카드가 장착된 보드 슬롯 인덱스를 정렬한 카드 반환
         /// - 슬롯 인덱스 6, 7, 8 순서
         /// </summary>
-        public List<Card> GetOccupiedMonsterCards()
+        public List<BaseCard> GetOccupiedMonsterCards()
         {
             return GetMonsterBoardSlots()
-                .Where(slot => slot.IsOccupied)
+                .Where(slot => slot.Card != null)
                 .Select(slot => slot.Card)
                 .ToList();
         }
@@ -346,7 +346,7 @@ namespace ERang
         /// 카드로 상대 카드 리스트 얻기
         /// </summary>
         /// <param name="self"></param>
-        public List<Card> GetOpponetCards(Card self)
+        public List<BaseCard> GetOpponetCards(Card self)
         {
             if (self.Type == CardType.Creature || self.Type == CardType.Master)
                 return GetOccupiedMonsterCards();
@@ -360,57 +360,29 @@ namespace ERang
         /// <summary>
         /// 슬롯으로 상대 슬롯 리스트 얻기
         /// </summary>
-        public List<BoardSlot> GetOpponentSlots(BoardSlot self)
+        public List<BSlot> GetOpponentSlots(BSlot self)
         {
-            if (self.CardType == CardType.Creature || self.CardType == CardType.Master)
+            if (self.SlotCardType == CardType.Creature || self.SlotCardType == CardType.Master)
                 return GetMonsterBoardSlots();
 
-            if (self.CardType == CardType.Monster || self.CardType == CardType.EnemyMaster)
+            if (self.SlotCardType == CardType.Monster || self.SlotCardType == CardType.EnemyMaster)
                 return GetCreatureBoardSlots();
 
-            return new List<BoardSlot>();
+            return new List<BSlot>();
         }
 
         /// <summary>
         /// 슬롯으로 친구 슬롯 리스트 얻기
         /// </summary>
-        public List<BoardSlot> GetFriendlySlots(BoardSlot self)
+        public List<BSlot> GetFriendlySlots(BSlot self)
         {
-            if (self.CardType == CardType.Creature || self.CardType == CardType.Master)
+            if (self.SlotCardType == CardType.Creature || self.SlotCardType == CardType.Master)
                 return GetCreatureBoardSlots();
 
-            if (self.CardType == CardType.Monster || self.CardType == CardType.EnemyMaster)
+            if (self.SlotCardType == CardType.Monster || self.SlotCardType == CardType.EnemyMaster)
                 return GetMonsterBoardSlots();
 
-            return new List<BoardSlot>();
-        }
-
-        /// <summary>
-        /// 가장 가까운 보드 슬롯 찾기
-        /// </summary>
-        /// <param name="position"></param>
-        public BoardSlot NeareastBoardSlot(Vector3 position)
-        {
-            BoardSlot nearestSlot = null;
-            float minDistance = float.MaxValue;
-
-            List<BoardSlot> boardSlots = leftSlots.Concat(rightSlots).Concat(buildingSlots).ToList();
-
-            foreach (BoardSlot slot in boardSlots)
-            {
-                if (slot.IsOverlapCard == false)
-                    continue;
-
-                float distance = Vector3.Distance(position, slot.transform.position);
-
-                if (distance >= minDistance)
-                    continue;
-
-                minDistance = distance;
-                nearestSlot = slot;
-            }
-
-            return nearestSlot;
+            return new List<BSlot>();
         }
     }
 }

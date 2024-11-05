@@ -21,7 +21,7 @@ namespace ERang
         /// <returns></returns>
         public int GetCardAiDataId(BaseCard card)
         {
-            BoardSlot boardSlot = BoardSystem.Instance.GetBoardSlot(card.Uid);
+            BSlot boardSlot = BoardSystem.Instance.GetBoardSlot(card.Uid);
 
             string aiGroupDataTableLog = $"{(boardSlot != null ? Utils.BoardSlotLog(boardSlot) : $"카드({card.Id})")}. <color=#78d641>AiGroupData</color> 테이블 {card.AiGroupId} 데이터 얻기";
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
@@ -174,11 +174,11 @@ namespace ERang
         /// <param name="reactionSlot"></param>
         /// <param name="opponentSlots"></param>
         /// <returns></returns>
-        public (AiData aiData, List<BoardSlot> targetSlots) GetReacationAiData(BoardSlot reactionSlot, List<BoardSlot> opponentSlots)
+        public (AiData aiData, List<BSlot> targetSlots) GetReacationAiData(BSlot reactionSlot, List<BSlot> opponentSlots)
         {
-            var reactionAiData = (default(AiData), default(List<BoardSlot>));
+            var reactionAiData = (default(AiData), default(List<BSlot>));
 
-            Card card = reactionSlot.Card;
+            BaseCard card = reactionSlot.Card;
 
             if (card == null)
             {
@@ -215,7 +215,7 @@ namespace ERang
                     continue;
                 }
 
-                List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, reactionSlot);
+                List<BSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, reactionSlot);
 
                 if (aiTargetSlots.Count == 0)
                 {
@@ -235,9 +235,9 @@ namespace ERang
         /// <summary>
         /// 턴 시작 액션 AiData id 얻기
         /// </summary>
-        public int GetTurnStartActionAiDataId(BoardSlot selfSlot, List<BoardSlot> opponentSlots)
+        public int GetTurnStartActionAiDataId(BSlot selfSlot, List<BSlot> opponentSlots)
         {
-            Card card = selfSlot.Card;
+            BaseCard card = selfSlot.Card;
 
             List<(AiGroupData.Reaction, ConditionData)> reactionPairs = GetCardReactionPairs(card, ConditionCheckPoint.TurnStart);
 
@@ -268,7 +268,7 @@ namespace ERang
                     continue;
                 }
 
-                List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot);
+                List<BSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot);
 
                 if (aiTargetSlots.Count == 0)
                 {
@@ -290,7 +290,7 @@ namespace ERang
         /// <param name="card"></param>
         /// <param name="checkPoint"></param>
         /// <returns></returns>
-        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(Card card, ConditionCheckPoint checkPoint)
+        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(BaseCard card, ConditionCheckPoint checkPoint)
         {
             List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new();
 

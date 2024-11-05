@@ -20,13 +20,13 @@ namespace ERang
         /// <summary>
         /// AiData 테이블의 대상 슬롯 얻기
         /// </summary>
-        public List<BoardSlot> GetAiTargetSlots(AiData aiData, BoardSlot selfSlot)
+        public List<BSlot> GetAiTargetSlots(AiData aiData, BSlot selfSlot)
         {
-            List<BoardSlot> targetSlots = new List<BoardSlot>();
+            List<BSlot> targetSlots = new List<BSlot>();
 
             switch (aiData.target)
             {
-                case AiDataTarget.Self: return new List<BoardSlot> { selfSlot };
+                case AiDataTarget.Self: return new List<BSlot> { selfSlot };
                 case AiDataTarget.Enemy: return TargetEnemy(aiData, selfSlot);
                 case AiDataTarget.NearEnemy: return TargetNearEnemy(aiData, selfSlot);
                 case AiDataTarget.AllEnemy: return TargetAllEnemy(selfSlot);
@@ -52,9 +52,9 @@ namespace ERang
         /// <summary>
         /// AiData AttackType 선택 타입 대상 슬롯 얻기
         /// </summary>
-        public List<BoardSlot> GetSelectAttackTypeTargetSlot(AiDataAttackType aiDataAttackType)
+        public List<BSlot> GetSelectAttackTypeTargetSlot(AiDataAttackType aiDataAttackType)
         {
-            List<BoardSlot> targetSlots = new List<BoardSlot>();
+            List<BSlot> targetSlots = new List<BSlot>();
 
             switch (aiDataAttackType)
             {
@@ -71,12 +71,12 @@ namespace ERang
             return targetSlots;
         }
 
-        private List<BoardSlot> TargetEnemy(AiData aiData, BoardSlot selfSlot)
+        private List<BSlot> TargetEnemy(AiData aiData, BSlot selfSlot)
         {
-            List<BoardSlot> targets = new List<BoardSlot>();
+            List<BSlot> targets = new List<BSlot>();
 
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
+            List<BSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
 
             switch (aiData.type)
             {
@@ -88,7 +88,7 @@ namespace ERang
                         // 근접 공격 거리가 상대 카드 개수 보다 크면 패스
                         if (targetSlotIndex < 0 || targetSlotIndex >= opponentSlots.Count)
                         {
-                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBoardSlots.Count: {opponentSlots.Count}");
+                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBSlots.Count: {opponentSlots.Count}");
                             continue;
                         }
 
@@ -103,7 +103,7 @@ namespace ERang
 
                         if (targetSlotIndex < 0 || targetSlotIndex >= opponentSlots.Count)
                         {
-                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBoardSlots.Count: {opponentSlots.Count}");
+                            Debug.LogWarning($"{aiData.ai_Id} - targetSlotIndex is out of range. targetSlotIndex: {targetSlotIndex}, targetBSlots.Count: {opponentSlots.Count}");
                             continue;
                         }
 
@@ -122,15 +122,22 @@ namespace ERang
         /// <summary>
         /// 카드가 장착된 첫번째 카드를 타겟으로 설정
         /// </summary>
-        private List<BoardSlot> TargetNearEnemy(AiData aiData, BoardSlot selfSlot)
+        private List<BSlot> TargetNearEnemy(AiData aiData, BSlot selfSlot)
         {
-            List<BoardSlot> targets = new List<BoardSlot>();
+            List<BSlot> targets = new List<BSlot>();
 
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
+            List<BSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
 
             // 제일 근접한 타겟 찾기
-            BoardSlot targetSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
+            BSlot targetSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
+
+            if (targetSlot == null)
+            {
+                Debug.LogWarning($"{aiData.ai_Id} - 첫번째 카드가 없어서 패스");
+                return targets;
+            }
+
             int targetIndex = targetSlot.Index;
 
             // Debug.Log($"{aiData.ai_Id} - 제일 근접한 타겟 슬롯 인덱스 {targetIndex} 찾고 attackRanges({(aiData.attackRanges.Count > 0 ? string.Join(", ", aiData.attackRanges) : "없음")}) 에 설정된 타겟 찾기");
@@ -164,39 +171,39 @@ namespace ERang
             return targets;
         }
 
-        private List<BoardSlot> TargetAllEnemy(BoardSlot selfSlot, bool exceptMaster = false)
+        private List<BSlot> TargetAllEnemy(BSlot selfSlot, bool exceptMaster = false)
         {
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
+            List<BSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
 
             if (exceptMaster)
-                opponentSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
+                opponentSlots = opponentSlots.Where(x => x.SlotCardType != CardType.Master || x.SlotCardType != CardType.EnemyMaster).ToList();
 
             // Debug.Log($"TargetAllEnemy - exceptMaster: {exceptMaster}, targetSlots: {string.Join(", ", opponentSlots.Select(x => x.Slot))}");
 
             return opponentSlots;
         }
 
-        private List<BoardSlot> TargetAllFriendly(BoardSlot selfSlot, bool exceptMaster = false)
+        private List<BSlot> TargetAllFriendly(BSlot selfSlot, bool exceptMaster = false)
         {
             // 아군 슬롯 리스트
-            List<BoardSlot> friendlySlots = BoardSystem.Instance.GetFriendlySlots(selfSlot);
+            List<BSlot> friendlySlots = BoardSystem.Instance.GetFriendlySlots(selfSlot);
 
             if (exceptMaster)
-                friendlySlots = friendlySlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
+                friendlySlots = friendlySlots.Where(x => x.SlotCardType != CardType.Master || x.SlotCardType != CardType.EnemyMaster).ToList();
 
             // Debug.Log($"TargetAllFriendly - exceptMaster: {exceptMaster}, targetSlots: {string.Join(", ", friendlySlots.Select(x => x.Slot))}");
 
             return friendlySlots;
         }
 
-        private List<BoardSlot> TargetRandomEnemy(BoardSlot selfSlot, bool exceptMaster = false)
+        private List<BSlot> TargetRandomEnemy(BSlot selfSlot, bool exceptMaster = false)
         {
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
+            List<BSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
 
             if (exceptMaster)
-                opponentSlots = opponentSlots.Where(x => x.CardType != CardType.Master || x.CardType != CardType.EnemyMaster).ToList();
+                opponentSlots = opponentSlots.Where(x => x.SlotCardType != CardType.Master || x.SlotCardType != CardType.EnemyMaster).ToList();
 
             int randomIndex = Random.Range(0, opponentSlots.Count);
 
@@ -206,7 +213,7 @@ namespace ERang
                 return null;
             }
 
-            return new List<BoardSlot> { opponentSlots[randomIndex] };
+            return new List<BSlot> { opponentSlots[randomIndex] };
         }
 
         /// <summary>
@@ -214,16 +221,16 @@ namespace ERang
         /// </summary>
         /// <param name="slefSlot"></param>
         /// <returns></returns>
-        public List<BoardSlot> TargetFirstEnemy(BoardSlot slefSlot)
+        public List<BSlot> TargetFirstEnemy(BSlot slefSlot)
         {
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(slefSlot);
+            List<BSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(slefSlot);
 
-            BoardSlot targetSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
+            BSlot targetSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
 
-            Debug.Log($"TargetFirstEnemy - targetSlot: {targetSlot.Slot}, opponentSlots: {string.Join(", ", opponentSlots.Select(x => x.Slot))}");
+            Debug.Log($"TargetFirstEnemy - targetSlot: {targetSlot.SlotNum}, opponentSlots: {string.Join(", ", opponentSlots.Select(x => x.SlotNum))}");
 
-            return new List<BoardSlot> { targetSlot };
+            return new List<BSlot> { targetSlot };
         }
 
         /// <summary>
@@ -231,13 +238,13 @@ namespace ERang
         /// </summary>
         /// <param name="slefSlot"></param>
         /// <returns></returns>
-        public List<BoardSlot> TargetSecondEnemy(BoardSlot slefSlot)
+        public List<BSlot> TargetSecondEnemy(BSlot slefSlot)
         {
             // 상대방 슬롯 리스트
-            List<BoardSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(slefSlot);
+            List<BSlot> opponentSlots = BoardSystem.Instance.GetOpponentSlots(slefSlot);
 
             // 슬롯에 장착된 두 번째 카드
-            BoardSlot secondSlot = opponentSlots.Where(x => x.Card != null).ElementAtOrDefault(1);
+            BSlot secondSlot = opponentSlots.Where(x => x.Card != null).ElementAtOrDefault(1);
 
             // 두 번째 카드가 없으면 첫 번째 카드
             if (secondSlot == null)
@@ -245,10 +252,10 @@ namespace ERang
                 secondSlot = opponentSlots.FirstOrDefault(x => x.Card != null);
             }
 
-            Debug.Log($"TargetFirstEnemy - secondSlot: {secondSlot.Slot}, opponentSlots: {string.Join(", ", opponentSlots.Select(x => x.Slot))}");
+            Debug.Log($"TargetFirstEnemy - secondSlot: {secondSlot.SlotNum}, opponentSlots: {string.Join(", ", opponentSlots.Select(x => x.SlotNum))}");
 
             // 첫 번째 카드도 없으면 null 반환
-            return new List<BoardSlot> { secondSlot };
+            return new List<BSlot> { secondSlot };
         }
     }
 }

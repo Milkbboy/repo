@@ -57,12 +57,12 @@ namespace ERang
             return shortID;
         }
 
-        public static string BoardSlotLog(BoardSlot boardSlot)
+        public static string BoardSlotLog(BSlot boardSlot)
         {
             if (boardSlot == null)
                 return "보드 슬롯 없음";
 
-            return BoardSlotLog(boardSlot.Slot, boardSlot.Card?.Type ?? CardType.None, boardSlot.Card?.Id ?? 0);
+            return BoardSlotLog(boardSlot.SlotNum, boardSlot.Card?.CardType ?? CardType.None, boardSlot.Card?.Id ?? 0);
         }
 
         public static string BoardSlotLog(int slot, CardType cardType, int cardId)
@@ -95,9 +95,9 @@ namespace ERang
             return $"<color=#f4872e>{abilityType} 어빌리티({abilityId})</color>";
         }
 
-        public static string BoardSlotNumersText(List<BoardSlot> boardSlots)
+        public static string BoardSlotNumersText(List<BSlot> boardSlots)
         {
-            return $"<color=#ea4123>{string.Join(", ", boardSlots.Select(boardSlot => boardSlot.Slot).ToList())}</color>";
+            return $"<color=#ea4123>{string.Join(", ", boardSlots.Select(boardSlot => boardSlot.SlotNum).ToList())}</color>";
         }
 
         public static string NumbersText(List<int> numbers)

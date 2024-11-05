@@ -10,7 +10,7 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.AddMana;
         public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
+        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
             int beforeMana = Master.Instance.Mana;
 
@@ -21,7 +21,7 @@ namespace ERang
             yield return new WaitForSeconds(0.1f);
         }
 
-        public IEnumerator Release(Ability ability, BoardSlot selfSlot, BoardSlot targetSlot)
+        public IEnumerator Release(Ability ability, BSlot selfSlot, BSlot targetSlot)
         {
             int beforeMana = Master.Instance.Mana;
 

@@ -23,7 +23,6 @@ namespace ERang
         private AudioClip flipSound;
 
         // 핸드 카드 리스트
-        private readonly List<HandCard> handCards = new();
         private readonly List<HCard> hCards = new();
 
         void Awake()
@@ -102,7 +101,7 @@ namespace ERang
         {
             foreach (HCard handCard in hCards)
             {
-                // handCard.DiscardAnimation(extinctionCardCountText.rectTransform);
+                handCard.DiscardAnimation(graveCardCountText.rectTransform);
             }
 
             hCards.Clear();

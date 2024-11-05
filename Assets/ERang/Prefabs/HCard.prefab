@@ -286,8 +286,9 @@ GameObject:
   - component: {fileID: 3135472850982025108}
   - component: {fileID: 2534245526723963024}
   - component: {fileID: 1895222548237892759}
+  - component: {fileID: 8084433754154090173}
   m_Layer: 0
-  m_Name: Card
+  m_Name: HCard
   m_TagString: HandCard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,9 +418,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 392b62c20040ef34391534809ae7f52f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &2534245526723963024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,6 +445,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 078d554d99bdf2945ab51b13e7c70aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  detectionRadius: 1
+--- !u!114 &8084433754154090173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1377124965481123407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0812d7210a8984e40805d2e31b4ce31e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DiscardPos: {fileID: 0}
+  FX_Pos: {fileID: 4583508697194487509}
+  effectPrefab: {fileID: 8207343968682951967, guid: bbb824979bdea5241802469f9ba78f20,
+    type: 3}
 --- !u!1 &1382533044437119861
 GameObject:
   m_ObjectHideFlags: 0

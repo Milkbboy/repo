@@ -52,6 +52,13 @@ namespace ERang
             }
 
             CardData cardData = CardData.GetCardData(card.Id);
+
+            if (cardData == null)
+            {
+                Debug.LogError($"{card.Id} CardData is null");
+                return;
+            }
+
             Texture2D cardTexture = cardData.GetCardTexture();
 
             if (!cardTexture)

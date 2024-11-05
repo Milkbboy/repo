@@ -10,40 +10,44 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.DefUp;
         public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
+        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
-            foreach (BoardSlot targetSlot in targetSlots)
+            foreach (BSlot targetSlot in targetSlots)
             {
-                if (targetSlot.Card == null)
+                if (targetSlot.Card == null || targetSlot.Card is not CreatureCard)
                 {
-                    Changes.Add((false, targetSlot.Slot, 0, targetSlot.CardType, 0, 0, 0));
+                    Changes.Add((false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
                     continue;
                 }
 
-                int before = targetSlot.Card.def;
+                CreatureCard creatureCard = targetSlot.Card as CreatureCard;
+
+                int before = creatureCard.Def;
                 int change = abilityData.value;
 
-                targetSlot.AddCardDef(change);
+                creatureCard.IncreaseDefense(change);
 
-                Changes.Add((true, targetSlot.Slot, targetSlot.Card.Id, targetSlot.CardType, before, targetSlot.Card.hp, change));
+                Changes.Add((true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, creatureCard.Hp, change));
             }
 
             yield return new WaitForSeconds(0.1f);
         }
 
-        public IEnumerator Release(Ability ability, BoardSlot selfSlot, BoardSlot targetSlot)
+        public IEnumerator Release(Ability ability, BSlot selfSlot, BSlot targetSlot)
         {
-            Card card = targetSlot.Card;
+            BaseCard card = targetSlot.Card;
 
-            if (card == null)
+            if (card == null || card is not CreatureCard)
                 yield break;
 
-            int before = card.def;
+            CreatureCard creatureCard = card as CreatureCard;
+
+            int before = creatureCard.Def;
             int change = ability.abilityValue * -1;
 
-            targetSlot.AddCardDef(change);
+            creatureCard.DecreaseDefense(change);
 
-            Changes.Add((true, targetSlot.Slot, card.Id, targetSlot.CardType, before, card.def, change));
+            Changes.Add((true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, creatureCard.Def, change));
 
             yield return new WaitForSeconds(0.1f);
         }

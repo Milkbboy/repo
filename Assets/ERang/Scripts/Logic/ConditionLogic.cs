@@ -22,15 +22,15 @@ namespace ERang
         /// <param name="selfSlot"></param>
         /// <param name="opponentSlots"></param>
         /// <returns></returns>
-        public (int aiDataId, List<int> targetSlots) GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
+        public (int aiDataId, List<int> targetSlots) GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, BSlot selfSlot, List<BSlot> opponentSlots)
         {
             var (reaction, condition) = reactionPairs;
 
-            // Debug.Log($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({reaction.conditionId}) 확인 시작 - ConditionLogic.GetReactionConditionAiDataId");
+            // Debug.Log($"{selfSlot.SlotNum}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({reaction.conditionId}) 확인 시작 - ConditionLogic.GetReactionConditionAiDataId");
 
-            string conditionTargetLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({condition.id}) 타겟 {condition.target} 슬롯 찾기";
+            string conditionTargetLog = $"{selfSlot.SlotNum}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({condition.id}) 타겟 {condition.target} 슬롯 찾기";
 
-            List<BoardSlot> targetSlots = GetConditionTargets(condition, selfSlot, opponentSlots);
+            List<BSlot> targetSlots = GetConditionTargets(condition, selfSlot, opponentSlots);
 
             if (targetSlots.Count == 0)
             {
@@ -38,30 +38,30 @@ namespace ERang
                 return (0, new List<int>());
             }
 
-            // Debug.Log($"{conditionTargetLog} - 성공. 타겟 슬롯 <color=yellow>{string.Join(", ", targetSlots.Select(slot => slot.Slot))}</color> 에 대한 리액션 발동 확인 - ConditionLogic.GetReactionConditionAiDataId");
+            // Debug.Log($"{conditionTargetLog} - 성공. 타겟 슬롯 <color=yellow>{string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}</color> 에 대한 리액션 발동 확인 - ConditionLogic.GetReactionConditionAiDataId");
 
-            string conditionCheckLog = $"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}).";
+            string conditionCheckLog = $"{selfSlot.SlotNum}번 슬롯 카드({selfSlot.Card.Id}).";
 
             var result = (0, new List<int>());
 
             foreach (var targetSlot in targetSlots)
             {
-                Card targetCard = targetSlot.Card;
+                BaseCard targetCard = targetSlot.Card;
 
                 // 슬롯에 카드가 없으면 패스
                 if (targetCard == null)
                 {
-                    Debug.LogWarning($"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color>에 대한 리액션 컨디션({condition.id}) 발동 확인 - 실패. {targetSlot.Slot} 슬롯에 장착된 카드 없음 - ConditionLogic.GetReactionConditionAiDataId");
+                    Debug.LogWarning($"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.SlotNum}</color>에 대한 리액션 컨디션({condition.id}) 발동 확인 - 실패. {targetSlot.SlotNum} 슬롯에 장착된 카드 없음 - ConditionLogic.GetReactionConditionAiDataId");
                     continue;
                 }
 
-                string targetConditionLog = $"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.Slot}</color> 카드({targetCard.Id})에 대한 리액션 컨디션({condition.id}) {condition.type} 조건 비교";
+                string targetConditionLog = $"{conditionCheckLog} 타겟 슬롯 <color=yellow>{targetSlot.SlotNum}</color> 카드({targetCard.Id})에 대한 리액션 컨디션({condition.id}) {condition.type} 조건 비교";
 
                 if (condition.type == ConditionType.EveryTurn)
                 {
                     if (ConditionRatio(condition.id, reaction.ratio))
                     {
-                        result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
+                        result = (reaction.aiDataId, new List<int> { targetSlot.SlotNum });
                         // Debug.Log($"{targetConditionLog} - 성공 (발생 확률만 비교) 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                     else
@@ -85,18 +85,21 @@ namespace ERang
                             break;
                         // 대상의 체력 상태 확인
                         case ConditionType.Hp:
-                            compareValue = targetCard.hp;
+                            if (targetCard is CreatureCard creatureCard)
+                                compareValue = creatureCard.Hp;
+                            else
+                                Debug.LogWarning($"{selfSlot.SlotNum}번 슬롯 카드({selfSlot.Card.Id}). ConditionType.Hp 에 대한 {targetCard.CardType} 카드 아님");
                             break;
                         case ConditionType.Extinction:
                         case ConditionType.Acquisition:
-                            Debug.LogWarning($"{selfSlot.Slot}번 슬롯 카드({selfSlot.Card.Id}). ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전 - ConditionLogic.GetReactionConditionAiDataId");
+                            Debug.LogWarning($"{selfSlot.SlotNum}번 슬롯 카드({selfSlot.Card.Id}). ConditionType.Extinction, ConditionType.Acquisition 아직 구현 전 - ConditionLogic.GetReactionConditionAiDataId");
                             break;
                     }
 
                     // 해당 조건의 컨디션이 있으면 다음 컨디션은 검사하지 않는다.
                     if (ConditionCompare(condition, compareValue) && ConditionRatio(condition.id, reaction.ratio))
                     {
-                        result = (reaction.aiDataId, new List<int> { targetSlot.Slot });
+                        result = (reaction.aiDataId, new List<int> { targetSlot.SlotNum });
                         // Debug.Log($"{targetConditionLog} - 성공 (조건 비교와 발생 확률 모두 통과). 리액션에 설정된 aiDataId({result.Item1}) - ConditionLogic.GetReactionConditionAiDataId");
                     }
                     else
@@ -120,14 +123,14 @@ namespace ERang
         /// <param name="selfSlot">내 보드 슬롯</param>
         /// <param name="opponentCards">상대(적)</param>
         /// <returns></returns>
-        public List<BoardSlot> GetConditionTargets(ConditionData conditionData, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
+        public List<BSlot> GetConditionTargets(ConditionData conditionData, BSlot selfSlot, List<BSlot> opponentSlots)
         {
-            List<BoardSlot> targetSlots = new List<BoardSlot>();
+            List<BSlot> targetSlots = new List<BSlot>();
 
             switch (conditionData.target)
             {
                 case ConditionTarget.NearEnemy:
-                    BoardSlot occupiedSlot = opponentSlots.Find(slot => slot.Card != null);
+                    BSlot occupiedSlot = opponentSlots.Find(slot => slot.Card != null);
 
                     // 타겟 슬롯에 카드가 없으면 제일 첫번째 슬롯 반환 (타겟 슬롯 확인 용도)
                     if (occupiedSlot != null)
@@ -151,19 +154,19 @@ namespace ERang
                     targetSlots.Add(opponentSlots[3]);
                     break;
                 case ConditionTarget.FriendlyCreature:
-                    if (selfSlot.CardType == CardType.Creature)
+                    if (selfSlot.SlotCardType == CardType.Creature)
                         targetSlots = BoardSystem.Instance.GetCreatureBoardSlots();
-                    if (selfSlot.CardType == CardType.Monster)
+                    if (selfSlot.SlotCardType == CardType.Monster)
                         targetSlots = BoardSystem.Instance.GetMonsterBoardSlots();
                     break;
                 case ConditionTarget.EnemyCreature:
-                    if (selfSlot.CardType == CardType.Creature)
+                    if (selfSlot.SlotCardType == CardType.Creature)
                         targetSlots = BoardSystem.Instance.GetMonsterBoardSlots();
-                    if (selfSlot.CardType == CardType.Monster)
+                    if (selfSlot.SlotCardType == CardType.Monster)
                         targetSlots = BoardSystem.Instance.GetCreatureBoardSlots();
                     break;
                 case ConditionTarget.Card:
-                    Debug.LogWarning("{selfSlot.Slot}번 슬롯. 카드 대상 미구현 - ConditionLogic.GetConditionTargets");
+                    Debug.LogWarning("{selfSlot.SlotNum}번 슬롯. 카드 대상 미구현 - ConditionLogic.GetConditionTargets");
                     break;
             }
 

@@ -7,6 +7,8 @@ namespace ERang
 {
     public class DeckSystem : MonoBehaviour
     {
+        public static DeckSystem Instance { get; private set; }
+
         public int DeckCardCount => deckCards.Count;
         public int HandCardCount => handCards.Count;
         public int ExtinctionCardCount => extinctionCards.Count;
@@ -20,7 +22,6 @@ namespace ERang
         private readonly int maxHandCardCount = 5;
         private readonly System.Random random = new();
 
-        // 이 녀석들은 보드에서 관리해 볼까?
         private readonly List<BaseCard> creatureCards = new(); // 마스터 크리쳐 카드
         private readonly List<BaseCard> buildingCards = new(); // 건물 카드
 
@@ -34,6 +35,8 @@ namespace ERang
 
         void Awake()
         {
+            Instance = this;
+
             deckUI = GetComponent<DeckUI>();
         }
 
@@ -111,6 +114,26 @@ namespace ERang
             }
 
             yield return StartCoroutine(DrawHandDeck());
+        }
+
+        public void HandCardToBoard(BaseCard card)
+        {
+            // 핸드 카드 제거
+            handCards.Remove(card);
+            deckUI.RemoveHandCard(card.Uid);
+
+            switch (card)
+            {
+                case CreatureCard creatureCard:
+                    creatureCards.Add(creatureCard);
+                    break;
+
+                case BuildingCard buildingCard:
+                    buildingCards.Add(buildingCard);
+                    break;
+            }
+
+            UpdateDeckCardCountUI();
         }
 
         /// <summary>
