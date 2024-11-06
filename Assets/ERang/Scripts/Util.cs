@@ -23,6 +23,22 @@ namespace ERang
     {
         private static Random random = new Random();
 
+        public static BaseCard MakeCard(CardData cardData)
+        {
+            BaseCard card = cardData.cardType switch
+            {
+                CardType.Creature => new CreatureCard(cardData),
+                CardType.Monster => new CreatureCard(cardData),
+                CardType.Building => new BuildingCard(cardData),
+                CardType.Charm => new MagicCard(cardData),
+                CardType.Curse => new MagicCard(cardData),
+                CardType.Magic => new MagicCard(cardData),
+                _ => new BaseCard(cardData),
+            };
+
+            return card;
+        }
+
         /// <summary>
         /// Fisher-Yates shuffle (피셔 예이츠)알고리즘
         /// </summary>

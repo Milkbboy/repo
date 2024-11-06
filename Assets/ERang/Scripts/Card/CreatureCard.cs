@@ -23,6 +23,14 @@ namespace ERang
             Mana = cardData.costMana;
         }
 
+        public CreatureCard(Master master) : base(master.MasterId, CardType.Master, 0, master.CardImage)
+        {
+            Hp = master.Hp;
+            MaxHp = master.MaxHp;
+            Def = master.Def;
+            Mana = master.Mana;
+        }
+
         public void TakeDamage(int amount)
         {
             Hp -= amount;

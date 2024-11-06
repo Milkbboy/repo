@@ -4,10 +4,16 @@ using ERang.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
-using Unity.VisualScripting;
 
 namespace ERang
 {
+    [System.Serializable]
+    public class StatObjectPair
+    {
+        public StatType statType;
+        public GameObject gameObject;
+    }
+
     public class CardUI : MonoBehaviour
     {
         public Image cardImage;
@@ -18,17 +24,47 @@ namespace ERang
         public TextMeshProUGUI manaText;
         public TextMeshProUGUI atkText;
         public TextMeshProUGUI defText;
-        public GameObject cardObject;
         public TextMeshProUGUI floatingTextPrefab;
         public Transform floatingTextParent;
+        public Dictionary<StatType, GameObject> statObjects = new();
+
+        [SerializeField]
+        private List<StatObjectPair> statObjectPairs = new List<StatObjectPair>();
 
         private Texture2D originTexture;
-        private List<TextMeshProUGUI> floatingTextList = new List<TextMeshProUGUI>();
+        private List<TextMeshProUGUI> floatingTextList = new();
+
+        void Awake()
+        {
+            foreach (var pair in statObjectPairs)
+            {
+                if (!statObjects.ContainsKey(pair.statType))
+                    statObjects.Add(pair.statType, pair.gameObject);
+            }
+        }
+
+        public void SetStatObjects(List<StatType> statTypes, bool activate)
+        {
+            foreach (var pair in statObjectPairs)
+            {
+                if (statTypes.Contains(pair.statType))
+                {
+                    pair.gameObject.SetActive(activate);
+                }
+            }
+        }
 
         public void SetCard(BaseCard card)
         {
+            foreach (var pair in statObjectPairs)
+            {
+                pair.gameObject.SetActive(false);
+            }
+
             if (card is CreatureCard creatureCard)
             {
+                SetStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Atk, StatType.Def }, true);
+
                 hpText.text = creatureCard.Hp.ToString();
                 manaText.text = creatureCard.Mana.ToString();
                 atkText.text = creatureCard.Atk.ToString();
@@ -37,6 +73,13 @@ namespace ERang
 
             if (card is MagicCard magicCard)
             {
+                List<StatType> statTypes = new List<StatType> { StatType.Mana };
+
+                if (magicCard.Atk > 0)
+                    statTypes.Add(StatType.Atk);
+
+                SetStatObjects(statTypes, true);
+
                 hpText.text = string.Empty;
                 manaText.text = magicCard.Mana.ToString();
                 atkText.text = magicCard.Atk.ToString();
@@ -45,27 +88,15 @@ namespace ERang
 
             if (card is BuildingCard buildingCard)
             {
+                SetStatObjects(new List<StatType> { StatType.Mana, StatType.Gold }, true);
+
                 hpText.text = string.Empty;
                 manaText.text = buildingCard.Gold.ToString();
                 atkText.text = string.Empty;
                 defText.text = string.Empty;
             }
 
-            CardData cardData = CardData.GetCardData(card.Id);
-
-            if (cardData == null)
-            {
-                Debug.LogError($"{card.Id} CardData is null");
-                return;
-            }
-
-            Texture2D cardTexture = cardData.GetCardTexture();
-
-            if (!cardTexture)
-            {
-                Debug.LogError($"${cardData.card_id} Card texture is null");
-                return;
-            }
+            Texture2D cardTexture = card.CardImage;
 
             if (cardMeshRenderer != null)
             {

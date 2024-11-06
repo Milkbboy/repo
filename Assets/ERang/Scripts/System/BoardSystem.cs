@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,17 +11,12 @@ namespace ERang
         public static BoardSystem Instance { get; private set; }
 
         public readonly CardType[] leftSlotCardTypes = { CardType.Master, CardType.Creature, CardType.Creature, CardType.Creature, CardType.None };
-        public readonly CardType[] rightSlotCardTypes = { CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.EnemyMaster };
+        public readonly CardType[] rightSlotCardTypes = { CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.Master };
         public readonly CardType[] buildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
 
-        // public BoardSlot boardSlot;
         public BSlot bSlotPrefab;
 
         private BoardUI boardUI;
-
-        // private readonly List<BoardSlot> boardSlots = new();
-        // private readonly List<BoardSlot> buildingSlots = new();
-
         private readonly List<BSlot> bSlots = new();
         private readonly List<BSlot> leftBSlots = new();
         private readonly List<BSlot> rightBSlots = new();
@@ -38,12 +34,9 @@ namespace ERang
         /// [ 0: Master, 1: Creature, 2: Creature, 3: Creature, 4: None, 
         ///   5: None, 6: Creature, 7: Creature, 8: Creature, 9: Master ]
         /// </summary>
-        /// <param name="master"></param>
-        /// <param name="enemy"></param>
-        public void CreateBoardSlots(Master master)
+        public void CreateBoardSlots(int creatureSlotCount)
         {
             int totalBoardSlotCount = leftSlotCardTypes.Length + rightSlotCardTypes.Length; ;
-            int creatureSlotCount = master.CreatureSlots;
             int leftSlotStartIndex = 3;
             int rightSlotStartIndex = 6;
 
@@ -116,59 +109,65 @@ namespace ERang
             }
         }
 
+        public IEnumerator CreateMasterCard(Master master)
+        {
+            CreatureCard card = new(master);
+
+            yield return null;
+
+            bSlots[0].EquipCard(card);
+        }
+
         /// <summary>
         /// 몬스터 카드 보드 슬롯에 생성
         /// </summary>
         /// <param name="monsterCards"></param>
-        public void CreateMonsterBoardSlots(List<BaseCard> monsterCards)
+        public IEnumerator CreateMonsterCards(List<int> cardIds)
         {
-            for (int i = 0; i < monsterCards.Count; i++)
+            Debug.Log($"몬스터 카드들 {string.Join(", ", cardIds)} 생성");
+
+            List<(int, BaseCard)> monsterCards = new();
+
+            for (int i = 0; i < cardIds.Count; ++i)
             {
-                BaseCard monsterCard = monsterCards[i];
-                BSlot slot = rightBSlots[i];
-
-                slot.EquipCard(monsterCard);
-            }
-        }
-
-        public void CreateMonsterBoardSlots(List<int> cardIds)
-        {
-            // Debug.Log($"CreateMonsterBoardSlots: {cardIds.Count}, {string.Join(", ", cardIds)}");
-
-            for (int i = 0; i < rightBSlots.Count; ++i)
-            {
-                BSlot slot = rightBSlots[i];
-
-                // Debug.Log($"CreateMonsterBoardSlots: {i}, Slot: {slot.Slot}, Index: {slot.Index} {slot.CardType}");
-
-                if (slot.SlotCardType == CardType.None)
-                    continue;
-
-                if (i > cardIds.Count || slot.Index < 0)
-                {
-                    // Debug.LogWarning($"카드 데이터 없음: {i}, cardIds.Count: {cardIds.Count}");
-                    continue;
-                }
-
-                int cardId = cardIds[slot.Index];
+                int cardId = cardIds[i];
 
                 if (cardId == 0)
-                {
-                    // Debug.LogWarning($"카드 데이터 없음: {i}, cardId: {cardId}");
                     continue;
-                }
 
                 CardData cardData = MonsterCardData.GetCardData(cardId);
 
                 if (cardData == null)
                 {
-                    Debug.LogError($"카드({cardId}) {Utils.RedText("MonsterCardData 테이블 데이터 없음")}");
+                    Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
                     continue;
                 }
 
-                BaseCard monsterCard = new(cardData);
+                BaseCard card = Utils.MakeCard(cardData);
 
-                slot.EquipCard(monsterCard);
+                monsterCards.Add((i, card));
+            }
+
+            // 한 프레임 기다림. slot.EquipCard 함수 내용 중 CardUI 의 cardObject.SetActive(true) 적용을 위한 대기
+            // 이렇게 안하면 BSlot 의 card 게임 오브젝트가 활성화되지 않아 카드가 보이지 현상 발생
+            // - 타이밍 이슈는 종종 게임 오브젝트가 생성되거나 초기화되는 시점과 관련이 있습니다. 
+            //   특히, Unity에서 게임 오브젝트를 생성하고 나서 바로 사용하려고 할 때, 아직 오브젝트가 완전히 초기화되지 않았거나, 
+            //   렌더링 시스템이 업데이트되지 않았을 수 있습니다. 이로 인해 오브젝트가 화면에 제대로 표시되지 않을 수 있습니다.
+            yield return null;
+
+            foreach (var (slotNum, card) in monsterCards)
+            {
+                BSlot slot = rightBSlots.Find(slot => slot.Index == slotNum);
+
+                if (slot == null)
+                {
+                    Debug.LogWarning($"몬스터 카드 슬롯 없음. SlotNum: {slotNum}");
+                    continue;
+                }
+
+                Debug.Log($"몬스터 카드 장착. Slot: {slot.SlotNum}, Index: {slot.Index}, CardId: {card.Id}");
+
+                slot.EquipCard(card);
             }
         }
 

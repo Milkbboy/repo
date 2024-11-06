@@ -60,15 +60,7 @@ namespace ERang
                     continue;
                 }
 
-                BaseCard card = cardData.cardType switch
-                {
-                    CardType.Creature => new CreatureCard(cardData),
-                    CardType.Building => new BuildingCard(cardData),
-                    CardType.Charm => new MagicCard(cardData),
-                    CardType.Curse => new MagicCard(cardData),
-                    CardType.Magic => new MagicCard(cardData),
-                    _ => new BaseCard(cardData),
-                };
+                BaseCard card = Utils.MakeCard(cardData);
 
                 // 카드 타입별로 생성
                 allCards.Add(card);

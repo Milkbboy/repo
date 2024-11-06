@@ -65,12 +65,10 @@ namespace ERang
 
         void Start()
         {
-            deckSystem.CreateMasterCards(master.StartCardIds);
+            floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation?.eventType ?? EventType.None}";
 
-            // 마스터 생성
-            BoardSystem.Instance.CreateBoardSlots(master);
+            BoardSystem.Instance.CreateBoardSlots(master.CreatureSlotCount);
 
-            // 몬스터 카드 생성
             LevelData levelData = LevelGroupData.GetLevelData(levelId);
 
             if (levelData == null)
@@ -80,9 +78,15 @@ namespace ERang
             }
 
             Debug.Log($"----------------- BATTLE START {floor} 층 ({levelId}) -----------------");
-            BoardSystem.Instance.CreateMonsterBoardSlots(levelData.cardIds);
 
-            floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation?.eventType ?? EventType.None}";
+            // 마스터 카드 생성
+            StartCoroutine(BoardSystem.Instance.CreateMasterCard(master));
+
+            // 마스터 크리쳐 카드 생성
+            deckSystem.CreateMasterCards(master.StartCardIds);
+
+            // 몬스터 카드 생성
+            StartCoroutine(BoardSystem.Instance.CreateMonsterCards(levelData.cardIds));
 
             StartCoroutine(TurnStart());
         }

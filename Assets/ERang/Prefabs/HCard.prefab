@@ -389,10 +389,18 @@ MonoBehaviour:
   manaText: {fileID: 4491285787686075359}
   atkText: {fileID: 7797132383164199717}
   defText: {fileID: 1911744166990989675}
-  cardObject: {fileID: 0}
   floatingTextPrefab: {fileID: 4789639728361502292, guid: ec99e805295420a4c9e5fc762d8a2753,
     type: 3}
   floatingTextParent: {fileID: 9189102936287547896}
+  statObjectPairs:
+  - statType: 1
+    gameObject: {fileID: 2850730987921660050}
+  - statType: 4
+    gameObject: {fileID: 1382533044437119861}
+  - statType: 2
+    gameObject: {fileID: 3257300165502948710}
+  - statType: 3
+    gameObject: {fileID: 7343818913912090043}
 --- !u!114 &4589787783677879801
 MonoBehaviour:
   m_ObjectHideFlags: 0

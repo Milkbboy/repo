@@ -1929,8 +1929,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5719599843496110580}
   - component: {fileID: 8399403216885128594}
-  - component: {fileID: 312906942128757443}
-  - component: {fileID: 5535518452341789233}
   - component: {fileID: 1064206174239179385}
   - component: {fileID: 6568035617856158359}
   m_Layer: 0
@@ -1967,54 +1965,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9034570797144690319}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &312906942128757443
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9034570797144690319}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 4}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &5535518452341789233
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9034570797144690319}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 120
-  m_CollisionDetection: 0
 --- !u!114 &1064206174239179385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2035,10 +1985,18 @@ MonoBehaviour:
   manaText: {fileID: 7711192589758607168}
   atkText: {fileID: 430336571047444446}
   defText: {fileID: 8831798543456601535}
-  cardObject: {fileID: 0}
   floatingTextPrefab: {fileID: 4789639728361502292, guid: ec99e805295420a4c9e5fc762d8a2753,
     type: 3}
   floatingTextParent: {fileID: 4518726022018848052}
+  statObjectPairs:
+  - statType: 1
+    gameObject: {fileID: 8056020832152888888}
+  - statType: 4
+    gameObject: {fileID: 6872267412408709006}
+  - statType: 2
+    gameObject: {fileID: 8359497312635072275}
+  - statType: 3
+    gameObject: {fileID: 2471880365429170015}
 --- !u!114 &6568035617856158359
 MonoBehaviour:
   m_ObjectHideFlags: 0

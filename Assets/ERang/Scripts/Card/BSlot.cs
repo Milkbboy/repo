@@ -85,6 +85,8 @@ namespace ERang
                 return false;
             }
 
+            Debug.Log($"카드 장착: {card.Id} {card.GetType()} {card.CardType}");
+
             this.card = card;
 
             cardObject.SetActive(true);

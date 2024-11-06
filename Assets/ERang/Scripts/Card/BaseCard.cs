@@ -15,6 +15,7 @@ namespace ERang
         public int AiGroupIndex { get; set; }
         public bool inUse { get; set; }
         public bool isExtinction { get; set; }
+        public Texture2D CardImage { get; set; }
 
         public BaseCard(CardData cardData)
         {
@@ -25,6 +26,17 @@ namespace ERang
             isExtinction = cardData.extinction;
             AiGroupId = cardData.aiGroup_id;
             AiGroupIndex = 0;
+            CardImage = cardData.GetCardTexture();
+        }
+
+        public BaseCard(int cardId, CardType cardType, int aiGroupId, Texture2D cardImage)
+        {
+            Uid = Utils.GenerateShortUniqueID();
+            Id = cardId;
+            CardType = cardType;
+            AiGroupId = aiGroupId;
+            AiGroupIndex = 0;
+            CardImage = cardImage;
         }
     }
 }
