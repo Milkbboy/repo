@@ -14,8 +14,8 @@ namespace ERang
         {
             int beforeMana = Master.Instance.Mana;
 
-            // 마나 추가 획득
-            BoardSystem.Instance.AddMana(Master.Instance, abilityData.value);
+            selfSlot.AdjustMana(abilityData.value);
+
             Debug.Log($"{Utils.BoardSlotLog(selfSlot)} <color=#257dca>마나 {abilityData.value} 추가 획득</color>({beforeMana} => {Master.Instance.Mana})");
 
             yield return new WaitForSeconds(0.1f);
@@ -25,7 +25,7 @@ namespace ERang
         {
             int beforeMana = Master.Instance.Mana;
 
-            BoardSystem.Instance.AddMana(Master.Instance, ability.abilityValue * -1);
+            selfSlot.AdjustMana(ability.abilityValue * -1);
 
             Debug.Log($"<color=#257dca>마나 {ability.abilityValue} 감소</color>({beforeMana} => {Master.Instance.Mana})");
 

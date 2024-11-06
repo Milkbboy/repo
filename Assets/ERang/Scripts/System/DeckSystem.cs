@@ -244,7 +244,7 @@ namespace ERang
         /// </summary>
         private void RemoveCardProcess(BaseCard card)
         {
-            if (card.isExtinction)
+            if (card.IsExtinction)
                 extinctionCards.Add(card);
             else
                 graveCards.Add(card);

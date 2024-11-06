@@ -33,12 +33,18 @@ namespace ERang
             if (aiDataType == AiDataType.Ranged)
                 yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, targetSlots, atkCount, damage));
 
-            // Debug.Log($"targetSlots: {string.Join(", ", targetSlots.Select(x => x.Slot))}");
+            // Debug.Log($"targetSlots: {string.Join(", ", targetSlots.Select(x => x.SlotNum))}");
 
             foreach (BSlot targetSlot in targetSlots)
             {
-                if (targetSlot.Card == null || targetSlot.Card is not CreatureCard)
+                if (targetSlot.Card == null || (targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard))
                 {
+                    if (targetSlot.Card == null)
+                        Debug.LogWarning($"targetSlot.Card is null. slotNum: {targetSlot.SlotNum}");
+
+                    if (targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard)
+                        Debug.LogWarning($"targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard. slotNum: {targetSlot.SlotNum}");
+
                     Changes.Add((false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
                     continue;
                 }
@@ -50,6 +56,8 @@ namespace ERang
 
                 for (int i = 0; i < atkCount; i++)
                 {
+                    // Debug.Log($"slotNum : {targetSlot.SlotNum}, cardId : {cardId}, hp : {creatureCard.Hp}, damage : {damage}");
+
                     yield return StartCoroutine(targetSlot.TakeDamage(damage));
                     targetSlot.TakeDamageAnimation();
 

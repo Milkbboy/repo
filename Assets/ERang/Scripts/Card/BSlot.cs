@@ -21,7 +21,7 @@ namespace ERang
 
         public GameObject cardObject;
 
-        private BaseCard card;
+        private BaseCard card = null;
         private CardUI cardUI;
         private Ani_Attack aniAttack;
         private Ani_Damaged aniDamaged;
@@ -85,7 +85,7 @@ namespace ERang
                 return false;
             }
 
-            Debug.Log($"카드 장착: {card.Id} {card.GetType()} {card.CardType}");
+            Debug.Log($"카드 장착: {card.Id} 타입: {card.CardType}, 클래스: {card.GetType()} ");
 
             this.card = card;
 
@@ -103,9 +103,36 @@ namespace ERang
                 yield break;
             }
 
-            (card as CreatureCard).TakeDamage(amount);
+            CreatureCard creatureCard = card as CreatureCard;
+
+            creatureCard.TakeDamage(amount);
+            cardUI.SetHp(creatureCard.Hp);
+
+            if (creatureCard.Hp <= 0)
+            {
+                card = null;
+                cardObject.SetActive(false);
+            }
 
             yield return null;
+        }
+
+        public void AdjustMana(int amount)
+        {
+            if (card is not MasterCard)
+            {
+                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
+                return;
+            }
+
+            MasterCard masterCard = card as MasterCard;
+
+            if (amount > 0)
+                masterCard.IncreaseMana(amount);
+            else
+                masterCard.DecreaseMana(-amount);
+
+            cardUI.SetMana(masterCard.Mana);
         }
 
         public void ApplyDamageAnimation()

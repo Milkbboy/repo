@@ -196,10 +196,11 @@ namespace ERang
 
             yield return StartCoroutine(abilityAction.Apply(aiData, abilityData, selfSlot, targetSlots));
 
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} {Utils.AbilityLog(abilityData)}로 {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityData.abilityType, abilityAction.Changes)}");
+
             if (abilityAction.Changes.Count == 0)
                 yield break;
 
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} {Utils.AbilityLog(abilityData)}로 {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityData.abilityType, abilityAction.Changes)}");
             abilityAction.Changes.Clear();
         }
 

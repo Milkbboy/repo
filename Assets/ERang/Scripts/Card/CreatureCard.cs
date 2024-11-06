@@ -8,62 +8,72 @@ namespace ERang
     // 크리쳐 카드
     public class CreatureCard : BaseCard, IDamageable, IDefensible, IAttackable
     {
-        public int Hp { get; set; }
-        public int MaxHp { get; set; }
-        public int Atk { get; set; }
-        public int Def { get; set; }
-        public int Mana { get; set; }
+        public int Hp => hp;
+        public int MaxHp => maxHp;
+        public int Def => def;
+        public int Mana => mana;
+
+        public int Atk => atk;
+
+        private int hp;
+        private int maxHp;
+        private int atk;
+        private int def;
+        private int mana;
 
         public CreatureCard(CardData cardData) : base(cardData)
         {
-            Hp = cardData.hp;
-            MaxHp = cardData.hp;
-            Atk = cardData.atk;
-            Def = cardData.def;
-            Mana = cardData.costMana;
+            hp = cardData.hp;
+            maxHp = cardData.hp;
+            atk = cardData.atk;
+            def = cardData.def;
+            mana = cardData.costMana;
         }
 
         public CreatureCard(Master master) : base(master.MasterId, CardType.Master, 0, master.CardImage)
         {
-            Hp = master.Hp;
-            MaxHp = master.MaxHp;
-            Def = master.Def;
-            Mana = master.Mana;
+            hp = master.Hp;
+            maxHp = master.MaxHp;
+            def = master.Def;
+            mana = master.Mana;
         }
 
         public void TakeDamage(int amount)
         {
-            Hp -= amount;
+            hp -= amount;
+
+            if (hp <= 0)
+                hp = 0;
         }
 
         public void RestoreHealth(int amount)
         {
-            Hp += amount;
+            hp += amount;
         }
 
         public void IncreaseDefense(int amount)
         {
-            Def += amount;
+            def += amount;
         }
 
         public void DecreaseDefense(int amount)
         {
-            Def -= amount;
+            def -= amount;
         }
 
         public void IncreaseAttack(int amount)
         {
-            Atk += amount;
+            atk += amount;
         }
 
         public void DecreaseAttack(int amount)
         {
-            Atk -= amount;
+            atk -= amount;
         }
 
         public void SetAttack(int amount)
         {
-            Atk = amount;
+            atk = amount;
         }
     }
 }

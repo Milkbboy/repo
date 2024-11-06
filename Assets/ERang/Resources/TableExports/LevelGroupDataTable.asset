@@ -19,7 +19,7 @@ MonoBehaviour:
     SpawnRatio: 100
     Pos01_CardID: 1001
     Pos02_CardID: 0
-    Pos03_CardID: 0
+    Pos03_CardID: 1002
     MasterID: 0
   - LevelGroupID: 1001001
     LevelID: 100100102

@@ -455,7 +455,7 @@ namespace ERang
                 return false;
             }
 
-            if (card.inUse == false)
+            if (card.InUse == false)
             {
                 ToastNotification.Show($"card({card.Id}) is not in use");
                 Debug.LogWarning($"사용할 수 없는 카드({card.Id}) InUse: false 설정");

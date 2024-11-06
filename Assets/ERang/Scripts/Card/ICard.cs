@@ -29,4 +29,10 @@ namespace ERang
         public void IncreaseAttack(int amount);
         public void DecreaseAttack(int amount);
     }
+
+    public interface IManaManageable
+    {
+        public void IncreaseMana(int amount);
+        public void DecreaseMana(int amount);
+    }
 }

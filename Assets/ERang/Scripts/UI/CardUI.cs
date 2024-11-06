@@ -43,7 +43,7 @@ namespace ERang
             }
         }
 
-        public void SetStatObjects(List<StatType> statTypes, bool activate)
+        public void ActiveStatObjects(List<StatType> statTypes, bool activate)
         {
             foreach (var pair in statObjectPairs)
             {
@@ -63,12 +63,21 @@ namespace ERang
 
             if (card is CreatureCard creatureCard)
             {
-                SetStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Atk, StatType.Def }, true);
+                ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Atk, StatType.Def }, true);
 
                 hpText.text = creatureCard.Hp.ToString();
                 manaText.text = creatureCard.Mana.ToString();
                 atkText.text = creatureCard.Atk.ToString();
                 defText.text = creatureCard.Def.ToString();
+            }
+
+            if (card is MasterCard masterCard)
+            {
+                ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Def }, true);
+
+                hpText.text = masterCard.Hp.ToString();
+                manaText.text = masterCard.Mana.ToString();
+                defText.text = masterCard.Def.ToString();
             }
 
             if (card is MagicCard magicCard)
@@ -78,7 +87,7 @@ namespace ERang
                 if (magicCard.Atk > 0)
                     statTypes.Add(StatType.Atk);
 
-                SetStatObjects(statTypes, true);
+                ActiveStatObjects(statTypes, true);
 
                 hpText.text = string.Empty;
                 manaText.text = magicCard.Mana.ToString();
@@ -88,7 +97,7 @@ namespace ERang
 
             if (card is BuildingCard buildingCard)
             {
-                SetStatObjects(new List<StatType> { StatType.Mana, StatType.Gold }, true);
+                ActiveStatObjects(new List<StatType> { StatType.Mana, StatType.Gold }, true);
 
                 hpText.text = string.Empty;
                 manaText.text = buildingCard.Gold.ToString();

@@ -37,8 +37,8 @@ namespace ERang
         public void CreateBoardSlots(int creatureSlotCount)
         {
             int totalBoardSlotCount = leftSlotCardTypes.Length + rightSlotCardTypes.Length; ;
-            int leftSlotStartIndex = 3;
-            int rightSlotStartIndex = 6;
+            int leftSlotStartIndex = 4;
+            int rightSlotStartIndex = 5;
 
             // 마스터 보드 슬롯 구성
             for (int i = 0; i < leftSlotCardTypes.Length; ++i)
@@ -59,6 +59,7 @@ namespace ERang
 
                 // 새로운 슬롯
                 BSlot bSlot = Instantiate(bSlotPrefab);
+                bSlot.name = $"Slot_{i}_{leftSlotStartIndex - i}";
                 bSlot.CreateSlot(i, leftSlotStartIndex - i, cardType);
 
                 bSlots.Add(bSlot);
@@ -72,6 +73,7 @@ namespace ERang
                 CardType cardType = rightSlotCardTypes[i];
 
                 BSlot bSlot = Instantiate(bSlotPrefab);
+                bSlot.name = $"Slot_{slotNum}_{slotNum - rightSlotStartIndex}";
                 bSlot.CreateSlot(slotNum, slotNum - rightSlotStartIndex, cardType);
 
                 bSlots.Add(bSlot);
@@ -111,7 +113,7 @@ namespace ERang
 
         public IEnumerator CreateMasterCard(Master master)
         {
-            CreatureCard card = new(master);
+            MasterCard card = new(master);
 
             yield return null;
 
@@ -145,7 +147,8 @@ namespace ERang
 
                 BaseCard card = Utils.MakeCard(cardData);
 
-                monsterCards.Add((i, card));
+                // 크리쳐 카드 슬롯 인덱스는 1부터 시자되므로 1을 더함
+                monsterCards.Add((i + 1, card));
             }
 
             // 한 프레임 기다림. slot.EquipCard 함수 내용 중 CardUI 의 cardObject.SetActive(true) 적용을 위한 대기
@@ -210,7 +213,7 @@ namespace ERang
         /// <param name="mana"></param>
         public void AddMana(Master master, int mana)
         {
-            master.AddMana(mana);
+            // master.AddMana(mana);
 
             // if (bSlots.Count > 0)
             //     bSlots[0]?.SetMana(master.Mana);
@@ -382,6 +385,11 @@ namespace ERang
                 return GetMonsterBoardSlots();
 
             return new List<BSlot>();
+        }
+
+        public List<BSlot> GetAllSlots()
+        {
+            return bSlots;
         }
     }
 }
