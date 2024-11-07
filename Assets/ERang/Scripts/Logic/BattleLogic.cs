@@ -302,6 +302,52 @@ namespace ERang
             }
         }
 
+        public bool HandCardUse(HCard hCard, BSlot targetSlot)
+        {
+            if (hCard.Card is CreatureCard)
+            {
+                BoardSlotEquipCard(hCard, targetSlot);
+
+                return true;
+            }
+
+            if (hCard.Card is MagicCard)
+            {
+                HandCardUse(hCard.Card.Uid, targetSlot);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 보드 슬롯에 카드 장착
+        /// - BSlot OnMouseUp 에서 호출
+        /// </summary>
+        /// <param name="boardSlot"></param>
+        /// <param name="cardUid"></param>
+        public void BoardSlotEquipCard(HCard hCard, BSlot boardSlot)
+        {
+            if (boardSlot.SlotCardType != hCard.Card.CardType)
+            {
+                hCard.GoBackPosition();
+                Debug.LogError($"카드 타입이 일치하지 않습니다. 슬롯 타입: {boardSlot.SlotCardType}, 카드 타입: {hCard.Card.CardType}");
+                return;
+            }
+
+            // 보드 슬롯에 카드 장착
+            boardSlot.EquipCard(hCard.Card);
+
+            // 핸드 카드를 그레이브 덱으로 이동
+            deckSystem.HandCardToBoard(hCard.Card);
+
+            // 카드 비용 소모
+            BoardSystem.Instance.CardCost(master, hCard.Card);
+
+            Debug.Log($"보드 슬롯 {boardSlot.SlotNum} 에 카드({hCard.Card.Id}) 장착");
+        }
+
         /// <summary>
         /// 핸드 카드 사용
         /// </summary>
@@ -481,32 +527,6 @@ namespace ERang
             Debug.Log($"핸드 카드({card.Id}) 사용 가능");
 
             return true;
-        }
-
-        /// <summary>
-        /// 보드 슬롯에 카드 장착
-        /// - BSlot OnMouseUp 에서 호출
-        /// </summary>
-        /// <param name="boardSlot"></param>
-        /// <param name="cardUid"></param>
-        public void BoardSlotEquipCard(BSlot boardSlot, HCard hCard)
-        {
-            if (boardSlot.SlotCardType != hCard.Card.CardType)
-            {
-                hCard.GoBackPosition();
-                Debug.LogError($"카드 타입이 일치하지 않습니다. 슬롯 타입: {boardSlot.SlotCardType}, 카드 타입: {hCard.Card.CardType}");
-                return;
-            }
-
-            boardSlot.EquipCard(hCard.Card);
-
-            // 카드 비용 소모
-            BoardSystem.Instance.CardCost(master, hCard.Card);
-
-            // Master handCards => boardCreatureCards or boardBuildingCards 로 이동
-            deckSystem.HandCardToBoard(hCard.Card);
-
-            Debug.Log($"보드 슬롯 {boardSlot.SlotNum} 에 카드({hCard.Card.Id}) 장착");
         }
 
         /// <summary>

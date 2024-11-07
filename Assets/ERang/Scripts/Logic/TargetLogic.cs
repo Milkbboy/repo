@@ -68,6 +68,9 @@ namespace ERang
                     break;
             }
 
+            if (targetSlots.Count > 0)
+                Debug.Log($"{aiDataAttackType} 타겟. [{string.Join(", ", targetSlots.Select(slot => (slot.SlotNum, slot.Card?.Id ?? 0)))}] 얻기 완료");
+
             return targetSlots;
         }
 

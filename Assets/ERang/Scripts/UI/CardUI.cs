@@ -82,7 +82,7 @@ namespace ERang
 
             if (card is MagicCard magicCard)
             {
-                List<StatType> statTypes = new List<StatType> { StatType.Mana };
+                List<StatType> statTypes = new List<StatType> { StatType.Mana, StatType.Atk };
 
                 if (magicCard.Atk > 0)
                     statTypes.Add(StatType.Atk);

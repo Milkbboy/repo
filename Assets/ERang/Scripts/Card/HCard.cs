@@ -46,9 +46,8 @@ namespace ERang
                 // 슬롯 위치로 이동
                 Debug.Log($"Nearest Slot: {nearestSlot.Index}");
 
-                BattleLogic.Instance.BoardSlotEquipCard(nearestSlot, this);
-
-                return;
+                if (BattleLogic.Instance.HandCardUse(this, nearestSlot))
+                    return;
             }
 
             transform.position = originalPosition;
