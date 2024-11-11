@@ -19,12 +19,12 @@ namespace ERang
             yield return new WaitForSeconds(0.1f);
         }
 
-        public IEnumerator Release(Ability ability, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
-            AiDataAttackType aiAttackType = ability.aiAttackType;
-            int abilityValue = ability.abilityValue;
-            int atkCount = ability.atkCount;
-            AiDataType aiDataType = ability.aiType;
+            AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
+            AiData aiData = AiData.GetAiData(ability.aiDataId);
+
+            int atkCount = aiData.atk_Cnt;
 
             selfSlot.ApplyDamageAnimation();
 
@@ -34,11 +34,11 @@ namespace ERang
             if (selfSlot.Card is CreatureCard)
                 damage = (selfSlot.Card as CreatureCard).Atk;
 
-            if (Constants.SelectAttackTypes.Contains(aiAttackType))
-                damage = abilityValue;
+            if (Constants.SelectAttackTypes.Contains(aiData.attackType))
+                damage = abilityData.value;
 
             // 원거리 미사일 발사
-            if (aiDataType == AiDataType.Ranged)
+            if (aiData.type == AiDataType.Ranged)
                 yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, new List<BSlot> { targetSlot }, atkCount, damage));
 
             if (targetSlot.Card == null || targetSlot.Card is not CreatureCard)

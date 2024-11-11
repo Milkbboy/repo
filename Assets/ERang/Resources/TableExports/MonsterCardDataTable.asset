@@ -21,7 +21,7 @@ MonoBehaviour:
     AiGroup_id: 11001
     CostMana: 1
     CostGold: 0
-    Hp: 10
+    Hp: 2
     Atk: 3
     Def: 1
     Ability_Id: 

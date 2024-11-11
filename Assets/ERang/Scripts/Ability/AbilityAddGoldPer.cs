@@ -24,7 +24,7 @@ namespace ERang
             yield return new WaitForSeconds(0.1f);
         }
 
-        public IEnumerator Release(Ability ability, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
             yield break;
         }

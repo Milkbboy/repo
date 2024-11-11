@@ -43,17 +43,6 @@ namespace ERang
             }
         }
 
-        public void ActiveStatObjects(List<StatType> statTypes, bool activate)
-        {
-            foreach (var pair in statObjectPairs)
-            {
-                if (statTypes.Contains(pair.statType))
-                {
-                    pair.gameObject.SetActive(activate);
-                }
-            }
-        }
-
         public void SetCard(BaseCard card)
         {
             foreach (var pair in statObjectPairs)
@@ -119,91 +108,6 @@ namespace ERang
             {
                 cardImage.sprite = Sprite.Create(cardTexture, new Rect(0, 0, cardTexture.width, cardTexture.height), Vector2.zero);
             }
-        }
-
-        public void SetCard(Card card)
-        {
-            // Debug.Log("CardUI SetCard: " + cardId);
-            CardData cardData = (card.Type == CardType.Monster) ? MonsterCardData.GetCardData(card.Id) : CardData.GetCardData(card.Id);
-            Texture2D cardTexture = cardData.GetCardTexture();
-
-            if (!cardTexture)
-            {
-                Debug.LogError($"${cardData.card_id} Card texture is null");
-                return;
-            }
-
-            if (cardMeshRenderer != null)
-            {
-                // 원래 텍스쳐 저장
-                if (originTexture == null)
-                {
-                    originTexture = (Texture2D)cardMeshRenderer.materials[0].GetTexture("_BaseMap");
-                }
-
-                cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
-            }
-            else
-            {
-                cardImage.sprite = Sprite.Create(cardTexture, new Rect(0, 0, cardTexture.width, cardTexture.height), Vector2.zero);
-            }
-
-            if (cardTypeText != null)
-            {
-                cardTypeText.text = card.Type.ToString();
-            }
-
-            // 카드 정보 표시
-            if (descText != null)
-            {
-                // descText.text = $"gold: {card.costGold.ToString()}\nmana: {card.costMana.ToString()}";
-
-                // if (card.hp > 0)
-                // {
-                //     descText.text += $"\nhp: {card.hp}";
-                // }
-
-                // if (card.atk > 0)
-                // {
-                //     descText.text += $"\natk: {card.atk}";
-                // }
-            }
-
-            hpText.text = card.hp.ToString();
-            manaText.text = card.costMana.ToString();
-            atkText.text = card.atk.ToString();
-            defText.text = card.def.ToString();
-        }
-
-        public void SetMasterCard(Master master)
-        {
-            // Debug.Log("CardUI SetMasterCard: " + master.masterId);
-            MasterData masterData = MasterData.master_dict[master.MasterId];
-
-            // Debug.Log("CardUI SetCard: " + cardId);
-            Texture2D cardTexture = masterData.GetMasterTexture();
-
-            if (!cardTexture)
-            {
-                Debug.LogError($"${master.MasterId} Master texture is null");
-                return;
-            }
-
-            if (cardMeshRenderer != null)
-            {
-                cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
-            }
-            else
-            {
-                cardImage.sprite = Sprite.Create(cardTexture, new Rect(0, 0, cardTexture.width, cardTexture.height), Vector2.zero);
-            }
-
-            if (cardTypeText != null)
-            {
-                cardTypeText.text = "Master";
-            }
-
-            SetMasterStat(master.Hp, master.MaxHp, master.Atk, master.Def, master.Mana, master.MaxMana);
         }
 
         public void SetEnemyMasterCard(Enemy enemy)
@@ -296,6 +200,17 @@ namespace ERang
         public void SetDesc(string desc)
         {
             descText.text = desc;
+        }
+
+        private void ActiveStatObjects(List<StatType> statTypes, bool activate)
+        {
+            foreach (var pair in statObjectPairs)
+            {
+                if (statTypes.Contains(pair.statType))
+                {
+                    pair.gameObject.SetActive(activate);
+                }
+            }
         }
 
         private void ShowFloatingText(string text, string oldValue, string newValue)

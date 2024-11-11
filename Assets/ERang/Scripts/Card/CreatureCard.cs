@@ -19,7 +19,7 @@ namespace ERang
         private int maxHp;
         private int atk;
         private int def;
-        private int mana;
+        protected int mana;
 
         public CreatureCard(CardData cardData) : base(cardData)
         {

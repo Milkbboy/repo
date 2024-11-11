@@ -21,6 +21,9 @@ namespace ERang
 
         public GameObject cardObject;
 
+        // LogText 속성 추가
+        public string LogText => Utils.BoardSlotLog(this);
+
         private BaseCard card = null;
         private CardUI cardUI;
         private Ani_Attack aniAttack;
@@ -85,7 +88,7 @@ namespace ERang
                 return false;
             }
 
-            Debug.Log($"카드 장착: {card.Id} 타입: {card.CardType}, 클래스: {card.GetType()} ");
+            Debug.Log($"{card.CardType} 카드({card.Id}) 장착. {card.GetType()} ");
 
             this.card = card;
 
@@ -112,9 +115,11 @@ namespace ERang
             {
                 card = null;
                 cardObject.SetActive(false);
-            }
 
-            yield return null;
+                yield return null;
+
+                StartCoroutine(BattleLogic.Instance.RemoveBoardCard(slotNum));
+            }
         }
 
         public void AdjustMana(int amount)
@@ -132,6 +137,20 @@ namespace ERang
             else
                 masterCard.DecreaseMana(-amount);
 
+            cardUI.SetMana(masterCard.Mana);
+        }
+
+        public void ResetMana()
+        {
+            if (card is not MasterCard)
+            {
+                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
+                return;
+            }
+
+            MasterCard masterCard = card as MasterCard;
+
+            masterCard.ResetMana();
             cardUI.SetMana(masterCard.Mana);
         }
 

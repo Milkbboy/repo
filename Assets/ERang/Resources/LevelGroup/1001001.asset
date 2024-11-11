@@ -17,7 +17,7 @@ MonoBehaviour:
   - levelId: 100100101
     nameDesc: "\uC561\uD2B8 1 \uC2DC\uC791 \uBAAC\uC2A4\uD130 \uC18C\uB4DC\uB9E8"
     spawnRatio: 100
-    cardIds: e903000000000000ea03000000000000
+    cardIds: e9030000000000000000000000000000
   - levelId: 100100102
     nameDesc: "\uC561\uD2B8 1 \uC2DC\uC791 \uBAAC\uC2A4\uD130 \uC544\uCCD02"
     spawnRatio: 100

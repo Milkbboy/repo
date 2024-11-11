@@ -20,7 +20,7 @@ namespace ERang
         /// <summary>
         /// AiData 테이블의 대상 슬롯 얻기
         /// </summary>
-        public List<BSlot> GetAiTargetSlots(AiData aiData, BSlot selfSlot)
+        public List<BSlot> GetAiTargetSlots(AiData aiData, BSlot selfSlot, string whereFrom = "")
         {
             List<BSlot> targetSlots = new List<BSlot>();
 
@@ -39,12 +39,12 @@ namespace ERang
                 case AiDataTarget.SecondEnemy: targetSlots = TargetSecondEnemy(selfSlot); break;
                 case AiDataTarget.None:
                 default:
-                    Debug.LogWarning($"{aiData.ai_Id} - 대상이 없음");
+                    Debug.LogWarning($"{aiData.ai_Id} - 대상이 없음. {whereFrom} 에서 호출");
                     break;
             }
 
             if (targetSlots.Count > 0)
-                Debug.Log($"{Utils.BoardSlotLog(selfSlot)} AiData({aiData.ai_Id})에 설정된 {aiData.target} 타겟. [{string.Join(", ", targetSlots.Select(slot => (slot.SlotNum, slot.Card?.Id ?? 0)))}] 얻기 완료");
+                Debug.Log($"{selfSlot.LogText} AiData({aiData.ai_Id})에 설정된 {aiData.target} 타겟. [{string.Join(", ", targetSlots.Select(slot => (slot.SlotNum, slot.Card?.Id ?? 0)))}] 얻기 완료. ({whereFrom})");
 
             return targetSlots;
         }
@@ -60,11 +60,11 @@ namespace ERang
             {
                 case AiDataAttackType.SelectEnemy:
                 case AiDataAttackType.SelectEnemyCreature:
-                    targetSlots = BoardSystem.Instance.GetMonsterBoardSlots();
+                    targetSlots = BoardSystem.Instance.GetRightBoardSlots();
                     break;
                 case AiDataAttackType.SelectFriendly:
                 case AiDataAttackType.SelectFriendlyCreature:
-                    targetSlots = BoardSystem.Instance.GetCreatureBoardSlots();
+                    targetSlots = BoardSystem.Instance.GetLeftBoardSlots();
                     break;
             }
 
@@ -166,7 +166,7 @@ namespace ERang
 
             int targetSlotNum = targetSlot.SlotNum;
 
-            Debug.Log($"{aiData.ai_Id} - 제일 근접한 타겟 SlotNum {targetSlot.SlotNum}, Index: {targetSlot.Index} 찾고 attackRanges({(aiData.attackRanges.Count > 0 ? string.Join(", ", aiData.attackRanges) : "없음")}) 에 설정된 타겟 찾기");
+            // Debug.Log($"{aiData.ai_Id} - 제일 근접한 타겟 SlotNum {targetSlot.SlotNum}, Index: {targetSlot.Index} 찾고 attackRanges({(aiData.attackRanges.Count > 0 ? string.Join(", ", aiData.attackRanges) : "없음")}) 에 설정된 타겟 찾기");
 
             if (aiData.attackRanges.Count == 0)
             {

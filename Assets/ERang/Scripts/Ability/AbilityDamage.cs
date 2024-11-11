@@ -76,7 +76,7 @@ namespace ERang
             }
         }
 
-        public IEnumerator Release(Ability ability, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
             yield break;
         }

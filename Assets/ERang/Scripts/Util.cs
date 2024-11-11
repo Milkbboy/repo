@@ -11,9 +11,11 @@ namespace ERang
     public static class Colors
     {
         public static string Red { get; } = "#dd3333";
-        public static string Green { get; } = "#81d742";
-        public static string Blue { get; } = "#1e73be";
+        public static string Green { get; } = "#00ff00";
+        public static string Blue { get; } = "#257dca";
         public static string Yellow { get; } = "#eeee22";
+        public static string Orange { get; } = "#e78a27";
+        public static string Puple { get; } = "#ed6ddc";
     }
 
     /// <summary>
@@ -21,7 +23,7 @@ namespace ERang
     /// </summary>
     public static class Utils
     {
-        private static Random random = new Random();
+        private static Random random = new();
 
         public static BaseCard MakeCard(CardData cardData)
         {
@@ -83,12 +85,12 @@ namespace ERang
 
         public static string BoardSlotLog(int slot, CardType cardType, int cardId)
         {
-            return $"{slot}번 슬롯 {(cardType == CardType.None ? "" : GetCardType(cardType))} 카드({(cardId != 0 ? cardId : "없음")})";
+            return $"<color={(slot > 5 ? Colors.Red : Colors.Green)}>{slot}</color>번 슬롯 {(cardType == CardType.None ? "" : GetCardType(cardType))} 카드({(cardId != 0 ? cardId : "없음")})";
         }
 
-        public static string CardLog(Card card)
+        public static string CardLog(HCard card)
         {
-            return $"{GetCardType(card.Type)} 카드({card.Id})";
+            return $"{GetCardType(card.Card.CardType)} 카드({card.Card.Id})";
         }
 
         public static string CardLog(BaseCard card)
@@ -156,6 +158,9 @@ namespace ERang
                 AbilityType.BrokenDef => "def",
                 _ => "스탯",
             };
+
+            if (changes.Count == 0)
+                return $"changes.Count == 0 으로 변화 없음";
 
             return $"{string.Join(", ", changes.Select(change => $"{change.slot}번 슬롯 {GetCardType(change.cardType)} 카드 {statText} {(change.isAffect ? $"<color=#00ff00>{change.before} => {change.after}</color>" : "")} 효과 {(change.isAffect ? "적용" : "미적용")}. 변화량: {change.changeValue}"))}";
         }

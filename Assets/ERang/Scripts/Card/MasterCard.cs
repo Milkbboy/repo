@@ -17,12 +17,17 @@ namespace ERang
 
         public void IncreaseMana(int amount)
         {
-            maxMana += amount;
+            mana += amount;
         }
 
         public void DecreaseMana(int amount)
         {
-            maxMana -= amount;
+            mana -= amount;
+        }
+
+        public void ResetMana()
+        {
+            mana = 0;
         }
     }
 }

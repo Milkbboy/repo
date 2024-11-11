@@ -16,6 +16,11 @@ namespace ERang
         public bool InUse { get; set; }
         public bool IsExtinction { get; set; }
         public Texture2D CardImage { get; set; }
+        public List<CardAbility> Abilities { get => abilities; set => abilities = value; }
+
+        public string LogText => Utils.CardLog(this);
+
+        private List<CardAbility> abilities = new();
 
         public BaseCard(CardData cardData)
         {

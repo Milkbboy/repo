@@ -12,22 +12,33 @@ namespace ERang
 
         public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
-            int beforeMana = Master.Instance.Mana;
+            if (selfSlot.Card is not MasterCard masterCard)
+                yield break;
+
+            // 이 시점에서 masterCard는 MasterCard 타입으로 변환된 상태입니다.
+            int beforeMana = masterCard.Mana;
 
             selfSlot.AdjustMana(abilityData.value);
 
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} <color=#257dca>마나 {abilityData.value} 추가 획득</color>({beforeMana} => {Master.Instance.Mana})");
+            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} <color=#257dca>마나 {abilityData.value} 추가 획득</color>({beforeMana} => {masterCard.Mana})");
 
             yield return new WaitForSeconds(0.1f);
         }
 
-        public IEnumerator Release(Ability ability, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
-            int beforeMana = Master.Instance.Mana;
+            BaseCard card = selfSlot.Card;
+            AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
 
-            selfSlot.AdjustMana(ability.abilityValue * -1);
+            if (card == null || card is not MasterCard masterCard || abilityData == null)
+                yield break;
 
-            Debug.Log($"<color=#257dca>마나 {ability.abilityValue} 감소</color>({beforeMana} => {Master.Instance.Mana})");
+            int beforeMana = masterCard.Mana;
+            int amount = abilityData.value;
+
+            selfSlot.AdjustMana(amount * -1);
+
+            Debug.Log($"<color=#257dca>마나 {amount} 감소</color>({beforeMana} => {masterCard.Mana})");
 
             yield return new WaitForSeconds(0.1f);
         }

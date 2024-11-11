@@ -73,20 +73,7 @@ namespace ERang
             Debug.Log($"<color=#257dca>Reset Mana: {beforeMana} -> {mana}</color>");
         }
 
-        public void AddMana(int value)
-        {
-            int beforeMana = mana;
 
-            mana += value;
-
-            if (mana < 0)
-                mana = 0;
-
-            if (mana > MaxMana)
-                mana = MaxMana;
-
-            // Debug.Log($"<color=#257dca>Add Mana({value}): {beforeMana} -> {mana}</color>");
-        }
 
         public void AddGold(int gold)
         {
