@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Newtonsoft.Json;
-using System.Text; // Newtonsoft.Json 라이브러리 추가
 
 namespace ERang
 {
@@ -17,6 +16,9 @@ namespace ERang
         [MenuItem("ERang/PlayerPrefs Viewer")]
         public static void ShowWindow()
         {
+            if (PlayerPrefsUtility.HasKey("KeepSatiety") == false)
+                PlayerPrefsUtility.SetBool("KeepSatiety", false);
+
             var window = GetWindow<PlayerPrefsViewer>("PlayerPrefs Viewer");
             window.LoadPlayerPrefs();
         }
@@ -53,13 +55,22 @@ namespace ERang
                     }
                 }
             }
+
+            foreach (var key in PlayerPrefsUtility.PrefBoolKeys)
+            {
+                if (PlayerPrefsUtility.HasKey(key))
+                {
+                    bool boolValue = PlayerPrefsUtility.GetBool(key);
+                    playerPrefsValues[key] = boolValue;
+                }
+            }
         }
 
         private void OnEnable()
         {
             // Load PlayerPrefs values into the dictionary
             string keysString = PlayerPrefsUtility.GetString("PlayerPrefsKeys", "");
-            Debug.Log($"keysString: {keysString}");
+            // Debug.Log($"keysString: {keysString}");
 
             foreach (var key in keysString.Split(';'))
             {
@@ -70,36 +81,46 @@ namespace ERang
 
         private void OnGUI()
         {
-            GUILayout.Label("PlayerPrefs Viewer", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            // GUILayout.Label("PlayerPrefs Viewer", EditorStyles.boldLabel);
 
             if (GUILayout.Button("Refresh"))
             {
-                PlayerPrefs.DeleteAll();
+                PlayerPrefsUtility.DeleteAllExcept();
 
                 LoadPlayerPrefs();
             }
 
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
-            foreach (var kvp in playerPrefsValues)
+            // 컬렉션을 수정할 때 열거 작업을 피하기 위해 딕셔너리의 키 목록을 복사합니다.
+            var keys = playerPrefsValues.Keys.ToList();
+
+            foreach (var key in keys)
             {
-                if (kvp.Key == "DepthWidths")
+                if (key == "DepthWidths")
                     continue;
 
-                EditorGUILayout.LabelField(kvp.Key, GUILayout.Width(200));
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(key, GUILayout.Width(200));
 
-                if (kvp.Value is int intValue)
+                var value = playerPrefsValues[key];
+
+                if (value is int intValue)
                 {
                     int newValue = EditorGUILayout.IntField(intValue, GUILayout.Width(200));
                     if (newValue != intValue)
                     {
-                        playerPrefsValues[kvp.Key] = newValue;
-                        PlayerPrefsUtility.SetInt(kvp.Key, newValue);
+                        playerPrefsValues[key] = newValue;
+                        PlayerPrefsUtility.SetInt(key, newValue);
                     }
                 }
-                else if (kvp.Value is string stringValue)
+                else if (value is string stringValue)
                 {
-                    if (kvp.Key == "Locations")
+                    if (key == "Locations")
                     {
                         // Locations 데이터를 층별로 표시
                         foreach (var depth in locationsByDepth.Keys.OrderBy(d => d))
@@ -124,7 +145,7 @@ namespace ERang
                             EditorGUILayout.EndVertical();
                         }
                     }
-                    else if (kvp.Key == "SelectedDepthIndies")
+                    else if (key == "SelectedDepthIndies")
                     {
                         List<(int, int)> selectedDepthIndiesList = selectedDepthIndies.Select(kvp => (kvp.Key, kvp.Value)).ToList();
 
@@ -136,11 +157,22 @@ namespace ERang
                         string newValue = EditorGUILayout.TextField(stringValue, GUILayout.Width(200));
                         if (newValue != stringValue)
                         {
-                            playerPrefsValues[kvp.Key] = newValue;
-                            PlayerPrefsUtility.SetString(kvp.Key, newValue);
+                            playerPrefsValues[key] = newValue;
+                            PlayerPrefsUtility.SetString(key, newValue);
                         }
                     }
                 }
+                else if (value is bool boolValue)
+                {
+                    bool newValue = EditorGUILayout.Toggle(boolValue, GUILayout.Width(200));
+                    if (newValue != boolValue)
+                    {
+                        playerPrefsValues[key] = newValue;
+                        PlayerPrefsUtility.SetBool(key, newValue);
+                    }
+                }
+
+                EditorGUILayout.EndHorizontal();
             }
 
             EditorGUILayout.EndScrollView();

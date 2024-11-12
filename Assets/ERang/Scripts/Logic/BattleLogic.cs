@@ -31,6 +31,7 @@ namespace ERang
         private DeckSystem deckSystem;
         private bool isTruenEndProcessing = false;
         private MapLocation selectLocation;
+        private bool keepSatiety;
 
         // for test
         private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
@@ -43,6 +44,9 @@ namespace ERang
             masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
             floor = PlayerPrefsUtility.GetInt("Floor", 1);
             levelId = PlayerPrefsUtility.GetInt("LevelId", 100100101);
+            keepSatiety = PlayerPrefsUtility.GetValue<bool>("KeepSatiety", false);
+
+            Debug.Log($"포만감 저장 여부: {keepSatiety}");
 
             string selectLocationJson = PlayerPrefsUtility.GetString("SelectLocation", null);
 
@@ -90,6 +94,10 @@ namespace ERang
             if (master.MasterType == MasterType.Luci)
             {
                 satietyUI.gameObject.SetActive(true);
+
+                if (keepSatiety)
+                    master.Satiety = PlayerPrefsUtility.GetInt("Satiety", master.Satiety);
+
                 satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
             }
 
@@ -197,25 +205,34 @@ namespace ERang
 
         IEnumerator BattleEnd(bool isWin)
         {
-            resultText.text = isWin ? "YOU WIN" : "YOU LOSE";
-
-            // 이기면 층 증가
-            int nextFloor = isWin ? floor + 1 : 0;
-            PlayerPrefsUtility.SetInt("Floor", nextFloor);
-
+            int nextFloor = 0;
             int locationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
 
-            Debug.Log($"배틀 종료 {isWin}, loastLocationId: {locationId}, nextFloor: {nextFloor}");
-
-            // 마지막에 선택한 층 인덱스 저장 (지면 초기화)
-            PlayerPrefsUtility.SetInt("LastLocationId", isWin ? locationId : 0);
-
-            if (!isWin)
+            if (isWin)
             {
+                resultText.text = "YOU WIN";
+                // 이기면 층 증가
+                nextFloor = floor + 1;
+
+                // 마지막에 선택한 층 인덱스 저장
+                PlayerPrefsUtility.SetInt("LastLocationId", locationId);
+
+                if (keepSatiety)
+                    PlayerPrefsUtility.SetInt("Satiety", master.Satiety);
+            }
+            else
+            {
+                resultText.text = "YOU LOSE";
+
                 PlayerPrefsUtility.SetInt("MasterId", 0);
                 PlayerPrefsUtility.SetInt("AreaId", 0);
                 PlayerPrefsUtility.SetInt("LevelId", 0);
+                PlayerPrefsUtility.SetInt("LastLocationId", 0);
             }
+
+            PlayerPrefsUtility.SetInt("Floor", nextFloor);
+
+            Debug.Log($"배틀 종료 {isWin}, loastLocationId: {locationId}, nextFloor: {nextFloor}");
 
             yield return new WaitForSeconds(2f);
 
