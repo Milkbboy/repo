@@ -25,6 +25,7 @@ namespace ERang
         public int masterId;
         public int floor;
         public int levelId;
+        public SatietyUI satietyUI;
 
         private Master master;
         private DeckSystem deckSystem;
@@ -85,6 +86,13 @@ namespace ERang
             // 마스터 크리쳐 카드 생성
             deckSystem.CreateMasterCards(master.StartCardIds);
 
+            // 루시 포만감 UI 설정
+            if (master.MasterType == MasterType.Luci)
+            {
+                satietyUI.gameObject.SetActive(true);
+                satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
+            }
+
             // 몬스터 카드 생성
             StartCoroutine(BoardSystem.Instance.CreateMonsterCards(levelData.cardIds));
 
@@ -94,6 +102,30 @@ namespace ERang
         void Update()
         {
             ActionQueueProcess();
+        }
+
+        /// <summary>
+        /// 테스트
+        /// </summary>
+        public void Test()
+        {
+            // BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(6);
+            // List<BoardSlot> targetSlots = BoardSystem.Instance.GetBoardSlots(new List<int> { 3, 2 });
+
+            // AiData aiData = AiData.GetAiData(1001);
+            // AbilityData abilityData = AbilityData.GetAbilityData(70001); // 기본 근거리 공격
+
+            // StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
+
+            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
+
+            List<BSlot> firstSlots = TargetLogic.Instance.TargetFirstEnemy(selfSlot);
+            Debug.Log($"TargetFirstEnemy - first Slot: {firstSlots[0].SlotNum}, index: {firstSlots[0].Index}");
+
+            List<BSlot> secondsSlots = TargetLogic.Instance.TargetSecondEnemy(selfSlot);
+            Debug.Log($"TargetSecondEnemy - first Slot: {secondsSlots[0].SlotNum}, index: {secondsSlots[0].Index}");
+
+            UpdateSatietyGauge(10);
         }
 
         public IEnumerator TurnStart()
@@ -110,7 +142,6 @@ namespace ERang
             BoardSystem.Instance.ResetMana(master);
 
             // 마나 충전
-            // EnqueueAction("마나 충전", () => { BoardSystem.Instance.ChargeMana(master); });
             BoardSystem.Instance.AddMana(master.RechargeMana);
 
             // 핸드 카드 만들기
@@ -368,52 +399,61 @@ namespace ERang
 
         /// <summary>
         /// 핸드 카드 사용
+        // - 카드 사용 주체는 마스터 슬롯
         /// </summary>
-        public void HandCardUse(string cardUid, BSlot targetSlot)
+        public void HandCardUse(string cardUid, BSlot neareastSlot)
         {
             BaseCard card = deckSystem.FindHandCard(cardUid);
 
-            // 타겟 설정 카드인가 확인
-            var (isSelectAttackType, aiData) = AiLogic.Instance.GetAiAttackInfo(card);
+            int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
 
-            Debug.Log($"핸드 카드({card.Id}) 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData?.ai_Id ?? 0}, targetSlot: {targetSlot?.SlotNum ?? -1}");
+            AiData aiData = AiData.GetAiData(aiDataId);
 
+            if (aiData == null)
+            {
+                Debug.LogError($"{card.LogText} 카드 AiData 없음");
+                return;
+            }
+
+            // 타겟 설정 카드 확인
+            bool isSelectAttackType = Constants.SelectAttackTypes.Contains(aiData.attackType);
+
+            // 마법 사용 주체는 마스터 슬롯
+            BSlot selfSlot = BoardSystem.Instance.GetMasterSlot();
+
+            // 타겟팅이면 nearastSlot 을 대상으로 설정
+            List<BSlot> targetSlots = (aiData.target == AiDataTarget.SelectEnemy) ?
+                new List<BSlot> { neareastSlot } :
+                TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandCardUse");
+
+            Debug.Log($"{card.LogText} 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData.ai_Id}, aiData.target: {aiData.target}, neareastSlot: {neareastSlot?.SlotNum ?? -1}, tagetSlots: {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
+
+            // 대상 선택 사용 카드
             if (isSelectAttackType)
             {
-                if (targetSlot == null)
+                if (neareastSlot == null)
                 {
-                    Debug.LogWarning($"핸드 카드({card.Id}) 타겟 슬롯이 없어 카드 사용 불가");
+                    Debug.LogError($"{card.LogText} 마법 대상이 없어서 카드 사용 실패");
                     return;
                 }
 
-                List<BSlot> selectTypeTargetSlots = TargetLogic.Instance.GetSelectAttackTypeTargetSlot(aiData.attackType);
-
-                // 타겟 슬롯에 대상 슬롯에 포함되어 있으면 카드 사용
-                if (selectTypeTargetSlots.Contains(targetSlot))
+                if (targetSlots.Contains(neareastSlot) == false)
                 {
-                    Debug.Log($"타겟 슬롯 {targetSlot.SlotNum} 에 핸드 카드({card.Id}) 사용");
-                    BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
-
-                    List<BSlot> targetSlots = new() { targetSlot };
-                    List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
-
-                    foreach (AbilityData abilityData in abilityDatas)
-                    {
-                        // 핸드 카드로 공격하는 경우 마스터 공격력 설정. 핸드 카드 동작은 마스터 카드로 하는데....이건 아니다.
-                        (selfSlot.Card as CreatureCard).SetAttack(aiData.value);
-
-                        // 어빌리티 적용
-                        StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning($"핸드 카드({card.Id}) 타겟 아님");
+                    Debug.LogError($"{card.LogText} 대상 슬롯이 아닌 슬롯에 카드 사용 실패");
                     return;
                 }
             }
 
-            Debug.Log($"핸드 카드({card.Id}) 사용");
+            List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
+
+            foreach (AbilityData abilityData in abilityDatas)
+            {
+                // 핸드 카드로 공격하는 경우 마스터 공격력 설정. 핸드 카드 동작은 마스터 카드로 하는데....이건 아니다.
+                (selfSlot.Card as CreatureCard).SetAttack(aiData.value);
+
+                // 어빌리티 적용
+                StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
+            }
 
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, card);
@@ -544,28 +584,6 @@ namespace ERang
         }
 
         /// <summary>
-        /// 테스트
-        /// </summary>
-        public void Test()
-        {
-            // BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(6);
-            // List<BoardSlot> targetSlots = BoardSystem.Instance.GetBoardSlots(new List<int> { 3, 2 });
-
-            // AiData aiData = AiData.GetAiData(1001);
-            // AbilityData abilityData = AbilityData.GetAbilityData(70001); // 기본 근거리 공격
-
-            // StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
-
-            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
-
-            List<BSlot> firstSlots = TargetLogic.Instance.TargetFirstEnemy(selfSlot);
-            Debug.Log($"TargetFirstEnemy - first Slot: {firstSlots[0].SlotNum}, index: {firstSlots[0].Index}");
-
-            List<BSlot> secondsSlots = TargetLogic.Instance.TargetSecondEnemy(selfSlot);
-            Debug.Log($"TargetSecondEnemy - first Slot: {secondsSlots[0].SlotNum}, index: {secondsSlots[0].Index}");
-        }
-
-        /// <summary>
         /// 테스트용 원거리
         /// </summary>
         public void TestRanged()
@@ -577,6 +595,16 @@ namespace ERang
             AbilityData abilityData = AbilityData.GetAbilityData(70004); // 기본 원거리 공격
 
             StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
+        }
+
+        public void UpdateSatietyGauge(int amount)
+        {
+            if (amount > 0)
+                master.IncreaseSatiety(amount);
+            else
+                master.DecreaseSatiety(-amount);
+
+            satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
         }
 
         /// <summary>

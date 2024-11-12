@@ -4,6 +4,7 @@ namespace ERang
     public class AiDataEntity
     {
         public int Ai_Id; // Ai의 Id 값
+        public string NameDesc; // Ai의 이름 및 설명
         public string Type; // 행동의 타입을 정의
         public string Target; // 대상 혹은 복수 대상을 설정한다.
         public string Atk_Type; // 행동이 이루어지는 절차를 설정한다.

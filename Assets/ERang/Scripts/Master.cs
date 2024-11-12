@@ -9,6 +9,7 @@ namespace ERang
         public static Master Instance { get; private set; }
 
         public int MasterId => masterId;
+        public MasterType MasterType => masterType;
         public int Hp { get => hp; set => hp = value; }
         public int MaxHp { get => maxHp; set => maxHp = value; }
         public int Mana => mana;
@@ -18,10 +19,13 @@ namespace ERang
         public int Def { get => def; set => def = value; }
         public int Gold { get => gold; set => gold = value; }
         public int CreatureSlotCount => creatureSlots;
+        public int Satiety { get => satiety; set => satiety = value; }
+        public int MaxSatiety => maxSatiety;
         public List<int> StartCardIds => startCardIds;
         public Texture2D CardImage => masterTexture;
 
         private readonly int masterId;
+        private readonly MasterType masterType;
         private readonly List<int> startCardIds = new();
 
         private int hp;
@@ -33,6 +37,8 @@ namespace ERang
         private int def;
         private int gold;
         private int creatureSlots;
+        private int satiety;
+        private int maxSatiety;
         private Texture2D masterTexture;
 
         public Master(MasterData masterData)
@@ -40,6 +46,7 @@ namespace ERang
             Instance = this;
 
             masterId = masterData.master_Id;
+            masterType = masterData.masterType;
             maxHp = hp = masterData.hp;
             mana = masterData.startMana;
             maxMana = masterData.maxMana;
@@ -48,32 +55,11 @@ namespace ERang
             def = masterData.def;
             gold = 1000; // 임시
             creatureSlots = masterData.creatureSlots;
+            satiety = masterData.satietyGauge;
+            maxSatiety = masterData.maxSatietyGauge;
             startCardIds = masterData.startCardIds;
             masterTexture = masterData.masterTexture;
         }
-
-        public void ChargeMana()
-        {
-            int beforeMana = mana;
-
-            mana += rechargeMana;
-
-            if (mana > MaxMana)
-                mana = MaxMana;
-
-            Debug.Log($"<color=#257dca>Charge Mana({rechargeMana}): {beforeMana} -> {mana}</color>");
-        }
-
-        public void ResetMana()
-        {
-            int beforeMana = mana;
-
-            mana = 0;
-
-            Debug.Log($"<color=#257dca>Reset Mana: {beforeMana} -> {mana}</color>");
-        }
-
-
 
         public void AddGold(int gold)
         {
@@ -82,6 +68,30 @@ namespace ERang
             this.gold += gold;
 
             Debug.Log($"<color=#257dca>Add Gold({gold}): {beforeGold} -> {this.gold}</color>");
+        }
+
+        public void IncreaseSatiety(int satiety)
+        {
+            int beforeSatiety = this.satiety;
+
+            this.satiety += satiety;
+
+            if (this.satiety > maxSatiety)
+                this.satiety = maxSatiety;
+
+            Debug.Log($"<color=#257dca>만복감 증가({satiety}): {beforeSatiety} -> {this.satiety}</color>");
+        }
+
+        public void DecreaseSatiety(int satiety)
+        {
+            int beforeSatiety = this.satiety;
+
+            this.satiety -= satiety;
+
+            if (this.satiety < 0)
+                this.satiety = 0;
+
+            Debug.Log($"<color=#257dca>Decrease Satiety({satiety}): {beforeSatiety} -> {this.satiety}</color>");
         }
     }
 }

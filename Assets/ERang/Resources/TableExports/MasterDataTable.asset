@@ -24,7 +24,9 @@ MonoBehaviour:
     MaxMana: 6
     RechargeMana: 2
     CreatureSlots: 2
-    StartCardDeck_Id: 100101, 100101, 100301, 200101, 300101
+    SatietyGauge: 20
+    MaxSatietyGauge: 100
+    StartCardDeck_Id: 1007,1007,1007,1007, 100301, 100301
     StartArtiFact_Id: 1001
     StartAbility_Id: 9001001
   - Master_Id: 1002
@@ -38,6 +40,8 @@ MonoBehaviour:
     MaxMana: 5
     RechargeMana: 2
     CreatureSlots: 1
+    SatietyGauge: 0
+    MaxSatietyGauge: 0
     StartCardDeck_Id: 100103, 100104, 100105, 200102, 200102, 300101, 300201
     StartArtiFact_Id: 0
     StartAbility_Id: 9001002, 9001002
@@ -52,6 +56,8 @@ MonoBehaviour:
     MaxMana: 5
     RechargeMana: 2
     CreatureSlots: 2
+    SatietyGauge: 0
+    MaxSatietyGauge: 0
     StartCardDeck_Id: 100105, 100105, 100305, 200101, 300101, 300101, 300201
     StartArtiFact_Id: 0
     StartAbility_Id: 9001004

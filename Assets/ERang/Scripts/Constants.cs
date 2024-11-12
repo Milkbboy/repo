@@ -2,6 +2,14 @@ using System.Collections.Generic;
 
 namespace ERang
 {
+    public enum MasterType
+    {
+        None = 0,
+        Luci = 1001,
+        CrawlSeul = 1002,
+        BarakRahum = 1003,
+    }
+
     public enum StatType
     {
         None = 0,
@@ -83,6 +91,7 @@ namespace ERang
         Self, // 자기 자신을 대상으로 설정한다.
         FirstEnemy, // 가장 앞에 있는 적을 공격한다. (Atk_Range 무시)
         SecondEnemy, // 첫번째 적을 건너뛰고 뒤에 있는 적을 공격한다. (Atk_Range 무시) 해당 타겟이 없다면, 첫번째 적을 타겟으로 한다.
+        SelectEnemy, // 적 보스를 포함한 적군 중 하나를 대상으로 지정한다 (지정 UI 출력)
     }
 
     // 행동이 이루어지는 절차를 설정한다.
@@ -127,6 +136,8 @@ namespace ERang
         AddMana, // 대상의 마나를 Value 만큼 Duration 턴 동안 증가시킨다.
         SubMana, // 대상의 마나를 Value 만큼 Duration 턴 동안 감소시킨다.
         AddGold, // Value 만큼 골드를 획득한다.
+        AddSatiety, // Value 만큼 포만감을 채운다.
+        SubSatiety, // Value 만큼 포만감을 소모한다.
     }
 
     /// <summary>

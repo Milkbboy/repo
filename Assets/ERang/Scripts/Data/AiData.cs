@@ -119,6 +119,7 @@ namespace ERang.Data
                 "AllFriendly" => AiDataTarget.AllFriendly,
                 "AllFriendlyCreature" => AiDataTarget.AllFriendlyCreature,
                 "Self" => AiDataTarget.Self,
+                "SelectEnemy" => AiDataTarget.SelectEnemy,
                 _ => AiDataTarget.None,
             };
         }

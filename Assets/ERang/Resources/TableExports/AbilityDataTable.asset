@@ -429,3 +429,29 @@ MonoBehaviour:
     SkillIcon: AddGold_01
     SkillViewIcon: 
     FxSound: 
+  - AbilityData_Id: 100001
+    AbilityType: AddSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+  - AbilityData_Id: 100002
+    AbilityType: SubSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 

@@ -9,6 +9,7 @@ namespace ERang.Data
     public class MasterData : ScriptableObject
     {
         public int master_Id; // 마왕의 Id 값
+        public MasterType masterType; // 마왕의 타입
         public string masterNameDesc_id; // 마왕 캐릭터의 실제 이름 String이 들어간 데이터 Id
         public string masterDesc_id; // 마왕의 캐릭터 설명을 담은 String이 들어간 데이터 Id
         public int masterAi_id; // 마왕의 공격 타입에 대한 Id (근거리, 원거리, 혹은 폭파 등)
@@ -22,6 +23,8 @@ namespace ERang.Data
         public int startArtiFact_id; // 마왕이 처음 시작 시 갖고 있는 아티팩트의 id 값
         public string StartAbilityIds; // 마왕이 선천적으로 가지고 있는 특성 id 값
         public int creatureSlots; // 마왕이 소환할 수 있는 크리쳐의 슬롯 개수
+        public int satietyGauge; // 마왕의 포만감 게이지 초기 값
+        public int maxSatietyGauge; // 마왕의 포만감 게이지 최대 값
         public List<int> startCardIds = new List<int>(); // 마왕이 처음 스테이지에 진입 할 때 갖게되는 카드 id 리스트
         public List<int> startAbilityIds = new List<int>(); // 마왕이 선천적으로 가지고 있는 특성 id 리스트
 
@@ -31,6 +34,7 @@ namespace ERang.Data
         public void Initialize(MasterDataEntity entity)
         {
             master_Id = entity.Master_Id;
+            masterType = GetMasterType(master_Id);
             masterNameDesc_id = entity.MasterNameDesc_Id;
             masterDesc_id = entity.MasterDesc_Id;
             masterAi_id = entity.MasterAi_id;
@@ -41,6 +45,8 @@ namespace ERang.Data
             maxMana = entity.MaxMana;
             rechargeMana = entity.RechargeMana;
             creatureSlots = entity.CreatureSlots;
+            satietyGauge = entity.SatietyGauge;
+            maxSatietyGauge = entity.MaxSatietyGauge;
             startArtiFact_id = entity.StartArtiFact_Id;
 
             // entity.StartCardDeck_Id 문자열을 ","로 분리하고, 결과에서 빈칸을 제거합니다.
@@ -114,6 +120,17 @@ namespace ERang.Data
         public Texture2D GetMasterTexture()
         {
             return masterTexture;
+        }
+
+        public MasterType GetMasterType(int masterId)
+        {
+            return masterId switch
+            {
+                1001 => MasterType.Luci,
+                1002 => MasterType.CrawlSeul,
+                1003 => MasterType.BarakRahum,
+                _ => MasterType.None,
+            };
         }
     }
 }

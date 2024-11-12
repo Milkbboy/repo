@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - Ai_Id: 1001
+    NameDesc: "\uAE30\uBCF8 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     Type: Melee
     Target: Near Enemy
     Atk_Type: Automatic
@@ -24,6 +25,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70001
   - Ai_Id: 1002
+    NameDesc: "\uB2E4\uB2E8 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     Type: Melee
     Target: Near Enemy
     Atk_Type: Automatic
@@ -34,6 +36,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70002
   - Ai_Id: 1003
+    NameDesc: "\uAD00\uD1B5 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     Type: Melee
     Target: Near Enemy
     Atk_Type: Automatic
@@ -44,6 +47,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70003
   - Ai_Id: 1004
+    NameDesc: "\uAE30\uBCF8 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     Type: Ranged
     Target: Enemy
     Atk_Type: Automatic
@@ -54,6 +58,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70004
   - Ai_Id: 1005
+    NameDesc: "\uB2E4\uB2E8 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     Type: Ranged
     Target: Enemy
     Atk_Type: Automatic
@@ -64,6 +69,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70005
   - Ai_Id: 1006
+    NameDesc: "\uBC94\uC704 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     Type: Ranged
     Target: Enemy
     Atk_Type: Automatic
@@ -74,6 +80,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70006
   - Ai_Id: 1007
+    NameDesc: "\uD3ED\uD30C \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     Type: Explosion
     Target: Enemy
     Atk_Type: Automatic
@@ -84,6 +91,8 @@ MonoBehaviour:
     Explosion_Shock: -2
     Ability_id: 70007
   - Ai_Id: 1008
+    NameDesc: "\uB79C\uB364 \uD0C0\uAC9F \uC6D0\uAC70\uB9AC \uACF5\uACA9_1 (\uC801
+      \uB9C8\uC655 \uD3EC\uD568)"
     Type: Ranged
     Target: Random Enemy
     Atk_Type: Automatic
@@ -94,6 +103,8 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70008
   - Ai_Id: 1009
+    NameDesc: "\uB79C\uB364 \uD0C0\uAC9F \uC6D0\uAC70\uB9AC \uACF5\uACA9_2 (\uC801
+      \uD06C\uB9AC\uCCD0\uB9CC)"
     Type: Ranged
     Target: Random Enemy Creature
     Atk_Type: Automatic
@@ -104,6 +115,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70009
   - Ai_Id: 1010
+    NameDesc: "\uD30C\uC774\uC5B4 \uBCFC (\uB9C8\uBC95)"
     Type: Ranged
     Target: Enemy
     Atk_Type: Select Enemy
@@ -114,6 +126,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70010
   - Ai_Id: 1011
+    NameDesc: "\uBE14\uB9AC\uC790\uB4DC (\uC804\uCCB4 \uB9C8\uBC95)"
     Type: Ranged
     Target: All Enemy
     Atk_Type: Automatic
@@ -124,6 +137,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70011
   - Ai_Id: 1012
+    NameDesc: "\uD30C\uC774\uC5B4 \uC6D4 (\uD06C\uCE58\uCCD0 \uC804\uCCB4 \uB9C8\uBC95)"
     Type: Ranged
     Target: All Enemy Creature
     Atk_Type: Automatic
@@ -134,6 +148,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70012
   - Ai_Id: 1013
+    NameDesc: "\uD790\uB9C1 (\uD0C0\uAC9F \uD790\uB9C1 \uB9C8\uBC95)"
     Type: Ranged
     Target: Friendly
     Atk_Type: Select Friendly
@@ -144,6 +159,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70013
   - Ai_Id: 1014
+    NameDesc: "\uACF5\uACA9\uB825 \uAC15\uD654 (\uC544\uAD70 \uC804\uCCB4)"
     Type: Ranged
     Target: All Friendly Creature
     Atk_Type: Automatic
@@ -154,6 +170,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70014
   - Ai_Id: 2001
+    NameDesc: "\uC18C\uB4DC\uB9E8 \uAE30\uBCF8 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     Type: Melee
     Target: Near Enemy
     Atk_Type: Automatic
@@ -164,6 +181,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70015
   - Ai_Id: 2002
+    NameDesc: "\uC18C\uB4DC\uB9E8 \uAE30\uBCF8 \uADFC\uAC70\uB9AC \uAC15\uACF5\uACA9"
     Type: Melee
     Target: Near Enemy
     Atk_Type: Automatic
@@ -174,6 +192,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70016
   - Ai_Id: 2003
+    NameDesc: "\uC18C\uB4DC\uB9E8 \uBC29\uC5B4\uB825 \uC99D\uAC00"
     Type: Buff
     Target: Self
     Atk_Type: Automatic
@@ -184,6 +203,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70017
   - Ai_Id: 2004
+    NameDesc: "\uC18C\uB4DC\uB9E8 \uBC29\uC5B4\uB825 \uD30C\uAD34"
     Type: DeBuff
     Target: Near Enemy
     Atk_Type: Automatic
@@ -194,6 +214,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70018
   - Ai_Id: 3001
+    NameDesc: "\uC544\uCCD0 \uAE30\uBCF8 \uC0AC\uACA9"
     Type: Ranged
     Target: Enemy
     Atk_Type: Automatic
@@ -204,6 +225,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70019
   - Ai_Id: 3002
+    NameDesc: "\uC544\uCCD0 \uBC94\uC704 \uC0AC\uACA9"
     Type: Ranged
     Target: Enemy
     Atk_Type: Automatic
@@ -214,6 +236,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70020
   - Ai_Id: 3003
+    NameDesc: "\uC544\uCCD0 \uCDA9\uC804 \uC0AC\uACA9"
     Type: Ranged
     Target: Enemy
     Atk_Type: Automatic
@@ -224,6 +247,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70021
   - Ai_Id: 4001
+    NameDesc: "\uAD11\uC804\uC0AC \uACF5\uACA9"
     Type: Melee
     Target: Near Enemy
     Atk_Type: Automatic
@@ -234,6 +258,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70022
   - Ai_Id: 4002
+    NameDesc: "\uAD11\uC804\uC0AC \uB2E4\uB2E8 \uACF5\uACA9"
     Type: Melee
     Target: Near Enemy
     Atk_Type: Automatic
@@ -244,6 +269,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70023
   - Ai_Id: 4003
+    NameDesc: "\uAD11\uC804\uC0AC \uACF5\uACA9\uB825 \uC99D\uAC00"
     Type: Buff
     Target: Self
     Atk_Type: Automatic
@@ -254,6 +280,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70024
   - Ai_Id: 4004
+    NameDesc: "\uAD11\uC804\uC0AC \uC804\uCCB4 \uACF5\uACA9"
     Type: Melee
     Target: All Enemy Creature
     Atk_Type: Automatic
@@ -264,6 +291,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 70025
   - Ai_Id: 90001
+    NameDesc: "\uCE74\uB4DC_\uC544\uADC0 \uAE30\uBCF8 \uACF5\uACA9"
     Type: Melee
     Target: Near Enemy
     Atk_Type: Automatic
@@ -274,6 +302,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 90001
   - Ai_Id: 90002
+    NameDesc: "\uD30C\uC774\uC5B4 \uBCFC"
     Type: Ranged
     Target: Select Enemy
     Atk_Type: Select Enemy
@@ -282,8 +311,9 @@ MonoBehaviour:
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 90002
+    Ability_id: 90002, 100001
   - Ai_Id: 90003
+    NameDesc: "\uAE08\uAD11"
     Type: Build
     Target: Self
     Atk_Type: Select Field
@@ -294,6 +324,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 90003
   - Ai_Id: 90004
+    NameDesc: "\uD48D\uC694\uC758 \uBD80\uC801"
     Type: Buff
     Target: All Friendly Creature
     Atk_Type: Automatic
@@ -304,6 +335,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 90004
   - Ai_Id: 90005
+    NameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
     Type: DeBuff
     Target: All Friendly Creature
     Atk_Type: Automatic
@@ -314,6 +346,7 @@ MonoBehaviour:
     Explosion_Shock: 0
     Ability_id: 90005
   - Ai_Id: 90006
+    NameDesc: "\uB808\uD504\uB9AC\uCE78\uC758 \uAE08\uB2E8\uC9C0"
     Type: Buff
     Target: Self
     Atk_Type: Automatic
@@ -323,3 +356,25 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 90004, 90005
+  - Ai_Id: 100001
+    NameDesc: "\uB9CC\uBCF5\uB3C4 \uCC44\uC6B0\uAE30"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 100001
+  - Ai_Id: 100002
+    NameDesc: "\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
+    Type: DeBuff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 100002

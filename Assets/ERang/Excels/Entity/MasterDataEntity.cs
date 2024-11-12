@@ -14,6 +14,8 @@ namespace ERang
         public int MaxMana; // 마왕 캐릭터의 최대 마나 값
         public int RechargeMana; // 턴이 다시 시작 될 때 얻게 되는 마나 초기 값
         public int CreatureSlots; // 마왕이 소환할 수 있는 크리쳐의 슬롯 수
+        public int SatietyGauge; // 마왕의 포만감 게이지 초기 값
+        public int MaxSatietyGauge; // 마왕의 포만감 게이지 최대 값
         public string StartCardDeck_Id; // 마왕이 처음 스테이지에 진입 할 때 갖게되는 카드의 복수 값
         public int StartArtiFact_Id; // 마왕이 처음 시작 시 갖고 있는 아티팩트의 id 값
         public string StartAbility_Id; // 마왕이 선천적으로 가지고 있는 특성 id 값

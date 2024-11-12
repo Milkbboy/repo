@@ -154,9 +154,30 @@ MonoBehaviour:
     Extinction: 1
     CompleteExtinction: 0
     Level: 1
-    Level_1_img: bull
+    Level_1_img: Crotch_Lv1
     Level_3_img: Crotch_Lv3
     Level_5_img: Crotch_Lv5
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 1007
+    NameDesc: "\uD1A0\uD558\uAE30"
+    CardNameDesc_Id: CardName_1001
+    CardDesc_Id: CardDesc_1001
+    CardType: Magic
+    AiGroup_id: 31002
+    CostMana: 0
+    CostGold: 20
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 0
+    CompleteExtinction: 1
+    Level: 1
+    Level_1_img: Poison
+    Level_3_img: GoldPot
+    Level_5_img: GoldPot
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001

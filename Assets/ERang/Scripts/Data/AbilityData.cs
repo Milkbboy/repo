@@ -96,6 +96,8 @@ namespace ERang.Data
                 "AddMana" => AbilityType.AddMana,
                 "SubMana" => AbilityType.SubMana,
                 "AddGold" => AbilityType.AddGold,
+                "AddSatiety" => AbilityType.AddSatiety,
+                "SubSatiety" => AbilityType.SubSatiety,
                 _ => AbilityType.None,
             };
         }

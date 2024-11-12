@@ -233,12 +233,11 @@ namespace ERang
                     Debug.LogWarning("Unhandled card type");
                     break;
             }
+        }
 
-            // if (card.costMana > 0)
-            //     AddMana(master, -card.costMana);
-
-            // if (card.costGold > 0)
-            //     AddGold(master, -card.costGold);
+        public BSlot GetMasterSlot()
+        {
+            return bSlots[0];
         }
 
         public BSlot GetBoardSlot(int slotNum)
