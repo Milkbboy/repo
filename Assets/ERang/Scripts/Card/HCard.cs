@@ -57,7 +57,7 @@ namespace ERang
         void OnDrawGizmos()
         {
             // 드래그 중일 때만 구체를 그립니다.
-            if (dragable.IsDragging)
+            if (dragable != null && dragable.IsDragging)
             {
                 Gizmos.color = Color.red; // 구체의 색상을 설정합니다.
                 Gizmos.DrawWireSphere(transform.position, detectionRadius); // 구체를 그립니다.

@@ -64,13 +64,13 @@ namespace ERang
             }
 
             // abilityActions 딕셔너리의 값들이 null 확인
-            foreach (var kvp in abilityActions)
-            {
-                if (kvp.Value != null)
-                    Debug.Log($"AbilityAction[{kvp.Key}] found: {kvp.Value.AbilityType}");
-                else
-                    Debug.LogError($"AbilityAction[{kvp.Key}] is null.");
-            }
+            // foreach (var kvp in abilityActions)
+            // {
+            //     if (kvp.Value != null)
+            //         Debug.Log($"AbilityAction[{kvp.Key}] found: {kvp.Value.AbilityType}");
+            //     else
+            //         Debug.LogError($"AbilityAction[{kvp.Key}] is null.");
+            // }
         }
 
         void Start()

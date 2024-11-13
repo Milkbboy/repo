@@ -18,13 +18,13 @@ namespace ERang
     {
         public Image cardImage;
         public MeshRenderer cardMeshRenderer;
-        public TextMeshProUGUI cardTypeText;
-        public TextMeshProUGUI descText;
-        public TextMeshProUGUI hpText;
-        public TextMeshProUGUI manaText;
-        public TextMeshProUGUI atkText;
-        public TextMeshProUGUI defText;
-        public TextMeshProUGUI floatingTextPrefab;
+        public TextMeshPro cardTypeText;
+        public TextMeshPro descText;
+        public TextMeshPro hpText;
+        public TextMeshPro manaText;
+        public TextMeshPro atkText;
+        public TextMeshPro defText;
+        public TextMeshPro floatingTextPrefab;
         public Transform floatingTextParent;
         public Dictionary<StatType, GameObject> statObjects = new();
 
@@ -32,7 +32,7 @@ namespace ERang
         private List<StatObjectPair> statObjectPairs = new List<StatObjectPair>();
 
         private Texture2D originTexture;
-        private List<TextMeshProUGUI> floatingTextList = new();
+        private List<TextMeshPro> floatingTextList = new();
 
         void Awake()
         {
@@ -46,9 +46,9 @@ namespace ERang
         public void SetCard(BaseCard card)
         {
             foreach (var pair in statObjectPairs)
-            {
                 pair.gameObject.SetActive(false);
-            }
+
+            cardTypeText.text = card.CardType.ToString();
 
             if (card is CreatureCard creatureCard)
             {
@@ -102,7 +102,10 @@ namespace ERang
                 if (originTexture == null)
                     originTexture = (Texture2D)cardMeshRenderer.materials[0].GetTexture("_BaseMap");
 
-                cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
+                // cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
+                cardMeshRenderer.materials[0].SetTexture("_MainTex", cardTexture);
+
+                Debug.Log($"{card.Id} 텍스쳐 설정. {cardTexture.width}, {cardTexture.height}");
             }
             else
             {
@@ -242,7 +245,7 @@ namespace ERang
             if (diff == 0) return;
 
             string diffText = diff > 0 ? $"<color=green>+{diff}</color>" : $"<color=red>{diff.ToString()}</color>";
-            TextMeshProUGUI floatingText = Instantiate(floatingTextPrefab, floatingTextParent);
+            TextMeshPro floatingText = Instantiate(floatingTextPrefab, floatingTextParent);
             floatingText.text = $"{text} {diffText}";
 
             RectTransform rectTransform = floatingText.GetComponent<RectTransform>();
@@ -253,7 +256,7 @@ namespace ERang
             StartCoroutine(BlinkFloatingText(floatingText));
         }
 
-        private IEnumerator ScrollFloatingText(TextMeshProUGUI floatingText)
+        private IEnumerator ScrollFloatingText(TextMeshPro floatingText)
         {
             Vector3 startPos = floatingText.transform.position; // 시작 위치
             Vector3 endPos = startPos + new Vector3(0, 50, 0);
@@ -271,7 +274,7 @@ namespace ERang
             Destroy(floatingText.gameObject);
         }
 
-        private IEnumerator BlinkFloatingText(TextMeshProUGUI floatingText)
+        private IEnumerator BlinkFloatingText(TextMeshPro floatingText)
         {
             float duration = 3f; // 지속시간
             float blinkInterval = 0.5f; // 깜빡이는 간격

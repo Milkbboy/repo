@@ -80,7 +80,7 @@ namespace ERang
                 rightBSlots.Add(bSlot);
             }
 
-            float boardSpacing = 0.2f;
+            float boardSpacing = 0f;
             float boardWidth = bSlotPrefab.GetComponent<BoxCollider>().size.x * bSlotPrefab.transform.localScale.x;
             float totalWidth = (totalBoardSlotCount - 1) * (boardWidth + boardSpacing);
             float startX = -totalWidth / 2;
@@ -97,7 +97,7 @@ namespace ERang
 
             // 빌딩 보드 슬롯 구성
             startX = -5f;
-            float startY = 2f;
+            float startY = 3f;
 
             for (int i = 0; i < buildingSlotCardTypes.Length; i++)
             {

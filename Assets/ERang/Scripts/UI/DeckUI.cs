@@ -28,7 +28,8 @@ namespace ERang
         void Awake()
         {
             // 카드의 너비를 얻기 위해 cardPrefab의 BoxCollider 컴포넌트에서 size.x 값을 사용
-            cardWidth = cardPrefab.GetComponent<BoxCollider>().size.x;
+            BoxCollider boxCollider = cardPrefab.GetComponent<BoxCollider>();
+            cardWidth = boxCollider.size.x * cardPrefab.transform.localScale.x;
         }
 
         void Start()
@@ -76,8 +77,8 @@ namespace ERang
         public void DrawHandCards()
         {
             // 겹치는 정도를 조절하기 위해 cardWidth의 일부를 사용
-            float overlap = cardWidth * 0.05f; // 20% 겹치도록 설정
-            cardSpacing = cardWidth + overlap; // 카드 간격 재조정
+            float overlap = cardWidth * 0.05f;
+            cardSpacing = cardWidth + overlap;
 
             // 카드 정렬 로직 시작
             float totalWidth = (hCards.Count - 1) * cardSpacing;
