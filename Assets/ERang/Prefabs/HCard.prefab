@@ -340,7 +340,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 4}
+  m_Size: {x: 1, y: 1, z: 7.33}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6995899921063417948
 Rigidbody:
@@ -383,14 +383,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardImage: {fileID: 4153547562748439513}
   cardMeshRenderer: {fileID: 0}
-  cardTypeText: {fileID: 4807693777951646236}
-  descText: {fileID: 8405086876915666709}
-  hpText: {fileID: 2156719251255444161}
-  manaText: {fileID: 4491285787686075359}
-  atkText: {fileID: 7797132383164199717}
-  defText: {fileID: 1911744166990989675}
-  floatingTextPrefab: {fileID: 4789639728361502292, guid: ec99e805295420a4c9e5fc762d8a2753,
-    type: 3}
+  cardTypeText: {fileID: 0}
+  descText: {fileID: 0}
+  hpText: {fileID: 0}
+  manaText: {fileID: 0}
+  atkText: {fileID: 0}
+  defText: {fileID: 0}
+  floatingTextPrefab: {fileID: 0}
   floatingTextParent: {fileID: 9189102936287547896}
   statObjectPairs:
   - statType: 1

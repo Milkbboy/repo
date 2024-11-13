@@ -6,6 +6,7 @@ namespace ERang
         public int Master_Id; // 마왕의 Id 값
         public string MasterNameDesc_Id; // 마왕 캐릭터의 실제 이름 String이 들어간 데이터 Id
         public string MasterDesc_Id; // 마왕의 캐릭터 설명을 담은 String이 들어간 데이터 Id
+        public string MasterShortDesc_Id; // 마왕 간단 설명
         public int MasterAi_id; // 마왕의 공격 타입에 대한 Id (근거리, 원거리, 혹은 폭파 등)
         public int Hp; // 마왕 캐릭터의 초기 체력 값
         public int Atk; // 마왕 캐릭터의 초기 공격력 값 (공격력 값이 0인 캐릭터는 공격을 시도하지 않는다)
