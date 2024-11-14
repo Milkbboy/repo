@@ -90,6 +90,9 @@ namespace ERang
             // 마스터 크리쳐 카드 생성
             deckSystem.CreateMasterCards(master.StartCardIds);
 
+            // 골드 설정
+            BoardSystem.Instance.SetGold(master.Gold);
+
             // 루시 포만감 UI 설정
             if (master.MasterType == MasterType.Luci)
             {

@@ -211,6 +211,11 @@ namespace ERang
             boardUI.SetGold(master.Gold);
         }
 
+        public void SetGold(int gold)
+        {
+            boardUI.SetGold(gold);
+        }
+
         /// <summary>
         /// 카드 비용 소모
         /// </summary>
