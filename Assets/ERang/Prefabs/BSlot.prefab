@@ -625,7 +625,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.63, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4645172016859266904}
@@ -678,7 +678,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.8, y: 2.75, z: 0.21}
+  m_Size: {x: 0.9, y: 1.3, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &350462035197487451
 MonoBehaviour:
@@ -1784,7 +1784,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2828502446162881656}
@@ -1815,6 +1815,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardImage: {fileID: 0}
   cardMeshRenderer: {fileID: 2256814188324096012}
+  cardNameText: {fileID: 75562771872739662}
   cardTypeText: {fileID: 4698229711921990403}
   descText: {fileID: 3437287807370088741}
   hpText: {fileID: 6547698229707868273}
@@ -2013,8 +2014,8 @@ Transform:
   m_GameObject: {fileID: 8092601976934028621}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.1}
-  m_LocalScale: {x: 1.8, y: 2.7, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.9, y: 1.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5393872452953806231}

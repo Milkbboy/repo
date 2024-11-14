@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179a731be5561e54c81ecb71e91c59a0, type: 3}
+  m_Name: TextDataTable
+  m_EditorClassIdentifier: 
+  items:
+  - DescID: MasterName_1001
+    NameDesc: "\uB8E8\uC2DC"
+    Desc_Ko: "\uB8E8\uC2DC"
+    Desc_En: 
+  - DescID: MasterDesc_1001
+    NameDesc: "\uB8E8\uC2DC \uC124\uBA85"
+    Desc_Ko: "\uB8E8\uC2DC\uD37C\uC758 6\uBC88\uC9F8 \uB538\uB85C \uD3ED\uC2DD\uC758
+      \uC5EC\uC81C\uB77C \uBD88\uB9AC\uBA70, \uD615\uC81C\uB4E4\uC744 \uBC30\uC18D\uC5D0
+      \uC800\uC7A5\uD558\uACE0 \uC788\uC74C"
+    Desc_En: 
+  - DescID: MasterShortDesc_1001
+    NameDesc: "\uB8E8\uC2DC \uAC04\uB2E8 \uC124\uBA85"
+    Desc_Ko: "\uD3ED\uC2DD\uC758 \uC5EC\uC81C"
+    Desc_En: 
+  - DescID: CardName_1001
+    NameDesc: "\uC544\uADC0"
+    Desc_Ko: "\uC544\uADC0"
+    Desc_En: 
+  - DescID: CardDesc_1001
+    NameDesc: "\uC544\uADC0 \uC124\uBA85"
+    Desc_Ko: "\uB9C8\uACC4\uC758 \uAC00\uC7A5 \uAE30\uBCF8\uC801\uC778 \uB9C8\uBB3C\uB85C
+      \uAD76\uC8FC\uB9B0 \uC601\uD63C\uC744 \uB9D0\uD55C\uB2E4"
+    Desc_En: 
+  - DescID: CardShortDesc_1001
+    NameDesc: "\uC544\uADC0 \uAC04\uB2E8 \uC124\uBA85"
+    Desc_Ko: 
+    Desc_En: 
+  - DescID: MobName_1001
+    NameDesc: "\uC18C\uB4DC\uB9E8 "
+    Desc_Ko: "\uC18C\uB4DC\uB9E8"
+    Desc_En: 
+  - DescID: MobDesc_1001
+    NameDesc: "\uC18C\uB4DC\uB9E8 \uC124\uBA85"
+    Desc_Ko: "\uBC1C\uB97C\uB860\uD2B8 \uC655\uAC00\uC758 \uC815\uADDC\uAD70\uC73C\uB85C
+      \uCE7C\uACFC \uBC29\uD328\uB85C \uBB34\uC7A5\uD55C \uC0C1\uD0DC\uC774\uB2E4."
+    Desc_En: 
+  - DescID: MobShortDesc_1001
+    NameDesc: "\uC18C\uB4DC\uB9E8 \uAC04\uB2E8 \uC124\uBA85"
+    Desc_Ko: 
+    Desc_En: 

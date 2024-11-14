@@ -22,6 +22,7 @@ namespace ERang
             AbilityData.Load("TableExports/AbilityDataTable");
             EventsData.Load("TableExports/EventsDataTable");
             RandomEventsData.Load("TableExports/RandomEventsDataTable");
+            TextData.Load("TableExports/TextDataTable");
         }
     }
 }

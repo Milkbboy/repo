@@ -10,8 +10,9 @@ namespace ERang.Data
     {
         public int master_Id; // 마왕의 Id 값
         public MasterType masterType; // 마왕의 타입
-        public string masterNameDesc_id; // 마왕 캐릭터의 실제 이름 String이 들어간 데이터 Id
-        public string masterDesc_id; // 마왕의 캐릭터 설명을 담은 String이 들어간 데이터 Id
+        public string cardNameId; // 마왕 캐릭터의 실제 이름 String이 들어간 데이터 Id
+        public string cardDescId; // 마왕의 캐릭터 설명을 담은 String이 들어간 데이터 Id
+        public string cardShortDescId; // 마왕 간단 설명
         public int masterAi_id; // 마왕의 공격 타입에 대한 Id (근거리, 원거리, 혹은 폭파 등)
         public int hp; // 마왕 캐릭터의 초기 체력 값
         public int atk; // 마왕 캐릭터의 초기 공격력 값 (공격력 값이 0인 캐릭터는 공격을 시도하지 않는다)
@@ -35,8 +36,9 @@ namespace ERang.Data
         {
             master_Id = entity.Master_Id;
             masterType = GetMasterType(master_Id);
-            masterNameDesc_id = entity.MasterNameDesc_Id;
-            masterDesc_id = entity.MasterDesc_Id;
+            cardNameId = entity.MasterNameDesc_Id;
+            cardDescId = entity.MasterShortDesc_Id;
+            cardShortDescId = entity.MasterDesc_Id;
             masterAi_id = entity.MasterAi_id;
             hp = entity.Hp;
             atk = entity.Atk;

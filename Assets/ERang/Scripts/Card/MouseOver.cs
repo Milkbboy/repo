@@ -20,7 +20,7 @@ namespace ERang
             isDragging = false;
 
             originalPosition = transform.position;
-            originalScale = transform.localScale;
+            // originalScale = transform.localScale;
         }
 
         void OnMouseEnter()
@@ -29,7 +29,7 @@ namespace ERang
                 return;
 
             transform.DOMoveY(originalPosition.y + hoverHeight, animationDuration);
-            transform.DOScale(originalScale * scaleFactor, animationDuration);
+            // transform.DOScale(originalScale * scaleFactor, animationDuration);
         }
 
         void OnMouseExit()
@@ -38,7 +38,7 @@ namespace ERang
                 return;
 
             transform.DOMoveY(originalPosition.y, animationDuration);
-            transform.DOScale(originalScale, animationDuration);
+            // transform.DOScale(originalScale, animationDuration);
         }
     }
 }

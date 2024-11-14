@@ -17,6 +17,7 @@ MonoBehaviour:
     NameDesc: "\uC544\uADC0"
     CardNameDesc_Id: CardName_1001
     CardDesc_Id: CardDesc_1001
+    CardShortDesc_Id: CardShortDesc_1001
     CardType: Creature
     AiGroup_id: 21001
     CostMana: 2
@@ -38,6 +39,7 @@ MonoBehaviour:
     NameDesc: "\uD30C\uC774\uC5B4 \uBCFC"
     CardNameDesc_Id: CardName_1002
     CardDesc_Id: CardDesc_1002
+    CardShortDesc_Id: 
     CardType: Magic
     AiGroup_id: 21002
     CostMana: 1
@@ -59,6 +61,7 @@ MonoBehaviour:
     NameDesc: "\uAE08\uAD11"
     CardNameDesc_Id: CardName_1003
     CardDesc_Id: CardDesc_1003
+    CardShortDesc_Id: 
     CardType: Building
     AiGroup_id: 21003
     CostMana: 3
@@ -80,6 +83,7 @@ MonoBehaviour:
     NameDesc: "\uD48D\uC694\uC758 \uBD80\uC801"
     CardNameDesc_Id: CardName_1004
     CardDesc_Id: CardDesc_1004
+    CardShortDesc_Id: 
     CardType: Charm
     AiGroup_id: 21004
     CostMana: 0
@@ -101,6 +105,7 @@ MonoBehaviour:
     NameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
     CardNameDesc_Id: CardName_1005
     CardDesc_Id: CardDesc_1005
+    CardShortDesc_Id: 
     CardType: Curse
     AiGroup_id: 21005
     CostMana: 0
@@ -122,6 +127,7 @@ MonoBehaviour:
     NameDesc: "\uB808\uD504\uB9AC\uCE78\uC758 \uAE08\uB2E8\uC9C0"
     CardNameDesc_Id: CardName_1006
     CardDesc_Id: CardDesc_1006
+    CardShortDesc_Id: 
     CardType: Magic
     AiGroup_id: 21006
     CostMana: 0
@@ -143,6 +149,7 @@ MonoBehaviour:
     NameDesc: "\uD14C\uC2A4\uD2B8\uC544\uCCD0"
     CardNameDesc_Id: CardName_1001
     CardDesc_Id: CardDesc_1001
+    CardShortDesc_Id: 
     CardType: Creature
     AiGroup_id: 11002
     CostMana: 0
@@ -164,6 +171,7 @@ MonoBehaviour:
     NameDesc: "\uD1A0\uD558\uAE30"
     CardNameDesc_Id: CardName_1001
     CardDesc_Id: CardDesc_1001
+    CardShortDesc_Id: 
     CardType: Magic
     AiGroup_id: 31002
     CostMana: 0
@@ -172,7 +180,7 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 0
+    Extinction: 1
     CompleteExtinction: 1
     Level: 1
     Level_1_img: Poison

@@ -12,8 +12,9 @@ namespace ERang.Data
     {
         public int card_id; // 카드의 Id 값
         public string nameDesc; // 카드의 실제 이름
-        public string cardNameDesc_id; // 카드의 실제 이름 String이 들어간 데이터 Id
-        public string cardDesc_id; // 카드에 대한 설명을 담은 String이 들어간 데이터 Id
+        public string cardNameId; // 카드의 실제 이름 String이 들어간 데이터 Id
+        public string cardDescId; // 카드에 대한 설명을 담은 String이 들어간 데이터 Id
+        public string cardShortDescId; // 카드 간단 설명
         public CardType cardType; // 해당 카드의 타입을 입력 (타입은 초안에서 총 6개의 타입으로 구분)
         public int aiGroup_id; // 해당 카드가 가지고 있는 Ai 그룹의 Id 값
         public int creatureAI_id; // Creature의 공격 Ai id (근접, 원거리 등)
@@ -45,8 +46,9 @@ namespace ERang.Data
         {
             card_id = cardEntity.Card_Id;
             nameDesc = cardEntity.NameDesc;
-            cardNameDesc_id = cardEntity.CardNameDesc_Id;
-            cardDesc_id = cardEntity.CardDesc_Id;
+            cardNameId = cardEntity.CardNameDesc_Id;
+            cardDescId = cardEntity.CardDesc_Id;
+            cardShortDescId = cardEntity.CardShortDesc_Id;
             cardType = ConvertCardType(cardEntity.CardType);
             aiGroup_id = cardEntity.AiGroup_id;
             costMana = cardEntity.CostMana;
@@ -79,8 +81,9 @@ namespace ERang.Data
         {
             card_id = cardEntity.Card_Id;
             nameDesc = cardEntity.NameDesc;
-            cardNameDesc_id = cardEntity.CardNameDesc_Id;
-            cardDesc_id = cardEntity.CardDesc_Id;
+            cardNameId = cardEntity.CardNameDesc_Id;
+            cardDescId = cardEntity.CardDesc_Id;
+            cardShortDescId = cardEntity.CardShortDesc_Id;
             cardType = ConvertCardType(cardEntity.CardType);
             aiGroup_id = cardEntity.AiGroup_id;
             costMana = cardEntity.CostMana;

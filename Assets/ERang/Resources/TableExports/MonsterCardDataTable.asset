@@ -17,11 +17,12 @@ MonoBehaviour:
     NameDesc: "\uC18C\uB4DC\uB9E8_Lv1"
     CardNameDesc_Id: CardName_1001
     CardDesc_Id: CardDesc_1001
+    CardShortDesc_Id: MobShortDesc_1001
     CardType: Monster
     AiGroup_id: 11001
     CostMana: 1
     CostGold: 0
-    Hp: 2
+    Hp: 5
     Atk: 3
     Def: 1
     Ability_Id: 
@@ -38,11 +39,12 @@ MonoBehaviour:
     NameDesc: "\uC544\uCCD0_Lv1"
     CardNameDesc_Id: CardName_1002
     CardDesc_Id: CardDesc_1002
+    CardShortDesc_Id: 
     CardType: Monster
     AiGroup_id: 11002
     CostMana: 2
     CostGold: 0
-    Hp: 1
+    Hp: 3
     Atk: 4
     Def: 0
     Ability_Id: 
@@ -59,6 +61,7 @@ MonoBehaviour:
     NameDesc: "\uAD11\uC804\uC0AC_Lv1"
     CardNameDesc_Id: CardName_1003
     CardDesc_Id: CardDesc_1003
+    CardShortDesc_Id: 
     CardType: Monster
     AiGroup_id: 11003
     CostMana: 3

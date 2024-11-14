@@ -212,9 +212,9 @@ GameObject:
   - component: {fileID: 3546026623359364433}
   - component: {fileID: 2700464884132021625}
   - component: {fileID: 2454312380614597166}
-  - component: {fileID: 2605064727976273313}
   - component: {fileID: 466828341774064172}
   - component: {fileID: 6221956436652581614}
+  - component: {fileID: 7107610237126492336}
   m_Layer: 0
   m_Name: PF_CardFrame
   m_TagString: HandCard
@@ -232,7 +232,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 733659750304902566}
@@ -311,6 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardImage: {fileID: 0}
   cardMeshRenderer: {fileID: 7537297532065721133}
+  cardNameText: {fileID: 8451897545058203192}
   cardTypeText: {fileID: 6573728247654823361}
   descText: {fileID: 7113559082506060398}
   hpText: {fileID: 8105305606165354607}
@@ -353,21 +354,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 392b62c20040ef34391534809ae7f52f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2605064727976273313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1253406716375538767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ce5a7cb408280241aa429c554bcd938, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hoverHeight: 0.2
-  animationDuration: 0.2
-  scaleFactor: 1.1
 --- !u!114 &466828341774064172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,9 +383,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DiscardPos: {fileID: 0}
-  FX_Pos: {fileID: 0}
+  FX_Pos: {fileID: 4618419410661572291}
   effectPrefab: {fileID: 8207343968682951967, guid: bbb824979bdea5241802469f9ba78f20,
     type: 3}
+--- !u!114 &7107610237126492336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253406716375538767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ce5a7cb408280241aa429c554bcd938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverHeight: 0.2
+  animationDuration: 0.2
+  scaleFactor: 1.1
 --- !u!1 &1281878656943373027
 GameObject:
   m_ObjectHideFlags: 0

@@ -311,7 +311,7 @@ MonoBehaviour:
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 90002, 100001
+    Ability_id: 90002
   - Ai_Id: 90003
     NameDesc: "\uAE08\uAD11"
     Type: Build

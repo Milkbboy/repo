@@ -117,7 +117,7 @@ namespace ERang
                 }
             }
 
-            Debug.Log($"position: {position}, nearestSlot: {nearestSlot?.Index}");
+            // Debug.Log($"position: {position}, nearestSlot: {nearestSlot?.Index}");
 
             return nearestSlot != null;
         }

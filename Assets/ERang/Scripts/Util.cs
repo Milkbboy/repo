@@ -41,6 +41,32 @@ namespace ERang
             return card;
         }
 
+        public static void GetMasterText(int masterId, out string cardName, out string cardDesc, out string cardShortDesc)
+        {
+            MasterData masterData = MasterData.GetMasterData(masterId);
+
+            cardName = TextData.GetKr(masterData.cardNameId);
+            cardDesc = TextData.GetKr(masterData.cardDescId);
+            cardShortDesc = TextData.GetKr(masterData.cardShortDescId);
+        }
+
+        public static void GetCardText(int cardId, out string cardName, out string cardDesc, out string cardShortDesc)
+        {
+            CardData cardData = MonsterCardData.GetCardData(cardId);
+
+            if (cardData == null)
+            {
+                cardName = "카드 데이터 없음";
+                cardDesc = "카드 데이터 없음";
+                cardShortDesc = "카드 데이터 없음";
+                return;
+            }
+
+            cardName = TextData.GetKr(cardData.cardNameId);
+            cardDesc = TextData.GetKr(cardData.cardDescId);
+            cardShortDesc = TextData.GetKr(cardData.cardShortDescId);
+        }
+
         /// <summary>
         /// Fisher-Yates shuffle (피셔 예이츠)알고리즘
         /// </summary>

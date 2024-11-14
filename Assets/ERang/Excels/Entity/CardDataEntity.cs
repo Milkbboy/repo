@@ -7,6 +7,7 @@ namespace ERang
         public string NameDesc;
         public string CardNameDesc_Id; // 카드의 실제 이름 String이 들어간 데이터 Id
         public string CardDesc_Id; // 카드에 대한 설명을 담은 String이 들어간 데이터 Id
+        public string CardShortDesc_Id; // 카드 간단 설명
         public string CardType; // 해당 카드의 타입을 입력 (타입은 초안에서 총 6개의 타입으로 구분)
         public int AiGroup_id; // 해당 카드가 가지고 있는 Ai 그룹의 Id 값
         public int CostMana; // 소환에 필요한 마나

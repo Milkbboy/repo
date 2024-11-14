@@ -18,6 +18,7 @@ namespace ERang
     {
         public Image cardImage;
         public MeshRenderer cardMeshRenderer;
+        public TextMeshPro cardNameText;
         public TextMeshPro cardTypeText;
         public TextMeshPro descText;
         public TextMeshPro hpText;
@@ -47,6 +48,16 @@ namespace ERang
         {
             foreach (var pair in statObjectPairs)
                 pair.gameObject.SetActive(false);
+
+            string cardName, cardDesc, cardShortDesc;
+
+            if (card is MasterCard)
+                Utils.GetMasterText(card.Id, out cardName, out cardDesc, out cardShortDesc);
+            else
+                Utils.GetCardText(card.Id, out cardName, out cardDesc, out cardShortDesc);  
+
+            cardNameText.text = cardName;
+            descText.text = cardDesc;
 
             cardTypeText.text = card.CardType.ToString();
 
