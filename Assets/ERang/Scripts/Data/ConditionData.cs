@@ -5,7 +5,7 @@ using ERang.Table;
 
 namespace ERang.Data
 {
-    public class ConditionData : ScriptableObject
+    public class ConditionData
     {
         public int id; // Condition Id를 지정한다.
         public ConditionTarget target; // 체크할 대상을 선정함
@@ -44,14 +44,7 @@ namespace ERang.Data
                 if (conditionData_dict.ContainsKey(conditionEntity.ConditionData_Id))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Conditions/{conditionEntity.ConditionData_Id}.asset";
-                ConditionData conditionData = AssetDatabase.LoadAssetAtPath<ConditionData>(assetPath);
-
-                if (conditionData == null)
-                {
-                    conditionData = CreateInstance<ConditionData>();
-                    AssetDatabase.CreateAsset(conditionData, assetPath);
-                }
+                ConditionData conditionData = new();
 
                 conditionData.Initialize(conditionEntity);
 

@@ -29,7 +29,7 @@ namespace ERang
             {
                 RandomEventsData randomEventsData = RandomEventsData.GetEventsData(randomEvents[^1]);
 
-                if (randomEventsData)
+                if (randomEventsData != null)
                     eventTypeText.text = randomEventsData.nameDesc;
             }
 

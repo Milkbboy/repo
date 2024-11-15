@@ -26,20 +26,7 @@ namespace ERang.Data
                 if (card_dict.ContainsKey(cardEntity.Card_Id))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Cards/Monster/{cardEntity.Card_Id}.asset";
-                CardData cardData = AssetDatabase.LoadAssetAtPath<CardData>(assetPath);
-
-                if (cardData == null)
-                {
-                    // CardData 가 없으면 생성
-                    cardData = CreateInstance<CardData>();
-                    AssetDatabase.CreateAsset(cardData, assetPath);
-                }
-                else
-                {
-                    // CardData 가 있으면 초기화
-                    cardData.abilityIds.Clear();
-                }
+                CardData cardData = new CardData();
 
                 cardData.Initialize(cardEntity);
 

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using ERang.Table;
 
 namespace ERang.Data
@@ -8,7 +7,7 @@ namespace ERang.Data
     /// <summary>
     /// Ai와 AiGroup에서 스킬이 선택되고 대상이 선택된 후, 실질적인 효과를 지정하는 데이터
     /// </summary>
-    public class AbilityData : ScriptableObject
+    public class AbilityData
     {
         public int abilityId;
         public AbilityType abilityType;
@@ -61,14 +60,7 @@ namespace ERang.Data
                 if (abilityData_dict.ContainsKey(abilityEntity.AbilityData_Id))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Abilities/{abilityEntity.AbilityData_Id}.asset";
-                AbilityData abilityData = AssetDatabase.LoadAssetAtPath<AbilityData>(assetPath);
-
-                if (abilityData == null)
-                {
-                    abilityData = CreateInstance<AbilityData>();
-                    AssetDatabase.CreateAsset(abilityData, assetPath);
-                }
+                AbilityData abilityData = new();
 
                 abilityData.Initialize(abilityEntity);
 

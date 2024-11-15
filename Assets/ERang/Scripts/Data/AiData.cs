@@ -10,7 +10,7 @@ namespace ERang.Data
     /// 스킬의 타겟과 행동 타입을 지정하는 데이터 시트
     /// </summary>
     [System.Serializable]
-    public class AiData : ScriptableObject
+    public class AiData
     {
         public int ai_Id; // Ai의 Id 값
         public AiDataType type; // 행동의 타입을 정의
@@ -60,19 +60,7 @@ namespace ERang.Data
                 if (ai_dict.ContainsKey(aiEntity.Ai_Id))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Ais/{aiEntity.Ai_Id}.asset";
-                AiData aiData = AssetDatabase.LoadAssetAtPath<AiData>(assetPath);
-
-                if (aiData == null)
-                {
-                    aiData = CreateInstance<AiData>();
-                    AssetDatabase.CreateAsset(aiData, assetPath);
-                }
-                else
-                {
-                    aiData.ability_Ids.Clear();
-                    aiData.attackRanges.Clear();
-                }
+                AiData aiData = new();
 
                 aiData.Initialize(aiEntity);
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ERang.Data
 {
-    public class EventsData : ScriptableObject
+    public class EventsData
     {
         /// <summary>
         /// 이벤트 id 값
@@ -71,20 +71,7 @@ namespace ERang.Data
                 if (eventsDataDict.ContainsKey(eventsEntity.EventsID))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Events/{eventsEntity.EventsID}.asset";
-                EventsData eventsData = AssetDatabase.LoadAssetAtPath<EventsData>(assetPath);
-
-                if (eventsData == null)
-                {
-                    eventsData = CreateInstance<EventsData>();
-                    AssetDatabase.CreateAsset(eventsData, assetPath);
-                }
-                else
-                {
-                    eventsData.excludeFloors.Clear();
-                    eventsData.includeFloors.Clear();
-                    eventsData.randomEventIDs.Clear();
-                }
+                EventsData eventsData = new();
 
                 eventsData.Initialize(eventsEntity);
 

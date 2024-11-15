@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace ERang.Data
 {
-    public class AreaData : ScriptableObject
+    public class AreaData
     {
         public int areaID;
         public string nameDesc;
@@ -36,14 +36,7 @@ namespace ERang.Data
                 if (areaDataDict.ContainsKey(areaEntity.AreaID))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Area/{areaEntity.AreaID}.asset";
-                AreaData areaData = AssetDatabase.LoadAssetAtPath<AreaData>(assetPath);
-
-                if (areaData == null)
-                {
-                    areaData = CreateInstance<AreaData>();
-                    AssetDatabase.CreateAsset(areaData, assetPath);
-                }
+                AreaData areaData = new();
 
                 areaData.Initialize(areaEntity, prevFloorMax);
 

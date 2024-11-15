@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ERang.Data
 {
-    public class ActData : ScriptableObject
+    public class ActData
     {
         public int actID;
         public string nameDesc;
@@ -35,19 +35,7 @@ namespace ERang.Data
                 if (actDataDict.ContainsKey(actEntity.ActID))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Act/{actEntity.ActID}.asset";
-                ActData actData = AssetDatabase.LoadAssetAtPath<ActData>(assetPath);
-
-                if (actData == null)
-                {
-                    actData = CreateInstance<ActData>();
-                    AssetDatabase.CreateAsset(actData, assetPath);
-                }
-                else
-                {
-                    actData.areaIds.Clear();
-                    actData.eventIds.Clear();
-                }
+                ActData actData = new();
 
                 actData.Initialize(actEntity);
 

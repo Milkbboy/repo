@@ -6,7 +6,7 @@ using ERang.Table;
 
 namespace ERang.Data
 {
-    public class MasterData : ScriptableObject
+    public class MasterData
     {
         public int master_Id; // 마왕의 Id 값
         public MasterType masterType; // 마왕의 타입
@@ -60,9 +60,7 @@ namespace ERang.Data
             masterTexture = Resources.Load<Texture2D>(texturePath);
 
             if (masterTexture == null)
-            {
                 Debug.LogError($"MasterData {master_Id} texture is null");
-            }
         }
 
         public static List<MasterData> master_list = new List<MasterData>();
@@ -83,19 +81,7 @@ namespace ERang.Data
                 if (master_dict.ContainsKey(MasterEntity.Master_Id))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Masters/{MasterEntity.Master_Id}.asset";
-                MasterData masterData = AssetDatabase.LoadAssetAtPath<MasterData>(assetPath);
-
-                if (masterData == null)
-                {
-                    masterData = CreateInstance<MasterData>();
-                    AssetDatabase.CreateAsset(masterData, assetPath);
-                }
-                else
-                {
-                    masterData.startCardIds.Clear();
-                    masterData.startAbilityIds.Clear();
-                }
+                MasterData masterData = new();
 
                 masterData.Initialize(MasterEntity);
 

@@ -8,7 +8,7 @@ namespace ERang.Data
     /// <summary>
     /// 등장하는 모든 카드의 데이터 시트
     /// </summary>
-    public class CardData : ScriptableObject
+    public class CardData
     {
         public int card_id; // 카드의 Id 값
         public string nameDesc; // 카드의 실제 이름
@@ -72,9 +72,7 @@ namespace ERang.Data
             cardTexture = Resources.Load<Texture2D>(texturePath);
 
             if (cardTexture == null)
-            {
                 Debug.LogError("Card Texture not found: " + texturePath);
-            }
         }
 
         public void Initialize(MonsterCardDataEntity cardEntity)
@@ -105,9 +103,7 @@ namespace ERang.Data
             cardTexture = Resources.Load<Texture2D>(texturePath);
 
             if (cardTexture == null)
-            {
                 Debug.LogError("Card Texture not found: " + texturePath);
-            }
         }
 
         public static void Load(string path = "")
@@ -126,20 +122,7 @@ namespace ERang.Data
                 if (card_dict.ContainsKey(cardEntity.Card_Id))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Cards/{cardEntity.Card_Id}.asset";
-                CardData cardData = AssetDatabase.LoadAssetAtPath<CardData>(assetPath);
-
-                if (cardData == null)
-                {
-                    // CardData 가 없으면 생성
-                    cardData = CreateInstance<CardData>();
-                    AssetDatabase.CreateAsset(cardData, assetPath);
-                }
-                else
-                {
-                    // CardData 가 있으면 초기화
-                    cardData.abilityIds.Clear();
-                }
+                CardData cardData = new();
 
                 cardData.Initialize(cardEntity);
 

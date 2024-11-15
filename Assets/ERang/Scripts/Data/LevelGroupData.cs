@@ -30,7 +30,7 @@ namespace ERang.Data
         public List<int> cardIds = new();
     }
 
-    public class LevelGroupData : ScriptableObject
+    public class LevelGroupData
     {
         public int levelGroupId;
         public List<LevelData> levelDatas = new();
@@ -53,25 +53,12 @@ namespace ERang.Data
             {
                 if (!levelGroupDictionary.TryGetValue(levelGroupEntity.LevelGroupID, out LevelGroupData levelGroupData))
                 {
-                    string assetPath = $"Assets/ERang/Resources/LevelGroup/{levelGroupEntity.LevelGroupID}.asset";
-                    levelGroupData = AssetDatabase.LoadAssetAtPath<LevelGroupData>(assetPath);
-
-                    if (levelGroupData == null)
-                    {
-                        levelGroupData = CreateInstance<LevelGroupData>();
-                        AssetDatabase.CreateAsset(levelGroupData, assetPath);
-                    }
-                    else
-                    {
-                        levelGroupData.levelDatas.Clear();
-                    }
+                    levelGroupData = new();
 
                     levelGroupDictionary[levelGroupEntity.LevelGroupID] = levelGroupData;
                 }
 
                 levelGroupData.Initialize(levelGroupEntity);
-
-                EditorUtility.SetDirty(levelGroupData); // 데이터가 변경되었음을 Unity에 알림
             }
 
             AssetDatabase.SaveAssets();

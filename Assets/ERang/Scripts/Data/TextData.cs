@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ERang.Data
 {
-    public class TextData : ScriptableObject
+    public class TextData
     {
         /// <summary>
         /// 텍스트 ID 값
@@ -42,19 +42,13 @@ namespace ERang.Data
                 if (textDataDict.ContainsKey(textEntity.DescID))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/Texts/{textEntity.DescID}.asset";
-                TextData textData = AssetDatabase.LoadAssetAtPath<TextData>(assetPath);
-
-                if (textData == null)
+                TextData textData = new()
                 {
-                    textData = CreateInstance<TextData>();
-                    AssetDatabase.CreateAsset(textData, assetPath);
-                }
-
-                textData.descID = textEntity.DescID;
-                textData.nameDesc = textEntity.NameDesc;
-                textData.descKo = textEntity.Desc_Ko;
-                textData.descEn = textEntity.Desc_En;
+                    descID = textEntity.DescID,
+                    nameDesc = textEntity.NameDesc,
+                    descKo = textEntity.Desc_Ko,
+                    descEn = textEntity.Desc_En
+                };
 
                 textDatas.Add(textData);
                 textDataDict.Add(textData.descID, textData);

@@ -6,7 +6,7 @@ using ERang.Table;
 
 namespace ERang.Data
 {
-    public class AiGroupData : ScriptableObject
+    public class AiGroupData
     {
         public int aiGroup_Id;
         public string ai_Group_1;
@@ -104,21 +104,7 @@ namespace ERang.Data
                 if (aiGroups_dict.ContainsKey(aiGroupEntity.AiGroup_Id))
                     continue;
 
-                string assetPath = $"Assets/ERang/Resources/AiGroups/{aiGroupEntity.AiGroup_Id}.asset";
-                AiGroupData aiGroupData = AssetDatabase.LoadAssetAtPath<AiGroupData>(assetPath);
-
-                if (aiGroupData == null)
-                {
-                    aiGroupData = CreateInstance<AiGroupData>();
-                    AssetDatabase.CreateAsset(aiGroupData, assetPath);
-                }
-                else
-                {
-                    foreach (var aiGroup in aiGroupData.ai_Groups)
-                    {
-                        aiGroup.Clear();
-                    }
-                }
+                AiGroupData aiGroupData = new();
                 aiGroupData.Initialize(aiGroupEntity);
 
                 aiGroups_list.Add(aiGroupData);
