@@ -151,5 +151,13 @@ namespace ERang
         {
             extinctionCardCountText.text = count.ToString();
         }
+
+        public void UpdateHandCardUI()
+        {
+            foreach (HCard handCard in hCards)
+            {
+                handCard.UpdateCardUI();
+            }
+        }
     }
 }

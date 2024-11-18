@@ -109,7 +109,9 @@ namespace ERang
             CreatureCard creatureCard = card as CreatureCard;
 
             creatureCard.TakeDamage(amount);
+            
             cardUI.SetHp(creatureCard.Hp);
+            cardUI.SetDef(creatureCard.Def);
 
             if (creatureCard.Hp <= 0)
             {

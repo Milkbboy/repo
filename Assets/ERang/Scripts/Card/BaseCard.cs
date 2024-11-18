@@ -43,5 +43,15 @@ namespace ERang
             AiGroupIndex = 0;
             CardImage = cardImage;
         }
+
+        public void UpdateCardData(CardData cardData)
+        {
+            Id = cardData.card_id;
+            CardType = cardData.cardType;
+            InUse = cardData.inUse;
+            IsExtinction = cardData.extinction;
+            AiGroupId = cardData.aiGroup_id;
+            CardImage = cardData.GetCardTexture();
+        }
     }
 }

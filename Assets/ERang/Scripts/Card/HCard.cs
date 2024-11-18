@@ -94,6 +94,11 @@ namespace ERang
             discardAnimation.PlaySequence(discardPos);
         }
 
+        public void UpdateCardUI()
+        {
+            cardUI.SetCard(card);
+        }
+
         private bool TryGetNearestSlot(Vector3 position, out BSlot nearestSlot)
         {
             nearestSlot = null;

@@ -38,9 +38,30 @@ namespace ERang
             mana = master.Mana;
         }
 
+        public void SetHp(int amount)
+        {
+            hp = amount;
+        }
+
+        public void SetDefense(int amount)
+        {
+            def = amount;
+        }
+
+        public void SetMana(int amount)
+        {
+            mana = amount;
+        }
+
         public void TakeDamage(int amount)
         {
-            hp -= amount;
+            def -= amount;
+
+            if (def < 0)
+            {
+                hp += def;
+                def = 0;
+            }
 
             if (hp <= 0)
                 hp = 0;
@@ -59,6 +80,9 @@ namespace ERang
         public void DecreaseDefense(int amount)
         {
             def -= amount;
+
+            if (def < 0)
+                def = 0;
         }
 
         public void IncreaseAttack(int amount)

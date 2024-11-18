@@ -373,14 +373,14 @@ namespace ERang
 
         public bool HandCardUse(HCard hCard, BSlot targetSlot)
         {
-            if (hCard.Card is CreatureCard || hCard.Card is BuildingCard)
+            if (hCard.Card.CardType == CardType.Creature || hCard.Card.CardType == CardType.Building)
             {
                 BoardSlotEquipCard(hCard, targetSlot);
 
                 return true;
             }
 
-            if (hCard.Card is MagicCard)
+            if (hCard.Card.CardType == CardType.Magic)
             {
                 HandCardUse(hCard.Card.Uid, targetSlot);
 

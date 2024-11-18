@@ -16,5 +16,15 @@ namespace ERang
             Atk = cardData.atk;
             Mana = cardData.costMana;
         }
+
+        public void SetMana(int amount)
+        {
+            Mana = amount;
+        }
+
+        public void SetAttack(int amount)
+        {
+            Atk = amount;
+        }
     }
 }

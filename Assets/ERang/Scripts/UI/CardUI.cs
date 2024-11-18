@@ -115,8 +115,6 @@ namespace ERang
 
                 // cardMeshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
                 cardMeshRenderer.materials[0].SetTexture("_MainTex", cardTexture);
-
-                Debug.Log($"{card.Id} 텍스쳐 설정. {cardTexture.width}, {cardTexture.height}");
             }
             else
             {

@@ -139,6 +139,22 @@ namespace ERang.Data
             return card_dict.TryGetValue(card_id, out CardData cardData) ? cardData : null;
         }
 
+        /// <summary>
+        /// 카드 id, name을 반환
+        /// </summary>
+        /// <returns></returns>
+        public static List<(int, string)> GetCardIdNames()
+        {
+            List<(int, string)> cardIds = new();
+
+            foreach (var card in card_list)
+            {
+                cardIds.Add((card.card_id, card.nameDesc));
+            }
+
+            return cardIds;
+        }
+
         public Texture2D GetCardTexture()
         {
             return cardTexture;

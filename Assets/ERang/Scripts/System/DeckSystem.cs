@@ -18,6 +18,7 @@ namespace ERang
         public List<BaseCard> HandCards => handCards;
         public List<BaseCard> GraveCards => graveCards;
         public List<BaseCard> ExtinctionCards => extinctionCards;
+        public List<BaseCard> BuildingCards => buildingCards;
 
         private readonly int maxHandCardCount = 5;
         private readonly System.Random random = new();
@@ -222,6 +223,11 @@ namespace ERang
             }
 
             RemoveCardProcess(card);
+        }
+
+        public void UpdateHandCardUI()
+        {
+            deckUI.UpdateHandCardUI();
         }
 
         /// <summary>
