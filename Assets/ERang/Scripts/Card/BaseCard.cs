@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
+using System.Linq;
 
 namespace ERang
 {
@@ -52,6 +53,21 @@ namespace ERang
             IsExtinction = cardData.extinction;
             AiGroupId = cardData.aiGroup_id;
             CardImage = cardData.GetCardTexture();
+        }
+
+        public void AddAbility(CardAbility ability)
+        {
+            abilities.Add(ability);
+        }
+
+        public int GetBuffCount()
+        {
+            return abilities.Count(ability => ability.aiType == AiDataType.Buff);
+        }
+
+        public int GetDeBuffCount()
+        {
+            return abilities.Count(ability => ability.aiType == AiDataType.Debuff);
         }
     }
 }

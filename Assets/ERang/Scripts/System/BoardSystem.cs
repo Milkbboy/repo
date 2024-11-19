@@ -14,6 +14,8 @@ namespace ERang
         public readonly CardType[] rightSlotCardTypes = { CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.Master };
         public readonly CardType[] buildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
 
+        public List<BSlot> AllSlots => bSlots;
+
         public BSlot bSlotPrefab;
 
         private BoardUI boardUI;

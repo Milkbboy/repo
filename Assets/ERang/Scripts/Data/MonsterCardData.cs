@@ -38,6 +38,22 @@ namespace ERang.Data
             AssetDatabase.Refresh();
         }
 
+        /// <summary>
+        /// 카드 id, name을 반환
+        /// </summary>
+        /// <returns></returns>
+        public static List<(int, string)> GetCardIdNames()
+        {
+            List<(int, string)> cardIds = new();
+
+            foreach (var card in card_list)
+            {
+                cardIds.Add((card.card_id, card.nameDesc));
+            }
+
+            return cardIds;
+        }
+
         public static CardData GetCardData(int card_id)
         {
             return card_dict.TryGetValue(card_id, out CardData cardData) ? cardData : null;

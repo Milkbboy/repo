@@ -11,7 +11,9 @@ namespace ERang
         public AbilityWhereFrom whereFrom; // 어빌리티 적용 위치
         public int abilityId; // 어빌리티 Id
         public AbilityWorkType workType; // 어빌리티 작업 타입(HandOn 찾기 위함)
+        public AiDataType aiType; // Ai 타입. Buff, Debuff 구분
         public int duration;
+        public int totalDuration;
         public int startTurn;
         public int aiDataId;
         public int selfSlotNum;
@@ -42,7 +44,6 @@ namespace ERang
     {
         public static AbilityLogic Instance { get; private set; }
 
-        public List<Ability> abilities = new();
         public Dictionary<AbilityType, IAbility> abilityActions = new();
 
         void Awake()
@@ -71,50 +72,6 @@ namespace ERang
             //     else
             //         Debug.LogError($"AbilityAction[{kvp.Key}] is null.");
             // }
-        }
-
-        void Start()
-        {
-
-        }
-
-        public List<Ability> GetAbilities()
-        {
-            return abilities;
-        }
-
-        public List<Ability> GetHandOnAbilities()
-        {
-            return abilities.FindAll(ability => ability.whereFrom == AbilityWhereFrom.TurnStarHandOn);
-        }
-
-        public List<Ability> GetBoardSlotCardAbilities()
-        {
-            return abilities.FindAll(ability => ability.whereFrom != AbilityWhereFrom.TurnStarHandOn);
-        }
-
-        /// <summary>
-        /// 카드 버프 개수 얻기
-        /// </summary>
-        public int GetBuffCount(string cardUid)
-        {
-            return abilities.Count(ability => ability.targetCardUid == cardUid && ability.aiType == AiDataType.Buff);
-        }
-
-        /// <summary>
-        /// 카드 디버프 개수 얻기
-        /// </summary>
-        public int GetDebuffCount(string cardUid)
-        {
-            return abilities.Count(ability => ability.targetCardUid == cardUid && ability.aiType == AiDataType.Debuff);
-        }
-
-        /// <summary>
-        /// 카드 어빌리티 제거 - card uid
-        /// </summary>
-        public void RemoveAbility(string cardUid)
-        {
-            abilities.RemoveAll(ability => ability.targetCardUid == cardUid);
         }
 
         public IEnumerator AbilityAction(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
@@ -224,9 +181,11 @@ namespace ERang
             CardAbility cardAbility = new()
             {
                 whereFrom = whereFrom,
+                aiType = aiData.type,
                 abilityId = abilityData.abilityId,
                 workType = abilityData.workType,
                 duration = abilityData.duration,
+                totalDuration = abilityData.duration,
                 startTurn = BattleLogic.Instance.turnCount,
                 aiDataId = aiData.ai_Id,
                 selfSlotNum = selfSlot.SlotNum,
