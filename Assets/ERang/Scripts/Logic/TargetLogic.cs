@@ -10,8 +10,6 @@ namespace ERang
     {
         public static TargetLogic Instance { get; private set; }
 
-        private const int BOARD_CENTER_OFFSET = 3;
-
         void Awake()
         {
             Instance = this;

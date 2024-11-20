@@ -3,41 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
+using Unity.VisualScripting;
 
 namespace ERang
 {
     public class CardAbility
     {
         public AbilityWhereFrom whereFrom; // 어빌리티 적용 위치
+
         public int abilityId; // 어빌리티 Id
         public AbilityWorkType workType; // 어빌리티 작업 타입(HandOn 찾기 위함)
+
+        public int aiDataId;
         public AiDataType aiType; // Ai 타입. Buff, Debuff 구분
+
         public int duration;
         public int totalDuration;
         public int startTurn;
-        public int aiDataId;
+
         public int selfSlotNum;
         public int targetSlotNum;
+        
         public List<BSlot> targetSlots = new();
-    }
-
-    public class Ability
-    {
-        public AbilityWhereFrom whereFrom; // 어빌리티 적용 위치
-        public int atkCount; // 공격 횟수
-        public AiDataType aiType; // Ai 타입
-        public AiDataAttackType aiAttackType; // Ai 공격 타입
-        public int abilityId; // 어빌리티 Id
-        public AbilityType abilityType; // 어빌리티 타입
-        public AbilityWorkType abilityWorkType; // 어빌리티 작업 타입(HandOn 찾기 위함)
-        public int beforeValue; // 어빌리티 적용 전 값
-        public int abilityValue; // 어빌리티 값
-        public int duration; // 현재 지속 시간
-        public int selfBoardSlot; // 어빌리티 발동 보드 슬롯
-        public string selfCardUid; // 어빌리티 발동 카드 Uid
-        public int targetBoardSlot; // 어빌리티 대상 보드 슬롯
-        public int targetCardId; // 어빌리티 대상 카드 Id
-        public string targetCardUid; // 어빌리티 대상 카드 Uid
     }
 
     public class AbilityLogic : MonoBehaviour
@@ -72,6 +59,18 @@ namespace ERang
             //     else
             //         Debug.LogError($"AbilityAction[{kvp.Key}] is null.");
             // }
+        }
+
+        public IEnumerator AbilityAction(List<int> abilityIds, BSlot selfSlot, List<BSlot> targetSlots)
+        {
+            List<AbilityData> abilityDatas = abilityIds.Select(id => AbilityData.GetAbilityData(id)).ToList();
+
+            foreach (AbilityData abilityData in abilityDatas)
+            {
+                string abilityLog = $"{selfSlot.LogText} {abilityData.LogText} 타겟 (슬롯, 카드): {string.Join(", ", targetSlots.Select(slot => (slot.SlotNum, slot.Card?.Id)))}";
+            }
+
+            yield return null;
         }
 
         public IEnumerator AbilityAction(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)

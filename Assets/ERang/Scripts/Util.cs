@@ -11,7 +11,7 @@ namespace ERang
     public static class Colors
     {
         public static string Red { get; } = "#dd3333";
-        public static string Green { get; } = "#00ff00";
+        public static string Green { get; } = "#78d641";
         public static string Blue { get; } = "#257dca";
         public static string Yellow { get; } = "#eeee22";
         public static string Orange { get; } = "#e78a27";
@@ -122,11 +122,6 @@ namespace ERang
         public static string CardLog(BaseCard card)
         {
             return $"{GetCardType(card.CardType)} 카드({card.Id})";
-        }
-
-        public static string AbilityLog(Ability ability)
-        {
-            return AbilityLog(ability.abilityType, ability.abilityId);
         }
 
         public static string AbilityLog(AbilityData ability)
