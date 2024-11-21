@@ -57,7 +57,7 @@ namespace ERang
                 Utils.GetCardText(card.Id, out cardName, out cardDesc, out cardShortDesc);  
 
             cardNameText.text = cardName;
-            descText.text = cardDesc;
+            descText.text = cardShortDesc;
 
             cardTypeText.text = card.CardType.ToString();
 

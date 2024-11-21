@@ -78,9 +78,6 @@ namespace ERang.Data
                 eventsDatas.Add(eventsData);
                 eventsDataDict.Add(eventsData.eventsID, eventsData);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static List<EventsData> GetEventsDatas()

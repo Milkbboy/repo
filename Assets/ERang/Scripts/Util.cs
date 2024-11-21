@@ -52,7 +52,7 @@ namespace ERang
 
         public static void GetCardText(int cardId, out string cardName, out string cardDesc, out string cardShortDesc)
         {
-            CardData cardData = MonsterCardData.GetCardData(cardId);
+            CardData cardData = CardData.GetCardData(cardId);
 
             if (cardData == null)
             {
@@ -201,12 +201,12 @@ namespace ERang
                     continue;
                 }
 
-                CardData monsterCardData = MonsterCardData.GetCardData(cardId);
+                CardData CardData = CardData.GetCardData(cardId);
 
-                if (monsterCardData == null)
+                if (CardData == null)
                     cardDataList.Add((pos, $"카드 데이터 없음: {cardId}", cardId));
                 else
-                    cardDataList.Add((pos, monsterCardData.nameDesc, monsterCardData.card_id));
+                    cardDataList.Add((pos, CardData.nameDesc, CardData.card_id));
             }
 
             return $"Level ID: {levelData.levelId}. 등장 카드들 {string.Join(", ", cardDataList.Select(x => $"{x.Item1}: {x.Item2}({x.Item3})").ToList())}";

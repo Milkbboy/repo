@@ -129,9 +129,6 @@ namespace ERang.Data
                 card_list.Add(cardData);
                 card_dict.Add(cardData.card_id, cardData);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static CardData GetCardData(int card_id)

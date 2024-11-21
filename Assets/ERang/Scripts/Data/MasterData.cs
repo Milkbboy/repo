@@ -92,9 +92,6 @@ namespace ERang.Data
 
                 // Debug.Log("MasterData loaded: " + MasterData.championName + " " + MasterData.uid + " " + MasterData.atk + " " + MasterData.hp + " " + MasterData.def + " " + MasterData.mana + " " + MasterData.startCardIds.Count);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static MasterData GetMasterData(int master_id)

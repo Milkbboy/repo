@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: MonsterCardDataTable
   m_EditorClassIdentifier: 
   items:
-  - Card_Id: 1001
+  - Card_Id: 901001
     NameDesc: "\uC18C\uB4DC\uB9E8_Lv1"
-    CardNameDesc_Id: CardName_1001
-    CardDesc_Id: CardDesc_1001
-    CardShortDesc_Id: MobShortDesc_1001
+    CardNameDesc_Id: MobName_901001
+    CardDesc_Id: MobDesc_901001
+    CardShortDesc_Id: MobShortDesc_901001
     CardType: Monster
     AiGroup_id: 11001
     CostMana: 1
@@ -35,11 +35,11 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 0
-  - Card_Id: 1002
+  - Card_Id: 901002
     NameDesc: "\uC544\uCCD0_Lv1"
-    CardNameDesc_Id: CardName_1002
-    CardDesc_Id: CardDesc_1002
-    CardShortDesc_Id: 
+    CardNameDesc_Id: CardName_901002
+    CardDesc_Id: CardDesc_901002
+    CardShortDesc_Id: MobShortDesc_901002
     CardType: Monster
     AiGroup_id: 11002
     CostMana: 2
@@ -57,11 +57,11 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 0
-  - Card_Id: 1003
+  - Card_Id: 901003
     NameDesc: "\uAD11\uC804\uC0AC_Lv1"
-    CardNameDesc_Id: CardName_1003
-    CardDesc_Id: CardDesc_1003
-    CardShortDesc_Id: 
+    CardNameDesc_Id: CardName_901003
+    CardDesc_Id: CardDesc_901003
+    CardShortDesc_Id: MobShortDesc_901003
     CardType: Monster
     AiGroup_id: 11003
     CostMana: 3

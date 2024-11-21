@@ -67,9 +67,6 @@ namespace ERang.Data
                 ai_list.Add(aiData);
                 ai_dict.Add(aiData.ai_Id, aiData);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static AiData GetAiData(int aiId)

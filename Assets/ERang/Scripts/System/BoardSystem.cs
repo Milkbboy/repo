@@ -139,7 +139,7 @@ namespace ERang
                 if (cardId == 0)
                     continue;
 
-                CardData cardData = MonsterCardData.GetCardData(cardId);
+                CardData cardData = CardData.GetCardData(cardId);
 
                 if (cardData == null)
                 {

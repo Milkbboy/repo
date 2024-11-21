@@ -60,9 +60,6 @@ namespace ERang.Data
 
                 levelGroupData.Initialize(levelGroupEntity);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static LevelGroupData GetLevelGroupData(int levelGroupId)

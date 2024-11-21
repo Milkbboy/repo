@@ -51,9 +51,6 @@ namespace ERang.Data
                 conditionData_list.Add(conditionData);
                 conditionData_dict.Add(conditionData.id, conditionData);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static ConditionData GetConditionData(int id)

@@ -42,9 +42,6 @@ namespace ERang.Data
                 actDatas.Add(actData);
                 actDataDict.Add(actData.actID, actData);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static List<ActData> GetActDatas()

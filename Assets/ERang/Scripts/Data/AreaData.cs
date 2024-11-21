@@ -45,9 +45,6 @@ namespace ERang.Data
                 areaDatas.Add(areaData);
                 areaDataDict.Add(areaData.areaID, areaData);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static AreaData GetAreaDataFromFloor(int floor)

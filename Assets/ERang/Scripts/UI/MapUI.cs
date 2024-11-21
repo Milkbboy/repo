@@ -161,7 +161,7 @@ namespace ERang
                             continue;
                         }
 
-                        CardData monsterCardData = MonsterCardData.GetCardData(cardId);
+                        CardData monsterCardData = CardData.GetCardData(cardId);
 
                         if (monsterCardData == null)
                         {

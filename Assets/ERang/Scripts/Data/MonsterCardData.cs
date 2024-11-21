@@ -2,14 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using ERang.Table;
+using RogueEngine;
 
 namespace ERang.Data
 {
     public class MonsterCardData
     {
-        public static List<CardData> card_list = new List<CardData>();
-        public static Dictionary<int, CardData> card_dict = new Dictionary<int, CardData>();
-
         public static void Load(string path = "")
         {
             // 엑셀로 생성된 ScriptableObject 로드
@@ -23,40 +21,16 @@ namespace ERang.Data
 
             foreach (var cardEntity in cardDataTable.items)
             {
-                if (card_dict.ContainsKey(cardEntity.Card_Id))
+                if (CardData.card_dict.ContainsKey(cardEntity.Card_Id))
                     continue;
 
                 CardData cardData = new CardData();
 
                 cardData.Initialize(cardEntity);
 
-                card_list.Add(cardData);
-                card_dict.Add(cardData.card_id, cardData);
+                CardData.card_list.Add(cardData);
+                CardData.card_dict.Add(cardData.card_id, cardData);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
-        /// <summary>
-        /// 카드 id, name을 반환
-        /// </summary>
-        /// <returns></returns>
-        public static List<(int, string)> GetCardIdNames()
-        {
-            List<(int, string)> cardIds = new();
-
-            foreach (var card in card_list)
-            {
-                cardIds.Add((card.card_id, card.nameDesc));
-            }
-
-            return cardIds;
-        }
-
-        public static CardData GetCardData(int card_id)
-        {
-            return card_dict.TryGetValue(card_id, out CardData cardData) ? cardData : null;
         }
     }
 }

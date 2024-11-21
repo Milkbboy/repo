@@ -13,8 +13,6 @@ namespace ERang
         private Vector2 scrollPosition;
         private int[] cardDataIds;
         private string[] cardDataNames;
-        private int[] monsterCardDataIds;
-        private string[] monsterCardDataNames;
         private int[] masterCardDataIds;
         private string[] masterCardDataNames;
         private const int elementWidth = 220;
@@ -30,29 +28,18 @@ namespace ERang
             boardSystem = FindObjectOfType<BoardSystem>();
 
             List<(int, string)> cardIdNames = CardData.GetCardIdNames();
-            List<(int, string)> monsterCardIdNames = MonsterCardData.GetCardIdNames();
             List<(int, string)> masterCardIdNames = MasterData.GetCardIdNames();
 
             cardDataIds = new int[cardIdNames.Count];
             cardDataNames = new string[cardIdNames.Count];
+            masterCardDataIds = new int[masterCardIdNames.Count];
+            masterCardDataNames = new string[masterCardIdNames.Count];
 
             for (int i = 0; i < cardIdNames.Count; i++)
             {
                 cardDataIds[i] = cardIdNames[i].Item1;
                 cardDataNames[i] = cardIdNames[i].Item2;
             }
-
-            monsterCardDataIds = new int[monsterCardIdNames.Count];
-            monsterCardDataNames = new string[monsterCardIdNames.Count];
-
-            for (int i = 0; i < monsterCardIdNames.Count; i++)
-            {
-                monsterCardDataIds[i] = monsterCardIdNames[i].Item1;
-                monsterCardDataNames[i] = monsterCardIdNames[i].Item2;
-            }
-
-            masterCardDataIds = new int[masterCardIdNames.Count];
-            masterCardDataNames = new string[masterCardIdNames.Count];
 
             for (int i = 0; i < masterCardIdNames.Count; i++)
             {
@@ -113,17 +100,17 @@ namespace ERang
 
                 int[] ids = bSlot.SlotCardType switch
                 {
-                    CardType.Monster => monsterCardDataIds,
                     CardType.Master => masterCardDataIds,
                     CardType.Creature => cardDataIds,
+                    CardType.Monster => cardDataIds,
                     _ => cardDataIds,
                 };
 
                 string[] names = bSlot.SlotCardType switch
                 {
-                    CardType.Monster => monsterCardDataNames,
                     CardType.Master => masterCardDataNames,
                     CardType.Creature => cardDataNames,
+                    CardType.Monster => cardDataNames,
                     _ => cardDataNames,
                 };
 
@@ -134,9 +121,9 @@ namespace ERang
                 {
                     int cardId = bSlot.SlotCardType switch
                     {
-                        CardType.Monster => monsterCardDataIds[newSelectedIndex],
                         CardType.Master => masterCardDataIds[newSelectedIndex],
                         CardType.Creature => cardDataIds[newSelectedIndex],
+                        CardType.Monster => cardDataIds[newSelectedIndex],
                         _ => cardDataIds[newSelectedIndex],
                     };
 
@@ -152,7 +139,7 @@ namespace ERang
                             card ??= new MasterCard();
                             break;
                         case CardType.Monster:
-                            CardData selectedMonsterCardData = MonsterCardData.GetCardData(cardId);
+                            CardData selectedMonsterCardData = CardData.GetCardData(cardId);
                             inUse = selectedMonsterCardData.inUse;
                             cardTexture = selectedMonsterCardData.GetCardTexture();
                             card ??= new CreatureCard(selectedMonsterCardData);

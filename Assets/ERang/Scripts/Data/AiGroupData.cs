@@ -110,9 +110,6 @@ namespace ERang.Data
                 aiGroups_list.Add(aiGroupData);
                 aiGroups_dict.Add(aiGroupData.aiGroup_Id, aiGroupData);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static AiGroupData GetAiGroupData(int aiGroupId)

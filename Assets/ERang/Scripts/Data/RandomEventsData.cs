@@ -62,9 +62,6 @@ namespace ERang.Data
                 randomEventsDatas.Add(randomEventsData);
                 randomEventsDataDict.Add(randomEventsData.randomEventsID, randomEventsData);
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         public static List<RandomEventsData> GetRandomEventsDatas()

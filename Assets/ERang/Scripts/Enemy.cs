@@ -36,7 +36,7 @@ namespace ERang
             {
                 int cardId = enemyData.startCardIds[i];
 
-                CardData cardData = MonsterCardData.GetCardData(cardId);
+                CardData cardData = CardData.GetCardData(cardId);
 
                 if (cardData == null)
                 {
@@ -61,7 +61,7 @@ namespace ERang
                     continue;
                 }
 
-                CardData cardData = MonsterCardData.GetCardData(cardId);
+                CardData cardData = CardData.GetCardData(cardId);
 
                 if (cardData == null)
                 {
