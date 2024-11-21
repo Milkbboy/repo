@@ -21,6 +21,10 @@ namespace ERang
         private int def;
         protected int mana;
 
+        public CreatureCard()
+        {
+        }
+
         public CreatureCard(CardData cardData) : base(cardData)
         {
             hp = cardData.hp;

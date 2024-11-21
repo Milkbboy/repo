@@ -108,56 +108,84 @@ namespace ERang
 
                 BaseCard card = bSlot.Card;
 
-                if (card != null)
+                // CardData 선택 드롭다운 메뉴 추가
+                EditorGUILayout.LabelField("Select Card Data");
+
+                int[] ids = bSlot.SlotCardType switch
                 {
-                    // CardData 선택 드롭다운 메뉴 추가
-                    EditorGUILayout.LabelField("Select Card Data");
+                    CardType.Monster => monsterCardDataIds,
+                    CardType.Master => masterCardDataIds,
+                    CardType.Creature => cardDataIds,
+                    _ => cardDataIds,
+                };
 
-                    int[] ids = bSlot.SlotCardType switch
+                string[] names = bSlot.SlotCardType switch
+                {
+                    CardType.Monster => monsterCardDataNames,
+                    CardType.Master => masterCardDataNames,
+                    CardType.Creature => cardDataNames,
+                    _ => cardDataNames,
+                };
+
+                int selectedIndex = System.Array.IndexOf(ids, card?.Id ?? -1);
+                int newSelectedIndex = EditorGUILayout.Popup(selectedIndex, names);
+
+                if (newSelectedIndex != selectedIndex)
+                {
+                    int cardId = bSlot.SlotCardType switch
                     {
-                        CardType.Monster => monsterCardDataIds,
-                        CardType.Master => masterCardDataIds,
-                        CardType.Creature => cardDataIds,
-                        _ => cardDataIds,
+                        CardType.Monster => monsterCardDataIds[newSelectedIndex],
+                        CardType.Master => masterCardDataIds[newSelectedIndex],
+                        CardType.Creature => cardDataIds[newSelectedIndex],
+                        _ => cardDataIds[newSelectedIndex],
                     };
 
-                    string[] names = bSlot.SlotCardType switch
-                    {
-                        CardType.Monster => monsterCardDataNames,
-                        CardType.Master => masterCardDataNames,
-                        CardType.Creature => cardDataNames,
-                        _ => cardDataNames,
-                    };
+                    bool inUse = false;
+                    Texture2D cardTexture = null;
 
-                    int selectedIndex = System.Array.IndexOf(ids, card.Id);
-                    int newSelectedIndex = EditorGUILayout.Popup(selectedIndex, names);
-
-                    if (newSelectedIndex != selectedIndex)
+                    switch (bSlot.SlotCardType)
                     {
-                        switch (bSlot.SlotCardType)
-                        {
-                            case CardType.Monster:
-                                CardData selectedMonsterCardData = MonsterCardData.GetCardData(monsterCardDataIds[newSelectedIndex]);
-                                Debug.Log($"newSelectedIndex: {newSelectedIndex}, cardId: {monsterCardDataIds[newSelectedIndex]}, {string.Join(", ", monsterCardDataIds)}");
-                                card.UpdateCardData(selectedMonsterCardData);
-                                break;
-                            case CardType.Master:
-                                MasterData selectedMasterCardData = MasterData.GetMasterData(masterCardDataIds[newSelectedIndex]);
-                                card.UpdateCardData(selectedMasterCardData.master_Id, CardType.Master, false, 0, selectedMasterCardData.GetMasterTexture());
-                                break;
-                            case CardType.Creature:
-                                CardData selectedCardData = CardData.GetCardData(cardDataIds[newSelectedIndex]);
-                                Debug.Log($"Selected Card: {selectedCardData.card_id}, {selectedCardData.cardType}, {selectedCardData.inUse}, {selectedCardData.extinction}");
-                                card.UpdateCardData(selectedCardData);
-                                break;
-                        }
+                        case CardType.Master:
+                            MasterData selectedMasterCardData = MasterData.GetMasterData(cardId);
+                            inUse = false;
+                            cardTexture = selectedMasterCardData.GetMasterTexture();
+                            card ??= new MasterCard();
+                            break;
+                        case CardType.Monster:
+                            CardData selectedMonsterCardData = MonsterCardData.GetCardData(cardId);
+                            inUse = selectedMonsterCardData.inUse;
+                            cardTexture = selectedMonsterCardData.GetCardTexture();
+                            card ??= new CreatureCard(selectedMonsterCardData);
+                            break;
+                        case CardType.Creature:
+                            CardData selectedCardData = CardData.GetCardData(cardId);
+                            inUse = selectedCardData.inUse;
+                            cardTexture = selectedCardData.GetCardTexture();
+                            card ??= new CreatureCard(selectedCardData);
+                            break;
                     }
 
+                    card.UpdateCardData(cardId, bSlot.SlotCardType, inUse, 0, cardTexture);
+                    bSlot.EquipCard(card);
+                }
+
+                if (card != null)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.BeginVertical();
                     // 카드 이미지 표시
                     if (bSlot.Card.CardImage != null)
                         GUILayout.Label(bSlot.Card.CardImage, GUILayout.Width(elementWidth), GUILayout.Height(150));
                     else
                         GUILayout.Label("No Image", GUILayout.Width(elementWidth), GUILayout.Height(150));
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.BeginVertical();
+                    if (GUILayout.Button("X", GUILayout.Width(20), GUILayout.Height(20)))
+                    {
+                        bSlot.RemoveCard();
+                    }
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.EndHorizontal();
 
                     // 카드 ability 표시
                     EditorGUILayout.LabelField("Card Abilities");
@@ -187,25 +215,7 @@ namespace ERang
 
                             AbilityData selectedAbilityData = AbilityData.GetAbilityData(selectedAbilityId);
 
-                            CardAbility cardAbility = new()
-                            {
-                                whereFrom = AbilityWhereFrom.AddedEditor,
-                                
-                                aiType = aiType,
-                                aiDataId = aiDataId,
-
-                                abilityId = selectedAbilityId,
-                                workType = selectedAbilityData.workType,
-                                duration = selectedAbilityData.duration,
-                                totalDuration = selectedAbilityData.duration,
-
-                                startTurn = BattleLogic.Instance.turnCount,
-                                
-                                selfSlotNum = bSlot.SlotNum,
-                                targetSlotNum = bSlot.SlotNum,
-                            };
-
-                            card.Abilities.Add(cardAbility);
+                            AbilityLogic.Instance.AbilityAction(aiDataId, selectedAbilityId, bSlot, targetSlots, AbilityWhereFrom.AddedEditor);
                         });
                     }
                 }

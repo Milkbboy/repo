@@ -115,13 +115,18 @@ namespace ERang
 
             if (creatureCard.Hp <= 0)
             {
-                card = null;
-                cardObject.SetActive(false);
+                RemoveCard();
 
                 yield return null;
 
                 StartCoroutine(BattleLogic.Instance.RemoveBoardCard(slotNum));
             }
+        }
+
+        public void RemoveCard()
+        {
+            card = null;
+            cardObject.SetActive(false);
         }
 
         public void AdjustMana(int amount)

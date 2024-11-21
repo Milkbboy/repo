@@ -73,6 +73,14 @@ namespace ERang
             yield return null;
         }
 
+        public void AbilityAction(int aiDataId, int abilityId, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
+        {
+            AiData aiData = AiData.GetAiData(aiDataId);
+            AbilityData abilityData = AbilityData.GetAbilityData(abilityId);
+
+            StartCoroutine(AbilityAction(aiData, abilityData, selfSlot, targetSlots, whereFrom));
+        }
+
         public IEnumerator AbilityAction(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
         {
             string abilityLog = $"{selfSlot.LogText} {abilityData.LogText} 타겟 (슬롯, 카드): {string.Join(", ", targetSlots.Select(slot => (slot.SlotNum, slot.Card?.Id)))}";

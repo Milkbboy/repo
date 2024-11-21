@@ -37,11 +37,14 @@ namespace ERang
 
             foreach (BSlot targetSlot in targetSlots)
             {
-                if (targetSlot.Card == null || (targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard))
+                if (targetSlot.Card == null)
                 {
-                    if (targetSlot.Card == null)
-                        Debug.LogWarning($"targetSlot.Card is null. slotNum: {targetSlot.SlotNum}");
+                    Debug.LogWarning($"targetSlot.Card is null. slotNum: {targetSlot.SlotNum}");
+                    continue;
+                }
 
+                if (targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard)
+                {
                     if (targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard)
                         Debug.LogWarning($"targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard. slotNum: {targetSlot.SlotNum}");
 

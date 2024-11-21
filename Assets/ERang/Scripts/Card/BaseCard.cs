@@ -24,6 +24,10 @@ namespace ERang
 
         private List<CardAbility> abilities = new();
 
+        public BaseCard()
+        {
+        }
+
         public BaseCard(CardData cardData)
         {
             Uid = Utils.GenerateShortUniqueID();

@@ -10,6 +10,10 @@ namespace ERang
         public int MaxMana => maxMana;
         private int maxMana;
 
+        public MasterCard()
+        {
+        }
+
         public MasterCard(Master master) : base(master)
         {
             maxMana = master.MaxMana;

@@ -110,6 +110,7 @@ namespace ERang
             switch (aiData.target)
             {
                 case AiDataTarget.Self:
+                case AiDataTarget.Friendly:
                 case AiDataTarget.AllFriendly:
                 case AiDataTarget.AllFriendlyCreature:
                     targetSlots = BoardSystem.Instance.GetFriendlySlots(selfSlot);
@@ -122,11 +123,12 @@ namespace ERang
                 case AiDataTarget.RandomEnemyCreature:
                 case AiDataTarget.FirstEnemy:
                 case AiDataTarget.SecondEnemy:
+                case AiDataTarget.SelectEnemy:
                     targetSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
                     break;
                 case AiDataTarget.None:
                 default:
-                    Debug.LogWarning($"{aiData.ai_Id} - 대상이 없음");
+                    Debug.LogWarning($"{aiData.ai_Id} {aiData.target} - 대상이 없음");
                     break;
             }
 
