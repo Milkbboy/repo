@@ -13,7 +13,7 @@ namespace ERang
         private static List<AbilityData> abilities;
         private static BSlot selfSlot;
         private Vector2 scrollPosition;
-        private Dictionary<int, bool> selectedTargetSlots = new Dictionary<int, bool>(); // 선택된 타겟 슬롯을 저장할 딕셔너리
+        private Dictionary<int, Dictionary<int, bool>> selectedTargetSlots = new Dictionary<int, Dictionary<int, bool>>(); // 선택된 타겟 슬롯을 저장할 딕셔너리
 
         public static void ShowWindow(BSlot bSlot, Action<int, int, AiDataType, List<BSlot>> onAbilitySelectedAction)
         {
@@ -63,16 +63,19 @@ namespace ERang
                     // 타겟 보드 슬롯 선택 드롭다운 메뉴
                     List<BSlot> targetSlots = GetSelectableSlots(aiData, selfSlot);
 
+                    if (!selectedTargetSlots.ContainsKey(abilityData.abilityId))
+                        selectedTargetSlots[abilityData.abilityId] = new Dictionary<int, bool>();
+
                     EditorGUILayout.BeginVertical(); // 수직 레이아웃 시작
                     foreach (BSlot slot in targetSlots)
                     {
-                        if (!selectedTargetSlots.ContainsKey(slot.SlotNum))
+                        if (!selectedTargetSlots[abilityData.abilityId].ContainsKey(slot.SlotNum))
                         {
-                            selectedTargetSlots[slot.SlotNum] = false;
+                            selectedTargetSlots[abilityData.abilityId][slot.SlotNum] = false;
                         }
 
                         EditorGUILayout.BeginHorizontal(); // 수평 레이아웃 시작
-                        selectedTargetSlots[slot.SlotNum] = EditorGUILayout.Toggle(selectedTargetSlots[slot.SlotNum], GUILayout.Width(20));
+                        selectedTargetSlots[abilityData.abilityId][slot.SlotNum] = EditorGUILayout.Toggle(selectedTargetSlots[abilityData.abilityId][slot.SlotNum], GUILayout.Width(20));
                         EditorGUILayout.LabelField($"Slot {slot.SlotNum}", GUILayout.Width(60));
                         EditorGUILayout.EndHorizontal(); // 수평 레이아웃 종료
                     }
@@ -81,7 +84,7 @@ namespace ERang
                     if (GUILayout.Button("Select"))
                     {
                         List<int> selectedSlots = new List<int>();
-                        foreach (var kvp in selectedTargetSlots)
+                        foreach (var kvp in selectedTargetSlots[abilityData.abilityId])
                         {
                             if (kvp.Value)
                             {
