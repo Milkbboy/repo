@@ -9,12 +9,15 @@ namespace ERang
 {
     public class AbilitySelectorWindow : EditorWindow
     {
-        private static Action<int, int, AiDataType> onAbilitySelected;
+        private static Action<int, int, AiDataType, List<BSlot>> onAbilitySelected;
         private static List<AbilityData> abilities;
+        private static BSlot selfSlot;
         private Vector2 scrollPosition;
+        private Dictionary<int, bool> selectedTargetSlots = new Dictionary<int, bool>(); // 선택된 타겟 슬롯을 저장할 딕셔너리
 
-        public static void ShowWindow(Action<int, int, AiDataType> onAbilitySelectedAction)
+        public static void ShowWindow(BSlot bSlot, Action<int, int, AiDataType, List<BSlot>> onAbilitySelectedAction)
         {
+            selfSlot = bSlot;
             abilities = AbilityData.abilityData_list;
             onAbilitySelected = onAbilitySelectedAction;
             GetWindow<AbilitySelectorWindow>("Ability 선택");
@@ -55,10 +58,38 @@ namespace ERang
                     EditorGUILayout.LabelField($"AiData ID: {aiData.ai_Id}");
                     EditorGUILayout.LabelField($"AiData Type: {aiData.type}");
                     EditorGUILayout.LabelField($"AiData Target: {aiData.target}");
+                    
+
+                    // 타겟 보드 슬롯 선택 드롭다운 메뉴
+                    List<BSlot> targetSlots = GetSelectableSlots(aiData, selfSlot);
+
+                    EditorGUILayout.BeginVertical(); // 수직 레이아웃 시작
+                    foreach (BSlot slot in targetSlots)
+                    {
+                        if (!selectedTargetSlots.ContainsKey(slot.SlotNum))
+                        {
+                            selectedTargetSlots[slot.SlotNum] = false;
+                        }
+
+                        EditorGUILayout.BeginHorizontal(); // 수평 레이아웃 시작
+                        selectedTargetSlots[slot.SlotNum] = EditorGUILayout.Toggle(selectedTargetSlots[slot.SlotNum], GUILayout.Width(20));
+                        EditorGUILayout.LabelField($"Slot {slot.SlotNum}", GUILayout.Width(60));
+                        EditorGUILayout.EndHorizontal(); // 수평 레이아웃 종료
+                    }
+                    EditorGUILayout.EndVertical(); // 수직 레이아웃 종료
 
                     if (GUILayout.Button("Select"))
                     {
-                        onAbilitySelected?.Invoke(abilityData.abilityId, aiData.ai_Id, aiData.type);
+                        List<int> selectedSlots = new List<int>();
+                        foreach (var kvp in selectedTargetSlots)
+                        {
+                            if (kvp.Value)
+                            {
+                                selectedSlots.Add(kvp.Key);
+                            }
+                        }
+
+                        onAbilitySelected?.Invoke(abilityData.abilityId, aiData.ai_Id, aiData.type, targetSlots);
                         Close();
                     }
 
@@ -67,6 +98,36 @@ namespace ERang
             }
 
             EditorGUILayout.EndScrollView();
+        }
+
+        private List<BSlot> GetSelectableSlots(AiData aiData, BSlot selfSlot)
+        {
+            List<BSlot> targetSlots = new List<BSlot>();
+
+            switch (aiData.target)
+            {
+                case AiDataTarget.Self:
+                case AiDataTarget.AllFriendly:
+                case AiDataTarget.AllFriendlyCreature:
+                    targetSlots = BoardSystem.Instance.GetFriendlySlots(selfSlot);
+                    break;
+                case AiDataTarget.Enemy:
+                case AiDataTarget.NearEnemy:
+                case AiDataTarget.AllEnemy:
+                case AiDataTarget.AllEnemyCreature:
+                case AiDataTarget.RandomEnemy:
+                case AiDataTarget.RandomEnemyCreature:
+                case AiDataTarget.FirstEnemy:
+                case AiDataTarget.SecondEnemy:
+                    targetSlots = BoardSystem.Instance.GetOpponentSlots(selfSlot);
+                    break;
+                case AiDataTarget.None:
+                default:
+                    Debug.LogWarning($"{aiData.ai_Id} - 대상이 없음");
+                    break;
+            }
+
+            return targetSlots;
         }
     }
 }

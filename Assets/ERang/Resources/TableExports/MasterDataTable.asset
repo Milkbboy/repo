@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC"
     MasterNameDesc_Id: MasterName_1001
     MasterDesc_Id: MasterDesc_1001
     MasterShortDesc_Id: MasterShortDesc_1001
@@ -31,6 +32,7 @@ MonoBehaviour:
     StartArtiFact_Id: 1001
     StartAbility_Id: 9001001
   - Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uC138\uC6B8"
     MasterNameDesc_Id: MasterName_1002
     MasterDesc_Id: MasterDesc_1002
     MasterShortDesc_Id: 
@@ -48,6 +50,7 @@ MonoBehaviour:
     StartArtiFact_Id: 0
     StartAbility_Id: 9001002, 9001002
   - Master_Id: 1003
+    NameDesc: "\uBC14\uB77D \uB77C\uD6D4"
     MasterNameDesc_Id: MasterName_1003
     MasterDesc_Id: MasterDesc_1003
     MasterShortDesc_Id: 

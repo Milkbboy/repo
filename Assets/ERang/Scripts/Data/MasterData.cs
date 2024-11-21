@@ -9,6 +9,7 @@ namespace ERang.Data
     public class MasterData
     {
         public int master_Id; // 마왕의 Id 값
+        public string nameDesc; // 마왕 캐릭터의 실제 이름
         public MasterType masterType; // 마왕의 타입
         public string cardNameId; // 마왕 캐릭터의 실제 이름 String이 들어간 데이터 Id
         public string cardDescId; // 마왕의 캐릭터 설명을 담은 String이 들어간 데이터 Id
@@ -35,6 +36,7 @@ namespace ERang.Data
         public void Initialize(MasterDataEntity entity)
         {
             master_Id = entity.Master_Id;
+            nameDesc = entity.NameDesc;
             masterType = GetMasterType(master_Id);
             cardNameId = entity.MasterNameDesc_Id;
             cardDescId = entity.MasterShortDesc_Id;
@@ -108,6 +110,21 @@ namespace ERang.Data
         public Texture2D GetMasterTexture()
         {
             return masterTexture;
+        }
+
+        /// <summary>
+        /// 카드 id, name을 반환
+        /// </summary>
+        public static List<(int, string)> GetCardIdNames()
+        {
+            List<(int, string)> cardIds = new();
+
+            foreach (var master in master_list)
+            {
+                cardIds.Add((master.master_Id, master.nameDesc));
+            }
+
+            return cardIds;
         }
 
         public MasterType GetMasterType(int masterId)

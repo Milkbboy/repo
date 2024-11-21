@@ -174,6 +174,19 @@ namespace ERang
             }
         }
 
+        public void RefreshBoardSlot()
+        {
+            foreach (var slot in bSlots)
+            {
+                BaseCard card = slot.Card;
+
+                if (card == null)
+                    continue;
+
+                slot.EquipCard(card);
+            }
+        }
+
         /// <summary>
         /// 턴 카운트 설정
         /// </summary>

@@ -5,7 +5,7 @@ using ERang.Table;
 
 namespace ERang.Data
 {
-    public class MonsterCardData : ScriptableObject
+    public class MonsterCardData
     {
         public static List<CardData> card_list = new List<CardData>();
         public static Dictionary<int, CardData> card_dict = new Dictionary<int, CardData>();

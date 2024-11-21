@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace ERang
 {
@@ -53,6 +54,16 @@ namespace ERang
             IsExtinction = cardData.extinction;
             AiGroupId = cardData.aiGroup_id;
             CardImage = cardData.GetCardTexture();
+        }
+
+        public void UpdateCardData(int cardId, CardType cardType, bool inUse, int aiGroupId, Texture2D cardImage)
+        {
+            Id = cardId;
+            CardType = cardType;
+            InUse = inUse;
+            AiGroupId = aiGroupId;
+            AiGroupIndex = 0;
+            CardImage = cardImage;
         }
 
         public void AddAbility(CardAbility ability)

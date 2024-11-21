@@ -4,6 +4,7 @@ namespace ERang
     public class MasterDataEntity
     {
         public int Master_Id; // 마왕의 Id 값
+        public string NameDesc;
         public string MasterNameDesc_Id; // 마왕 캐릭터의 실제 이름 String이 들어간 데이터 Id
         public string MasterDesc_Id; // 마왕의 캐릭터 설명을 담은 String이 들어간 데이터 Id
         public string MasterShortDesc_Id; // 마왕 간단 설명
