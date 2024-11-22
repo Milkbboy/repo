@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 namespace ERang
 {
@@ -10,14 +11,18 @@ namespace ERang
         /// </summary>
         public bool IsDragging => isDragging;
 
+        public float hoverHeight = 3f;
+        public float animationDuration = 0.1f;
+        public float scaleFactor = 1.1f;
+
         private bool isDragging = false;
-        private float originalZ;
-        private float dragOffsetZ = 0.3f; // 카메라 쪽으로 이동할 거리
+        private Vector3 originalPosition;
         private Vector3 originalScale;
-        private float scaleFactor = 2f; // 드래그 중인 오브젝트의 크기 배율
+        // 마우스 다운 시의 오프셋
+        private Vector3 mouseOffset;
+
         private int originalSortingOrder;
         private int originalTextSortingOrder;
-        private Vector3 mouseOffset; // 마우스 다운 시의 오프셋
 
         private Renderer[] renderers;
         private TextMeshPro[] textMeshPros;
@@ -33,19 +38,53 @@ namespace ERang
             // Debug.Log($"textMeshPros.Length: {textMeshPros.Length}");
         }
 
+        void Start()
+        {
+            originalPosition = transform.position;
+            originalScale = transform.localScale;
+        }
+
         void OnMouseDown()
         {
             isDragging = true;
-            originalZ = transform.position.z; // 원래 z 좌표 저장
-            originalScale = transform.localScale; // 원래 크기 저장
+
+            DeckSystem.Instance.SetDragginCard(GetComponent<HCard>());
 
             // 마우스 다운 시의 오프셋 계산
             Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
             mouseOffset = transform.position - objPosition;
+        }
 
-            // 크기를 키움
-            transform.localScale = originalScale * scaleFactor;
+        void OnMouseDrag()
+        {
+            if (isDragging == false)
+                return;
+
+            Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
+            Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+            transform.position = objPosition + mouseOffset;
+        }
+
+        void OnMouseUp()
+        {
+            isDragging = false;
+
+            DeckSystem.Instance.SetDragginCard(null);
+
+            transform.DOScale(originalScale, animationDuration);
+
+            ResetSortingOrder();
+        }
+
+        void OnMouseEnter()
+        {
+            if (isDragging)
+                return;
+
+            transform.DOMoveY(originalPosition.y + hoverHeight, animationDuration);
+            transform.DOScale(originalScale * scaleFactor, animationDuration);
 
             // 모든 렌더러의 sortingOrder를 높게 설정
             foreach (var renderer in renderers)
@@ -62,24 +101,19 @@ namespace ERang
             }
         }
 
-        void OnMouseDrag()
+        void OnMouseExit()
         {
-            if (isDragging == false)
+            if (isDragging)
                 return;
 
-            Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
-            Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+            transform.DOMoveY(originalPosition.y, animationDuration);
+            transform.DOScale(originalScale, animationDuration);
 
-            // 드래그 중일 때 z 좌표를 카메라 쪽으로 약간 이동
-            objPosition.z = originalZ - dragOffsetZ; // 원래 z 좌표에서 약간 이동
-
-            transform.position = objPosition + mouseOffset;
+            ResetSortingOrder();
         }
 
-        void OnMouseUp()
+        private void ResetSortingOrder()
         {
-            isDragging = false;
-
             // 모든 렌더러의 sortingOrder를 원래 값으로 복원
             foreach (var renderer in renderers)
             {
@@ -91,14 +125,6 @@ namespace ERang
             {
                 textMeshPro.sortingOrder = originalTextSortingOrder;
             }
-
-            // 드래그가 끝나면 원래 z 좌표로 복원
-            Vector3 position = transform.position;
-            position.z = originalZ;
-            transform.position = position;
-
-            // 크기를 원래 크기로 복원
-            transform.localScale = originalScale;
         }
     }
 }

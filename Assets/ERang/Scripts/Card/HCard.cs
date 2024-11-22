@@ -14,7 +14,6 @@ namespace ERang
         public float detectionRadius = 1.0f; // 감지 반경
 
         private Dragable dragable;
-        private MouseOver mouseOver;
 
         private BaseCard card;
         private CardUI cardUI;
@@ -25,17 +24,7 @@ namespace ERang
         void Awake()
         {
             dragable = GetComponent<Dragable>();
-            mouseOver = GetComponent<MouseOver>();
             cardUI = GetComponent<CardUI>();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            if (dragable == null || mouseOver == null)
-                return;
-
-            mouseOver.IsDragging = dragable.IsDragging;
         }
 
         void OnMouseUp()

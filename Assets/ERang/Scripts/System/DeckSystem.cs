@@ -14,6 +14,8 @@ namespace ERang
         public int ExtinctionCardCount => extinctionCards.Count;
         public int GraveCardCount => graveCards.Count;
 
+        public HCard DragginCard => dragginCard;
+
         public List<BaseCard> DeckCards => deckCards;
         public List<BaseCard> HandCards => handCards;
         public List<BaseCard> GraveCards => graveCards;
@@ -32,6 +34,8 @@ namespace ERang
         private readonly List<BaseCard> graveCards = new();
         private readonly List<BaseCard> extinctionCards = new();
 
+        private HCard dragginCard;
+
         private DeckUI deckUI;
 
         void Awake()
@@ -44,6 +48,11 @@ namespace ERang
         public BaseCard FindHandCard(string cardUid)
         {
             return handCards.Find(card => card.Uid == cardUid);
+        }
+
+        public void SetDragginCard(HCard card)
+        {
+            dragginCard = card;
         }
 
         /// <summary>
