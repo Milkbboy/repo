@@ -27,6 +27,16 @@ namespace ERang
             cardUI = GetComponent<CardUI>();
         }
 
+        void OnMouseEnter()
+        { 
+            cardUI.ShowDesc(card.Id);
+        }
+
+        void OnMouseExit()
+        {
+            cardUI.ShowShortDesc(card.Id);
+        }
+
         void OnMouseUp()
         {
             // 가장 가까운 슬롯을 찾고, 슬롯 위에 있는지 확인

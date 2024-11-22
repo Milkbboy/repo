@@ -67,6 +67,20 @@ namespace ERang
             cardShortDesc = TextData.GetKr(cardData.cardShortDescId);
         }
 
+        public static string GetCardDescText(int cardId)
+        {
+            CardData cardData = CardData.GetCardData(cardId);
+
+            return cardData == null ? "카드 데이터 없음" : TextData.GetKr(cardData.cardDescId);
+        }
+
+        public static string GetCardShortDescText(int cardId)
+        {
+            CardData cardData = CardData.GetCardData(cardId);
+
+            return cardData == null ? "카드 데이터 없음" : TextData.GetKr(cardData.cardShortDescId);
+        }
+
         /// <summary>
         /// Fisher-Yates shuffle (피셔 예이츠)알고리즘
         /// </summary>

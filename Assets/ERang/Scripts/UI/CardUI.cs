@@ -214,6 +214,16 @@ namespace ERang
             descText.text = desc;
         }
 
+        public void ShowDesc(int cardId)
+        {
+            descText.text = Utils.GetCardDescText(cardId);
+        }
+
+        public void ShowShortDesc(int cardId)
+        {
+            descText.text = Utils.GetCardShortDescText(cardId);
+        }
+
         private void ActiveStatObjects(List<StatType> statTypes, bool activate)
         {
             foreach (var pair in statObjectPairs)

@@ -10,12 +10,15 @@ namespace ERang
         /// 드래그 상태를 외부에서 확인할 수 있는 프로퍼티
         /// </summary>
         public bool IsDragging => isDragging;
+        public bool IsMouseOver => isMouseOver;
 
         public float hoverHeight = 3f;
         public float animationDuration = 0.1f;
         public float scaleFactor = 1.1f;
 
         private bool isDragging = false;
+        private bool isMouseOver = false;
+
         private Vector3 originalPosition;
         private Vector3 originalScale;
         // 마우스 다운 시의 오프셋
@@ -105,6 +108,8 @@ namespace ERang
         {
             if (isDragging)
                 return;
+
+            isMouseOver = false;
 
             transform.DOMoveY(originalPosition.y, animationDuration);
             transform.DOScale(originalScale, animationDuration);
