@@ -12,9 +12,9 @@ namespace ERang
         public bool IsDragging => isDragging;
         public bool IsMouseOver => isMouseOver;
 
-        public float hoverHeight = 3f;
+        public float hoverHeight = 1.5f;
         public float animationDuration = 0.1f;
-        public float scaleFactor = 1.1f;
+        public float scaleFactor = 1.5f;
 
         private bool isDragging = false;
         private bool isMouseOver = false;
@@ -23,6 +23,9 @@ namespace ERang
         private Vector3 originalScale;
         // 마우스 다운 시의 오프셋
         private Vector3 mouseOffset;
+        // y 방향으로 이동할 거리 임계값
+        private float dragThreshold = 1f;
+        private float initialYPosition;
 
         private int originalSortingOrder;
         private int originalTextSortingOrder;
@@ -50,6 +53,8 @@ namespace ERang
         void OnMouseDown()
         {
             isDragging = true;
+            // 드래그 시작 시 y 위치 저장
+            initialYPosition = transform.position.y;
 
             DeckSystem.Instance.SetDragginCard(GetComponent<HCard>());
 
@@ -68,6 +73,13 @@ namespace ERang
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
             transform.position = objPosition + mouseOffset;
+
+            //  // y 방향으로 일정 거리 이상 이동했는지 확인
+            // if (Mathf.Abs(transform.position.y - initialYPosition) >= dragThreshold)
+            // {
+            //     // Debug.Log("카드가 y 방향으로 일정 거리 이상 이동했습니다.");
+            //     MoveCardToCenter();
+            // }
         }
 
         void OnMouseUp()
@@ -130,6 +142,11 @@ namespace ERang
             {
                 textMeshPro.sortingOrder = originalTextSortingOrder;
             }
+        }
+
+        private void MoveCardToCenter()
+        {
+            transform.DOMove(new Vector3(0, initialYPosition, transform.position.z), animationDuration);
         }
     }
 }

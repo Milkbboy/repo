@@ -110,7 +110,7 @@ namespace ERang
             {
                 BSlot bSlot = hitCollider.GetComponent<BSlot>();
 
-                if (bSlot == null || bSlot.IsOverlapCard == false)
+                if (bSlot == null || bSlot.IsOverlapCard == false || bSlot.Card == null)
                     continue;
 
                 float distance = Vector3.Distance(position, bSlot.transform.position);

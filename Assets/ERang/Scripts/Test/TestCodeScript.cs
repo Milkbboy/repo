@@ -10,6 +10,8 @@ namespace ERang
         public GameObject cardPrefab;
         public List<BaseCard> cards = new();
 
+        public TargetingArrow targetingArrow;
+
         private float cardWidth = 0f;
         private float cardSpacing = 1f;
         private List<HCard> handCards = new();
@@ -17,7 +19,9 @@ namespace ERang
 
         void Awake()
         {
-            cardWidth = cardPrefab.GetComponent<BoxCollider>().size.x;
+            // BoxCollider의 size는 로컬 공간에서의 크기를 나타내서 Transform의 localScale은 객체의 스케일을 곱한 값
+            BoxCollider boxCollider = cardPrefab.GetComponent<BoxCollider>();
+            cardWidth = boxCollider.size.x * cardPrefab.transform.localScale.x;
         }
 
         public void Test()
@@ -25,6 +29,12 @@ namespace ERang
             flip = !flip;
 
             CardData cardData = CardData.GetCardData(1006);
+
+            if (cardData == null)
+            {
+                Debug.LogError($"CardData 테이블에 {Utils.RedText(1006)} 카드 없음");
+                return;
+            }
 
             handCards[0].SetCard(new MagicCard(cardData));
         }
