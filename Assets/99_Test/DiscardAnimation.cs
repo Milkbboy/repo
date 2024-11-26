@@ -12,7 +12,7 @@ public class DiscardAnimation : MonoBehaviour
     private float scaleUpAmount = 1.5f;  // 오브젝트가 커질 크기 배율
     private float scaleDownAmount = 0.65f;  // 오브젝트가 작아질 크기 배율
     private float scaleDuration = 0.3f;  // 크기 변환에 걸리는 시간
-    private float rotationAmount = 360f;  // 회전할 각도 (한 바퀴)
+    private float rotationAmount = 180f;  // 회전할 각도 (한 바퀴)
     private float moveDuration = 0.3f;  // 타겟 지점으로 이동하는 시간
     private float effectDelay = 0.01f;  // 이펙트 출력 지연 시간 (n초 후)
     private float shrinkAmount = 0.1f;  // 타겟 위치에서 줄어들 크기 배율 (X만큼)
@@ -42,7 +42,7 @@ public class DiscardAnimation : MonoBehaviour
 
         // 2. 오브젝트가 a만큼 커졌다가 b만큼 작아지며 회전
         sequence.Append(transform.DOScale(originalScale * scaleUpAmount, scaleDuration / 2))  // a만큼 커짐
-                .Join(transform.DORotate(new Vector3(0f, 0f, rotationAmount), scaleDuration, RotateMode.FastBeyond360))  // 회전
+                .Join(transform.DORotate(new Vector3( 0f, rotationAmount, 0f), scaleDuration, RotateMode.LocalAxisAdd))  // 회전
                 .Append(transform.DOScale(originalScale * scaleDownAmount, scaleDuration / 2));  // b만큼 작아짐
 
         // 3. DiscardPos 지점으로 이동 (타겟으로 이동하는 시간 변수로 제어)
