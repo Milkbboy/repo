@@ -63,13 +63,6 @@ namespace ERang
             mouseOffset = transform.position - objPosition;
 
             // Debug.Log($"Draggable. 현재 위치: {transform.position}, originalPosition: {originalPosition}");
-
-            // HCard hCard = GetComponent<HCard>();
-            // if (!(hCard.Card.CardType == CardType.Magic || hCard.Card.CardType == CardType.Charm || hCard.Card.CardType == CardType.Curse))
-            // {
-            //     return;
-            // }
-            // HandDeck.Instance.SetDragginCard(GetComponent<HCard>());
         }
 
         void OnMouseDrag()
@@ -163,7 +156,7 @@ namespace ERang
 
         private void MoveCardToCenter()
         {
-            transform.DOMove(new Vector3(0, initialYPosition, transform.position.z), animationDuration);
+            transform.DOMove(new Vector3(0, initialYPosition, originalPosition.z), animationDuration);
         }
     }
 }
