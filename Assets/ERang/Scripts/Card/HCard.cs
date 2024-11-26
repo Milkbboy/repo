@@ -1,6 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using ERang.Data;
 
 namespace ERang
 {
@@ -9,6 +10,7 @@ namespace ERang
     {
         public string CardUid => cardUid;
         public BaseCard Card => card;
+        public HashSet<int> TargetSlotNumbers => targetSlotNumbers;
 
         public LayerMask slotLayerMask;
         public float detectionRadius = 1.0f; // 감지 반경
@@ -18,6 +20,14 @@ namespace ERang
         private BaseCard card;
         private CardUI cardUI;
         private string cardUid;
+        /// <summary>
+        /// 핸드 카드 공격 타입
+        /// </summary>
+        private List<AiDataAttackType> aiDataAttackTypes = new();
+        /// <summary>
+        /// 핸드 카드 공격 타입이 Select 이면 선택 가능한 슬롯 번호
+        /// </summary>
+        private HashSet<int> targetSlotNumbers = new();
 
         private Vector3 originalPosition;
 
@@ -27,29 +37,56 @@ namespace ERang
             cardUI = GetComponent<CardUI>();
         }
 
+        void Start()
+        {
+            originalPosition = transform.position;
+        }
+
         void OnMouseEnter()
-        { 
+        {
+            // Debug.Log($"HCard. OnMouseEnter. {card?.Uid} {card?.LogText}");
+
+            if (card == null)
+                return;
+
             cardUI.ShowDesc(card.Id);
         }
 
         void OnMouseExit()
         {
+            // Debug.Log($"HCard. OnMouseExit. {card?.Uid} {card?.LogText}");
+
+            if (card == null)
+                return;
+
             cardUI.ShowShortDesc(card.Id);
         }
 
         void OnMouseUp()
         {
-            // 가장 가까운 슬롯을 찾고, 슬롯 위에 있는지 확인
-            if (TryGetNearestSlot(transform.position, out BSlot nearestSlot))
-            {
-                // 슬롯 위치로 이동
-                Debug.Log($"Nearest Slot: {nearestSlot.Index}");
+            Debug.Log($"HCard. OnMouseUp - 1. {card?.Uid} {card?.LogText}, originalPosition: {originalPosition}");
 
-                if (BattleLogic.Instance.HandCardUse(this, nearestSlot))
-                    return;
+            // 가장 가까운 슬롯을 찾고, 슬롯 위에 있는지 확인
+            if (card is MagicCard)
+            {
+                HandDeck.Instance.MagicCardUse(this);
+
+                HandDeck.Instance.SetTargettingArraow(false);
+            }
+            else
+            {
+                if (TryGetNearestSlot(transform.position, out BSlot nearestSlot))
+                {
+                    // 슬롯 위치로 이동
+                    Debug.Log($"HCard. Nearest Slot: {nearestSlot.Index}");
+
+                    if (BattleLogic.Instance.HandCardUse(this, nearestSlot))
+                        return;
+                }
             }
 
-            transform.position = originalPosition;
+            transform.DOMove(originalPosition, .1f);
+            // Debug.Log($"HCard. OnMouseUp - 2. {card?.Uid} {card?.LogText}, originalPosition: {originalPosition}");
         }
 
         // Gizmos를 사용하여 Scene 뷰에서 구체를 그립니다.
@@ -74,6 +111,55 @@ namespace ERang
                 cardUI.SetCard(card);
             else
                 Debug.LogError("CardUI is null");
+
+            // 마법 카드인 경우 공격 타입 및 타겟 슬롯 번호 설정
+            if (card is not MagicCard)
+                return;
+
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
+
+            if (aiGroupData == null)
+            {
+                Debug.LogError($"HCard.SetCard 함수. AiGroupData is null. AiGroupId: {card.AiGroupId}");
+                return;
+            }
+
+            foreach (List<int> aiDataIds in aiGroupData.ai_Groups)
+            {
+                foreach (int aiDataId in aiDataIds)
+                {
+                    AiData aiData = AiData.GetAiData(aiDataId);
+
+                    if (aiData == null)
+                    {
+                        Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId}");
+                        continue;
+                    }
+
+                    aiDataAttackTypes.Add(aiData.attackType);
+
+                    if (aiData.attackType == AiDataAttackType.SelectEnemy || aiData.attackType == AiDataAttackType.SelectEnemyCreature)
+                    {
+                        foreach (var slotNumber in Constants.EnemySlotNumbers)
+                        {
+                            targetSlotNumbers.Add(slotNumber);
+                        }
+                    }
+
+                    if (aiData.attackType == AiDataAttackType.SelectFriendly || aiData.attackType == AiDataAttackType.SelectFriendlyCreature)
+                    {
+                        foreach (var slotNumber in Constants.MySlotNumbers)
+                        {
+                            targetSlotNumbers.Add(slotNumber);
+                        }
+                    }
+                }
+            }
+
+            if (aiDataAttackTypes.Count > 0)
+                Debug.Log($"핸드 카드 AttackTypes: {string.Join(", ", aiDataAttackTypes)}, targetSlotNumbers: {string.Join(", ", targetSlotNumbers)}");
+            else
+                Debug.Log($"핸드 카드 AttackTypes: 없음");
         }
 
         public void SetDrawPostion(Vector3 position)
@@ -98,6 +184,11 @@ namespace ERang
             cardUI.SetCard(card);
         }
 
+        public bool IsDragging()
+        {
+            return dragable.IsDragging;
+        }
+
         private bool TryGetNearestSlot(Vector3 position, out BSlot nearestSlot)
         {
             nearestSlot = null;
@@ -106,11 +197,13 @@ namespace ERang
             // 감지 반경 내의 모든 콜라이더를 가져옴
             Collider[] hitColliders = Physics.OverlapSphere(position, detectionRadius, slotLayerMask);
 
+            // Debug.Log($"hitColliders.Length: {hitColliders.Length}");
+
             foreach (Collider hitCollider in hitColliders)
             {
                 BSlot bSlot = hitCollider.GetComponent<BSlot>();
 
-                if (bSlot == null || bSlot.IsOverlapCard == false || bSlot.Card == null)
+                if (bSlot == null || bSlot.IsOverlapCard == false)
                     continue;
 
                 float distance = Vector3.Distance(position, bSlot.transform.position);
@@ -121,7 +214,7 @@ namespace ERang
                 }
             }
 
-            // Debug.Log($"position: {position}, nearestSlot: {nearestSlot?.Index}");
+            Debug.Log($"position: {position}, nearestSlot: {nearestSlot?.Index}");
 
             return nearestSlot != null;
         }

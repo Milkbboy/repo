@@ -752,6 +752,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f585624fdcbb311438fffa67e91ba5f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &363775009 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8028014065667705318, guid: c43864c6cfd24c4478e0e145c4fa8eae,
+    type: 3}
+  m_PrefabInstance: {fileID: 1321887171}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f6b78e860482884da3ec14047721ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &392837569
 GameObject:
   m_ObjectHideFlags: 0
@@ -2989,6 +3001,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 1253406716375538767, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
     type: 3}
+  targetingArrow: {fileID: 363775009}
 --- !u!1 &1121082073
 GameObject:
   m_ObjectHideFlags: 0
@@ -3505,6 +3518,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c43864c6cfd24c4478e0e145c4fa8eae, type: 3}
+--- !u!114 &1327445880 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8250744969895585455, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+    type: 3}
+  m_PrefabInstance: {fileID: 9041849247338029572}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b278f77418d2f4191ddb1a965e120a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1346407259
 GameObject:
   m_ObjectHideFlags: 0
@@ -4055,8 +4080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c93f7c450cf4254e9b768ddc1f478a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSlotPrefab: {fileID: 7770323684137707093, guid: 876a6d0a2e6699f45b2069835b6f9c73,
-    type: 3}
+  bSlotPrefab: {fileID: 1327445880}
 --- !u!114 &1494334419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5705,6 +5729,11 @@ PrefabInstance:
     - target: {fileID: 2415071818857348720, guid: 876a6d0a2e6699f45b2069835b6f9c73,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3457710038412735413, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4171272882197185169, guid: 876a6d0a2e6699f45b2069835b6f9c73,

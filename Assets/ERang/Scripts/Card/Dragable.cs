@@ -11,8 +11,9 @@ namespace ERang
         /// </summary>
         public bool IsDragging => isDragging;
         public bool IsMouseOver => isMouseOver;
+        public Vector3 OriginalPosition => originalPosition;
 
-        public float hoverHeight = 1.5f;
+        public float hoverHeight = 1f;
         public float animationDuration = 0.1f;
         public float scaleFactor = 1.5f;
 
@@ -56,12 +57,19 @@ namespace ERang
             // 드래그 시작 시 y 위치 저장
             initialYPosition = transform.position.y;
 
-            DeckSystem.Instance.SetDragginCard(GetComponent<HCard>());
-
             // 마우스 다운 시의 오프셋 계산
             Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
             mouseOffset = transform.position - objPosition;
+
+            // Debug.Log($"Draggable. 현재 위치: {transform.position}, originalPosition: {originalPosition}");
+
+            // HCard hCard = GetComponent<HCard>();
+            // if (!(hCard.Card.CardType == CardType.Magic || hCard.Card.CardType == CardType.Charm || hCard.Card.CardType == CardType.Curse))
+            // {
+            //     return;
+            // }
+            // HandDeck.Instance.SetDragginCard(GetComponent<HCard>());
         }
 
         void OnMouseDrag()
@@ -74,19 +82,23 @@ namespace ERang
 
             transform.position = objPosition + mouseOffset;
 
-            //  // y 방향으로 일정 거리 이상 이동했는지 확인
-            // if (Mathf.Abs(transform.position.y - initialYPosition) >= dragThreshold)
-            // {
-            //     // Debug.Log("카드가 y 방향으로 일정 거리 이상 이동했습니다.");
-            //     MoveCardToCenter();
-            // }
+             // y 방향으로 일정 거리 이상 이동했는지 확인
+            if (Mathf.Abs(transform.position.y - initialYPosition) >= dragThreshold)
+            {
+                HCard hCard = GetComponent<HCard>();
+
+                // 매직 카드인 경우 중앙으로 이동
+                if (hCard.Card is MagicCard)
+                {
+                    MoveCardToCenter();
+                    HandDeck.Instance.SetTargettingArraow(true);
+                }
+            }
         }
 
         void OnMouseUp()
         {
             isDragging = false;
-
-            DeckSystem.Instance.SetDragginCard(null);
 
             transform.DOScale(originalScale, animationDuration);
 
@@ -127,6 +139,11 @@ namespace ERang
             transform.DOScale(originalScale, animationDuration);
 
             ResetSortingOrder();
+        }
+
+        public void MoveToOriginalPosition()
+        {
+            transform.DOMove(originalPosition, animationDuration);
         }
 
         private void ResetSortingOrder()

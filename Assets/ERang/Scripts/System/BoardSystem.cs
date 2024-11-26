@@ -107,6 +107,7 @@ namespace ERang
                 Vector3 slotPosition = new(xPosition, startY, bSlotPrefab.transform.position.z);
 
                 BSlot bSlot = Instantiate(bSlotPrefab, slotPosition, Quaternion.identity);
+                bSlot.name = $"Building_{i}_{i - rightSlotStartIndex}";
                 bSlot.CreateSlot(i, i, buildingSlotCardTypes[i]);
 
                 buildingSlots.Add(bSlot);

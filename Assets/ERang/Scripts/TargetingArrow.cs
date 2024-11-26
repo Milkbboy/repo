@@ -9,6 +9,7 @@ namespace ERang
     /// </summary>
     public class TargetingArrow : MonoBehaviour
     {
+        public int SelectedSlotNum => selectedSlotNum;
         [SerializeField]
         private GameObject bodyPrefab;
         [SerializeField]
@@ -23,10 +24,11 @@ namespace ERang
         [SerializeField]
         private GameObject bottomRightPrefab;
 
+        private int selectedSlotNum = -1;
         private const int NumPartsTargetingArrow = 17;
         private readonly List<GameObject> arrows = new List<GameObject>(NumPartsTargetingArrow);
 
-        private GameObject selectedEnemy;
+        private GameObject selectedSlot;
         private GameObject topLeftVertex;
         private GameObject topRightVertex;
         private GameObject bottomLeftVertex;
@@ -34,9 +36,12 @@ namespace ERang
 
         private Camera mainCamera;
 
-        private LayerMask enemyLayer;
+        private LayerMask boardSlotLayer;
 
         private bool isArrowEnabled;
+
+        private int originalSortingOrder;
+        private Renderer[] renderers;
 
         private void Start()
         {
@@ -49,11 +54,6 @@ namespace ERang
             var head = Instantiate(headPrefab, gameObject.transform);
             arrows.Add(head);
 
-            foreach (var part in arrows)
-            {
-                part.SetActive(false);
-            }
-
             topLeftVertex = Instantiate(topLeftPrefab, gameObject.transform);
             topRightVertex = Instantiate(topRightPrefab, gameObject.transform);
             bottomLeftVertex = Instantiate(bottomLeftPrefab, gameObject.transform);
@@ -63,12 +63,33 @@ namespace ERang
 
             mainCamera  = Camera.main;
 
-            enemyLayer = 1 << LayerMask.NameToLayer("Enemy");
+            boardSlotLayer = 1 << LayerMask.NameToLayer("BoardSlot");
+
+            // 모든 렌더러를 가져옵니다.
+            renderers = GetComponentsInChildren<Renderer>(true);
+
+            // Debug.Log($"renderers.Length: {renderers.Length}");
+
+            foreach (var part in arrows)
+            {
+                part.SetActive(false);
+            }
+
+            // 각 모서리를 나타내는 Vertex들의 색을 약간 노란색으로 변경
+            SetVertexColor(topLeftVertex, Color.yellow);
+            SetVertexColor(topRightVertex, Color.yellow);
+            SetVertexColor(bottomLeftVertex, Color.yellow);
+            SetVertexColor(bottomRightVertex, Color.yellow);
         }
 
         public void EnableArrow(bool arrowEnabled)
         {
+            if (isArrowEnabled == arrowEnabled)
+                return;
+
             isArrowEnabled = arrowEnabled;
+
+            Debug.Log($"EnableArrow called with: {isArrowEnabled}");
 
             foreach (var part in arrows)
             {
@@ -77,7 +98,18 @@ namespace ERang
 
             if (!arrowEnabled)
             {
-                UnselectEnemy();
+                UnselectEnemy(3);
+            }
+
+            // 모든 렌더러의 sortingOrder를 높게 설정
+            if (isArrowEnabled == true)
+            {
+                foreach (var renderer in renderers)
+                {
+                    originalSortingOrder = renderer.sortingOrder;
+                    renderer.sortingOrder = 2000; // 높은 값으로 설정하여 맨 앞으로 이동
+                    // Debug.Log($"Renderer: {renderer.gameObject.name}, New SortingOrder: {renderer.sortingOrder}");
+                }
             }
         }
 
@@ -102,18 +134,30 @@ namespace ERang
 
             // Debug.Log($"mousePos: {mousePos}, mouseX: {mouseX}, mouseY: {mouseY}");
 
-            var hitInfo = Physics2D.Raycast(mousePos, Vector3.forward, Mathf.Infinity, enemyLayer);
-            if (hitInfo.collider != null)
+            var ray = mainCamera.ScreenPointToRay(mousePos);
+
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, boardSlotLayer))
             {
-                if (hitInfo.collider.gameObject != selectedEnemy ||
-                    selectedEnemy == null)
+                // Debug.Log($"HitInfo: {hitInfo.collider.gameObject.name}");
+
+                if (hitInfo.collider.gameObject != selectedSlot || selectedSlot == null)
+                {
+                    BSlot boardSlot = hitInfo.collider.gameObject.GetComponent<BSlot>();
+                    // Debug.Log($"HitInfo: {hitInfo.collider.gameObject.name}, {(boardSlot.Card != null ? $"Card: {boardSlot.Card.LogText}" : "No Card")}");
+
+                    if (HandDeck.Instance.IsTargetSlot(boardSlot.SlotNum))
                     {
                         SelectEnemy(hitInfo.collider.gameObject);
                     }
+                    else
+                    {
+                        UnselectEnemy(1);
+                    }
+                }
             }
             else
             {
-                UnselectEnemy();
+                UnselectEnemy(2);
             }
 
             const float centerX = 0.0f;
@@ -168,21 +212,37 @@ namespace ERang
             }
         }
 
+        private void SetVertexColor(GameObject vertext, Color color)
+        {
+            var renderer = vertext.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material.color = color;
+            }
+            else
+            {
+                Debug.Log($"Renderer is null for vertex: {vertext.name}");
+            }
+        }
+
         private void SelectEnemy(GameObject go)
         {
-            selectedEnemy = go;
+            selectedSlot = go;
 
-            var boxCollider = go.GetComponent<BoxCollider2D>();
+            selectedSlotNum = go.GetComponent<BSlot>().SlotNum;
+            Debug.Log($"{"SelectEnemy"}: {selectedSlot.name}, {selectedSlotNum}");
+
+            var boxCollider = go.GetComponent<BoxCollider>();
             var size = boxCollider.size;
-            var offset = boxCollider.offset;
+            var center = boxCollider.center;
 
-            var topLeftLocal = offset + new Vector2(-size.x * 0.5f, size.y * 0.5f);
+            var topLeftLocal = center + new Vector3(-size.x * 0.5f, size.y * 0.5f, 0);
             var topLeftWorld = go.transform.TransformPoint(topLeftLocal);
-            var topRightLocal = offset + new Vector2(size.x * 0.5f, size.y * 0.5f);
+            var topRightLocal = center + new Vector3(size.x * 0.5f, size.y * 0.5f, 0);
             var topRightWorld = go.transform.TransformPoint(topRightLocal);
-            var bottomLeftLocal = offset + new Vector2(-size.x * 0.5f, -size.y * 0.5f);
+            var bottomLeftLocal = center + new Vector3(-size.x * 0.5f, -size.y * 0.5f, 0);
             var bottomLeftWorld = go.transform.TransformPoint(bottomLeftLocal);
-            var bottomRightLocal = offset + new Vector2(size.x * 0.5f, -size.y * 0.5f);
+            var bottomRightLocal = center + new Vector3(size.x * 0.5f, -size.y * 0.5f, 0);
             var bottomRightWorld = go.transform.TransformPoint(bottomRightLocal);
 
             EnableSelectionBox();
@@ -193,9 +253,12 @@ namespace ERang
             bottomRightVertex.transform.position = bottomRightWorld;
         }
 
-        private void UnselectEnemy()
+        private void UnselectEnemy(int temp)
         {
-            selectedEnemy = null;
+            // Debug.Log($"<color=red>{selectedSlot?.name} unselected - {temp}</color>");
+            selectedSlot = null;
+            selectedSlotNum = -1;
+
             DisableSelectionBox();
         }
 

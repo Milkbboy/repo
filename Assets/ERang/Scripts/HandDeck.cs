@@ -6,8 +6,11 @@ namespace ERang
 {
     public class HandDeck : MonoBehaviour
     {
+        public static HandDeck Instance { get; private set; }
+
         // 핸드 카드 생성을 위한 프리팹
         public GameObject cardPrefab;
+        public TargetingArrow targetingArrow;
 
         // 핸드 카드 리스트
         private readonly List<HCard> hCards = new();
@@ -20,6 +23,10 @@ namespace ERang
 
         void Awake()
         {
+            Instance = this;
+
+            // targetingArrow = GetComponent<TargetingArrow>();
+
             // 카드의 너비를 얻기 위해 cardPrefab의 BoxCollider 컴포넌트에서 size.x 값을 사용
             BoxCollider boxCollider = cardPrefab.GetComponent<BoxCollider>();
             cardWidth = boxCollider.size.x * cardPrefab.transform.localScale.x;
@@ -33,6 +40,52 @@ namespace ERang
 
             // 오디오 클립을 로드합니다.
             flipSound = Resources.Load<AudioClip>("Audio/flipcard");
+        }
+        
+        public void MagicCardUse(HCard hCard)
+        {
+            if (targetingArrow == null)
+            {
+                Debug.Log($"{hCard.Card.LogText}. 타겟팅 화살표가 없습니다.");
+            }
+
+            if (targetingArrow.SelectedSlotNum == -1)
+            {
+                Debug.LogWarning($"{hCard.Card.LogText}. 타겟 슬롯이 없습니다.");
+                return;
+            }
+
+            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(targetingArrow.SelectedSlotNum);
+
+            if (targetSlot == null)
+            {
+                Debug.LogWarning($"{hCard.Card.LogText}. 타겟 슬롯이 없습니다.");
+                return;
+            }
+
+            targetingArrow.EnableArrow(false);
+
+            BattleLogic.Instance.HandCardUse(hCard, targetSlot);
+        }
+
+        public void SetTargettingArraow(bool isShow)
+        {
+            targetingArrow.EnableArrow(isShow);
+        }
+
+        /// <summary>
+        /// 드래깅 핸드 카드 타겟에 해당하는 보드 슬롯인지 확인
+        /// </summary>
+        public bool IsTargetSlot(int slotNum)
+        {
+            HCard dragginCard = hCards.Find(x => x.IsDragging());
+
+            // Debug.Log($"HandDeck. IsTargetSlot. Dragging Card: {dragginCard.Card.LogText}, 타겟 슬롯: {bSlot.LogText}, TargetSlotNumbers: {string.Join(", ", dragginCard.TargetSlotNumbers)}, SlotNum: {bSlot.SlotNum}");  
+
+            if (dragginCard == null)
+                return false;
+
+            return dragginCard.TargetSlotNumbers.Contains(slotNum);
         }
 
         /// <summary>
