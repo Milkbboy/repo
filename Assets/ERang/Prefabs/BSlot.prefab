@@ -401,7 +401,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cef803cff8b90ff41ac4214992260ad7, type: 2}
+  - {fileID: 2100000, guid: e9ebdbb26d8317a40a69471794a93b72, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1764,7 +1764,6 @@ GameObject:
   - component: {fileID: 5023672509244654884}
   - component: {fileID: 5308237351865053753}
   - component: {fileID: 3887454758117647742}
-  - component: {fileID: 2169309900057192348}
   - component: {fileID: 9072300249284258069}
   - component: {fileID: 4605999407673836840}
   m_Layer: 0
@@ -1858,21 +1857,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 392b62c20040ef34391534809ae7f52f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2169309900057192348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7976447041433626861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ce5a7cb408280241aa429c554bcd938, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hoverHeight: 0.2
-  animationDuration: 0.2
-  scaleFactor: 1.1
+  hoverHeight: 1
+  animationDuration: 0.1
+  scaleFactor: 1.5
 --- !u!114 &9072300249284258069
 MonoBehaviour:
   m_ObjectHideFlags: 0
