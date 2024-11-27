@@ -98,16 +98,18 @@ namespace ERang
 
             if (!arrowEnabled)
             {
-                UnselectEnemy(3);
+                UnselectEnemy();
             }
 
             // 모든 렌더러의 sortingOrder를 높게 설정
             if (isArrowEnabled == true)
             {
-                foreach (var renderer in renderers)
+                for (int i = 0; i < renderers.Length; ++i)
                 {
+                    var renderer = renderers[i];
+                    
                     originalSortingOrder = renderer.sortingOrder;
-                    renderer.sortingOrder = 2000; // 높은 값으로 설정하여 맨 앞으로 이동
+                    renderer.sortingOrder = 2000 + i; // 높은 값으로 설정하여 맨 앞으로 이동
                     // Debug.Log($"Renderer: {renderer.gameObject.name}, New SortingOrder: {renderer.sortingOrder}");
                 }
             }
@@ -151,13 +153,13 @@ namespace ERang
                     }
                     else
                     {
-                        UnselectEnemy(1);
+                        UnselectEnemy();
                     }
                 }
             }
             else
             {
-                UnselectEnemy(2);
+                UnselectEnemy();
             }
 
             const float centerX = 0.0f;
@@ -253,7 +255,7 @@ namespace ERang
             bottomRightVertex.transform.position = bottomRightWorld;
         }
 
-        private void UnselectEnemy(int temp)
+        private void UnselectEnemy(int temp = 0)
         {
             // Debug.Log($"<color=red>{selectedSlot?.name} unselected - {temp}</color>");
             selectedSlot = null;

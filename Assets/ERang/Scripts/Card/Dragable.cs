@@ -10,7 +10,6 @@ namespace ERang
         /// 드래그 상태를 외부에서 확인할 수 있는 프로퍼티
         /// </summary>
         public bool IsDragging => isDragging;
-        public bool IsMouseOver => isMouseOver;
         public Vector3 OriginalPosition => originalPosition;
 
         public float hoverHeight = 1f;
@@ -18,7 +17,7 @@ namespace ERang
         public float scaleFactor = 1.5f;
 
         private bool isDragging = false;
-        private bool isMouseOver = false;
+        private bool isCentered = false;
 
         private Vector3 originalPosition;
         private Vector3 originalScale;
@@ -70,6 +69,9 @@ namespace ERang
             if (isDragging == false)
                 return;
 
+            if (isCentered)
+                return;
+
             Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
@@ -81,7 +83,7 @@ namespace ERang
                 HCard hCard = GetComponent<HCard>();
 
                 // 매직 카드인 경우 중앙으로 이동
-                if (hCard.Card is MagicCard)
+                if (hCard.Card is MagicCard magicCard)
                 {
                     MoveCardToCenter();
                     HandDeck.Instance.SetTargettingArraow(true);
@@ -92,6 +94,7 @@ namespace ERang
         void OnMouseUp()
         {
             isDragging = false;
+            isCentered = false;
 
             transform.DOScale(originalScale, animationDuration);
 
@@ -126,8 +129,6 @@ namespace ERang
             if (isDragging)
                 return;
 
-            isMouseOver = false;
-
             transform.DOMoveY(originalPosition.y, animationDuration);
             transform.DOScale(originalScale, animationDuration);
 
@@ -156,6 +157,8 @@ namespace ERang
 
         private void MoveCardToCenter()
         {
+            isCentered = true;
+
             transform.DOMove(new Vector3(0, initialYPosition, originalPosition.z), animationDuration);
         }
     }

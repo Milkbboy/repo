@@ -13,7 +13,7 @@ namespace ERang
         private Dictionary<int, List<LocationData>> locationsByDepth = new();
         Dictionary<int, int> selectedDepthIndies = new();
 
-        [MenuItem("ERang/PlayerPrefs Viewer")]
+        [MenuItem("ERang/0. PlayerPrefs Viewer")]
         public static void ShowWindow()
         {
             if (PlayerPrefsUtility.HasKey("KeepSatiety") == false)
