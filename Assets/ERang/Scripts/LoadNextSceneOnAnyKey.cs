@@ -1,19 +1,18 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LoadNextSceneOnAnyKey : MonoBehaviour
 {
     [SerializeField]
-    private string nextSceneName; // ´ÙÀ½ ¾ÀÀÇ ÀÌ¸§ (ÀÎ½ºÆåÅÍ¿¡¼­ ¼³Á¤ °¡´É)
+    private string nextSceneName; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ (ï¿½Î½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 
     [SerializeField]
-    private float delayInSeconds = 3.0f; // ¾À ÀüÈ¯ µô·¹ÀÌ ½Ã°£ (ÃÊ) (ÀÎ½ºÆåÅÍ¿¡¼­ ¼³Á¤ °¡´É)
+    private float delayInSeconds = 3.0f; // ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ (ï¿½ï¿½) (ï¿½Î½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 
     void Update()
     {
-        // ¾Æ¹« Å°³ª ÀÔ·Â¹ÞÀ¸¸é ´ÙÀ½ ¾ÀÀ» ·Îµå
+        // ï¿½Æ¹ï¿½ Å°ï¿½ï¿½ ï¿½Ô·Â¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
         if (Input.anyKeyDown)
         {
             StartCoroutine(LoadNextSceneWithDelay());
@@ -22,10 +21,10 @@ public class LoadNextSceneOnAnyKey : MonoBehaviour
 
     IEnumerator LoadNextSceneWithDelay()
     {
-        // ÁöÁ¤µÈ ½Ã°£¸¸Å­ ´ë±â
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½Å­ ï¿½ï¿½ï¿½
         yield return new WaitForSeconds(delayInSeconds);
 
-        // ´ÙÀ½ ¾À ·Îµå
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Îµï¿½
         SceneManager.LoadScene(nextSceneName);
     }
 }

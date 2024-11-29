@@ -1,10 +1,10 @@
-using System.Collections;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
-using ERang.Data;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using ERang.Data;
 
 namespace ERang
 {

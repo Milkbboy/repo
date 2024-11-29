@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 using Newtonsoft.Json;
 
 namespace ERang
@@ -83,9 +83,7 @@ namespace ERang
         {
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            // GUILayout.Label("PlayerPrefs Viewer", EditorStyles.boldLabel);
-
-            if (GUILayout.Button("Refresh"))
+            if (GUILayout.Button("Refresh", GUILayout.Height(40)))
             {
                 PlayerPrefsUtility.DeleteAllExcept();
 

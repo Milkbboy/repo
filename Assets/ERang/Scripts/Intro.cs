@@ -1,27 +1,26 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Intro : MonoBehaviour
 {
     [SerializeField]
-    public float logoDisplayTime = 3.0f; // ·Î°í Ç¥½Ã ½Ã°£ (ÃÊ)
+    public float logoDisplayTime = 3.0f; // ï¿½Î°ï¿½ Ç¥ï¿½ï¿½ ï¿½Ã°ï¿½ (ï¿½ï¿½)
 
     [SerializeField]
-    public string nextSceneName; // ´ÙÀ½ ¾ÀÀÇ ÀÌ¸§ (ÀÎ½ºÆåÅÍ¿¡¼­ ¼³Á¤ °¡´É)
+    public string nextSceneName; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ (ï¿½Î½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 
-    private bool isKeyPressed = false; // Å° ÀÔ·ÂÀÌ °¨ÁöµÇ¾ú´ÂÁö ¿©ºÎ
+    private bool isKeyPressed = false; // Å° ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     void Start()
     {
-        // ·Î°í Ç¥½Ã ½Ã°£ÀÌ Áö³­ ÈÄ Å¸ÀÌÆ² ¾ÀÀ¸·Î ÀüÈ¯
+        // ï¿½Î°ï¿½ Ç¥ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å¸ï¿½ï¿½Æ² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
         StartCoroutine(LoadNextSceneAfterDelay(logoDisplayTime));
     }
 
     void Update()
     {
-        // ¾Æ¹« Å°³ª ÀÔ·Â¹ÞÀ¸¸é ¹Ù·Î ´ÙÀ½ ¾ÀÀ¸·Î ÀüÈ¯
+        // ï¿½Æ¹ï¿½ Å°ï¿½ï¿½ ï¿½Ô·Â¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
         if (Input.anyKeyDown)
         {
             isKeyPressed = true;
@@ -31,10 +30,10 @@ public class Intro : MonoBehaviour
 
     IEnumerator LoadNextSceneAfterDelay(float delay)
     {
-        // ÁöÁ¤µÈ ½Ã°£¸¸Å­ ´ë±â
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½Å­ ï¿½ï¿½ï¿½
         yield return new WaitForSeconds(delay);
 
-        // Å° ÀÔ·ÂÀÌ ¾ø¾úÀ» °æ¿ì¿¡¸¸ ¾ÀÀ» ÀüÈ¯
+        // Å° ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
         if (!isKeyPressed)
         {
             SceneManager.LoadScene(nextSceneName);

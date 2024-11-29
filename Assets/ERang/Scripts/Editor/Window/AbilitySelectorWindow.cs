@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
 using System;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 using ERang.Data;
 
 namespace ERang

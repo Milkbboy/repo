@@ -1,5 +1,3 @@
-using ERang.Data;
-
 namespace ERang
 {
     public interface ICard

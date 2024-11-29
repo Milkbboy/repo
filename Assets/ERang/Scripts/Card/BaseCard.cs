@@ -1,9 +1,7 @@
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
-using System.Linq;
-using System.Security.Cryptography;
 
 namespace ERang
 {

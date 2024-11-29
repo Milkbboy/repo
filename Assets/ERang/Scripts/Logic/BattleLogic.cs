@@ -2,10 +2,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ERang.Data;
 using UnityEngine.Events;
 using TMPro;
 using Newtonsoft.Json;
+using ERang.Data;
 
 namespace ERang
 {

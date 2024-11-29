@@ -1,8 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
-using ERang.Table;
-using UnityEditor;
 using UnityEngine;
+using ERang.Table;
 
 namespace ERang.Data
 {

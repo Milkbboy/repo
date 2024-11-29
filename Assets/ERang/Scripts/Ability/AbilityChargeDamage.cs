@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
-using ERang.Data;
 using UnityEngine;
+using ERang.Data;
 
 namespace ERang
 {

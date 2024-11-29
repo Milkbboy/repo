@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using ERang.Data;
 using Newtonsoft.Json;
+using ERang.Data;
 
 namespace ERang
 {
