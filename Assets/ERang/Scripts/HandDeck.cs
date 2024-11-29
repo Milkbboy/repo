@@ -11,9 +11,12 @@ namespace ERang
         // 핸드 카드 생성을 위한 프리팹
         public GameObject cardPrefab;
         public TargetingArrow targetingArrow;
+        public HCard DraggingCard => draggingCard;
 
         // 핸드 카드 리스트
         private readonly List<HCard> hCards = new();
+
+        private HCard draggingCard;
 
         private float cardWidth = 0f;
         private float cardSpacing = 1f;
@@ -40,6 +43,15 @@ namespace ERang
 
             // 오디오 클립을 로드합니다.
             flipSound = Resources.Load<AudioClip>("Audio/flipcard");
+        }
+
+        /// <summary>
+        /// 드래깅 카드 설정
+        /// - 다른 핸드 카드의 OnMouseEnter, OnMouseExit 이벤트를 방지하기 위해 설정
+        /// </summary>
+        public void SetDraggingCard(HCard hCard)
+        {
+            draggingCard = hCard;
         }
         
         public void MagicCardUse(HCard hCard)
@@ -95,6 +107,7 @@ namespace ERang
         public IEnumerator SpawnHandCard(BaseCard card)
         {
             GameObject cardObject = Instantiate(cardPrefab, transform);
+            cardObject.name = $"HandCard_{card.Id}";
 
             HCard handCard = cardObject.GetComponent<HCard>();
             handCard.SetCard(card);

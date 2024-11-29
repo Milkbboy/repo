@@ -52,6 +52,12 @@ namespace ERang
 
         void OnMouseDown()
         {
+            HCard hCard = GetComponent<HCard>();
+
+            // 핸드 온 카드 드래깅 안되게 처리
+            if (hCard.IsHandOnCard)
+                return;
+
             isDragging = true;
             // 드래그 시작 시 y 위치 저장
             initialYPosition = transform.position.y;
@@ -83,7 +89,7 @@ namespace ERang
                 HCard hCard = GetComponent<HCard>();
 
                 // 매직 카드인 경우 중앙으로 이동
-                if (hCard.Card is MagicCard magicCard)
+                if (hCard.Card is MagicCard)
                 {
                     MoveCardToCenter();
                     HandDeck.Instance.SetTargettingArraow(true);
@@ -96,13 +102,16 @@ namespace ERang
             isDragging = false;
             isCentered = false;
 
-            transform.DOScale(originalScale, animationDuration);
+            transform?.DOScale(originalScale, animationDuration);
 
             ResetSortingOrder();
         }
 
         void OnMouseEnter()
         {
+            if (HandDeck.Instance.DraggingCard != null)
+                return;
+
             if (isDragging)
                 return;
 
@@ -126,6 +135,9 @@ namespace ERang
 
         void OnMouseExit()
         {
+            if (HandDeck.Instance.DraggingCard != null)
+                return;
+
             if (isDragging)
                 return;
 
