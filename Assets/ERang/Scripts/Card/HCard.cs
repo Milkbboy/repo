@@ -14,7 +14,7 @@ namespace ERang
         public HashSet<int> TargetSlotNumbers => targetSlotNumbers;
 
         public LayerMask slotLayerMask;
-        public float detectionRadius = 1.0f; // 감지 반경
+        public string LogText => Utils.CardLog(card);
 
         private Dragable dragable;
         private bool isHandOnCard = false;

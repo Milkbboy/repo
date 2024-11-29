@@ -9,6 +9,9 @@ namespace ERang
     {
         public static DeckSystem Instance { get; private set; }
 
+        public HandDeck handDeck;
+        public Transform gravePosition;
+
         public int DeckCardCount => deckCards.Count;
         public int HandCardCount => handCards.Count;
         public int ExtinctionCardCount => extinctionCards.Count;
@@ -68,13 +71,12 @@ namespace ERang
                 deckCards.Add(card);
             }
 
-            UpdateDeckCardCountUI();
+            deckUI.SetDeckCardCount(DeckCardCount);
         }
 
         /// <summary>
         /// 핸드 카드 생성
         /// </summary>
-        /// <returns></returns>
         public IEnumerator MakeHandCards()
         {
             // 덱 카드 섞기
@@ -107,44 +109,22 @@ namespace ERang
             }
 
             yield return StartCoroutine(DrawHandDeck());
-        }
 
-        public void HandCardToBoard(BaseCard card)
-        {
-            // 핸드 카드 제거
-            handCards.Remove(card);
-            deckUI.RemoveHandCard(card.Uid);
-
-            switch (card)
-            {
-                case CreatureCard creatureCard:
-                    creatureCards.Add(creatureCard);
-                    break;
-
-                case BuildingCard buildingCard:
-                    buildingCards.Add(buildingCard);
-                    break;
-            }
-
-            UpdateDeckCardCountUI();
+            deckUI.SetDeckCardCount(DeckCardCount);
         }
 
         /// <summary>
-        /// 핸드 카드 보드에 놓기
+        /// 핸드 카드를 보드로 이동
         /// </summary>
-        public void HandCardToBoard(string cardUid)
+        public void HandCardToBoard(BaseCard card)
         {
-            BaseCard card = handCards.Find(card => card.Uid == cardUid);
-
             if (card == null)
             {
                 Debug.LogError($"핸드덱에 {card.Id} 카드 없음");
                 return;
             }
 
-            // 핸드 카드 제거
-            handCards.Remove(card);
-            deckUI.RemoveHandCard(cardUid);
+            RemoveHandCard(card);
 
             switch (card)
             {
@@ -157,7 +137,7 @@ namespace ERang
                     break;
             }
 
-            UpdateDeckCardCountUI();
+            deckUI.SetDeckCardCount(DeckCardCount);
         }
 
         /// <summary>
@@ -184,9 +164,10 @@ namespace ERang
                 graveCards.Add(card);
             }
 
-            deckUI.TurnEndRemoveHandCard();
+            handDeck.TurnEndRemoveHandCard(gravePosition);
 
-            UpdateDeckCardCountUI();
+            deckUI.SetDeckCardCount(DeckCardCount);
+            deckUI.SetGraveCardCount(GraveCardCount);
         }
 
         /// <summary>
@@ -203,31 +184,21 @@ namespace ERang
             }
 
             handCards.Remove(card);
-            deckUI.RemoveHandCard(cardUid);
+            handDeck.RemoveHandCard(cardUid);
 
-            RemoveCardProcess(card);
-        }
+            if (card.IsExtinction)
+                extinctionCards.Add(card);
+            else
+                graveCards.Add(card);
 
-        /// <summary>
-        /// 보드 슬롯에 있는 카드 제거
-        /// </summary>
-        public void RemoveBoardCard(string cardUid)
-        {
-            // 크리쳐 먼저 찾고 없으면 건물 찾기
-            BaseCard card = creatureCards.Find(card => card.Uid == cardUid) ?? buildingCards.Find(card => card.Uid == cardUid);
-
-            if (card == null)
-            {
-                Debug.LogError($"보드 슬롯에 {cardUid} 카드 없음");
-                return;
-            }
-
-            RemoveCardProcess(card);
+            deckUI.SetDeckCardCount(DeckCardCount);
+            deckUI.SetGraveCardCount(GraveCardCount);
+            deckUI.SetExtinctionCardCount(ExtinctionCardCount);
         }
 
         public void UpdateHandCardUI()
         {
-            deckUI.UpdateHandCardUI();
+            handDeck.UpdateHandCardUI();
         }
 
         /// <summary>
@@ -245,28 +216,19 @@ namespace ERang
             }
         }
 
-        /// <summary>
-        /// 제거된 카드 설정
-        /// </summary>
-        private void RemoveCardProcess(BaseCard card)
+        private void RemoveHandCard(BaseCard card)
         {
-            if (card.IsExtinction)
-                extinctionCards.Add(card);
-            else
-                graveCards.Add(card);
-
-            UpdateDeckCardCountUI();
+            handCards.Remove(card);
+            handDeck.RemoveHandCard(card.Uid);
         }
 
-        IEnumerator DrawHandDeck()
+        private IEnumerator DrawHandDeck()
         {
             for (int i = 0; i < handCards.Count; ++i)
             {
                 BaseCard card = handCards[i];
 
-                yield return deckUI.SpawnHandCard(card);
-
-                UpdateDeckCardCountUI();
+                yield return handDeck.SpawnHandCard(card);
             }
         }
 

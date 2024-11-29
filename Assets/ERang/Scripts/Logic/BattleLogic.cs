@@ -401,20 +401,20 @@ namespace ERang
             if (boardSlot.SlotCardType != hCard.Card.CardType)
             {
                 hCard.GoBackPosition();
-                Debug.LogError($"카드 타입이 일치하지 않습니다. 슬롯 타입: {boardSlot.SlotCardType}, 카드 타입: {hCard.Card.CardType}");
+                Debug.LogError($"카드 타입이 일치하지 않아 장착 실패. {boardSlot.SlotCardType}에 {hCard.Card.CardType} 장착 시도");
                 return;
             }
 
             // 보드 슬롯에 카드 장착
             boardSlot.EquipCard(hCard.Card);
 
-            // 핸드 카드를 그레이브 덱으로 이동
+            // 핸드 카드 => 보드 카드 이동
             deckSystem.HandCardToBoard(hCard.Card);
 
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, hCard.Card);
 
-            Debug.Log($"보드 슬롯 {boardSlot.SlotNum} 에 카드({hCard.Card.Id}) 장착");
+            Debug.Log($"{boardSlot.LogText} 에 {hCard.LogText} 장착");
         }
 
         /// <summary>
