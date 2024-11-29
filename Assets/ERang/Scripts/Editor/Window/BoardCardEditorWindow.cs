@@ -83,6 +83,9 @@ namespace ERang
 
         private void DrawBoardCards(List<BSlot> bSlots)
         {
+            GUIStyle redTextStyle = new GUIStyle();
+            redTextStyle.normal.textColor = new Color(244, 100, 81);
+
             foreach (BSlot bSlot in bSlots)
             {
                 EditorGUILayout.BeginVertical("box", GUILayout.Width(elementWidth));
@@ -178,10 +181,15 @@ namespace ERang
 
                     for (int i = 0; i < card.Abilities.Count; ++i)
                     {
+                        AbilityData abilityData = AbilityData.GetAbilityData(card.Abilities[i].abilityId);
+
                         EditorGUILayout.BeginHorizontal();
 
-                        card.Abilities[i].abilityId = EditorGUILayout.IntField("Ability ID", card.Abilities[i].abilityId, GUILayout.Width(80));
-                        EditorGUILayout.LabelField($"{AbilityData.GetAbilityData(card.Abilities[i].abilityId).abilityType}", GUILayout.Width(80));
+                        card.Abilities[i].abilityId = EditorGUILayout.IntField($"Ability ID", abilityData.abilityId, GUILayout.Width(80));
+                        EditorGUILayout.LabelField($"{AbilityData.GetAbilityData(abilityData.abilityId).abilityType}", GUILayout.Width(80));
+
+                        // duration을 빨간색으로 표시
+                        GUILayout.Label($"{abilityData.duration}", redTextStyle);
 
                         if (GUILayout.Button("Remove", GUILayout.Width(60)))
                         {

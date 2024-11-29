@@ -111,6 +111,7 @@ namespace ERang
             yield return StartCoroutine(DrawHandDeck());
 
             deckUI.SetDeckCardCount(DeckCardCount);
+            deckUI.SetGraveCardCount(GraveCardCount);
         }
 
         /// <summary>
@@ -183,8 +184,7 @@ namespace ERang
                 return;
             }
 
-            handCards.Remove(card);
-            handDeck.RemoveHandCard(cardUid);
+            RemoveHandCard(card);
 
             if (card.IsExtinction)
                 extinctionCards.Add(card);
@@ -230,13 +230,6 @@ namespace ERang
 
                 yield return handDeck.SpawnHandCard(card);
             }
-        }
-
-        private void UpdateDeckCardCountUI()
-        {
-            deckUI.SetDeckCardCount(DeckCardCount);
-            deckUI.SetGraveCardCount(GraveCardCount);
-            deckUI.SetExtinctionCardCount(ExtinctionCardCount);
         }
     }
 }

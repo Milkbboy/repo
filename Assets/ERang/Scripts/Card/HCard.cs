@@ -46,8 +46,6 @@ namespace ERang
 
         void OnMouseEnter()
         {
-            // Debug.Log($"HCard. OnMouseEnter. {card?.Uid} {card?.LogText}");
-
             if (HandDeck.Instance.DraggingCard != null)
                 return;
 
@@ -59,8 +57,6 @@ namespace ERang
 
         void OnMouseExit()
         {
-            // Debug.Log($"HCard. OnMouseExit. {card?.Uid} {card?.LogText}");
-
             if (HandDeck.Instance.DraggingCard != null)
                 return;
 
