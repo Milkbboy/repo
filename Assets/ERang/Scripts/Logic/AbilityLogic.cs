@@ -10,6 +10,7 @@ namespace ERang
     {
         public AbilityWhereFrom whereFrom; // 어빌리티 적용 위치
 
+        public string abilityUid; // 어빌리티 고유 번호. abilityId + startTurn + abilityCount
         public int abilityId; // 어빌리티 Id
         public AbilityWorkType workType; // 어빌리티 작업 타입(HandOn 찾기 위함)
 
@@ -24,6 +25,8 @@ namespace ERang
         public int targetSlotNum;
         
         public List<BSlot> targetSlots = new();
+
+        public string LogText => Utils.AbilityLog(abilityId, abilityUid);
     }
 
     public class AbilityLogic : MonoBehaviour
@@ -154,8 +157,6 @@ namespace ERang
                 yield break;
             }
 
-            card.Abilities.Remove(cardAbility);
-
             yield return StartCoroutine(abilityAction.Release(cardAbility, selfSlot, targetSlot));
 
             if (abilityAction.Changes.Count > 0)
@@ -174,19 +175,18 @@ namespace ERang
         {
             if (targetSlot.Card == null)
             {
-                Debug.LogWarning($"{targetSlot.LogText} {abilityData.LogText} 적용 슬롯 카드 없음");
+                // Debug.LogWarning($"{targetSlot.LogText} {abilityData.LogText} 적용 슬롯 카드 없음");
                 return;
             }
 
             int beforeValue = GetOriginStatValue(abilityData.abilityType, targetSlot);
-
-            Debug.Log($"{targetSlot.LogText} {abilityData.LogText} 추가. beforeValue: {beforeValue}, value: {abilityData.value}, duration: {abilityData.duration}, workType: {abilityData.workType}");
 
             BaseCard card = targetSlot.Card;
 
             CardAbility cardAbility = new()
             {
                 whereFrom = whereFrom,
+                abilityUid = $"{abilityData.abilityId}_{BattleLogic.Instance.turnCount}_{card.Abilities.Count}",
                 aiType = aiData.type,
                 abilityId = abilityData.abilityId,
                 workType = abilityData.workType,
@@ -197,6 +197,8 @@ namespace ERang
                 selfSlotNum = selfSlot.SlotNum,
                 targetSlotNum = targetSlot.SlotNum,
             };
+
+            Debug.Log($"{targetSlot.LogText} {cardAbility.LogText} 추가. beforeValue: {beforeValue}, value: {abilityData.value}, duration: {abilityData.duration}, workType: {abilityData.workType}");
 
             card.Abilities.Add(cardAbility);
         }

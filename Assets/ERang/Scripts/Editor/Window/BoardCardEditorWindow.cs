@@ -89,9 +89,9 @@ namespace ERang
             foreach (BSlot bSlot in bSlots)
             {
                 EditorGUILayout.BeginVertical("box", GUILayout.Width(elementWidth));
-                EditorGUILayout.LabelField($"SlotNum: {bSlot.SlotNum}", GUILayout.Width(elementWidth));
-                EditorGUILayout.LabelField($"Index: {bSlot.Index}", GUILayout.Width(elementWidth));
-                EditorGUILayout.LabelField($"IsOverlapCard: {bSlot.IsOverlapCard}", GUILayout.Width(elementWidth));
+                EditorGUILayout.LabelField($"SlotNum: {bSlot.SlotNum}");
+                EditorGUILayout.LabelField($"Index: {bSlot.Index}");
+                EditorGUILayout.LabelField($"IsOverlapCard: {bSlot.IsOverlapCard}");
                 EditorGUILayout.LabelField("SlotCardType");
                 bSlot.SlotCardType = (CardType)EditorGUILayout.EnumPopup(bSlot.SlotCardType);
 
@@ -186,22 +186,18 @@ namespace ERang
 
                     for (int i = 0; i < card.Abilities.Count; ++i)
                     {
-                        AbilityData abilityData = AbilityData.GetAbilityData(card.Abilities[i].abilityId);
+                        CardAbility cardAbility = card.Abilities[i];
+                        AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
 
                         EditorGUILayout.BeginHorizontal();
-
-                        card.Abilities[i].abilityId = EditorGUILayout.IntField($"Ability ID", abilityData.abilityId, GUILayout.Width(80));
-                        EditorGUILayout.LabelField($"{AbilityData.GetAbilityData(abilityData.abilityId).abilityType}", GUILayout.Width(80));
-
-                        // duration을 빨간색으로 표시
-                        GUILayout.Label($"{abilityData.duration}", redTextStyle);
-
-                        if (GUILayout.Button("Remove", GUILayout.Width(60)))
+                        if (GUILayout.Button("X", GUILayout.Width(20)))
                         {
                             card.Abilities.RemoveAt(i);
                             i--; // Remove the current ability and adjust the index
                         }
-
+                        EditorGUILayout.LabelField($"{abilityData.workType}: {cardAbility.abilityUid} {AbilityData.GetAbilityData(abilityData.abilityId).abilityType}", GUILayout.Width(elementWidth));
+                        // duration을 빨간색으로 표시
+                        GUILayout.Label($"{cardAbility.duration}", redTextStyle);
                         EditorGUILayout.EndHorizontal();
                     }
 

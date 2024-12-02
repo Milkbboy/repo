@@ -196,9 +196,9 @@ namespace ERang
             }
 
             if (aiDataAttackTypes.Count > 0)
-                Debug.Log($"핸드 카드 AttackTypes: {string.Join(", ", aiDataAttackTypes)}, targetSlotNumbers: {string.Join(", ", targetSlotNumbers)}");
+                Debug.Log($"{card.LogText} AttackTypes: {string.Join(", ", aiDataAttackTypes)}, targetSlotNumbers: {string.Join(", ", targetSlotNumbers)}");
             else
-                Debug.Log($"핸드 카드 AttackTypes: 없음");
+                Debug.Log($"{card.LogText} AttackTypes: 없음");
         }
 
         public void SetDrawPostion(Vector3 position)

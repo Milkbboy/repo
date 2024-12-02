@@ -138,6 +138,26 @@ namespace ERang
             return $"{GetCardType(card.CardType)} 카드({card.Id})";
         }
 
+        public static string AbilityLog(int abilityId)
+        {
+            AbilityData ability = AbilityData.GetAbilityData(abilityId);
+
+            if (ability == null)
+                return $"어빌리티 데이터 없음: {abilityId}";
+
+            return AbilityLog(ability);
+        }
+
+        public static string AbilityLog(int abilityId, string abilityUid)
+        {
+            AbilityData ability = AbilityData.GetAbilityData(abilityId);
+
+            if (ability == null)
+                return $"어빌리티 데이터 없음: {abilityId}";
+
+            return $"<color=#f4872e>{ability.abilityType} 어빌리티({abilityUid})</color>";
+        }
+
         public static string AbilityLog(AbilityData ability)
         {
             return AbilityLog(ability.abilityType, ability.abilityId);

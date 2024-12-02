@@ -502,15 +502,19 @@ namespace ERang
 
                 Debug.Log($"{boardSlot.LogText} 어빌리티 {card.Abilities.Count} 개");
 
+                List<string> releaseAbilityUids = new();
+
                 for (int i = 0; i < card.Abilities.Count; ++i)
                 {
                     CardAbility ability = card.Abilities[i];
+
+                    int beforeDuration = ability.duration;
 
                     ability.duration -= 1;
 
                     AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
 
-                    string releaseLog = $"{boardSlot.LogText} {Utils.AbilityLog(abilityData.abilityType, ability.abilityId)} Duration: {ability.duration}";
+                    string releaseLog = $"{boardSlot.LogText} {Utils.AbilityLog(abilityData.abilityType, ability.abilityId)} Duration: {beforeDuration} => {ability.duration}";
 
                     if (ability.duration > 0)
                     {
@@ -525,7 +529,19 @@ namespace ERang
 
                     StartCoroutine(AbilityLogic.Instance.AbilityRelease(ability, selfBoardSlot, targetBoardSlot));
 
+                    releaseAbilityUids.Add(ability.abilityUid);
+
                     yield return new WaitForSeconds(abilityReleaseDelay);
+                }
+
+                // 해제된 어빌리티 제거
+                foreach (string uid in releaseAbilityUids)
+                    card.Abilities.RemoveAll(ability => ability.abilityUid == uid);
+
+                for (int i = 0; i < card.Abilities.Count; ++i)
+                {
+                    CardAbility ability = card.Abilities[i];
+                    Debug.Log($"{boardSlot.LogText} {ability.LogText}, Duration: {ability.duration}");
                 }
             }
         }
