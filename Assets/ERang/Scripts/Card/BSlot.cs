@@ -99,20 +99,14 @@ namespace ERang
 
         public IEnumerator TakeDamage(int amount)
         {
-            if (card is not CreatureCard)
-            {
-                Debug.LogWarning($"카드 타입이 크리쳐가 아닌 {card.CardType}");
-                yield break;
-            }
+            Debug.Log($"{card.GetType()} 카드({card.Id}) {amount} 데미지 받음");
 
-            CreatureCard creatureCard = card as CreatureCard;
-
-            creatureCard.TakeDamage(amount);
+            card.TakeDamage(amount);
             
-            cardUI.SetHp(creatureCard.Hp);
-            cardUI.SetDef(creatureCard.Def);
+            cardUI.SetHp(card.Hp);
+            cardUI.SetDef(card.Def);
 
-            if (creatureCard.Hp <= 0)
+            if (card.Hp <= 0)
             {
                 RemoveCard();
 
@@ -120,6 +114,24 @@ namespace ERang
 
                 StartCoroutine(BattleLogic.Instance.RemoveBoardCard(slotNum));
             }
+        }
+
+        public void RestoreHealth(int amount)
+        {
+            card.RestoreHealth(amount);
+            cardUI.SetHp(card.Hp);
+        }
+
+        public void IncreaseDefense(int amount)
+        {
+            card.IncreaseDefense(amount);
+            cardUI.SetDef(card.Def);
+        }
+
+        public void DecreaseDefense(int amount)
+        {
+            card.DecreaseDefense(amount);
+            cardUI.SetDef(card.Def);
         }
 
         public void RemoveCard()

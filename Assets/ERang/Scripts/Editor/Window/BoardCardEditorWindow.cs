@@ -83,7 +83,7 @@ namespace ERang
 
         private void DrawBoardCards(List<BSlot> bSlots)
         {
-            GUIStyle redTextStyle = new GUIStyle();
+            GUIStyle redTextStyle = new();
             redTextStyle.normal.textColor = new Color(244 / 255f, 100 / 255f, 81 / 255f);
 
             foreach (BSlot bSlot in bSlots)
@@ -237,7 +237,7 @@ namespace ERang
             int hp = card.Hp;
             int mana = card.Mana;
             int def = card.Def;
-
+            
             DrawCardStatField("Hp", ref hp);
             DrawCardStatField("Mana", ref mana);
             DrawCardStatField("Def", ref def);

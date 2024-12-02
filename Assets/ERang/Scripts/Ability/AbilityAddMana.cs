@@ -8,11 +8,13 @@ namespace ERang
     public class AbilityAddMana : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.AddMana;
-        public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
+        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
         public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
-            if (selfSlot.Card is not MasterCard masterCard)
+            BaseCard card = selfSlot.Card;
+
+            if (card == null || card is not MasterCard masterCard || abilityData == null)
                 yield break;
 
             // 이 시점에서 masterCard는 MasterCard 타입으로 변환된 상태입니다.

@@ -41,7 +41,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1002
     CardShortDesc_Id: CardShortDesc_1002
     CardType: Magic
-    AiGroup_id: 21002
+    AiGroup_id: 20986
     CostMana: 1
     CostGold: 0
     Hp: 0

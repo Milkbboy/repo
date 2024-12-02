@@ -241,7 +241,7 @@ namespace ERang
 
             if (floatingTextPrefab == null || floatingTextParent == null)
             {
-                Debug.LogWarning("FloatingTextPrefab or FloatingTextParent is null");
+                // Debug.LogWarning("FloatingTextPrefab or FloatingTextParent is null");
                 return;
             }
 

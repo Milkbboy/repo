@@ -9,7 +9,7 @@ namespace ERang
     public class AbilityDamage : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Damage;
-        public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
+        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
         public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
@@ -37,29 +37,29 @@ namespace ERang
 
             foreach (BSlot targetSlot in targetSlots)
             {
-                if (targetSlot.Card == null)
+                BaseCard card = targetSlot.Card;
+
+                if (card == null)
                 {
-                    Debug.LogWarning($"targetSlot.Card is null. slotNum: {targetSlot.SlotNum}");
+                    Debug.LogWarning($"{targetSlot.LogText}");
                     continue;
                 }
 
-                if (targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard)
+                if (card is not CreatureCard && card is not MasterCard)
                 {
-                    if (targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard)
-                        Debug.LogWarning($"targetSlot.Card is not CreatureCard && targetSlot.Card is not MasterCard. slotNum: {targetSlot.SlotNum}");
+                    Debug.LogWarning($"{targetSlot.LogText}: 타겟 슬롯 카드가 CreatureCard 또는 MasterCard 가 아닙니다.");
 
-                    Changes.Add((false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
+                    Changes.Add((StatType.Hp, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, card.Hp, card.Hp, damage));
+                    Changes.Add((StatType.Def, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, card.Def, card.Def, damage));
                     continue;
                 }
 
-                CreatureCard creatureCard = targetSlot.Card as CreatureCard;
-
-                int cardId = creatureCard.Id;
-                int before = creatureCard.Hp;
+                int beforeHp = card.Hp;
+                int beforeDef = card.Def;
 
                 for (int i = 0; i < atkCount; i++)
                 {
-                    // Debug.Log($"slotNum : {targetSlot.SlotNum}, cardId : {cardId}, hp : {creatureCard.Hp}, damage : {damage}");
+                    Debug.Log($"{targetSlot.LogText}, hp: {card.Hp}, def: {card.Def}, damage : {damage}");
 
                     yield return StartCoroutine(targetSlot.TakeDamage(damage));
                     targetSlot.TakeDamageAnimation();
@@ -67,15 +67,16 @@ namespace ERang
                     yield return new WaitForSeconds(0.5f);
                 }
 
-                // targetSlot.SetDamage 으로 hp 가 0 이 되면 카드 제거로 Card 가 null 이 됨
-                if (creatureCard == null)
+                // targetSlot.TakeDamage 으로 hp 가 0 이 되면 카드 제거로 Card 가 null 이 됨
+                if (card == null)
                 {
-                    Changes.Add((false, targetSlot.SlotNum, cardId, targetSlot.SlotCardType, 0, 0, 0));
+                    Changes.Add((StatType.Hp, false, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, 0, 0, damage));
                     continue;
                 }
 
                 // 카드가 hp 0 으로 제거되는 경우도 있음
-                Changes.Add((true, targetSlot.SlotNum, cardId, targetSlot.SlotCardType, before, creatureCard.Hp, damage * atkCount));
+                Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, targetSlot.Card.Hp, damage * atkCount));
+                Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, targetSlot.Card.Def, damage * atkCount));
             }
         }
 

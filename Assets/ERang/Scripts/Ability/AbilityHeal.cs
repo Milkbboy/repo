@@ -8,25 +8,23 @@ namespace ERang
     public class AbilityHeal : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Heal;
-        public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
+        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
         public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
             foreach (BSlot targetSlot in targetSlots)
             {
-                if (targetSlot.Card == null || targetSlot.Card is not CreatureCard)
+                if (targetSlot.Card == null)
                 {
-                    Changes.Add((false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
+                    Changes.Add((StatType.Hp, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
                     continue;
                 }
 
-                CreatureCard creatureCard = targetSlot.Card as CreatureCard;
+                int before = targetSlot.Card.Hp;
 
-                int before = creatureCard.Hp;
+                targetSlot.RestoreHealth(abilityData.value);
 
-                creatureCard.RestoreHealth(abilityData.value);
-
-                Changes.Add((true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, creatureCard.Hp, abilityData.value));
+                Changes.Add((StatType.Hp, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Hp, abilityData.value));
             }
 
             yield return new WaitForSeconds(0.1f);

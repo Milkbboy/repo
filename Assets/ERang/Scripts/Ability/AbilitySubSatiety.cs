@@ -8,7 +8,7 @@ namespace ERang
     public class AbilitySubSatiety : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.SubSatiety;
-        public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
+        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
         public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {

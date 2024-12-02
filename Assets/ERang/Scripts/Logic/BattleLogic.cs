@@ -159,7 +159,7 @@ namespace ERang
             yield return StartCoroutine(deckSystem.MakeHandCards());
 
             // 핸드 카드 HandOn 어빌리티 액션
-            HandOnCardAbilityAction(deckSystem.HandCards);
+            yield return HandOnCardAbilityAction(deckSystem.HandCards);
 
             // 턴 시작시 실행되는 카드의 Reaction 을 확인
             StartCoroutine(TurnStartAction());
@@ -276,9 +276,7 @@ namespace ERang
 
                 // 어빌리티 적용
                 foreach (AbilityData abilityData in abilityDatas)
-                    StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
-
-                yield return new WaitForSeconds(turnStartActionDelay);
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
             }
         }
 
@@ -355,7 +353,7 @@ namespace ERang
         /// <summary>
         /// 핸드에 있을때 효과가 발동되는 카드 액션
         /// </summary>
-        void HandOnCardAbilityAction(List<BaseCard> handCards)
+        IEnumerator HandOnCardAbilityAction(List<BaseCard> handCards)
         {
             // 핸드 온 카드 액션의 주체는 마스터 슬롯
             BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
@@ -367,7 +365,7 @@ namespace ERang
 
                 // 어빌리티 적용
                 foreach (AbilityData abilityData in abilityDatas)
-                    StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.TurnStarHandOn));
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.TurnStarHandOn));
             }
         }
 

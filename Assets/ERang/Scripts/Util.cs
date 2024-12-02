@@ -201,23 +201,12 @@ namespace ERang
             return $"<color={Colors.Green}>{floor}</color>층 <color={Colors.Yellow}>{floorIndex}</color> 번째";
         }
 
-        public static string StatChangesText(AbilityType abilityType, List<(bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> changes)
+        public static string StatChangesText(List<(StatType statType, bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> changes)
         {
-            string statText = abilityType switch
-            {
-                AbilityType.Damage => "hp",
-                AbilityType.Heal => "hp",
-                AbilityType.ChargeDamage => "hp",
-                AbilityType.AtkUp => "atk",
-                AbilityType.DefUp => "def",
-                AbilityType.BrokenDef => "def",
-                _ => "스탯",
-            };
-
             if (changes.Count == 0)
                 return $"changes.Count == 0 으로 변화 없음";
 
-            return $"{string.Join(", ", changes.Select(change => $"{change.slot}번 슬롯 {GetCardType(change.cardType)} 카드 {statText} {(change.isAffect ? $"<color=#00ff00>{change.before} => {change.after}</color>" : "")} 효과 {(change.isAffect ? "적용" : "미적용")}. 변화량: {change.changeValue}"))}";
+            return $"{string.Join(", ", changes.Select(change => $"{change.slot}번 슬롯 {GetCardType(change.cardType)} 카드 {change.statType} {(change.isAffect ? $"<color=#00ff00>{change.before} => {change.after}</color>" : "")} 효과 {(change.isAffect ? "적용" : "미적용")}. 변화량: {change.changeValue}"))}";
         }
 
         public static string LevelDataText(LevelData levelData)

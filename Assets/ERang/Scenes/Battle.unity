@@ -1096,7 +1096,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8558921083859622414, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7031510969763341693, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7493711368074159841, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6054054153215433612, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5716055432516845222, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6482499105545164725, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6775768924987776809, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 0b9dbedd2e8a2d44289756a9cba3212b, type: 3}
 --- !u!1 &417366539
 GameObject:
@@ -4057,7 +4085,6 @@ MonoBehaviour:
   extinctionCardCountText: {fileID: 1025752001}
   cardPrefab: {fileID: 1253406716375538767, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
     type: 3}
-  handDeck: {fileID: 1119929280}
 --- !u!114 &1494334418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5722,11 +5749,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3457710038412735413, guid: 876a6d0a2e6699f45b2069835b6f9c73,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4171272882197185169, guid: 876a6d0a2e6699f45b2069835b6f9c73,
         type: 3}
       propertyPath: m_Name
@@ -5745,7 +5767,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4303360420089864651, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 697482485300141857, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6841694023808552038, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7890715320214908856, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8532658263198828630, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2273076048622127601, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6956531181529573992, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 876a6d0a2e6699f45b2069835b6f9c73, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

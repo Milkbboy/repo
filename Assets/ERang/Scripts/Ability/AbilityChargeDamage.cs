@@ -9,7 +9,7 @@ namespace ERang
     public class AbilityChargeDamage : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.ChargeDamage;
-        public List<(bool, int, int, CardType, int, int, int)> Changes { get; set; } = new List<(bool, int, int, CardType, int, int, int)>();
+        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
         public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
@@ -41,16 +41,16 @@ namespace ERang
             if (aiData.type == AiDataType.Ranged)
                 yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, new List<BSlot> { targetSlot }, atkCount, damage));
 
-            if (targetSlot.Card == null || targetSlot.Card is not CreatureCard)
+            BaseCard card = targetSlot.Card;
+
+            if (card == null)
             {
-                Changes.Add((false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
+                Changes.Add((StatType.Hp, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
                 yield break;
             }
 
-            CreatureCard creatureCard = targetSlot.Card as CreatureCard;
-
-            int cardId = creatureCard.Id;
-            int before = creatureCard.Hp;
+            int beforeHp = card.Hp;
+            int beforeDef = card.Def;
 
             for (int i = 0; i < atkCount; i++)
             {
@@ -61,13 +61,14 @@ namespace ERang
             }
 
             // targetSlot.SetDamage 으로 hp 가 0 이 되면 카드 제거로 Card 가 null 이 됨
-            if (targetSlot.Card == null)
+            if (card == null)
             {
-                Changes.Add((false, targetSlot.SlotNum, cardId, targetSlot.SlotCardType, 0, 0, 0));
+                Changes.Add((StatType.Hp, false, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, 0, 0, 0));
                 yield break;
             }
 
-            Changes.Add((true, targetSlot.SlotNum, cardId, targetSlot.SlotCardType, before, creatureCard.Hp, damage * atkCount));
+            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.Hp, damage * atkCount));
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, card.Def, damage * atkCount));
         }
     }
 }

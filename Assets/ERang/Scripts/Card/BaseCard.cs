@@ -22,6 +22,14 @@ namespace ERang
 
         private List<CardAbility> abilities = new();
 
+        public virtual int Hp { get; set; }
+        public virtual int Def { get; set; }
+
+        public virtual void TakeDamage(int amount) {}
+        public virtual void RestoreHealth(int amount) {}
+        public virtual void IncreaseDefense(int amount) {}
+        public virtual void DecreaseDefense(int amount) {}
+
         public BaseCard()
         {
         }

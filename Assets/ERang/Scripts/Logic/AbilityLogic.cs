@@ -122,7 +122,7 @@ namespace ERang
 
             yield return StartCoroutine(abilityAction.Apply(aiData, abilityData, selfSlot, targetSlots));
 
-            Debug.Log($"{selfSlot.LogText} {abilityData.LogText} 실행. {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityData.abilityType, abilityAction.Changes)}");
+            Debug.Log($"{selfSlot.LogText} {abilityData.LogText} 실행. {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityAction.Changes)}");
 
             if (abilityAction.Changes.Count == 0)
                 yield break;
@@ -161,7 +161,7 @@ namespace ERang
 
             if (abilityAction.Changes.Count > 0)
             {
-                Debug.Log($"{abilityActionLog} 해제. {Utils.StatChangesText(abilityData.abilityType, abilityAction.Changes)}");
+                Debug.Log($"{abilityActionLog} 해제. {Utils.StatChangesText(abilityAction.Changes)}");
                 abilityAction.Changes.Clear();
             }
 
@@ -220,9 +220,8 @@ namespace ERang
                 // Debug.Log($"마스터 카드. cardId: {boardSlot.Card.Id} Slot: {boardSlot.SlotNum}, hp: {masterCard.Hp}, mana: {masterCard.Mana}");
                 return abilityType switch
                 {
-                    AbilityType.AtkUp => masterCard.Atk,
-                    AbilityType.DefUp or AbilityType.BrokenDef => masterCard.Def,
                     AbilityType.AddMana or AbilityType.SubMana => masterCard.Mana,
+                    AbilityType.DefUp or AbilityType.BrokenDef => masterCard.Def,
                     AbilityType.Heal or AbilityType.Damage or AbilityType.ChargeDamage => masterCard.Hp,
                     _ => 0,
                 };
