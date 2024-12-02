@@ -84,7 +84,7 @@ namespace ERang
         private void DrawBoardCards(List<BSlot> bSlots)
         {
             GUIStyle redTextStyle = new GUIStyle();
-            redTextStyle.normal.textColor = new Color(244, 100, 81);
+            redTextStyle.normal.textColor = new Color(244 / 255f, 100 / 255f, 81 / 255f);
 
             foreach (BSlot bSlot in bSlots)
             {
@@ -176,6 +176,11 @@ namespace ERang
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.EndHorizontal();
 
+                    if (card is CreatureCard creatureCard)
+                        CreatureCard(creatureCard);
+                    else if (card is MasterCard masterCard)
+                        MasterCard(masterCard);
+
                     // 카드 ability 표시
                     EditorGUILayout.LabelField("Card Abilities");
 
@@ -216,6 +221,42 @@ namespace ERang
 
                 EditorGUILayout.EndVertical();
             }
+        }
+
+        private void CreatureCard(CreatureCard card)
+        {
+            int hp = card.Hp;
+            int mana = card.Mana;
+            int atk = card.Atk;
+            int def = card.Def;
+
+            DrawCardStatField("Hp", ref hp);
+            DrawCardStatField("Mana", ref mana);
+            DrawCardStatField("Atk", ref atk);
+            DrawCardStatField("Def", ref def);
+        }
+
+        private void MasterCard(MasterCard card)
+        {
+            int hp = card.Hp;
+            int mana = card.Mana;
+            int def = card.Def;
+
+            DrawCardStatField("Hp", ref hp);
+            DrawCardStatField("Mana", ref mana);
+            DrawCardStatField("Def", ref def);
+
+            card.SetHp(hp);
+            card.SetMana(mana);
+            card.SetDefense(def);
+        }
+
+        private void DrawCardStatField(string label, ref int stat)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(label);
+            stat = EditorGUILayout.IntField(stat, GUILayout.Width(30));
+            EditorGUILayout.EndHorizontal();
         }
     }
 }
