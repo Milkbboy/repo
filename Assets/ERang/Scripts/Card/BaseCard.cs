@@ -24,6 +24,8 @@ namespace ERang
 
         public virtual int Hp { get; set; }
         public virtual int Def { get; set; }
+        public virtual int Mana { get; set; }
+        public virtual int Atk { get; set; }
 
         public virtual void TakeDamage(int amount) {}
         public virtual void RestoreHealth(int amount) {}

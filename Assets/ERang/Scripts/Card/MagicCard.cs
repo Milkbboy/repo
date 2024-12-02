@@ -5,8 +5,8 @@ namespace ERang
     // 마법 카드
     public class MagicCard : BaseCard
     {
-        public int Atk { get; set; }
-        public int Mana { get; set; }
+        public override int Atk { get; set; }
+        public override int Mana { get; set; }
 
         public MagicCard(CardData cardData) : base(cardData)
         {

@@ -7,10 +7,10 @@ namespace ERang
     {
         public override int Hp => hp;
         public override int Def => def;
+        public override int Mana => mana;
+        public override int Atk => atk;
 
         public int MaxHp => maxHp;
-        public int Mana => mana;
-        public int Atk => atk;
 
         private int hp;
         private int maxHp;

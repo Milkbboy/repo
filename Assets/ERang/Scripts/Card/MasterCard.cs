@@ -1,13 +1,11 @@
-using System.Diagnostics;
-
 namespace ERang
 {
     public class MasterCard : BaseCard, IDefensible, IManaManageable
     {
         public override int Hp => hp;
         public override int Def => def;
+        public override int Mana => mana;
 
-        public int Mana => mana;
         public int MaxMana => maxMana;
 
         private int hp;

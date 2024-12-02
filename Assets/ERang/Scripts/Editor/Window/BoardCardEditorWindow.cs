@@ -86,6 +86,10 @@ namespace ERang
             GUIStyle redTextStyle = new();
             redTextStyle.normal.textColor = new Color(244 / 255f, 100 / 255f, 81 / 255f);
 
+            GUIStyle statStyle = new GUIStyle(GUI.skin.label);
+            statStyle.normal.background = MakeTex(2, 2, new Color(0f, 0f, 0f, 0.8f)); // 반투명 검정 배경
+            statStyle.normal.textColor = Color.white;
+
             foreach (BSlot bSlot in bSlots)
             {
                 EditorGUILayout.BeginVertical("box", GUILayout.Width(elementWidth));
@@ -167,6 +171,14 @@ namespace ERang
                         GUILayout.Label(bSlot.Card.CardImage, GUILayout.Width(elementWidth), GUILayout.Height(150));
                     else
                         GUILayout.Label("No Image", GUILayout.Width(elementWidth), GUILayout.Height(150));
+
+                    // 카드 이미지 위에 스탯 표시
+                    Rect lastRect = GUILayoutUtility.GetLastRect();
+                    GUI.Label(new Rect(lastRect.x, lastRect.y, 50, 20), $"Mana: {card.Mana}", statStyle);
+                    GUI.Label(new Rect(lastRect.xMax - 50, lastRect.y, 50, 20), $"Atk: {card.Atk}", statStyle);
+                    GUI.Label(new Rect(lastRect.xMax - 50, lastRect.y + 20, 50, 20), $"Def: {card.Def}", statStyle);
+                    GUI.Label(new Rect(lastRect.xMax - 50, lastRect.y + 40, 50, 20), $"Hp: {card.Hp}", statStyle);
+
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.BeginVertical();
                     if (GUILayout.Button("X", GUILayout.Width(20), GUILayout.Height(20)))
@@ -175,11 +187,6 @@ namespace ERang
                     }
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.EndHorizontal();
-
-                    if (card is CreatureCard creatureCard)
-                        CreatureCard(creatureCard);
-                    else if (card is MasterCard masterCard)
-                        MasterCard(masterCard);
 
                     // 카드 ability 표시
                     EditorGUILayout.LabelField("Card Abilities");
@@ -219,40 +226,18 @@ namespace ERang
             }
         }
 
-        private void CreatureCard(CreatureCard card)
+        private Texture2D MakeTex(int width, int height, Color col)
         {
-            int hp = card.Hp;
-            int mana = card.Mana;
-            int atk = card.Atk;
-            int def = card.Def;
-
-            DrawCardStatField("Hp", ref hp);
-            DrawCardStatField("Mana", ref mana);
-            DrawCardStatField("Atk", ref atk);
-            DrawCardStatField("Def", ref def);
-        }
-
-        private void MasterCard(MasterCard card)
-        {
-            int hp = card.Hp;
-            int mana = card.Mana;
-            int def = card.Def;
+            Color[] pix = new Color[width * height];
             
-            DrawCardStatField("Hp", ref hp);
-            DrawCardStatField("Mana", ref mana);
-            DrawCardStatField("Def", ref def);
+            for (int i = 0; i < pix.Length; i++)
+                pix[i] = col;
 
-            card.SetHp(hp);
-            card.SetMana(mana);
-            card.SetDefense(def);
-        }
+            Texture2D result = new Texture2D(width, height);
+            result.SetPixels(pix);
+            result.Apply();
 
-        private void DrawCardStatField(string label, ref int stat)
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(label);
-            stat = EditorGUILayout.IntField(stat, GUILayout.Width(30));
-            EditorGUILayout.EndHorizontal();
+            return result;
         }
     }
 }
