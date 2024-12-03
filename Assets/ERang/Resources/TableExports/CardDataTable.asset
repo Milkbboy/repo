@@ -19,6 +19,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1001
     CardShortDesc_Id: CardShortDesc_1001
     CardType: Creature
+    Grade: Common
     AiGroup_id: 21001
     CostMana: 2
     CostGold: 0
@@ -41,6 +42,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1002
     CardShortDesc_Id: CardShortDesc_1002
     CardType: Magic
+    Grade: Rare
     AiGroup_id: 21002
     CostMana: 1
     CostGold: 0
@@ -63,6 +65,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1003
     CardShortDesc_Id: CardShortDesc_1003
     CardType: Building
+    Grade: Legendary
     AiGroup_id: 21003
     CostMana: 3
     CostGold: 150
@@ -85,6 +88,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1004
     CardShortDesc_Id: CardShortDesc_1004
     CardType: Charm
+    Grade: Common
     AiGroup_id: 21004
     CostMana: 0
     CostGold: 0
@@ -107,6 +111,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1005
     CardShortDesc_Id: CardShortDesc_1005
     CardType: Curse
+    Grade: Common
     AiGroup_id: 21005
     CostMana: 0
     CostGold: 0
@@ -129,6 +134,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1006
     CardShortDesc_Id: CardShortDesc_1006
     CardType: Magic
+    Grade: Common
     AiGroup_id: 21006
     CostMana: 0
     CostGold: 0
@@ -151,6 +157,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1007
     CardShortDesc_Id: CardShortDesc_1007
     CardType: Creature
+    Grade: Common
     AiGroup_id: 11002
     CostMana: 0
     CostGold: 0
@@ -173,6 +180,7 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_1008
     CardShortDesc_Id: CardShortDesc_1008
     CardType: Magic
+    Grade: Common
     AiGroup_id: 31002
     CostMana: 0
     CostGold: 20

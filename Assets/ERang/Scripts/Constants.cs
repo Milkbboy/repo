@@ -18,6 +18,14 @@ namespace ERang
         Gold,
     }
 
+    public enum CardGrade
+    {
+        None = 0,
+        Common,
+        Rare,
+        Legendary,
+    }
+
     public enum CardType
     {
         None = 0,

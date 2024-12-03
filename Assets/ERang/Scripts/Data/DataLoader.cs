@@ -23,6 +23,8 @@ namespace ERang
             EventsData.Load("TableExports/EventsDataTable");
             RandomEventsData.Load("TableExports/RandomEventsDataTable");
             TextData.Load("TableExports/TextDataTable");
+            RewardSetData.Load("TableExports/RewardSetDataTable");
+            RewardData.Load("TableExports/RewardDataTable");
         }
     }
 }
