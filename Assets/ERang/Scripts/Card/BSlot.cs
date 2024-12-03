@@ -99,7 +99,8 @@ namespace ERang
 
         public IEnumerator TakeDamage(int amount)
         {
-            Debug.Log($"{card.GetType()} 카드({card.Id}) {amount} 데미지 받음");
+            int beforeHp = card.Hp;
+            int beforeDef = card.Def;
 
             card.TakeDamage(amount);
             
@@ -114,6 +115,8 @@ namespace ERang
 
                 StartCoroutine(BattleLogic.Instance.RemoveBoardCard(slotNum));
             }
+
+            Debug.Log($"{card.LogText} {amount} 데미지. Hp: {beforeHp} -> {card.Hp}, Def: {beforeDef} -> {card.Def} - TakeDamage");
         }
 
         public void RestoreHealth(int amount)

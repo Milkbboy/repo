@@ -161,8 +161,8 @@ namespace ERang
             // 핸드 카드 HandOn 어빌리티 액션
             yield return HandOnCardAbilityAction(deckSystem.HandCards);
 
-            // 턴 시작시 실행되는 카드의 Reaction 을 확인
-            StartCoroutine(TurnStartAction());
+            // 턴 시작시 실행되는 몬스터 카드 Reaction
+            StartCoroutine(TurnStartMonsterReaction());
         }
 
         public void TurnEnd()
@@ -182,12 +182,23 @@ namespace ERang
 
         private IEnumerator TrunEndProcess()
         {
-            // 지속 시간 종료 어빌리티 해제
-            yield return StartCoroutine(ReleaseCardAbility(BoardSystem.Instance.GetLeftBoardSlots()));
-            yield return StartCoroutine(ReleaseCardAbility(BoardSystem.Instance.GetRightBoardSlots()));
-
             // 카드 액션
-            yield return StartCoroutine(TurnEndCardAction());
+            List<BSlot> creatureSlots = BoardSystem.Instance.GetLeftBoardSlots();
+            yield return StartCoroutine(BoardCardAction(creatureSlots));
+
+            List<BSlot> monsterSlots = BoardSystem.Instance.GetRightBoardSlots();
+            yield return StartCoroutine(BoardCardAction(monsterSlots));
+
+            List<BSlot> buildingSlots = BoardSystem.Instance.GetBuildingBoardSlots();
+            yield return StartCoroutine(BoardCardAction(buildingSlots));
+
+            // 핸드 온 카드 어빌리티 해제
+            List<BaseCard> allCards = BoardSystem.Instance.GetAllSlots().Where(slot => slot.Card != null).Select(slot => slot.Card).ToList();
+            yield return StartCoroutine(ReleaseHandOnCardAbility(allCards));
+
+            // 지속 시간 종료 어빌리티 해제
+            yield return StartCoroutine(ReleaseBoardCardAbility(BoardSystem.Instance.GetLeftBoardSlots()));
+            yield return StartCoroutine(ReleaseBoardCardAbility(BoardSystem.Instance.GetRightBoardSlots()));
 
             // 핸드덱에 카드 제거
             deckSystem.RemoveTurnEndHandCard();
@@ -248,7 +259,7 @@ namespace ERang
         /// <summary>
         /// 턴 시작 액션
         /// </summary>
-        IEnumerator TurnStartAction()
+        IEnumerator TurnStartMonsterReaction()
         {
             List<BSlot> reactionSlots = BoardSystem.Instance.GetRightBoardSlots();
             List<BSlot> opponentSlots = BoardSystem.Instance.GetLeftBoardSlots();
@@ -278,18 +289,6 @@ namespace ERang
                 foreach (AbilityData abilityData in abilityDatas)
                     yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
             }
-        }
-
-        IEnumerator TurnEndCardAction()
-        {
-            List<BSlot> creatureSlots = BoardSystem.Instance.GetLeftBoardSlots();
-            yield return StartCoroutine(BoardCardAction(creatureSlots));
-
-            List<BSlot> monsterSlots = BoardSystem.Instance.GetRightBoardSlots();
-            yield return StartCoroutine(BoardCardAction(monsterSlots));
-
-            List<BSlot> buildingSlots = BoardSystem.Instance.GetBuildingBoardSlots();
-            yield return StartCoroutine(BoardCardAction(buildingSlots));
         }
 
         /// <summary>
@@ -480,10 +479,35 @@ namespace ERang
             deckSystem.RemoveUsedHandCard(cardUid);
         }
 
+        IEnumerator ReleaseHandOnCardAbility(List<BaseCard> cards)
+        {
+            foreach (var card in cards)
+            {
+                List<string> removeAbilityUids = new();
+
+                foreach (var cardAbility in card.Abilities)
+                {
+                    if (cardAbility.workType != AbilityWorkType.OnHand)
+                        continue;
+
+                    removeAbilityUids.Add(cardAbility.abilityUid);
+
+                    yield return StartCoroutine(AbilityLogic.Instance.ReleaseCardAbilityAction(cardAbility));
+                }
+
+                // 해제된 어빌리티 제거
+                foreach (string uid in removeAbilityUids)
+                    card.Abilities.RemoveAll(ability => ability.abilityUid == uid);
+
+                if (removeAbilityUids.Count > 0)
+                    Debug.Log($"{card.LogText} 해제된 어빌리티 {removeAbilityUids.Count}개. {string.Join(", ", removeAbilityUids)} - ReleaseHandOnCardAbility");
+            }
+        }
+
         /// <summary>
         /// 보드 카드 지속시간(duration) 이 0되는 카드 어빌리티 해제
         /// </summary>
-        IEnumerator ReleaseCardAbility(List<BSlot> boardSlots)
+        IEnumerator ReleaseBoardCardAbility(List<BSlot> boardSlots)
         {
             foreach (BSlot boardSlot in boardSlots)
             {
@@ -500,50 +524,37 @@ namespace ERang
 
                 Debug.Log($"{boardSlot.LogText} 어빌리티 {card.Abilities.Count} 개");
 
-                List<string> releaseAbilityUids = new();
+                List<string> removeAbilityUids = new();
 
-                for (int i = 0; i < card.Abilities.Count; ++i)
+                foreach (var cardAbility in card.Abilities)
                 {
-                    CardAbility ability = card.Abilities[i];
+                    AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
 
-                    int beforeDuration = ability.duration;
+                    int beforeDuration = cardAbility.duration;
 
-                    ability.duration -= 1;
+                    cardAbility.duration -= 1;
 
-                    AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
-
-                    string releaseLog = $"{boardSlot.LogText} {Utils.AbilityLog(abilityData.abilityType, ability.abilityId)} Duration: {beforeDuration} => {ability.duration}";
-
-                    if (ability.duration > 0)
+                    if (cardAbility.duration > 0)
                     {
-                        Debug.Log($"{releaseLog} 남아서 패스");
+                        Debug.Log($"{boardSlot.LogText} {abilityData.LogText} duration {beforeDuration} => {cardAbility.duration} 으로 어빌리티 해제 패스 - ReleaseBoardCardAbility");
                         continue;
                     }
 
-                    Debug.Log($"{releaseLog} 으로 해제");
+                    removeAbilityUids.Add(cardAbility.abilityUid);
 
-                    BSlot selfBoardSlot = BoardSystem.Instance.GetBoardSlot(ability.selfSlotNum);
-                    BSlot targetBoardSlot = BoardSystem.Instance.GetBoardSlot(ability.targetSlotNum);
-
-                    StartCoroutine(AbilityLogic.Instance.AbilityRelease(ability, selfBoardSlot, targetBoardSlot));
-
-                    releaseAbilityUids.Add(ability.abilityUid);
-
-                    yield return new WaitForSeconds(abilityReleaseDelay);
+                    yield return StartCoroutine(AbilityLogic.Instance.ReleaseCardAbilityAction(cardAbility));
                 }
 
                 // 해제된 어빌리티 제거
-                foreach (string uid in releaseAbilityUids)
+                foreach (string uid in removeAbilityUids)
                     card.Abilities.RemoveAll(ability => ability.abilityUid == uid);
 
-                for (int i = 0; i < card.Abilities.Count; ++i)
-                {
-                    CardAbility ability = card.Abilities[i];
-                    Debug.Log($"{boardSlot.LogText} {ability.LogText}, Duration: {ability.duration}");
-                }
+                if (removeAbilityUids.Count > 0)
+                    Debug.Log($"{boardSlot.LogText} 해제된 어빌리티 {string.Join(", ", removeAbilityUids)} 개 - ReleaseBoardCardAbility");
             }
         }
 
+        
         /// <summary>
         /// 핸드 카드 사용 가능 확인
         /// </summary>

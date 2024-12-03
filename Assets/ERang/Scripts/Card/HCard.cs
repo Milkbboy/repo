@@ -195,7 +195,7 @@ namespace ERang
                 }
             }
 
-            if (aiDataAttackTypes.Count > 0)
+            if (aiDataAttackTypes.Count > 0 && targetSlotNumbers.Count > 0)
                 Debug.Log($"{card.LogText} AttackTypes: {string.Join(", ", aiDataAttackTypes)}, targetSlotNumbers: {string.Join(", ", targetSlotNumbers)}");
             else
                 Debug.Log($"{card.LogText} AttackTypes: 없음");

@@ -131,6 +131,36 @@ namespace ERang
         }
 
         /// <summary>
+        /// 카드 어빌리티 해제 동작
+        /// </summary>
+        public IEnumerator ReleaseCardAbilityAction(CardAbility cardAbility)
+        {
+            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.selfSlotNum);
+
+            if (selfSlot == null)
+            {
+                Debug.LogError($"selfSlotNum({cardAbility.selfSlotNum}) 보드 슬롯 없음 - ReleaseCardAbilityAction");
+                yield return null;
+            }
+
+            AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
+
+            if (abilityData == null)
+            {
+                Debug.LogError($"AbilityData({cardAbility.abilityId}) {Utils.RedText("테이블 데이터 없음")} - ReleaseCardAbilityAction");
+                yield return null;
+            }
+
+            Debug.Log($"{selfSlot.LogText} {cardAbility.LogText} Duration: {cardAbility.duration} 으로 해제 - ReleaseCardAbilityAction");
+
+            BSlot selfBoardSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.selfSlotNum);
+            BSlot targetBoardSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.targetSlotNum);
+
+            yield return StartCoroutine(AbilityRelease(cardAbility, selfBoardSlot, targetBoardSlot));
+        }
+
+
+        /// <summary>
         /// 보드 슬롯에 장착된 카드 ability 해제
         /// </summary>
         public IEnumerator AbilityRelease(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
@@ -141,7 +171,7 @@ namespace ERang
 
             if (abilityAction == null)
             {
-                Debug.LogWarning($"{selfSlot.LogText} {abilityData.LogText} 에 대한 해제 없음");
+                Debug.LogWarning($"{selfSlot.LogText} {abilityData.LogText} 에 대한 해제 없음 - AbilityRelease");
                 yield break;
             }
 
@@ -151,7 +181,7 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogWarning($"{abilityActionLog} - 카드 없음. 어빌리티 삭제");
+                Debug.LogWarning($"{abilityActionLog} 카드 없음. AbilityRelease");
 
                 abilityAction.Changes.Clear();
                 yield break;
@@ -165,7 +195,7 @@ namespace ERang
                 abilityAction.Changes.Clear();
             }
 
-            Debug.Log($"어빌리티 삭제: {targetSlot.LogText} {abilityData.LogText}");
+            Debug.Log($"삭제 어빌리티 동작. {targetSlot.LogText} {abilityData.LogText} - AbilityRelease");
         }
 
         /// <summary>

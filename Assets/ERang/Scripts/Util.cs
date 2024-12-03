@@ -138,6 +138,16 @@ namespace ERang
             return $"{GetCardType(card.CardType)} 카드({card.Id})";
         }
 
+        public static string AbilityLog(CardAbility cardAbility)
+        {
+            return AbilityLog(cardAbility.abilityId, cardAbility.abilityUid);
+        }
+
+        public static string AbilityLog(AbilityData ability)
+        {
+            return $"<color=#f4872e>{ability.abilityType} 어빌리티({ability.abilityId})</color>";
+        }
+
         public static string AbilityLog(int abilityId)
         {
             AbilityData ability = AbilityData.GetAbilityData(abilityId);
@@ -150,22 +160,17 @@ namespace ERang
 
         public static string AbilityLog(int abilityId, string abilityUid)
         {
-            AbilityData ability = AbilityData.GetAbilityData(abilityId);
+            AbilityData abilityData = AbilityData.GetAbilityData(abilityId);
 
-            if (ability == null)
+            if (abilityData == null)
                 return $"어빌리티 데이터 없음: {abilityId}";
 
-            return $"<color=#f4872e>{ability.abilityType} 어빌리티({abilityUid})</color>";
+            return AbilityLog(abilityData.abilityType, abilityUid, abilityData.workType);
         }
 
-        public static string AbilityLog(AbilityData ability)
+        public static string AbilityLog(AbilityType abilityType, string abilityUid, AbilityWorkType workType)
         {
-            return AbilityLog(ability.abilityType, ability.abilityId);
-        }
-
-        public static string AbilityLog(AbilityType abilityType, int abilityId)
-        {
-            return $"<color=#f4872e>{abilityType} 어빌리티({abilityId})</color>";
+            return $"<color=#f4872e>{abilityType} {workType} 어빌리티({abilityUid})</color>";
         }
 
         public static string BoardSlotNumersText(List<BSlot> boardSlots)

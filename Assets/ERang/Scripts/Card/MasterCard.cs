@@ -1,6 +1,6 @@
 namespace ERang
 {
-    public class MasterCard : BaseCard, IDefensible, IManaManageable
+    public class MasterCard : BaseCard, IManaManageable
     {
         public override int Hp => hp;
         public override int Def => def;

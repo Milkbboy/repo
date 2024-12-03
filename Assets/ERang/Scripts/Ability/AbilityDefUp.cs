@@ -25,7 +25,7 @@ namespace ERang
 
                 targetSlot.IncreaseDefense(amount);
 
-                Changes.Add((StatType.Def, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Hp, amount));
+                Changes.Add((StatType.Def, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Def, amount));
             }
 
             yield return new WaitForSeconds(0.1f);

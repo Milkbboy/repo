@@ -3,7 +3,7 @@ using ERang.Data;
 namespace ERang
 {
     // 크리쳐 카드
-    public class CreatureCard : BaseCard, IDefensible, IAttackable
+    public class CreatureCard : BaseCard, IAttackable
     {
         public override int Hp => hp;
         public override int Def => def;
