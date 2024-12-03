@@ -463,12 +463,9 @@ namespace ERang
 
             List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
 
+            // 어빌리티 적용
             foreach (AbilityData abilityData in abilityDatas)
             {
-                // 핸드 카드로 공격하는 경우 마스터 공격력 설정. 핸드 카드 동작은 마스터 카드로 하는데....이건 아니다.
-                (selfSlot.Card as CreatureCard).SetAttack(aiData.value);
-
-                // 어빌리티 적용
                 StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
             }
 
