@@ -180,18 +180,11 @@ namespace ERang
 
         public void ClickStart()
         {
-            if (levelId == 0)
-            {
-                // 이벤트 씬 전환
-                NextScene("MapEvent");
-            }
-            else
-            {
-                // 배틀 씬 전환
-                NextScene("Battle");
-            }
-
             SaveMapData();
+
+            NextScene(levelId == 0 ? "Event" : "Battle");
+
+            PlayerPrefsUtility.SetString("LastScene", "Map");
         }
 
         public void NextScene(string sceneName)

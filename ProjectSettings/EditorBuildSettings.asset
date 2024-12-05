@@ -21,6 +21,6 @@ EditorBuildSettings:
     path: Assets/ERang/Scenes/Battle.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/ERang/Scenes/MapEvent.unity
+    path: Assets/ERang/Scenes/Event.unity
     guid: 6d98353b89e405f478cd641a627cecb7
   m_configObjects: {}

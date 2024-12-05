@@ -11,5 +11,6 @@ namespace ERang
         public int Pos02_CardID;
         public int Pos03_CardID;
         public int MasterID;
+        public int RewardID;
     }
 }

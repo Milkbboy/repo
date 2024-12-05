@@ -256,5 +256,7 @@ namespace ERang
 
         public static readonly int[] MySlotNumbers = new[] { 0, 1, 2, 3 };
         public static readonly int[] EnemySlotNumbers = new[] { 6, 7, 8, 9 };
+
+        public static readonly int RewardCardCount = 3;
     }
 }

@@ -21,11 +21,13 @@ namespace ERang.Data
             cardIds.Add(entity.Pos02_CardID);
             cardIds.Add(entity.Pos03_CardID);
             cardIds.Add(entity.MasterID);
+            rewardId = entity.RewardID;
         }
 
         public int levelId;
         public string nameDesc;
         public int spawnRatio;
+        public int rewardId;
         public List<int> cardIds = new();
     }
 
@@ -34,7 +36,6 @@ namespace ERang.Data
         public int levelGroupId;
         public List<LevelData> levelDatas = new();
 
-        public static List<LevelGroupData> levelGroupDatas = new();
         public static Dictionary<int, LevelGroupData> levelGroupDictionary = new();
         public static Dictionary<int, LevelData> levelDataDictionary = new();
 

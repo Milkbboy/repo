@@ -87,7 +87,7 @@ namespace ERang
             if (GUILayout.Button("Apply Changes"))
             {
                 EditorUtility.SetDirty(deckSystem);
-                deckSystem.UpdateHandCardUI();
+                // deckSystem.UpdateHandCardUI();
             }
         }
 

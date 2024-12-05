@@ -4,7 +4,7 @@ using UnityEngine;
 public static class PlayerPrefsUtility
 {
     public static readonly List<string> PrefIntKeys = new() { "MasterId", "ActId", "AreaId", "Floor", "MaxFloor", "LevelId", "DepthIndies", "Satiety" };
-    public static readonly List<string> PrefStringKeys = new() { "SelectedDepthIndies", "DepthWidths", "Locations" };
+    public static readonly List<string> PrefStringKeys = new() { "SelectedDepthIndies", "DepthWidths", "Locations", "LastScene" };
     public static readonly List<string> PrefBoolKeys = new() { "KeepSatiety" };
     public static readonly List<string> PrefExceptKeys = new() { "KeepSatiety", "Satiety" };
 
