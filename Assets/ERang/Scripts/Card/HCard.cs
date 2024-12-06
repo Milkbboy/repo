@@ -91,9 +91,9 @@ namespace ERang
                 if (TryGetNearestSlot(transform.position, out BSlot nearestSlot))
                 {
                     // 슬롯 위치로 이동
-                    Debug.Log($"HCard. Nearest Slot: {nearestSlot.Index}");
+                    Debug.Log($"HCard. Nearest Slot: {nearestSlot.Index}, card: {nearestSlot.Card}");
 
-                    if (BattleLogic.Instance.HandCardUse(this, nearestSlot))
+                    if (nearestSlot.Card == null && BattleLogic.Instance.HandCardUse(this, nearestSlot))
                         return;
                 }
             }

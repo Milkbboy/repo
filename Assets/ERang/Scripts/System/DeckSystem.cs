@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
+using System.Linq;
 
 namespace ERang
 {
@@ -9,39 +10,47 @@ namespace ERang
     {
         public static DeckSystem Instance { get; private set; }
 
-        public HandDeck handDeck;
-        public Transform gravePosition;
-
+        public int AllCardCount => allCards.Count;
         public int DeckCardCount => deckCards.Count;
         public int HandCardCount => handCards.Count;
         public int ExtinctionCardCount => extinctionCards.Count;
         public int GraveCardCount => graveCards.Count;
 
+        public List<BaseCard> AllCards => allCards;
         public List<BaseCard> DeckCards => deckCards;
         public List<BaseCard> HandCards => handCards;
         public List<BaseCard> GraveCards => graveCards;
         public List<BaseCard> ExtinctionCards => extinctionCards;
         public List<BaseCard> BuildingCards => buildingCards;
 
+        private bool isCreatedStarCard = false;
         private readonly int maxHandCardCount = 5;
         private readonly System.Random random = new();
 
         private readonly List<BaseCard> creatureCards = new(); // 마스터 크리쳐 카드
         private readonly List<BaseCard> buildingCards = new(); // 건물 카드
 
-        private readonly List<BaseCard> allCards = new();
-        private readonly List<BaseCard> deckCards = new();
+        [SerializeField]
+        private List<BaseCard> allCards = new List<BaseCard>();
+        [SerializeField]
+        private List<BaseCard> deckCards = new List<BaseCard>();
         private readonly List<BaseCard> handCards = new();
         private readonly List<BaseCard> graveCards = new();
         private readonly List<BaseCard> extinctionCards = new();
 
-        private DeckUI deckUI;
-
         void Awake()
         {
-            Instance = this;
-
-            deckUI = GetComponent<DeckUI>();
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+                Debug.Log("DeckSystem 생성됨");
+            }
+            else if (Instance != this)
+            {
+                Debug.Log("DeckSystem 파괴됨");
+                Destroy(gameObject);
+            }
         }
 
         public BaseCard FindHandCard(string cardUid)
@@ -52,9 +61,22 @@ namespace ERang
         /// <summary>
         /// 마스터 덱 카드 생성
         /// </summary>
-        public void CreateMasterCards(List<int> cardIds)
+        public void CreateMasterCards(Master master)
         {
-            foreach (int cardId in cardIds)
+            if (isCreatedStarCard == true)
+            {
+                Debug.LogError("이미 마스터 시작 카드 생성으로 allCards => deckCards 복사");
+
+                Clear();
+
+                // allCards 를 deckCards 로 복사
+                deckCards.AddRange(allCards);
+
+                Debug.Log($"deckCards.Count: {deckCards.Count}, {string.Join(", ", deckCards.Select(card => card.Id))}");
+                return;
+            }
+
+            foreach (int cardId in master.StartCardIds)
             {
                 CardData cardData = CardData.GetCardData(cardId);
 
@@ -71,13 +93,13 @@ namespace ERang
                 deckCards.Add(card);
             }
 
-            deckUI.SetDeckCardCount(DeckCardCount);
+            isCreatedStarCard = true;
         }
 
         /// <summary>
         /// 핸드 카드 생성
         /// </summary>
-        public IEnumerator MakeHandCards()
+        public void MakeHandCards()
         {
             // 덱 카드 섞기
             ShuffleCards(deckCards);
@@ -107,11 +129,6 @@ namespace ERang
                     handCards.Add(card);
                 }
             }
-
-            yield return StartCoroutine(DrawHandDeck());
-
-            deckUI.SetDeckCardCount(DeckCardCount);
-            deckUI.SetGraveCardCount(GraveCardCount);
         }
 
         /// <summary>
@@ -137,8 +154,6 @@ namespace ERang
                     buildingCards.Add(buildingCard);
                     break;
             }
-
-            deckUI.SetDeckCardCount(DeckCardCount);
         }
 
         /// <summary>
@@ -164,11 +179,6 @@ namespace ERang
                 handCards.RemoveAt(i);
                 graveCards.Add(card);
             }
-
-            handDeck.TurnEndRemoveHandCard(gravePosition);
-
-            deckUI.SetDeckCardCount(DeckCardCount);
-            deckUI.SetGraveCardCount(GraveCardCount);
         }
 
         /// <summary>
@@ -190,15 +200,30 @@ namespace ERang
                 extinctionCards.Add(card);
             else
                 graveCards.Add(card);
-
-            deckUI.SetDeckCardCount(DeckCardCount);
-            deckUI.SetGraveCardCount(GraveCardCount);
-            deckUI.SetExtinctionCardCount(ExtinctionCardCount);
         }
 
-        public void UpdateHandCardUI()
+        public void AddCard(int cardId)
         {
-            handDeck.UpdateHandCardUI();
+            CardData cardData = CardData.GetCardData(cardId);
+
+            if (cardData == null)
+            {
+                Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음 - AddCard");
+                return;
+            }
+
+            BaseCard card = Utils.MakeCard(cardData);
+
+            // 카드 타입별로 생성
+            allCards.Add(card);
+        }
+
+        public void Clear()
+        {
+            deckCards.Clear();
+            handCards.Clear();
+            graveCards.Clear();
+            buildingCards.Clear();
         }
 
         /// <summary>
@@ -219,17 +244,6 @@ namespace ERang
         private void RemoveHandCard(BaseCard card)
         {
             handCards.Remove(card);
-            handDeck.RemoveHandCard(card.Uid);
-        }
-
-        private IEnumerator DrawHandDeck()
-        {
-            for (int i = 0; i < handCards.Count; ++i)
-            {
-                BaseCard card = handCards[i];
-
-                yield return handDeck.SpawnHandCard(card);
-            }
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ERang
         public GameObject mapEventObject;
         public GameObject rewardObject;
 
-        public DeckSystem deckSystem;
+        private DeckSystem deckSystem;
 
         void Awake()
         {
@@ -19,7 +19,12 @@ namespace ERang
             RewardData.Load("TableExports/RewardDataTable");
 
             // 시스템 생성
-            deckSystem = GetComponent<DeckSystem>();
+            deckSystem = DeckSystem.Instance;
+
+            if (deckSystem == null)
+            {
+                Debug.LogError("DeckSystem을 로드하는 데 실패했습니다.");
+            }
 
             mapEventObject.GetComponent<MapEvent>().OnClickNextScene += NextScene;
             rewardObject.GetComponent<Reward>().OnClickNextScene += NextScene;
@@ -35,15 +40,13 @@ namespace ERang
 
             mapEventObject.SetActive(lastScene == "Map");
             rewardObject.SetActive(lastScene == "Battle");
+
+            Debug.Log($"DeckSystem allCards: {string.Join(", ", deckSystem.AllCards)}");
         }
 
         public void NextScene()
         {
             PlayerPrefsUtility.SetString("LastScene", "Event");
-
-            // 층 증가
-            int floor = PlayerPrefsUtility.GetInt("Floor", 1);
-            PlayerPrefsUtility.SetInt("Floor", floor + 1);
 
             NextScene nextScene = GetComponent<NextScene>();
             nextScene.Play("Map");

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using ERang.Data;
 namespace ERang
 {
     // 기본 카드
+    [Serializable]
     public class BaseCard : ICard
     {
         public string Uid { get; set; }

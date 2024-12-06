@@ -111,12 +111,10 @@ namespace ERang
             {
                 RemoveCard();
 
-                yield return null;
-
-                StartCoroutine(BattleLogic.Instance.RemoveBoardCard(slotNum));
+                yield return StartCoroutine(BattleLogic.Instance.RemoveBoardCard(slotNum));
             }
 
-            Debug.Log($"{card.LogText} {amount} 데미지. Hp: {beforeHp} -> {card.Hp}, Def: {beforeDef} -> {card.Def} - TakeDamage");
+            Debug.Log($"{card?.LogText ?? "카드 없음"} {amount} 데미지. Hp: {beforeHp} -> {card?.Hp ?? 0}, Def: {beforeDef} -> {card?.Def ?? 0} - TakeDamage");
         }
 
         public void RestoreHealth(int amount)

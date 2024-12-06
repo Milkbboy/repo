@@ -11,6 +11,7 @@ namespace ERang
         private Vector2 scrollPosition;
         private int[] cardDataIds;
         private string[] cardDataNames;
+        private float elementWidth = 100;
 
         [MenuItem("ERang/Deck Card Editor")]
         public static void ShowWindow()
@@ -45,6 +46,13 @@ namespace ERang
             EditorGUILayout.LabelField("덱 카드 에디터", EditorStyles.boldLabel);
 
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            EditorGUILayout.LabelField("전체 카드", EditorStyles.boldLabel);
+
+            EditorGUILayout.BeginHorizontal();
+            DrawDeckCards(deckSystem.AllCards);
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             EditorGUILayout.LabelField("덱 카드", EditorStyles.boldLabel);
@@ -103,7 +111,7 @@ namespace ERang
             foreach (var card in cards)
             {
                 // 수직 레이아웃 시작
-                EditorGUILayout.BeginVertical("box", GUILayout.Width(80));
+                EditorGUILayout.BeginVertical("box", GUILayout.Width(elementWidth));
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField($"Card Id: {card.Id}");
@@ -126,10 +134,7 @@ namespace ERang
                 }
 
                 // 카드 이미지 표시
-                if (card.CardImage != null)
-                    GUILayout.Label(card.CardImage, GUILayout.Width(100), GUILayout.Height(150));
-                else
-                    GUILayout.Label("No Image", GUILayout.Width(100), GUILayout.Height(150));
+                GUILayout.Label(card.CardImage, GUILayout.Width(100), GUILayout.Height(123));
 
                 // 카드 타입
                 EditorGUILayout.BeginHorizontal();

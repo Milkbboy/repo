@@ -26,6 +26,7 @@ namespace ERang
         public int floor;
         public int levelId;
         public SatietyUI satietyUI;
+        public DeckUI deckUI;
 
         private Master master;
         private DeckSystem deckSystem;
@@ -39,7 +40,8 @@ namespace ERang
 
         void Awake()
         {
-            Instance = this;
+            if (Instance == null)
+                Instance = this;
 
             masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
             floor = PlayerPrefsUtility.GetInt("Floor", 1);
@@ -53,9 +55,6 @@ namespace ERang
             if (selectLocationJson != null)
                 selectLocation = JsonConvert.DeserializeObject<MapLocation>(selectLocationJson);
 
-            // 시스템 생성
-            deckSystem = GetComponent<DeckSystem>();
-
             // 마스터
             MasterData masterData = MasterData.GetMasterData(masterId);
 
@@ -66,6 +65,15 @@ namespace ERang
             }
 
             master = new Master(masterData);
+
+            if (deckSystem == null)
+                deckSystem = DeckSystem.Instance;
+
+            if (deckSystem == null)
+            {
+                Debug.LogError("DeckSystem을 로드하는 데 실패했습니다.");
+                return;
+            }
         }
 
         void Start()
@@ -88,7 +96,8 @@ namespace ERang
             StartCoroutine(BoardSystem.Instance.CreateMasterCard(master));
 
             // 마스터 크리쳐 카드 생성
-            deckSystem.CreateMasterCards(master.StartCardIds);
+            deckSystem.CreateMasterCards(master);
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
 
             // 골드 설정
             BoardSystem.Instance.SetGold(master.Gold);
@@ -156,7 +165,11 @@ namespace ERang
             BoardSystem.Instance.AddMana(master.RechargeMana);
 
             // 핸드 카드 만들기
-            yield return StartCoroutine(deckSystem.MakeHandCards());
+            deckSystem.MakeHandCards();
+            yield return StartCoroutine(deckUI.DrawHandDeck(deckSystem.HandCards));
+
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+            deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
 
             // 핸드 카드 HandOn 어빌리티 액션
             yield return HandOnCardAbilityAction(deckSystem.HandCards);
@@ -203,6 +216,10 @@ namespace ERang
             // 핸드덱에 카드 제거
             deckSystem.RemoveTurnEndHandCard();
 
+            deckUI.RemoveTurnEndHandCard();
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+            deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
+
             // 마스터 마나 리셋
             BoardSystem.Instance.ResetMana(master);
 
@@ -229,6 +246,8 @@ namespace ERang
                 nextFloor = floor + 1;
 
                 // 마지막에 선택한 층 인덱스 저장
+                PlayerPrefsUtility.SetInt("MasterId", masterId);
+                PlayerPrefsUtility.SetInt("LevelId", levelId);
                 PlayerPrefsUtility.SetInt("LastLocationId", locationId);
 
                 if (keepSatiety)
@@ -253,7 +272,9 @@ namespace ERang
             GameObject nextSceneObject = GameObject.Find("Scene Manager");
 
             if (nextSceneObject.TryGetComponent<NextScene>(out NextScene nextScene))
-                nextScene.Play(isWin ? "Map" : "Lobby");
+                nextScene.Play(isWin ? "Event" : "Lobby");
+
+            PlayerPrefsUtility.SetString("LastScene", "Battle");
         }
 
         /// <summary>
@@ -407,6 +428,8 @@ namespace ERang
 
             // 핸드 카드 => 보드 카드 이동
             deckSystem.HandCardToBoard(hCard.Card);
+            deckUI.RemoveHandCard(hCard.Card.Uid);
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
 
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, hCard.Card);
@@ -474,6 +497,11 @@ namespace ERang
 
             // 마스터 핸드 카드 제거
             deckSystem.RemoveUsedHandCard(cardUid);
+            deckUI.RemoveHandCard(cardUid);
+
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+            deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
+            deckUI.SetExtinctionCardCount(deckSystem.ExtinctionCardCount);
         }
 
         IEnumerator ReleaseHandOnCardAbility(List<BaseCard> cards)

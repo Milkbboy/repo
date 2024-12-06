@@ -28,8 +28,6 @@ namespace ERang
         {
             Instance = this;
 
-            // targetingArrow = GetComponent<TargetingArrow>();
-
             // 카드의 너비를 얻기 위해 cardPrefab의 BoxCollider 컴포넌트에서 size.x 값을 사용
             BoxCollider boxCollider = cardPrefab.GetComponent<BoxCollider>();
             cardWidth = boxCollider.size.x * cardPrefab.transform.localScale.x;

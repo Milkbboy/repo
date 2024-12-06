@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using ERang.Data;
 
 namespace ERang
 {
+    [Serializable]
     public class CardAbility
     {
         public AbilityWhereFrom whereFrom; // 어빌리티 적용 위치

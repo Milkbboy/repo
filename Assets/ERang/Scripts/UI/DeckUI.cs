@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -11,6 +13,8 @@ namespace ERang
         public TextMeshProUGUI extinctionCardCountText;
 
         public GameObject cardPrefab;
+        public HandDeck handDeck;
+        public Transform gravePosition;
 
         /// <summary>
         /// 덱 카드 개수 표시
@@ -37,6 +41,26 @@ namespace ERang
         public void SetExtinctionCardCount(int count)
         {
             extinctionCardCountText.text = count.ToString();
+        }
+
+        public void RemoveTurnEndHandCard()
+        {
+            handDeck.TurnEndRemoveHandCard(gravePosition);
+        }
+
+        public void RemoveHandCard(string cardUid)
+        {
+            handDeck.RemoveHandCard(cardUid);
+        }
+
+        public IEnumerator DrawHandDeck(List<BaseCard> handCards)
+        {
+            for (int i = 0; i < handCards.Count; ++i)
+            {
+                BaseCard card = handCards[i];
+
+                yield return handDeck.SpawnHandCard(card);
+            }
         }
     }
 }
