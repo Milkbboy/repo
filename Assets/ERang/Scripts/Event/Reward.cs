@@ -8,8 +8,9 @@ using ERang;
 public class Reward : MonoBehaviour
 {
     public GameObject cardPrefab;
-    public UnityAction OnClickNextScene;
     public Transform deckPosition;
+
+    public UnityAction OnClickNextScene;
 
     private RewardCard selectedCard;
     private List<RewardCard> rewardCards = new();
@@ -120,7 +121,7 @@ public class Reward : MonoBehaviour
 
             Vector3 cardPosition = new(startX + i * cardSpacing, worldCenter.y, worldCenter.z);
 
-            GameObject cardObject = Instantiate(cardPrefab, cardPosition, Quaternion.identity);
+            GameObject cardObject = Instantiate(cardPrefab, cardPosition, transform.rotation, transform);
             cardObject.name = $"RewardCard_{card.Id}";
 
             RewardCard rewardCard = cardObject.GetComponent<RewardCard>();
