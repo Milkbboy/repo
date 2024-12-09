@@ -122,33 +122,6 @@ namespace ERang
             }
         }
 
-        public void SetEnemyMasterCard(Enemy enemy)
-        {
-            // Debug.Log("CardUI SetEnemyMasterCard: " + enemy.enemyId);
-            MasterData enemyData = MasterData.master_dict[enemy.enemyId];
-
-            // Debug.Log("CardUI SetCard: " + cardId);
-            Texture2D enemyTexture = enemyData.GetMasterTexture();
-
-            if (!enemyTexture)
-            {
-                Debug.LogError($"${enemy.enemyId} Enemy Master texture is null");
-                return;
-            }
-
-            if (cardMeshRenderer != null)
-            {
-                cardMeshRenderer.materials[0].SetTexture("_BaseMap", enemyTexture);
-            }
-
-            if (cardTypeText != null)
-            {
-                cardTypeText.text = "Enemy Master";
-            }
-
-            SetMasterStat(enemy.Hp, enemy.MaxHp, enemy.Atk, enemy.Def);
-        }
-
         public void SetMasterStat(int hp, int maxHp, int atk, int def, int mana = 0, int maxMana = 0)
         {
             // if (descText != null)
