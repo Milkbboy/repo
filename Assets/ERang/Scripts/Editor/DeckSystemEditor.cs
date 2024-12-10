@@ -17,10 +17,10 @@ namespace ERang
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("All Cards", EditorStyles.boldLabel);
 
-            if (deckSystem.AllCards.Count == 0)
+            if (Player.Instance.AllCards.Count == 0)
                 return;
 
-            foreach (BaseCard card in deckSystem.AllCards)
+            foreach (BaseCard card in Player.Instance.AllCards)
             {
                 EditorGUILayout.BeginVertical("box");
                 EditorGUILayout.LabelField("Uid", card.Uid);

@@ -19,6 +19,7 @@ public class Reward : MonoBehaviour
     {
         RewardCards();
     }
+
     public void RewardCards()
     {
         int masterId = PlayerPrefsUtility.GetInt("MasterId", 0);
@@ -141,13 +142,13 @@ public class Reward : MonoBehaviour
         }
 
         Debug.Log($"Selected RewardCard: {selectedCard.Card.Id}");
-        Debug.Log($"before cards {DeckSystem.Instance.AllCardCount}. {string.Join(", ", DeckSystem.Instance.AllCards.Select(card => card.Id))}");
+        Debug.Log($"before cards {Player.Instance.AllCardCount}. {string.Join(", ", Player.Instance.AllCards.Select(card => card.Id))}");
 
-        DeckSystem.Instance.AddCard(selectedCard.Card.Id);
+        Player.Instance.AddCard(selectedCard.Card.Id);
 
         selectedCard.DiscardAnimation(deckPosition);
 
-        Debug.Log($"after cards {DeckSystem.Instance.AllCardCount}. {string.Join(", ", DeckSystem.Instance.AllCards.Select(card => card.Id))}");
+        Debug.Log($"after cards {Player.Instance.AllCardCount}. {string.Join(", ", Player.Instance.AllCards.Select(card => card.Id))}");
 
         OnClickNextScene?.Invoke();
     }

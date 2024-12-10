@@ -51,7 +51,7 @@ namespace ERang
             EditorGUILayout.LabelField("전체 카드", EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
-            DrawDeckCards(deckSystem.AllCards);
+            DrawDeckCards(Player.Instance?.AllCards);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);

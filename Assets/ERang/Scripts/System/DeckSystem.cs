@@ -9,17 +9,16 @@ namespace ERang
     public class DeckSystem : MonoBehaviour
     {
         public static DeckSystem Instance { get; private set; }
+
         public GameObject cardPrefab;
         public GameObject showCards;
         public Canvas canvas;
 
-        public int AllCardCount => allCards.Count;
         public int DeckCardCount => deckCards.Count;
         public int HandCardCount => handCards.Count;
         public int ExtinctionCardCount => extinctionCards.Count;
         public int GraveCardCount => graveCards.Count;
 
-        public List<BaseCard> AllCards => allCards;
         public List<BaseCard> DeckCards => deckCards;
         public List<BaseCard> HandCards => handCards;
         public List<BaseCard> GraveCards => graveCards;
@@ -33,10 +32,7 @@ namespace ERang
         private readonly List<BaseCard> creatureCards = new(); // 마스터 크리쳐 카드
         private readonly List<BaseCard> buildingCards = new(); // 건물 카드
 
-        [SerializeField]
-        private List<BaseCard> allCards = new List<BaseCard>();
-        [SerializeField]
-        private List<BaseCard> deckCards = new List<BaseCard>();
+        [SerializeField] private List<BaseCard> deckCards = new List<BaseCard>();
         private readonly List<BaseCard> handCards = new();
         private readonly List<BaseCard> graveCards = new();
         private readonly List<BaseCard> extinctionCards = new();
@@ -45,35 +41,7 @@ namespace ERang
 
         void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-                Debug.Log("DeckSystem 생성됨");
-
-                // 씬 로드 이벤트에 핸들러 등록
-                SceneManager.sceneLoaded += OnSceneLoaded;
-            }
-            else if (Instance != this)
-            {
-                Debug.Log("DeckSystem 파괴됨");
-                Destroy(gameObject);
-            }
-        }
-
-        void OnDestroy()
-        {
-            // 씬 로드 이벤트에서 핸들러 제거
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            // 현재 씬의 카메라를 Canvas의 Event Camera로 설정
-            if (canvas != null && canvas.renderMode == RenderMode.WorldSpace)
-            {
-                canvas.worldCamera = Camera.main;
-            }
+            Instance = this;
         }
 
         public BaseCard FindHandCard(string cardUid)
@@ -93,7 +61,7 @@ namespace ERang
                 Clear();
 
                 // allCards 를 deckCards 로 복사
-                deckCards.AddRange(allCards);
+                deckCards.AddRange(Player.Instance.AllCards);
 
                 Debug.Log($"deckCards.Count: {deckCards.Count}, {string.Join(", ", deckCards.Select(card => card.Id))}");
                 return;
@@ -112,7 +80,7 @@ namespace ERang
                 BaseCard card = Utils.MakeCard(cardData);
 
                 // 카드 타입별로 생성
-                allCards.Add(card);
+                Player.Instance.AllCards.Add(card);
                 deckCards.Add(card);
             }
 
@@ -225,22 +193,6 @@ namespace ERang
                 graveCards.Add(card);
         }
 
-        public void AddCard(int cardId)
-        {
-            CardData cardData = CardData.GetCardData(cardId);
-
-            if (cardData == null)
-            {
-                Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음 - AddCard");
-                return;
-            }
-
-            BaseCard card = Utils.MakeCard(cardData);
-
-            // 카드 타입별로 생성
-            allCards.Add(card);
-        }
-
         public void Clear()
         {
             deckCards.Clear();
@@ -268,7 +220,7 @@ namespace ERang
             float cardWidth = cardSize.x * cardPrefab.transform.localScale.x + 0.1f; // 카드 간격 포함
             float cardHeight = cardSize.y * cardPrefab.transform.localScale.y + 0.1f; // 카드 간격 포함
 
-            for (int i = 0; i < allCards.Count; i++)
+            for (int i = 0; i < Player.Instance.AllCards.Count; i++)
             {
                 // 카드 인스턴스화
                 GameObject cardObject = Instantiate(cardPrefab, showCards.transform);
@@ -292,7 +244,7 @@ namespace ERang
                     foreach (Renderer renderer in renderers)
                         renderer.sortingOrder = 3000; // 높은 값으로 설정하여 맨 앞으로 이동
 
-                    cardUI.SetCard(allCards[i]);
+                    cardUI.SetCard(Player.Instance.AllCards[i]);
                 }
             }
         }

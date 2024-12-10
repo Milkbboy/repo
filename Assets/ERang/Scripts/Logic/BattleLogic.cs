@@ -27,9 +27,9 @@ namespace ERang
         public int levelId;
         public SatietyUI satietyUI;
         public DeckUI deckUI;
+        public DeckSystem deckSystem;
 
         private Master master;
-        private DeckSystem deckSystem;
         private bool isTruenEndProcessing = false;
         private MapLocation selectLocation;
         private bool keepSatiety;
@@ -65,15 +65,6 @@ namespace ERang
             }
 
             master = new Master(masterData);
-
-            if (deckSystem == null)
-                deckSystem = DeckSystem.Instance;
-
-            if (deckSystem == null)
-            {
-                Debug.LogError("DeckSystem을 로드하는 데 실패했습니다.");
-                return;
-            }
         }
 
         void Start()
