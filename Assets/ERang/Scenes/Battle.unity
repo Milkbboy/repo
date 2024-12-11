@@ -5618,10 +5618,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ad38bd11599d2d43b8a693481c8b1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 1253406716375538767, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
-    type: 3}
-  showCards: {fileID: 3659533723149255452}
-  canvas: {fileID: 4302904424261099809}
   deckCards: []
 --- !u!1001 &655681818315073502
 PrefabInstance:
@@ -5817,6 +5813,7 @@ GameObject:
   m_Component:
   - component: {fileID: 974567127042515843}
   - component: {fileID: 564248983336087366}
+  - component: {fileID: 1476300709312864607}
   m_Layer: 0
   m_Name: DeckSystem
   m_TagString: Untagged
@@ -5824,6 +5821,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1476300709312864607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476300709312864606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb21e64ee91e7d4faf6d332749393f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardPrefab: {fileID: 1253406716375538767, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+    type: 3}
+  showCards: {fileID: 3659533723149255452}
+  canvas: {fileID: 4302904424261099809}
 --- !u!222 &1890365352974031632
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6001,9 +6014,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 564248983336087366}
-        m_TargetAssemblyTypeName: ERang.DeckSystem, Assembly-CSharp
-        m_MethodName: ToggleShowCards
+      - m_Target: {fileID: 1476300709312864607}
+        m_TargetAssemblyTypeName: ERang.ShowAllCard, Assembly-CSharp
+        m_MethodName: ShowAllCards
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

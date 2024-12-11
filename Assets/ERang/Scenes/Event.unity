@@ -2143,11 +2143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ad38bd11599d2d43b8a693481c8b1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 1253406716375538767, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
-    type: 3}
-  showCards: {fileID: 3659533722760343241}
-  canvas: {fileID: 4302904424317357300}
-  allCards: []
   deckCards: []
 --- !u!1 &739207374589132964
 GameObject:
@@ -2225,6 +2220,7 @@ GameObject:
   m_Component:
   - component: {fileID: 974567126726266454}
   - component: {fileID: 564248983056269971}
+  - component: {fileID: 1476300709831806092}
   m_Layer: 0
   m_Name: DeckSystem
   m_TagString: Untagged
@@ -2232,6 +2228,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1476300709831806092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476300709831806091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb21e64ee91e7d4faf6d332749393f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardPrefab: {fileID: 1253406716375538767, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+    type: 3}
+  showCards: {fileID: 3659533722760343241}
+  canvas: {fileID: 4302904424317357300}
 --- !u!222 &1890365352455943877
 CanvasRenderer:
   m_ObjectHideFlags: 0

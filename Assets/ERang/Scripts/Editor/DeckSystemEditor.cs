@@ -17,6 +17,9 @@ namespace ERang
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("All Cards", EditorStyles.boldLabel);
 
+            if (Player.Instance == null)
+                return;
+
             if (Player.Instance.AllCards.Count == 0)
                 return;
 
