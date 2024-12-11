@@ -26,8 +26,8 @@ namespace ERang
         public int floor;
         public int levelId;
         public SatietyUI satietyUI;
-        public DeckUI deckUI;
-        public DeckSystem deckSystem;
+
+        public Deck deck;
 
         private Master master;
         private bool isTruenEndProcessing = false;
@@ -87,8 +87,7 @@ namespace ERang
             StartCoroutine(BoardSystem.Instance.CreateMasterCard(master));
 
             // 마스터 크리쳐 카드 생성
-            deckSystem.CreateMasterCards(master);
-            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+            deck.CreateMasterCards(master);
 
             // 골드 설정
             BoardSystem.Instance.SetGold(master.Gold);
@@ -156,14 +155,10 @@ namespace ERang
             BoardSystem.Instance.AddMana(master.RechargeMana);
 
             // 핸드 카드 만들기
-            deckSystem.MakeHandCards();
-            yield return StartCoroutine(deckUI.DrawHandDeck(deckSystem.HandCards));
-
-            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
-            deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
+            yield return StartCoroutine(deck.MakeHandCards());
 
             // 핸드 카드 HandOn 어빌리티 액션
-            yield return HandOnCardAbilityAction(deckSystem.HandCards);
+            yield return HandOnCardAbilityAction(deck.HandCards);
 
             // 턴 시작시 실행되는 몬스터 카드 Reaction
             StartCoroutine(TurnStartMonsterReaction());
@@ -205,11 +200,7 @@ namespace ERang
             yield return StartCoroutine(ReleaseBoardCardAbility(BoardSystem.Instance.GetRightBoardSlots()));
 
             // 핸드덱에 카드 제거
-            deckSystem.RemoveTurnEndHandCard();
-
-            deckUI.RemoveTurnEndHandCard();
-            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
-            deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
+            deck.TrunEndProcess();
 
             // 마스터 마나 리셋
             BoardSystem.Instance.ResetMana(master);
@@ -418,9 +409,7 @@ namespace ERang
             boardSlot.EquipCard(hCard.Card);
 
             // 핸드 카드 => 보드 카드 이동
-            deckSystem.HandCardToBoard(hCard.Card);
-            deckUI.RemoveHandCard(hCard.Card.Uid);
-            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+            deck.HandCardToBaord(hCard);
 
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, hCard.Card);
@@ -434,7 +423,7 @@ namespace ERang
         /// </summary>
         public void HandCardUse(string cardUid, BSlot neareastSlot)
         {
-            BaseCard card = deckSystem.FindHandCard(cardUid);
+            BaseCard card = deck.FindHandCard(cardUid);
 
             int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
 
@@ -487,12 +476,7 @@ namespace ERang
             BoardSystem.Instance.CardCost(master, card);
 
             // 마스터 핸드 카드 제거
-            deckSystem.RemoveUsedHandCard(cardUid);
-            deckUI.RemoveHandCard(cardUid);
-
-            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
-            deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
-            deckUI.SetExtinctionCardCount(deckSystem.ExtinctionCardCount);
+            deck.RemoveHandCard(cardUid);
         }
 
         IEnumerator ReleaseHandOnCardAbility(List<BaseCard> cards)
@@ -576,7 +560,7 @@ namespace ERang
         /// </summary>
         public bool CanHandCardUse(string cardUid)
         {
-            BaseCard card = deckSystem.FindHandCard(cardUid);
+            BaseCard card = deck.FindHandCard(cardUid);
 
             if (card == null)
             {
@@ -640,7 +624,7 @@ namespace ERang
         /// </summary>
         public void ExtinctionCards()
         {
-            string extinctionCardIds = string.Join(", ", deckSystem.ExtinctionCards.Select(card => card.Id));
+            string extinctionCardIds = string.Join(", ", deck.ExtinctionCards.Select(card => card.Id));
             ToastNotification.Show($"Extinction Card Ids: {extinctionCardIds}");
         }
 

@@ -11,10 +11,14 @@ namespace ERang
         public TextMeshProUGUI deckCardCountText;
         public TextMeshProUGUI graveCardCountText;
         public TextMeshProUGUI extinctionCardCountText;
-
-        public GameObject cardPrefab;
-        public HandDeck handDeck;
         public Transform gravePosition;
+
+        private HandDeck handDeck;
+
+        void Awake()
+        {
+            handDeck = GetComponent<HandDeck>();
+        }
 
         /// <summary>
         /// 덱 카드 개수 표시
@@ -51,16 +55,6 @@ namespace ERang
         public void RemoveHandCard(string cardUid)
         {
             handDeck.RemoveHandCard(cardUid);
-        }
-
-        public IEnumerator DrawHandDeck(List<BaseCard> handCards)
-        {
-            for (int i = 0; i < handCards.Count; ++i)
-            {
-                BaseCard card = handCards[i];
-
-                yield return handDeck.SpawnHandCard(card);
-            }
         }
     }
 }

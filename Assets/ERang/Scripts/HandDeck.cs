@@ -8,10 +8,12 @@ namespace ERang
     {
         public static HandDeck Instance { get; private set; }
 
+        public HCard DraggingCard => draggingCard;
+
         // 핸드 카드 생성을 위한 프리팹
         public GameObject cardPrefab;
         public TargetingArrow targetingArrow;
-        public HCard DraggingCard => draggingCard;
+        public Transform handDeckTransform;
 
         // 핸드 카드 리스트
         private readonly List<HCard> hCards = new();
@@ -104,7 +106,7 @@ namespace ERang
         /// <param name="card"></param>
         public IEnumerator SpawnHandCard(BaseCard card)
         {
-            GameObject cardObject = Instantiate(cardPrefab, transform);
+            GameObject cardObject = Instantiate(cardPrefab, handDeckTransform);
             cardObject.name = $"HandCard_{card.Id}";
 
             HCard handCard = cardObject.GetComponent<HCard>();

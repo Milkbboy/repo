@@ -12,7 +12,7 @@ namespace ERang
 
         void Awake()
         {
-            if (DeckSystem.Instance == null)
+            if (Player.Instance == null)
             {
                 GameObject playerObject = Instantiate(PlayerPrefab);
                 DontDestroyOnLoad(playerObject);
