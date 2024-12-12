@@ -26,6 +26,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_01
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70002
     AbilityType: Damage
     Value: 3
@@ -39,6 +40,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_02
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70003
     AbilityType: Damage
     Value: 4
@@ -52,6 +54,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_03
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70004
     AbilityType: Damage
     Value: 4
@@ -65,6 +68,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_01
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70005
     AbilityType: Damage
     Value: 3
@@ -78,6 +82,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_02
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70006
     AbilityType: Damage
     Value: 3
@@ -91,6 +96,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_03
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70007
     AbilityType: Damage
     Value: 5
@@ -104,6 +110,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_04
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70008
     AbilityType: Damage
     Value: 3
@@ -117,6 +124,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70009
     AbilityType: Damage
     Value: 4
@@ -130,6 +138,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70010
     AbilityType: Damage
     Value: 3
@@ -143,6 +152,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70011
     AbilityType: Damage
     Value: 2
@@ -156,6 +166,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70012
     AbilityType: Damage
     Value: 3
@@ -169,6 +180,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70013
     AbilityType: Heal
     Value: 3
@@ -182,6 +194,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70014
     AbilityType: AtkUp
     Value: 2
@@ -195,6 +208,7 @@ MonoBehaviour:
     SkillIcon: AtkUp_01
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70015
     AbilityType: Damage
     Value: 3
@@ -208,6 +222,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_01
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70016
     AbilityType: Damage
     Value: 5
@@ -221,6 +236,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_02
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70017
     AbilityType: DefUp
     Value: 3
@@ -234,6 +250,7 @@ MonoBehaviour:
     SkillIcon: DefUp_01
     SkillViewIcon: Skill_01
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70018
     AbilityType: BrokenDef
     Value: 3
@@ -247,6 +264,7 @@ MonoBehaviour:
     SkillIcon: DefDown_01
     SkillViewIcon: Skill_01
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70019
     AbilityType: Damage
     Value: 5
@@ -260,6 +278,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_01
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70020
     AbilityType: Damage
     Value: 3
@@ -273,6 +292,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_02
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70021
     AbilityType: ChargeDamage
     Value: 8
@@ -286,6 +306,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Skill_01
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70022
     AbilityType: Damage
     Value: 5
@@ -299,6 +320,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_01
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70023
     AbilityType: Damage
     Value: 3
@@ -312,6 +334,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_02
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70024
     AbilityType: AtkUp
     Value: 3
@@ -325,6 +348,7 @@ MonoBehaviour:
     SkillIcon: AtkUp_01
     SkillViewIcon: Skill_01
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 70025
     AbilityType: Damage
     Value: 3
@@ -338,6 +362,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: Atk_03
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 90001
     AbilityType: Damage
     Value: 4
@@ -351,6 +376,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 90002
     AbilityType: Damage
     Value: 5
@@ -364,6 +390,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 90003
     AbilityType: AddGoldPer
     Value: 0
@@ -377,6 +404,7 @@ MonoBehaviour:
     SkillIcon: AddGold_01
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 90004
     AbilityType: AddMana
     Value: 1
@@ -390,6 +418,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 90005
     AbilityType: BrokenDef
     Value: 2
@@ -403,6 +432,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 90006
     AbilityType: AddGold
     Value: 30
@@ -416,6 +446,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 90007
     AbilityType: AddGoldPer
     Value: 0
@@ -429,6 +460,7 @@ MonoBehaviour:
     SkillIcon: AddGold_01
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 100001
     AbilityType: AddSatiety
     Value: 20
@@ -442,6 +474,7 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
   - AbilityData_Id: 100002
     AbilityType: SubSatiety
     Value: 20
@@ -455,3 +488,46 @@ MonoBehaviour:
     SkillIcon: 
     SkillViewIcon: 
     FxSound: 
+    Summon_GroupId: 0
+  - AbilityData_Id: 100011
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1001
+  - AbilityData_Id: 100012
+    AbilityType: Summon_DrawDeck
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1002
+  - AbilityData_Id: 100013
+    AbilityType: Summon_GraveDeck
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1003

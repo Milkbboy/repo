@@ -197,3 +197,72 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
+  - Card_Id: 1011
+    NameDesc: "\uD578\uB4DC \uC18C\uD658"
+    CardNameDesc_Id: CardName_1011
+    CardDesc_Id: CardDesc_1011
+    CardShortDesc_Id: CardShortDesc_1011
+    CardType: Magic
+    Grade: Common
+    AiGroup_id: 31002
+    CostMana: 0
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Poison
+    Level_3_img: GoldPot
+    Level_5_img: GoldPot
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 1012
+    NameDesc: "\uBF51\uC744 \uB371 \uC18C\uD658"
+    CardNameDesc_Id: CardName_1012
+    CardDesc_Id: CardDesc_1012
+    CardShortDesc_Id: CardShortDesc_1012
+    CardType: Magic
+    Grade: Common
+    AiGroup_id: 31002
+    CostMana: 0
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Poison
+    Level_3_img: GoldPot
+    Level_5_img: GoldPot
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 1013
+    NameDesc: "\uBB34\uB364 \uB371 \uC18C\uD658"
+    CardNameDesc_Id: CardName_1013
+    CardDesc_Id: CardDesc_1013
+    CardShortDesc_Id: CardShortDesc_1013
+    CardType: Magic
+    Grade: Common
+    AiGroup_id: 31002
+    CostMana: 0
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Poison
+    Level_3_img: GoldPot
+    Level_5_img: GoldPot
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001

@@ -25,6 +25,7 @@ namespace ERang
             TextData.Load("TableExports/TextDataTable");
             RewardSetData.Load("TableExports/RewardSetDataTable");
             RewardData.Load("TableExports/RewardDataTable");
+            SummonData.Load("TableExports/SummonDataTable");
         }
     }
 }

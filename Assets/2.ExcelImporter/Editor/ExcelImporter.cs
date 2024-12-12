@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -164,10 +164,16 @@ public class ExcelImporter : AssetPostprocessor
 		{
 			// Debug.Log($"columnName[{i}]: {columnNames[i]}");
 
-			FieldInfo entityField = entityType.GetField(
-				columnNames[i],
-				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-			);
+			// 컬럼 이름, 필드 이름을 대문자로 변환하여 비교
+			string columnName = columnNames[i].ToUpper(); // 컬럼 이름을 대문자로 변환
+			FieldInfo entityField = entityType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+				.FirstOrDefault(f => f.Name.ToUpper() == columnName); // 필드 이름을 대문자로 변환하여 비교
+
+			// columnNames[i] 와 일치하는 필드를 찾고, 해당 필드에 값을 설정
+			// FieldInfo entityField = entityType.GetField(
+			// 	columnNames[i],
+			// 	BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+			// );
 			if (entityField == null) continue;
 			if (!entityField.IsPublic && entityField.GetCustomAttributes(typeof(SerializeField), false).Length == 0) continue;
 
