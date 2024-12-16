@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using ERang.Data;
 
 namespace ERang
 {
@@ -10,26 +8,15 @@ namespace ERang
     {
         public string CardUid => cardUid;
         public BaseCard Card => card;
-        public bool IsHandOnCard => isHandOnCard;
-        public HashSet<int> TargetSlotNumbers => targetSlotNumbers;
 
         public LayerMask slotLayerMask;
         public string LogText => Utils.CardLog(card);
 
         private Dragable dragable;
-        private bool isHandOnCard = false;
 
         private BaseCard card;
         private CardUI cardUI;
         private string cardUid;
-        /// <summary>
-        /// 핸드 카드 공격 타입
-        /// </summary>
-        private List<AiDataAttackType> aiDataAttackTypes = new();
-        /// <summary>
-        /// 핸드 카드 공격 타입이 Select 이면 선택 가능한 슬롯 번호
-        /// </summary>
-        private HashSet<int> targetSlotNumbers = new();
 
         private Vector3 originalPosition;
 
@@ -80,11 +67,12 @@ namespace ERang
             Debug.Log($"HCard. OnMouseUp - 1. {card?.Uid} {card?.LogText}, originalPosition: {originalPosition}");
 
             // 가장 가까운 슬롯을 찾고, 슬롯 위에 있는지 확인
-            if (card is MagicCard)
+            if (card is MagicCard magicCard)
             {
                 HandDeck.Instance.MagicCardUse(this);
 
-                HandDeck.Instance.SetTargettingArraow(false);
+                if (magicCard.IsSelectAttackType)
+                    HandDeck.Instance.SetTargettingArraow(false);
             }
             else
             {
@@ -136,69 +124,21 @@ namespace ERang
                 cardUI.SetCard(card);
             else
                 Debug.LogError("CardUI is null");
+        }
 
-            // 마법 카드인 경우 공격 타입 및 타겟 슬롯 번호 설정
-            if (card is not MagicCard)
-                return;
+        public bool IsSelectAttackTypeCard()
+        {
+            return card is MagicCard magicCard && magicCard.IsSelectAttackType;
+        }
 
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
+        public bool IsHandOnCard()
+        {
+            return card is MagicCard magicCard && magicCard.IsHandOnCard;
+        }
 
-            if (aiGroupData == null)
-            {
-                Debug.LogError($"HCard.SetCard 함수. AiGroupData is null. AiGroupId: {card.AiGroupId}");
-                return;
-            }
-
-            foreach (List<int> aiDataIds in aiGroupData.ai_Groups)
-            {
-                foreach (int aiDataId in aiDataIds)
-                {
-                    AiData aiData = AiData.GetAiData(aiDataId);
-
-                    if (aiData == null)
-                    {
-                        Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId}");
-                        continue;
-                    }
-
-                    aiDataAttackTypes.Add(aiData.attackType);
-
-                    if (aiData.attackType == AiDataAttackType.SelectEnemy || aiData.attackType == AiDataAttackType.SelectEnemyCreature)
-                    {
-                        foreach (var slotNumber in Constants.EnemySlotNumbers)
-                        {
-                            targetSlotNumbers.Add(slotNumber);
-                        }
-                    }
-
-                    if (aiData.attackType == AiDataAttackType.SelectFriendly || aiData.attackType == AiDataAttackType.SelectFriendlyCreature)
-                    {
-                        foreach (var slotNumber in Constants.MySlotNumbers)
-                        {
-                            targetSlotNumbers.Add(slotNumber);
-                        }
-                    }
-
-                    // 핸드 온 카드 설정
-                    foreach (int abilityId in aiData.ability_Ids)
-                    {
-                        AbilityData ability = AbilityData.GetAbilityData(abilityId);
-
-                        if (ability == null)
-                        {
-                            Debug.LogWarning($"HCard.SetCard 함수. AbilityData({abilityId}) {Utils.RedText("테이블 데이터 없음")}");
-                            continue;
-                        }
-
-                        isHandOnCard = ability.workType == AbilityWorkType.OnHand;
-                    }
-                }
-            }
-
-            if (aiDataAttackTypes.Count > 0 && targetSlotNumbers.Count > 0)
-                Debug.Log($"{card.LogText} AttackTypes: {string.Join(", ", aiDataAttackTypes)}, targetSlotNumbers: {string.Join(", ", targetSlotNumbers)}");
-            else
-                Debug.Log($"{card.LogText} AttackTypes: 없음");
+        public bool IsContainsSlotNum(int slotNum)
+        {
+            return card is MagicCard magicCard && magicCard.TargetSlotNumbers.Contains(slotNum);
         }
 
         public void SetDrawPostion(Vector3 position)

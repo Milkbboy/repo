@@ -107,18 +107,111 @@ namespace ERang
         /// <summary>
         /// 타겟 선택 카드 타입 확인
         /// </summary>
-        /// <param name="card"></param>
-        /// <returns></returns>
-        public (bool IsSelectAttackType, AiData) GetAiAttackInfo(BaseCard card)
+        public bool IsSelectAttackType(BaseCard card)
         {
             int aiDataId = GetCardAiDataId(card);
 
             if (aiDataId == 0)
-                return (false, null);
+                return false;
 
             AiData aiData = AiData.GetAiData(aiDataId);
 
-            return (Constants.SelectAttackTypes.Contains(aiData.attackType), aiData);
+            return Constants.SelectAttackTypes.Contains(aiData.attackType);
+        }
+
+        /// <summary>
+        /// 핸드 온 카드 확인
+        /// </summary>
+        public bool IsHandOnCard(BaseCard card)
+        {
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
+
+            if (aiGroupData == null)
+            {
+                Debug.LogError($"AiGroupData is null. AiGroupId: {card.AiGroupId} - IsHandOnCard");
+                return false;
+            }
+
+            bool isHandOnCard = false;
+
+            foreach (List<int> aiDataIds in aiGroupData.ai_Groups)
+            {
+                foreach (int aiDataId in aiDataIds)
+                {
+                    AiData aiData = AiData.GetAiData(aiDataId);
+
+                    if (aiData == null)
+                    {
+                        Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId} - IsHandOnCard");
+                        continue;
+                    }
+
+                    // 핸드 온 카드 설정
+                    foreach (int abilityId in aiData.ability_Ids)
+                    {
+                        AbilityData ability = AbilityData.GetAbilityData(abilityId);
+
+                        if (ability == null)
+                        {
+                            Debug.LogWarning($"HCard.SetCard 함수. AbilityData({abilityId}) {Utils.RedText("테이블 데이터 없음")} - IsHandOnCard");
+                            continue;
+                        }
+
+                        if (ability.workType == AbilityWorkType.OnHand)
+                            isHandOnCard = true;
+                    }
+                }
+            }
+
+            return isHandOnCard;
+        }
+
+        /// <summary>
+        /// 공격 타입이 Select 이면 선택 가능한 슬롯 번호 얻기
+        /// </summary>
+        public List<int> GetTargetSlotNumbers(BaseCard card)
+        {
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
+
+            if (aiGroupData == null)
+            {
+                Debug.LogError($"AiGroupData is null. AiGroupId: {card.AiGroupId} - IsHandOnCard");
+                return new List<int>();
+            }
+
+            HashSet<int> targetSlotNumbers = new();
+
+            foreach (List<int> aiDataIds in aiGroupData.ai_Groups)
+            {
+                foreach (int aiDataId in aiDataIds)
+                {
+                    AiData aiData = AiData.GetAiData(aiDataId);
+
+                    if (aiData == null)
+                    {
+                        Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId} - IsHandOnCard");
+                        continue;
+                    }
+
+                    if (aiData.attackType == AiDataAttackType.SelectEnemy || aiData.attackType == AiDataAttackType.SelectEnemyCreature)
+                    {
+                        foreach (var slotNumber in Constants.EnemySlotNumbers)
+                        {
+                            targetSlotNumbers.Add(slotNumber);
+                        }
+                    }
+
+                    if (aiData.attackType == AiDataAttackType.SelectFriendly || aiData.attackType == AiDataAttackType.SelectFriendlyCreature)
+                    {
+                        foreach (var slotNumber in Constants.MySlotNumbers)
+                        {
+                            targetSlotNumbers.Add(slotNumber);
+                        }
+                    }
+                }
+            }
+
+            return targetSlotNumbers.ToList();
         }
 
         /// <summary>

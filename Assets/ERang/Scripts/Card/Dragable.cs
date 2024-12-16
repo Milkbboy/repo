@@ -55,7 +55,7 @@ namespace ERang
             HCard hCard = GetComponent<HCard>();
 
             // 핸드 온 카드 드래깅 안되게 처리
-            if (hCard.IsHandOnCard)
+            if (hCard.IsHandOnCard())
                 return;
 
             isDragging = true;
@@ -83,15 +83,16 @@ namespace ERang
 
             transform.position = objPosition + mouseOffset;
 
-             // y 방향으로 일정 거리 이상 이동했는지 확인
+            // y 방향으로 일정 거리 이상 이동했는지 확인
             if (Mathf.Abs(transform.position.y - initialYPosition) >= dragThreshold)
             {
                 HCard hCard = GetComponent<HCard>();
 
                 // 매직 카드인 경우 중앙으로 이동
-                if (hCard.Card is MagicCard)
+                if (hCard.Card is MagicCard magicCard && magicCard.IsSelectAttackType)
                 {
                     MoveCardToCenter();
+
                     HandDeck.Instance.SetTargettingArraow(true);
                 }
             }

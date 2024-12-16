@@ -72,6 +72,11 @@ namespace ERang
 
                 BaseCard card = Utils.MakeCard(cardData);
 
+                if (card is MagicCard magicCard)
+                    magicCard.SetSelectAttackType(AiLogic.Instance.IsSelectAttackType(card));
+
+                Debug.Log($"CreateMasterCards. cardId: {cardId}, card: {card}, {card.LogText}");
+
                 // 카드 타입별로 생성
                 Player.Instance.AllCards.Add(card);
                 deckCards.Add(card);
@@ -212,6 +217,11 @@ namespace ERang
         private void RemoveHandCard(BaseCard card)
         {
             handCards.Remove(card);
+        }
+
+        public void AddHandCard(BaseCard card)
+        {
+            handCards.Add(card);
         }
     }
 }
