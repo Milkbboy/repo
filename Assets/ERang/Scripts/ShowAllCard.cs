@@ -7,7 +7,6 @@ namespace ERang
     {
         public GameObject cardPrefab;
         public GameObject showCards;
-        public Canvas canvas;
 
         private List<GameObject> cardObjects = new List<GameObject>();
 
@@ -84,6 +83,18 @@ namespace ERang
             else
             {
                 ShowAllCards();
+            }
+        }
+
+        public void ToggleShowCards(List<BaseCard> cards)
+        {
+            if (cardObjects.Count > 0)
+            {
+                ClearAllCards();
+            }
+            else
+            {
+                ShowCards(cards);
             }
         }
     }
