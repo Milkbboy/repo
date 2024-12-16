@@ -22,6 +22,7 @@ namespace ERang.Data
         public string skillIcon;
         public string skillViewIcon;
         public string fxSound;
+        public int summonGroupId;
 
         public string LogText => Utils.AbilityLog(this);
 
@@ -40,6 +41,7 @@ namespace ERang.Data
             skillIcon = entity.SkillIcon;
             skillViewIcon = entity.SkillViewIcon;
             fxSound = entity.FxSound;
+            summonGroupId = entity.Summon_GroupId;
         }
 
         public static List<AbilityData> abilityData_list = new List<AbilityData>();
@@ -90,6 +92,9 @@ namespace ERang.Data
                 "AddGold" => AbilityType.AddGold,
                 "AddSatiety" => AbilityType.AddSatiety,
                 "SubSatiety" => AbilityType.SubSatiety,
+                "Summon_Hand" => AbilityType.SummonHand,
+                "Summon_DrawDeck" => AbilityType.SummonDrawDeck,
+                "Summon_GraveDeck" => AbilityType.SummonGraveDeck,
                 _ => AbilityType.None,
             };
         }
@@ -101,6 +106,7 @@ namespace ERang.Data
                 "Active" => AbilityWorkType.Active,
                 "Passive" => AbilityWorkType.Passive,
                 "OnHand" => AbilityWorkType.OnHand,
+                "OnStage" or "Onstage" => AbilityWorkType.OnStage,
                 _ => AbilityWorkType.None,
             };
         }
