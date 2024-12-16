@@ -21,7 +21,10 @@ namespace ERang
         /// <returns></returns>
         public int GetCardAiDataId(BaseCard card)
         {
-            BSlot boardSlot = BoardSystem.Instance.GetBoardSlot(card.Uid);
+            BSlot boardSlot = null;
+
+            if (BoardSystem.Instance != null)
+                BoardSystem.Instance.GetBoardSlot(card.Uid);
 
             string aiGroupDataTableLog = $"{(boardSlot != null ? Utils.BoardSlotLog(boardSlot) : $"카드({card.Id})")}. <color=#78d641>AiGroupData</color> 테이블 {card.AiGroupId} 데이터 얻기";
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);

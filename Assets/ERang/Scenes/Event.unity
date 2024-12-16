@@ -1458,6 +1458,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1234060461}
+  - component: {fileID: 1234060464}
   - component: {fileID: 1234060462}
   - component: {fileID: 1234060463}
   m_Layer: 0
@@ -1512,6 +1513,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextSceneName: Map
+--- !u!114 &1234060464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1234060460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03e30a6f043062d40bcd21cd51c8d142, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1275900569
 GameObject:
   m_ObjectHideFlags: 0
@@ -1580,6 +1593,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1277878242
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1277878243}
+  - component: {fileID: 1277878244}
+  m_Layer: 0
+  m_Name: DataLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1277878243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277878242}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1277878244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277878242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352cbf4eb110e9546b210fa4bb9c4b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1334907219
 GameObject:
   m_ObjectHideFlags: 0
@@ -2243,7 +2300,6 @@ MonoBehaviour:
   cardPrefab: {fileID: 1253406716375538767, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
     type: 3}
   showCards: {fileID: 3659533722760343241}
-  canvas: {fileID: 4302904424317357300}
 --- !u!222 &1890365352455943877
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2442,7 +2498,7 @@ Transform:
   m_GameObject: {fileID: 3659533722760343241}
   serializedVersion: 2
   m_LocalRotation: {x: -0.10452837, y: 0, z: 0, w: 0.9945219}
-  m_LocalPosition: {x: -6, y: 3, z: -1}
+  m_LocalPosition: {x: -7.3, y: 3.5, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2682,6 +2738,7 @@ SceneRoots:
   - {fileID: 1056374317}
   - {fileID: 2028196247}
   - {fileID: 1275900572}
+  - {fileID: 1277878243}
   - {fileID: 315981006}
   - {fileID: 86527741}
   - {fileID: 1234060461}
