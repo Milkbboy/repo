@@ -83,5 +83,31 @@ namespace ERang.Data
 
             return null;
         }
+
+        public static int PickUpCard(int summonGroupId)
+        {
+            if (summonDataDict.TryGetValue(summonGroupId, out SummonData summonData))
+            {
+                int totalValue = 0;
+
+                foreach (var summonCardData in summonData.summonCardDatas)
+                {
+                    totalValue += summonCardData.value;
+                }
+
+                int randomValue = Random.Range(0, totalValue);
+                int sumValue = 0;
+                foreach (var summonCardData in summonData.summonCardDatas)
+                {
+                    sumValue += summonCardData.value;
+                    if (randomValue < sumValue)
+                    {
+                        return summonCardData.cardId;
+                    }
+                }
+            }
+
+            return 0;
+        }
     }
 }

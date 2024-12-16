@@ -204,7 +204,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_1011
     CardType: Magic
     Grade: Common
-    AiGroup_id: 31002
+    AiGroup_id: 41001
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -227,7 +227,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_1012
     CardType: Magic
     Grade: Common
-    AiGroup_id: 31002
+    AiGroup_id: 41002
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -250,7 +250,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_1013
     CardType: Magic
     Grade: Common
-    AiGroup_id: 31002
+    AiGroup_id: 41003
     CostMana: 0
     CostGold: 0
     Hp: 0

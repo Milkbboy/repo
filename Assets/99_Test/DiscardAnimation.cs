@@ -19,15 +19,18 @@ public class DiscardAnimation : MonoBehaviour
     private float destroyDelay = 0.1f;  // 오브젝트가 c초 후에 삭제되는 시간
     private Vector3 originalScale;  // 오브젝트의 원래 크기 저장
 
+    private IEnumerator onCompleteCoroutine;  // 시퀀스 완료 후 실행할 코루틴
+
     void Start()
     {
         originalScale = transform.localScale;  // 처음 크기 저장
 
     }
 
-    public void PlaySequence(Transform disCardPos)
+    public void PlaySequence(Transform disCardPos, IEnumerator onCompleteCoroutine = null)
     {
         DiscardPos = disCardPos;
+        this.onCompleteCoroutine = onCompleteCoroutine;
 
         PlaySequence();
     }
@@ -42,7 +45,7 @@ public class DiscardAnimation : MonoBehaviour
 
         // 2. 오브젝트가 a만큼 커졌다가 b만큼 작아지며 회전
         sequence.Append(transform.DOScale(originalScale * scaleUpAmount, scaleDuration / 2))  // a만큼 커짐
-                .Join(transform.DORotate(new Vector3( 0f, rotationAmount, 0f), scaleDuration, RotateMode.LocalAxisAdd))  // 회전
+                .Join(transform.DORotate(new Vector3(0f, rotationAmount, 0f), scaleDuration, RotateMode.LocalAxisAdd))  // 회전
                 .Append(transform.DOScale(originalScale * scaleDownAmount, scaleDuration / 2));  // b만큼 작아짐
 
         // 3. DiscardPos 지점으로 이동 (타겟으로 이동하는 시간 변수로 제어)
@@ -54,6 +57,8 @@ public class DiscardAnimation : MonoBehaviour
 
         // 5. 오브젝트 삭제
         sequence.OnComplete(() => Invoke("DestroyObject", destroyDelay));  // c초 후 오브젝트 삭제
+
+        sequence.OnComplete(() => StartCoroutine(OnSequenceComplete()));  // 시퀀스 완료 후 실행할 코루틴
 
         // 시퀀스 실행
         sequence.Play();
@@ -72,5 +77,18 @@ public class DiscardAnimation : MonoBehaviour
     {
         // 오브젝트 삭제
         Destroy(gameObject);
+    }
+
+    private IEnumerator OnSequenceComplete()
+    {
+        // 시퀀스 종료 후 실행할 동작
+        Debug.Log("Sequence completed. Executing additional actions...");
+
+        // 외부 코루틴 실행
+        if (onCompleteCoroutine != null)
+            yield return StartCoroutine(onCompleteCoroutine);
+
+        // 오브젝트 삭제
+        DestroyObject();
     }
 }

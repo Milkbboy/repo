@@ -14,6 +14,7 @@ namespace ERang
         private DeckSystem deckSystem;
         private DeckUI deckUI;
         private HandDeck handDeck;
+        private ShowAllCard showAllCard;
 
         void Awake()
         {
@@ -23,6 +24,7 @@ namespace ERang
             deckSystem = GetComponent<DeckSystem>();
             deckUI = GetComponent<DeckUI>();
             handDeck = GetComponent<HandDeck>();
+            showAllCard = GetComponent<ShowAllCard>();
         }
 
         public void CreateMasterCards(Master master)
@@ -77,6 +79,37 @@ namespace ERang
             deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
             deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
             deckUI.SetExtinctionCardCount(deckSystem.ExtinctionCardCount);
+        }
+
+        public void AddHandCard(BaseCard card)
+        {
+            deckSystem.AddHandCard(card);
+
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+        }
+
+        public void AddGraveCard(BaseCard card)
+        {
+            deckSystem.AddGraveCard(card);
+
+            deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
+        }
+
+        public void AddDeckCard(BaseCard card)
+        {
+            deckSystem.AddDeckCard(card);
+
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+        }
+
+        public void ShowDeckCards()
+        {
+            showAllCard.ToggleShowCards(deckSystem.DeckCards);
+        }
+
+        public void ShowGraveCards()
+        {
+            showAllCard.ToggleShowCards(deckSystem.GraveCards);
         }
     }
 }

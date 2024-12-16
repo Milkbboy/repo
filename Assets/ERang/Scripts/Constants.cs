@@ -1,5 +1,12 @@
 namespace ERang
 {
+    public enum DeckKind
+    {
+        Deck,
+        Hand,
+        Grave
+    }
+
     public enum MasterType
     {
         None = 0,
@@ -145,6 +152,9 @@ namespace ERang
         AddGold, // Value 만큼 골드를 획득한다.
         AddSatiety, // Value 만큼 포만감을 채운다.
         SubSatiety, // Value 만큼 포만감을 소모한다.
+        SummonHand, // 핸드로 카드를 소환한다.
+        SummonDrawDeck, // 뽑을 카드 덱으로 카드를 소환한다.
+        SummonGraveDeck, // 무덤 덱으로 카드를 소환한다.
     }
 
     /// <summary>
@@ -156,7 +166,7 @@ namespace ERang
         Active, // 어빌리티가 호출되는 시점에 1회 발동
         Passive, // 세션이 시작 후 세션이 종료되기 전까지 지속
         OnHand, // 핸드에 카드가 있을 때만 효과 지속
-        Onstage, // 이번 전투에 한하여 해당 효과 지속
+        OnStage, // 이번 전투에 한하여 해당 효과 지속
     }
 
     /// <summary>

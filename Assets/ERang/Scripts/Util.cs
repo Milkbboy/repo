@@ -27,18 +27,46 @@ namespace ERang
 
         public static BaseCard MakeCard(CardData cardData)
         {
-            BaseCard card = cardData.cardType switch
+            BaseCard card = null;
+
+            switch (cardData.cardType)
             {
-                CardType.Creature => new CreatureCard(cardData),
-                CardType.Monster => new CreatureCard(cardData),
-                CardType.Building => new BuildingCard(cardData),
-                CardType.Charm => new MagicCard(cardData),
-                CardType.Curse => new MagicCard(cardData),
-                CardType.Magic => new MagicCard(cardData),
-                _ => new BaseCard(cardData),
-            };
+                case CardType.Creature:
+                case CardType.Monster:
+                    card = new CreatureCard(cardData);
+                    break;
+                case CardType.Building:
+                    card = new BuildingCard(cardData);
+                    break;
+                case CardType.Charm:
+                case CardType.Curse:
+                case CardType.Magic:
+                    card = new MagicCard(cardData);
+                    // 추가 동작 수행
+                    MagicCard magicCard = card as MagicCard;
+
+                    magicCard.SetHandOnCard(AiLogic.Instance.IsHandOnCard(card));
+                    magicCard.SetTargetSlotNumbers(AiLogic.Instance.GetTargetSlotNumbers(card));
+                    magicCard.SetSelectAttackType(AiLogic.Instance.IsSelectAttackType(card));
+                    break;
+                default:
+                    card = new BaseCard(cardData);
+                    break;
+            }
 
             return card;
+
+            // BaseCard card = cardData.cardType switch
+            // {
+            //     CardType.Creature => new CreatureCard(cardData),
+            //     CardType.Monster => new CreatureCard(cardData),
+            //     CardType.Building => new BuildingCard(cardData),
+            //     CardType.Charm => new MagicCard(cardData),
+            //     CardType.Curse => new MagicCard(cardData),
+            //     CardType.Magic => new MagicCard(cardData),
+            //     _ => new BaseCard(cardData),
+            // };
+            // return card;
         }
 
         public static void GetMasterText(int masterId, out string cardName, out string cardDesc, out string cardShortDesc)

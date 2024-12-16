@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ERang.Data;
 using UnityEngine;
 
 namespace ERang
@@ -12,8 +13,13 @@ namespace ERang
 
         // 핸드 카드 생성을 위한 프리팹
         public GameObject cardPrefab;
+        // 소환 카드 생성을 위한 프리펩
+        public GameObject summonCardPrefab;
         public TargetingArrow targetingArrow;
+
         public Transform handDeckTransform;
+        public Transform DeckTransform;
+        public Transform GraveTransform;
 
         // 핸드 카드 리스트
         private readonly List<HCard> hCards = new();
@@ -53,9 +59,22 @@ namespace ERang
         {
             draggingCard = hCard;
         }
-        
+
         public void MagicCardUse(HCard hCard)
         {
+            if (hCard.Card != null && hCard.Card is not MagicCard)
+            {
+                Debug.LogWarning($"{hCard.Card.LogText}. 마법 카드가 아닙니다.");
+                return;
+            }
+
+            // 공격 타입이 Select가 아닌 경우
+            if (hCard.IsSelectAttackTypeCard() == false)
+            {
+                BattleLogic.Instance.HandCardUse(hCard, null);
+                return;
+            }
+
             if (targetingArrow == null)
             {
                 Debug.Log($"{hCard.Card.LogText}. 타겟팅 화살표가 없습니다.");
@@ -97,7 +116,7 @@ namespace ERang
             if (dragginCard == null)
                 return false;
 
-            return dragginCard.TargetSlotNumbers.Contains(slotNum);
+            return dragginCard.IsContainsSlotNum(slotNum);
         }
 
         /// <summary>
@@ -189,6 +208,47 @@ namespace ERang
             foreach (HCard handCard in hCards)
             {
                 handCard.UpdateCardUI();
+            }
+        }
+
+        public IEnumerator SummonCardToDeck(int cardId, DeckKind deckKind)
+        {
+            CardData cardData = CardData.GetCardData(cardId);
+
+            if (cardData == null)
+            {
+                Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
+                yield break;
+            }
+
+            BaseCard card = Utils.MakeCard(cardData);
+
+            GameObject cardObject = Instantiate(summonCardPrefab, transform);
+            cardObject.name = $"SummonCard_{card.Id}";
+
+            SummonCard summonCard = cardObject.GetComponent<SummonCard>();
+            summonCard.SetCard(card);
+
+            yield return new WaitForSeconds(.5f);
+
+            DiscardAnimation discardAnimation = summonCard.GetComponent<DiscardAnimation>();
+
+            switch (deckKind)
+            {
+                case DeckKind.Hand:
+                    Deck.Instance.AddHandCard(card);
+                    discardAnimation.PlaySequence(handDeckTransform, SpawnHandCard(card));
+                    break;
+
+                case DeckKind.Grave:
+                    Deck.Instance.AddGraveCard(card);
+                    discardAnimation.PlaySequence(GraveTransform, null);
+                    break;
+
+                case DeckKind.Deck:
+                    Deck.Instance.AddDeckCard(card);
+                    discardAnimation.PlaySequence(DeckTransform, null);
+                    break;
             }
         }
     }
