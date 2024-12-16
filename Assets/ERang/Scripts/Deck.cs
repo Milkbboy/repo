@@ -78,5 +78,26 @@ namespace ERang
             deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
             deckUI.SetExtinctionCardCount(deckSystem.ExtinctionCardCount);
         }
+
+        public void AddHandCard(BaseCard card)
+        {
+            deckSystem.AddHandCard(card);
+
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+        }
+
+        public void AddGraveCard(BaseCard card)
+        {
+            deckSystem.AddGraveCard(card);
+
+            deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
+        }
+
+        public void AddDeckCard(BaseCard card)
+        {
+            deckSystem.AddDeckCard(card);
+
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+        }
     }
 }

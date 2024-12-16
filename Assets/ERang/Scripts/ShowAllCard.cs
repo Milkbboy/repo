@@ -13,6 +13,13 @@ namespace ERang
 
         public void ShowAllCards()
         {
+            ShowCards(Player.Instance.AllCards);
+        }
+
+        public void ShowCards(List<BaseCard> cards)
+        {
+            ClearAllCards();
+
             // 스크린의 왼쪽 상단을 기준으로 시작 위치 계산
             Vector3 screenTopLeft = new(0, Screen.height, Camera.main.nearClipPlane);
             Vector3 worldTopLeft = Camera.main.ScreenToWorldPoint(screenTopLeft);
@@ -30,7 +37,7 @@ namespace ERang
             float cardWidth = cardSize.x * cardPrefab.transform.localScale.x + 0.1f; // 카드 간격 포함
             float cardHeight = cardSize.y * cardPrefab.transform.localScale.y + 0.1f; // 카드 간격 포함
 
-            for (int i = 0; i < Player.Instance.AllCards.Count; i++)
+            for (int i = 0; i < cards.Count; i++)
             {
                 // 카드 인스턴스화
                 GameObject cardObject = Instantiate(cardPrefab, showCards.transform);
@@ -38,7 +45,7 @@ namespace ERang
                 // 카드 위치 설정
                 int row = i / 10;
                 int col = i % 10;
-                
+
                 Vector3 position = worldTopLeft + new Vector3(col * cardWidth, -row * cardHeight, 0f);
                 cardObject.transform.localPosition = position;
 
@@ -54,7 +61,7 @@ namespace ERang
                     foreach (Renderer renderer in renderers)
                         renderer.sortingOrder = 3000; // 높은 값으로 설정하여 맨 앞으로 이동
 
-                    cardUI.SetCard(Player.Instance.AllCards[i]);
+                    cardUI.SetCard(cards[i]);
                 }
             }
         }

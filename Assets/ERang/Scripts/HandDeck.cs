@@ -229,16 +229,25 @@ namespace ERang
             SummonCard summonCard = cardObject.GetComponent<SummonCard>();
             summonCard.SetCard(card);
 
-            DeckSystem.Instance.AddHandCard(card);
-
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(.5f);
 
             DiscardAnimation discardAnimation = summonCard.GetComponent<DiscardAnimation>();
 
             switch (deckKind)
             {
                 case DeckKind.Hand:
+                    Deck.Instance.AddHandCard(card);
                     discardAnimation.PlaySequence(handDeckTransform, SpawnHandCard(card));
+                    break;
+
+                case DeckKind.Grave:
+                    Deck.Instance.AddGraveCard(card);
+                    discardAnimation.PlaySequence(GraveTransform, null);
+                    break;
+
+                case DeckKind.Deck:
+                    Deck.Instance.AddDeckCard(card);
+                    discardAnimation.PlaySequence(DeckTransform, null);
                     break;
             }
         }

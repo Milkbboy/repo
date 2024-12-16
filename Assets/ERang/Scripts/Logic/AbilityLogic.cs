@@ -25,7 +25,7 @@ namespace ERang
 
         public int selfSlotNum;
         public int targetSlotNum;
-        
+
         public List<BSlot> targetSlots = new();
 
         public string LogText => Utils.AbilityLog(abilityId, abilityUid);
@@ -44,6 +44,8 @@ namespace ERang
             // 현재 게임 오브젝트와 모든 자식 게임 오브젝트의 Transform 컴포넌트를 얻음
             Transform[] abilities = GetComponentsInChildren<Transform>();
 
+            // Debug.Log($"AbilityLogic Awake. abilities: {abilities.Length}");
+
             // 자식 객체의 이름을 출력
             foreach (Transform abilityTransform in abilities)
             {
@@ -52,6 +54,13 @@ namespace ERang
                     continue;
 
                 IAbility ability = abilityTransform.GetComponent<IAbility>();
+
+                if (abilityActions.ContainsKey(ability.AbilityType))
+                {
+                    Debug.LogError($"어빌리티 {ability.AbilityType} 중복. 어빌리티 스크립트의 AbilityType 확인 필요");
+                    continue;
+                }
+
                 abilityActions.Add(ability.AbilityType, ability);
             }
 

@@ -223,5 +223,15 @@ namespace ERang
         {
             handCards.Add(card);
         }
+
+        public void AddDeckCard(BaseCard card)
+        {
+            deckCards.Add(card);
+        }
+
+        public void AddGraveCard(BaseCard card)
+        {
+            graveCards.Add(card);
+        }
     }
 }

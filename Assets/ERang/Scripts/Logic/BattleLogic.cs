@@ -421,9 +421,15 @@ namespace ERang
         /// 핸드 카드 사용
         // - 카드 사용 주체는 마스터 슬롯
         /// </summary>
-        public void HandCardUse(string cardUid, BSlot neareastSlot)
+        public void HandCardUse(string cardUid, BSlot targetSlot)
         {
             BaseCard card = deck.FindHandCard(cardUid);
+
+            if (card == null)
+            {
+                Debug.LogError($"핸드에 카드({cardUid}) 없음");
+                return;
+            }
 
             int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
 
@@ -443,21 +449,21 @@ namespace ERang
 
             // 타겟팅이면 nearastSlot 을 대상으로 설정
             List<BSlot> targetSlots = (aiData.target == AiDataTarget.SelectEnemy) ?
-                new List<BSlot> { neareastSlot } :
+                new List<BSlot> { targetSlot } :
                 TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandCardUse");
 
-            Debug.Log($"{card.LogText} 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData.ai_Id}, aiData.target: {aiData.target}, neareastSlot: {neareastSlot?.SlotNum ?? -1}, tagetSlots: {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
+            Debug.Log($"{card.LogText} 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData.ai_Id}, aiData.target: {aiData.target}, targetSlot: {targetSlot?.SlotNum ?? -1}, tagetSlots: {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
 
             // 대상 선택 사용 카드
             if (isSelectAttackType)
             {
-                if (neareastSlot == null)
+                if (targetSlot == null)
                 {
                     Debug.LogError($"{card.LogText} 마법 대상이 없어서 카드 사용 실패");
                     return;
                 }
 
-                if (targetSlots.Contains(neareastSlot) == false)
+                if (targetSlots.Contains(targetSlot) == false)
                 {
                     Debug.LogError($"{card.LogText} 대상 슬롯이 아닌 슬롯에 카드 사용 실패");
                     return;
@@ -554,7 +560,7 @@ namespace ERang
             }
         }
 
-        
+
         /// <summary>
         /// 핸드 카드 사용 가능 확인
         /// </summary>

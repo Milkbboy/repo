@@ -25,7 +25,7 @@ namespace ERang
 
             // 카드가 만들어져서 해당 덱으로 이동하는걸 만들어야 겠네
             // 뽑은 카드 만들어서 핸드에 추가
-            HandDeck.Instance.SummonCardToDeck(cardId, DeckKind.Grave);
+            StartCoroutine(HandDeck.Instance.SummonCardToDeck(cardId, DeckKind.Grave));
 
             yield break;
         }
