@@ -5,10 +5,6 @@ namespace ERang
 {
     public class BSlot : MonoBehaviour
     {
-        [Header("Display")]
-        public Texture2D cardTexture;
-        public MeshRenderer meshRenderer;
-
         /// <summary>
         /// 슬롯에 장착할 수 있는 카드 타입
         /// </summary>
@@ -24,6 +20,7 @@ namespace ERang
         public string LogText => Utils.BoardSlotLog(this);
 
         private BaseCard card = null;
+        private SlotUI slotUI;
         private CardUI cardUI;
         private Ani_Attack aniAttack;
         private Ani_Damaged aniDamaged;
@@ -35,6 +32,7 @@ namespace ERang
 
         void Awake()
         {
+            slotUI = GetComponent<SlotUI>();
             cardUI = cardObject.GetComponent<CardUI>();
 
             aniAttack = GetComponent<Ani_Attack>();
@@ -68,15 +66,7 @@ namespace ERang
             this.index = index;
             slotCardType = cardType;
 
-            switch (cardType)
-            {
-                case CardType.None: cardTexture = Resources.Load<Texture2D>("Textures/Blank_Red"); break;
-                case CardType.Creature: cardTexture = Resources.Load<Texture2D>("Textures/Blank_Green"); break;
-                case CardType.Monster: cardTexture = Resources.Load<Texture2D>("Textures/Blank_Purple"); break;
-            }
-
-            if (cardTexture != null)
-                meshRenderer.materials[0].SetTexture("_BaseMap", cardTexture);
+            slotUI.SetSlot(cardType);
         }
 
         public bool EquipCard(BaseCard card)
@@ -103,7 +93,7 @@ namespace ERang
             int beforeDef = card.Def;
 
             card.TakeDamage(amount);
-            
+
             cardUI.SetHp(card.Hp);
             cardUI.SetDef(card.Def);
 

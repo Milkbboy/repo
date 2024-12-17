@@ -7,13 +7,17 @@ using ERang;
 
 public class Reward : MonoBehaviour
 {
-    public GameObject cardPrefab;
     public Transform deckPosition;
 
     public UnityAction OnClickNextScene;
 
     private RewardCard selectedCard;
-    private List<RewardCard> rewardCards = new();
+    private RewardUI rewardUI;
+
+    void Awake()
+    {
+        rewardUI = GetComponent<RewardUI>();
+    }
 
     void Start()
     {
@@ -22,8 +26,8 @@ public class Reward : MonoBehaviour
 
     public void RewardCards()
     {
-        int masterId = PlayerPrefsUtility.GetInt("MasterId", 0);
-        int levelId = PlayerPrefsUtility.GetInt("LevelId", 0);
+        int masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
+        int levelId = PlayerPrefsUtility.GetInt("LevelId", 100100101);
 
         PlayerPrefsUtility.SetInt("MasterId", masterId);
         PlayerPrefsUtility.SetInt("LevelId", levelId);
@@ -56,7 +60,6 @@ public class Reward : MonoBehaviour
             return;
         }
 
-        List<RewardCardData> selectedCards = new();
         List<int> selectedCardIds = new();
 
         foreach (CardGrade cardGrade in cardGrades)
@@ -88,8 +91,9 @@ public class Reward : MonoBehaviour
 
                 if (selectedCardData != null)
                 {
-                    selectedCards.Add(selectedCardData);
                     selectedCardIds.Add(selectedCardData.cardId);
+
+                    // Debug.Log($"selected cardId: {selectedCardData.cardId}, cardNameDesc: {selectedCardData.cardNameDesc}, cardGrade: {selectedCardData.cardGrade}, weightValue: {selectedCardData.weightValue}, resultValue: {selectedCardData.resultValue}");
                 }
             }
         }
@@ -97,40 +101,8 @@ public class Reward : MonoBehaviour
         // foreach(RewardCard card in rewardData.rewardCards)
         //     Debug.Log($"cardId: {card.cardId}, cardNameDesc: {card.cardNameDesc}, cardGrade: {card.cardGrade}, weightValue: {card.weightValue}, resultValue: {card.resultValue}");
 
-        // foreach (RewardCard card in selectedCards)
-        //     Debug.Log($"selected cardId: {card.cardId}, cardNameDesc: {card.cardNameDesc}, cardGrade: {card.cardGrade}, weightValue: {card.weightValue}, resultValue: {card.resultValue}");
-
         // 화면 중앙에 카드를 배치
-        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0);
-        Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
-        worldCenter.z = 0; // Z축 위치를 0으로 설정하여 2D 평면에 배치
-
-        float cardSpacing = 2f;
-        float startX = worldCenter.x - (selectedCards.Count - 1) * cardSpacing / 2;
-
-        for (int i = 0; i < selectedCardIds.Count; ++i)
-        {
-            CardData cardData = CardData.GetCardData(selectedCardIds[i]);
-
-            if (cardData == null)
-            {
-                Debug.LogError($"cardId({selectedCardIds[i]}) CardData {Utils.RedText("테이블 데이터 없음")}");
-                continue;
-            }
-
-            BaseCard card = Utils.MakeCard(cardData);
-
-            Vector3 cardPosition = new(startX + i * cardSpacing, worldCenter.y, worldCenter.z);
-
-            GameObject cardObject = Instantiate(cardPrefab, cardPosition, transform.rotation, transform);
-            cardObject.name = $"RewardCard_{card.Id}";
-
-            RewardCard rewardCard = cardObject.GetComponent<RewardCard>();
-            rewardCard.SetCard(card);
-            rewardCard.OnClick += OnRewardCardClicked;
-
-            rewardCards.Add(rewardCard);
-        }
+        rewardUI.ShowRewardCards(selectedCardIds, OnSelectRewardCard);
     }
 
     public void Confirm()
@@ -153,7 +125,7 @@ public class Reward : MonoBehaviour
         OnClickNextScene?.Invoke();
     }
 
-    private void OnRewardCardClicked(RewardCard rewardCard)
+    private void OnSelectRewardCard(RewardCard rewardCard)
     {
         if (selectedCard != rewardCard)
             selectedCard?.SetScaleFixed(false);

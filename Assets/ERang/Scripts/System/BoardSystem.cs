@@ -42,7 +42,7 @@ namespace ERang
             int leftSlotStartIndex = 4;
             int rightSlotStartIndex = 5;
 
-            // 마스터 보드 슬롯 구성
+            // left 슬롯 구성
             for (int i = 0; i < leftSlotCardTypes.Length; ++i)
             {
                 CardType cardType = CardType.None;
@@ -68,7 +68,7 @@ namespace ERang
                 leftBSlots.Add(bSlot);
             }
 
-            // 몬스터 보드 슬롯 구성
+            // right 슬롯 구성
             for (int i = 0; i < rightSlotCardTypes.Length; ++i)
             {
                 int slotNum = i + rightSlotCardTypes.Length;
