@@ -24,6 +24,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
@@ -38,6 +39,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
@@ -52,6 +54,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_03
     FxSound: 
     Summon_GroupId: 0
@@ -66,6 +69,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: Arrow_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
@@ -80,6 +84,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: Arrow_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
@@ -94,6 +99,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: ArrowRain_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_03
     FxSound: 
     Summon_GroupId: 0
@@ -108,6 +114,7 @@ MonoBehaviour:
     HitFx: Hit_02
     PtojectileFx: Boom_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_04
     FxSound: 
     Summon_GroupId: 0
@@ -122,6 +129,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -136,6 +144,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -150,6 +159,7 @@ MonoBehaviour:
     HitFx: HitFireball_01
     PtojectileFx: FireBall_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -164,6 +174,7 @@ MonoBehaviour:
     HitFx: HitBlizzard_01
     PtojectileFx: Blizzard_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -178,6 +189,7 @@ MonoBehaviour:
     HitFx: HitFireWall_01
     PtojectileFx: FireWall_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -192,6 +204,7 @@ MonoBehaviour:
     HitFx: HitHeal_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -206,6 +219,7 @@ MonoBehaviour:
     HitFx: HitAtkUp_01
     PtojectileFx: 
     SkillIcon: AtkUp_01
+    SkillIconDesc: AtkUp_01_Desc
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -220,6 +234,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
@@ -234,6 +249,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
@@ -248,6 +264,7 @@ MonoBehaviour:
     HitFx: Hit_Buff_01
     PtojectileFx: 
     SkillIcon: DefUp_01
+    SkillIconDesc: DefUp_01_Desc
     SkillViewIcon: Skill_01
     FxSound: 
     Summon_GroupId: 0
@@ -262,6 +279,7 @@ MonoBehaviour:
     HitFx: Hit_DeBuff_01
     PtojectileFx: 
     SkillIcon: DefDown_01
+    SkillIconDesc: DefDown_01_Desc
     SkillViewIcon: Skill_01
     FxSound: 
     Summon_GroupId: 0
@@ -276,6 +294,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: Arrow_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
@@ -290,6 +309,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: ArrowRain_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
@@ -304,6 +324,7 @@ MonoBehaviour:
     HitFx: Hit_03
     PtojectileFx: Arrow_02
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Skill_01
     FxSound: 
     Summon_GroupId: 0
@@ -318,6 +339,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
@@ -332,6 +354,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
@@ -345,7 +368,8 @@ MonoBehaviour:
     SkillFx: Skill_Use_01
     HitFx: HitAtkUp_01
     PtojectileFx: 
-    SkillIcon: AtkUp_01
+    SkillIcon: AtkUp_02
+    SkillIconDesc: AtkUp_02_Desc
     SkillViewIcon: Skill_01
     FxSound: 
     Summon_GroupId: 0
@@ -360,6 +384,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: Atk_03
     FxSound: 
     Summon_GroupId: 0
@@ -374,6 +399,7 @@ MonoBehaviour:
     HitFx: Hit_01
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -388,6 +414,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: HitFireball_01
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -401,7 +428,8 @@ MonoBehaviour:
     SkillFx: Skill_Use_01
     HitFx: 
     PtojectileFx: 
-    SkillIcon: AddGold_01
+    SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -416,6 +444,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -430,6 +459,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -444,6 +474,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -457,7 +488,8 @@ MonoBehaviour:
     SkillFx: 
     HitFx: 
     PtojectileFx: 
-    SkillIcon: AddGold_01
+    SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -472,6 +504,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -486,6 +519,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -500,6 +534,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 1001
@@ -514,6 +549,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 1002
@@ -528,6 +564,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 1003

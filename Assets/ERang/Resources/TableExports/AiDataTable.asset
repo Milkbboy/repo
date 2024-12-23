@@ -355,7 +355,7 @@ MonoBehaviour:
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 90004, 90005
+    Ability_id: 90006, 90007
   - Ai_Id: 100001
     NameDesc: "\uB9CC\uBCF5\uB3C4 \uCC44\uC6B0\uAE30"
     Type: Buff

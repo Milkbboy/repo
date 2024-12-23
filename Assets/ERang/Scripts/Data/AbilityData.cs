@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Table;
+using System;
 
 namespace ERang.Data
 {
@@ -20,9 +21,13 @@ namespace ERang.Data
         public string hitFx;
         public string ptojectileFx;
         public string skillIcon;
+        public string skillIconDesc;
         public string skillViewIcon;
         public string fxSound;
         public int summonGroupId;
+
+        [Header("Display")]
+        public Texture2D iconTexture;
 
         public string LogText => Utils.AbilityLog(this);
 
@@ -39,13 +44,24 @@ namespace ERang.Data
             hitFx = entity.HitFx;
             ptojectileFx = entity.PtojectileFx;
             skillIcon = entity.SkillIcon;
+            skillIconDesc = entity.SkillIconDesc;
             skillViewIcon = entity.SkillViewIcon;
             fxSound = entity.FxSound;
             summonGroupId = entity.Summon_GroupId;
+
+            // 아이콘 이미지 로드 및 iconTexture 에 할당
+            if (!string.IsNullOrEmpty(skillIcon))
+            {
+                string texturePath = $"Textures/{skillIcon}";
+                iconTexture = Resources.Load<Texture2D>(texturePath);
+
+                if (iconTexture == null)
+                    Debug.LogError("Card Texture not found: " + texturePath);
+            }
         }
 
-        public static List<AbilityData> abilityData_list = new List<AbilityData>();
-        public static Dictionary<int, AbilityData> abilityData_dict = new Dictionary<int, AbilityData>();
+        public static List<AbilityData> abilityData_list = new();
+        public static Dictionary<int, AbilityData> abilityData_dict = new();
 
         public static void Load(string path = "")
         {

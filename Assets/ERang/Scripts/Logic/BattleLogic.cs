@@ -29,6 +29,9 @@ namespace ERang
 
         public Deck deck;
 
+        public AbilityIcon testAbilityIcon;
+        public BSlot testBSlot;
+
         private Master master;
         private bool isTruenEndProcessing = false;
         private MapLocation selectLocation;
@@ -127,15 +130,49 @@ namespace ERang
 
             // StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
 
-            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
+            // BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
 
-            List<BSlot> firstSlots = TargetLogic.Instance.TargetFirstEnemy(selfSlot);
-            Debug.Log($"TargetFirstEnemy - first Slot: {firstSlots[0].SlotNum}, index: {firstSlots[0].Index}");
+            // List<BSlot> firstSlots = TargetLogic.Instance.TargetFirstEnemy(selfSlot);
+            // Debug.Log($"TargetFirstEnemy - first Slot: {firstSlots[0].SlotNum}, index: {firstSlots[0].Index}");
 
-            List<BSlot> secondsSlots = TargetLogic.Instance.TargetSecondEnemy(selfSlot);
-            Debug.Log($"TargetSecondEnemy - first Slot: {secondsSlots[0].SlotNum}, index: {secondsSlots[0].Index}");
+            // List<BSlot> secondsSlots = TargetLogic.Instance.TargetSecondEnemy(selfSlot);
+            // Debug.Log($"TargetSecondEnemy - first Slot: {secondsSlots[0].SlotNum}, index: {secondsSlots[0].Index}");
 
-            UpdateSatietyGauge(10);
+            // UpdateSatietyGauge(10);
+
+            // 어빌리티 아이콘 설정
+            if (testAbilityIcon == null)
+            {
+                Debug.LogError("AbilityIcon 없음");
+                return;
+            }
+
+            int[] abilityIds = { 70014, 70017, 70018, 70024 };
+
+            StartCoroutine(ChangeAbilityIcon(abilityIds));
+
+            CardData cardData = CardData.GetCardData(100101);
+
+            testBSlot.SlotCardType = CardType.Creature;
+            testBSlot.EquipCard(new CreatureCard(cardData));
+            testBSlot.Card.Abilities = new List<CardAbility>
+            {
+                new (70014),
+                new (70017),
+                new (70018),
+                new (70024),
+            };
+            testBSlot.DrawAbilityIcons();
+        }
+
+        private IEnumerator ChangeAbilityIcon(int[] abilityIds)
+        {
+            foreach (int id in abilityIds)
+            {
+                testAbilityIcon.SetIcon(id);
+
+                yield return new WaitForSeconds(1f);
+            }
         }
 
         public IEnumerator TurnStart()

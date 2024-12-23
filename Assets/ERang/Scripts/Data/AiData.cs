@@ -26,6 +26,11 @@ namespace ERang.Data
         // - Ranged의 경우 자신의 위치를 기준으로 지정된 값 만큼의 거리를 의미한다. 
         //   (Ex 4의 경우 자신의 4칸 앞을 향해 공격한다는 것을 의미, 4와 5가 입력된 경우 자신의 앞 4번째 그리고 5번째 적까지 공격한다는 의미)
         public List<int> attackRanges = new List<int>();
+        public List<int> BuffAbilityIds => buffAbilityIds;
+        public List<int> DebuffAbilityIds => debuffAbilityIds;
+
+        private static List<int> buffAbilityIds = new List<int>();
+        private static List<int> debuffAbilityIds = new List<int>();
 
         public void Initialize(AiDataEntity entity)
         {
@@ -39,6 +44,15 @@ namespace ERang.Data
             explosion_Shock = entity.Explosion_Shock;
             ability_Ids.AddRange(Utils.ParseIntArray(entity.Ability_id).Where(x => x != 0));
             attackRanges.AddRange(Utils.ParseIntArray(entity.Atk_Range).Where(x => x != 0));
+
+            if (type == AiDataType.Buff)
+            {
+                buffAbilityIds.AddRange(ability_Ids);
+            }
+            else if (type == AiDataType.Debuff)
+            {
+                debuffAbilityIds.AddRange(ability_Ids);
+            }
         }
 
         public static List<AiData> ai_list = new List<AiData>();
@@ -71,6 +85,17 @@ namespace ERang.Data
         public static AiData GetAiData(int aiId)
         {
             return ai_dict.ContainsKey(aiId) ? ai_dict[aiId] : null;
+        }
+
+        public static AiDataType GetAbilityAiDataType(int abilityId)
+        {
+            if (buffAbilityIds.Contains(abilityId))
+                return AiDataType.Buff;
+
+            if (debuffAbilityIds.Contains(abilityId))
+                return AiDataType.Debuff;
+
+            return AiDataType.None;
         }
 
         AiDataType ConvertAiDataType(string type)

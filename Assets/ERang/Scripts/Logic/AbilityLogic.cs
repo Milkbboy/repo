@@ -10,6 +10,15 @@ namespace ERang
     [Serializable]
     public class CardAbility
     {
+        public CardAbility()
+        {
+        }
+
+        public CardAbility(int abilityId)
+        {
+            this.abilityId = abilityId;
+        }
+
         public AbilityWhereFrom whereFrom; // 어빌리티 적용 위치
 
         public string abilityUid; // 어빌리티 고유 번호. abilityId + startTurn + abilityCount
@@ -74,18 +83,6 @@ namespace ERang
             // }
         }
 
-        public IEnumerator AbilityAction(List<int> abilityIds, BSlot selfSlot, List<BSlot> targetSlots)
-        {
-            List<AbilityData> abilityDatas = abilityIds.Select(id => AbilityData.GetAbilityData(id)).ToList();
-
-            foreach (AbilityData abilityData in abilityDatas)
-            {
-                string abilityLog = $"{selfSlot.LogText} {abilityData.LogText} 타겟 (슬롯, 카드): {string.Join(", ", targetSlots.Select(slot => (slot.SlotNum, slot.Card?.Id)))}";
-            }
-
-            yield return null;
-        }
-
         public void AbilityAction(int aiDataId, int abilityId, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
         {
             AiData aiData = AiData.GetAiData(aiDataId);
@@ -115,7 +112,14 @@ namespace ERang
             }
 
             if (targetSlots.Count > 0)
+            {
                 yield return StartCoroutine(AbilityAction(aiData, abilityData, selfSlot, targetSlots));
+
+                foreach (BSlot targetSlot in targetSlots)
+                    targetSlot.DrawAbilityIcons();
+            }
+
+            Debug.Log($"{abilityLog} 실행. {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityActions[abilityData.abilityType].Changes)}");
         }
 
         /// <summary>
@@ -169,7 +173,6 @@ namespace ERang
 
             yield return StartCoroutine(AbilityRelease(cardAbility, selfBoardSlot, targetBoardSlot));
         }
-
 
         /// <summary>
         /// 보드 슬롯에 장착된 카드 ability 해제

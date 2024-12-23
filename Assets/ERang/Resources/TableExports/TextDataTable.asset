@@ -180,3 +180,19 @@ MonoBehaviour:
     NameDesc: "\uBB34\uB364 \uB371\uC73C\uB85C \uCE74\uB4DC 1\uC7A5 \uC18C\uD658"
     Desc_Ko: "\uBB34\uB364 \uB371\uC73C\uB85C \uCE74\uB4DC 1\uC7A5 \uC18C\uD658"
     Desc_En: 
+  - DescID: AtkUp_01_Desc
+    NameDesc: "2/2 \uC5B4\uD0DD\uC5C5"
+    Desc_Ko: "\uD798 2 \uC99D\uAC00"
+    Desc_En: 
+  - DescID: DefUp_01_Desc
+    NameDesc: "3/2 \uBC29\uC5B4 \uC5C5"
+    Desc_Ko: "\uBC29\uC5B4 3 \uC99D\uAC00"
+    Desc_En: 
+  - DescID: DefDown_01_Desc
+    NameDesc: "3/2 \uBC29\uC5B4 \uB2E4\uC6B4"
+    Desc_Ko: "\uBC29\uC5B4 3 \uAC10\uC18C"
+    Desc_En: 
+  - DescID: AtkUp_02_Desc
+    NameDesc: "3/3 \uC5B4\uD0DD \uC5C5"
+    Desc_Ko: "\uD798 3 \uC99D\uAC00"
+    Desc_En: 

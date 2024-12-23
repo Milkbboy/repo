@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using ERang.Data;
+using UnityEngine;
 
 namespace ERang
 {
@@ -23,7 +24,7 @@ namespace ERang
     /// </summary>
     public static class Utils
     {
-        private static Random random = new();
+        private static System.Random random = new();
 
         public static BaseCard MakeCard(CardData cardData)
         {
@@ -93,6 +94,18 @@ namespace ERang
             cardName = TextData.GetKr(cardData.cardNameId);
             cardDesc = TextData.GetKr(cardData.cardDescId);
             cardShortDesc = TextData.GetKr(cardData.cardShortDescId);
+        }
+
+        public static string GetAbilityIconText(int abilityId)
+        {
+            AbilityData abilityData = AbilityData.GetAbilityData(abilityId);
+
+            if (abilityData == null)
+            {
+                return "어빌리티 데이터 없음";
+            }
+
+            return TextData.GetKr(abilityData.skillIconDesc);
         }
 
         public static string GetCardDescText(int cardId)
@@ -266,6 +279,16 @@ namespace ERang
             }
 
             return $"Level ID: {levelData.levelId}. 등장 카드들 {string.Join(", ", cardDataList.Select(x => $"{x.Item1}: {x.Item2}({x.Item3})").ToList())}";
+        }
+
+        public static Texture2D LoadTexture(string texturePath)
+        {
+            Texture2D texture = Resources.Load<Texture2D>(texturePath);
+
+            if (texture == null)
+                Debug.LogError("Texture not found: " + texturePath);
+
+            return texture;
         }
 
         private static string GetCardType(CardType cardType)

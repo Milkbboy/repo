@@ -14,6 +14,7 @@ namespace ERang
         public string HitFx;
         public string PtojectileFx;
         public string SkillIcon;
+        public string SkillIconDesc;
         public string SkillViewIcon;
         public string FxSound;
         public int Summon_GroupId;
