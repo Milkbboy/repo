@@ -101,7 +101,7 @@ namespace ERang
                 }
 
                 // 있으면 turnCount 업데이트
-                int beforeDuration = ability.duration;
+                int beforeDuration = abilityIcon.Duration;
 
                 abilityIcon.SetTurnCount(ability.duration);
 

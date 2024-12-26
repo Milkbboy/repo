@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using TMPro;
 using Newtonsoft.Json;
 using ERang.Data;
+using RogueEngine.Client;
 
 namespace ERang
 {
@@ -38,6 +39,8 @@ namespace ERang
         private bool keepSatiety;
 
         // for test
+        BaseCard testCard;
+
         private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
         private List<BSlot> flashingSlots = new List<BSlot>();
 
@@ -117,11 +120,44 @@ namespace ERang
             ActionQueueProcess();
         }
 
+        private IEnumerator AbilityTest()
+        {
+            // 테스트 아쳐 카드 생성 후 테스트 어빌리티 추가
+            if (testCard == null)
+            {
+                int testCardId = 100201;
+                CardData cardData = CardData.GetCardData(testCardId);
+                testCard = Utils.MakeCard(cardData);
+                testCard.CardType = CardType.Master;
+
+                // 테스트 아쳐 카드 장착
+                BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(9);
+                selfSlot.EquipCard(testCard);
+
+                BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(9);
+
+                AiData aiData = AiData.GetAiData(3003);
+
+                int[] abilityIds = { 70014, 70014, 70014, 70014 };
+                List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(new List<int>(abilityIds));
+
+                foreach (AbilityData abilityData in abilityDatas)
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, new List<BSlot> { targetSlot }, AbilityWhereFrom.Test));
+            }
+            else
+            {
+                // testCard.DecreaseAbilityDuration();
+                StartCoroutine(ReleaseBoardCardAbility(new List<BSlot> { BoardSystem.Instance.GetBoardSlot(9) }));
+            }
+        }
+
         /// <summary>
         /// 테스트
         /// </summary>
         public void Test()
         {
+            StartCoroutine(AbilityTest());
+
             // BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(6);
             // List<BoardSlot> targetSlots = BoardSystem.Instance.GetBoardSlots(new List<int> { 3, 2 });
 
@@ -141,28 +177,28 @@ namespace ERang
             // UpdateSatietyGauge(10);
 
             // 어빌리티 아이콘 설정
-            if (testAbilityIcon == null)
-            {
-                Debug.LogError("AbilityIcon 없음");
-                return;
-            }
+            // if (testAbilityIcon == null)
+            // {
+            //     Debug.LogError("AbilityIcon 없음");
+            //     return;
+            // }
 
-            int[] abilityIds = { 70014, 70017, 70018, 70024 };
+            // int[] abilityIds = { 70014, 70017, 70018, 70024 };
 
-            StartCoroutine(ChangeAbilityIcon(abilityIds));
+            // StartCoroutine(ChangeAbilityIcon(abilityIds));
 
-            CardData cardData = CardData.GetCardData(100101);
+            // CardData cardData = CardData.GetCardData(100101);
 
-            testBSlot.SlotCardType = CardType.Creature;
-            testBSlot.EquipCard(new CreatureCard(cardData));
-            testBSlot.Card.Abilities = new List<CardAbility>
-            {
-                new (70014),
-                new (70017),
-                new (70018),
-                new (70024),
-            };
-            testBSlot.DrawAbilityIcons();
+            // testBSlot.SlotCardType = CardType.Creature;
+            // testBSlot.EquipCard(new CreatureCard(cardData));
+            // testBSlot.Card.Abilities = new List<CardAbility>
+            // {
+            //     new (70014),
+            //     new (70017),
+            //     new (70018),
+            //     new (70024),
+            // };
+            // testBSlot.DrawAbilityIcons();
         }
 
         private IEnumerator ChangeAbilityIcon(int[] abilityIds)
@@ -565,6 +601,9 @@ namespace ERang
                     continue;
                 }
 
+                // 카드 어빌리티 duration 감소
+                card.DecreaseAbilityDuration();
+
                 Debug.Log($"{boardSlot.LogText} 어빌리티 {card.Abilities.Count} 개");
 
                 List<string> removeAbilityUids = new();
@@ -574,8 +613,6 @@ namespace ERang
                     AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
 
                     int beforeDuration = cardAbility.duration;
-
-                    cardAbility.duration -= 1;
 
                     if (cardAbility.duration > 0)
                     {
@@ -594,6 +631,8 @@ namespace ERang
 
                 if (removeAbilityUids.Count > 0)
                     Debug.Log($"{boardSlot.LogText} 해제된 어빌리티 {string.Join(", ", removeAbilityUids)} 개 - ReleaseBoardCardAbility");
+
+                boardSlot.DrawAbilityIcons();
             }
         }
 

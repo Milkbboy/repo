@@ -38,6 +38,9 @@ namespace ERang
         public List<BSlot> targetSlots = new();
 
         public string LogText => Utils.AbilityLog(abilityId, abilityUid);
+
+        /// 생성 시간
+        public long createdDt;
     }
 
     public class AbilityLogic : MonoBehaviour
@@ -203,6 +206,8 @@ namespace ERang
 
             yield return StartCoroutine(abilityAction.Release(cardAbility, selfSlot, targetSlot));
 
+            targetSlot.DrawAbilityIcons();
+
             if (abilityAction.Changes.Count > 0)
             {
                 Debug.Log($"{abilityActionLog} 해제. {Utils.StatChangesText(abilityAction.Changes)}");
@@ -230,7 +235,8 @@ namespace ERang
             CardAbility cardAbility = new()
             {
                 whereFrom = whereFrom,
-                abilityUid = $"{abilityData.abilityId}_{BattleLogic.Instance.turnCount}_{card.Abilities.Count}",
+                // abilityUid 는 AddAbility 에서 생성
+                // abilityUid = $"{abilityData.abilityId}_{BattleLogic.Instance.turnCount}_{card.Abilities.Count}",
                 aiType = aiData.type,
                 abilityId = abilityData.abilityId,
                 workType = abilityData.workType,
@@ -240,11 +246,12 @@ namespace ERang
                 aiDataId = aiData.ai_Id,
                 selfSlotNum = selfSlot.SlotNum,
                 targetSlotNum = targetSlot.SlotNum,
+                createdDt = DateTime.Now.Ticks,
             };
 
             Debug.Log($"{targetSlot.LogText} {cardAbility.LogText} 추가. beforeValue: {beforeValue}, value: {abilityData.value}, duration: {abilityData.duration}, workType: {abilityData.workType}");
 
-            card.Abilities.Add(cardAbility);
+            card.AddAbility(cardAbility, BattleLogic.Instance.turnCount);
         }
 
         /// <summary>

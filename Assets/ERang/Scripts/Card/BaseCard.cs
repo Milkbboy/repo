@@ -34,6 +34,8 @@ namespace ERang
         public virtual void IncreaseDefense(int amount) { }
         public virtual void DecreaseDefense(int amount) { }
 
+        private Dictionary<int, int> abilityOrder = new();
+
         public BaseCard()
         {
         }
@@ -80,8 +82,66 @@ namespace ERang
             CardImage = cardImage;
         }
 
-        public void AddAbility(CardAbility ability)
+        public void DecreaseAbilityDuration()
         {
+            Debug.Log("-- duration 감소 전 --");
+
+            var groupedAndSortedAbilities = abilities
+                .GroupBy(a => a.abilityId)
+                .Select(g => new
+                {
+                    abilityId = g.Key,
+                    Abilities = g.OrderBy(a => a.createdDt).ToList()
+                })
+                .ToList();
+
+            // 결과 출력 (디버그용)
+            foreach (var group in groupedAndSortedAbilities)
+            {
+                Debug.Log($"AbilityId: {group.abilityId}");
+
+                foreach (var ability in group.Abilities)
+                {
+                    Debug.Log($"{ability.abilityUid}: StartTurn: {ability.startTurn}, Duration: {ability.duration} createdDt: {ability.createdDt}");
+                }
+            }
+
+            // 각 어빌리티의 그룹 첫번째 어빌리티의 Duration 을 감소하고 0이 되면 제거
+            foreach (var group in groupedAndSortedAbilities)
+            {
+                var firstAbility = group.Abilities.First();
+                firstAbility.duration--;
+
+                // if (firstAbility.duration <= 0)
+                // {
+                //     abilities.RemoveAll(a => a.abilityUid == firstAbility.abilityUid);
+
+                //     Debug.Log($"{LogText} 해제된 어빌리티 {firstAbility.abilityUid} - DecreaseAbilityDuration");
+                // }
+            }
+
+            Debug.Log("-- duration 감소 후 --");
+            // 결과 출력 (디버그용)
+            foreach (CardAbility ability in abilities)
+            {
+                Debug.Log($"{ability.abilityUid}: StartTurn: {ability.startTurn}, Duration: {ability.duration} createdDt: {ability.createdDt}");
+            }
+        }
+
+        public void AddAbility(CardAbility ability, int turnCount)
+        {
+            // 아이디가 중복되는 어빌리티면 카운트 증가
+            if (abilityOrder.ContainsKey(ability.abilityId))
+            {
+                abilityOrder[ability.abilityId]++;
+                ability.abilityUid = $"{ability.abilityId}_{turnCount}_{abilityOrder[ability.abilityId]}";
+            }
+            else
+            {
+                abilityOrder.Add(ability.abilityId, 1);
+                ability.abilityUid = $"{ability.abilityId}_1_1";
+            }
+
             abilities.Add(ability);
         }
 

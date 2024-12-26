@@ -132,6 +132,7 @@ namespace ERang
         HandUse, // 핸드에 있는 카드가 발동
         OnStage, // 필드에 있는 카드가 발동
         AddedEditor, // 에디터에서 추가
+        Test,
     }
 
     /// <summary>

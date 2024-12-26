@@ -7,6 +7,7 @@ namespace ERang
     public class AbilityIcon : MonoBehaviour
     {
         public int AbilityId => abilityId;
+        public int Duration => duration;
         public UnityAction<int> OnIconMouseEnterAction;
 
         private int abilityId;
