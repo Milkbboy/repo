@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,39 +5,6 @@ using ERang.Data;
 
 namespace ERang
 {
-    [Serializable]
-    public class CardAbility
-    {
-        public CardAbility()
-        {
-        }
-
-        public CardAbility(int abilityId)
-        {
-            this.abilityId = abilityId;
-        }
-
-        public AbilityWhereFrom whereFrom; // 어빌리티 적용 위치
-
-        public string abilityUid; // 어빌리티 고유 번호. abilityId + startTurn + abilityCount
-        public int abilityId; // 어빌리티 Id
-        public AbilityWorkType workType; // 어빌리티 작업 타입(HandOn 찾기 위함)
-
-        public int aiDataId;
-        public AiDataType aiType; // Ai 타입. Buff, Debuff 구분
-
-        public int duration;
-        public int totalDuration;
-        public int startTurn;
-
-        public int selfSlotNum;
-        public int targetSlotNum;
-
-        public List<BSlot> targetSlots = new();
-
-        public string LogText => Utils.AbilityLog(abilityId, abilityUid);
-    }
-
     public class AbilityLogic : MonoBehaviour
     {
         public static AbilityLogic Instance { get; private set; }
@@ -93,33 +58,30 @@ namespace ERang
 
         public IEnumerator AbilityAction(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
         {
-            string abilityLog = $"{selfSlot.LogText} {abilityData.LogText} 타겟 (슬롯, 카드): {string.Join(", ", targetSlots.Select(slot => (slot.SlotNum, slot.Card?.Id)))}";
-
             foreach (BSlot targetSlot in targetSlots)
             {
-                // 핸드 온 어빌리티는 턴 종료시 해제되기 때문에 모두 저장
-                if (abilityData.workType == AbilityWorkType.OnHand)
-                {
-                    AddAbility(aiData, abilityData, selfSlot, targetSlot, whereFrom);
+                BaseCard card = targetSlot.Card;
+
+                if (card == null)
                     continue;
+
+                CardAbility found = card.CardAbilities.Find(cardAbility => cardAbility.abilityId == abilityData.abilityId);
+
+                // 핸드 온 어빌리티는 턴 종료시 해제되기 때문에 모두 저장. 효과 지속 시간이 있는 어빌리티
+                if (abilityData.workType == AbilityWorkType.OnHand || abilityData.duration > 0)
+                    card.AddCardAbility(abilityData, aiData, selfSlot.SlotNum, targetSlot.SlotNum, BattleLogic.Instance.turnCount, whereFrom);
+
+                // 어빌리티가 처음 추가 되면 효과 적용. 효과 중복 방지
+                // 추후 효과가 중복되는 어빌리티가 생기면 수정 필요
+                if (found == null)
+                {
+                    Debug.Log($"{targetSlot.LogText} {abilityData.LogText} 추가");
+
+                    yield return StartCoroutine(TakeAbility(aiData, abilityData, selfSlot, targetSlot));
                 }
 
-                // 효과 지속 시간이 있는 어빌리티만 추가
-                if (abilityData.duration <= 0)
-                    continue;
-
-                AddAbility(aiData, abilityData, selfSlot, targetSlot, whereFrom);
+                targetSlot.DrawAbilityIcons();
             }
-
-            if (targetSlots.Count > 0)
-            {
-                yield return StartCoroutine(AbilityAction(aiData, abilityData, selfSlot, targetSlots));
-
-                foreach (BSlot targetSlot in targetSlots)
-                    targetSlot.DrawAbilityIcons();
-            }
-
-            Debug.Log($"{abilityLog} 실행. {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityActions[abilityData.abilityType].Changes)}");
         }
 
         /// <summary>
@@ -136,6 +98,29 @@ namespace ERang
             }
 
             yield return StartCoroutine(abilityAction.Apply(aiData, abilityData, selfSlot, targetSlots));
+
+            Debug.Log($"{selfSlot.LogText} {abilityData.LogText} 실행. {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityAction.Changes)}");
+
+            if (abilityAction.Changes.Count == 0)
+                yield break;
+
+            abilityAction.Changes.Clear();
+        }
+
+        /// <summary>
+        /// 어빌리티 효과 적용
+        /// </summary>
+        public IEnumerator TakeAbility(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        {
+            IAbility abilityAction = abilityActions.TryGetValue(abilityData.abilityType, out IAbility action) ? action : null;
+
+            if (abilityAction == null)
+            {
+                Debug.LogWarning($"{selfSlot.LogText} {abilityData.LogText} 에 대한 동작이 없음");
+                yield break;
+            }
+
+            yield return StartCoroutine(abilityAction.ApplySingle(aiData, abilityData, selfSlot, targetSlot));
 
             Debug.Log($"{selfSlot.LogText} {abilityData.LogText} 실행. {Utils.TargetText(aiData.target)} {Utils.StatChangesText(abilityAction.Changes)}");
 
@@ -210,41 +195,6 @@ namespace ERang
             }
 
             Debug.Log($"삭제 어빌리티 동작. {targetSlot.LogText} {abilityData.LogText} - AbilityRelease");
-        }
-
-        /// <summary>
-        /// 어빌리티 추가
-        /// </summary>
-        private void AddAbility(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot, AbilityWhereFrom whereFrom)
-        {
-            if (targetSlot.Card == null)
-            {
-                // Debug.LogWarning($"{targetSlot.LogText} {abilityData.LogText} 적용 슬롯 카드 없음");
-                return;
-            }
-
-            int beforeValue = GetOriginStatValue(abilityData.abilityType, targetSlot);
-
-            BaseCard card = targetSlot.Card;
-
-            CardAbility cardAbility = new()
-            {
-                whereFrom = whereFrom,
-                abilityUid = $"{abilityData.abilityId}_{BattleLogic.Instance.turnCount}_{card.Abilities.Count}",
-                aiType = aiData.type,
-                abilityId = abilityData.abilityId,
-                workType = abilityData.workType,
-                duration = abilityData.duration,
-                totalDuration = abilityData.duration,
-                startTurn = BattleLogic.Instance.turnCount,
-                aiDataId = aiData.ai_Id,
-                selfSlotNum = selfSlot.SlotNum,
-                targetSlotNum = targetSlot.SlotNum,
-            };
-
-            Debug.Log($"{targetSlot.LogText} {cardAbility.LogText} 추가. beforeValue: {beforeValue}, value: {abilityData.value}, duration: {abilityData.duration}, workType: {abilityData.workType}");
-
-            card.Abilities.Add(cardAbility);
         }
 
         /// <summary>

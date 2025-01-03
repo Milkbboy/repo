@@ -12,6 +12,11 @@ namespace ERang
 
         public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
+            yield return StartCoroutine(ApplySingle(aiData, abilityData, selfSlot, null));
+        }
+
+        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        {
             int amount = abilityData.value;
 
             BattleLogic.Instance.UpdateSatietyGauge(amount);

@@ -12,6 +12,11 @@ namespace ERang
 
         public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
         {
+            yield return StartCoroutine(ApplySingle(aiData, abilityData, selfSlot, null));
+        }
+
+        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        {
             float gainGold = aiData.value * abilityData.ratio;
             int gold = aiData.value + (int)gainGold;
             int beforeGold = Master.Instance.Gold;

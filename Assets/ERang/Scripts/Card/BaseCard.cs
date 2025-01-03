@@ -18,11 +18,9 @@ namespace ERang
         public bool InUse { get; set; }
         public bool IsExtinction { get; set; }
         public Texture2D CardImage { get; set; }
-        public List<CardAbility> Abilities { get => abilities; set => abilities = value; }
+        public List<CardAbility> CardAbilities { get => cardAbilities; set => cardAbilities = value; }
 
         public string LogText => Utils.CardLog(this);
-
-        private List<CardAbility> abilities = new();
 
         public virtual int Hp { get; set; }
         public virtual int Def { get; set; }
@@ -33,6 +31,8 @@ namespace ERang
         public virtual void RestoreHealth(int amount) { }
         public virtual void IncreaseDefense(int amount) { }
         public virtual void DecreaseDefense(int amount) { }
+
+        private List<CardAbility> cardAbilities = new();
 
         public BaseCard()
         {
@@ -80,19 +80,68 @@ namespace ERang
             CardImage = cardImage;
         }
 
-        public void AddAbility(CardAbility ability)
+        public void AddCardAbility(AbilityData abilityData, AiData aiData, int selfSlotNum, int targetSlotNum, int turnCount, AbilityWhereFrom whereFrom)
         {
-            abilities.Add(ability);
+            Ability ability = new()
+            {
+                whereFrom = whereFrom,
+                applyTurn = turnCount,
+                value = abilityData.value,
+                duration = abilityData.duration,
+                createdDt = DateTime.UtcNow.Ticks
+            };
+
+            CardAbility cardAbility = CardAbilities.Find(ability => ability.abilityId == abilityData.abilityId);
+
+            if (cardAbility == null)
+            {
+                cardAbility = new()
+                {
+                    aiType = aiData.type,
+                    abilityId = abilityData.abilityId,
+                    workType = abilityData.workType,
+                    duration = abilityData.duration,
+                    aiDataId = aiData.ai_Id,
+                    selfSlotNum = selfSlotNum,
+                    targetSlotNum = targetSlotNum,
+                };
+
+                CardAbilities.Add(cardAbility);
+            }
+
+            cardAbility.AddAbility(ability);
+
+            Debug.Log($"{cardAbility.LogText} 추가. value: {abilityData.value}, duration: {abilityData.duration}, workType: {abilityData.workType}");
+        }
+
+        public List<CardAbility> DecreaseDuration()
+        {
+            List<CardAbility> removedCardAbilities = new();
+
+            foreach (CardAbility cardAbility in cardAbilities)
+            {
+                cardAbility.DecreaseDuration();
+
+                if (cardAbility.duration == 0)
+                    removedCardAbilities.Add(cardAbility);
+            }
+
+            return removedCardAbilities;
+        }
+
+        public void RemoveCardAbility(CardAbility cardAbility)
+        {
+            cardAbilities.Remove(cardAbility);
         }
 
         public int GetBuffCount()
         {
-            return abilities.Count(ability => ability.aiType == AiDataType.Buff);
+            return cardAbilities.Count(ability => ability.aiType == AiDataType.Buff);
         }
 
         public int GetDeBuffCount()
         {
-            return abilities.Count(ability => ability.aiType == AiDataType.Debuff);
+            return cardAbilities.Count(ability => ability.aiType == AiDataType.Debuff);
         }
     }
 }

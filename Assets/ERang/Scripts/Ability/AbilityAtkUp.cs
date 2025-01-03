@@ -35,6 +35,28 @@ namespace ERang
             yield return new WaitForSeconds(0.1f);
         }
 
+        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        {
+            BaseCard card = targetSlot.Card;
+
+            if (card == null || card is not CreatureCard)
+            {
+                Changes.Add((StatType.Atk, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
+                yield break;
+            }
+
+            CreatureCard creatureCard = card as CreatureCard;
+
+            int before = creatureCard.Atk;
+            int change = abilityData.value;
+
+            creatureCard.IncreaseAttack(change);
+
+            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, creatureCard.Atk, change));
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
         public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
             BaseCard card = targetSlot.Card;

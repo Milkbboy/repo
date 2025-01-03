@@ -43,23 +43,13 @@ namespace ERang
             this.bSlot = bSlot;
         }
 
-        public void SetIcons(List<CardAbility> abilities)
+        public void SetIcons(List<CardAbility> cardAbilities)
         {
             List<string> lotTexts = new();
 
-            // abilities 리스트를 abilityId와 targetSlotNum으로 그룹화하고 duration 값을 합침
-            var groupedAbilities = abilities
-                .GroupBy(a => new { a.abilityId, a.targetSlotNum })
-                .Select(g => new
-                {
-                    abilityId = g.Key.abilityId,
-                    duration = g.Sum(a => a.duration)
-                })
-                .ToList();
-
-            foreach (var ability in groupedAbilities)
+            foreach (var cardAbility in cardAbilities)
             {
-                AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
+                AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
 
                 if (abilityData == null)
                 {
@@ -70,7 +60,7 @@ namespace ERang
                 if (string.IsNullOrEmpty(abilityData.skillIcon))
                     continue;
 
-                AbilityIcon abilityIcon = abilityIcons.Find(x => x.AbilityId == ability.abilityId);
+                AbilityIcon abilityIcon = abilityIcons.Find(x => x.AbilityId == cardAbility.abilityId);
 
                 // 없으면 생성
                 if (abilityIcon == null)
@@ -84,28 +74,25 @@ namespace ERang
                     // 부모의 Scale 값이 2 이기 때문에 자식으로 생성되면 Scale 이 2배가 되서 확인 해보면 0.3 * 2 = 0.6 이다. 그래서 원래 사이즈로 계산
                     // 하지만 아이콘이 너무 작아 보기 힘들어 2배 사이즈 유지
                     // icon.transform.localScale = new Vector3(0.3f / parentScale.x, 0.3f / parentScale.y, 0.3f / parentScale.z);
-                    icon.GetComponent<AbilityIcon>().SetIcon(ability.abilityId);
+                    icon.GetComponent<AbilityIcon>().SetIcon(cardAbility.abilityId);
                     icon.GetComponent<AbilityIcon>().OnIconMouseEnterAction += SetMouseOverAbilityIcon;
 
                     abilityIcons.Add(icon);
 
-                    lotTexts.Add($"{bSlot.LogText} 어빌리티 아이콘 생성: {ability.abilityId} duration: {ability.duration}");
+                    lotTexts.Add($"{bSlot.LogText} 어빌리티 아이콘 생성: {cardAbility.abilityId} duration: {cardAbility.duration}");
                     continue;
                 }
 
                 // duration이 0이면 아이콘 제거
-                if (ability.duration == 0)
+                if (cardAbility.duration == 0)
                 {
-                    RemoveIcon(ability.abilityId);
+                    RemoveIcon(cardAbility.abilityId);
                     continue;
                 }
 
-                // 있으면 turnCount 업데이트
-                int beforeDuration = ability.duration;
+                abilityIcon.SetTurnCount(cardAbility.duration);
 
-                abilityIcon.SetTurnCount(ability.duration);
-
-                lotTexts.Add($"{bSlot.LogText} 어빌리티 아이콘 업데이트: {ability.abilityId} duration: {beforeDuration} => {ability.duration}");
+                lotTexts.Add($"{bSlot.LogText} 어빌리티 아이콘 업데이트: {cardAbility.abilityId} duration: {cardAbility.duration}");
             }
 
             foreach (string logText in lotTexts)
@@ -162,7 +149,7 @@ namespace ERang
                 float iconWidth = iconRenderer.bounds.size.x;
                 float iconHeight = iconRenderer.bounds.size.y;
 
-                Debug.Log($"아이콘 크기: {iconWidth}, {iconHeight}");
+                // Debug.Log($"아이콘 크기: {iconWidth}, {iconHeight}");
 
                 // 아이콘의 상단 왼쪽 모서리가 현재 위치에 맞도록 위치 조정
                 icon.transform.position = currentPosition + new Vector3(iconWidth / 2, -iconHeight / 2, 0);

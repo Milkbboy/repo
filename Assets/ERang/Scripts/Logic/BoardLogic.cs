@@ -47,6 +47,32 @@ namespace ERang
                 Destroy(missile.Item1);
         }
 
+        public IEnumerator FireMissile(BSlot selfSlot, BSlot targetSlot, int ackCount, int damage)
+        {
+            Vector3 startPosition = selfSlot.transform.position;
+
+            Vector3 targetPosition = targetSlot.transform.position;
+
+            GameObject missile = GameObject.CreatePrimitive(PrimitiveType.Sphere); // 임시로 구체를 미사일로 사용
+            missile.transform.position = startPosition;
+            missile.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f); // 미사일 크기 조정
+
+            float duration = .2f;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                float t = elapsed / duration;
+
+                missile.transform.position = CalculateParabolicPath(startPosition, targetPosition, t);
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            Destroy(missile);
+        }
+
         private Vector3 CalculateParabolicPath(Vector3 start, Vector3 end, float t)
         {
             float height = 5.0f; // 포물선의 높이

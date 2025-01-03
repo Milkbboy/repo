@@ -196,15 +196,15 @@ namespace ERang
                 return;
             }
 
-            List<int> abilityIds = card.Abilities.Select(ability => ability.abilityId).ToList();
+            List<int> abilityIds = card.CardAbilities.Select(ability => ability.abilityId).ToList();
 
             if (abilityIds.Count == 0)
             {
-                Debug.Log($"{LogText} 어빌리티가 없습니다.");
+                abilityIcons.RemoveAllIcons();
                 return;
             }
 
-            abilityIcons.SetIcons(card.Abilities);
+            abilityIcons.SetIcons(card.CardAbilities);
         }
 
         public void RestoreHealth(int amount)

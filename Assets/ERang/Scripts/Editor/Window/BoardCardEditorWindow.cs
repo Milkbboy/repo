@@ -75,8 +75,8 @@ namespace ERang
                 {
                     if (bSlot.Card == null)
                         continue;
-                    
-                    Debug.Log($"SlotNum: {bSlot.SlotNum}, {string.Join(", ", bSlot.Card.Abilities.Select(ability => ability.abilityId))}");
+
+                    Debug.Log($"SlotNum: {bSlot.SlotNum}, {string.Join(", ", bSlot.Card.CardAbilities.Select(ability => ability.abilityId))}");
                 }
             }
         }
@@ -191,15 +191,15 @@ namespace ERang
                     // 카드 ability 표시
                     EditorGUILayout.LabelField("Card Abilities");
 
-                    for (int i = 0; i < card.Abilities.Count; ++i)
+                    for (int i = 0; i < card.CardAbilities.Count; ++i)
                     {
-                        CardAbility cardAbility = card.Abilities[i];
+                        CardAbility cardAbility = card.CardAbilities[i];
                         AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
 
                         EditorGUILayout.BeginHorizontal();
                         if (GUILayout.Button("X", GUILayout.Width(20)))
                         {
-                            card.Abilities.RemoveAt(i);
+                            card.CardAbilities.RemoveAt(i);
                             i--; // Remove the current ability and adjust the index
                         }
                         EditorGUILayout.LabelField($"{abilityData.workType}: {cardAbility.abilityUid} {AbilityData.GetAbilityData(abilityData.abilityId).abilityType}", GUILayout.Width(elementWidth));
@@ -229,7 +229,7 @@ namespace ERang
         private Texture2D MakeTex(int width, int height, Color col)
         {
             Color[] pix = new Color[width * height];
-            
+
             for (int i = 0; i < pix.Length; i++)
                 pix[i] = col;
 

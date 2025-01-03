@@ -33,7 +33,7 @@ namespace ERang
                 EditorGUILayout.LabelField("AiGroupIndex", card.AiGroupIndex.ToString());
                 EditorGUILayout.LabelField("InUse", card.InUse.ToString());
                 EditorGUILayout.LabelField("IsExtinction", card.IsExtinction.ToString());
-                EditorGUILayout.LabelField("abilityCount", card.Abilities.Count.ToString());
+                EditorGUILayout.LabelField("abilityCount", card.CardAbilities.Count.ToString());
                 GUILayout.Label(card.CardImage, GUILayout.Width(100), GUILayout.Height(123));
 
                 // 카드의 실제 타입에 따라 속성을 표시

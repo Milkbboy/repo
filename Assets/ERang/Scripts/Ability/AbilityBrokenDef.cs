@@ -31,6 +31,24 @@ namespace ERang
             yield return new WaitForSeconds(0.1f);
         }
 
+        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        {
+            if (targetSlot.Card == null)
+            {
+                Changes.Add((StatType.Def, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
+                yield break;
+            }
+
+            int before = targetSlot.Card.Def;
+            int change = abilityData.value;
+
+            targetSlot.DecreaseDefense(change);
+
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Def, change));
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
         public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
             AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);

@@ -30,6 +30,23 @@ namespace ERang
             yield return new WaitForSeconds(0.1f);
         }
 
+        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        {
+            if (targetSlot.Card == null)
+            {
+                Changes.Add((StatType.Hp, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
+                yield break;
+            }
+
+            int before = targetSlot.Card.Hp;
+
+            targetSlot.RestoreHealth(abilityData.value);
+
+            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Hp, abilityData.value));
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
         // 즉시 효과는 해제 불필요
         public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
