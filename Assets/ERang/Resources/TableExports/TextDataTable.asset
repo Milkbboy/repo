@@ -196,3 +196,20 @@ MonoBehaviour:
     NameDesc: "3/3 \uC5B4\uD0DD \uC5C5"
     Desc_Ko: "\uD798 3 \uC99D\uAC00"
     Desc_En: 
+  - DescID: ArmorBreak_01_Desc
+    NameDesc: "\uBC29\uC5B4\uAD6C \uD30C\uAD34_1\uD134 \uBC29\uC5B4\uB825 0"
+    Desc_Ko: "\uBC29\uC5B4\uAD6C \uD30C\uAD34"
+    Desc_En: 
+  - DescID: Doom_01_Desc
+    NameDesc: "\uD30C\uBA78_3\uD134 \uD134 \uC885\uB8CC \uC2DC \uCE90\uB9AD\uD130
+      \uC0AC\uB9DD"
+    Desc_Ko: "\uD30C\uBA78 "
+    Desc_En: 
+  - DescID: Burn_01_Desc
+    NameDesc: "\uD654\uC0C1_2\uD134 \uD134 \uC2DC\uC791 \uC2DC \uCCB4\uB825 -2"
+    Desc_Ko: "\uD134 \uC2DC\uC791\uC2DC \uCCB4\uB825 -2"
+    Desc_En: 
+  - DescID: Poison_01_Desc
+    NameDesc: "\uB3C5_2\uD134 \uD134 \uC885\uB8CC \uC2DC \uCCB4\uB825 -2"
+    Desc_Ko: "\uD134 \uC885\uB8CC\uC2DC \uCCB4\uB825 -2"
+    Desc_En: 

@@ -156,6 +156,11 @@ namespace ERang
         SummonHand, // 핸드로 카드를 소환한다.
         SummonDrawDeck, // 뽑을 카드 덱으로 카드를 소환한다.
         SummonGraveDeck, // 무덤 덱으로 카드를 소환한다.
+        Weaken, // 약화 상태로 N턴 동안 공격력 N이 감소된다.
+        ArmorBreak, // 방어구 파괴 상태로 N턴 동안 방어력이 사라진다. 방어력을 감소 시키는 다른 상태 이상을 무시하며 방어구 파괴 상태일 시, 방어력은 0으로 고정된다.
+        Doom, // 파멸 상태로 N턴 이후 캐릭터는 사망한다.
+        Burn, // 화상 상태로 N턴 동안 매 행동 시작 시 N만큼의 피해를 받는다.
+        Poison, // 중독 상태로 N턴 동안 매 행동 종료 시 N만큼의 피해를 받는다.
     }
 
     /// <summary>
@@ -269,5 +274,17 @@ namespace ERang
         public static readonly int[] EnemySlotNumbers = new[] { 6, 7, 8, 9 };
 
         public static readonly int RewardCardCount = 3;
+
+        // 행동 전 효과 발생 어빌리티
+        public static readonly AbilityType[] CardPriorAbilities = new[]
+        {
+            AbilityType.Burn,
+        };
+
+        // 행동 후 효과 발생 어빌리티
+        public static readonly AbilityType[] CardPostAbilities = new[]
+        {
+            AbilityType.Poison,
+        };
     }
 }

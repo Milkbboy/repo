@@ -568,3 +568,78 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 1003
+  - AbilityData_Id: 100021
+    AbilityType: Weaken
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Weaken_01
+    SkillIconDesc: Weaken_01_Desc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+  - AbilityData_Id: 100022
+    AbilityType: ArmorBreak
+    Value: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: ArmorBreak_01
+    SkillIconDesc: ArmorBreak_01_Desc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+  - AbilityData_Id: 100023
+    AbilityType: Doom
+    Value: 0
+    Ratio: 0
+    Type: Active
+    Duration: 3
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Doom_01
+    SkillIconDesc: Doom_01_Desc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+  - AbilityData_Id: 100024
+    AbilityType: Burn
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Burn_01
+    SkillIconDesc: Burn_01_Desc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+  - AbilityData_Id: 100025
+    AbilityType: Poison
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Poison_01
+    SkillIconDesc: Poison_01_Desc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0

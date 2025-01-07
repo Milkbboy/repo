@@ -32,6 +32,7 @@ namespace ERang
 
         public string abilityUid; // 어빌리티 고유 번호. abilityId + startTurn + abilityCount
         public int abilityId; // 어빌리티 Id
+        public AbilityType abilityType; // 어빌리티 타입
         public AbilityWorkType workType; // 어빌리티 작업 타입(HandOn 찾기 위함)
 
         public int aiDataId;

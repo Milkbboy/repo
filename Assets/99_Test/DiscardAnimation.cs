@@ -82,7 +82,7 @@ public class DiscardAnimation : MonoBehaviour
     private IEnumerator OnSequenceComplete()
     {
         // 시퀀스 종료 후 실행할 동작
-        Debug.Log("Sequence completed. Executing additional actions...");
+        Debug.Log("DiscardAnimation OnSequenceComplete. 카드 오브젝트 삭제 실행.");
 
         // 외부 코루틴 실행
         if (onCompleteCoroutine != null)

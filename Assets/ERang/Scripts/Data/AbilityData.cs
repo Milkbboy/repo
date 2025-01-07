@@ -111,6 +111,11 @@ namespace ERang.Data
                 "Summon_Hand" => AbilityType.SummonHand,
                 "Summon_DrawDeck" => AbilityType.SummonDrawDeck,
                 "Summon_GraveDeck" => AbilityType.SummonGraveDeck,
+                "Weaken" => AbilityType.Weaken,
+                "ArmorBreak" => AbilityType.ArmorBreak,
+                "Doom" => AbilityType.Doom,
+                "Burn" => AbilityType.Burn,
+                "Poison" => AbilityType.Poison,
                 _ => AbilityType.None,
             };
         }

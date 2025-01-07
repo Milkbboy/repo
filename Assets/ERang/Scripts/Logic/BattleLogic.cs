@@ -143,6 +143,11 @@ namespace ERang
 
         private IEnumerator AbilityTest()
         {
+            int[] abilityIds = { 100024, 100025 };
+
+            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(9);
+            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(9);
+
             // 테스트 아쳐 카드 생성 후 테스트 어빌리티 추가
             if (testCard == null)
             {
@@ -152,25 +157,27 @@ namespace ERang
                 testCard.CardType = CardType.Master;
 
                 // 테스트 아쳐 카드 장착
-                BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(9);
                 selfSlot.EquipCard(testCard);
-
-                BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(9);
 
                 AiData aiData = AiData.GetAiData(3003);
 
-                int[] abilityIds = { 70014 };
                 List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(new List<int>(abilityIds));
 
                 foreach (AbilityData abilityData in abilityDatas)
-                    yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, new List<BSlot> { targetSlot }, AbilityWhereFrom.Test));
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, new List<BSlot> { targetSlot }, AbilityWhereFrom.Test));
             }
             else
             {
-                StartCoroutine(ReleaseBoardCardAbility(new List<BSlot> { BoardSystem.Instance.GetBoardSlot(9) }));
+                // List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(new List<int>(abilityIds));
+
+                // foreach (AbilityData abilityData in abilityDatas)
+                //     StartCoroutine(AbilityLogic.Instance.AbilityAction(abilityData, null, selfSlot, targetSlot));
+
+                yield return StartCoroutine(CardPriorAbility(targetSlot));
+                yield return StartCoroutine(CardAiAction(targetSlot));
+                yield return StartCoroutine(CardPostAbility(targetSlot));
             }
         }
-
 
         public IEnumerator TurnStart()
         {
@@ -324,7 +331,7 @@ namespace ERang
 
                 // 어빌리티 적용
                 foreach (AbilityData abilityData in abilityDatas)
-                    yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
             }
         }
 
@@ -335,55 +342,103 @@ namespace ERang
         {
             foreach (BSlot boardSlot in actorSlots)
             {
-                BaseCard card = boardSlot.Card;
+                // 카드 액션 전 적용 어빌리티
+                yield return StartCoroutine(CardPriorAbility(boardSlot));
 
-                if (card == null)
-                {
-                    // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
-                    continue;
-                }
+                // 카드 AI 액션
+                yield return StartCoroutine(CardAiAction(boardSlot));
 
-                if (card.AiGroupId == 0)
-                {
-                    Debug.LogWarning($"{boardSlot.LogText} AiGroupId 가 {Utils.RedText(card.AiGroupId)}이라서 카드 액션 패스");
-                    continue;
-                }
-
-                // 카드의 행동 aiData 설정
-                int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
-
-                if (aiDataId == 0)
-                {
-                    Debug.LogWarning($"{boardSlot.LogText} AiGroupData({card.AiGroupId})에 해당하는 aiDataId 얻기 실패");
-                    continue;
-                }
-
-                // 1. AiData 얻고
-                AiData aiData = AiData.GetAiData(aiDataId);
-
-                if (aiData == null)
-                {
-                    Debug.LogError($"{boardSlot.LogText} AiData({aiDataId}) <color=red>테이블 데이터 없음</color> ");
-                    continue;
-                }
-
-                // 2. AiData 에 설정된 타겟 얻기
-                List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, boardSlot, "AiAbilityProcess");
-
-                if (targetSlots.Count == 0)
-                {
-                    Debug.LogWarning($"{boardSlot.LogText} 설정 타겟({aiData.target}) 없음 ");
-                    continue;
-                }
-
-                List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
-
-                // 어빌리티 적용
-                foreach (AbilityData abilityData in abilityDatas)
-                    StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnEndBoardSlot));
-
-                yield return new WaitForSeconds(boardCardActionDelay);
+                // 카드 액션 후 적용 어빌리티
+                yield return StartCoroutine(CardPostAbility(boardSlot));
             }
+        }
+
+        IEnumerator CardPriorAbility(BSlot boardSlot)
+        {
+            BaseCard card = boardSlot.Card;
+
+            if (card == null)
+            {
+                // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
+                yield break;
+            }
+
+            foreach (CardAbility ability in card.PriorCardAbilities)
+            {
+                AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
+
+                yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(abilityData, null, boardSlot, boardSlot));
+            }
+        }
+
+        IEnumerator CardPostAbility(BSlot boardSlot)
+        {
+            BaseCard card = boardSlot.Card;
+
+            if (card == null)
+            {
+                // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
+                yield break;
+            }
+
+            foreach (CardAbility ability in card.PostCardAbilities)
+            {
+                AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
+
+                yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(abilityData, null, boardSlot, boardSlot));
+            }
+        }
+
+        IEnumerator CardAiAction(BSlot boardSlot)
+        {
+            BaseCard card = boardSlot.Card;
+
+            if (card == null)
+            {
+                // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
+                yield break;
+            }
+
+            if (card.AiGroupId == 0)
+            {
+                Debug.LogWarning($"{boardSlot.LogText} AiGroupId 가 {Utils.RedText(card.AiGroupId)}이라서 카드 액션 패스");
+                yield break;
+            }
+
+            // 카드의 행동 aiData 설정
+            int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
+
+            if (aiDataId == 0)
+            {
+                Debug.LogWarning($"{boardSlot.LogText} AiGroupData({card.AiGroupId})에 해당하는 aiDataId 얻기 실패");
+                yield break;
+            }
+
+            // 1. AiData 얻고
+            AiData aiData = AiData.GetAiData(aiDataId);
+
+            if (aiData == null)
+            {
+                Debug.LogError($"{boardSlot.LogText} AiData({aiDataId}) <color=red>테이블 데이터 없음</color> ");
+                yield break;
+            }
+
+            // 2. AiData 에 설정된 타겟 얻기
+            List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, boardSlot, "CardAiAction");
+
+            if (targetSlots.Count == 0)
+            {
+                Debug.LogWarning($"{boardSlot.LogText} 설정 타겟({aiData.target}) 없음 ");
+                yield break;
+            }
+
+            List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
+
+            // 어빌리티 적용
+            foreach (AbilityData abilityData in abilityDatas)
+                yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnEndBoardSlot));
+
+            yield return new WaitForSeconds(boardCardActionDelay);
         }
 
         /// <summary>
@@ -401,7 +456,7 @@ namespace ERang
 
                 // 어빌리티 적용
                 foreach (AbilityData abilityData in abilityDatas)
-                    yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.TurnStarHandOn));
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.TurnStarHandOn));
             }
         }
 
@@ -508,9 +563,7 @@ namespace ERang
 
             // 어빌리티 적용
             foreach (AbilityData abilityData in abilityDatas)
-            {
-                StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
-            }
+                StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
 
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, card);
@@ -659,7 +712,7 @@ namespace ERang
             AiData aiData = AiData.GetAiData(1004);
             AbilityData abilityData = AbilityData.GetAbilityData(70004); // 기본 원거리 공격
 
-            StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
+            StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.Test));
         }
 
         public void UpdateSatietyGauge(int amount)

@@ -19,6 +19,8 @@ namespace ERang
         public bool IsExtinction { get; set; }
         public Texture2D CardImage { get; set; }
         public List<CardAbility> CardAbilities { get => cardAbilities; set => cardAbilities = value; }
+        public List<CardAbility> PriorCardAbilities { get => cardAbilities.Where(ability => Constants.CardPriorAbilities.Contains(ability.abilityType)).ToList(); }
+        public List<CardAbility> PostCardAbilities { get => cardAbilities.Where(ability => Constants.CardPostAbilities.Contains(ability.abilityType)).ToList(); }
 
         public string LogText => Utils.CardLog(this);
 
@@ -99,6 +101,7 @@ namespace ERang
                 {
                     aiType = aiData.type,
                     abilityId = abilityData.abilityId,
+                    abilityType = abilityData.abilityType,
                     workType = abilityData.workType,
                     duration = abilityData.duration,
                     aiDataId = aiData.ai_Id,
