@@ -15,7 +15,7 @@ namespace ERang
 
         public int turnCount = 1;
         public float turnStartActionDelay = .5f;
-        public float boardCardActionDelay = .5f;
+        public float boardTurnEndDelay = .5f;
         public float abilityReleaseDelay = .5f;
         public TextMeshProUGUI floorText;
         public TextMeshProUGUI resultText;
@@ -143,8 +143,8 @@ namespace ERang
 
         private IEnumerator AbilityTest()
         {
-            int testSlotNum = 8;
-            int[] abilityIds = { 70017, 70018, 100022 };
+            int testSlotNum = 0;
+            int[] abilityIds = { 70017, 70018, 100024, 100025 };
 
             BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(testSlotNum);
             BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(testSlotNum);
@@ -152,13 +152,13 @@ namespace ERang
             // 테스트 아쳐 카드 생성 후 테스트 어빌리티 추가
             if (testCard == null)
             {
-                int testCardId = 100201;
-                CardData cardData = CardData.GetCardData(testCardId);
-                testCard = Utils.MakeCard(cardData);
-                testCard.CardType = CardType.Monster;
+                // int testCardId = 100201;
+                // CardData cardData = CardData.GetCardData(testCardId);
+                // testCard = Utils.MakeCard(cardData);
+                // testCard.CardType = CardType.Monster;
 
-                // 테스트 아쳐 카드 장착
-                selfSlot.EquipCard(testCard);
+                // // 테스트 아쳐 카드 장착
+                // selfSlot.EquipCard(testCard);
 
                 AiData aiData = AiData.GetAiData(3003);
 
@@ -189,6 +189,10 @@ namespace ERang
 
             // 턴 카운트 설정
             BoardSystem.Instance.SetTurnCount(turnCount);
+
+            // 마스터 행동 시작
+            BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
+            yield return StartCoroutine(CardPriorAbility(masterSlot));
 
             // 마스터 마나 리셋
             BoardSystem.Instance.ResetMana(master);
@@ -223,15 +227,21 @@ namespace ERang
 
         private IEnumerator TrunEndProcess()
         {
-            // 카드 액션
+            // 크리쳐 카드 행동
             List<BSlot> creatureSlots = BoardSystem.Instance.GetLeftBoardSlots();
-            yield return StartCoroutine(BoardCardAction(creatureSlots));
+            yield return StartCoroutine(BoardTurnEnd(creatureSlots));
 
+            // 마스터 행동 후 어빌리티
+            BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
+            yield return StartCoroutine(CardPostAbility(masterSlot));
+
+            // 몬스터 카드 행동
             List<BSlot> monsterSlots = BoardSystem.Instance.GetRightBoardSlots();
-            yield return StartCoroutine(BoardCardAction(monsterSlots));
+            yield return StartCoroutine(BoardTurnEnd(monsterSlots));
 
+            // 건물 카드 행동
             List<BSlot> buildingSlots = BoardSystem.Instance.GetBuildingBoardSlots();
-            yield return StartCoroutine(BoardCardAction(buildingSlots));
+            yield return StartCoroutine(BoardTurnEnd(buildingSlots));
 
             // 핸드 온 카드 어빌리티 해제
             List<BaseCard> allCards = BoardSystem.Instance.GetAllSlots().Where(slot => slot.Card != null).Select(slot => slot.Card).ToList();
@@ -337,19 +347,23 @@ namespace ERang
         }
 
         /// <summary>
-        /// 턴 종료 보드 슬롯 카드 액션
+        /// 턴 종료 보드 슬롯 카드 행동
         /// </summary>
-        IEnumerator BoardCardAction(List<BSlot> actorSlots)
+        IEnumerator BoardTurnEnd(List<BSlot> actorSlots)
         {
             foreach (BSlot boardSlot in actorSlots)
             {
-                // 카드 액션 전 적용 어빌리티
+                // 유저 마스터 카드는 여기서 동작 안하고 따로 함
+                if (boardSlot.SlotNum == 0 && boardSlot.SlotCardType == CardType.Master)
+                    continue;
+
+                // 카드 액션 전 적용 어빌리티 (기존 어빌리티)
                 yield return StartCoroutine(CardPriorAbility(boardSlot));
 
-                // 카드 AI 액션
+                // 카드 AI 액션 (신규 어빌리티)
                 yield return StartCoroutine(CardAiAction(boardSlot));
 
-                // 카드 액션 후 적용 어빌리티
+                // 카드 액션 후 적용 어빌리티 (기존 어빌리티)
                 yield return StartCoroutine(CardPostAbility(boardSlot));
             }
         }
@@ -439,7 +453,7 @@ namespace ERang
             foreach (AbilityData abilityData in abilityDatas)
                 yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnEndBoardSlot));
 
-            yield return new WaitForSeconds(boardCardActionDelay);
+            yield return new WaitForSeconds(boardTurnEndDelay);
         }
 
         /// <summary>

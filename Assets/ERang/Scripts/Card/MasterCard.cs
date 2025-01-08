@@ -30,7 +30,7 @@ namespace ERang
             hp = amount;
         }
 
-        public void SetDefense(int amount)
+        public override void SetDefense(int amount)
         {
             def = amount;
         }
