@@ -144,7 +144,7 @@ namespace ERang
         private IEnumerator AbilityTest()
         {
             int testSlotNum = 8;
-            int[] abilityIds = { 100023 };
+            int[] abilityIds = { 70017, 70018, 100022 };
 
             BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(testSlotNum);
             BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(testSlotNum);

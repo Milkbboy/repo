@@ -36,14 +36,17 @@ namespace ERang
             hp = amount;
         }
 
-        public void SetDefense(int amount)
-        {
-            def = amount;
-        }
-
         public void SetMana(int amount)
         {
             mana = amount;
+        }
+
+        public override void SetDefense(int amount)
+        {
+            def = amount;
+
+            if (def < 0)
+                def = 0;
         }
 
         public override void RestoreHealth(int amount)

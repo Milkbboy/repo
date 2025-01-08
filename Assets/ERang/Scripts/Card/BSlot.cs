@@ -213,6 +213,12 @@ namespace ERang
             cardUI.SetHp(card.Hp);
         }
 
+        public void SetDefense(int amount)
+        {
+            card.SetDefense(amount);
+            cardUI.SetDef(card.Def);
+        }
+
         public void IncreaseDefense(int amount)
         {
             card.IncreaseDefense(amount);

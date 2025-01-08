@@ -21,6 +21,9 @@ namespace ERang
         public List<CardAbility> CardAbilities { get => cardAbilities; set => cardAbilities = value; }
         public List<CardAbility> PriorCardAbilities { get => cardAbilities.Where(ability => Constants.CardPriorAbilities.Contains(ability.abilityType)).ToList(); }
         public List<CardAbility> PostCardAbilities { get => cardAbilities.Where(ability => Constants.CardPostAbilities.Contains(ability.abilityType)).ToList(); }
+        public List<CardAbility> BrokenDefAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.BrokenDef).ToList(); }
+        public List<CardAbility> DefUpAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.DefUp).ToList(); }
+        public CardAbility ArmorBreakAbility { get => cardAbilities.FirstOrDefault(ability => ability.abilityType == AbilityType.ArmorBreak); }
 
         public string LogText => Utils.CardLog(this);
 
@@ -31,6 +34,7 @@ namespace ERang
 
         public virtual void TakeDamage(int amount) { }
         public virtual void RestoreHealth(int amount) { }
+        public virtual void SetDefense(int amount) { }
         public virtual void IncreaseDefense(int amount) { }
         public virtual void DecreaseDefense(int amount) { }
 
@@ -93,7 +97,7 @@ namespace ERang
                 createdDt = DateTime.UtcNow.Ticks
             };
 
-            CardAbility cardAbility = CardAbilities.Find(ability => ability.abilityId == abilityData.abilityId);
+            CardAbility cardAbility = cardAbilities.Find(ability => ability.abilityId == abilityData.abilityId);
 
             if (cardAbility == null)
             {
@@ -110,7 +114,11 @@ namespace ERang
                     targetSlotNum = targetSlotNum,
                 };
 
-                CardAbilities.Add(cardAbility);
+                // ArmorBreak 능력은 가장 먼저 적용되어야 함
+                if (cardAbility.abilityType == AbilityType.ArmorBreak)
+                    cardAbilities.Insert(0, cardAbility);
+                else
+                    cardAbilities.Add(cardAbility);
             }
 
             cardAbility.AddAbility(ability);

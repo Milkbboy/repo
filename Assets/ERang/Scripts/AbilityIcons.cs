@@ -95,6 +95,18 @@ namespace ERang
                 lotTexts.Add($"{bSlot.LogText} 어빌리티 아이콘 업데이트: {cardAbility.abilityId} duration: {cardAbility.duration}");
             }
 
+            // cardAbilities 와 차이나는 아이콘 제거
+            List<AbilityIcon> removeIcons = abilityIcons.Where(x => !cardAbilities.Exists(y => y.abilityId == x.AbilityId)).ToList();
+
+            if (removeIcons.Count > 0)
+                Debug.Log($"{bSlot.LogText} 차이나는 어빌리티 아이콘 제거: {removeIcons.Count} {string.Join(", ", removeIcons.Select(x => x.AbilityId))}");
+
+            foreach (AbilityIcon removeIcon in removeIcons)
+            {
+                abilityIcons.Remove(removeIcon);
+                Destroy(removeIcon.gameObject);
+            }
+
             foreach (string logText in lotTexts)
                 Debug.Log(logText);
 

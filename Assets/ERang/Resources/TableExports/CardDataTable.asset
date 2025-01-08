@@ -163,7 +163,7 @@ MonoBehaviour:
     CostGold: 0
     Hp: 5
     Atk: 3
-    Def: 0
+    Def: 1
     InUse: 1
     Extinction: 1
     CompleteExtinction: 0
