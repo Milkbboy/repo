@@ -102,6 +102,7 @@ namespace ERang
                     aiType = aiData.type,
                     abilityId = abilityData.abilityId,
                     abilityType = abilityData.abilityType,
+                    abilityValue = abilityData.value,
                     workType = abilityData.workType,
                     duration = abilityData.duration,
                     aiDataId = aiData.ai_Id,

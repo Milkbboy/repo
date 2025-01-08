@@ -225,6 +225,30 @@ namespace ERang
             cardUI.SetDef(card.Def);
         }
 
+        public void IncreaseAttack(int amount)
+        {
+            if (card is not CreatureCard creatureCard)
+            {
+                Debug.LogWarning($"{LogText}: 슬롯 카드가 CreatureCard 가 아닙니다.");
+                return;
+            }
+
+            creatureCard.IncreaseAttack(amount);
+            cardUI.SetAtk(creatureCard.Atk);
+        }
+
+        public void DecreaseAttack(int amount)
+        {
+            if (card is not CreatureCard creatureCard)
+            {
+                Debug.LogWarning($"{LogText}: 슬롯 카드가 CreatureCard 가 아닙니다.");
+                return;
+            }
+
+            creatureCard.DecreaseAttack(amount);
+            cardUI.SetAtk(creatureCard.Atk);
+        }
+
         public void RemoveCard()
         {
             abilityIcons.RemoveAllIcons();

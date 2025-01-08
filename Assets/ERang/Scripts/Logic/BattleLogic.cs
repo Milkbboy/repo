@@ -143,10 +143,11 @@ namespace ERang
 
         private IEnumerator AbilityTest()
         {
-            int[] abilityIds = { 100024, 100025 };
+            int testSlotNum = 8;
+            int[] abilityIds = { 100023 };
 
-            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(9);
-            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(9);
+            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(testSlotNum);
+            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(testSlotNum);
 
             // 테스트 아쳐 카드 생성 후 테스트 어빌리티 추가
             if (testCard == null)
@@ -154,7 +155,7 @@ namespace ERang
                 int testCardId = 100201;
                 CardData cardData = CardData.GetCardData(testCardId);
                 testCard = Utils.MakeCard(cardData);
-                testCard.CardType = CardType.Master;
+                testCard.CardType = CardType.Monster;
 
                 // 테스트 아쳐 카드 장착
                 selfSlot.EquipCard(testCard);

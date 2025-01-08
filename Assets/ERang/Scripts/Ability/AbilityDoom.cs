@@ -20,9 +20,43 @@ namespace ERang
             yield break;
         }
 
+        /// <summary>
+        /// Hp 0 설정
+        /// </summary>
         public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
-            yield break;
+            BaseCard card = targetSlot.Card;
+
+            if (card == null)
+            {
+                Debug.LogWarning($"{targetSlot.LogText}");
+                yield break;
+            }
+
+            int damage = card.Hp;
+
+            if (card is not CreatureCard && card is not MasterCard)
+            {
+                Debug.LogWarning($"{targetSlot.LogText}: 타겟 슬롯 카드가 CreatureCard 또는 MasterCard 가 아닙니다.");
+
+                Changes.Add((StatType.Hp, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, card.Hp, card.Hp, damage));
+                yield break;
+            }
+
+            int beforeHp = card.Hp;
+
+            yield return StartCoroutine(targetSlot.TakeDamage(damage));
+            targetSlot.TakeDamageAnimation();
+
+            // targetSlot.TakeDamage 으로 hp 가 0 이 되면 카드 제거로 Card 가 null 이 됨
+            if (card == null)
+            {
+                Changes.Add((StatType.Hp, false, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, 0, 0, damage));
+                yield break;
+            }
+
+            // 카드가 hp 0 으로 제거되는 경우도 있음
+            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, targetSlot.Card.Hp, damage));
         }
     }
 }
