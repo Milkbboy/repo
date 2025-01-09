@@ -10,52 +10,41 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.Weaken;
         public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
-        {
-            yield return StartCoroutine(ApplySingle(aiData, abilityData, selfSlot, null));
-        }
-
         /// <summary>
         /// 적용 - Atk 감소
         /// </summary>
-        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BaseCard card = targetSlot.Card;
-
-            if (card == null)
-            {
-                Debug.LogWarning($"{targetSlot.LogText}");
-                yield break;
-            }
-
-            int before = card.Atk;
-            int change = abilityData.value;
-
-            targetSlot.DecreaseAttack(change);
-
-            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Atk, change));
-
-            yield return new WaitForSeconds(0.1f);
+            yield return StartCoroutine(Apply(cardAbility, targetSlot, false));
         }
 
         /// <summary>
         /// 해제 - Atk 증가
         /// </summary>
-        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        {
+            yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
+        }
+
+        private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAtkUp)
         {
             BaseCard card = targetSlot.Card;
 
             if (card == null)
             {
-                Debug.LogWarning($"{targetSlot.LogText}");
+                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
                 yield break;
             }
+
             int before = card.Atk;
-            int change = ability.abilityValue;
+            int value = cardAbility.abilityValue;
 
-            targetSlot.IncreaseAttack(change);
+            if (isAtkUp)
+                targetSlot.IncreaseAttack(value);
+            else
+                targetSlot.DecreaseAttack(value);
 
-            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Atk, change));
+            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Atk, isAtkUp ? value : value * -1));
 
             yield return new WaitForSeconds(0.1f);
         }

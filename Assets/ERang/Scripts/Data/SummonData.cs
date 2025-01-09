@@ -97,9 +97,11 @@ namespace ERang.Data
 
                 int randomValue = Random.Range(0, totalValue);
                 int sumValue = 0;
+
                 foreach (var summonCardData in summonData.summonCardDatas)
                 {
                     sumValue += summonCardData.value;
+
                     if (randomValue < sumValue)
                     {
                         return summonCardData.cardId;

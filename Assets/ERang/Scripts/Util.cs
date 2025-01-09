@@ -239,6 +239,21 @@ namespace ERang
             return $"<color={Colors.Green}>{floor}</color>층";
         }
 
+        public static string DataNullText(string tableText, int dataId)
+        {
+            return $"<color=#78d641>{tableText}</color> 테이블 {dataId} <color=red>데이터 없음</color>";
+        }
+
+        public static T CheckData<T>(Func<int, T> getDataFunc, string dataType, int dataId) where T : class
+        {
+            T data = getDataFunc(dataId);
+
+            if (data == null)
+                Debug.LogError(DataNullText(dataType, dataId));
+
+            return data;
+        }
+
         public static string MapLocationText(int locationId)
         {
             int floor = locationId / 100;

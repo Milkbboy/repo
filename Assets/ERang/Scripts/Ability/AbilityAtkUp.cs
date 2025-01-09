@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ERang.Data;
 
 namespace ERang
 {
@@ -10,69 +9,41 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.AtkUp;
         public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
+        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            foreach (BSlot targetSlot in targetSlots)
-            {
-                BaseCard card = targetSlot.Card;
-
-                if (card == null || card is not CreatureCard)
-                {
-                    Changes.Add((StatType.Atk, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
-                    continue;
-                }
-
-                CreatureCard creatureCard = card as CreatureCard;
-
-                int before = creatureCard.Atk;
-                int change = abilityData.value;
-
-                creatureCard.IncreaseAttack(change);
-
-                Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, creatureCard.Atk, change));
-            }
-
-            yield return new WaitForSeconds(0.1f);
+            yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
-        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        {
+            yield return StartCoroutine(Apply(cardAbility, targetSlot, false));
+        }
+
+        private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAtkUp)
         {
             BaseCard card = targetSlot.Card;
 
-            if (card == null || card is not CreatureCard)
+            if (card == null)
             {
-                Changes.Add((StatType.Atk, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
+                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
                 yield break;
             }
 
-            CreatureCard creatureCard = card as CreatureCard;
-
-            int before = creatureCard.Atk;
-            int change = abilityData.value;
-
-            creatureCard.IncreaseAttack(change);
-
-            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, creatureCard.Atk, change));
-
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
-        {
-            BaseCard card = targetSlot.Card;
-            AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
-
-            if (card == null || card is not CreatureCard || abilityData == null)
+            if (card is not CreatureCard creatureCard)
+            {
+                Debug.LogWarning($"{card.LogText} 크리쳐 카드 아님.");
                 yield break;
-
-            CreatureCard creatureCard = card as CreatureCard;
+            }
 
             int before = creatureCard.Atk;
-            int amount = abilityData.value * -1;
+            int value = cardAbility.abilityValue;
 
-            creatureCard.IncreaseAttack(amount);
+            if (isAtkUp)
+                creatureCard.IncreaseAttack(value);
+            else
+                creatureCard.DecreaseAttack(value);
 
-            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, creatureCard.Atk, amount));
+            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, creatureCard.Atk, isAtkUp ? value : value * -1));
 
             yield return new WaitForSeconds(0.1f);
         }

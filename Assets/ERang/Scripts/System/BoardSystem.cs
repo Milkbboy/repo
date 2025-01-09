@@ -213,7 +213,10 @@ namespace ERang
         /// <param name="mana"></param>
         public void AddMana(int amount)
         {
-            bSlots[0].AdjustMana(amount);
+            if (amount > 0)
+                bSlots[0].IncreaseMana(amount);
+            else
+                bSlots[0].DecreaseMana(amount);
         }
 
         /// <summary>

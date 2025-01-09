@@ -63,9 +63,6 @@ namespace ERang
         /// </summary>
         public IEnumerator AbilityProcess(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
         {
-            // 어빌리티 발동 슬롯 리스트
-            List<BSlot> abilityActionSlots = new();
-
             Debug.Log($"{selfSlot.LogText} {abilityData.LogText} 실행 - AbilityProcess");
 
             foreach (BSlot targetSlot in targetSlots)
@@ -75,50 +72,59 @@ namespace ERang
                 if (card == null)
                     continue;
 
-                CardAbility found = card.CardAbilities.Find(cardAbility => cardAbility.abilityId == abilityData.abilityId);
+                CardAbility cardAbility = card.CardAbilities.Find(cardAbility => cardAbility.abilityId == abilityData.abilityId);
 
-                // 신규 어빌리티인 경우 어빌리티 발동 슬롯 리스트에 추가. 이미 있으면 이전에 발동된 어빌리티
-                if (found == null)
-                    abilityActionSlots.Add(targetSlot);
+                // 어빌리티 발동 여부
+                bool isAbilityAction = cardAbility == null;
+
+                cardAbility ??= new()
+                {
+                    abilityId = abilityData.abilityId,
+                    aiDataId = aiData.ai_Id,
+                    selfSlotNum = selfSlot.SlotNum,
+                    targetSlotNum = targetSlot.SlotNum,
+
+                    aiType = aiData.type,
+                    abilityType = abilityData.abilityType,
+                    abilityValue = abilityData.value,
+                    workType = abilityData.workType,
+                    duration = abilityData.duration,
+                };
 
                 // 핸드 온 어빌리티는 턴 종료시 해제되기 때문에 저장. 효과 지속 시간이 있는 어빌리티 저장.
                 if (abilityData.workType == AbilityWorkType.OnHand || abilityData.duration > 0)
                 {
-                    card.AddCardAbility(abilityData, aiData, selfSlot.SlotNum, targetSlot.SlotNum, BattleLogic.Instance.turnCount, whereFrom);
-                    Debug.Log($"{targetSlot.LogText} {abilityData.LogText} 신규 추가");
+                    card.AddCardAbility(cardAbility, BattleLogic.Instance.turnCount, whereFrom);
                 }
 
                 targetSlot.DrawAbilityIcons();
-            }
 
-            // 어빌리티가 처음 추가 되면 효과 적용. 효과 중복 방지
-            // 추후 효과가 중복되는 어빌리티가 생기면 수정 필요
-            foreach (BSlot abilityActionSlot in abilityActionSlots)
-            {
-                // 행동 전, 후 어빌리티이면 어빌리티는 여기서 발동 안함
-                if (Constants.CardPriorAbilities.Contains(abilityData.abilityType) || Constants.CardPostAbilities.Contains(abilityData.abilityType))
-                    yield break;
+                // 신규 어빌리티인 경우 어빌리티 발동
+                if (isAbilityAction)
+                {
+                    // 행동 전, 후 어빌리티는 여기서 발동 안함
+                    // 행동 전 어빌리티는 PriorAbilityAction, 행동 후 어빌리티는 PostAbilityAction 에서 발동
+                    if (Constants.CardPriorAbilities.Contains(abilityData.abilityType) || Constants.CardPostAbilities.Contains(abilityData.abilityType))
+                        yield break;
 
-                yield return StartCoroutine(AbilityAction(abilityData, aiData, selfSlot, abilityActionSlot));
+                    yield return StartCoroutine(AbilityAction(cardAbility, selfSlot, targetSlot));
+                }
             }
         }
 
-        /// <summary>
-        /// 어빌리티 발동. 화면 연출 + 효과 적용
-        /// </summary>
-        public IEnumerator AbilityAction(AbilityData abilityData, AiData aiData, BSlot selfSlot, BSlot actionSlot)
+        public IEnumerator AbilityAction(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            IAbility abilityAction = abilityActions.TryGetValue(abilityData.abilityType, out IAbility action) ? action : null;
+            IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
 
             if (abilityAction == null)
             {
-                Debug.LogWarning($"{selfSlot?.LogText ?? "selfSlot 없음"} {abilityData.LogText} 에 대한 동작이 없음");
+                Debug.LogWarning($"{targetSlot?.LogText ?? "targetSlot 없음"} {cardAbility.LogText} 에 대한 동작이 없음");
                 yield break;
             }
 
-            yield return StartCoroutine(abilityAction.ApplySingle(aiData, abilityData, selfSlot, actionSlot));
+            yield return StartCoroutine(abilityAction.ApplySingle(cardAbility, selfSlot, targetSlot));
 
-            Debug.Log($"{selfSlot?.LogText ?? "selfSlot 없음"} {abilityData.LogText} 실행. {Utils.TargetText(aiData?.target ?? AiDataTarget.None)} {Utils.StatChangesText(abilityAction.Changes)}");
+            Debug.Log($"{targetSlot?.LogText ?? "targetSlot 없음"} {cardAbility.LogText} 실행. 어빌리티 효과: {Utils.StatChangesText(abilityAction.Changes)}");
 
             if (abilityAction.Changes.Count == 0)
                 yield break;

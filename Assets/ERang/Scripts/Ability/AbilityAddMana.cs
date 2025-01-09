@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ERang.Data;
 
 namespace ERang
 {
@@ -10,42 +9,41 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.AddMana;
         public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
+        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            yield return StartCoroutine(ApplySingle(aiData, abilityData, selfSlot, null));
+            yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
-        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BaseCard card = selfSlot.Card;
-
-            if (card == null || card is not MasterCard masterCard || abilityData == null)
-                yield break;
-
-            // 이 시점에서 masterCard는 MasterCard 타입으로 변환된 상태입니다.
-            int beforeMana = masterCard.Mana;
-
-            selfSlot.AdjustMana(abilityData.value);
-
-            Debug.Log($"{Utils.BoardSlotLog(selfSlot)} <color=#257dca>마나 {abilityData.value} 추가 획득</color>({beforeMana} => {masterCard.Mana})");
-
-            yield return new WaitForSeconds(0.1f);
+            yield return StartCoroutine(Apply(cardAbility, selfSlot, false));
         }
 
-        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
+        private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAdd)
         {
-            BaseCard card = selfSlot.Card;
-            AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
+            BaseCard card = targetSlot.Card;
 
-            if (card == null || card is not MasterCard masterCard || abilityData == null)
+            if (card == null)
+            {
+                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
                 yield break;
+            }
+
+            if (card is not MasterCard masterCard)
+            {
+                Debug.LogWarning($"{card.LogText} 마스터 카드 아님.");
+                yield break;
+            }
 
             int beforeMana = masterCard.Mana;
-            int amount = abilityData.value;
+            int value = cardAbility.abilityValue;
 
-            selfSlot.AdjustMana(amount * -1);
+            if (isAdd)
+                masterCard.IncreaseMana(value);
+            else
+                masterCard.DecreaseMana(value);
 
-            Debug.Log($"<color=#257dca>마나 {amount} 감소</color>({beforeMana} => {masterCard.Mana})");
+            Debug.Log($"<color=#257dca>마나 변화량 {(isAdd ? value : value * -1)}</color>({beforeMana} => {masterCard.Mana})");
 
             yield return new WaitForSeconds(0.1f);
         }

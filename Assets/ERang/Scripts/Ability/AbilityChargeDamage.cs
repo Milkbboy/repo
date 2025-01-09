@@ -11,23 +11,18 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.ChargeDamage;
         public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
+        public IEnumerator ApplySingle(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
         {
-            yield return StartCoroutine(ApplySingle(aiData, abilityData, selfSlot, null));
+            // 차징하는 애니메이션 있으면 좋을 듯
+            yield break;
         }
 
-        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            // 차징 애니메이션
-            selfSlot.ApplyDamageAnimation();
+            AiData aiData = Utils.CheckData(AiData.GetAiData, "AiData", cardAbility.aiDataId);
 
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
-        {
-            AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
-            AiData aiData = AiData.GetAiData(ability.aiDataId);
+            if (aiData == null)
+                yield break;
 
             int atkCount = aiData.atk_Cnt;
 
@@ -40,7 +35,7 @@ namespace ERang
                 damage = (selfSlot.Card as CreatureCard).Atk;
 
             if (Constants.SelectAttackTypes.Contains(aiData.attackType))
-                damage = abilityData.value;
+                damage = cardAbility.abilityValue;
 
             // 원거리 미사일 발사
             if (aiData.type == AiDataType.Ranged)
@@ -50,7 +45,7 @@ namespace ERang
 
             if (card == null)
             {
-                Changes.Add((StatType.Hp, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
+                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
                 yield break;
             }
 
@@ -60,16 +55,6 @@ namespace ERang
             for (int i = 0; i < atkCount; i++)
             {
                 yield return StartCoroutine(targetSlot.TakeDamage(damage));
-                targetSlot.TakeDamageAnimation();
-
-                yield return new WaitForSeconds(0.5f);
-            }
-
-            // targetSlot.SetDamage 으로 hp 가 0 이 되면 카드 제거로 Card 가 null 이 됨
-            if (card == null)
-            {
-                Changes.Add((StatType.Hp, false, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, 0, 0, 0));
-                yield break;
             }
 
             Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.Hp, damage * atkCount));

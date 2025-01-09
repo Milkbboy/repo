@@ -4,7 +4,10 @@ using System.Linq;
 
 namespace ERang
 {
-    public class Ability
+    /// <summary>
+    /// 어빌리티 아이템
+    /// </summary>
+    public class AbilityItem
     {
         // 어빌리티 적용 위치
         public AbilityWhereFrom whereFrom;
@@ -32,53 +35,58 @@ namespace ERang
 
         public string abilityUid; // 어빌리티 고유 번호. abilityId + startTurn + abilityCount
         public int abilityId; // 어빌리티 Id
-        public AbilityType abilityType; // 어빌리티 타입
-        public AbilityWorkType workType; // 어빌리티 작업 타입(HandOn 찾기 위함)
-
         public int aiDataId;
-        public AiDataType aiType; // Ai 타입. Buff, Debuff 구분
-
-        public int duration;
-
         public int selfSlotNum;
         public int targetSlotNum;
 
         public List<BSlot> targetSlots = new();
-
         public string LogText => Utils.AbilityLog(abilityId, abilityUid);
 
+        // 어빌리티 아이템
+        // 실제 어빌리티 총 value, 총 duration 을 계산할때 사용
+        // 2025-01-09 value 는 중첩되지 않지만 duration 은 충첩되고 있음. 추후 AbilityType 에 따라 value 도 중첩될 수 있음.
+        private Queue<AbilityItem> abilityItems = new();
+
+
+
+        // -----------------------------------------------------------------------------------
+        public AbilityType abilityType; // 어빌리티 타입
+        public AbilityWorkType workType; // 어빌리티 작업 타입(HandOn 찾기 위함)
+        public AiDataType aiType; // Ai 타입. Buff, Debuff 구분
+        public int duration;
         public int abilityValue;
+        // -----------------------------------------------------------------------------------
 
-        // 어빌리티 요소
-        private Queue<Ability> abilities = new();
-
-        public void AddAbility(Ability ability)
+        public void AddAbilityItem(AbilityItem abilityItem)
         {
-            abilities.Enqueue(ability);
+            abilityItems.Enqueue(abilityItem);
 
             CalcDuration();
         }
 
+        /// <summary>
+        /// 최초 추가된 AbilityItem 의 duration 부터 감소
+        /// </summary>
         public void DecreaseDuration()
         {
-            if (abilities.Count == 0)
+            if (abilityItems.Count == 0)
             {
                 return;
             }
 
-            Ability ability = abilities.Peek();
+            AbilityItem abilityItem = abilityItems.Peek();
 
-            ability.duration--;
+            abilityItem.duration--;
 
-            if (ability.duration <= 0)
-                abilities.Dequeue();
+            if (abilityItem.duration <= 0)
+                abilityItems.Dequeue();
 
             CalcDuration();
         }
 
         public void CalcDuration()
         {
-            duration = abilities.Sum(ability => ability.duration);
+            duration = abilityItems.Sum(abilityItem => abilityItem.duration);
         }
     }
 }

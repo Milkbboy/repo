@@ -178,6 +178,8 @@ namespace ERang
             cardUI.SetHp(card.Hp);
             cardUI.SetDef(card.Def);
 
+            TakeDamageAnimation();
+
             if (card.Hp <= 0)
             {
                 RemoveCard();
@@ -262,20 +264,28 @@ namespace ERang
             card = null;
         }
 
-        public void AdjustMana(int amount)
+        public void IncreaseMana(int amount)
         {
-            if (card is not MasterCard)
+            if (card is not MasterCard masterCard)
             {
                 Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
                 return;
             }
 
-            MasterCard masterCard = card as MasterCard;
+            masterCard.IncreaseMana(amount);
 
-            if (amount > 0)
-                masterCard.IncreaseMana(amount);
-            else
-                masterCard.DecreaseMana(-amount);
+            cardUI.SetMana(masterCard.Mana);
+        }
+
+        public void DecreaseMana(int amount)
+        {
+            if (card is not MasterCard masterCard)
+            {
+                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
+                return;
+            }
+
+            masterCard.DecreaseMana(amount);
 
             cardUI.SetMana(masterCard.Mana);
         }

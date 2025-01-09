@@ -86,46 +86,43 @@ namespace ERang
             CardImage = cardImage;
         }
 
-        public void AddCardAbility(AbilityData abilityData, AiData aiData, int selfSlotNum, int targetSlotNum, int turnCount, AbilityWhereFrom whereFrom)
+        /// <summary>
+        ///  지속되어야 하는 어빌리티 추가
+        ///  - 턴 표시
+        ///  - duration 0 되었을때 발동되어야 하는 어빌리티
+        /// </summary>
+        public void AddCardAbility(CardAbility cardAbility, int turnCount, AbilityWhereFrom whereFrom)
         {
-            Ability ability = new()
+            // 어빌리티 아이템 - 동일한 어빌리티가 추가되면 AbilityItem 이 추가되고 duration 이 증가. 효과는 변하지 않음
+            AbilityItem abilityItem = new()
             {
                 whereFrom = whereFrom,
                 applyTurn = turnCount,
-                value = abilityData.value,
-                duration = abilityData.duration,
+                value = cardAbility.abilityValue,
+                duration = cardAbility.duration,
                 createdDt = DateTime.UtcNow.Ticks
             };
 
-            CardAbility cardAbility = cardAbilities.Find(ability => ability.abilityId == abilityData.abilityId);
+            CardAbility found = cardAbilities.Find(ability => ability.abilityId == cardAbility.abilityId);
 
-            if (cardAbility == null)
+            if (found == null)
             {
-                cardAbility = new()
-                {
-                    aiType = aiData.type,
-                    abilityId = abilityData.abilityId,
-                    abilityType = abilityData.abilityType,
-                    abilityValue = abilityData.value,
-                    workType = abilityData.workType,
-                    duration = abilityData.duration,
-                    aiDataId = aiData.ai_Id,
-                    selfSlotNum = selfSlotNum,
-                    targetSlotNum = targetSlotNum,
-                };
-
-                // ArmorBreak 능력은 가장 먼저 적용되어야 함
+                // ArmorBreak 는 다른 def 효과를 무시하기 때문에 제일 앞에 추가해서 가장 먼저 적용되게 설정
                 if (cardAbility.abilityType == AbilityType.ArmorBreak)
                     cardAbilities.Insert(0, cardAbility);
                 else
                     cardAbilities.Add(cardAbility);
             }
 
-            cardAbility.AddAbility(ability);
+            cardAbility.AddAbilityItem(abilityItem);
 
-            Debug.Log($"{cardAbility.LogText} 추가. value: {abilityData.value}, duration: {abilityData.duration}, workType: {abilityData.workType}");
+            Debug.Log($"{cardAbility.LogText} {(found == null ? "신규" : "AbilityItem 만")} 추가. value: {cardAbility.abilityValue}, duration: {cardAbility.duration}, workType: {cardAbility.workType}");
         }
 
+        /// <summary>
+        /// 어빌리티 duration 감소
+        /// - AbilityItem 의 duration 감소
+        /// </summary>
         public List<CardAbility> DecreaseDuration()
         {
             List<CardAbility> removedCardAbilities = new();

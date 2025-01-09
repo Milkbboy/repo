@@ -378,11 +378,9 @@ namespace ERang
                 yield break;
             }
 
-            foreach (CardAbility ability in card.PriorCardAbilities)
+            foreach (CardAbility cardAbility in card.PriorCardAbilities)
             {
-                AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
-
-                yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(abilityData, null, boardSlot, boardSlot));
+                yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(cardAbility, boardSlot, boardSlot));
             }
         }
 
@@ -396,11 +394,9 @@ namespace ERang
                 yield break;
             }
 
-            foreach (CardAbility ability in card.PostCardAbilities)
+            foreach (CardAbility cardAbility in card.PostCardAbilities)
             {
-                AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
-
-                yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(abilityData, null, boardSlot, boardSlot));
+                yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(cardAbility, boardSlot, boardSlot));
             }
         }
 

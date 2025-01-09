@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ERang.Data;
 
 namespace ERang
 {
@@ -10,58 +9,35 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.DefUp;
         public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
+        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            foreach (BSlot targetSlot in targetSlots)
-            {
-                if (targetSlot.Card == null)
-                {
-                    Changes.Add((StatType.Def, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
-                    continue;
-                }
-
-                int before = targetSlot.Card.Def;
-                int amount = abilityData.value;
-
-                targetSlot.IncreaseDefense(amount);
-
-                Changes.Add((StatType.Def, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Def, amount));
-            }
-
-            yield return new WaitForSeconds(0.1f);
+            yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
-        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            if (targetSlot.Card == null)
+            yield return StartCoroutine(Apply(cardAbility, targetSlot, false));
+        }
+
+        private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isDefUp)
+        {
+            BaseCard card = targetSlot.Card;
+
+            if (card == null)
             {
-                Changes.Add((StatType.Def, false, targetSlot.SlotNum, 0, targetSlot.SlotCardType, 0, 0, 0));
+                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
                 yield break;
             }
 
-            int before = targetSlot.Card.Def;
-            int amount = abilityData.value;
+            int before = card.Def;
+            int value = cardAbility.abilityValue;
 
-            targetSlot.IncreaseDefense(amount);
+            if (isDefUp)
+                card.IncreaseDefense(value);
+            else
+                card.DecreaseDefense(value);
 
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Def, amount));
-
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
-        {
-            AbilityData abilityData = AbilityData.GetAbilityData(ability.abilityId);
-
-            if (targetSlot.Card == null || abilityData == null)
-                yield break;
-
-            int before = targetSlot.Card.Def;
-            int amount = abilityData.value;
-
-            targetSlot.DecreaseDefense(amount);
-
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Def, amount));
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Def, isDefUp ? value : value * -1));
 
             yield return new WaitForSeconds(0.1f);
         }

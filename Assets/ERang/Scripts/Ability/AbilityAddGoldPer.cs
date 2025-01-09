@@ -10,13 +10,18 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.AddGoldPer;
         public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
-        public IEnumerator Apply(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
+        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            yield return StartCoroutine(ApplySingle(aiData, abilityData, selfSlot, null));
-        }
+            AiData aiData = Utils.CheckData(AiData.GetAiData, "AiData", cardAbility.aiDataId);
 
-        public IEnumerator ApplySingle(AiData aiData, AbilityData abilityData, BSlot selfSlot, BSlot targetSlot)
-        {
+            if (aiData == null)
+                yield break;
+
+            AbilityData abilityData = Utils.CheckData(AbilityData.GetAbilityData, "AbilityData", cardAbility.abilityId);
+
+            if (abilityData == null)
+                yield break;
+
             float gainGold = aiData.value * abilityData.ratio;
             int gold = aiData.value + (int)gainGold;
             int beforeGold = Master.Instance.Gold;
@@ -29,7 +34,7 @@ namespace ERang
             yield return new WaitForSeconds(0.1f);
         }
 
-        public IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             yield break;
         }
