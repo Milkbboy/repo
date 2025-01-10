@@ -4,6 +4,7 @@ namespace ERang
     public class AbilityDataEntity
     {
         public int AbilityData_Id;
+        public string NameDesc;
         public string AbilityType;
         public int Value;
         public float Ratio;

@@ -66,8 +66,8 @@ namespace ERang
             }
 
             // TakeDamage 에서 카드가 Destroy 되면 null 이 되는 경우도 있음
-            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, targetSlot.Card.Hp, value * atkCount));
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, targetSlot.Card.Def, value * atkCount));
+            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card?.Id ?? 0, targetSlot.SlotCardType, beforeHp, card?.Hp ?? 0, value * atkCount));
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card?.Id ?? 0, targetSlot.SlotCardType, beforeDef, card?.Def ?? 0, value * atkCount));
         }
 
         public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)

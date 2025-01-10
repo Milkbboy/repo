@@ -11,6 +11,7 @@ namespace ERang.Data
     public class AbilityData
     {
         public int abilityId;
+        public string nameDesc;
         public AbilityType abilityType;
         public int value;
         public float ratio;
@@ -34,6 +35,7 @@ namespace ERang.Data
         public void Initialize(AbilityDataEntity entity)
         {
             abilityId = entity.AbilityData_Id;
+            nameDesc = entity.NameDesc;
             abilityType = ConvertAbilityType(entity.AbilityType);
             value = entity.Value;
             ratio = entity.Ratio;

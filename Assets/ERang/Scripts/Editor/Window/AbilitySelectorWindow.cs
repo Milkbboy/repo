@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using ERang.Data;
+using System.Linq;
 
 namespace ERang
 {
     public class AbilitySelectorWindow : EditorWindow
     {
-        private static Action<int, int, AiDataType, List<BSlot>> onAbilitySelected;
+        private static Action<int> onAbilitySelected;
         private static List<AbilityData> abilities;
         private static BSlot selfSlot;
         private Vector2 scrollPosition;
         private Dictionary<int, Dictionary<int, bool>> selectedTargetSlots = new Dictionary<int, Dictionary<int, bool>>(); // 선택된 타겟 슬롯을 저장할 딕셔너리
 
-        public static void ShowWindow(BSlot bSlot, Action<int, int, AiDataType, List<BSlot>> onAbilitySelectedAction)
+        public static void ShowWindow(BSlot bSlot, Action<int> onAbilitySelectedAction)
         {
             selfSlot = bSlot;
-            abilities = AbilityData.abilityData_list;
+            abilities = AbilityData.abilityData_list.OrderByDescending(x => x.iconTexture != null).ToList();
             onAbilitySelected = onAbilitySelectedAction;
             GetWindow<AbilitySelectorWindow>("Ability 선택");
         }
@@ -28,75 +29,42 @@ namespace ERang
 
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
-            HashSet<int> displayedAbilityIds = new HashSet<int>();
-
             foreach (AbilityData abilityData in abilities)
             {
-                // AiData와 연결된 AbilityData 를 찾기
-                List<AiData> connectedAiDatas = AiData.ai_list.FindAll(aiData => aiData.ability_Ids.Contains(abilityData.abilityId));
+                EditorGUILayout.BeginVertical("box");
+                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-                // AbilityData와 연결된 AiData 정보를 함께 표시
-                foreach (AiData aiData in connectedAiDatas)
+                // 중복되는 AbilityData의 ID 색상을 변경
+                GUIStyle idStyle = new GUIStyle(EditorStyles.label);
+                idStyle.normal.textColor = new Color(236, 54, 54);
+
+                EditorGUILayout.LabelField($"Ability ID: {abilityData.abilityId}", idStyle);
+                EditorGUILayout.LabelField($"Ability Type: {abilityData.abilityType}");
+                EditorGUILayout.LabelField($"Ability Name: {abilityData.nameDesc}");
+                EditorGUILayout.LabelField($"Value: {abilityData.value}");
+
+                if (abilityData.iconTexture != null)
+                    GUILayout.Box(abilityData.iconTexture, GUILayout.Width(50), GUILayout.Height(50));
+
+                if (!selectedTargetSlots.ContainsKey(abilityData.abilityId))
+                    selectedTargetSlots[abilityData.abilityId] = new Dictionary<int, bool>();
+
+                if (GUILayout.Button("Select"))
                 {
-                    EditorGUILayout.BeginVertical("box");
-                    EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-
-                    // 중복되는 AbilityData의 ID 색상을 변경
-                    GUIStyle idStyle = new GUIStyle(EditorStyles.label);
-                    if (displayedAbilityIds.Contains(abilityData.abilityId))
+                    List<int> selectedSlots = new List<int>();
+                    foreach (var kvp in selectedTargetSlots[abilityData.abilityId])
                     {
-                        idStyle.normal.textColor = new Color(236, 54, 54);
-                    }
-                    else
-                    {
-                        displayedAbilityIds.Add(abilityData.abilityId);
-                    }
-
-                    EditorGUILayout.LabelField($"Ability ID: {abilityData.abilityId}", idStyle);
-                    EditorGUILayout.LabelField($"Ability Type: {abilityData.abilityType}");
-                    EditorGUILayout.LabelField($"AiData ID: {aiData.ai_Id}");
-                    EditorGUILayout.LabelField($"AiData Type: {aiData.type}");
-                    EditorGUILayout.LabelField($"AiData Target: {aiData.target}");
-                    
-
-                    // 타겟 보드 슬롯 선택 드롭다운 메뉴
-                    List<BSlot> targetSlots = GetSelectableSlots(aiData, selfSlot);
-
-                    if (!selectedTargetSlots.ContainsKey(abilityData.abilityId))
-                        selectedTargetSlots[abilityData.abilityId] = new Dictionary<int, bool>();
-
-                    EditorGUILayout.BeginVertical(); // 수직 레이아웃 시작
-                    foreach (BSlot slot in targetSlots)
-                    {
-                        if (!selectedTargetSlots[abilityData.abilityId].ContainsKey(slot.SlotNum))
+                        if (kvp.Value)
                         {
-                            selectedTargetSlots[abilityData.abilityId][slot.SlotNum] = false;
+                            selectedSlots.Add(kvp.Key);
                         }
-
-                        EditorGUILayout.BeginHorizontal(); // 수평 레이아웃 시작
-                        selectedTargetSlots[abilityData.abilityId][slot.SlotNum] = EditorGUILayout.Toggle(selectedTargetSlots[abilityData.abilityId][slot.SlotNum], GUILayout.Width(20));
-                        EditorGUILayout.LabelField($"Slot {slot.SlotNum}", GUILayout.Width(60));
-                        EditorGUILayout.EndHorizontal(); // 수평 레이아웃 종료
-                    }
-                    EditorGUILayout.EndVertical(); // 수직 레이아웃 종료
-
-                    if (GUILayout.Button("Select"))
-                    {
-                        List<int> selectedSlots = new List<int>();
-                        foreach (var kvp in selectedTargetSlots[abilityData.abilityId])
-                        {
-                            if (kvp.Value)
-                            {
-                                selectedSlots.Add(kvp.Key);
-                            }
-                        }
-
-                        onAbilitySelected?.Invoke(abilityData.abilityId, aiData.ai_Id, aiData.type, targetSlots);
-                        Close();
                     }
 
-                    EditorGUILayout.EndVertical();
+                    onAbilitySelected?.Invoke(abilityData.abilityId);
+                    Close();
                 }
+
+                EditorGUILayout.EndVertical();
             }
 
             EditorGUILayout.EndScrollView();

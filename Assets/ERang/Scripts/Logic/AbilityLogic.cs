@@ -49,12 +49,30 @@ namespace ERang
             // }
         }
 
-        public void AbilityAction(int aiDataId, int abilityId, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
+        /// <summary>
+        /// BoardCardEditorWindow 에서 호출되는 어빌리티 액션
+        /// </summary>
+        public void AbilityAction(int abilityId, BSlot targetSlot)
         {
-            AiData aiData = AiData.GetAiData(aiDataId);
-            AbilityData abilityData = AbilityData.GetAbilityData(abilityId);
+            AbilityData abilityData = Utils.CheckData(AbilityData.GetAbilityData, "AbilityData", abilityId);
 
-            StartCoroutine(AbilityProcess(aiData, abilityData, selfSlot, targetSlots, whereFrom));
+            if (abilityData == null)
+                return;
+
+            StartCoroutine(AbilityProcess(null, abilityData, targetSlot, new List<BSlot> { targetSlot }, AbilityWhereFrom.AddedEditor));
+        }
+
+        /// <summary>
+        /// BoardCardEditorWindow 에서 호출되는 어빌리티 해제
+        /// </summary>
+        public void ReleaseAction(BSlot targetSlot, CardAbility cardAbility)
+        {
+            StartCoroutine(ReleaseCardAbilityAction(cardAbility));
+
+            BaseCard card = targetSlot.Card;
+
+            card.RemoveCardAbility(cardAbility);
+            targetSlot.DrawAbilityIcons();
         }
 
         /// <summary>
@@ -80,11 +98,11 @@ namespace ERang
                 cardAbility ??= new()
                 {
                     abilityId = abilityData.abilityId,
-                    aiDataId = aiData.ai_Id,
+                    aiDataId = aiData?.ai_Id ?? 0,
                     selfSlotNum = selfSlot.SlotNum,
                     targetSlotNum = targetSlot.SlotNum,
 
-                    aiType = aiData.type,
+                    aiType = aiData?.type ?? AiDataType.None,
                     abilityType = abilityData.abilityType,
                     abilityValue = abilityData.value,
                     workType = abilityData.workType,
@@ -124,7 +142,7 @@ namespace ERang
 
             yield return StartCoroutine(abilityAction.ApplySingle(cardAbility, selfSlot, targetSlot));
 
-            Debug.Log($"{targetSlot?.LogText ?? "targetSlot 없음"} {cardAbility.LogText} 실행. 어빌리티 효과: {Utils.StatChangesText(abilityAction.Changes)}");
+            Debug.Log($"{targetSlot?.LogText ?? "targetSlot 없음"} {cardAbility.LogText} 실행. 어빌리티 효과: {Utils.StatChangesText(abilityAction.Changes)} - AbilityAction");
 
             if (abilityAction.Changes.Count == 0)
                 yield break;
@@ -135,7 +153,7 @@ namespace ERang
         /// <summary>
         /// 카드 어빌리티 해제 동작
         /// </summary>
-        public IEnumerator ReleaseCardAbilityAction(CardAbility cardAbility)
+        public IEnumerator ReleaseCardAbilityAction(CardAbility cardAbility, AbilityWhereFrom abilityWhereFrom = AbilityWhereFrom.None)
         {
             BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.selfSlotNum);
 
@@ -153,12 +171,11 @@ namespace ERang
                 yield return null;
             }
 
-            Debug.Log($"{selfSlot.LogText} {cardAbility.LogText} Duration: {cardAbility.duration} 으로 해제 - ReleaseCardAbilityAction");
+            Debug.Log($"{selfSlot.LogText} {cardAbility.LogText} Duration: {cardAbility.duration} 으로 해제 {(abilityWhereFrom != AbilityWhereFrom.None ? abilityWhereFrom : "")} - ReleaseCardAbilityAction");
 
-            BSlot selfBoardSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.selfSlotNum);
             BSlot targetBoardSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.targetSlotNum);
 
-            yield return StartCoroutine(AbilityRelease(cardAbility, selfBoardSlot, targetBoardSlot));
+            yield return StartCoroutine(AbilityRelease(cardAbility, selfSlot, targetBoardSlot));
         }
 
         /// <summary>
@@ -172,7 +189,7 @@ namespace ERang
 
             if (abilityAction == null)
             {
-                Debug.LogWarning($"{selfSlot.LogText} {abilityData.LogText} 에 대한 해제 없음 - AbilityRelease");
+                Debug.LogWarning($"{targetSlot.LogText} {abilityData.LogText} 에 대한 해제 없음 - AbilityRelease");
                 yield break;
             }
 

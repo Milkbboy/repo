@@ -14,7 +14,7 @@ namespace ERang
         private string[] cardDataNames;
         private int[] masterCardDataIds;
         private string[] masterCardDataNames;
-        private const int elementWidth = 220;
+        private const int elementWidth = 200;
 
         [MenuItem("ERang/Board Card Editor")]
         public static void ShowWindow()
@@ -23,6 +23,27 @@ namespace ERang
         }
 
         private void OnEnable()
+        {
+            InitializeEditor();
+
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+
+        private void OnDisable()
+        {
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        }
+
+        private void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.EnteredEditMode || state == PlayModeStateChange.EnteredPlayMode)
+            {
+                InitializeEditor();
+                Repaint();
+            }
+        }
+
+        private void InitializeEditor()
         {
             boardSystem = FindObjectOfType<BoardSystem>();
 
@@ -102,7 +123,13 @@ namespace ERang
                 BaseCard card = bSlot.Card;
 
                 // CardData 선택 드롭다운 메뉴 추가
+                EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Select Card Data");
+                if (GUILayout.Button("X", GUILayout.Width(20), GUILayout.Height(20)))
+                {
+                    bSlot.RemoveCard();
+                }
+                EditorGUILayout.EndHorizontal();
 
                 int[] ids = bSlot.SlotCardType switch
                 {
@@ -175,21 +202,29 @@ namespace ERang
                     // 카드 이미지 위에 스탯 표시
                     Rect lastRect = GUILayoutUtility.GetLastRect();
                     GUI.Label(new Rect(lastRect.x, lastRect.y, 50, 20), $"Mana: {card.Mana}", statStyle);
-                    GUI.Label(new Rect(lastRect.xMax - 50, lastRect.y, 50, 20), $"Atk: {card.Atk}", statStyle);
-                    GUI.Label(new Rect(lastRect.xMax - 50, lastRect.y + 20, 50, 20), $"Def: {card.Def}", statStyle);
-                    GUI.Label(new Rect(lastRect.xMax - 50, lastRect.y + 40, 50, 20), $"Hp: {card.Hp}", statStyle);
+                    GUI.Label(new Rect(lastRect.xMax - 100, lastRect.y, 50, 20), $"Atk: {card.Atk}", statStyle);
+                    GUI.Label(new Rect(lastRect.xMax - 100, lastRect.y + 20, 50, 20), $"Def: {card.Def}", statStyle);
+                    GUI.Label(new Rect(lastRect.xMax - 100, lastRect.y + 40, 50, 20), $"Hp: {card.Hp}", statStyle);
 
-                    EditorGUILayout.EndVertical();
-                    EditorGUILayout.BeginVertical();
-                    if (GUILayout.Button("X", GUILayout.Width(20), GUILayout.Height(20)))
-                    {
-                        bSlot.RemoveCard();
-                    }
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.EndHorizontal();
 
                     // 카드 ability 표시
+                    EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField("Card Abilities");
+
+                    // 카드 ability 추가
+                    if (GUILayout.Button("+", GUILayout.Width(20)))
+                    {
+                        AbilitySelectorWindow.ShowWindow(bSlot, (selectedAbilityId) =>
+                        {
+                            Debug.Log($"Add Ability: {selectedAbilityId}");
+
+                            AbilityLogic.Instance.AbilityAction(selectedAbilityId, bSlot);
+                            Repaint();
+                        });
+                    }
+                    EditorGUILayout.EndHorizontal();
 
                     for (int i = 0; i < card.CardAbilities.Count; ++i)
                     {
@@ -199,26 +234,31 @@ namespace ERang
                         EditorGUILayout.BeginHorizontal();
                         if (GUILayout.Button("X", GUILayout.Width(20)))
                         {
-                            card.CardAbilities.RemoveAt(i);
-                            i--; // Remove the current ability and adjust the index
+                            AbilityLogic.Instance.ReleaseAction(bSlot, cardAbility);
+                            i--;
                         }
-                        EditorGUILayout.LabelField($"{abilityData.workType}: {cardAbility.abilityUid} {AbilityData.GetAbilityData(abilityData.abilityId).abilityType}", GUILayout.Width(elementWidth));
+                        EditorGUILayout.LabelField($"[{cardAbility.abilityId}] {abilityData.workType}: {AbilityData.GetAbilityData(abilityData.abilityId).abilityType}", GUILayout.Width(elementWidth));
                         // duration을 빨간색으로 표시
                         GUILayout.Label($"{cardAbility.duration}", redTextStyle);
                         EditorGUILayout.EndHorizontal();
-                    }
 
-                    // 카드 ability 추가
-                    if (GUILayout.Button("Add Ability", GUILayout.Width(elementWidth)))
-                    {
-                        AbilitySelectorWindow.ShowWindow(bSlot, (selectedAbilityId, aiDataId, aiType, targetSlots) =>
+                        // 마우스 오버 시 툴팁 표시
+                        Rect lastRectAbility = GUILayoutUtility.GetLastRect();
+                        if (lastRectAbility.Contains(Event.current.mousePosition))
                         {
-                            Debug.Log($"Add Ability: {selectedAbilityId}, {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
+                            Vector2 mousePosition = Event.current.mousePosition;
+                            GUIStyle tooltipStyle = new(GUI.skin.box);
+                            tooltipStyle.normal.background = MakeTex(2, 2, new Color(0f, 0f, 0f, 0.8f)); // 검정 배경
+                            tooltipStyle.normal.textColor = Color.white;
+                            tooltipStyle.padding = new RectOffset(10, 10, 10, 10);
 
-                            AbilityData selectedAbilityData = AbilityData.GetAbilityData(selectedAbilityId);
+                            string tooltipText = $"{abilityData.nameDesc} {cardAbility.duration} 턴 남음";
 
-                            AbilityLogic.Instance.AbilityAction(aiDataId, selectedAbilityId, bSlot, targetSlots, AbilityWhereFrom.AddedEditor);
-                        });
+                            Vector2 size = tooltipStyle.CalcSize(new GUIContent(tooltipText));
+                            Rect tooltipRect = new Rect(mousePosition.x, mousePosition.y - 10, size.x, size.y);
+
+                            GUI.Box(tooltipRect, tooltipText, tooltipStyle);
+                        }
                     }
                 }
 

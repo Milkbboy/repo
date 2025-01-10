@@ -213,3 +213,7 @@ MonoBehaviour:
     NameDesc: "\uB3C5_2\uD134 \uD134 \uC885\uB8CC \uC2DC \uCCB4\uB825 -2"
     Desc_Ko: "\uD134 \uC885\uB8CC\uC2DC \uCCB4\uB825 -2"
     Desc_En: 
+  - DescID: Bless_01_Desc
+    NameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
+    Desc_Ko: "\uBC29\uC5B4\uB825 -2"
+    Desc_En: 
