@@ -59,7 +59,7 @@ namespace ERang
             if (abilityData == null)
                 return;
 
-            StartCoroutine(AbilityProcess(null, abilityData, targetSlot, new List<BSlot> { targetSlot }, AbilityWhereFrom.AddedEditor));
+            StartCoroutine(AbilityProcess(null, abilityData, targetSlot, new List<BSlot> { targetSlot }, AbilityWhereFrom.EditorWindow));
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace ERang
         /// </summary>
         public void ReleaseAction(BSlot targetSlot, CardAbility cardAbility)
         {
-            StartCoroutine(ReleaseCardAbilityAction(cardAbility));
+            StartCoroutine(AbilityRelease(cardAbility, AbilityWhereFrom.EditorWindow));
 
             BaseCard card = targetSlot.Card;
 
@@ -151,59 +151,35 @@ namespace ERang
         }
 
         /// <summary>
-        /// 카드 어빌리티 해제 동작
+        /// 카드 ability 해제 동작
         /// </summary>
-        public IEnumerator ReleaseCardAbilityAction(CardAbility cardAbility, AbilityWhereFrom abilityWhereFrom = AbilityWhereFrom.None)
+        public IEnumerator AbilityRelease(CardAbility cardAbility, AbilityWhereFrom abilityWhereFrom = AbilityWhereFrom.None)
         {
+            IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
+
+            if (abilityAction == null)
+            {
+                Debug.LogWarning($"{cardAbility.LogText} 에 대한 해제 없음. {abilityWhereFrom} - AbilityRelease");
+                yield break;
+            }
+
             BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.selfSlotNum);
 
             if (selfSlot == null)
             {
-                Debug.LogError($"selfSlotNum({cardAbility.selfSlotNum}) 보드 슬롯 없음 - ReleaseCardAbilityAction");
+                Debug.LogError($"selfSlotNum({cardAbility.selfSlotNum}) 보드 슬롯 없음. {abilityWhereFrom} - AbilityRelease");
                 yield return null;
             }
 
-            AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
+            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.targetSlotNum);
 
-            if (abilityData == null)
+            if (targetSlot == null)
             {
-                Debug.LogError($"AbilityData({cardAbility.abilityId}) {Utils.RedText("테이블 데이터 없음")} - ReleaseCardAbilityAction");
+                Debug.LogError($"targetSlotNum({cardAbility.targetSlotNum}) 보드 슬롯 없음. {abilityWhereFrom} - AbilityRelease");
                 yield return null;
             }
 
-            Debug.Log($"{selfSlot.LogText} {cardAbility.LogText} Duration: {cardAbility.duration} 으로 해제 {(abilityWhereFrom != AbilityWhereFrom.None ? abilityWhereFrom : "")} - ReleaseCardAbilityAction");
-
-            BSlot targetBoardSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.targetSlotNum);
-
-            yield return StartCoroutine(AbilityRelease(cardAbility, selfSlot, targetBoardSlot));
-        }
-
-        /// <summary>
-        /// 보드 슬롯에 장착된 카드 ability 해제
-        /// </summary>
-        public IEnumerator AbilityRelease(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
-        {
-            AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
-
-            IAbility abilityAction = abilityActions.TryGetValue(abilityData.abilityType, out IAbility action) ? action : null;
-
-            if (abilityAction == null)
-            {
-                Debug.LogWarning($"{targetSlot.LogText} {abilityData.LogText} 에 대한 해제 없음 - AbilityRelease");
-                yield break;
-            }
-
-            string abilityActionLog = $"{targetSlot.LogText} {abilityData.LogText} 효과 지속 시간(<color=yellow>{cardAbility.duration}</color>)";
-
-            BaseCard card = targetSlot.Card;
-
-            if (card == null)
-            {
-                Debug.LogWarning($"{abilityActionLog} 카드 없음. AbilityRelease");
-
-                abilityAction.Changes.Clear();
-                yield break;
-            }
+            string abilityActionLog = $"{targetSlot.LogText} {cardAbility.LogText} 효과 지속 시간(<color=yellow>{cardAbility.duration}</color>)";
 
             yield return StartCoroutine(abilityAction.Release(cardAbility, selfSlot, targetSlot));
 
@@ -213,7 +189,7 @@ namespace ERang
                 abilityAction.Changes.Clear();
             }
 
-            Debug.Log($"삭제 어빌리티 동작. {targetSlot.LogText} {abilityData.LogText} - AbilityRelease");
+            Debug.Log($"삭제 어빌리티 동작. {targetSlot.LogText} {cardAbility.LogText}. {abilityWhereFrom} - AbilityRelease");
         }
 
         /// <summary>

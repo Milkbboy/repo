@@ -127,11 +127,12 @@ namespace ERang
         BoardSlot, // 필드에 있는 카드가 발동
         TurnStarHandOn, // 턴 시작 핸드 온 액션
         TurnStartAction, // 턴시작 액션 발동
+        TurnEndHandOn, // 턴 종료 핸드 온 액션
         TurnEndBoardSlot, // 턴 종료 필드 슬롯 액션
         TurnEndBuilding, // 턴 종료 건물 액션
         HandUse, // 핸드에 있는 카드가 발동
         OnStage, // 필드에 있는 카드가 발동
-        AddedEditor, // 에디터에서 추가
+        EditorWindow, // 에디터에서 추가
         Test, // 테스트
     }
 

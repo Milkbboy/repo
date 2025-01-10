@@ -33,14 +33,14 @@ namespace ERang
                 yield break;
             }
 
-            int value = card.Hp;
+            int value = card.Hp + card.Def;
             int beforeHp = card.Hp;
 
             yield return StartCoroutine(targetSlot.TakeDamage(value));
 
-            if (card != null)
+            if (targetSlot.Card != null)
             {
-                Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, targetSlot.Card.Hp, value));
+                Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.Hp, value));
                 yield break;
             }
         }
