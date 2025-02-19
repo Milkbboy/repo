@@ -29,6 +29,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70002
     NameDesc: "\uB2E4\uB2E8 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     AbilityType: Damage
@@ -45,6 +46,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70003
     NameDesc: "\uAD00\uD1B5 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     AbilityType: Damage
@@ -61,6 +63,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_03
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70004
     NameDesc: "\uAE30\uBCF8 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     AbilityType: Damage
@@ -77,6 +80,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70005
     NameDesc: "\uB2E4\uB2E8 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     AbilityType: Damage
@@ -93,6 +97,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70006
     NameDesc: "\uBC94\uC704 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     AbilityType: Damage
@@ -109,6 +114,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_03
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70007
     NameDesc: "\uD3ED\uD30C \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     AbilityType: Damage
@@ -125,6 +131,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_04
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70008
     NameDesc: "\uB79C\uB364 \uD0C0\uAC9F \uC6D0\uAC70\uB9AC \uACF5\uACA9_1 (\uC801
       \uB9C8\uC655 \uD3EC\uD568)"
@@ -142,6 +149,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70009
     NameDesc: "\uB79C\uB364 \uD0C0\uAC9F \uC6D0\uAC70\uB9AC \uACF5\uACA9_2 (\uC801
       \uD06C\uB9AC\uCCD0\uB9CC)"
@@ -159,6 +167,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70010
     NameDesc: "\uD30C\uC774\uC5B4 \uBCFC (\uB9C8\uBC95)"
     AbilityType: Damage
@@ -175,6 +184,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70011
     NameDesc: "\uBE14\uB9AC\uC790\uB4DC (\uC804\uCCB4 \uB9C8\uBC95)"
     AbilityType: Damage
@@ -191,6 +201,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70012
     NameDesc: "\uD30C\uC774\uC5B4 \uC6D4 (\uD06C\uCE58\uCCD0 \uC804\uCCB4 \uB9C8\uBC95)"
     AbilityType: Damage
@@ -207,6 +218,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70013
     NameDesc: "\uD790\uB9C1 (\uD0C0\uAC9F \uD790\uB9C1 \uB9C8\uBC95)"
     AbilityType: Heal
@@ -223,6 +235,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70014
     NameDesc: "\uACF5\uACA9\uB825 \uAC15\uD654 (\uC544\uAD70 \uC804\uCCB4)"
     AbilityType: AtkUp
@@ -239,6 +252,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70015
     NameDesc: "\uC18C\uB4DC\uB9E8 \uAE30\uBCF8 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     AbilityType: Damage
@@ -255,6 +269,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70016
     NameDesc: "\uC18C\uB4DC\uB9E8 \uAE30\uBCF8 \uADFC\uAC70\uB9AC \uAC15\uACF5\uACA9"
     AbilityType: Damage
@@ -271,6 +286,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70017
     NameDesc: "\uC18C\uB4DC\uB9E8 \uBC29\uC5B4\uB825 \uC99D\uAC00"
     AbilityType: DefUp
@@ -287,6 +303,7 @@ MonoBehaviour:
     SkillViewIcon: Skill_01
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70018
     NameDesc: "\uC18C\uB4DC\uB9E8 \uBC29\uC5B4\uB825 \uD30C\uAD34"
     AbilityType: BrokenDef
@@ -303,6 +320,7 @@ MonoBehaviour:
     SkillViewIcon: Skill_01
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70019
     NameDesc: "\uC544\uCCD0 \uAE30\uBCF8 \uC0AC\uACA9"
     AbilityType: Damage
@@ -319,6 +337,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70020
     NameDesc: "\uC544\uCCD0 \uBC94\uC704 \uC0AC\uACA9"
     AbilityType: Damage
@@ -335,6 +354,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70021
     NameDesc: "\uC544\uCCD0 \uCDA9\uC804 \uC0AC\uACA9"
     AbilityType: ChargeDamage
@@ -351,6 +371,7 @@ MonoBehaviour:
     SkillViewIcon: Skill_01
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70022
     NameDesc: "\uAD11\uC804\uC0AC \uACF5\uACA9"
     AbilityType: Damage
@@ -367,6 +388,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70023
     NameDesc: "\uAD11\uC804\uC0AC \uB2E4\uB2E8 \uACF5\uACA9"
     AbilityType: Damage
@@ -383,6 +405,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_02
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70024
     NameDesc: "\uAD11\uC804\uC0AC \uACF5\uACA9\uB825 \uC99D\uAC00"
     AbilityType: AtkUp
@@ -399,6 +422,7 @@ MonoBehaviour:
     SkillViewIcon: Skill_01
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 70025
     NameDesc: "\uAD11\uC804\uC0AC \uC804\uCCB4 \uACF5\uACA9"
     AbilityType: Damage
@@ -415,6 +439,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_03
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 90001
     NameDesc: "\uCE74\uB4DC_\uC544\uADC0 \uAE30\uBCF8 \uACF5\uACA9"
     AbilityType: Damage
@@ -431,6 +456,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 90002
     NameDesc: "\uD30C\uC774\uC5B4 \uBCFC"
     AbilityType: Damage
@@ -447,6 +473,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 90003
     NameDesc: "\uAE08\uAD11"
     AbilityType: AddGoldPer
@@ -463,6 +490,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 90004
     NameDesc: "\uD48D\uC694\uC758 \uBD80\uC801"
     AbilityType: AddMana
@@ -479,6 +507,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 90005
     NameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
     AbilityType: BrokenDef
@@ -495,6 +524,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 90006
     NameDesc: "\uB808\uD504\uB9AC\uCE78\uC758 \uAE08\uB2E8\uC9C0"
     AbilityType: AddGold
@@ -511,6 +541,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 90007
     NameDesc: "\uB808\uD504\uB9AC\uCE78\uC758 \uAE08\uB2E8\uC9C0"
     AbilityType: AddGoldPer
@@ -527,6 +558,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 100001
     NameDesc: "\uB9CC\uBCF5\uB3C4 \uCC44\uC6B0\uAE30"
     AbilityType: AddSatiety
@@ -543,6 +575,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 100002
     NameDesc: "\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
     AbilityType: SubSatiety
@@ -559,6 +592,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 100011
     NameDesc: "\uCE74\uB4DC \uC190\uC73C\uB85C \uC18C\uD658"
     AbilityType: Summon_Hand
@@ -575,6 +609,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 1001
+    ChainAbilityId: 0
   - AbilityData_Id: 100012
     NameDesc: "\uCE74\uB4DC \uBF51\uC744 \uCE74\uB4DC\uB85C \uC18C\uD658"
     AbilityType: Summon_DrawDeck
@@ -591,6 +626,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 1002
+    ChainAbilityId: 0
   - AbilityData_Id: 100013
     NameDesc: "\uCE74\uB4DC \uADF8\uB808\uC774\uBE0C\uB85C \uC18C\uD658"
     AbilityType: Summon_GraveDeck
@@ -607,6 +643,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 1003
+    ChainAbilityId: 0
   - AbilityData_Id: 100021
     NameDesc: "\uC57D\uD654_2\uD134 \uACF5\uACA9\uB825 - 1"
     AbilityType: Weaken
@@ -623,6 +660,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 100022
     NameDesc: "\uBC29\uC5B4\uAD6C \uD30C\uAD34_1\uD134 \uBC29\uC5B4\uB825 0"
     AbilityType: ArmorBreak
@@ -639,6 +677,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 100023
     NameDesc: "\uD30C\uBA78_3\uD134 \uD134 \uC885\uB8CC \uC2DC \uCE90\uB9AD\uD130
       \uC0AC\uB9DD"
@@ -656,6 +695,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 100024
     NameDesc: "\uD654\uC0C1_2\uD134 \uD134 \uC2DC\uC791 \uC2DC \uCCB4\uB825 -2"
     AbilityType: Burn
@@ -672,6 +712,7 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 100025
     NameDesc: "\uB3C5_2\uD134 \uD134 \uC885\uB8CC \uC2DC \uCCB4\uB825 -2"
     AbilityType: Poison
@@ -688,3 +729,38 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 100026
+    NameDesc: "\uC0BC\uD0A4\uAE30"
+    AbilityType: Swallow
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Doom_01
+    SkillIconDesc: Doom_01_Desc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 100027
+  - AbilityData_Id: 100027
+    NameDesc: "\uC0BC\uD0A8 \uCE74\uB4DC \uBE44\uC6A9 \uAC10\uC18C"
+    AbilityType: 'ReducedMana '
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Poison_01
+    SkillIconDesc: Poison_01_Desc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0

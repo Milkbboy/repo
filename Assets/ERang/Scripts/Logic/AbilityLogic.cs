@@ -130,6 +130,50 @@ namespace ERang
             }
         }
 
+        public IEnumerator HandCardAbilityAction(BaseCard handCard)
+        {
+            foreach (CardAbility cardAbility in handCard.HandAbilities)
+            {
+                IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
+
+                if (abilityAction == null)
+                {
+                    Debug.LogWarning($"{cardAbility.LogText} 에 대한 동작이 없음");
+                    yield break;
+                }
+
+                if (abilityAction is AbilityReducedMana reducedMana)
+                {
+                    yield return StartCoroutine(reducedMana.ApplySingle(handCard));
+                }
+            }
+        }
+
+        public IEnumerator HandCardAbilityRelease(BaseCard handCard)
+        {
+            for (int i = 0; i < handCard.HandAbilities.Count; ++i)
+            {
+                CardAbility cardAbility = handCard.HandAbilities[i];
+
+                IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
+
+                if (abilityAction == null)
+                {
+                    Debug.LogWarning($"{cardAbility.LogText} 에 대한 해제 없음");
+                    yield break;
+                }
+
+                if (abilityAction is AbilityReducedMana reducedMana)
+                {
+                    yield return StartCoroutine(reducedMana.Release(handCard));
+
+                    handCard.RemoveHandCardAbility(cardAbility);
+
+                    Debug.Log($"{handCard.LogText} {cardAbility.LogText} 해제. 어빌리티 효과: {Utils.StatChangesText(reducedMana.Changes)} - HandCardAbilityRelease");
+                }
+            }
+        }
+
         public IEnumerator AbilityAction(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;

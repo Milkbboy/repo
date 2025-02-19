@@ -47,6 +47,13 @@ namespace ERang
         EnemyMaster, // 적군의 마스터 카드로 기본적으로 체력, 공격력, 방어력이 존재한다.
     }
 
+    public enum CardTraits
+    {
+        None = 0,
+        NextTurnSelect = 1 << 0, // 다음 턴에 선택 가능한 카드
+        // RandomSelect = 1 << 1, // 무작위로 선택되는 카드
+    }
+
     // 행동 패턴의 진행 방식 지정으로 초안에서는 2개의 타입이 존재한다.
     public enum AiGroupType
     {
@@ -64,6 +71,7 @@ namespace ERang
         Explosion, // 폭발 공격으로 Explosion로 설정된 경우 제자리에서 행동한다.
         Buff, // 이로운 효과를 주는 버프 행동으로 제자리에서 행동한다. (Ranged와 동일하나 데이터 가독성을 위해 분리)
         Debuff, // 해로운 효과를 주는 디버프 행동으로 제자리에서 행동한다. (Ranged와 동일하나 데이터 가독성을 위해 분리)
+        Chain, // 복수의 어빌리티를 순차적으로 실행하는 타입
     }
 
     public enum Target
@@ -162,6 +170,8 @@ namespace ERang
         Doom, // 파멸 상태로 N턴 이후 캐릭터는 사망한다.
         Burn, // 화상 상태로 N턴 동안 매 행동 시작 시 N만큼의 피해를 받는다.
         Poison, // 중독 상태로 N턴 동안 매 행동 종료 시 N만큼의 피해를 받는다.
+        Swallow, // 카드 한 장을 선택하여 삼킨다. 삼킨 카드는 다음 턴에 다시 핸드로 돌아온다.
+        ReducedMana, // 마나 소모량을 Value 만큼 감소시킨다.
     }
 
     /// <summary>

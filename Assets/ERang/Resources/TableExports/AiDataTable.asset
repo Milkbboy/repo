@@ -411,3 +411,14 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 100013
+  - Ai_Id: 100014
+    NameDesc: "\uCE74\uB4DC \uC0BC\uD0A4\uAE30"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 100026

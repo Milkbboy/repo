@@ -28,7 +28,7 @@ namespace ERang
         private readonly List<BaseCard> buildingCards = new(); // 건물 카드
 
         [SerializeField] private List<BaseCard> deckCards = new List<BaseCard>();
-        private readonly List<BaseCard> handCards = new();
+        private List<BaseCard> handCards = new();
         private readonly List<BaseCard> graveCards = new();
         private readonly List<BaseCard> extinctionCards = new();
 
@@ -118,6 +118,25 @@ namespace ERang
                     handCards.Add(card);
                 }
             }
+
+            // Traits가 NextTurnSelect인 카드를 앞으로 이동시키고 Traits를 None으로 설정
+            handCards = handCards.OrderByDescending(card => (card.Traits & CardTraits.NextTurnSelect) == CardTraits.NextTurnSelect).ToList();
+
+            // 핸드 카드 어빌리티 설정
+            foreach (var card in handCards)
+            {
+                // Traits를 None으로 설정
+                if ((card.Traits & CardTraits.NextTurnSelect) == CardTraits.NextTurnSelect)
+                {
+                    card.Traits = CardTraits.None;
+                }
+
+                Debug.Log($"MakeHandCards. card: {card}, {card.LogText}, handAbilities.Count: {card.HandAbilities.Count}");
+
+                StartCoroutine(AbilityLogic.Instance.HandCardAbilityAction(card));
+            }
+
+            // Debug.Log($"MakeHandCards. handCards.Count: {handCards.Count}, {string.Join(", ", handCards.Select(card => card.Uid))}");
         }
 
         /// <summary>
@@ -130,6 +149,9 @@ namespace ERang
                 Debug.LogError($"핸드덱에 {card.Id} 카드 없음");
                 return;
             }
+
+            // 핸드 카드 어빌리티 해제
+            StartCoroutine(AbilityLogic.Instance.HandCardAbilityRelease(card));
 
             RemoveHandCard(card);
 
@@ -165,7 +187,10 @@ namespace ERang
             {
                 BaseCard card = handCards[i];
 
-                handCards.RemoveAt(i);
+                // 핸드 카드 어빌리티 해제
+                StartCoroutine(AbilityLogic.Instance.HandCardAbilityRelease(card));
+
+                RemoveHandCard(card);
                 graveCards.Add(card);
             }
         }
@@ -183,12 +208,30 @@ namespace ERang
                 return;
             }
 
+            // 핸드 카드 어빌리티 해제
+            StartCoroutine(AbilityLogic.Instance.HandCardAbilityRelease(card));
+
             RemoveHandCard(card);
 
             if (card.IsExtinction)
                 extinctionCards.Add(card);
             else
                 graveCards.Add(card);
+        }
+
+        /// <summary>
+        /// 카드 덱으로 이동
+        /// </summary>
+        public void HandCardToDeck(BaseCard card)
+        {
+            if (card == null)
+            {
+                Debug.LogError($"핸드덱에 {card.Id} 카드 없음");
+                return;
+            }
+
+            deckCards.Add(card);
+            handCards.Remove(card);
         }
 
         public void Clear()
@@ -222,6 +265,19 @@ namespace ERang
         public void AddHandCard(BaseCard card)
         {
             handCards.Add(card);
+        }
+
+        public BaseCard GetHandCard(string cardUid)
+        {
+            BaseCard card = handCards.Find(card => card.Uid == cardUid);
+
+            if (card == null)
+            {
+                Debug.LogError($"핸드에 {card.Id} 카드 없음");
+                return null;
+            }
+
+            return card;
         }
 
         public void AddDeckCard(BaseCard card)

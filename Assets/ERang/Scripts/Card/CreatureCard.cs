@@ -3,7 +3,7 @@ using ERang.Data;
 namespace ERang
 {
     // 크리쳐 카드
-    public class CreatureCard : BaseCard, IAttackable
+    public class CreatureCard : BaseCard, IAttackable, IManaManageable
     {
         public override int Hp => hp;
         public override int Def => def;
@@ -94,6 +94,19 @@ namespace ERang
         public void SetAttack(int amount)
         {
             atk = amount;
+        }
+
+        public void IncreaseMana(int amount)
+        {
+            mana += amount;
+        }
+
+        public void DecreaseMana(int amount)
+        {
+            mana -= amount;
+
+            if (mana < 0)
+                mana = 0;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace ERang
     [Serializable]
     public class BaseCard : ICard
     {
+        // 테이블 관련 멤버 변수
         public string Uid { get; set; }
         public int Id { get; set; }
         public CardType CardType { get; set; }
@@ -18,12 +19,16 @@ namespace ERang
         public bool InUse { get; set; }
         public bool IsExtinction { get; set; }
         public Texture2D CardImage { get; set; }
+
+        // 게임 관련 멤버 변수
         public List<CardAbility> CardAbilities { get => cardAbilities; set => cardAbilities = value; }
         public List<CardAbility> PriorCardAbilities { get => cardAbilities.Where(ability => Constants.CardPriorAbilities.Contains(ability.abilityType)).ToList(); }
         public List<CardAbility> PostCardAbilities { get => cardAbilities.Where(ability => Constants.CardPostAbilities.Contains(ability.abilityType)).ToList(); }
         public List<CardAbility> BrokenDefAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.BrokenDef).ToList(); }
         public List<CardAbility> DefUpAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.DefUp).ToList(); }
         public CardAbility ArmorBreakAbility { get => cardAbilities.FirstOrDefault(ability => ability.abilityType == AbilityType.ArmorBreak); }
+        public CardTraits Traits { get; set; }
+        public List<CardAbility> HandAbilities { get => handAbilities; set => handAbilities = value; }
 
         public string LogText => Utils.CardLog(this);
 
@@ -38,7 +43,10 @@ namespace ERang
         public virtual void IncreaseDefense(int amount) { }
         public virtual void DecreaseDefense(int amount) { }
 
+        // 보드에서 적용되는 어빌리티
         private List<CardAbility> cardAbilities = new();
+        // 핸드에서 적용되는 어빌리티
+        private List<CardAbility> handAbilities = new();
 
         public BaseCard()
         {
@@ -54,6 +62,7 @@ namespace ERang
             AiGroupId = cardData.aiGroup_id;
             AiGroupIndex = 0;
             CardImage = cardData.GetCardTexture();
+            Traits = CardTraits.None;
         }
 
         public BaseCard(int cardId, CardType cardType, int aiGroupId, Texture2D cardImage)
@@ -64,6 +73,7 @@ namespace ERang
             AiGroupId = aiGroupId;
             AiGroupIndex = 0;
             CardImage = cardImage;
+            Traits = CardTraits.None;
         }
 
         public void UpdateCardData(CardData cardData)
@@ -87,7 +97,7 @@ namespace ERang
         }
 
         /// <summary>
-        ///  지속되어야 하는 어빌리티 추가
+        /// 보드 슬롯에서 지속되어야 하는 어빌리티 추가
         ///  - 턴 표시
         ///  - duration 0 되었을때 발동되어야 하는 어빌리티
         /// </summary>
@@ -120,6 +130,15 @@ namespace ERang
         }
 
         /// <summary>
+        /// 핸드에 들어올때 적용되는 어빌리티 추가
+        /// </summary>
+        public void AddHandCardAbility(CardAbility cardAbility)
+        {
+            Debug.Log($"AddHandCardAbility. cardAbility: {cardAbility.LogText}");
+            handAbilities.Add(cardAbility);
+        }
+
+        /// <summary>
         /// 어빌리티 duration 감소
         /// - AbilityItem 의 duration 감소
         /// </summary>
@@ -141,6 +160,11 @@ namespace ERang
         public void RemoveCardAbility(CardAbility cardAbility)
         {
             cardAbilities.Remove(cardAbility);
+        }
+
+        public void RemoveHandCardAbility(CardAbility cardAbility)
+        {
+            handAbilities.Remove(cardAbility);
         }
 
         public int GetBuffCount()

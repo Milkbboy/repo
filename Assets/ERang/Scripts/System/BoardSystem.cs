@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
+using System;
 
 namespace ERang
 {
@@ -216,7 +217,7 @@ namespace ERang
             if (amount > 0)
                 bSlots[0].IncreaseMana(amount);
             else
-                bSlots[0].DecreaseMana(amount);
+                bSlots[0].DecreaseMana(Math.Abs(amount));
         }
 
         /// <summary>
@@ -245,9 +246,11 @@ namespace ERang
             switch (card)
             {
                 case CreatureCard creatureCard:
+                    Debug.Log($"CreatureCard: {creatureCard.Id} Mana: {creatureCard.Mana}");
                     AddMana(-creatureCard.Mana);
                     break;
                 case MagicCard magicCard:
+                    Debug.Log($"MagicCard: {magicCard.Id} Mana: {magicCard.Mana}");
                     AddMana(-magicCard.Mana);
                     break;
                 case BuildingCard buildingCard:

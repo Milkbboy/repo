@@ -19,5 +19,6 @@ namespace ERang
         public string SkillViewIcon;
         public string FxSound;
         public int Summon_GroupId;
+        public int ChainAbilityId;
     }
 }
