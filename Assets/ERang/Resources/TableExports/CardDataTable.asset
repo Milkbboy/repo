@@ -163,7 +163,7 @@ MonoBehaviour:
     CostGold: 0
     Hp: 5
     Atk: 3
-    Def: 1
+    Def: 0
     InUse: 1
     Extinction: 1
     CompleteExtinction: 0
@@ -263,6 +263,29 @@ MonoBehaviour:
     Level_1_img: Poison
     Level_3_img: GoldPot
     Level_5_img: GoldPot
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 1014
+    NameDesc: "\uCE74\uB4DC \uC0BC\uD0A4\uAE30 "
+    CardNameDesc_Id: CardName_1014
+    CardDesc_Id: CardDesc_1014
+    CardShortDesc_Id: CardShortDesc_1014
+    CardType: Magic
+    Grade: Common
+    AiGroup_id: 41004
+    CostMana: 0
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Swallow_Lv1
+    Level_3_img: Swallow_Lv3
+    Level_5_img: Swallow_Lv5
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001

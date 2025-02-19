@@ -80,6 +80,9 @@ namespace ERang
         public void DecreaseMana(int amount)
         {
             mana -= amount;
+
+            if (mana < 0)
+                mana = 0;
         }
 
         public void ResetMana()

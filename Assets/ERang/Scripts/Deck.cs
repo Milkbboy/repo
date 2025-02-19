@@ -66,6 +66,14 @@ namespace ERang
             deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
         }
 
+        public void HandCardToDeck(SelectCard selectCard)
+        {
+            deckSystem.HandCardToDeck(selectCard.Card);
+
+            deckUI.RemoveHandCard(selectCard.Card.Uid);
+            deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
+        }
+
         public BaseCard FindHandCard(string cardUid)
         {
             return deckSystem.FindHandCard(cardUid);

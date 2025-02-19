@@ -35,7 +35,7 @@ namespace ERang
 
         public string abilityUid; // 어빌리티 고유 번호. abilityId + startTurn + abilityCount
         public int abilityId; // 어빌리티 Id
-        public int aiDataId;
+        public int aiDataId; // AiData Id
         public int selfSlotNum;
         public int targetSlotNum;
 
@@ -46,8 +46,6 @@ namespace ERang
         // 실제 어빌리티 총 value, 총 duration 을 계산할때 사용
         // 2025-01-09 value 는 중첩되지 않지만 duration 은 충첩되고 있음. 추후 AbilityType 에 따라 value 도 중첩될 수 있음.
         private Queue<AbilityItem> abilityItems = new();
-
-
 
         // -----------------------------------------------------------------------------------
         public AbilityType abilityType; // 어빌리티 타입
@@ -65,7 +63,8 @@ namespace ERang
         }
 
         /// <summary>
-        /// 최초 추가된 AbilityItem 의 duration 부터 감소
+        /// 동일한 어빌리티의 duration 처리
+        ///  - 추가된 순서대로 AbilityItem 의 duration 부터 감소
         /// </summary>
         public void DecreaseDuration()
         {
@@ -84,6 +83,9 @@ namespace ERang
             CalcDuration();
         }
 
+        /// <summary>
+        /// 어빌리티 duration 계산
+        /// </summary>
         public void CalcDuration()
         {
             duration = abilityItems.Sum(abilityItem => abilityItem.duration);

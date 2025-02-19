@@ -28,6 +28,7 @@ namespace ERang
         public SatietyUI satietyUI;
 
         public Deck deck;
+        public CardSelect cardSelect;
 
         private Master master;
         private bool isTruenEndProcessing = false;
@@ -138,7 +139,9 @@ namespace ERang
 
             // UpdateSatietyGauge(10);
 
-            StartCoroutine(AbilityTest());
+            // StartCoroutine(AbilityTest());
+            cardSelect.gameObject.SetActive(true);
+            cardSelect.DrawCards(deck.HandCards);
         }
 
         private IEnumerator AbilityTest()
@@ -482,7 +485,7 @@ namespace ERang
 
             if (hCard.Card.CardType == CardType.Magic)
             {
-                HandCardUse(hCard.Card.Uid, targetSlot);
+                StartCoroutine(HandCardUse(hCard.Card.Uid, targetSlot));
 
                 return true;
             }
@@ -521,14 +524,14 @@ namespace ERang
         /// 핸드 카드 사용
         // - 카드 사용 주체는 마스터 슬롯
         /// </summary>
-        public void HandCardUse(string cardUid, BSlot targetSlot)
+        public IEnumerator HandCardUse(string cardUid, BSlot targetSlot)
         {
             BaseCard card = deck.FindHandCard(cardUid);
 
             if (card == null)
             {
                 Debug.LogError($"핸드에 카드({cardUid}) 없음");
-                return;
+                yield break;
             }
 
             int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
@@ -538,7 +541,7 @@ namespace ERang
             if (aiData == null)
             {
                 Debug.LogError($"{card.LogText} 카드 AiData 없음");
-                return;
+                yield break;
             }
 
             // 타겟 설정 카드 확인
@@ -560,27 +563,27 @@ namespace ERang
                 if (targetSlot == null)
                 {
                     Debug.LogError($"{card.LogText} 마법 대상이 없어서 카드 사용 실패");
-                    return;
+                    yield break;
                 }
 
                 if (targetSlots.Contains(targetSlot) == false)
                 {
                     Debug.LogError($"{card.LogText} 대상 슬롯이 아닌 슬롯에 카드 사용 실패");
-                    return;
+                    yield break;
                 }
             }
+
+            // 마스터 핸드 카드 제거 먼저 하고 어빌리티 발동 (먼저 삭제하지 않으면 핸드카드 선택 어빌리티에서 보일 수 있음)
+            deck.RemoveHandCard(cardUid);
 
             List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
 
             // 어빌리티 적용
             foreach (AbilityData abilityData in abilityDatas)
-                StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
+                yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
 
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, card);
-
-            // 마스터 핸드 카드 제거
-            deck.RemoveHandCard(cardUid);
         }
 
         /// <summary>

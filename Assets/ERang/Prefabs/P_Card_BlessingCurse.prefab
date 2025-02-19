@@ -1138,7 +1138,6 @@ GameObject:
   - component: {fileID: 6363688871000402312}
   - component: {fileID: 5900284514085502876}
   - component: {fileID: -6579194241496720873}
-  - component: {fileID: -5386672416980230907}
   - component: {fileID: -4681829242462720617}
   - component: {fileID: -5393989896994016311}
   m_Layer: 0
@@ -1220,20 +1219,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
---- !u!114 &-5386672416980230907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6549374021415066406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2d77514f050ff54dbe4c4be9ae2ec9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardId: 0
-  cardType: 0
 --- !u!114 &-4681829242462720617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1246,16 +1231,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f0adb72dd00da6409802d76aa018221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardImage: {fileID: 0}
   cardMeshRenderer: {fileID: 0}
-  cardTypeText: {fileID: 4252308859526660259}
-  descText: {fileID: 978401443610042965}
-  hpText: {fileID: 1678332781460938638}
-  manaText: {fileID: 1935977956902000363}
-  atkText: {fileID: 2937463406376378940}
-  defText: {fileID: 2764430739858798895}
-  cardObject: {fileID: 0}
+  cardNameText: {fileID: 0}
+  cardTypeText: {fileID: 0}
+  descText: {fileID: 0}
+  hpText: {fileID: 0}
+  manaText: {fileID: 0}
+  atkText: {fileID: 0}
+  defText: {fileID: 0}
   floatingTextPrefab: {fileID: 0}
   floatingTextParent: {fileID: 0}
+  statObjectPairs: []
 --- !u!114 &-5393989896994016311
 MonoBehaviour:
   m_ObjectHideFlags: 0

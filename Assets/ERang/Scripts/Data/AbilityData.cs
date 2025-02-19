@@ -26,6 +26,7 @@ namespace ERang.Data
         public string skillViewIcon;
         public string fxSound;
         public int summonGroupId;
+        public int chainAbilityId;
 
         [Header("Display")]
         public Texture2D iconTexture;
@@ -50,6 +51,7 @@ namespace ERang.Data
             skillViewIcon = entity.SkillViewIcon;
             fxSound = entity.FxSound;
             summonGroupId = entity.Summon_GroupId;
+            chainAbilityId = entity.ChainAbilityId;
 
             // 아이콘 이미지 로드 및 iconTexture 에 할당
             if (!string.IsNullOrEmpty(skillIcon))
@@ -96,6 +98,8 @@ namespace ERang.Data
 
         AbilityType ConvertAbilityType(string abilityType)
         {
+            abilityType = abilityType.Replace(" ", "");
+
             return abilityType switch
             {
                 "Damage" => AbilityType.Damage,
@@ -118,6 +122,8 @@ namespace ERang.Data
                 "Doom" => AbilityType.Doom,
                 "Burn" => AbilityType.Burn,
                 "Poison" => AbilityType.Poison,
+                "Swallow" => AbilityType.Swallow,
+                "ReducedMana" => AbilityType.ReducedMana,
                 _ => AbilityType.None,
             };
         }

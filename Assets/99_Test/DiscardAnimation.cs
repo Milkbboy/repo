@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
@@ -8,6 +7,7 @@ public class DiscardAnimation : MonoBehaviour
     public Transform DiscardPos;  // 타겟 오브젝트의 새로운 이름: DiscardPos (버릴 위치)
     public Transform FX_Pos;  // 이펙트 출력 위치의 새로운 이름: FX_Pos
     public GameObject effectPrefab;  // 이펙트 프리팹
+    public bool IsAnimationComplete { get; private set; } = false;
 
     private float scaleUpAmount = 1.5f;  // 오브젝트가 커질 크기 배율
     private float scaleDownAmount = 0.65f;  // 오브젝트가 작아질 크기 배율
@@ -31,6 +31,8 @@ public class DiscardAnimation : MonoBehaviour
     {
         DiscardPos = disCardPos;
         this.onCompleteCoroutine = onCompleteCoroutine;
+
+        IsAnimationComplete = false;
 
         PlaySequence();
     }
@@ -87,6 +89,8 @@ public class DiscardAnimation : MonoBehaviour
         // 외부 코루틴 실행
         if (onCompleteCoroutine != null)
             yield return StartCoroutine(onCompleteCoroutine);
+
+        IsAnimationComplete = true;
 
         // 오브젝트 삭제
         DestroyObject();
