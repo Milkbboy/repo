@@ -508,11 +508,11 @@ namespace ERang
                 return;
             }
 
-            // 보드 슬롯에 카드 장착
-            boardSlot.EquipCard(hCard.Card);
-
             // 핸드 카드 => 보드 카드 이동
             deck.HandCardToBaord(hCard);
+
+            // 보드 슬롯에 카드 장착
+            boardSlot.EquipCard(hCard.Card);
 
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, hCard.Card);
