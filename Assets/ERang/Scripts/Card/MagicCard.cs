@@ -6,9 +6,6 @@ namespace ERang
     // 마법 카드
     public class MagicCard : BaseCard, IManaManageable
     {
-        public override int Atk { get; set; }
-        public override int Mana => mana;
-
         public bool IsSelectAttackType => isSelectAttackType;
         public bool IsHandOnCard => isHandOnCard;
         public List<int> TargetSlotNumbers => targetSlotNumbers;
@@ -26,22 +23,8 @@ namespace ERang
         /// </summary>
         private List<int> targetSlotNumbers = new();
 
-        private int mana;
-
         public MagicCard(CardData cardData) : base(cardData)
         {
-            Atk = cardData.atk;
-            mana = cardData.costMana;
-        }
-
-        public void SetMana(int amount)
-        {
-            mana = amount;
-        }
-
-        public void SetAttack(int amount)
-        {
-            Atk = amount;
         }
 
         public void SetHandOnCard(bool isHandOnCard)
@@ -57,19 +40,6 @@ namespace ERang
         public void SetTargetSlotNumbers(List<int> slotNumbers)
         {
             targetSlotNumbers = slotNumbers;
-        }
-
-        public void IncreaseMana(int amount)
-        {
-            mana += amount;
-        }
-
-        public void DecreaseMana(int amount)
-        {
-            mana -= amount;
-
-            if (mana < 0)
-                mana = 0;
         }
     }
 }

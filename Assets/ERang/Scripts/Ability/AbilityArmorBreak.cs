@@ -6,6 +6,9 @@ using ERang.Data;
 
 namespace ERang
 {
+    /// <summary>
+    /// 카드 방어력 0 되게 하는 어빌리티
+    /// </summary>
     public class AbilityArmorBreak : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.ArmorBreak;

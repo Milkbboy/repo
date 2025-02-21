@@ -1,10 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
 
 namespace ERang
 {
+    /// <summary>
+    /// 전체 카드를 갖고 있는 플레이어
+    /// </summary>
     public class Player : MonoBehaviour
     {
         public static Player Instance { get; private set; }

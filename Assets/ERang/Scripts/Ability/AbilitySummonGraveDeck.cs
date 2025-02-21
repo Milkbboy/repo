@@ -5,6 +5,9 @@ using ERang.Data;
 
 namespace ERang
 {
+    /// <summary>
+    /// 랜덤으로 뽑힌 카드 무덤 덱으로 이동
+    /// </summary>
     public class AbilitySummonGraveDeck : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.SummonGraveDeck;

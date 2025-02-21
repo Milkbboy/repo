@@ -245,7 +245,7 @@ namespace ERang
                     discardAnimation.PlaySequence(GraveTransform, null);
                     break;
 
-                case DeckKind.Deck:
+                case DeckKind.ReadyDeck:
                     Deck.Instance.AddDeckCard(card);
                     discardAnimation.PlaySequence(DeckTransform, null);
                     break;

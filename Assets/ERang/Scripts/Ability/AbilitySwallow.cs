@@ -7,6 +7,10 @@ using ERang.Data;
 
 namespace ERang
 {
+    /// <summary>
+    /// 선택한 카드를 ReadyDeck 으로 이동
+    /// - 선택한 카드는 ChainAbilityId 효과 적용
+    /// </summary>
     public class AbilitySwallow : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Swallow;
@@ -16,8 +20,6 @@ namespace ERang
 
         public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            // cardAbility.abilityValue 만큼 유저가 핸드 카드를 뽑을때까지 대기
-            // BattleLogic.Instance.ShowCardSelect(cardAbility.abilityValue);
             cardSelectObject.gameObject.SetActive(true);
 
             cardSelectObject.SetMaxSelectCardCount(cardAbility.abilityValue);

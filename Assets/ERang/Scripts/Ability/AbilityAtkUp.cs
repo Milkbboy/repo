@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// 공격력 증가 어빌리티
+    /// </summary>
     public class AbilityAtkUp : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.AtkUp;
@@ -29,21 +32,15 @@ namespace ERang
                 yield break;
             }
 
-            if (card is not CreatureCard creatureCard)
-            {
-                Debug.LogWarning($"{card.LogText} 크리쳐 카드 아님.");
-                yield break;
-            }
-
-            int before = creatureCard.Atk;
+            int before = card.Atk;
             int value = cardAbility.abilityValue;
 
             if (isAtkUp)
-                creatureCard.IncreaseAttack(value);
+                card.IncreaseAttack(value);
             else
-                creatureCard.DecreaseAttack(value);
+                card.DecreaseAttack(value);
 
-            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, creatureCard.Atk, isAtkUp ? value : value * -1));
+            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Atk, isAtkUp ? value : value * -1));
 
             yield return new WaitForSeconds(0.1f);
         }

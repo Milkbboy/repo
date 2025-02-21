@@ -18,7 +18,6 @@ namespace ERang
         /// <summary>
         /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
         /// </summary>
-        /// <returns></returns>
         public int GetCardAiDataId(BaseCard card)
         {
             BSlot boardSlot = null;
@@ -83,7 +82,7 @@ namespace ERang
                     totalValue += aiData.value;
 
                     aiDataList.Add((aiDataId, aiData.value));
-                };
+                }
 
                 string aiDataListLog = $"{card.Id} 카드. aiDataIds {string.Join(", ", aiDataIds)} 중 중 하나 선택";
 

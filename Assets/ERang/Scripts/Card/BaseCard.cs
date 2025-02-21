@@ -20,6 +20,13 @@ namespace ERang
         public bool IsExtinction { get; set; }
         public Texture2D CardImage { get; set; }
 
+        public int Hp { get { return hp; } set { hp = value; } }
+        public int MaxHp { get { return maxHp; } set { maxHp = value; } }
+        public int Def { get { return def; } set { def = value; } }
+        public int Mana { get { return mana; } set { mana = value; } }
+        public int Atk { get { return atk; } set { atk = value; } }
+        public CardTraits Traits { get; set; }
+
         // 게임 관련 멤버 변수
         public List<CardAbility> CardAbilities { get => cardAbilities; set => cardAbilities = value; }
         public List<CardAbility> PriorCardAbilities { get => cardAbilities.Where(ability => Constants.CardPriorAbilities.Contains(ability.abilityType)).ToList(); }
@@ -27,15 +34,15 @@ namespace ERang
         public List<CardAbility> BrokenDefAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.BrokenDef).ToList(); }
         public List<CardAbility> DefUpAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.DefUp).ToList(); }
         public CardAbility ArmorBreakAbility { get => cardAbilities.FirstOrDefault(ability => ability.abilityType == AbilityType.ArmorBreak); }
-        public CardTraits Traits { get; set; }
         public List<CardAbility> HandAbilities { get => handAbilities; set => handAbilities = value; }
 
         public string LogText => Utils.CardLog(this);
 
-        public virtual int Hp { get; set; }
-        public virtual int Def { get; set; }
-        public virtual int Mana { get; set; }
-        public virtual int Atk { get; set; }
+        protected int hp;
+        protected int maxHp;
+        protected int atk;
+        protected int def;
+        protected int mana;
 
         public virtual void TakeDamage(int amount) { }
         public virtual void RestoreHealth(int amount) { }
@@ -63,6 +70,12 @@ namespace ERang
             AiGroupIndex = 0;
             CardImage = cardData.GetCardTexture();
             Traits = CardTraits.None;
+
+            hp = cardData.hp;
+            maxHp = cardData.hp;
+            atk = cardData.atk;
+            def = cardData.def;
+            mana = cardData.costMana;
         }
 
         public BaseCard(int cardId, CardType cardType, int aiGroupId, Texture2D cardImage)
@@ -94,6 +107,29 @@ namespace ERang
             AiGroupId = aiGroupId;
             AiGroupIndex = 0;
             CardImage = cardImage;
+        }
+
+        public void IncreaseAttack(int amount)
+        {
+            atk += amount;
+        }
+
+        public void DecreaseAttack(int amount)
+        {
+            atk -= amount;
+        }
+
+        public void IncreaseMana(int amount)
+        {
+            mana += amount;
+        }
+
+        public void DecreaseMana(int amount)
+        {
+            mana -= amount;
+
+            if (mana < 0)
+                mana = 0;
         }
 
         /// <summary>

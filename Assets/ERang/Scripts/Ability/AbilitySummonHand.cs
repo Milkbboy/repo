@@ -5,6 +5,9 @@ using ERang.Data;
 
 namespace ERang
 {
+    /// <summary>
+    /// 랜덤으로 뽑힌 카드 핸드 덱으로 이동
+    /// </summary>
     public class AbilitySummonHand : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.SummonHand;

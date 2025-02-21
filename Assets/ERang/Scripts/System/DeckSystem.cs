@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace ERang
 {
+    /// <summary>
+    /// 모든 카드를 관리
+    /// </summary>
     public class DeckSystem : MonoBehaviour
     {
         public static DeckSystem Instance { get; private set; }
@@ -14,10 +17,15 @@ namespace ERang
         public int ExtinctionCardCount => extinctionCards.Count;
         public int GraveCardCount => graveCards.Count;
 
+        // 준비 카드
         public List<BaseCard> DeckCards => deckCards;
+        // 핸드 카드
         public List<BaseCard> HandCards => handCards;
+        // 무덤 카드. 배틀에서 재활용 가능
         public List<BaseCard> GraveCards => graveCards;
+        // 소멸 카드. 배틀에서 재활용 불가능으로 한번만 사용 가능
         public List<BaseCard> ExtinctionCards => extinctionCards;
+        // 건물 카드
         public List<BaseCard> BuildingCards => buildingCards;
 
         private bool isCreatedStarCard = false;

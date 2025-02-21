@@ -5,6 +5,9 @@ using ERang.Data;
 
 namespace ERang
 {
+    /// <summary>
+    /// 공격력 감소 어빌리티
+    /// </summary>
     public class AbilityWeaken : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Weaken;

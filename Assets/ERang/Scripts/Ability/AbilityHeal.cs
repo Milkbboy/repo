@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// 카드 체력 회복 어빌리티
+    /// </summary>
     public class AbilityHeal : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Heal;

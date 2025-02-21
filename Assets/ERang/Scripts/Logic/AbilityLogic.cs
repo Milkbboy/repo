@@ -25,7 +25,7 @@ namespace ERang
             foreach (Transform abilityTransform in abilities)
             {
                 // 현재 게임 오브젝트 자신은 제외
-                if (abilityTransform == this.transform)
+                if (abilityTransform == transform)
                     continue;
 
                 IAbility ability = abilityTransform.GetComponent<IAbility>();

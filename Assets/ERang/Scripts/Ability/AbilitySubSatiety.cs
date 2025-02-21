@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// 포만도 감소 어빌리티
+    /// </summary>
     public class AbilitySubSatiety : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.SubSatiety;

@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// hp 0 만드는 어빌리티
+    /// </summary>
     public class AbilityDoom : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Doom;

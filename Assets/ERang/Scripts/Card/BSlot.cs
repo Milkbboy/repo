@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using System.Linq;
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -235,26 +233,14 @@ namespace ERang
 
         public void IncreaseAttack(int amount)
         {
-            if (card is not CreatureCard creatureCard)
-            {
-                Debug.LogWarning($"{LogText}: 슬롯 카드가 CreatureCard 가 아닙니다.");
-                return;
-            }
-
-            creatureCard.IncreaseAttack(amount);
-            cardUI.SetAtk(creatureCard.Atk);
+            card.IncreaseAttack(amount);
+            cardUI.SetAtk(card.Atk);
         }
 
         public void DecreaseAttack(int amount)
         {
-            if (card is not CreatureCard creatureCard)
-            {
-                Debug.LogWarning($"{LogText}: 슬롯 카드가 CreatureCard 가 아닙니다.");
-                return;
-            }
-
-            creatureCard.DecreaseAttack(amount);
-            cardUI.SetAtk(creatureCard.Atk);
+            card.DecreaseAttack(amount);
+            cardUI.SetAtk(card.Atk);
         }
 
         public void RemoveCard()
@@ -266,39 +252,23 @@ namespace ERang
 
         public void IncreaseMana(int amount)
         {
-            if (card is not MasterCard masterCard)
-            {
-                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
-                return;
-            }
-
-            masterCard.IncreaseMana(amount);
-
-            cardUI.SetMana(masterCard.Mana);
+            card.IncreaseMana(amount);
+            cardUI.SetMana(card.Mana);
         }
 
         public void DecreaseMana(int amount)
         {
+            card.DecreaseMana(amount);
+            cardUI.SetMana(card.Mana);
+        }
+
+        public void ResetMana()
+        {
             if (card is not MasterCard masterCard)
             {
                 Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
                 return;
             }
-
-            masterCard.DecreaseMana(amount);
-
-            cardUI.SetMana(masterCard.Mana);
-        }
-
-        public void ResetMana()
-        {
-            if (card is not MasterCard)
-            {
-                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
-                return;
-            }
-
-            MasterCard masterCard = card as MasterCard;
 
             masterCard.ResetMana();
             cardUI.SetMana(masterCard.Mana);

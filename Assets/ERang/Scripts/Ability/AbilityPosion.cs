@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// 독 어빌리티
+    /// </summary>
     public class AbilityPosion : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Poison;

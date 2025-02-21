@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// 방어력 증가 어빌리티
+    /// </summary>
     public class AbilityDefUp : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.DefUp;

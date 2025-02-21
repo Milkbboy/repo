@@ -194,9 +194,9 @@ namespace ERang
             DrawCardStatField("Atk", ref atk);
             DrawCardStatField("Def", ref def);
 
-            card.SetHp(hp);
-            card.SetMana(mana);
-            card.SetAttack(atk);
+            card.Hp = hp;
+            card.Mana = mana;
+            card.Atk = atk;
             card.SetDefense(def);
         }
 
@@ -208,8 +208,8 @@ namespace ERang
             DrawCardStatField("Mana", ref mana);
             DrawCardStatField("Atk", ref atk);
 
-            card.SetMana(mana);
-            card.SetAttack(atk);
+            card.Mana = mana;
+            card.Atk = atk;
         }
 
         private void DrawCardStatField(string label, ref int stat)

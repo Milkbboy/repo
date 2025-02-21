@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// 화상 어빌리티
+    /// </summary>
     public class AbilityBurn : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Burn;

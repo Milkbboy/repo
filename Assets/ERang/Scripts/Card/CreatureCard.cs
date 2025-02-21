@@ -5,58 +5,30 @@ namespace ERang
     // 크리쳐 카드
     public class CreatureCard : BaseCard, IAttackable, IManaManageable
     {
-        public override int Hp => hp;
-        public override int Def => def;
-        public override int Mana => mana;
-        public override int Atk => atk;
-
-        public int MaxHp => maxHp;
-
-        private int hp;
-        private int maxHp;
-        private int atk;
-        private int def;
-        protected int mana;
-
         public CreatureCard()
         {
         }
 
         public CreatureCard(CardData cardData) : base(cardData)
         {
-            hp = cardData.hp;
-            maxHp = cardData.hp;
-            atk = cardData.atk;
-            def = cardData.def;
-            mana = cardData.costMana;
         }
 
-        public void SetHp(int amount)
+        public override void SetDefense(int def)
         {
-            hp = amount;
+            this.def = def;
+
+            if (this.def < 0)
+                this.def = 0;
         }
 
-        public void SetMana(int amount)
+        public override void RestoreHealth(int hp)
         {
-            mana = amount;
+            this.hp += hp;
         }
 
-        public override void SetDefense(int amount)
+        public override void TakeDamage(int damage)
         {
-            def = amount;
-
-            if (def < 0)
-                def = 0;
-        }
-
-        public override void RestoreHealth(int amount)
-        {
-            hp += amount;
-        }
-
-        public override void TakeDamage(int amount)
-        {
-            def -= amount;
+            def -= damage;
 
             if (def < 0)
             {
@@ -68,45 +40,17 @@ namespace ERang
                 hp = 0;
         }
 
-        public override void IncreaseDefense(int amount)
+        public override void IncreaseDefense(int def)
         {
-            def += amount;
+            this.def += def;
         }
 
-        public override void DecreaseDefense(int amount)
+        public override void DecreaseDefense(int def)
         {
-            def -= amount;
+            this.def -= def;
 
-            if (def < 0)
-                def = 0;
-        }
-
-        public void IncreaseAttack(int amount)
-        {
-            atk += amount;
-        }
-
-        public void DecreaseAttack(int amount)
-        {
-            atk -= amount;
-        }
-
-        public void SetAttack(int amount)
-        {
-            atk = amount;
-        }
-
-        public void IncreaseMana(int amount)
-        {
-            mana += amount;
-        }
-
-        public void DecreaseMana(int amount)
-        {
-            mana -= amount;
-
-            if (mana < 0)
-                mana = 0;
+            if (this.def < 0)
+                this.def = 0;
         }
     }
 }

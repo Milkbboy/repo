@@ -6,6 +6,9 @@ using ERang.Data;
 
 namespace ERang
 {
+    /// <summary>
+    /// 차징 공격 데미지 어빌리티
+    /// </summary>
     public class AbilityChargeDamage : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.ChargeDamage;
@@ -32,7 +35,7 @@ namespace ERang
             int damage = 0;
 
             if (selfSlot.Card is CreatureCard)
-                damage = (selfSlot.Card as CreatureCard).Atk;
+                damage = selfSlot.Card.Atk;
 
             if (Constants.SelectAttackTypes.Contains(aiData.attackType))
                 damage = cardAbility.abilityValue;

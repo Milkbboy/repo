@@ -11,7 +11,6 @@ namespace ERang
 
     public interface IDamageable
     {
-        // public void Die();
         public void TakeDamage(int amount);
         public void RestoreHealth(int amount);
     }

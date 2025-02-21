@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// 사용 마나 감소 어빌리티
+    /// </summary>
     public class AbilityReducedMana : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.ReducedMana;
@@ -41,25 +44,10 @@ namespace ERang
         {
             foreach (CardAbility cardAbility in card.HandAbilities)
             {
-                if (card is CreatureCard creatureCard)
-                {
-                    Debug.Log("크리처 카드!!!!");
-
-                    if (isReduced)
-                        creatureCard.DecreaseMana(cardAbility.abilityValue);
-                    else
-                        creatureCard.IncreaseMana(cardAbility.abilityValue);
-                }
-
-                if (card is MagicCard magicCard)
-                {
-                    Debug.Log("마법 카드!!!!");
-
-                    if (isReduced)
-                        magicCard.DecreaseMana(cardAbility.abilityValue);
-                    else
-                        magicCard.IncreaseMana(cardAbility.abilityValue);
-                }
+                if (isReduced)
+                    card.DecreaseMana(cardAbility.abilityValue);
+                else
+                    card.IncreaseMana(cardAbility.abilityValue);
             }
         }
     }

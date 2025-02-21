@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// 방어력 감소 어빌리티
+    /// </summary>
     public class AbilityBrokenDef : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.BrokenDef;

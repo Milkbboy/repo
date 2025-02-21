@@ -6,6 +6,9 @@ using ERang.Data;
 
 namespace ERang
 {
+    /// <summary>
+    /// 카드 데미지 어빌리티
+    /// </summary>
     public class AbilityDamage : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Damage;
@@ -27,7 +30,7 @@ namespace ERang
             int value = 0;
 
             if (selfSlot.Card is CreatureCard)
-                value = (selfSlot.Card as CreatureCard).Atk;
+                value = selfSlot.Card.Atk;
 
             // 카드 선택 공격 타입이면 어빌리티 데미지 값으로 설정
             if (Constants.SelectAttackTypes.Contains(aiAttackType))

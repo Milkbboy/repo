@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace ERang
 {
+    /// <summary>
+    /// 루시 전용 스킬
+    /// - 만복감 게이지 증가 어빌리티
+    /// </summary>
     public class AbilityAddSatiety : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.AddSatiety;

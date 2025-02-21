@@ -2,7 +2,7 @@ namespace ERang
 {
     public enum DeckKind
     {
-        Deck,
+        ReadyDeck,
         Hand,
         Grave
     }
