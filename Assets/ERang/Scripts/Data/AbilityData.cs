@@ -123,7 +123,7 @@ namespace ERang.Data
                 "Burn" => AbilityType.Burn,
                 "Poison" => AbilityType.Poison,
                 "Swallow" => AbilityType.Swallow,
-                "ReducedMana" => AbilityType.ReducedMana,
+                "SwallowReducedMana" => AbilityType.SwallowReducedMana,
                 _ => AbilityType.None,
             };
         }

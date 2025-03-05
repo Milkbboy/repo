@@ -142,7 +142,7 @@ namespace ERang
                     yield break;
                 }
 
-                if (abilityAction is AbilityReducedMana reducedMana)
+                if (abilityAction is AbilitySwallowReducedMana reducedMana)
                 {
                     yield return StartCoroutine(reducedMana.ApplySingle(handCard));
                 }
@@ -163,7 +163,7 @@ namespace ERang
                     yield break;
                 }
 
-                if (abilityAction is AbilityReducedMana reducedMana)
+                if (abilityAction is AbilitySwallowReducedMana reducedMana)
                 {
                     yield return StartCoroutine(reducedMana.Release(handCard));
 

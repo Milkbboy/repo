@@ -29,12 +29,13 @@ namespace ERang
 
         // 게임 관련 멤버 변수
         public List<CardAbility> CardAbilities { get => cardAbilities; set => cardAbilities = value; }
+        public List<CardAbility> HandAbilities { get => handAbilities; set => handAbilities = value; }
+
         public List<CardAbility> PriorCardAbilities { get => cardAbilities.Where(ability => Constants.CardPriorAbilities.Contains(ability.abilityType)).ToList(); }
         public List<CardAbility> PostCardAbilities { get => cardAbilities.Where(ability => Constants.CardPostAbilities.Contains(ability.abilityType)).ToList(); }
         public List<CardAbility> BrokenDefAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.BrokenDef).ToList(); }
         public List<CardAbility> DefUpAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.DefUp).ToList(); }
         public CardAbility ArmorBreakAbility { get => cardAbilities.FirstOrDefault(ability => ability.abilityType == AbilityType.ArmorBreak); }
-        public List<CardAbility> HandAbilities { get => handAbilities; set => handAbilities = value; }
 
         public string LogText => Utils.CardLog(this);
 
@@ -76,6 +77,23 @@ namespace ERang
             atk = cardData.atk;
             def = cardData.def;
             mana = cardData.costMana;
+        }
+
+        public BaseCard(Master master)
+        {
+            Uid = Utils.GenerateShortUniqueID();
+            Id = master.MasterId;
+            CardType = CardType.Master;
+            AiGroupId = 0;
+            AiGroupIndex = 0;
+            CardImage = master.CardImage;
+            Traits = CardTraits.None;
+
+            hp = master.Hp;
+            maxHp = master.MaxHp;
+            atk = master.Atk;
+            def = master.Def;
+            mana = master.Mana;
         }
 
         public BaseCard(int cardId, CardType cardType, int aiGroupId, Texture2D cardImage)

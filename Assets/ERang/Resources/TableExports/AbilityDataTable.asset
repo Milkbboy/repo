@@ -749,7 +749,7 @@ MonoBehaviour:
     ChainAbilityId: 100027
   - AbilityData_Id: 100027
     NameDesc: "\uC0BC\uD0A8 \uCE74\uB4DC \uBE44\uC6A9 \uAC10\uC18C"
-    AbilityType: 'ReducedMana '
+    AbilityType: 'SwallowReducedMana '
     Value: 2
     Ratio: 0
     Type: Active

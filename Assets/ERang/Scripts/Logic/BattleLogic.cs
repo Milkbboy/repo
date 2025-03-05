@@ -508,14 +508,14 @@ namespace ERang
                 return;
             }
 
-            // 핸드 카드 => 보드 카드 이동
+            // 카드 비용 소모
+            BoardSystem.Instance.CardCost(master, hCard.Card);
+
+            // 핸드 카드 => 보드 카드 이동. 이때 핸드 카드 HandAbilities Release 적용되기 때문에 카드 비용 소모 후 호출
             deck.HandCardToBaord(hCard);
 
             // 보드 슬롯에 카드 장착
             boardSlot.EquipCard(hCard.Card);
-
-            // 카드 비용 소모
-            BoardSystem.Instance.CardCost(master, hCard.Card);
 
             Debug.Log($"{boardSlot.LogText} 에 {hCard.LogText} 장착");
         }

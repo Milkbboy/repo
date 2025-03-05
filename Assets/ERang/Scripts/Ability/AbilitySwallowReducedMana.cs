@@ -7,9 +7,9 @@ namespace ERang
     /// <summary>
     /// 사용 마나 감소 어빌리티
     /// </summary>
-    public class AbilityReducedMana : MonoBehaviour, IAbility
+    public class AbilitySwallowReducedMana : MonoBehaviour, IAbility
     {
-        public AbilityType AbilityType => AbilityType.ReducedMana;
+        public AbilityType AbilityType => AbilityType.SwallowReducedMana;
         public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
         public IEnumerator ApplySingle(BaseCard card)

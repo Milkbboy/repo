@@ -21,7 +21,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Common
     AiGroup_id: 21001
-    CostMana: 2
+    CostMana: 4
     CostGold: 0
     Hp: 5
     Atk: 3

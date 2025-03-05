@@ -171,7 +171,7 @@ namespace ERang
         Burn, // 화상 상태로 N턴 동안 매 행동 시작 시 N만큼의 피해를 받는다.
         Poison, // 중독 상태로 N턴 동안 매 행동 종료 시 N만큼의 피해를 받는다.
         Swallow, // 카드 한 장을 선택하여 삼킨다. 삼킨 카드는 다음 턴에 다시 핸드로 돌아온다.
-        ReducedMana, // 마나 소모량을 Value 만큼 감소시킨다.
+        SwallowReducedMana, // 마나 소모량을 Value 만큼 감소시킨다.
     }
 
     /// <summary>

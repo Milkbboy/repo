@@ -10,7 +10,7 @@ namespace ERang
         {
         }
 
-        public MasterCard(Master master) : base(master.MasterId, CardType.Master, 0, master.CardImage)
+        public MasterCard(Master master) : base(master)
         {
             maxMana = master.MaxMana;
         }
