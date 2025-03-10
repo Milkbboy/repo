@@ -41,6 +41,11 @@ namespace ERang
         // Start is called before the first frame update
         void Start()
         {
+            // DrawCards();
+        }
+
+        public void DrawCards()
+        {
             // 마스터
             MasterData masterData = MasterData.GetMasterData(1001);
 
@@ -94,11 +99,6 @@ namespace ERang
                 handCards.Add(handCard);
             }
 
-            DrawCards();
-        }
-
-        public void DrawCards()
-        {
             // 겹치는 정도를 조절하기 위해 cardWidth의 일부를 사용
             float overlap = cardWidth * 0.05f; // 20% 겹치도록 설정
             cardSpacing = cardWidth + overlap; // 카드 간격 재조정

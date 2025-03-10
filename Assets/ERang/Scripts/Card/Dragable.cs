@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
@@ -15,6 +16,7 @@ namespace ERang
         public float hoverHeight = 1f;
         public float animationDuration = 0.1f;
         public float scaleFactor = 1.5f;
+        public GameObject cardGlow;
 
         private bool isDragging = false;
         private bool isCentered = false;
@@ -33,6 +35,25 @@ namespace ERang
         private Renderer[] renderers;
         private TextMeshPro[] textMeshPros;
 
+        private Material cardGlowMaterial;
+        private Coroutine glowCoroutine;
+
+        private void SetTransparentMaterial(Material mat)
+        {
+            if (mat == null) return;
+
+            // Surface(0=Opaque, 1=Transparent)
+            mat.SetFloat("_Surface", 1f);
+            mat.SetOverrideTag("RenderType", "Transparent");
+            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            mat.SetInt("_ZWrite", 0);
+            mat.DisableKeyword("_ALPHATEST_ON");
+            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            mat.EnableKeyword("_ALPHABLEND_ON");
+            mat.renderQueue = 2989; // Transparent
+        }
+
         void Awake()
         {
             renderers = GetComponentsInChildren<Renderer>(includeInactive: true);
@@ -42,6 +63,23 @@ namespace ERang
             renderers = System.Array.FindAll(renderers, r => !(r is MeshRenderer && r.GetComponent<TextMeshPro>() != null));
 
             // Debug.Log($"textMeshPros.Length: {textMeshPros.Length}");
+
+            cardGlow?.SetActive(false);
+
+            if (cardGlow != null)
+            {
+                cardGlowMaterial = cardGlow.GetComponent<Renderer>().material;
+
+                if (cardGlowMaterial == null)
+                {
+                    Debug.LogError("CardGlow 오브젝트에 Renderer 컴포넌트가 없거나 Material이 없습니다.");
+                }
+
+                if (cardGlowMaterial != null)
+                {
+                    SetTransparentMaterial(cardGlowMaterial);
+                }
+            }
         }
 
         void Start()
@@ -93,7 +131,7 @@ namespace ERang
                 {
                     MoveCardToCenter();
 
-                    HandDeck.Instance.SetTargettingArraow(true);
+                    HandDeck.Instance?.SetTargettingArraow(true);
                 }
             }
         }
@@ -110,11 +148,18 @@ namespace ERang
 
         void OnMouseEnter()
         {
-            if (HandDeck.Instance.DraggingCard != null)
+            if (HandDeck.Instance?.DraggingCard != null)
                 return;
 
             if (isDragging)
                 return;
+
+            cardGlow?.SetActive(true);
+
+            if (glowCoroutine == null && cardGlowMaterial != null)
+            {
+                glowCoroutine = StartCoroutine(GlowEffect());
+            }
 
             transform.DOMoveY(originalPosition.y + hoverHeight, animationDuration);
             transform.DOScale(originalScale * scaleFactor, animationDuration);
@@ -136,11 +181,26 @@ namespace ERang
 
         void OnMouseExit()
         {
-            if (HandDeck.Instance.DraggingCard != null)
+            if (HandDeck.Instance?.DraggingCard != null)
                 return;
 
             if (isDragging)
                 return;
+
+            cardGlow?.SetActive(false);
+
+            if (glowCoroutine != null)
+            {
+                StopCoroutine(glowCoroutine);
+                glowCoroutine = null;
+
+                if (cardGlowMaterial != null)
+                {
+                    Color color = cardGlowMaterial.color;
+                    color.a = 1.0f;
+                    cardGlowMaterial.color = color;
+                }
+            }
 
             transform.DOMoveY(originalPosition.y, animationDuration);
             transform.DOScale(originalScale, animationDuration);
@@ -151,6 +211,17 @@ namespace ERang
         public void MoveToOriginalPosition()
         {
             transform.DOMove(originalPosition, animationDuration);
+        }
+
+        private IEnumerator GlowEffect()
+        {
+            while (true)
+            {
+                Color color = cardGlowMaterial.color;
+                color.a = Mathf.PingPong(Time.time, .5f);
+                cardGlowMaterial.color = color;
+                yield return null; // 다음 프레임까지 대기
+            }
         }
 
         private void ResetSortingOrder()

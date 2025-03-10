@@ -33,7 +33,7 @@ namespace ERang
 
         void OnMouseEnter()
         {
-            if (HandDeck.Instance.DraggingCard != null)
+            if (HandDeck.Instance?.DraggingCard != null)
                 return;
 
             if (card == null)
@@ -44,7 +44,7 @@ namespace ERang
 
         void OnMouseExit()
         {
-            if (HandDeck.Instance.DraggingCard != null)
+            if (HandDeck.Instance?.DraggingCard != null)
                 return;
 
             if (card == null)
@@ -57,22 +57,22 @@ namespace ERang
         {
             // Debug.Log($"HCard. OnMouseDown. {card?.Uid} {card?.LogText}");
 
-            HandDeck.Instance.SetDraggingCard(this);
+            HandDeck.Instance?.SetDraggingCard(this);
         }
 
         void OnMouseUp()
         {
-            HandDeck.Instance.SetDraggingCard(null);
+            HandDeck.Instance?.SetDraggingCard(null);
 
             Debug.Log($"HCard. OnMouseUp - 1. {card?.Uid} {card?.LogText}, originalPosition: {originalPosition}");
 
             // 가장 가까운 슬롯을 찾고, 슬롯 위에 있는지 확인
             if (card is MagicCard magicCard)
             {
-                HandDeck.Instance.MagicCardUse(this);
+                HandDeck.Instance?.MagicCardUse(this);
 
                 if (magicCard.IsSelectAttackType)
-                    HandDeck.Instance.SetTargettingArraow(false);
+                    HandDeck.Instance?.SetTargettingArraow(false);
             }
             else
             {
