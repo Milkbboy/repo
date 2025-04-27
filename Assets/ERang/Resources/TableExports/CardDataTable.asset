@@ -23,7 +23,7 @@ MonoBehaviour:
     AiGroup_id: 21001
     CostMana: 2
     CostGold: 0
-    Hp: 5
+    Hp: 3
     Atk: 3
     Def: 0
     InUse: 1

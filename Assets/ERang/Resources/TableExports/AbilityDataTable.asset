@@ -171,7 +171,7 @@ MonoBehaviour:
   - AbilityData_Id: 70010
     NameDesc: "\uD30C\uC774\uC5B4 \uBCFC (\uB9C8\uBC95)"
     AbilityType: Damage
-    Value: 3
+    Value: 2
     Ratio: 0
     Type: Active
     Duration: 0
