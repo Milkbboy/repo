@@ -31,6 +31,7 @@ namespace ERang
         public CardSelect cardSelect;
 
         private Master master;
+        private MasterCard masterCard;
         private bool isTruenEndProcessing = false;
         private MapLocation selectLocation;
         private bool keepSatiety;
@@ -87,6 +88,7 @@ namespace ERang
 
             // 마스터 카드 생성
             StartCoroutine(BoardSystem.Instance.CreateMasterCard(master));
+            masterCard = BoardSystem.Instance.MasterCard;
 
             // 마스터 크리쳐 카드 생성
             deck.CreateMasterCards(master);
@@ -476,6 +478,9 @@ namespace ERang
 
         public bool HandCardUse(HCard hCard, BSlot targetSlot)
         {
+            if (CanHandCardUse(hCard.Card.Uid) == false)
+                return false;
+
             if (hCard.Card.CardType == CardType.Creature || hCard.Card.CardType == CardType.Building)
             {
                 BoardSlotEquipCard(hCard, targetSlot);
@@ -662,11 +667,19 @@ namespace ERang
                 return false;
             }
 
+            int requiredMana = 0;
+
+            if (card is CreatureCard creatureCard)
+                requiredMana = creatureCard.Mana;
+
+            if (card is MagicCard magicCard)
+                requiredMana = magicCard.Mana;
+
             // 필요 마나 확인
-            if (card is MagicCard magicCard && master.Mana < magicCard.Mana)
+            if (masterCard.Mana < requiredMana)
             {
-                ToastNotification.Show($"mana({master.Mana}) is not enough");
-                Debug.LogWarning($"핸드 카드({magicCard.Id}) 마나 부족으로 사용 불가능({master.Mana} < {magicCard.Mana})");
+                ToastNotification.Show($"mana({masterCard.Mana}) is not enough");
+                Debug.LogWarning($"핸드 카드({card.Id}) 마나 부족으로 사용 불가능({masterCard.Mana} < {requiredMana})");
                 return false;
             }
 
