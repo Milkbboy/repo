@@ -40,17 +40,10 @@ public class Reward : MonoBehaviour
             return;
         }
 
-        int cardCount = Constants.RewardCardCount;
+        // RewardSetData 에서 rewardCount 만큼 보상 타입을 랜덤으로 가져온다.
+        List<RewardType> rewardTypes = RewardSetData.GetRewardTypes(Constants.RewardCount);
 
-        List<CardGrade> cardGrades = new();
-
-        for (int i = 0; i < cardCount; ++i)
-        {
-            CardGrade cardGrade = RewardSetData.PickupCardGrade();
-            cardGrades.Add(cardGrade);
-        }
-
-        Debug.Log($"masterId: {masterId}, levelId: {levelId}, rewardId: {levelData.rewardId} Reward cardGrades: {string.Join(", ", cardGrades)}");
+        Debug.Log($"masterId: {masterId}, levelId: {levelId}, rewardId: {levelData.rewardId} Reward rewardTypes: {string.Join(", ", rewardTypes)}");
 
         RewardData rewardData = RewardData.rewardDataDict[(levelData.rewardId, masterId)];
 
@@ -62,9 +55,9 @@ public class Reward : MonoBehaviour
 
         List<int> selectedCardIds = new();
 
-        foreach (CardGrade cardGrade in cardGrades)
+        foreach (RewardType rewardType in rewardTypes)
         {
-            var rewardCardDatas = rewardData.rewardCardDatas.Where(card => card.cardGrade == cardGrade && !selectedCardIds.Contains(card.cardId)).ToList();
+            var rewardCardDatas = rewardData.rewardCardDatas.Where(card => card.rewardType == rewardType && !selectedCardIds.Contains(card.cardId)).ToList();
 
             if (rewardCardDatas.Count > 0)
             {
