@@ -2,9 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Unity Editor",
+            "type": "unity",
+            "request": "launch"
+        },
+        {
+            "name": "Unity Attach",
+            "type": "node",
+            "request": "attach"
+        },
+        {
             "name": "Attach to Unity",
             "type": "vstuc",
             "request": "attach"
         }
-     ]
+    ]
 }

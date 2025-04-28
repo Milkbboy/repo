@@ -4,6 +4,9 @@
     "editor.insertSpaces": true,
     "editor.detectIndentation": true,
     "editor.tabSize": 4,
+    "editor.fontFamily": "'D2Coding', Consolas, 'Courier New', monospace",
+    "editor.fontSize": 14,
+    "editor.fontLigatures": true,
     "files.exclude": {
         "**/.DS_Store": true,
         "**/.git": true,
