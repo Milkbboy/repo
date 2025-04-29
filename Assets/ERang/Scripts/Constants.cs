@@ -33,6 +33,14 @@ namespace ERang
         Legendary,
     }
 
+    public enum RewardType
+    {
+        None = 0,
+        Card,
+        Gold,
+        Mana,
+    }
+
     public enum CardType
     {
         None = 0,

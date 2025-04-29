@@ -8,6 +8,7 @@ namespace ERang
         public string NameDesc;
         public int CardId;
         public string CardNameDesc;
+        public string RewardType;
         public string Grade;
         public int WeightValue;
     }

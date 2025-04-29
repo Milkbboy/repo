@@ -12,6 +12,7 @@ namespace ERang.Data
         public CardGrade cardGrade;
         public int weightValue;
         public int resultValue;
+        public RewardType rewardType;
     }
 
     public class RewardData
@@ -63,6 +64,7 @@ namespace ERang.Data
                 cardGrade = GetCardGrade(entity),
                 weightValue = entity.WeightValue,
                 resultValue = GetResultValue(entity),
+                rewardType = GetRewardType(entity),
             };
 
             rewardCardDatas.Add(rewardCardData);
@@ -81,7 +83,7 @@ namespace ERang.Data
         }
 
         CardGrade GetCardGrade(RewardDataEntity entity)
-        {   
+        {
             CardGrade cardGrade = CardGrade.None;
 
             if (CardData.card_dict.TryGetValue(entity.CardId, out CardData cardData))
@@ -115,6 +117,21 @@ namespace ERang.Data
             }
 
             return rewardSetData.value + entity.WeightValue;
+        }
+
+        RewardType GetRewardType(RewardDataEntity entity)
+        {
+            RewardType rewardType = RewardType.None;
+
+            rewardType = entity.RewardType switch
+            {
+                "Card" => RewardType.Card,
+                "Gold" => RewardType.Gold,
+                "Mana" => RewardType.Mana,
+                _ => RewardType.None
+            };
+
+            return rewardType;
         }
     }
 }
