@@ -108,11 +108,11 @@ namespace ERang.Data
         {
             CardGrade cardGrade = GetCardGrade(entity);
 
-            RewardSetData rewardSetData = RewardSetData.GetRewardSetData(cardGrade);
+            RewardSetData rewardSetData = RewardSetData.GetRewardSetData(cardGrade.ToString());
 
             if (rewardSetData == null)
             {
-                Debug.LogError($"RewardSetData is not found: {cardGrade}");
+                Debug.LogError($"RewardSetData is not found: {cardGrade}, RewardID: {entity.RewardID}, MasterID: {entity.Master_Id}, CardID: {entity.CardId}, CardName: {entity.CardNameDesc}");
                 return entity.WeightValue;
             }
 
@@ -127,7 +127,7 @@ namespace ERang.Data
             {
                 "Card" => RewardType.Card,
                 "Gold" => RewardType.Gold,
-                "Mana" => RewardType.Mana,
+                "HP" => RewardType.HP,
                 _ => RewardType.None
             };
 

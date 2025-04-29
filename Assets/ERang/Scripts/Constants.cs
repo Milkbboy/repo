@@ -36,9 +36,12 @@ namespace ERang
     public enum RewardType
     {
         None = 0,
+        Common,
+        Rare,
+        Legendary,
         Card,
-        Gold,
-        Mana,
+        HP,
+        Gold
     }
 
     public enum CardType
@@ -292,7 +295,7 @@ namespace ERang
         public static readonly int[] MySlotNumbers = new[] { 0, 1, 2, 3 };
         public static readonly int[] EnemySlotNumbers = new[] { 6, 7, 8, 9 };
 
-        public static readonly int RewardCardCount = 3;
+        public static readonly int RewardCount = 3;
 
         // 행동 전 효과 발생 어빌리티
         public static readonly AbilityType[] CardPriorAbilities = new[]
