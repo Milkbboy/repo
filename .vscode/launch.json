@@ -2,13 +2,8 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Unity Editor",
-            "type": "unity",
-            "request": "launch"
-        },
-        {
             "name": "Unity Attach",
-            "type": "node",
+            "type": "unity",
             "request": "attach"
         },
         {

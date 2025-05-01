@@ -6,10 +6,14 @@ namespace ERang
         public int RewardID;
         public int Master_Id;
         public string NameDesc;
+        public string RewardType;
+        public string CardGrade;
         public int CardId;
         public string CardNameDesc;
-        public string RewardType;
-        public string Grade;
+        public int GoldMin;
+        public int GoldMax;
+        public int HpMin;
+        public int HpMax;
         public int WeightValue;
     }
 }

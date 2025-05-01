@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Unity Build",
+            "type": "shell",
+            "command": "echo 'Unity Build Task'",
+            "problemMatcher": []
+        }
+    ]
+}

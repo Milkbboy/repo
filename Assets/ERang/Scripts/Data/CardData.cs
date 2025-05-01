@@ -132,6 +132,23 @@ namespace ERang.Data
             }
         }
 
+        public static CardData GetGoldCardData()
+        {
+            CardData cardData = new();
+
+            cardData.card_id = 0;
+            cardData.cardType = CardType.Gold;
+            return cardData;
+        }
+
+        public static CardData GetHpCardData()
+        {
+            CardData cardData = new();
+
+            cardData.card_id = 0;
+            cardData.cardType = CardType.Hp;
+            return cardData;
+        }
         public static CardData GetCardData(int card_id)
         {
             if (!card_dict.TryGetValue(card_id, out CardData cardData))

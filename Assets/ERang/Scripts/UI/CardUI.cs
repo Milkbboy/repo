@@ -54,7 +54,7 @@ namespace ERang
             if (card is MasterCard)
                 Utils.GetMasterText(card.Id, out cardName, out cardDesc, out cardShortDesc);
             else
-                Utils.GetCardText(card.Id, out cardName, out cardDesc, out cardShortDesc);  
+                Utils.GetCardText(card.Id, out cardName, out cardDesc, out cardShortDesc);
 
             cardNameText.text = cardName;
             descText.text = cardShortDesc;
@@ -103,6 +103,16 @@ namespace ERang
                 manaText.text = buildingCard.Gold.ToString();
                 atkText.text = string.Empty;
                 defText.text = string.Empty;
+            }
+
+            if (card is HpCard hpCard)
+            {
+                descText.text = $"hp {hpCard.Hp} 회복";
+            }
+
+            if (card is GoldCard goldCard)
+            {
+                descText.text = $"골드 {goldCard.Gold} 획득";
             }
 
             Texture2D cardTexture = card.CardImage;

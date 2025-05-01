@@ -6,24 +6,24 @@ namespace ERang.Data
 {
     public class RewardSetData
     {
-        public string grade;
+        public RewardType rewardType;
+        public CardGrade cardGrade;
         public string nameDesc;
         public int value;
-        public RewardType rewardType;
         public bool isOnce;
 
         public static List<RewardSetData> rewardSetDatas = new();
-        public static Dictionary<string, RewardSetData> rewardSetDataDict = new();
+        public static Dictionary<(RewardType, CardGrade), RewardSetData> rewardSetDataDict = new();
 
         private static int sumValue = 0;
 
-        public void Initialize(RewardSetDataEntity entity)
+        public void Initialize(RewardSetDataEntity entity, RewardType rewardType, CardGrade cardGrade)
         {
-            grade = entity.RewardType;
+            this.rewardType = rewardType;
+            this.cardGrade = cardGrade;
             nameDesc = entity.NameDesc;
             value = entity.Value;
             isOnce = entity.IsOnce;
-            rewardType = ConvertRewardType(entity.RewardType);
 
             // Debug.Log($"RewardSetData Initialize: {grade}, {nameDesc}, {value}, {isOnce}, {rewardType}");
         }
@@ -40,25 +40,32 @@ namespace ERang.Data
 
             foreach (var rewardSetDataEntity in rewardSetDataTable.items)
             {
-                if (rewardSetDataDict.ContainsKey(rewardSetDataEntity.RewardType))
+                RewardType rewardType = ConvertRewardType(rewardSetDataEntity.RewardType);
+                CardGrade cardGrade = ConvertCardGrade(rewardSetDataEntity.CardGrade);
+
+                if (rewardSetDataDict.ContainsKey((rewardType, cardGrade)))
                     continue;
 
                 RewardSetData rewardSetData = new();
-                rewardSetData.Initialize(rewardSetDataEntity);
+                rewardSetData.Initialize(rewardSetDataEntity, rewardType, cardGrade);
 
                 sumValue += rewardSetData.value;
 
                 rewardSetDatas.Add(rewardSetData);
-                rewardSetDataDict.Add(rewardSetData.grade, rewardSetData);
+                rewardSetDataDict.Add((rewardSetData.rewardType, rewardSetData.cardGrade), rewardSetData);
+
+                // Debug.Log($"RewardSetData Load: {rewardSetData.rewardType}, {rewardSetData.cardGrade}, {rewardSetData.value}, {rewardSetData.nameDesc}, {rewardSetData.isOnce}");
             }
         }
 
-        public static RewardSetData GetRewardSetData(string grade)
+        public static RewardSetData GetRewardSetData(RewardType rewardType, CardGrade cardGrade)
         {
-            if (rewardSetDataDict.ContainsKey(grade))
-                return rewardSetDataDict[grade];
+            var key = (rewardType, cardGrade);
 
-            Debug.LogError($"RewardSetData is not found: {grade}");
+            if (rewardSetDataDict.ContainsKey(key))
+                return rewardSetDataDict[key];
+
+            Debug.LogError($"RewardSetData is not found: {rewardType}, {cardGrade}");
 
             return null;
         }
@@ -75,16 +82,16 @@ namespace ERang.Data
             return null;
         }
 
-        public static List<RewardType> GetRewardTypes(int count)
+        public static List<(RewardType rewardType, CardGrade cardGrade)> GetRewardValues(int count)
         {
             if (rewardSetDatas.Count == 0)
             {
                 Debug.LogError("RewardSetDatas 에 값이 없습니다.");
-                return new List<RewardType>();
+                return new List<(RewardType, CardGrade)>();
             }
 
-            List<RewardType> rewardTypes = new();
-            HashSet<RewardType> onceSelectedTypes = new();
+            List<(RewardType rewardType, CardGrade cardGrade)> rewardTypes = new();
+            HashSet<(RewardType rewardType, CardGrade cardGrade)> onceSelectedTypes = new();
 
             for (int i = 0; i < count; ++i)
             {
@@ -92,7 +99,7 @@ namespace ERang.Data
                 int availableSumValue = 0;
                 foreach (var data in rewardSetDatas)
                 {
-                    if (data.isOnce && onceSelectedTypes.Contains(data.rewardType))
+                    if (data.isOnce && onceSelectedTypes.Contains((data.rewardType, data.cardGrade)))
                         continue;
                     availableSumValue += data.value;
                 }
@@ -110,18 +117,18 @@ namespace ERang.Data
                 foreach (var rewardSetData in rewardSetDatas)
                 {
                     // isOnce가 1이고 이미 선택된 아이템은 스킵
-                    if (rewardSetData.isOnce && onceSelectedTypes.Contains(rewardSetData.rewardType))
+                    if (rewardSetData.isOnce && onceSelectedTypes.Contains((rewardSetData.rewardType, rewardSetData.cardGrade)))
                         continue;
 
                     tempValue += rewardSetData.value;
 
                     if (randomValue < tempValue)
                     {
-                        rewardTypes.Add(rewardSetData.rewardType);
+                        rewardTypes.Add((rewardSetData.rewardType, rewardSetData.cardGrade));
 
                         // isOnce가 1인 경우 선택된 목록에 추가
                         if (rewardSetData.isOnce)
-                            onceSelectedTypes.Add(rewardSetData.rewardType);
+                            onceSelectedTypes.Add((rewardSetData.rewardType, rewardSetData.cardGrade));
 
                         break;
                     }
@@ -131,16 +138,25 @@ namespace ERang.Data
             return rewardTypes;
         }
 
-        public RewardType ConvertRewardType(string rewardType)
+        private static RewardType ConvertRewardType(string rewardType)
         {
             return rewardType switch
             {
-                "Common" => RewardType.Common,
-                "Rare" => RewardType.Rare,
-                "Legendary" => RewardType.Legendary,
+                "Card" => RewardType.Card,
                 "HP" => RewardType.HP,
                 "Gold" => RewardType.Gold,
                 _ => RewardType.None
+            };
+        }
+
+        private static CardGrade ConvertCardGrade(string cardGrade)
+        {
+            return cardGrade switch
+            {
+                "Common" => CardGrade.Common,
+                "Rare" => CardGrade.Rare,
+                "Legendary" => CardGrade.Legendary,
+                _ => CardGrade.None
             };
         }
     }

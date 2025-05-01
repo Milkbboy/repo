@@ -10,7 +10,7 @@ namespace ERang
     {
         public GameObject cardPrefab;
 
-        public void ShowRewardCards(List<int> cardIds, UnityAction<RewardCard> OnSelectRewardCard)
+        public void ShowRewardCards(List<(RewardType, int)> rewards, UnityAction<RewardCard> OnSelectRewardCard)
         {
             // 화면 중앙에 카드를 배치
             Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0);
@@ -18,19 +18,33 @@ namespace ERang
             worldCenter.z = 0; // Z축 위치를 0으로 설정하여 2D 평면에 배치
 
             float cardSpacing = 2f;
-            float startX = worldCenter.x - (cardIds.Count - 1) * cardSpacing / 2;
+            float startX = worldCenter.x - (rewards.Count - 1) * cardSpacing / 2;
 
-            for (int i = 0; i < cardIds.Count; ++i)
+            for (int i = 0; i < rewards.Count; ++i)
             {
-                CardData cardData = CardData.GetCardData(cardIds[i]);
+                (RewardType rewardType, int value) = rewards[i];
+                BaseCard card = null;
 
-                if (cardData == null)
+                if (rewardType == RewardType.Card)
                 {
-                    Debug.LogError($"cardId({cardIds[i]}) CardData {Utils.RedText("테이블 데이터 없음")}");
-                    continue;
-                }
+                    CardData cardData = CardData.GetCardData(value);
 
-                BaseCard card = Utils.MakeCard(cardData);
+                    if (cardData == null)
+                    {
+                        Debug.LogError($"cardId({value}) CardData {Utils.RedText("테이블 데이터 없음")}");
+                        continue;
+                    }
+
+                    card = Utils.MakeCard(cardData);
+                }
+                else if (rewardType == RewardType.HP)
+                {
+                    card = Utils.MakeHpCard(CardData.GetHpCardData(), value);
+                }
+                else if (rewardType == RewardType.Gold)
+                {
+                    card = Utils.MakeGoldCard(CardData.GetGoldCardData(), value);
+                }
 
                 Vector3 cardPosition = new(startX + i * cardSpacing, worldCenter.y, worldCenter.z);
 

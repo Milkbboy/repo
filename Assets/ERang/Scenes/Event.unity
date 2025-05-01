@@ -1609,7 +1609,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1277878243
 Transform:
   m_ObjectHideFlags: 0
@@ -1667,8 +1667,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86afd5bbdd4aafc42aa51a757793b375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 5175991403112595638, guid: 5f255aa2c27477c4c988851541fd8e71,
-    type: 3}
   deckPosition: {fileID: 4858546856112772562}
 --- !u!4 &1334907221
 Transform:

@@ -70,6 +70,16 @@ namespace ERang
             // return card;
         }
 
+        public static BaseCard MakeHpCard(CardData cardData, int hp)
+        {
+            return new HpCard(cardData, hp);
+        }
+
+        public static BaseCard MakeGoldCard(CardData cardData, int gold)
+        {
+            return new GoldCard(cardData, gold);
+        }
+
         public static void GetMasterText(int masterId, out string cardName, out string cardDesc, out string cardShortDesc)
         {
             MasterData masterData = MasterData.GetMasterData(masterId);

@@ -41,9 +41,9 @@ public class Reward : MonoBehaviour
         }
 
         // RewardSetData 에서 rewardCount 만큼 보상 타입을 랜덤으로 가져온다.
-        List<RewardType> rewardTypes = RewardSetData.GetRewardTypes(Constants.RewardCount);
+        List<(RewardType rewardType, CardGrade cardGrade)> rewardValues = RewardSetData.GetRewardValues(Constants.RewardCount);
 
-        Debug.Log($"masterId: {masterId}, levelId: {levelId}, rewardId: {levelData.rewardId} Reward rewardTypes: {string.Join(", ", rewardTypes)}");
+        Debug.Log($"masterId: {masterId}, levelId: {levelId}, rewardId: {levelData.rewardId} Reward rewardValues: {string.Join(", ", rewardValues)}");
 
         RewardData rewardData = RewardData.rewardDataDict[(levelData.rewardId, masterId)];
 
@@ -53,49 +53,93 @@ public class Reward : MonoBehaviour
             return;
         }
 
-        List<int> selectedCardIds = new();
+        // foreach (RewardCardData cardData in rewardData.rewardCardDatas)
+        //     Debug.Log($"cardId: {cardData.cardId}, cardNameDesc: {cardData.cardNameDesc}, cardGrade: {cardData.cardGrade}, weightValue: {cardData.weightValue}, resultValue: {cardData.resultValue}");
 
-        foreach (RewardType rewardType in rewardTypes)
+        // 선택된 보상 카드 데이터. rewardType, RewardData 의 id, 카드 Id or 골드 or 체력
+        List<(RewardType rewardType, int id, int value)> selectedRewardCardDatas = new();
+
+        foreach ((RewardType rewardType, CardGrade cardGrade) in rewardValues)
         {
-            var rewardCardDatas = rewardData.rewardCardDatas.Where(card => card.rewardType == rewardType && !selectedCardIds.Contains(card.cardId)).ToList();
+            // Debug.Log($"Processing reward type: {rewardType}, cardGrade: {cardGrade}");
 
-            if (rewardCardDatas.Count > 0)
+            var availableRewards = GetAvailableRewards(rewardData, rewardType, cardGrade, selectedRewardCardDatas);
+            if (availableRewards.Count == 0)
             {
-                // 가중치 합산
-                int totalResultValue = rewardCardDatas.Sum(card => card.resultValue);
+                Debug.LogError($"No available rewards found for type {rewardType}, grade {cardGrade}");
+                return;
+            }
 
-                // 가중치 랜덤 선택
-                int randomValue = Random.Range(0, totalResultValue);
-
-                // 랜덤 값에 해당하는 카드 선택
-                int sumValue = 0;
-                RewardCardData selectedCardData = null;
-
-                foreach (var cardData in rewardCardDatas)
-                {
-                    sumValue += cardData.resultValue;
-
-                    if (randomValue < sumValue)
-                    {
-                        selectedCardData = cardData;
-                        break;
-                    }
-                }
-
-                if (selectedCardData != null)
-                {
-                    selectedCardIds.Add(selectedCardData.cardId);
-
-                    // Debug.Log($"selected cardId: {selectedCardData.cardId}, cardNameDesc: {selectedCardData.cardNameDesc}, cardGrade: {selectedCardData.cardGrade}, weightValue: {selectedCardData.weightValue}, resultValue: {selectedCardData.resultValue}");
-                }
+            var selectedReward = SelectRandomReward(availableRewards, rewardType);
+            if (selectedReward != null)
+            {
+                selectedRewardCardDatas.Add(selectedReward.Value);
+            }
+            else
+            {
+                Debug.LogError($"Failed to select reward for type {rewardType}, grade {cardGrade}");
+                return;
             }
         }
 
-        // foreach(RewardCard card in rewardData.rewardCards)
-        //     Debug.Log($"cardId: {card.cardId}, cardNameDesc: {card.cardNameDesc}, cardGrade: {card.cardGrade}, weightValue: {card.weightValue}, resultValue: {card.resultValue}");
+        // 선택된 보상 개수 확인
+        if (selectedRewardCardDatas.Count != rewardValues.Count)
+        {
+            Debug.LogError($"Expected {rewardValues.Count} rewards but got {selectedRewardCardDatas.Count} rewards");
+            return;
+        }
+
+        // 선택된 보상 출력
+        foreach (var reward in selectedRewardCardDatas)
+            Debug.Log($"Final selected reward: type={reward.rewardType}, id={reward.id}, value={reward.value}");
 
         // 화면 중앙에 카드를 배치
-        rewardUI.ShowRewardCards(selectedCardIds, OnSelectRewardCard);
+        List<(RewardType rewardType, int id)> rewards = selectedRewardCardDatas.Select(reward => (reward.rewardType, reward.value)).ToList();
+
+        rewardUI.ShowRewardCards(rewards, OnSelectRewardCard);
+    }
+
+    private List<RewardCardData> GetAvailableRewards(RewardData rewardData, RewardType rewardType, CardGrade cardGrade,
+        List<(RewardType rewardType, int id, int value)> selectedRewards)
+    {
+        return rewardData.rewardCardDatas.Where(cardData =>
+        {
+            bool typeMatch = cardData.rewardType == rewardType;
+            bool gradeMatch = rewardType == RewardType.Card ? cardData.cardGrade == cardGrade : true;
+            bool notSelected = !selectedRewards.Any(selected => selected.id == cardData.id);
+
+            return typeMatch && gradeMatch && notSelected;
+        }).ToList();
+    }
+
+    private (RewardType rewardType, int id, int value)? SelectRandomReward(List<RewardCardData> availableRewards, RewardType rewardType)
+    {
+        int totalResultValue = availableRewards.Sum(cardData => cardData.resultValue);
+        int randomValue = Random.Range(0, totalResultValue);
+        int sumValue = 0;
+
+        foreach (var cardData in availableRewards)
+        {
+            sumValue += cardData.resultValue;
+            if (randomValue < sumValue)
+            {
+                int rewardValue = GetRewardValue(cardData, rewardType);
+                return (rewardType, cardData.id, rewardValue);
+            }
+        }
+
+        return null;
+    }
+
+    private int GetRewardValue(RewardCardData cardData, RewardType rewardType)
+    {
+        return rewardType switch
+        {
+            RewardType.Card => cardData.cardId,
+            RewardType.Gold => Random.Range(cardData.goldMin, cardData.goldMax),
+            RewardType.HP => Random.Range(cardData.hpMin, cardData.hpMax),
+            _ => 0
+        };
     }
 
     public void Confirm()
@@ -106,16 +150,29 @@ public class Reward : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Selected RewardCard: {selectedCard.Card.Id}");
-        Debug.Log($"before cards {Player.Instance.AllCardCount}. {string.Join(", ", Player.Instance.AllCards.Select(card => card.Id))}");
+        if (selectedCard.Card is HpCard)
+        {
+            Debug.Log($"Selected Hp Card");
+            OnClickNextScene?.Invoke();
+        }
+        else if (selectedCard.Card is GoldCard)
+        {
+            Debug.Log($"Selected Gold Card");
+            OnClickNextScene?.Invoke();
+        }
+        else
+        {
+            Debug.Log($"Selected RewardCardId: {selectedCard.Card.Id}");
+            Debug.Log($"before cards {Player.Instance.AllCardCount}. {string.Join(", ", Player.Instance.AllCards.Select(card => card.Id))}");
 
-        Player.Instance.AddCard(selectedCard.Card.Id);
+            Player.Instance.AddCard(selectedCard.Card.Id);
 
-        selectedCard.DiscardAnimation(deckPosition);
+            selectedCard.DiscardAnimation(deckPosition);
 
-        Debug.Log($"after cards {Player.Instance.AllCardCount}. {string.Join(", ", Player.Instance.AllCards.Select(card => card.Id))}");
+            Debug.Log($"after cards {Player.Instance.AllCardCount}. {string.Join(", ", Player.Instance.AllCards.Select(card => card.Id))}");
 
-        OnClickNextScene?.Invoke();
+            OnClickNextScene?.Invoke();
+        }
     }
 
     private void OnSelectRewardCard(RewardCard rewardCard)

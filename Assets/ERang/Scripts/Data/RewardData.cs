@@ -7,16 +7,22 @@ namespace ERang.Data
     [System.Serializable]
     public class RewardCardData
     {
+        public int id;
         public int cardId;
         public string cardNameDesc;
+        public RewardType rewardType;
         public CardGrade cardGrade;
         public int weightValue;
         public int resultValue;
-        public RewardType rewardType;
+        public int goldMin;
+        public int goldMax;
+        public int hpMin;
+        public int hpMax;
     }
 
     public class RewardData
     {
+        private static Dictionary<(int rewardId, int masterId), int> nextIds = new();
         public int rewardId;
         public int masterId;
         public string nameDesc;
@@ -34,6 +40,8 @@ namespace ERang.Data
                 Debug.LogError("RewardDataTable is not found");
                 return;
             }
+
+            Debug.Log($"Total items in table: {rewardDataTable.items.Count}");
 
             foreach (var rewardDataEntity in rewardDataTable.items)
             {
@@ -57,14 +65,26 @@ namespace ERang.Data
 
         void Initialize(RewardDataEntity entity)
         {
+            var key = (entity.RewardID, entity.Master_Id);
+
+            if (!nextIds.ContainsKey(key))
+            {
+                nextIds[key] = 1;
+            }
+
             RewardCardData rewardCardData = new()
             {
+                id = nextIds[key]++,
                 cardId = entity.CardId,
                 cardNameDesc = entity.CardNameDesc,
                 cardGrade = GetCardGrade(entity),
                 weightValue = entity.WeightValue,
                 resultValue = GetResultValue(entity),
                 rewardType = GetRewardType(entity),
+                goldMin = entity.GoldMin,
+                goldMax = entity.GoldMax,
+                hpMin = entity.HpMin,
+                hpMax = entity.HpMax,
             };
 
             rewardCardDatas.Add(rewardCardData);
@@ -82,39 +102,13 @@ namespace ERang.Data
             return null;
         }
 
-        CardGrade GetCardGrade(RewardDataEntity entity)
-        {
-            CardGrade cardGrade = CardGrade.None;
-
-            if (CardData.card_dict.TryGetValue(entity.CardId, out CardData cardData))
-            {
-                cardGrade = cardData.cardGrade;
-            }
-            else
-            {
-                cardGrade = entity.Grade switch
-                {
-                    "Common" => CardGrade.Common,
-                    "Rare" => CardGrade.Rare,
-                    "Legendary" => CardGrade.Legendary,
-                    _ => CardGrade.None
-                };
-            }
-
-            return cardGrade;
-        }
-
         int GetResultValue(RewardDataEntity entity)
         {
+            RewardType rewardType = GetRewardType(entity);
             CardGrade cardGrade = GetCardGrade(entity);
 
-            RewardSetData rewardSetData = RewardSetData.GetRewardSetData(cardGrade.ToString());
-
-            if (rewardSetData == null)
-            {
-                Debug.LogError($"RewardSetData is not found: {cardGrade}, RewardID: {entity.RewardID}, MasterID: {entity.Master_Id}, CardID: {entity.CardId}, CardName: {entity.CardNameDesc}");
-                return entity.WeightValue;
-            }
+            RewardSetData rewardSetData = RewardSetData.GetRewardSetData(rewardType, cardGrade);
+            // Debug.Log($"RewardData GetResultValue: id: {entity.RewardID}, rewardType: {rewardType}, cardGrade: {cardGrade}, resetData.value: {rewardSetData.value}, weightValue: {entity.WeightValue}, resultValue: {rewardSetData.value + entity.WeightValue}");
 
             return rewardSetData.value + entity.WeightValue;
         }
@@ -132,6 +126,28 @@ namespace ERang.Data
             };
 
             return rewardType;
+        }
+
+        CardGrade GetCardGrade(RewardDataEntity entity)
+        {
+            CardGrade cardGrade = CardGrade.None;
+
+            if (CardData.card_dict.TryGetValue(entity.CardId, out CardData cardData))
+            {
+                cardGrade = cardData.cardGrade;
+            }
+            else
+            {
+                cardGrade = entity.CardGrade switch
+                {
+                    "Common" => CardGrade.Common,
+                    "Rare" => CardGrade.Rare,
+                    "Legendary" => CardGrade.Legendary,
+                    _ => CardGrade.None
+                };
+            }
+
+            return cardGrade;
         }
     }
 }
