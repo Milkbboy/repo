@@ -780,7 +780,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
-    ChainAbilityId: 81001001
+    ChainAbilityId: 0
   - AbilityData_Id: 81001001
     NameDesc: "\uB8E8\uC2DC_\uCC0C\uB974\uAE30 \uB9C8\uD06C"
     AbilityType: BrokenDef
@@ -814,7 +814,7 @@ MonoBehaviour:
     SkillViewIcon: Atk_01
     FxSound: 
     Summon_GroupId: 0
-    ChainAbilityId: 81002001
+    ChainAbilityId: 0
   - AbilityData_Id: 81002001
     NameDesc: "\uB8E8\uC2DC_\uC790\uB974\uAE30 \uB9C8\uD06C"
     AbilityType: BrokenDef

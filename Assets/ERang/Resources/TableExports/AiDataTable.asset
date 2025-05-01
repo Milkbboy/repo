@@ -432,7 +432,7 @@ MonoBehaviour:
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 81001000
+    Ability_id: 81001000, 81001001
   - Ai_Id: 8100200
     NameDesc: "\uC790\uB974\uAE30"
     Type: Melee
@@ -443,4 +443,4 @@ MonoBehaviour:
     Atk_Interval: 0.5
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 81002000
+    Ability_id: 81002000, 81002001
