@@ -21,13 +21,15 @@ namespace ERang
         public Texture2D CardImage { get; set; }
 
         // 게임 관련 멤버 변수
+        public CardState State { get; protected set; }
+        public CardAbilitySystem AbilitySystem { get; private set; }
+        public CardTraits Traits { get; set; }
         public List<CardAbility> CardAbilities { get => cardAbilities; set => cardAbilities = value; }
         public List<CardAbility> PriorCardAbilities { get => cardAbilities.Where(ability => Constants.CardPriorAbilities.Contains(ability.abilityType)).ToList(); }
         public List<CardAbility> PostCardAbilities { get => cardAbilities.Where(ability => Constants.CardPostAbilities.Contains(ability.abilityType)).ToList(); }
         public List<CardAbility> BrokenDefAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.BrokenDef).ToList(); }
         public List<CardAbility> DefUpAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.DefUp).ToList(); }
         public CardAbility ArmorBreakAbility { get => cardAbilities.FirstOrDefault(ability => ability.abilityType == AbilityType.ArmorBreak); }
-        public CardTraits Traits { get; set; }
         public List<CardAbility> HandAbilities { get => handAbilities; set => handAbilities = value; }
 
         public string LogText => Utils.CardLog(this);
@@ -37,12 +39,6 @@ namespace ERang
         public virtual int Mana { get; set; }
         public virtual int Atk { get; set; }
 
-        public virtual void TakeDamage(int amount) { }
-        public virtual void RestoreHealth(int amount) { }
-        public virtual void SetDefense(int amount) { }
-        public virtual void IncreaseDefense(int amount) { }
-        public virtual void DecreaseDefense(int amount) { }
-
         // 보드에서 적용되는 어빌리티
         private List<CardAbility> cardAbilities = new();
         // 핸드에서 적용되는 어빌리티
@@ -50,6 +46,8 @@ namespace ERang
 
         public BaseCard()
         {
+            State = new CardState(0, 0, 0, 0);
+            AbilitySystem = new CardAbilitySystem();
         }
 
         public BaseCard(CardData cardData)
@@ -63,6 +61,9 @@ namespace ERang
             AiGroupIndex = 0;
             CardImage = cardData.GetCardTexture();
             Traits = CardTraits.None;
+
+            State = new CardState(0, 0, 0, 0);
+            AbilitySystem = new CardAbilitySystem();
         }
 
         public BaseCard(int cardId, CardType cardType, int aiGroupId, Texture2D cardImage)
@@ -74,6 +75,9 @@ namespace ERang
             AiGroupIndex = 0;
             CardImage = cardImage;
             Traits = CardTraits.None;
+
+            State = new CardState(0, 0, 0, 0);
+            AbilitySystem = new CardAbilitySystem();
         }
 
         public void UpdateCardData(CardData cardData)
@@ -175,6 +179,31 @@ namespace ERang
         public int GetDeBuffCount()
         {
             return cardAbilities.Count(ability => ability.aiType == AiDataType.Debuff);
+        }
+
+        public virtual void TakeDamage(int amount)
+        {
+            State.TakeDamage(amount);
+        }
+
+        public virtual void RestoreHealth(int amount)
+        {
+            State.RestoreHealth(amount);
+        }
+
+        public virtual void SetDefense(int amount)
+        {
+            State.SetDef(amount);
+        }
+
+        public virtual void IncreaseDefense(int amount)
+        {
+            State.IncreaseDefense(amount);
+        }
+
+        public virtual void DecreaseDefense(int amount)
+        {
+            State.DecreaseDefense(amount);
         }
     }
 }

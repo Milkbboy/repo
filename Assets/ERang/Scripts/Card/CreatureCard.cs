@@ -5,18 +5,11 @@ namespace ERang
     // 크리쳐 카드
     public class CreatureCard : BaseCard, IAttackable, IManaManageable
     {
-        public override int Hp => hp;
-        public override int Def => def;
-        public override int Mana => mana;
-        public override int Atk => atk;
-
-        public int MaxHp => maxHp;
-
-        private int hp;
-        private int maxHp;
-        private int atk;
-        private int def;
-        protected int mana;
+        public override int Hp => State.Hp;
+        public override int Def => State.Def;
+        public override int Mana => State.Mana;
+        public override int Atk => State.Atk;
+        public int MaxHp => State.MaxHp;
 
         public CreatureCard()
         {
@@ -24,89 +17,67 @@ namespace ERang
 
         public CreatureCard(CardData cardData) : base(cardData)
         {
-            hp = cardData.hp;
-            maxHp = cardData.hp;
-            atk = cardData.atk;
-            def = cardData.def;
-            mana = cardData.costMana;
+            State = new CardState(cardData.hp, cardData.def, cardData.costMana, cardData.atk, cardData.hp);
         }
 
         public void SetHp(int amount)
         {
-            hp = amount;
+            State.SetHp(amount);
         }
 
         public void SetMana(int amount)
         {
-            mana = amount;
-        }
-
-        public override void SetDefense(int amount)
-        {
-            def = amount;
-
-            if (def < 0)
-                def = 0;
-        }
-
-        public override void RestoreHealth(int amount)
-        {
-            hp += amount;
-        }
-
-        public override void TakeDamage(int amount)
-        {
-            def -= amount;
-
-            if (def < 0)
-            {
-                hp += def;
-                def = 0;
-            }
-
-            if (hp <= 0)
-                hp = 0;
-        }
-
-        public override void IncreaseDefense(int amount)
-        {
-            def += amount;
-        }
-
-        public override void DecreaseDefense(int amount)
-        {
-            def -= amount;
-
-            if (def < 0)
-                def = 0;
-        }
-
-        public void IncreaseAttack(int amount)
-        {
-            atk += amount;
-        }
-
-        public void DecreaseAttack(int amount)
-        {
-            atk -= amount;
+            State.SetMana(amount);
         }
 
         public void SetAttack(int amount)
         {
-            atk = amount;
+            State.SetAtk(amount);
+        }
+
+        public void IncreaseAttack(int amount)
+        {
+            State.SetAtk(State.Atk + amount);
+        }
+
+        public void DecreaseAttack(int amount)
+        {
+            State.SetAtk(State.Atk - amount);
         }
 
         public void IncreaseMana(int amount)
         {
-            mana += amount;
+            State.IncreaseMana(amount);
         }
 
         public void DecreaseMana(int amount)
         {
-            mana -= amount;
+            State.DecreaseMana(amount);
+        }
 
-            if (mana < 0)
-                mana = 0;
+        public override void SetDefense(int amount)
+        {
+            State.SetDef(amount);
+        }
+
+        public override void RestoreHealth(int amount)
+        {
+            State.SetHp(State.Hp + amount);
+        }
+
+        public override void TakeDamage(int amount)
+        {
+            State.SetHp(State.Hp - amount);
+        }
+
+        public override void IncreaseDefense(int amount)
+        {
+            State.SetDef(State.Def + amount);
+        }
+
+        public override void DecreaseDefense(int amount)
+        {
+            State.SetDef(State.Def - amount);
         }
     }
 }

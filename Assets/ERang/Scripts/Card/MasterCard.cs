@@ -2,16 +2,10 @@ namespace ERang
 {
     public class MasterCard : BaseCard, IManaManageable
     {
-        public override int Hp => hp;
-        public override int Def => def;
-        public override int Mana => mana;
-
-        public int MaxMana => maxMana;
-
-        private int hp;
-        private int def;
-        private int mana;
-        private int maxMana;
+        public override int Hp => State.Hp;
+        public override int Def => State.Def;
+        public override int Mana => State.Mana;
+        public int MaxMana => State.MaxMana;
 
         public MasterCard()
         {
@@ -19,75 +13,57 @@ namespace ERang
 
         public MasterCard(Master master) : base(master.MasterId, CardType.Master, 0, master.CardImage)
         {
-            hp = master.Hp;
-            def = master.Def;
-            mana = master.Mana;
-            maxMana = master.MaxMana;
+            State = new CardState(master.Hp, master.Def, master.Mana, 0, master.Hp, master.MaxMana);
         }
 
         public void SetHp(int amount)
         {
-            hp = amount;
+            State.SetHp(amount);
         }
 
         public override void SetDefense(int amount)
         {
-            def = amount;
+            State.SetDef(amount);
         }
 
         public void SetMana(int amount)
         {
-            mana = amount;
+            State.SetMana(amount);
         }
 
         public override void RestoreHealth(int amount)
         {
-            hp += amount;
+            State.RestoreHealth(amount);
         }
 
         public override void TakeDamage(int amount)
         {
-            def -= amount;
-
-            if (def < 0)
-            {
-                hp += def;
-                def = 0;
-            }
-
-            if (hp <= 0)
-                hp = 0;
+            State.TakeDamage(amount);
         }
 
         public override void IncreaseDefense(int amount)
         {
-            def += amount;
+            State.IncreaseDefense(amount);
         }
 
         public override void DecreaseDefense(int amount)
         {
-            def -= amount;
-
-            if (def < 0)
-                def = 0;
+            State.DecreaseDefense(amount);
         }
 
         public void IncreaseMana(int amount)
         {
-            mana += amount;
+            State.IncreaseMana(amount);
         }
 
         public void DecreaseMana(int amount)
         {
-            mana -= amount;
-
-            if (mana < 0)
-                mana = 0;
+            State.DecreaseMana(amount);
         }
 
         public void ResetMana()
         {
-            mana = 0;
+            State.ResetMana();
         }
     }
 }
