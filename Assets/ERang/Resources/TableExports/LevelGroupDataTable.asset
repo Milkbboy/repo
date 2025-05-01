@@ -18,7 +18,7 @@ MonoBehaviour:
     NameDesc: "\uC561\uD2B8 1 \uC2DC\uC791 \uBAAC\uC2A4\uD130 \uC18C\uB4DC\uB9E8"
     SpawnRatio: 100
     Pos01_CardID: 901001
-    Pos02_CardID: 0
+    Pos02_CardID: 901001
     Pos03_CardID: 0
     MasterID: 0
     RewardID: 1001
@@ -26,7 +26,7 @@ MonoBehaviour:
     LevelID: 100100102
     NameDesc: "\uC561\uD2B8 1 \uC2DC\uC791 \uBAAC\uC2A4\uD130 \uC544\uCCD02"
     SpawnRatio: 100
-    Pos01_CardID: 0
+    Pos01_CardID: 901001
     Pos02_CardID: 901002
     Pos03_CardID: 901002
     MasterID: 0

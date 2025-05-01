@@ -422,3 +422,25 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 100026
+  - Ai_Id: 8100100
+    NameDesc: "\uCC0C\uB974\uAE30"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1, 2
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81001000
+  - Ai_Id: 8100200
+    NameDesc: "\uC790\uB974\uAE30"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 2
+    Atk_Interval: 0.5
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81002000
