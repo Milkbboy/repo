@@ -68,6 +68,13 @@ namespace ERang
             }
 
             master = new Master(masterData);
+
+            // 저장된 마스터 HP가 있으면 설정
+            int savedHp = PlayerPrefsUtility.GetInt("MasterHp", -1);
+            if (savedHp != -1)
+            {
+                master.SetHp(savedHp);
+            }
         }
 
         void Start()
@@ -288,6 +295,7 @@ namespace ERang
                 PlayerPrefsUtility.SetInt("MasterId", masterId);
                 PlayerPrefsUtility.SetInt("LevelId", levelId);
                 PlayerPrefsUtility.SetInt("LastLocationId", locationId);
+                PlayerPrefsUtility.SetInt("MasterHp", master.Hp);
 
                 if (keepSatiety)
                     PlayerPrefsUtility.SetInt("Satiety", master.Satiety);

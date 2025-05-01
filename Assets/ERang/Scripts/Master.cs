@@ -93,5 +93,15 @@ namespace ERang
 
             Debug.Log($"<color=#257dca>Decrease Satiety({satiety}): {beforeSatiety} -> {this.satiety}</color>");
         }
+
+        public void SetHp(int amount)
+        {
+            Hp = Mathf.Clamp(amount, 0, MaxHp);
+        }
+
+        public void SetMana(int amount)
+        {
+            mana = Mathf.Clamp(amount, 0, MaxMana);
+        }
     }
 }
