@@ -426,7 +426,7 @@ MonoBehaviour:
     NameDesc: "\uCC0C\uB974\uAE30"
     Type: Melee
     Target: Near Enemy
-    Atk_Type: Automatic
+    Atk_Type: Select Enemy
     Atk_Range: 1, 2
     Atk_Cnt: 1
     Atk_Interval: 0
@@ -437,10 +437,43 @@ MonoBehaviour:
     NameDesc: "\uC790\uB974\uAE30"
     Type: Melee
     Target: Near Enemy
-    Atk_Type: Automatic
+    Atk_Type: Select Enemy
     Atk_Range: 1
     Atk_Cnt: 2
     Atk_Interval: 0.5
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81002000, 81002001
+  - Ai_Id: 8100300
+    NameDesc: "\uD565\uAE30"
+    Type: Melee
+    Target: All Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81003000
+  - Ai_Id: 8100400
+    NameDesc: "\uB178\uB824\uBCF4\uAE30"
+    Type: DeBuff
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81004000, 81004001
+  - Ai_Id: 8100500
+    NameDesc: "\uCC0C\uB974\uACE0 \uC790\uB974\uAE30"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81005000, 81005001, 81005002, 81005003
