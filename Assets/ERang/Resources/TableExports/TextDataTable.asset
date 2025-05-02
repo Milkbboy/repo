@@ -310,3 +310,35 @@ MonoBehaviour:
     Desc_Ko: "\uC778\uC811\uD55C \uC801 3\uACFC 2\uC758 \uD53C\uD574. 2\uD134\uAC04
       \uB9C8\uD06C \uC9C0\uC18D"
     Desc_En: 
+  - DescID: CardName_81006
+    NameDesc: "\uB2E4\uC9C0\uAE30"
+    Desc_Ko: "\uB2E4\uC9C0\uAE30"
+    Desc_En: 
+  - DescID: CardDesc_81006
+    NameDesc: "\uB2E4\uC9C0\uAE30"
+    Desc_Ko: "\uC778\uC811\uD55C \uC801 1,2,3\uC5F4\uC758 \uC801\uC5D0\uAC8C 3\uC758
+      \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4. \uC801\uC758 \uBC29\uC5B4\uB97C 2\uD134\uAC04
+      3\uB9CC\uD2D0 \uD30C\uAD34\uD569\uB2C8\uB2E4."
+    Desc_En: 
+  - DescID: CardShortDesc_81006
+    NameDesc: "\uB2E4\uC9C0\uAE30"
+    Desc_Ko: "\uC778\uC811\uD55C 1,2,3\uC5F4 \uC801 3 \uD53C\uD574, 2\uD134\uAC04
+      \uBC29\uC5B4\uB825 \uC57D\uD654"
+    Desc_En: 
+  - DescID: 81006000_IconDesc
+    NameDesc: "\uB2E4\uC9C0\uAE30_\uD6A8\uACFC \uC124\uBA85"
+    Desc_Ko: "\uBC29\uC5B4\uB825 -3"
+    Desc_En: 
+  - DescID: CardName_81007
+    NameDesc: "\uC784\uD504"
+    Desc_Ko: "\uC784\uD504"
+    Desc_En: 
+  - DescID: CardDesc_81007
+    NameDesc: "\uC784\uD504"
+    Desc_Ko: "\uB9C8\uACC4 \uC545\uB9C8\uC758 \uB300\uD45C\uC801\uC778 \uC218\uD558\uB85C
+      \uADFC\uC811\uD55C \uC801\uC5D0\uAC8C 2\uC758 \uD53C\uD574\uB97C \uC785\uD799\uB2C8\uB2E4."
+    Desc_En: 
+  - DescID: CardShortDesc_81007
+    NameDesc: "\uC784\uD504"
+    Desc_Ko: "\uADFC\uC811"
+    Desc_En: 
