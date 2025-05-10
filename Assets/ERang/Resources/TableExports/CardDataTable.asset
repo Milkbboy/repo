@@ -450,3 +450,72 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
+  - Card_Id: 81008
+    NameDesc: "\uC784\uD504 \uAD81\uC218"
+    CardNameDesc_Id: CardName_81008
+    CardDesc_Id: CardDesc_81008
+    CardShortDesc_Id: CardShortDesc_81008
+    CardType: Creature
+    Grade: Common
+    AiGroup_id: 810080
+    CostMana: 1
+    CostGold: 0
+    Hp: 2
+    Atk: 3
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: Lucy_008
+    Level_3_img: Lucy_008
+    Level_5_img: Lucy_008
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81009
+    NameDesc: "\uACB9\uC8FC\uB984 \uC704"
+    CardNameDesc_Id: CardName_81009
+    CardDesc_Id: CardDesc_81009
+    CardShortDesc_Id: CardShortDesc_81009
+    CardType: Creature
+    Grade: Rare
+    AiGroup_id: 810090
+    CostMana: 2
+    CostGold: 0
+    Hp: 6
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: Lucy_009
+    Level_3_img: Lucy_009
+    Level_5_img: Lucy_009
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81010
+    NameDesc: "\uCD0C\uCDA9"
+    CardNameDesc_Id: CardName_81010
+    CardDesc_Id: CardDesc_81010
+    CardShortDesc_Id: CardShortDesc_81010
+    CardType: Creature
+    Grade: Common
+    AiGroup_id: 810100
+    CostMana: 1
+    CostGold: 0
+    Hp: 10
+    Atk: 1
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: Lucy_010
+    Level_3_img: Lucy_010
+    Level_5_img: Lucy_010
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001

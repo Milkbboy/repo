@@ -1002,3 +1002,54 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81008000
+    NameDesc: "\uC784\uD504 \uAD81\uC218 \uAE30\uBCF8 \uACF5\uACA9"
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81009000
+    NameDesc: "\uACB9\uC8FC\uB984 \uC704"
+    AbilityType: AddSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81010000
+    NameDesc: "\uCD0C\uCDA9"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0

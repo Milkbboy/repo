@@ -499,3 +499,36 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81007000
+  - Ai_Id: 8100800
+    NameDesc: "\uC784\uD504 \uAD81\uC218 \uAE30\uBCF8 \uACF5\uACA9"
+    Type: Ranged
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 2
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81008000
+  - Ai_Id: 8100900
+    NameDesc: "\uACB9\uC8FC\uB984 \uC704 \uAE30\uBCF8 \uD589\uB3D9"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81009000
+  - Ai_Id: 8101000
+    NameDesc: "\uCD0C\uCDA9 \uAE30\uBCF8 \uACF5\uACA9"
+    Type: Melee
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81010000
