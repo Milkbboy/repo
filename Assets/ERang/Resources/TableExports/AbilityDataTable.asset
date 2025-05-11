@@ -1053,3 +1053,71 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81011000
+    NameDesc: "\uACE0\uB798\uD68C\uCDA9_\uACF5\uACA9"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81011001
+    NameDesc: "\uACE0\uB798\uD68C\uCDA9_\uC911\uB3C5"
+    AbilityType: Poison
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 3
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Poison_01
+    SkillIconDesc: 81011001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81012000
+    NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC_\uACF5\uACA9"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81012001
+    NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC_\uC911\uB3C5"
+    AbilityType: Poison
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 3
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Poison_01
+    SkillIconDesc: 81012001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
