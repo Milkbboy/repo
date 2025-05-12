@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace RogueEngine.Gameplay
 {
 
-    public class WorldLogic 
+    public class WorldLogic
     {
 
         public UnityAction onGameStart;
@@ -25,7 +25,8 @@ namespace RogueEngine.Gameplay
 
         public WorldLogic(BattleLogic logic, World world) { this.battle_logic = logic; this.world_data = world; }
 
-        public virtual void SetData(World world) { 
+        public virtual void SetData(World world)
+        {
             this.world_data = world;
             battle_logic.SetData(world);
         }
@@ -152,7 +153,7 @@ namespace RogueEngine.Gameplay
             if (world_data.AreAllChampionsDead())
                 EndGame(false);
         }
-        
+
         public virtual void EndGame(bool victory)
         {
             if (world_data.state == WorldState.Ended)
@@ -403,7 +404,7 @@ namespace RogueEngine.Gameplay
                     else
                         player.gold -= cost;
 
-                    champion.UpgradeCard(card.uid); 
+                    champion.UpgradeCard(card.uid);
                     RefreshWorld();
                 }
             }
@@ -421,7 +422,7 @@ namespace RogueEngine.Gameplay
 
         public virtual void LevelUp(Champion champion)
         {
-            if(champion != null && world_data.state == WorldState.Map)
+            if (champion != null && world_data.state == WorldState.Map)
             {
                 if (champion.CanLevelUp())
                 {
@@ -683,7 +684,7 @@ namespace RogueEngine.Gameplay
                 {
                     foreach (BattleCharacter character in world_data.battle.characters)
                     {
-                        if(!character.IsEnemy())
+                        if (!character.IsEnemy())
                             character.damage += hp_cost;
                     }
 
@@ -836,10 +837,10 @@ namespace RogueEngine.Gameplay
         public virtual List<CardData> GetRandomCardsByProbability(List<CardData> cards, int nb, int seed_offset = 0)
         {
             System.Random rand = new System.Random(world_data.GetLocationSeed(13851 + seed_offset));
-            List <CardData> ocards = new List<CardData>();
+            List<CardData> ocards = new List<CardData>();
             int tries = 0;
             int tries_total = cards.Count;
-            while(ocards.Count < nb && cards.Count > 0 && tries < tries_total)
+            while (ocards.Count < nb && cards.Count > 0 && tries < tries_total)
             {
                 float total_probability = 0f;
                 foreach (CardData card in cards)

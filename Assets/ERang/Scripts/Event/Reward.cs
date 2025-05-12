@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using ERang.Data;
 using ERang;
+using Newtonsoft.Json;
 
 public class Reward : MonoBehaviour
 {
@@ -158,6 +159,7 @@ public class Reward : MonoBehaviour
             {
                 Debug.Log($"Selected Hp Card: ${selectedCard.Card.Hp}");
                 Player.Instance.RecoverHp(hpCard.Hp);
+                PlayerPrefsUtility.SetInt("MasterHp", Player.Instance.master.Hp);
             }
             else
             {
@@ -173,6 +175,7 @@ public class Reward : MonoBehaviour
             {
                 Debug.Log($"Selected Gold Card: ${goldCard.Gold}");
                 Player.Instance.AddGold(goldCard.Gold);
+                PlayerPrefsUtility.SetInt("MasterGold", Player.Instance.master.Gold);
             }
             else
             {
@@ -185,6 +188,8 @@ public class Reward : MonoBehaviour
             Debug.Log($"before cards {Player.Instance.AllCardCount}. {string.Join(", ", Player.Instance.AllCards.Select(card => card.Id))}");
 
             Player.Instance.AddCard(selectedCard.Card.Id);
+
+            PlayerPrefsUtility.SetString("MasterCards", JsonConvert.SerializeObject(Player.Instance.AllCards.Select(card => card.Id)));
 
             selectedCard.DiscardAnimation(deckPosition);
 

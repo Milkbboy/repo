@@ -3,8 +3,8 @@ using UnityEngine;
 
 public static class PlayerPrefsUtility
 {
-    public static readonly List<string> PrefIntKeys = new() { "MasterId", "ActId", "AreaId", "Floor", "MaxFloor", "LevelId", "DepthIndies", "Satiety" };
-    public static readonly List<string> PrefStringKeys = new() { "SelectedDepthIndies", "DepthWidths", "Locations", "LastScene" };
+    public static readonly List<string> PrefIntKeys = new() { "MasterId", "MasterHp", "MasterGold", "ActId", "AreaId", "Floor", "MaxFloor", "LevelId", "DepthIndies", "Satiety" };
+    public static readonly List<string> PrefStringKeys = new() { "MasterCards", "SelectedDepthIndies", "DepthWidths", "Locations", "LastScene" };
     public static readonly List<string> PrefBoolKeys = new() { "KeepSatiety" };
     public static readonly List<string> PrefExceptKeys = new() { "KeepSatiety", "Satiety" };
 
@@ -26,6 +26,7 @@ public static class PlayerPrefsUtility
 
     public static void SetInt(string key, int value)
     {
+        // Debug.Log($"SetInt: {key} = {value}");
         PlayerPrefs.SetInt(key, value);
         AddKey(key);
 

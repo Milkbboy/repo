@@ -101,6 +101,11 @@ namespace ERang
             Hp = Mathf.Clamp(amount, 0, MaxHp);
         }
 
+        public void SetGold(int amount)
+        {
+            Gold = amount;
+        }
+
         public void SetMana(int amount)
         {
             mana = Mathf.Clamp(amount, 0, MaxMana);

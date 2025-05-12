@@ -71,6 +71,7 @@ namespace ERang
             PlayerPrefsUtility.SetInt("LevelId", levelId);
             PlayerPrefsUtility.SetInt("LastLocationId", locationId);
             PlayerPrefsUtility.SetInt("MasterHp", master.Hp);
+            PlayerPrefsUtility.SetInt("Gold", master.Gold);
 
             if (keepSatiety)
                 PlayerPrefsUtility.SetInt("Satiety", master.Satiety);
@@ -110,6 +111,14 @@ namespace ERang
             if (savedHp != -1)
             {
                 master.SetHp(savedHp);
+            }
+
+            // 저장된 마스터 골드가 있으면 설정
+            int savedGold = PlayerPrefsUtility.GetInt("Gold", -1);
+
+            if (savedGold != -1)
+            {
+                master.SetGold(savedGold);
             }
 
             // 저장된 마스터 카드가 있으면 설정
