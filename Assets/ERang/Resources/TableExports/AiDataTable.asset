@@ -587,3 +587,25 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81015000, 81015001, 81015002
+  - Ai_Id: 8101600
+    NameDesc: "\uD55C\uC785"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1, 2
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81006000, 81006001
+  - Ai_Id: 8101700
+    NameDesc: "\uB450\uC785"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 2
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81007000, 81007001
