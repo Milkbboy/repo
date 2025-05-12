@@ -60,7 +60,7 @@ namespace ERang
                 return;
             }
 
-            foreach (int cardId in master.StartCardIds)
+            foreach (int cardId in master.CardIds)
             {
                 CardData cardData = CardData.GetCardData(cardId);
 

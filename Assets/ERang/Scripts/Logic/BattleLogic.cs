@@ -22,9 +22,6 @@ namespace ERang
 
         public Master Master => master;
 
-        public int masterId;
-        public int floor;
-        public int levelId;
         public SatietyUI satietyUI;
 
         public Deck deck;
@@ -33,7 +30,7 @@ namespace ERang
         private Master master;
         private MasterCard masterCard;
         private bool isTruenEndProcessing = false;
-        private MapLocation selectLocation;
+
         private bool keepSatiety;
 
         // for test
@@ -46,52 +43,26 @@ namespace ERang
             if (Instance == null)
                 Instance = this;
 
-            masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
-            floor = PlayerPrefsUtility.GetInt("Floor", 1);
-            levelId = PlayerPrefsUtility.GetInt("LevelId", 100100101);
             keepSatiety = PlayerPrefsUtility.GetValue<bool>("KeepSatiety", false);
-
             Debug.Log($"포만감 저장 여부: {keepSatiety}");
-
-            string selectLocationJson = PlayerPrefsUtility.GetString("SelectLocation", null);
-
-            if (selectLocationJson != null)
-                selectLocation = JsonConvert.DeserializeObject<MapLocation>(selectLocationJson);
-
-            // 마스터
-            MasterData masterData = MasterData.GetMasterData(masterId);
-
-            if (masterData == null)
-            {
-                Debug.LogError($"마스터({masterId}) MasterData {Utils.RedText("테이블 데이터 없음")}");
-                return;
-            }
-
-            master = new Master(masterData);
-
-            // 저장된 마스터 HP가 있으면 설정
-            int savedHp = PlayerPrefsUtility.GetInt("MasterHp", -1);
-            if (savedHp != -1)
-            {
-                master.SetHp(savedHp);
-            }
         }
 
         void Start()
         {
-            floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation?.eventType ?? EventType.None}";
+            master = Player.Instance.master;
+            // floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation?.eventType ?? EventType.None}";
 
             BoardSystem.Instance.CreateBoardSlots(master.CreatureSlotCount);
 
-            LevelData levelData = LevelGroupData.GetLevelData(levelId);
+            LevelData levelData = LevelGroupData.GetLevelData(Player.Instance.levelId);
 
             if (levelData == null)
             {
-                Debug.LogError($"레벨({levelId}) LevelGroupData {Utils.RedText("테이블 데이터 없음")}");
+                Debug.LogError($"레벨({Player.Instance.levelId}) LevelGroupData {Utils.RedText("테이블 데이터 없음")}");
                 return;
             }
 
-            Debug.Log($"----------------- BATTLE START {floor} 층 ({levelId}) -----------------");
+            Debug.Log($"----------------- BATTLE START {Player.Instance.floor} 층 ({Player.Instance.levelId}) -----------------");
 
             // 마스터 카드 생성
             StartCoroutine(BoardSystem.Instance.CreateMasterCard(master));
@@ -289,25 +260,21 @@ namespace ERang
             {
                 resultText.text = "YOU WIN";
                 // 이기면 층 증가
-                nextFloor = floor + 1;
+                nextFloor = Player.Instance.floor + 1;
 
-                // 마지막에 선택한 층 인덱스 저장
-                PlayerPrefsUtility.SetInt("MasterId", masterId);
-                PlayerPrefsUtility.SetInt("LevelId", levelId);
-                PlayerPrefsUtility.SetInt("LastLocationId", locationId);
-                PlayerPrefsUtility.SetInt("MasterHp", master.Hp);
-
-                if (keepSatiety)
-                    PlayerPrefsUtility.SetInt("Satiety", master.Satiety);
+                Player.Instance.SaveMaster(nextFloor, locationId, keepSatiety);
             }
             else
             {
                 resultText.text = "YOU LOSE";
 
                 PlayerPrefsUtility.SetInt("MasterId", 0);
-                PlayerPrefsUtility.SetInt("AreaId", 0);
                 PlayerPrefsUtility.SetInt("LevelId", 0);
                 PlayerPrefsUtility.SetInt("LastLocationId", 0);
+                PlayerPrefsUtility.SetInt("MasterHp", 0);
+
+                PlayerPrefsUtility.SetInt("AreaId", 0);
+                PlayerPrefsUtility.SetString("MasterCards", null);
             }
 
             PlayerPrefsUtility.SetInt("Floor", nextFloor);

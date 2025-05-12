@@ -21,12 +21,12 @@ namespace ERang
         public int CreatureSlotCount => creatureSlots;
         public int Satiety { get => satiety; set => satiety = value; }
         public int MaxSatiety => maxSatiety;
-        public List<int> StartCardIds => startCardIds;
+        public List<int> CardIds { get => cardIds; set => cardIds = value; }
         public Texture2D CardImage => masterTexture;
 
         private readonly int masterId;
         private readonly MasterType masterType;
-        private readonly List<int> startCardIds = new();
+        public List<int> cardIds = new();
 
         private int hp;
         private int maxHp;
@@ -57,8 +57,10 @@ namespace ERang
             creatureSlots = masterData.creatureSlots;
             satiety = masterData.satietyGauge;
             maxSatiety = masterData.maxSatietyGauge;
-            startCardIds = masterData.startCardIds;
+            cardIds = masterData.startCardIds;
             masterTexture = masterData.masterTexture;
+
+            Debug.Log($"마스터 카드: {string.Join(", ", cardIds)}");
         }
 
         public void AddGold(int gold)

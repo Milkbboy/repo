@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
+using Newtonsoft.Json;
 
 namespace ERang
 {
@@ -9,10 +10,16 @@ namespace ERang
     {
         public static Player Instance { get; private set; }
 
+        public Master master;
+
+        public int masterId;
+        public int floor;
+        public int levelId;
+        private MapLocation selectLocation;
         public int AllCardCount => allCards.Count;
         public List<BaseCard> AllCards => allCards;
 
-        [SerializeField] private List<BaseCard> allCards = new List<BaseCard>();
+        [SerializeField] private List<BaseCard> allCards = new();
 
         void Awake()
         {
@@ -21,11 +28,8 @@ namespace ERang
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
                 Debug.Log("Player 생성됨");
-            }
-            else if (Instance != this)
-            {
-                Debug.Log("Player 파괴됨");
-                Destroy(gameObject);
+
+                LoadMaster();
             }
         }
 
@@ -40,9 +44,65 @@ namespace ERang
             }
 
             BaseCard card = Utils.MakeCard(cardData);
+            allCards.Add(card);
 
             // 카드 타입별로 생성
-            allCards.Add(card);
+            master.CardIds.Add(cardId);
+        }
+
+        public void SaveMaster(int nextFloor, int locationId, bool keepSatiety)
+        {
+            PlayerPrefsUtility.SetInt("Floor", nextFloor);
+
+            PlayerPrefsUtility.SetInt("MasterId", masterId);
+            PlayerPrefsUtility.SetInt("LevelId", levelId);
+            PlayerPrefsUtility.SetInt("LastLocationId", locationId);
+            PlayerPrefsUtility.SetInt("MasterHp", master.Hp);
+
+            if (keepSatiety)
+                PlayerPrefsUtility.SetInt("Satiety", master.Satiety);
+        }
+
+        private void LoadMaster()
+        {
+            masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
+            floor = PlayerPrefsUtility.GetInt("Floor", 1);
+            levelId = PlayerPrefsUtility.GetInt("LevelId", 100100101);
+
+            // 마스터
+            MasterData masterData = MasterData.GetMasterData(masterId);
+
+            if (masterData == null)
+            {
+                Debug.LogError($"마스터({masterId}) MasterData {Utils.RedText("테이블 데이터 없음")}");
+                return;
+            }
+
+            master = new Master(masterData);
+
+            string selectLocationJson = PlayerPrefsUtility.GetString("SelectLocation", null);
+
+            if (selectLocationJson != null)
+                selectLocation = JsonConvert.DeserializeObject<MapLocation>(selectLocationJson);
+
+            Debug.Log($"마스터 인스턴스 생성될 때 카드: {string.Join(", ", master.CardIds)}");
+
+            // 저장된 마스터 HP가 있으면 설정
+            int savedHp = PlayerPrefsUtility.GetInt("MasterHp", -1);
+
+            if (savedHp != -1)
+            {
+                master.SetHp(savedHp);
+            }
+
+            // 저장된 마스터 카드가 있으면 설정
+            string savedCardsJson = PlayerPrefsUtility.GetString("MasterCards", null);
+
+            if (!string.IsNullOrEmpty(savedCardsJson))
+            {
+                Debug.Log($"저장된 마스터 카드: {savedCardsJson}");
+                master.CardIds = JsonConvert.DeserializeObject<List<int>>(savedCardsJson);
+            }
         }
     }
 }
