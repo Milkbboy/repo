@@ -302,3 +302,224 @@ MonoBehaviour:
     Reaction_Condition_3: 0
     Reaction_Condition_3_Ratio: 0
     Reaction_Ai_3: 0
+  - AiGroup_Id: 810030
+    Type: Repeat
+    Ai_Group_1: 8100300
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810040
+    Type: Repeat
+    Ai_Group_1: 8100400
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810050
+    Type: Repeat
+    Ai_Group_1: 8100500
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810060
+    Type: Repeat
+    Ai_Group_1: 8100600
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810070
+    Type: Repeat
+    Ai_Group_1: 8100700
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810080
+    Type: Repeat
+    Ai_Group_1: 8100800
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810090
+    Type: Repeat
+    Ai_Group_1: 8100900
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810100
+    Type: Repeat
+    Ai_Group_1: 8101000
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810110
+    Type: Repeat
+    Ai_Group_1: 8101100
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810120
+    Type: Repeat
+    Ai_Group_1: 8101200
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810130
+    Type: Repeat
+    Ai_Group_1: 8101300
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810140
+    Type: Repeat
+    Ai_Group_1: 8101400
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810150
+    Type: Repeat
+    Ai_Group_1: 8101500
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0

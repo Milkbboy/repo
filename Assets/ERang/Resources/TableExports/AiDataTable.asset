@@ -426,7 +426,7 @@ MonoBehaviour:
     NameDesc: "\uCC0C\uB974\uAE30"
     Type: Melee
     Target: Near Enemy
-    Atk_Type: Automatic
+    Atk_Type: Select Enemy
     Atk_Range: 1, 2
     Atk_Cnt: 1
     Atk_Interval: 0
@@ -437,10 +437,153 @@ MonoBehaviour:
     NameDesc: "\uC790\uB974\uAE30"
     Type: Melee
     Target: Near Enemy
-    Atk_Type: Automatic
+    Atk_Type: Select Enemy
     Atk_Range: 1
     Atk_Cnt: 2
     Atk_Interval: 0.5
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81002000, 81002001
+  - Ai_Id: 8100300
+    NameDesc: "\uD565\uAE30"
+    Type: Melee
+    Target: All Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81003000
+  - Ai_Id: 8100400
+    NameDesc: "\uB178\uB824\uBCF4\uAE30"
+    Type: DeBuff
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81004000, 81004001
+  - Ai_Id: 8100500
+    NameDesc: "\uCC0C\uB974\uACE0 \uC790\uB974\uAE30"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81005000, 81005001, 81005002, 81005003
+  - Ai_Id: 8100600
+    NameDesc: "\uB2E4\uC9C0\uAE30"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1, 2, 3
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81006000, 81006001
+  - Ai_Id: 8100700
+    NameDesc: "\uC784\uD504 \uAE30\uBCF8 \uACF5\uACA9"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81007000
+  - Ai_Id: 8100800
+    NameDesc: "\uC784\uD504 \uAD81\uC218 \uAE30\uBCF8 \uACF5\uACA9"
+    Type: Ranged
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 2
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81008000
+  - Ai_Id: 8100900
+    NameDesc: "\uACB9\uC8FC\uB984 \uC704 \uAE30\uBCF8 \uD589\uB3D9"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81009000
+  - Ai_Id: 8101000
+    NameDesc: "\uCD0C\uCDA9 \uAE30\uBCF8 \uACF5\uACA9"
+    Type: Melee
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81010000
+  - Ai_Id: 8101100
+    NameDesc: "\uACE0\uB798\uD68C\uCDA9 \uACF5\uACA9"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81011000, 81011001
+  - Ai_Id: 8101200
+    NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC \uACF5\uACA9"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1, 2, 3
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81012000, 81012001
+  - Ai_Id: 8101300
+    NameDesc: "\uAD6C\uD1A0"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81013000, 81013001
+  - Ai_Id: 8101400
+    NameDesc: "\uAD6C\uD1A0 \uBC1C\uC0AC"
+    Type: Ranged
+    Target: Select Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81014000, 81014001, 81014002
+  - Ai_Id: 8101500
+    NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC"
+    Type: Ranged
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1, 2, 3
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81015000, 81015001, 81015002

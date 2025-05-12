@@ -793,7 +793,7 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: DefDown_01
-    SkillIconDesc: 
+    SkillIconDesc: 81001001_IconDesc
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -827,6 +827,431 @@ MonoBehaviour:
     HitFx: 
     PtojectileFx: 
     SkillIcon: DefDown_01
+    SkillIconDesc: 81002001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81003000
+    NameDesc: "\uB8E8\uC2DC_\uD565\uAE30"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81004000
+    NameDesc: "\uB8E8\uC2DC_\uB178\uB824\uBCF4\uAE30"
+    AbilityType: Damage
+    Value: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81004001
+    NameDesc: "\uB8E8\uC2DC_\uB178\uB824\uBCF4\uAE30"
+    AbilityType: BrokenDef
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefDown_01
+    SkillIconDesc: 81004000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81005000
+    NameDesc: "\uB8E8\uC2DC_\uCC0C\uB974\uAE30"
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81005001
+    NameDesc: "\uB8E8\uC2DC_\uCC0C\uB974\uAE30 \uB9C8\uD06C"
+    AbilityType: BrokenDef
+    Value: 0
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefDown_01
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81005002
+    NameDesc: "\uB8E8\uC2DC_\uC790\uB974\uAE30"
+    AbilityType: Damage
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81005003
+    NameDesc: "\uB8E8\uC2DC_\uC790\uB974\uAE30 \uB9C8\uD06C"
+    AbilityType: BrokenDef
+    Value: 0
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefDown_01
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81006000
+    NameDesc: "\uB8E8\uC2DC_\uB2E4\uC9C0\uAE30"
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81006001
+    NameDesc: "\uB8E8\uC2DC_\uB2E4\uC9C0\uAE30"
+    AbilityType: BrokenDef
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefDown_01
+    SkillIconDesc: 81006000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81007000
+    NameDesc: "\uC784\uD504 \uAE30\uBCF8 \uACF5\uACA9"
+    AbilityType: Damage
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81008000
+    NameDesc: "\uC784\uD504 \uAD81\uC218 \uAE30\uBCF8 \uACF5\uACA9"
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81009000
+    NameDesc: "\uACB9\uC8FC\uB984 \uC704"
+    AbilityType: AddSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81010000
+    NameDesc: "\uCD0C\uCDA9"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81011000
+    NameDesc: "\uACE0\uB798\uD68C\uCDA9_\uACF5\uACA9"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81011001
+    NameDesc: "\uACE0\uB798\uD68C\uCDA9_\uC911\uB3C5"
+    AbilityType: Poison
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 3
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Poison_01
+    SkillIconDesc: 81011001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81012000
+    NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC_\uACF5\uACA9"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81012001
+    NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC_\uC911\uB3C5"
+    AbilityType: Poison
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 3
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: Poison_01
+    SkillIconDesc: 81012001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81013000
+    NameDesc: "\uAD6C\uD1A0"
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81013001
+    NameDesc: "\uAD6C\uD1A0_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8"
+    AbilityType: SubSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81014000
+    NameDesc: "\uAD6C\uD1A0 \uBC1C\uC0AC"
+    AbilityType: Damage
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: HitFireball_01
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81014001
+    NameDesc: "\uAD6C\uD1A0 \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81014002
+    NameDesc: "\uAD6C\uD1A0_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8"
+    AbilityType: SubSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81015000
+    NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC"
+    AbilityType: Damage
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: HitFireball_01
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81015001
+    NameDesc: "\uAD6C\uD1A0 \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81015002
+    NameDesc: "\uD608\uD1A0_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8"
+    AbilityType: SubSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
     SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
