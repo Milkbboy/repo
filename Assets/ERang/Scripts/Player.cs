@@ -48,6 +48,9 @@ namespace ERang
 
             // 카드 타입별로 생성
             master.CardIds.Add(cardId);
+
+            string cardIdsJson = JsonConvert.SerializeObject(master.CardIds);
+            PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
         }
 
         public void SaveMaster(int nextFloor, int locationId, bool keepSatiety)
@@ -61,6 +64,10 @@ namespace ERang
 
             if (keepSatiety)
                 PlayerPrefsUtility.SetInt("Satiety", master.Satiety);
+
+            // Master 카드 ids 저장
+            string cardIdsJson = JsonConvert.SerializeObject(master.CardIds);
+            PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
         }
 
         private void LoadMaster()
