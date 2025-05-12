@@ -177,11 +177,8 @@ namespace ERang
             BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
             yield return StartCoroutine(CardPriorAbility(masterSlot));
 
-            // 마스터 마나 리셋
-            BoardSystem.Instance.ResetMana(master);
-
-            // 마나 충전
-            BoardSystem.Instance.AddMana(master.RechargeMana);
+            BoardSystem.Instance.SetHp(master.Hp);
+            BoardSystem.Instance.SetMana(master.RechargeMana);
 
             // 핸드 카드 만들기
             yield return StartCoroutine(deck.MakeHandCards());

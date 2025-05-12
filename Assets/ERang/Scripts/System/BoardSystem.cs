@@ -200,6 +200,16 @@ namespace ERang
             boardUI.SetTurnCount(count);
         }
 
+        public void SetHp(int amount)
+        {
+            bSlots[0].SetHp(amount);
+        }
+
+        public void SetMana(int amount)
+        {
+            bSlots[0].SetMana(amount);
+        }
+
         /// <summary>
         /// 마스터 마나 초기화
         /// </summary>

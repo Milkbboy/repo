@@ -22,7 +22,6 @@ namespace ERang
         public void SetHp(int amount)
         {
             State.SetHp(amount);
-            master.SetHp(amount);
         }
 
         public override void SetDefense(int amount)

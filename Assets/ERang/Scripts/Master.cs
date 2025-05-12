@@ -105,5 +105,10 @@ namespace ERang
         {
             mana = Mathf.Clamp(amount, 0, MaxMana);
         }
+
+        public void RecoverHp(int amount)
+        {
+            Hp = Mathf.Clamp(Hp + amount, 0, MaxHp);
+        }
     }
 }

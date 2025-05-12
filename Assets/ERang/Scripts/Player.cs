@@ -33,6 +33,16 @@ namespace ERang
             }
         }
 
+        public void RecoverHp(int hp)
+        {
+            master.RecoverHp(hp);
+        }
+
+        public void AddGold(int gold)
+        {
+            master.AddGold(gold);
+        }
+
         public void AddCard(int cardId)
         {
             CardData cardData = CardData.GetCardData(cardId);

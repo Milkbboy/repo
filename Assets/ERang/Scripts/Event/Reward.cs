@@ -152,13 +152,32 @@ public class Reward : MonoBehaviour
 
         if (selectedCard.Card is HpCard)
         {
-            Debug.Log($"Selected Hp Card");
             OnClickNextScene?.Invoke();
+
+            if (selectedCard.Card is HpCard hpCard)
+            {
+                Debug.Log($"Selected Hp Card: ${selectedCard.Card.Hp}");
+                Player.Instance.RecoverHp(hpCard.Hp);
+            }
+            else
+            {
+                Debug.LogError($"Selected Hp Card is not HpCard class");
+            }
         }
         else if (selectedCard.Card is GoldCard)
         {
-            Debug.Log($"Selected Gold Card");
+
             OnClickNextScene?.Invoke();
+
+            if (selectedCard.Card is GoldCard goldCard)
+            {
+                Debug.Log($"Selected Gold Card: ${goldCard.Gold}");
+                Player.Instance.AddGold(goldCard.Gold);
+            }
+            else
+            {
+                Debug.LogError($"Selected Gold Card is not GoldCard class");
+            }
         }
         else
         {

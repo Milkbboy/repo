@@ -264,6 +264,32 @@ namespace ERang
             card = null;
         }
 
+        public void SetHp(int amount)
+        {
+            if (card is not MasterCard masterCard)
+            {
+                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
+                return;
+            }
+
+            masterCard.SetHp(amount);
+
+            cardUI.SetHp(masterCard.Hp);
+        }
+
+        public void SetMana(int amount)
+        {
+            if (card is not MasterCard masterCard)
+            {
+                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
+                return;
+            }
+
+            masterCard.SetMana(amount);
+
+            cardUI.SetMana(masterCard.Mana);
+        }
+
         public void IncreaseMana(int amount)
         {
             if (card is not MasterCard masterCard)
