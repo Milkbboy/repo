@@ -1121,3 +1121,139 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81013000
+    NameDesc: "\uAD6C\uD1A0"
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81013001
+    NameDesc: "\uAD6C\uD1A0_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8"
+    AbilityType: SubSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81014000
+    NameDesc: "\uAD6C\uD1A0 \uBC1C\uC0AC"
+    AbilityType: Damage
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: HitFireball_01
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81014001
+    NameDesc: "\uAD6C\uD1A0 \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81014002
+    NameDesc: "\uAD6C\uD1A0_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8"
+    AbilityType: SubSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81015000
+    NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC"
+    AbilityType: Damage
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: HitFireball_01
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81015001
+    NameDesc: "\uAD6C\uD1A0 \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81015002
+    NameDesc: "\uD608\uD1A0_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8"
+    AbilityType: SubSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
