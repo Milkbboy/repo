@@ -73,8 +73,9 @@ namespace ERang
                 Debug.LogWarning("backSound 파일을 찾을 수 없습니다.");
             }
 
-            if (!mapSystem.LoadMapData())
+            if (!LoadMapData())
             {
+                Debug.Log($"맵 데이터 로드 실패. 맵 생성. actId: {actId}");
                 if (actId == 0)
                     actId = ActData.GetFirstActDataId();
 
@@ -103,6 +104,10 @@ namespace ERang
 
             // 층과 선택한 위치 인덱스 저장
             selectedDepthIndies[floor] = floorIndex;
+
+            // string selectedDepthIndiesJson = JsonConvert.SerializeObject(selectedDepthIndies, Formatting.None);
+            // Dictionary<int, int> selectedDepthIndies2 = JsonConvert.DeserializeObject<Dictionary<int, int>>(selectedDepthIndiesJson);
+            // Debug.Log($"selectedDepthIndies: {string.Join(", ", selectedDepthIndies)}, selectedDepthIndiesJson: {selectedDepthIndiesJson}, selectedDepthIndies2: {string.Join(", ", selectedDepthIndies2)}");
 
             Debug.Log($"{Utils.MapLocationText(locationId)} 클릭 <color={Colors.Red}>{selectLocationId}</color>({selectLocation.eventType}) 클릭. lastLocationId: {lastLocationId}");
 
@@ -204,6 +209,40 @@ namespace ERang
         {
             int id = MapLocation.GetID(d, i);
             return GetLocation(id);
+        }
+
+        private bool LoadMapData()
+        {
+            // floor 로드
+            floor = PlayerPrefsUtility.GetInt("Floor", 1);
+
+            // 선택한 위치 인덱스 리스트 로드
+            // selectedDepthIndies: [3, 0], [4, 0], selectedDepthIndiesJson: {"3":0,"4":0}, selectedDepthIndies2: [3, 0], [4, 0]
+            string selectedDepthIndiesJson = PlayerPrefsUtility.GetString("SelectedDepthIndies", "{\"1\":0}");
+            selectedDepthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(selectedDepthIndiesJson);
+
+            Debug.Log($"selectedDepthIndies: {string.Join(", ", selectedDepthIndies)}, selectedDepthIndiesJson: {selectedDepthIndiesJson}");
+
+            // Load depthWidth
+            string depthWidthsJson = PlayerPrefsUtility.GetString("DepthWidths", null);
+
+            if (string.IsNullOrEmpty(depthWidthsJson))
+                return false;
+
+            mapSystem.depthWidths = JsonConvert.DeserializeObject<Dictionary<int, int>>(depthWidthsJson);
+
+            // Load locations
+            string locationsJson = PlayerPrefsUtility.GetString("Locations", null);
+
+            if (string.IsNullOrEmpty(locationsJson))
+                return false;
+
+            // 맵 위치
+            mapSystem.locations = JsonConvert.DeserializeObject<Dictionary<int, MapLocation>>(locationsJson);
+
+            Debug.Log($"맵 로드 floor: {floor}, depthWidths: {mapSystem.depthWidths.Count}, locations: {mapSystem.locations.Count}");
+
+            return true;
         }
 
         private void SaveMapData()

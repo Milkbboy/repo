@@ -79,6 +79,8 @@ namespace ERang
             // Master 카드 ids 저장
             string cardIdsJson = JsonConvert.SerializeObject(master.CardIds);
             PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
+
+            floor = nextFloor;
         }
 
         private void LoadMaster()

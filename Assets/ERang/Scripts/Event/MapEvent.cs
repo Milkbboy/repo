@@ -35,7 +35,9 @@ namespace ERang
 
             // 층 증가
             int floor = PlayerPrefsUtility.GetInt("Floor", 1);
-            PlayerPrefsUtility.SetInt("Floor", floor + 1);
+            Player.Instance.floor = floor + 1;
+
+            PlayerPrefsUtility.SetInt("Floor", Player.Instance.floor);
         }
 
         public void ChangeScene()

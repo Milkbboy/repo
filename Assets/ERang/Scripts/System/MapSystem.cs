@@ -39,7 +39,7 @@ namespace ERang
             int floorEnd = Random.Range(actData.mapSizeMin, actData.mapSizeMax);
             int floorCount = floorEnd - floorEnd + 1;
 
-            Debug.Log($"맵 생성 floorStart: {floorStart}, floorEnd: {floorEnd} floorCount: {floorCount}, eventIds: {string.Join(", ", actData.eventIds)}");
+            Debug.Log($"맵 생성 actId: {actId}, floorStart: {floorStart}, floorEnd: {floorEnd} floorCount: {floorCount}, eventIds: {string.Join(", ", actData.eventIds)}");
 
             Dictionary<int, List<EventType>> depthEventsMap = new();
 
@@ -220,30 +220,6 @@ namespace ERang
             // 생성된 맵 위치 저장
             string locationsJson = JsonConvert.SerializeObject(locations);
             PlayerPrefsUtility.SetString("Locations", locationsJson);
-        }
-
-        public bool LoadMapData()
-        {
-            // Load depthWidth
-            string depthWidthsJson = PlayerPrefsUtility.GetString("DepthWidths", null);
-
-            if (string.IsNullOrEmpty(depthWidthsJson))
-                return false;
-
-            depthWidths = JsonConvert.DeserializeObject<Dictionary<int, int>>(depthWidthsJson);
-
-            // Load locations
-            string locationsJson = PlayerPrefsUtility.GetString("Locations", null);
-
-            if (string.IsNullOrEmpty(locationsJson))
-                return false;
-
-            // 맵 위치
-            locations = JsonConvert.DeserializeObject<Dictionary<int, MapLocation>>(locationsJson);
-
-            Debug.Log($"맵 로드 depthWidths: {depthWidths.Count}, locations: {locations.Count}");
-
-            return true;
         }
 
         private MapLocation GetLocation(int d, int i)

@@ -256,9 +256,9 @@ namespace ERang
             if (isWin)
             {
                 resultText.text = "YOU WIN";
+
                 // 이기면 층 증가
                 nextFloor = Player.Instance.floor + 1;
-
                 Player.Instance.SaveMaster(nextFloor, locationId, keepSatiety);
             }
             else
@@ -273,8 +273,6 @@ namespace ERang
                 PlayerPrefsUtility.SetInt("AreaId", 0);
                 PlayerPrefsUtility.SetString("MasterCards", null);
             }
-
-            PlayerPrefsUtility.SetInt("Floor", nextFloor);
 
             Debug.Log($"배틀 종료 {isWin}, loastLocationId: {locationId}, nextFloor: {nextFloor}");
 
