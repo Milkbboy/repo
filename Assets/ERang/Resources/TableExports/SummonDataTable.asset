@@ -53,3 +53,7 @@ MonoBehaviour:
     NameDesc: "\uCD0C\uCDA9"
     Card_Id: 81010
     Value: 10
+  - Summon_GroupId: 1005
+    NameDesc: "\uC18C\uD654\uBD88\uB7C9"
+    Card_Id: 1015
+    Value: 10

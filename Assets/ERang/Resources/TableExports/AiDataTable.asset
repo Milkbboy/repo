@@ -597,7 +597,7 @@ MonoBehaviour:
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 81006000, 81006001
+    Ability_id: 81016000, 81016001
   - Ai_Id: 8101700
     NameDesc: "\uB450\uC785"
     Type: Melee
@@ -608,4 +608,103 @@ MonoBehaviour:
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 81007000, 81007001
+    Ability_id: 81017000, 81017001
+  - Ai_Id: 8101800
+    NameDesc: "\uD06C\uAC8C \uD55C\uC785"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1, 2, 3
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81018000, 81018001
+  - Ai_Id: 8101900
+    NameDesc: "\uBE68\uC544 \uBA39\uAE30"
+    Type: Ranged
+    Target: Select Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81019000, 81019001, 81019002
+  - Ai_Id: 8102000
+    NameDesc: "\uD3EC\uB9CC\uAC10"
+    Type: Buff
+    Target: All Friendly Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81020000, 81020001
+  - Ai_Id: 8102100
+    NameDesc: "\uAE40\uCE58"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81021000
+  - Ai_Id: 8102200
+    NameDesc: "\uACE8\uB3D9\uD488"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81022000
+  - Ai_Id: 8102300
+    NameDesc: "\uBD88\uC758 \uC228\uACB0"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1, 2, 3
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81023000, 81023001
+  - Ai_Id: 8102400
+    NameDesc: "\uBE44\uD504 \uC6F0\uB9C1\uD134"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81024000, 81024001
+  - Ai_Id: 8102500
+    NameDesc: "\uD478\uC640\uADF8\uB77C"
+    Type: Buff
+    Target: All Friendly Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81025000, 81025001, 81025002
+  - Ai_Id: 8102600
+    NameDesc: "\uBB34\uB77C\uB9C8\uC0AC"
+    Type: Ranged
+    Target: Select Enemy
+    Atk_Type: Select Enemy
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81026000, 81026001

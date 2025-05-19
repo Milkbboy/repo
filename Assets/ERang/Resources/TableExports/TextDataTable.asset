@@ -232,6 +232,18 @@ MonoBehaviour:
     Desc_Ko: "\uCE74\uB4DC \uD558\uB098\uB97C \uB2E4\uC74C\uD134\uC5D0 \uC18C\uD658.
       \uC18C\uD658 \uBE44\uC6A9 -2"
     Desc_En: 
+  - DescID: CardName_1015
+    NameDesc: "\uC18C\uD654 \uBD88\uB7C9"
+    Desc_Ko: "\uC18C\uD654 \uBD88\uB7C9"
+    Desc_En: 
+  - DescID: CardDesc_1015
+    NameDesc: "\uC18C\uD654 \uBD88\uB7C9"
+    Desc_Ko: "\uC800\uC8FC \uCE74\uB4DC"
+    Desc_En: 
+  - DescID: CardShortDesc_1015
+    NameDesc: "\uC18C\uD654 \uBD88\uB7C9"
+    Desc_Ko: "\uC800\uC8FC"
+    Desc_En: 
   - DescID: CardName_81001
     NameDesc: "\uCC0C\uB974\uAE30"
     Desc_Ko: "\uCC0C\uB974\uAE30"
@@ -396,7 +408,7 @@ MonoBehaviour:
     Desc_En: 
   - DescID: 81011001_IconDesc
     NameDesc: "\uACE0\uB798\uD68C\uCDA9_\uD6A8\uACFC \uC124\uBA85"
-    Desc_Ko: "\uC911\uB3C5 \uD53C\uD574 1, 3\uD134\uAC04 \uC9C0\uC18D"
+    Desc_Ko: "\uC911\uB3C5"
     Desc_En: 
   - DescID: CardName_81012
     NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC"
@@ -489,4 +501,136 @@ MonoBehaviour:
     NameDesc: "\uB450\uC785"
     Desc_Ko: "1\uC5F4\uC758 \uC801 2 \uD53C\uD574 2\uBC88. \uC801 \uB2F9 \uB9CC\uBCF5\uB3C4
       10 \uD68C\uBCF5"
+    Desc_En: 
+  - DescID: CardName_81018
+    NameDesc: "\uD06C\uAC8C \uD55C\uC785"
+    Desc_Ko: "\uD06C\uAC8C \uD55C\uC785"
+    Desc_En: 
+  - DescID: CardDesc_81018
+    NameDesc: "\uD06C\uAC8C \uD55C\uC785"
+    Desc_Ko: "1,2,3\uC5F4\uC758 \uC801\uC5D0\uAC8C 1\uC758 \uD53C\uD574, \uC801 \uB2F9
+      \uB9CC\uBCF5\uB3C4 10 \uD68C\uBCF5"
+    Desc_En: 
+  - DescID: CardShortDesc_81018
+    NameDesc: "\uD06C\uAC8C \uD55C\uC785"
+    Desc_Ko: "1,2,3\uC5F4\uC758 \uC801 1 \uD53C\uD574. \uC801 \uB2F9 \uB9CC\uBCF5\uB3C4
+      10 \uD68C\uBCF5"
+    Desc_En: 
+  - DescID: CardName_81019
+    NameDesc: "\uBE68\uC544 \uBA39\uAE30"
+    Desc_Ko: "\uBE68\uC544 \uBA39\uAE30"
+    Desc_En: 
+  - DescID: CardDesc_81019
+    NameDesc: "\uBE68\uC544 \uBA39\uAE30"
+    Desc_Ko: "1\uBA85\uC758 \uC801\uC744 \uC120\uD0DD\uD558\uC5EC 1\uC758 \uD53C\uD574,
+      \uB9CC\uBCF5\uB3C4 10 \uD68C\uBCF5, \uB9C8\uB098 1 \uD68C\uBCF5"
+    Desc_En: 
+  - DescID: CardShortDesc_81019
+    NameDesc: "\uBE68\uC544 \uBA39\uAE30"
+    Desc_Ko: "\uC801 1 \uD53C\uD574. \uB9CC\uBCF5\uB3C4 10, \uB9C8\uB098 1 \uD68C\uBCF5"
+    Desc_En: 
+  - DescID: CardName_81020
+    NameDesc: "\uD3EC\uB9CC\uAC10"
+    Desc_Ko: "\uD3EC\uB9CC\uAC10"
+    Desc_En: 
+  - DescID: CardDesc_81020
+    NameDesc: "\uD3EC\uB9CC\uAC10"
+    Desc_Ko: "\uB9CC\uBCF5\uB3C4 10\uC744 \uC18C\uBE44\uD558\uC5EC \uBAA8\uB4E0 \uC544\uAD70\uC758
+      \uBC29\uC5B4\uB825\uC744 2\uD134\uAC04 3\uB9CC\uD07C \uC99D\uAC00\uC2DC\uD0A8\uB2E4."
+    Desc_En: 
+  - DescID: CardShortDesc_81020
+    NameDesc: "\uD3EC\uB9CC\uAC10"
+    Desc_Ko: "\uB9CC\uBCF5\uB3C4 10 \uC18C\uBAA8. \uC544\uAD70 \uBC29\uC5B4\uB825
+      2\uD134\uAC04 3 \uC99D\uAC00"
+    Desc_En: 
+  - DescID: 81020000_IconDesc
+    NameDesc: "\uD3EC\uB9CC\uAC10_\uD6A8\uACFC \uC124\uBA85"
+    Desc_Ko: "\uBC29\uC5B4\uB825 +3"
+    Desc_En: 
+  - DescID: CardName_81021
+    NameDesc: "\uAE40\uCE58"
+    Desc_Ko: "\uAE40\uCE58"
+    Desc_En: 
+  - DescID: CardDesc_81021
+    NameDesc: "\uAE40\uCE58"
+    Desc_Ko: "\uC0AC\uC6A9 \uC2DC \uB9C8\uB098\uB97C 1 \uD68C\uBCF5\uD569\uB2C8\uB2E4."
+    Desc_En: 
+  - DescID: CardShortDesc_81021
+    NameDesc: "\uAE40\uCE58"
+    Desc_Ko: "\uB9C8\uB098 1 \uD68C\uBCF5"
+    Desc_En: 
+  - DescID: CardName_81022
+    NameDesc: "\uACE8\uB3D9\uD488"
+    Desc_Ko: "\uACE8\uB3D9\uD488"
+    Desc_En: 
+  - DescID: CardDesc_81022
+    NameDesc: "\uACE8\uB3D9\uD488"
+    Desc_Ko: "\uC0AC\uC6A9 \uC2DC \uB9C8\uB098\uB97C 30 \uD68D\uB4DD\uD569\uB2C8\uB2E4. "
+    Desc_En: 
+  - DescID: CardShortDesc_81022
+    NameDesc: "\uACE8\uB3D9\uD488"
+    Desc_Ko: "\uACE8\uB4DC 30 \uD68D\uB4DD"
+    Desc_En: 
+  - DescID: CardName_81023
+    NameDesc: "\uB3C5\uC758 \uC228\uACB0"
+    Desc_Ko: "\uB3C5\uC758 \uC228\uACB0"
+    Desc_En: 
+  - DescID: CardDesc_81023
+    NameDesc: "\uB3C5\uC758 \uC228\uACB0"
+    Desc_Ko: "\uC801 \uC804\uCCB4\uC5D0\uAC8C 3\uC758 \uD53C\uD574\uB97C \uC785\uD788\uACE0
+      3\uD134\uAC04 \uC911\uB3C5 \uC0C1\uD0DC\uC5D0 \uBE60\uD2B8\uB9B0\uB2E4."
+    Desc_En: 
+  - DescID: CardShortDesc_81023
+    NameDesc: "\uB3C5\uC758 \uC228\uACB0"
+    Desc_Ko: "\uC801 \uC804\uCCB4 \uD53C\uD574 3, 3\uD134\uAC04 \uC911\uB3C5"
+    Desc_En: 
+  - DescID: 81023000_IconDesc
+    NameDesc: "\uB3C5\uC758 \uC228\uACB0_\uD6A8\uACFC \uC124\uBA85"
+    Desc_Ko: "\uC911\uB3C5"
+    Desc_En: 
+  - DescID: CardName_81024
+    NameDesc: "\uBE44\uD504 \uC6F0\uB9C1\uD134"
+    Desc_Ko: "\uBE44\uD504 \uC6F0\uB9C1\uD134"
+    Desc_En: 
+  - DescID: CardDesc_81024
+    NameDesc: "\uBE44\uD504 \uC6F0\uB9C1\uD134"
+    Desc_Ko: "\uB8E8\uC2DC\uC758 \uB9CC\uBCF5\uB3C4 20\uC744 \uD68C\uBCF5\uD55C\uB2E4.
+      \uC18C\uD654 \uBD88\uB7C9 \uCE74\uB4DC \uD55C\uC7A5\uC744 \uD578\uB4DC\uC5D0
+      \uC18C\uD658\uD55C\uB2E4. "
+    Desc_En: 
+  - DescID: CardShortDesc_81024
+    NameDesc: "\uBE44\uD504 \uC6F0\uB9C1\uD134"
+    Desc_Ko: "\uB9CC\uBCF5\uB3C4 20 \uD68C\uBCF5. \uC18C\uD654 \uBD88\uB7C9 1\uC7A5
+      \uC18C\uD658"
+    Desc_En: 
+  - DescID: CardName_81025
+    NameDesc: "\uD478\uC640\uADF8\uB77C"
+    Desc_Ko: "\uD478\uC640\uADF8\uB77C"
+    Desc_En: 
+  - DescID: CardDesc_81025
+    NameDesc: "\uD478\uC640\uADF8\uB77C"
+    Desc_Ko: "\uB9CC\uBCF5\uB3C4 30 \uD68C\uBCF5. \uC18C\uD654 \uBD88\uB7C9 1\uC7A5
+      \uC18C\uD658, \uC544\uAD70 3\uD134\uAC04 2 \uACF5\uACA9\uB825 \uC99D\uAC00"
+    Desc_En: 
+  - DescID: CardShortDesc_81025
+    NameDesc: "\uD478\uC640\uADF8\uB77C"
+    Desc_Ko: "\uB9CC\uBCF5\uB3C4 30 \uD68C\uBCF5. \uC18C\uD654 \uBD88\uB7C9 1\uC7A5
+      \uC18C\uD658, \uC544\uAD70 3\uD134\uAC04 2 \uACF5\uACA9\uB825 \uC99D\uAC00"
+    Desc_En: 
+  - DescID: 81025002_IconDesc
+    NameDesc: "\uD478\uC640\uADF8\uB77C_\uD6A8\uACFC \uC124\uBA85"
+    Desc_Ko: "\uACF5\uACA9\uB825 +2"
+    Desc_En: 
+  - DescID: CardName_81026
+    NameDesc: "\uBB34\uB77C\uB9C8\uC0AC"
+    Desc_Ko: "\uBB34\uB77C\uB9C8\uC0AC"
+    Desc_En: 
+  - DescID: CardDesc_81026
+    NameDesc: "\uBB34\uB77C\uB9C8\uC0AC"
+    Desc_Ko: "\uC801 1\uBA85\uC744 \uC120\uD0DD\uD558\uC5EC 5\uC758 \uD53C\uD574\uB97C
+      \uC8FC\uACE0, \uBC29\uC5B4\uB825\uC744 \uC601\uAD6C \uD30C\uAD34\uD569\uB2C8\uB2E4."
+    Desc_En: 
+  - DescID: CardShortDesc_81026
+    NameDesc: "\uBB34\uB77C\uB9C8\uC0AC"
+    Desc_Ko: "\uC801 1 \uD53C\uD574. \uBC29\uC5B4\uB825 \uC601\uAD6C \uD30C\uAD34"
     Desc_En: 
