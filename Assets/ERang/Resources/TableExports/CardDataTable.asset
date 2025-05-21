@@ -602,9 +602,9 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 1
+    Extinction: 0
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_013
     Level_3_img: Lucy_013
     Level_5_img: Lucy_013
@@ -625,9 +625,9 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 1
+    Extinction: 0
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_014
     Level_3_img: Lucy_014
     Level_5_img: Lucy_014
@@ -648,9 +648,9 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 1
+    Extinction: 0
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_015
     Level_3_img: Lucy_015
     Level_5_img: Lucy_015
@@ -671,9 +671,9 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 1
+    Extinction: 0
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_016
     Level_3_img: Lucy_016
     Level_5_img: Lucy_016
@@ -694,9 +694,9 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 1
+    Extinction: 0
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_017
     Level_3_img: Lucy_017
     Level_5_img: Lucy_017
@@ -717,9 +717,9 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 1
+    Extinction: 0
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_018
     Level_3_img: Lucy_018
     Level_5_img: Lucy_018
@@ -740,9 +740,9 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 1
+    Extinction: 0
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_019
     Level_3_img: Lucy_019
     Level_5_img: Lucy_019
@@ -763,9 +763,9 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 1
+    Extinction: 0
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_020
     Level_3_img: Lucy_020
     Level_5_img: Lucy_020
@@ -788,7 +788,7 @@ MonoBehaviour:
     InUse: 1
     Extinction: 1
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_021
     Level_3_img: Lucy_021
     Level_5_img: Lucy_021
@@ -811,7 +811,7 @@ MonoBehaviour:
     InUse: 1
     Extinction: 1
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_022
     Level_3_img: Lucy_022
     Level_5_img: Lucy_022
@@ -832,9 +832,9 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 1
+    Extinction: 0
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_023
     Level_3_img: Lucy_023
     Level_5_img: Lucy_023
@@ -857,7 +857,7 @@ MonoBehaviour:
     InUse: 1
     Extinction: 1
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_024
     Level_3_img: Lucy_024
     Level_5_img: Lucy_024
@@ -880,7 +880,7 @@ MonoBehaviour:
     InUse: 1
     Extinction: 1
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_025
     Level_3_img: Lucy_025
     Level_5_img: Lucy_025
@@ -903,10 +903,125 @@ MonoBehaviour:
     InUse: 1
     Extinction: 1
     CompleteExtinction: 0
-    Level: 1
+    Level: 0
     Level_1_img: Lucy_026
     Level_3_img: Lucy_026
     Level_5_img: Lucy_026
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81027
+    NameDesc: "\uB2E8\uC2DD"
+    CardNameDesc_Id: CardName_81027
+    CardDesc_Id: CardDesc_81027
+    CardShortDesc_Id: CardShortDesc_81027
+    CardType: Magic
+    Grade: Rare
+    AiGroup_id: 810270
+    CostMana: 2
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_027
+    Level_3_img: Lucy_027
+    Level_5_img: Lucy_027
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81028
+    NameDesc: "\uD3ED\uC2DD"
+    CardNameDesc_Id: CardName_81028
+    CardDesc_Id: CardDesc_81028
+    CardShortDesc_Id: CardShortDesc_81028
+    CardType: Magic
+    Grade: Rare
+    AiGroup_id: 810280
+    CostMana: 2
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_028
+    Level_3_img: Lucy_028
+    Level_5_img: Lucy_028
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81029
+    NameDesc: "\uD5DB\uAD6C\uC5ED\uC9C8"
+    CardNameDesc_Id: CardName_81029
+    CardDesc_Id: CardDesc_81029
+    CardShortDesc_Id: CardShortDesc_81029
+    CardType: Magic
+    Grade: Rare
+    AiGroup_id: 810290
+    CostMana: 1
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_029
+    Level_3_img: Lucy_029
+    Level_5_img: Lucy_029
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81030
+    NameDesc: "\uACE0\uB300\uC758 \uBA85\uC57D"
+    CardNameDesc_Id: CardName_81030
+    CardDesc_Id: CardDesc_81030
+    CardShortDesc_Id: CardShortDesc_81030
+    CardType: Magic
+    Grade: Rare
+    AiGroup_id: 810300
+    CostMana: 2
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_030
+    Level_3_img: Lucy_030
+    Level_5_img: Lucy_030
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81031
+    NameDesc: "\uC9C0\uC625 \uC544\uADC0"
+    CardNameDesc_Id: CardName_81031
+    CardDesc_Id: CardDesc_81031
+    CardShortDesc_Id: CardShortDesc_81031
+    CardType: Creature
+    Grade: Common
+    AiGroup_id: 810310
+    CostMana: 1
+    CostGold: 0
+    Hp: 4
+    Atk: 1
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: Lucy_031
+    Level_3_img: Lucy_031
+    Level_5_img: Lucy_031
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001

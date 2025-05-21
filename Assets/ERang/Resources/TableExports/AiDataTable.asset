@@ -708,3 +708,58 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81026000, 81026001
+  - Ai_Id: 8102700
+    NameDesc: "\uB2E8\uC2DD"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81027000
+  - Ai_Id: 8102800
+    NameDesc: "\uD3ED\uC2DD"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81028000
+  - Ai_Id: 8102900
+    NameDesc: "\uD5DB\uAD6C\uC5ED\uC9C8"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81029000, 81029001
+  - Ai_Id: 8103000
+    NameDesc: "\uACE0\uB300\uC758 \uBA85\uC57D"
+    Type: Ranged
+    Target: Friendly
+    Atk_Type: Select Friendly
+    Atk_Range: 
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81030000
+  - Ai_Id: 8103100
+    NameDesc: "\uC9C0\uC625 \uC544\uADC0 \uACF5\uACA9"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81031000

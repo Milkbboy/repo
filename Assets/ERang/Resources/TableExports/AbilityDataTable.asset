@@ -1631,3 +1631,105 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81027000
+    NameDesc: "\uB2E8\uC2DD_\uC784\uC2DC"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81028000
+    NameDesc: "\uD3ED\uC2DD_\uC784\uC2DC"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81029000
+    NameDesc: "\uD5DB\uAD6C\uC5ED\uC9C8_\uCE74\uB4DC \uB450\uC7A5 \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81029001
+    NameDesc: "\uD5DB\uAD6C\uC5ED\uC9C8_\uCE74\uB4DC \uB450\uC7A5 \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81030000
+    NameDesc: "\uACE0\uB300\uC758 \uBA85\uC57D_\uD790\uB9C1"
+    AbilityType: Heal
+    Value: 99
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitHeal_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81031000
+    NameDesc: "\uC9C0\uC625 \uC544\uADC0 \uACF5\uACA9"
+    AbilityType: Damage
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
