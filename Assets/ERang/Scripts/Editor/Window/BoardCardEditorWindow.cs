@@ -97,7 +97,7 @@ namespace ERang
                     if (bSlot.Card == null)
                         continue;
 
-                    Debug.Log($"SlotNum: {bSlot.SlotNum}, {string.Join(", ", bSlot.Card.CardAbilities.Select(ability => ability.abilityId))}");
+                    Debug.Log($"SlotNum: {bSlot.SlotNum}, {string.Join(", ", bSlot.Card.AbilitySystem.CardAbilities.Select(ability => ability.abilityId))}");
                 }
             }
         }
@@ -226,9 +226,9 @@ namespace ERang
                     }
                     EditorGUILayout.EndHorizontal();
 
-                    for (int i = 0; i < card.CardAbilities.Count; ++i)
+                    for (int i = 0; i < card.AbilitySystem.CardAbilities.Count; ++i)
                     {
-                        CardAbility cardAbility = card.CardAbilities[i];
+                        CardAbility cardAbility = card.AbilitySystem.CardAbilities[i];
                         AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
 
                         EditorGUILayout.BeginHorizontal();

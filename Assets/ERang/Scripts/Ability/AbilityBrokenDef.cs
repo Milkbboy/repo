@@ -38,7 +38,7 @@ namespace ERang
                 card.DecreaseDefense(value);
 
             // 카드 어빌리티 중 ArmorBreak 가 있으면 방어력 감소 적용 안함
-            if (card.ArmorBreakAbility != null)
+            if (card.AbilitySystem.ArmorBreakAbility != null)
             {
                 Debug.Log($"{targetSlot.LogText} 카드 어빌리티 중 ArmorBreak 있어 def {(isDefUp ? "증가" : "감소")} 적용 안함.");
                 yield break;

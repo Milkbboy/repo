@@ -353,7 +353,7 @@ namespace ERang
                 yield break;
             }
 
-            foreach (CardAbility cardAbility in card.PriorCardAbilities)
+            foreach (CardAbility cardAbility in card.AbilitySystem.PriorCardAbilities)
             {
                 yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(cardAbility, boardSlot, boardSlot));
             }
@@ -369,7 +369,7 @@ namespace ERang
                 yield break;
             }
 
-            foreach (CardAbility cardAbility in card.PostCardAbilities)
+            foreach (CardAbility cardAbility in card.AbilitySystem.PostCardAbilities)
             {
                 yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(cardAbility, boardSlot, boardSlot));
             }
@@ -569,7 +569,7 @@ namespace ERang
         {
             foreach (var card in cards)
             {
-                List<CardAbility> onHandCardAbilities = card.CardAbilities.Where(ability => ability.workType == AbilityWorkType.OnHand).ToList();
+                List<CardAbility> onHandCardAbilities = card.AbilitySystem.CardAbilities.Where(ability => ability.workType == AbilityWorkType.OnHand).ToList();
 
                 foreach (var cardAbility in onHandCardAbilities)
                 {
@@ -594,7 +594,7 @@ namespace ERang
 
                 List<CardAbility> removedCardAbilities = new();
 
-                foreach (CardAbility cardAbility in card.CardAbilities)
+                foreach (CardAbility cardAbility in card.AbilitySystem.CardAbilities)
                 {
                     cardAbility.DecreaseDuration();
 

@@ -198,7 +198,7 @@ namespace ERang
                 return;
             }
 
-            List<int> abilityIds = card.CardAbilities.Select(ability => ability.abilityId).ToList();
+            List<int> abilityIds = card.AbilitySystem.CardAbilities.Select(ability => ability.abilityId).ToList();
 
             if (abilityIds.Count == 0)
             {
@@ -206,7 +206,7 @@ namespace ERang
                 return;
             }
 
-            abilityIcons.SetIcons(card.CardAbilities);
+            abilityIcons.SetIcons(card.AbilitySystem.CardAbilities);
         }
 
         public void RestoreHealth(int amount)

@@ -24,14 +24,6 @@ namespace ERang
         public CardState State { get; protected set; }
         public CardAbilitySystem AbilitySystem { get; private set; }
         public CardTraits Traits { get; set; }
-        public List<CardAbility> CardAbilities { get => cardAbilities; set => cardAbilities = value; }
-        public List<CardAbility> PriorCardAbilities { get => cardAbilities.Where(ability => Constants.CardPriorAbilities.Contains(ability.abilityType)).ToList(); }
-        public List<CardAbility> PostCardAbilities { get => cardAbilities.Where(ability => Constants.CardPostAbilities.Contains(ability.abilityType)).ToList(); }
-        public List<CardAbility> BrokenDefAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.BrokenDef).ToList(); }
-        public List<CardAbility> DefUpAbilities { get => cardAbilities.Where(ability => ability.abilityType == AbilityType.DefUp).ToList(); }
-        public CardAbility ArmorBreakAbility { get => cardAbilities.FirstOrDefault(ability => ability.abilityType == AbilityType.ArmorBreak); }
-        public List<CardAbility> HandAbilities { get => handAbilities; set => handAbilities = value; }
-
         public string LogText => Utils.CardLog(this);
 
         public virtual int Hp { get; set; }

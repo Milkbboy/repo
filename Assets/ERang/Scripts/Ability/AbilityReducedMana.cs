@@ -39,7 +39,7 @@ namespace ERang
 
         private void Apply(BaseCard card, bool isReduced)
         {
-            foreach (CardAbility cardAbility in card.HandAbilities)
+            foreach (CardAbility cardAbility in card.AbilitySystem.HandAbilities)
             {
                 if (card is CreatureCard creatureCard)
                 {

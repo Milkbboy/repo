@@ -38,7 +38,7 @@ namespace ERang
                 EditorGUILayout.LabelField("Def", card.Def.ToString());
                 EditorGUILayout.LabelField("Mana", card.Mana.ToString());
                 EditorGUILayout.LabelField("Traits", card.Traits.ToString());
-                EditorGUILayout.LabelField("HandAbility Count", card.HandAbilities.Count.ToString());
+                EditorGUILayout.LabelField("HandAbility Count", card.AbilitySystem.HandAbilities.Count.ToString());
 
                 // 카드 이미지 표시
                 if (card.CardImage != null)
@@ -48,7 +48,7 @@ namespace ERang
 
                 // 카드 능력 표시
                 EditorGUILayout.LabelField("Card HandAbilities", EditorStyles.boldLabel);
-                foreach (var ability in card.HandAbilities)
+                foreach (var ability in card.AbilitySystem.HandAbilities)
                 {
                     EditorGUILayout.BeginVertical("box");
                     EditorGUILayout.LabelField("abilityId", ability.abilityId.ToString());
@@ -82,7 +82,7 @@ namespace ERang
                 EditorGUILayout.LabelField("AiGroupIndex", card.AiGroupIndex.ToString());
                 EditorGUILayout.LabelField("InUse", card.InUse.ToString());
                 EditorGUILayout.LabelField("IsExtinction", card.IsExtinction.ToString());
-                EditorGUILayout.LabelField("abilityCount", card.CardAbilities.Count.ToString());
+                EditorGUILayout.LabelField("abilityCount", card.AbilitySystem.CardAbilities.Count.ToString());
                 GUILayout.Label(card.CardImage, GUILayout.Width(100), GUILayout.Height(123));
 
                 // 카드의 실제 타입에 따라 속성을 표시

@@ -131,7 +131,7 @@ namespace ERang
                     card.Traits = CardTraits.None;
                 }
 
-                Debug.Log($"MakeHandCards. card: {card}, {card.LogText}, handAbilities.Count: {card.HandAbilities.Count}");
+                Debug.Log($"MakeHandCards. card: {card}, {card.LogText}, handAbilities.Count: {card.AbilitySystem.HandAbilities.Count}");
 
                 StartCoroutine(AbilityLogic.Instance.HandCardAbilityAction(card));
             }

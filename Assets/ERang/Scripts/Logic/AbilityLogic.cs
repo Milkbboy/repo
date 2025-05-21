@@ -90,7 +90,7 @@ namespace ERang
                 if (card == null)
                     continue;
 
-                CardAbility cardAbility = card.CardAbilities.Find(cardAbility => cardAbility.abilityId == abilityData.abilityId);
+                CardAbility cardAbility = card.AbilitySystem.CardAbilities.Find(cardAbility => cardAbility.abilityId == abilityData.abilityId);
 
                 // 어빌리티 발동 여부
                 bool isAbilityAction = cardAbility == null;
@@ -132,7 +132,7 @@ namespace ERang
 
         public IEnumerator HandCardAbilityAction(BaseCard handCard)
         {
-            foreach (CardAbility cardAbility in handCard.HandAbilities)
+            foreach (CardAbility cardAbility in handCard.AbilitySystem.HandAbilities)
             {
                 IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
 
@@ -151,9 +151,9 @@ namespace ERang
 
         public IEnumerator HandCardAbilityRelease(BaseCard handCard)
         {
-            for (int i = 0; i < handCard.HandAbilities.Count; ++i)
+            for (int i = 0; i < handCard.AbilitySystem.HandAbilities.Count; ++i)
             {
-                CardAbility cardAbility = handCard.HandAbilities[i];
+                CardAbility cardAbility = handCard.AbilitySystem.HandAbilities[i];
 
                 IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
 

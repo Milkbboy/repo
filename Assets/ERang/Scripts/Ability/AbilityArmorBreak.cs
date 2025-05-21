@@ -43,9 +43,9 @@ namespace ERang
             if (isRelease)
             {
                 // 감소할 def
-                int sumBrokeDef = card.BrokenDefAbilities.Sum(ability => ability.abilityValue);
+                int sumBrokeDef = card.AbilitySystem.BrokenDefAbilities.Sum(ability => ability.abilityValue);
                 // 더할 def
-                int sumDefUp = card.DefUpAbilities.Sum(ability => ability.abilityValue);
+                int sumDefUp = card.AbilitySystem.DefUpAbilities.Sum(ability => ability.abilityValue);
 
                 CardData cardData = Utils.CheckData(CardData.GetCardData, "CardData", card.Id);
 

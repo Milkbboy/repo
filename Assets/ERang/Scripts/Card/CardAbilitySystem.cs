@@ -15,7 +15,7 @@ namespace ERang
         public event Action<CardAbility> OnHandAbilityAdded;
         public event Action<CardAbility> OnHandAbilityRemoved;
 
-        public IReadOnlyList<CardAbility> CardAbilities => cardAbilities;
+        public List<CardAbility> CardAbilities => cardAbilities;
         public IReadOnlyList<CardAbility> HandAbilities => handAbilities;
         public IReadOnlyList<CardAbility> PriorCardAbilities => cardAbilities.Where(ability => Constants.CardPriorAbilities.Contains(ability.abilityType)).ToList();
         public IReadOnlyList<CardAbility> PostCardAbilities => cardAbilities.Where(ability => Constants.CardPostAbilities.Contains(ability.abilityType)).ToList();
