@@ -1,14 +1,61 @@
+using UnityEngine;
 using ERang.Data;
 
 namespace ERang
 {
-    public class GoldCard : BaseCard
+    public class GoldCard : GameCard
     {
-        public int Gold { get; set; }
-
+        public int Gold => GetValue(ValueType.Gold);
+        
+        public GoldCard() : base()
+        {
+            // 골드 카드는 값 관리 기능만 사용
+            usesCombat = false;
+            usesAbilities = false;
+            usesValues = true;
+            usesAi = false;
+            CardType = CardType.Item;
+            
+            SetValue(ValueType.Gold, 0);
+        }
+        
         public GoldCard(CardData cardData, int gold) : base(cardData)
         {
-            Gold = gold;
+            // 골드 카드는 값 관리 기능만 사용
+            usesCombat = false;
+            usesAbilities = false;
+            usesValues = true;
+            usesAi = false;
+            
+            SetValue(ValueType.Gold, gold);
+        }
+        
+        public GoldCard(int gold) : base()
+        {
+            // 골드 카드는 값 관리 기능만 사용
+            usesCombat = false;
+            usesAbilities = false;
+            usesValues = true;
+            usesAi = false;
+            CardType = CardType.Item;
+            
+            SetValue(ValueType.Gold, gold);
+        }
+        
+        public void SetGold(int amount)
+        {
+            SetValue(ValueType.Gold, amount);
+        }
+        
+        public void AddGold(int amount)
+        {
+            ModifyValue(ValueType.Gold, amount);
+        }
+        
+        public override void OnPlay()
+        {
+            // 골드 카드 사용 시 실행되는 코드
+            Debug.Log($"골드 카드 {Id} 사용됨, 골드량: {Gold}");
         }
     }
 }

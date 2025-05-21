@@ -4,76 +4,60 @@ using System.Linq;
 
 namespace ERang
 {
-    // HandCard
-    public class HCard : MonoBehaviour
+    /// <summary>
+    /// 핸드에 있는 카드를 표현하는 UI 컴포넌트
+    /// </summary>
+    public class HCard : CardView
     {
-        public string CardUid => cardUid;
-        public BaseCard Card => card;
-
         public LayerMask slotLayerMask;
-        public string LogText => Utils.CardLog(card);
-
+        public string LogText => Utils.CardLog(Card);
+        
         private Dragable dragable;
-
-        private BaseCard card;
-        private CardUI cardUI;
         private string cardUid;
-
-        private Vector3 originalPosition;
-
-        void Awake()
+        
+        protected override void Awake()
         {
+            base.Awake();
             dragable = GetComponent<Dragable>();
-            cardUI = GetComponent<CardUI>();
         }
-
-        void Start()
-        {
-            originalPosition = transform.position;
-        }
-
-        void OnMouseEnter()
+        
+        protected override void OnMouseEnter()
         {
             if (HandDeck.Instance.DraggingCard != null)
                 return;
 
-            if (card == null)
-                return;
-
-            cardUI.ShowDesc(card.Id);
+            base.OnMouseEnter();
         }
-
-        void OnMouseExit()
+        
+        protected override void OnMouseExit()
         {
             if (HandDeck.Instance.DraggingCard != null)
                 return;
 
-            if (card == null)
-                return;
-
-            cardUI.ShowShortDesc(card.Id);
+            base.OnMouseExit();
         }
-
+        
         void OnMouseDown()
         {
-            // Debug.Log($"HCard. OnMouseDown. {card?.Uid} {card?.LogText}");
-
             HandDeck.Instance.SetDraggingCard(this);
         }
-
+        
         void OnMouseUp()
         {
             HandDeck.Instance.SetDraggingCard(null);
 
-            Debug.Log($"HCard. OnMouseUp - 1. {card?.Uid} {card?.LogText}, originalPosition: {originalPosition}");
+            Debug.Log($"HCard. OnMouseUp - 1. {Card?.Uid} {LogText}, originalPosition: {originalPosition}");
 
             // 가장 가까운 슬롯을 찾고, 슬롯 위에 있는지 확인
-            if (card is MagicCard magicCard)
+            if (Card is MagicCard magicCard)
             {
                 HandDeck.Instance.MagicCardUse(this);
-
+                
+                // IsSelectAttackType 속성이 현재 구현되어 있지 않아 임시로 주석 처리
+                /*
                 if (magicCard.IsSelectAttackType)
                     HandDeck.Instance.SetTargettingArraow(false);
+                */
             }
             else
             {
@@ -88,9 +72,8 @@ namespace ERang
             }
 
             transform.DOMove(originalPosition, .1f);
-            // Debug.Log($"HCard. OnMouseUp - 2. {card?.Uid} {card?.LogText}, originalPosition: {originalPosition}");
         }
-
+        
         // Gizmos를 사용하여 Scene 뷰에서 구체를 그립니다.
         void OnDrawGizmos()
         {
@@ -113,62 +96,45 @@ namespace ERang
                 }
             }
         }
-
-        public void SetCard(BaseCard card)
+        
+        /// <summary>
+        /// 카드 데이터 설정 - BaseCard에서 GameCard로 변경
+        /// </summary>
+        public override void SetCard(GameCard card)
         {
+            base.SetCard(card);
             cardUid = card.Uid;
-            this.card = card;
-
-            // Debug.Log($"cardId: {card.Id} CardType: {card.CardType}, class type: {card.GetType()}");
-
-            if (cardUI != null)
-                cardUI.SetCard(card);
-            else
-                Debug.LogError("CardUI is null");
         }
-
+        
+        // 이 두 메서드는 MagicCard 클래스에서 아직 구현되지 않은 속성에 의존하므로 임시로 주석 처리
+        /*
         public bool IsSelectAttackTypeCard()
         {
-            return card is MagicCard magicCard && magicCard.IsSelectAttackType;
+            return Card is MagicCard magicCard && magicCard.IsSelectAttackType;
         }
-
+        
         public bool IsHandOnCard()
         {
-            return card is MagicCard magicCard && magicCard.IsHandOnCard;
+            return Card is MagicCard magicCard && magicCard.IsHandOnCard;
         }
-
+        
         public bool IsContainsSlotNum(int slotNum)
         {
-            return card is MagicCard magicCard && magicCard.TargetSlotNumbers.Contains(slotNum);
+            return Card is MagicCard magicCard && magicCard.TargetSlotNumbers.Contains(slotNum);
         }
-
+        */
+        
         public void SetDrawPostion(Vector3 position)
         {
             transform.localPosition = position;
             originalPosition = transform.position;
         }
-
-        public void GoBackPosition()
-        {
-            transform.position = originalPosition;
-        }
-
-        public void DiscardAnimation(Transform discardPos)
-        {
-            DiscardAnimation discardAnimation = GetComponent<DiscardAnimation>();
-            discardAnimation.PlaySequence(discardPos);
-        }
-
-        public void UpdateCardUI()
-        {
-            cardUI.SetCard(card);
-        }
-
+        
         public bool IsDragging()
         {
             return dragable.IsDragging;
         }
-
+        
         private bool TryGetNearestSlot(Vector3 position, out BSlot nearestSlot)
         {
             nearestSlot = null;
@@ -183,8 +149,6 @@ namespace ERang
 
             // HCard의 Collider와 겹치는 모든 콜라이더를 가져옴
             Collider[] hitColliders = Physics.OverlapBox(hCardCollider.bounds.center, hCardCollider.bounds.extents, hCardCollider.transform.rotation, slotLayerMask);
-
-            // Debug.Log($"hitColliders.Length: {hitColliders.Length}");
 
             foreach (Collider hitCollider in hitColliders)
             {

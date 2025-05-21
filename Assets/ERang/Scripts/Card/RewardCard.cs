@@ -4,52 +4,36 @@ using DG.Tweening;
 
 namespace ERang
 {
-    public class RewardCard : MonoBehaviour
+    /// <summary>
+    /// 보상 카드를 표현하는 UI 컴포넌트
+    /// </summary>
+    public class RewardCard : CardView
     {
-        public BaseCard Card => card;
-
         public UnityAction<RewardCard> OnClick;
 
         public float hoverHeight = 0.5f;
         public float animationDuration = 0.1f;
         public float scaleFactor = 0.5f;
 
-        private BaseCard card;
-        private CardUI cardUI;
-
-        private Vector3 originalPosition;
-        private Vector3 originalScale;
-
         private bool isScaleFixed = false;
 
-        void Awake()
-        {
-            cardUI = GetComponent<CardUI>();
-        }
-
-        void Start()
-        {
-            originalPosition = transform.position;
-            originalScale = transform.localScale;
-        }
-
-        void OnMouseEnter()
+        protected override void OnMouseEnter()
         {
             if (isScaleFixed)
                 return;
 
-            cardUI.ShowDesc(card.Id);
+            base.OnMouseEnter();
 
             transform.DOMoveY(originalPosition.y + hoverHeight, animationDuration);
             transform.DOScale(originalScale * scaleFactor, animationDuration);
         }
 
-        void OnMouseExit()
+        protected override void OnMouseExit()
         {
             if (isScaleFixed)
                 return;
 
-            cardUI.ShowShortDesc(card.Id);
+            base.OnMouseExit();
 
             transform.DOMoveY(originalPosition.y, animationDuration);
             transform.DOScale(originalScale, animationDuration);
@@ -58,26 +42,18 @@ namespace ERang
         void OnMouseDown()
         {
             OnClick?.Invoke(this);
-
             isScaleFixed = true;
         }
 
-        public void SetCard(BaseCard card)
-        {
-            this.card = card;
-            cardUI.SetCard(card);
-        }
-
+        /// <summary>
+        /// 고정 크기 설정 (선택 시 크기 고정)
+        /// </summary>
         public void SetScaleFixed(bool isScaleFixed)
         {
             this.isScaleFixed = isScaleFixed;
 
-            OnMouseExit();
-        }
-
-        public void DiscardAnimation(Transform position)
-        {
-            GetComponent<DiscardAnimation>().PlaySequence(position);
+            if (!isScaleFixed)
+                OnMouseExit();
         }
     }
 }

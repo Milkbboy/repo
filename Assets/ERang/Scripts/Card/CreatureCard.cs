@@ -1,83 +1,49 @@
+using UnityEngine;
 using ERang.Data;
 
 namespace ERang
 {
-    // 크리쳐 카드
-    public class CreatureCard : BaseCard, IAttackable, IManaManageable
+    public class CreatureCard : GameCard
     {
-        public override int Hp => State.Hp;
-        public override int Def => State.Def;
-        public override int Mana => State.Mana;
-        public override int Atk => State.Atk;
-        public int MaxHp => State.MaxHp;
-
-        public CreatureCard()
+        public CreatureCard() : base()
         {
+            // 모든 기능 활성화
+            usesCombat = true;
+            usesAbilities = true;
+            usesValues = true;
+            usesAi = true;
+            CardType = CardType.Creature;
         }
-
+        
         public CreatureCard(CardData cardData) : base(cardData)
         {
-            State = new CardState(cardData.hp, cardData.def, cardData.costMana, cardData.atk, cardData.hp);
+            // 모든 기능 활성화
+            usesCombat = true;
+            usesAbilities = true;
+            usesValues = true;
+            usesAi = true;
         }
-
-        public void SetHp(int amount)
+        
+        public override void OnPlay()
         {
-            State.SetHp(amount);
+            // 크리쳐 카드가 필드에 배치될 때 실행되는 코드
+            Debug.Log($"크리쳐 카드 {Id} 배치됨");
         }
-
-        public void SetMana(int amount)
+        
+        public override void OnTurnStart()
         {
-            State.SetMana(amount);
+            // 턴 시작 시 실행
+            base.OnTurnStart();
+            
+            // 크리쳐 카드의 턴 시작 시 추가 로직 구현
         }
-
-        public void SetAttack(int amount)
+        
+        public override void OnTurnEnd()
         {
-            State.SetAtk(amount);
-        }
-
-        public void IncreaseAttack(int amount)
-        {
-            State.SetAtk(State.Atk + amount);
-        }
-
-        public void DecreaseAttack(int amount)
-        {
-            State.SetAtk(State.Atk - amount);
-        }
-
-        public void IncreaseMana(int amount)
-        {
-            State.IncreaseMana(amount);
-        }
-
-        public void DecreaseMana(int amount)
-        {
-            State.DecreaseMana(amount);
-        }
-
-        public override void SetDefense(int amount)
-        {
-            State.SetDef(amount);
-        }
-
-        public override void RestoreHealth(int amount)
-        {
-            State.SetHp(State.Hp + amount);
-        }
-
-        public override void TakeDamage(int amount)
-        {
-            State.SetHp(State.Hp - amount);
-        }
-
-        public override void IncreaseDefense(int amount)
-        {
-            State.SetDef(State.Def + amount);
-        }
-
-        public override void DecreaseDefense(int amount)
-        {
-            State.SetDef(State.Def - amount);
+            // 턴 종료 시 실행
+            base.OnTurnEnd();
+            
+            // 크리쳐 카드의 턴 종료 시 추가 로직 구현
         }
     }
 }

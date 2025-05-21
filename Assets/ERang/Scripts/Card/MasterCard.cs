@@ -1,74 +1,102 @@
+using UnityEngine;
+using ERang.Data;
+
 namespace ERang
 {
-    public class MasterCard : BaseCard, IManaManageable
+    public class MasterCard : GameCard
     {
-        public override int Hp => State.Hp;
-        public override int Def => State.Def;
-        public override int Mana => State.Mana;
-        public int MaxMana => State.MaxMana;
-
-        private Master master;
-
-        public MasterCard()
+        private MasterData masterData;
+        
+        public MasterData MasterData => masterData;
+        
+        public MasterCard() : base()
         {
+            // 마스터 카드는 모든 기능 사용
+            usesCombat = true;
+            usesAbilities = true;
+            usesValues = true;
+            usesAi = true;
+            CardType = CardType.Master;
         }
-
-        public MasterCard(Master master) : base(master.MasterId, CardType.Master, 0, master.CardImage)
+        
+        public MasterCard(CardData cardData, MasterData masterData = null) : base(cardData)
         {
-            this.master = master;
-            State = new CardState(master.Hp, master.Def, master.Mana, 0, master.MaxHp, master.MaxMana);
+            // 마스터 카드는 모든 기능 사용
+            usesCombat = true;
+            usesAbilities = true;
+            usesValues = true;
+            usesAi = true;
+            
+            if (masterData != null)
+            {
+                this.masterData = masterData;
+                InitializeFromMasterData();
+            }
         }
-
-        public void SetHp(int amount)
+        
+        protected virtual void InitializeFromMasterData()
         {
-            State.SetHp(amount);
+            // 마스터 데이터 기반으로 추가 초기화
+            if (masterData != null)
+            {
+                // 마스터의 최대 체력/마나 설정
+                SetValue(ValueType.MaxHp, masterData.maxHp);
+                SetValue(ValueType.Hp, masterData.maxHp);
+                SetValue(ValueType.MaxMana, masterData.maxMana);
+                SetValue(ValueType.Mana, masterData.startMana);
+                
+                // 다른 마스터 고유 속성 설정
+            }
         }
-
-        public override void SetDefense(int amount)
+        
+        public override void OnTurnStart()
         {
-            State.SetDef(amount);
+            base.OnTurnStart();
+            
+            // 턴 시작 시 마나 회복
+            int manaGain = masterData != null ? masterData.manaPerTurn : 1;
+            ModifyValue(ValueType.Mana, manaGain);
+            
+            Debug.Log($"마스터 {Id} 턴 시작, 마나 {manaGain} 회복");
         }
-
-        public void SetMana(int amount)
+        
+        public override void OnTurnEnd()
         {
-            State.SetMana(amount);
+            base.OnTurnEnd();
+            
+            // 턴 종료 시 추가 로직
         }
-
-        public override void RestoreHealth(int amount)
+        
+        public bool CanPlayCard(GameCard card)
         {
-            State.RestoreHealth(amount);
-            master.SetHp(State.Hp);
+            // 카드를 플레이할 수 있는지 마나 체크
+            int currentMana = GetValue(ValueType.Mana);
+            
+            if (card is IValueCard valueCard)
+            {
+                int cardCost = valueCard.GetValue(ValueType.Mana);
+                return currentMana >= cardCost;
+            }
+            else if (card.State != null)
+            {
+                return currentMana >= card.State.Mana;
+            }
+            
+            return true;
         }
-
-        public override void TakeDamage(int amount)
+        
+        public void ConsumeCardMana(GameCard card)
         {
-            State.TakeDamage(amount);
-            master.SetHp(State.Hp);
-        }
-
-        public override void IncreaseDefense(int amount)
-        {
-            State.IncreaseDefense(amount);
-        }
-
-        public override void DecreaseDefense(int amount)
-        {
-            State.DecreaseDefense(amount);
-        }
-
-        public void IncreaseMana(int amount)
-        {
-            State.IncreaseMana(amount);
-        }
-
-        public void DecreaseMana(int amount)
-        {
-            State.DecreaseMana(amount);
-        }
-
-        public void ResetMana()
-        {
-            State.ResetMana();
+            // 카드 플레이 시 마나 소모
+            if (card is IValueCard valueCard)
+            {
+                int cardCost = valueCard.GetValue(ValueType.Mana);
+                ModifyValue(ValueType.Mana, -cardCost);
+            }
+            else if (card.State != null)
+            {
+                ModifyValue(ValueType.Mana, -card.State.Mana);
+            }
         }
     }
 }
