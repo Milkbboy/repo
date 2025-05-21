@@ -142,7 +142,7 @@ namespace ERang
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                card.CardType = (CardType)EditorGUILayout.EnumPopup(card.CardType);
+                card.SetCardType((CardType)EditorGUILayout.EnumPopup(card.CardType));
                 EditorGUILayout.EndHorizontal();
 
                 // 카드 클래스 별로 스탯 표시
@@ -160,7 +160,7 @@ namespace ERang
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                card.AiGroupId = EditorGUILayout.IntField(card.AiGroupId);
+                card.SetAiGroupId(EditorGUILayout.IntField(card.AiGroupId));
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.EndVertical();

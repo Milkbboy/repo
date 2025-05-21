@@ -63,7 +63,7 @@ namespace ERang
     public enum CardTraits
     {
         None = 0,
-        NextTurnSelect = 1 << 0, // 다음 턴에 선택 가능한 카드
+        NextTurnSelect = 1 << 0, // 플레이어가 다음 턴 카드로 선택할 수 있게 무조건 핸드덱에 추가하는 특성
         // RandomSelect = 1 << 1, // 무작위로 선택되는 카드
     }
 

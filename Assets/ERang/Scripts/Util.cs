@@ -50,9 +50,6 @@ namespace ERang
                     magicCard.SetTargetSlotNumbers(AiLogic.Instance.GetTargetSlotNumbers(card));
                     magicCard.SetSelectAttackType(AiLogic.Instance.IsSelectAttackType(card));
                     break;
-                default:
-                    card = new BaseCard(cardData);
-                    break;
             }
 
             return card;

@@ -6,43 +6,53 @@ using ERang.Data;
 
 namespace ERang
 {
-    // 기본 카드
+    /// <summary>
+    /// 모든 카드 타입의 기본 기능을 구현하는 추상 클래스
+    /// </summary>
     [Serializable]
-    public class BaseCard : ICard
+    public abstract class BaseCard : ICard
     {
-        // 테이블 관련 멤버 변수
-        public string Uid { get; set; }
-        public int Id { get; set; }
-        public CardType CardType { get; set; }
-        public int AiGroupId { get; set; }
-        public int AiGroupIndex { get; set; }
-        public bool InUse { get; set; }
-        public bool IsExtinction { get; set; }
-        public Texture2D CardImage { get; set; }
+        // 테이블 관련 멤버 변수 - 대부분은 설정자를 protected로 제한
+        private string uid;
+        private int id;
+        private CardType cardType;
+        private int aiGroupId;
+        private bool inUse;
+        private bool isExtinction;
+        private Texture2D cardImage;
+
+        // 인터페이스 구현 - 대부분 읽기 전용, 일부만 쓰기 가능
+        public string Uid { get => uid; protected set => uid = value; }
+        public int Id { get => id; protected set => id = value; }
+        public CardType CardType { get => cardType; protected set => cardType = value; }
+        public int AiGroupId { get => aiGroupId; protected set => aiGroupId = value; }
+        public int AiGroupIndex { get; set; } // 외부에서 변경 가능
+        public bool InUse { get => inUse; protected set => inUse = value; }
+        public bool IsExtinction { get => isExtinction; protected set => isExtinction = value; }
+        public Texture2D CardImage { get => cardImage; protected set => cardImage = value; }
 
         // 게임 관련 멤버 변수
         public CardState State { get; protected set; }
-        public CardAbilitySystem AbilitySystem { get; private set; }
-        public CardTraits Traits { get; set; }
+        public CardAbilitySystem AbilitySystem { get; protected set; }
+        public CardTraits Traits { get; protected set; }
         public string LogText => Utils.CardLog(this);
 
-        public virtual int Hp { get; set; }
-        public virtual int Def { get; set; }
-        public virtual int Mana { get; set; }
-        public virtual int Atk { get; set; }
+        // 가상 속성 - 상속 클래스에서 재정의 가능
+        public virtual int Hp => State.Hp;
+        public virtual int Def => State.Def;
+        public virtual int Mana => State.Mana;
+        public virtual int Atk => State.Atk;
 
-        // 보드에서 적용되는 어빌리티
-        private List<CardAbility> cardAbilities = new();
-        // 핸드에서 적용되는 어빌리티
-        private List<CardAbility> handAbilities = new();
-
-        public BaseCard()
+        // 기본 생성자
+        protected BaseCard()
         {
             State = new CardState(0, 0, 0, 0);
             AbilitySystem = new CardAbilitySystem();
+            Traits = CardTraits.None;
         }
 
-        public BaseCard(CardData cardData)
+        // CardData 기반 생성자
+        protected BaseCard(CardData cardData)
         {
             Uid = Utils.GenerateShortUniqueID();
             Id = cardData.card_id;
@@ -54,11 +64,12 @@ namespace ERang
             CardImage = cardData.GetCardTexture();
             Traits = CardTraits.None;
 
-            State = new CardState(0, 0, 0, 0);
+            State = new CardState(cardData.hp, cardData.def, cardData.costMana, cardData.atk);
             AbilitySystem = new CardAbilitySystem();
         }
 
-        public BaseCard(int cardId, CardType cardType, int aiGroupId, Texture2D cardImage)
+        // ID, Type, AiGroupId 기반 생성자
+        protected BaseCard(int cardId, CardType cardType, int aiGroupId, Texture2D cardImage)
         {
             Uid = Utils.GenerateShortUniqueID();
             Id = cardId;
@@ -72,7 +83,23 @@ namespace ERang
             AbilitySystem = new CardAbilitySystem();
         }
 
-        public void UpdateCardData(CardData cardData)
+        public void SetCardTraits(CardTraits cardTraits)
+        {
+            Traits = cardTraits;
+        }
+
+        public void SetCardType(CardType cardType)
+        {
+            CardType = cardType;
+        }
+
+        public void SetAiGroupId(int aiGroupId)
+        {
+            AiGroupId = aiGroupId;
+        }
+
+        // CardData 업데이트
+        public virtual void UpdateCardData(CardData cardData)
         {
             Id = cardData.card_id;
             CardType = cardData.cardType;
@@ -82,7 +109,8 @@ namespace ERang
             CardImage = cardData.GetCardTexture();
         }
 
-        public void UpdateCardData(int cardId, CardType cardType, bool inUse, int aiGroupId, Texture2D cardImage)
+        // 카드 데이터 직접 업데이트
+        public virtual void UpdateCardData(int cardId, CardType cardType, bool inUse, int aiGroupId, Texture2D cardImage)
         {
             Id = cardId;
             CardType = cardType;
@@ -94,10 +122,10 @@ namespace ERang
 
         /// <summary>
         /// 보드 슬롯에서 지속되어야 하는 어빌리티 추가
-        ///  - 턴 표시
-        ///  - duration 0 되었을때 발동되어야 하는 어빌리티
+        /// - 턴 표시
+        /// - duration 0 되었을때 발동되어야 하는 어빌리티
         /// </summary>
-        public void AddCardAbility(CardAbility cardAbility, int turnCount, AbilityWhereFrom whereFrom)
+        public virtual void AddCardAbility(CardAbility cardAbility, int turnCount, AbilityWhereFrom whereFrom)
         {
             // 어빌리티 아이템 - 동일한 어빌리티가 추가되면 AbilityItem 이 추가되고 duration 이 증가. 효과는 변하지 않음
             AbilityItem abilityItem = new()
@@ -109,15 +137,15 @@ namespace ERang
                 createdDt = DateTime.UtcNow.Ticks
             };
 
-            CardAbility found = cardAbilities.Find(ability => ability.abilityId == cardAbility.abilityId);
+            CardAbility found = AbilitySystem.CardAbilities.Find(ability => ability.abilityId == cardAbility.abilityId);
 
             if (found == null)
             {
                 // ArmorBreak 는 다른 def 효과를 무시하기 때문에 제일 앞에 추가해서 가장 먼저 적용되게 설정
                 if (cardAbility.abilityType == AbilityType.ArmorBreak)
-                    cardAbilities.Insert(0, cardAbility);
+                    AbilitySystem.CardAbilities.Insert(0, cardAbility);
                 else
-                    cardAbilities.Add(cardAbility);
+                    AbilitySystem.CardAbilities.Add(cardAbility);
             }
 
             cardAbility.AddAbilityItem(abilityItem);
@@ -128,21 +156,21 @@ namespace ERang
         /// <summary>
         /// 핸드에 들어올때 적용되는 어빌리티 추가
         /// </summary>
-        public void AddHandCardAbility(CardAbility cardAbility)
+        public virtual void AddHandCardAbility(CardAbility cardAbility)
         {
             Debug.Log($"AddHandCardAbility. cardAbility: {cardAbility.LogText}");
-            handAbilities.Add(cardAbility);
+            AbilitySystem.HandAbilities.Add(cardAbility);
         }
 
         /// <summary>
         /// 어빌리티 duration 감소
         /// - AbilityItem 의 duration 감소
         /// </summary>
-        public List<CardAbility> DecreaseDuration()
+        public virtual List<CardAbility> DecreaseDuration()
         {
             List<CardAbility> removedCardAbilities = new();
 
-            foreach (CardAbility cardAbility in cardAbilities)
+            foreach (CardAbility cardAbility in AbilitySystem.CardAbilities)
             {
                 cardAbility.DecreaseDuration();
 
@@ -153,49 +181,64 @@ namespace ERang
             return removedCardAbilities;
         }
 
-        public void RemoveCardAbility(CardAbility cardAbility)
+        // 카드 어빌리티 제거
+        public virtual void RemoveCardAbility(CardAbility cardAbility)
         {
-            cardAbilities.Remove(cardAbility);
+            AbilitySystem.CardAbilities.Remove(cardAbility);
         }
 
-        public void RemoveHandCardAbility(CardAbility cardAbility)
+        // 핸드 카드 어빌리티 제거
+        public virtual void RemoveHandCardAbility(CardAbility cardAbility)
         {
-            handAbilities.Remove(cardAbility);
+            AbilitySystem.HandAbilities.Remove(cardAbility);
         }
 
-        public int GetBuffCount()
+        // 버프 카운트 반환
+        public virtual int GetBuffCount()
         {
-            return cardAbilities.Count(ability => ability.aiType == AiDataType.Buff);
+            return AbilitySystem.CardAbilities.Count(ability => ability.aiType == AiDataType.Buff);
         }
 
-        public int GetDeBuffCount()
+        // 디버프 카운트 반환
+        public virtual int GetDeBuffCount()
         {
-            return cardAbilities.Count(ability => ability.aiType == AiDataType.Debuff);
+            return AbilitySystem.CardAbilities.Count(ability => ability.aiType == AiDataType.Debuff);
         }
 
+        // 데미지 처리
         public virtual void TakeDamage(int amount)
         {
             State.TakeDamage(amount);
         }
 
+        // 체력 회복
         public virtual void RestoreHealth(int amount)
         {
             State.RestoreHealth(amount);
         }
 
+        // 방어력 설정
         public virtual void SetDefense(int amount)
         {
             State.SetDef(amount);
         }
 
+        // 방어력 증가
         public virtual void IncreaseDefense(int amount)
         {
             State.IncreaseDefense(amount);
         }
 
+        // 방어력 감소
         public virtual void DecreaseDefense(int amount)
         {
             State.DecreaseDefense(amount);
         }
+
+        // 하위 클래스에서 구현할 수 있는 카드 라이프사이클 이벤트 메서드
+        public virtual void OnPlay() { }
+        public virtual void OnTurnStart() { }
+        public virtual void OnTurnEnd() { }
+        public virtual void OnDiscard() { }
     }
 }

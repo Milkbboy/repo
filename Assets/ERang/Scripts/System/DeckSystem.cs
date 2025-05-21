@@ -128,7 +128,7 @@ namespace ERang
                 // Traits를 None으로 설정
                 if ((card.Traits & CardTraits.NextTurnSelect) == CardTraits.NextTurnSelect)
                 {
-                    card.Traits = CardTraits.None;
+                    card.SetCardTraits(CardTraits.None);
                 }
 
                 Debug.Log($"MakeHandCards. card: {card}, {card.LogText}, handAbilities.Count: {card.AbilitySystem.HandAbilities.Count}");

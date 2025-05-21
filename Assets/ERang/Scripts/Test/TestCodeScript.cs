@@ -61,8 +61,14 @@ namespace ERang
                     CardType.Charm => new MagicCard(cardData),
                     CardType.Curse => new MagicCard(cardData),
                     CardType.Magic => new MagicCard(cardData),
-                    _ => new BaseCard(cardData),
+                    _ => null
                 };
+
+                if (card == null)
+                {
+                    Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
+                    continue;
+                }
 
                 // 카드 타입별로 생성
                 cards.Add(card);
