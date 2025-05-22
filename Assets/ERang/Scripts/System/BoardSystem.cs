@@ -117,10 +117,8 @@ namespace ERang
             }
         }
 
-        public IEnumerator CreateMasterCard(Master master)
+        public IEnumerator CreateMasterCard(MasterCard masterCard)
         {
-            masterCard = new MasterCard(master);
-
             yield return null;
 
             bSlots[0].EquipCard(masterCard);
@@ -213,8 +211,7 @@ namespace ERang
         /// <summary>
         /// 마스터 마나 초기화
         /// </summary>
-        /// <param name="master"></param>
-        public void ResetMana(Master master)
+        public void ResetMasterMana()
         {
             bSlots[0].ResetMana();
         }
@@ -235,12 +232,12 @@ namespace ERang
         /// <summary>
         /// 마스터 골드 설정
         /// </summary>
-        /// <param name="master"></param>
+        /// <param name="masterCard"></param>
         /// <param name="gold"></param>
-        public void AddGold(Master master, int gold)
+        public void AddGold(MasterCard masterCard, int gold)
         {
-            master.AddGold(gold);
-            boardUI.SetGold(master.Gold);
+            masterCard.AddGold(gold);
+            boardUI.SetGold(masterCard.Gold);
         }
 
         public void SetGold(int gold)
@@ -251,9 +248,9 @@ namespace ERang
         /// <summary>
         /// 카드 비용 소모
         /// </summary>
-        /// <param name="master"></param>
+        /// <param name="masterCard"></param>
         /// <param name="card"></param>
-        public void CardCost(Master master, GameCard card)
+        public void CardCost(MasterCard masterCard, GameCard card)
         {
             switch (card)
             {
@@ -266,7 +263,7 @@ namespace ERang
                     AddMana(-magicCard.State.Mana);
                     break;
                 case BuildingCard buildingCard:
-                    AddGold(master, -buildingCard.Gold);
+                    AddGold(masterCard, -buildingCard.Gold);
                     break;
                 default:
                     Debug.LogWarning("Unhandled card type");

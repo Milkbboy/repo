@@ -20,14 +20,13 @@ namespace ERang
         public TextMeshProUGUI floorText;
         public TextMeshProUGUI resultText;
 
-        public Master Master => master;
+        public MasterCard MasterCard => masterCard;
 
         public SatietyUI satietyUI;
 
         public Deck deck;
         public CardSelect cardSelect;
 
-        private Master master;
         private MasterCard masterCard;
         private bool isTruenEndProcessing = false;
 
@@ -49,10 +48,10 @@ namespace ERang
 
         void Start()
         {
-            master = Player.Instance.master;
+            masterCard = Player.Instance.masterCard;
             // floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation?.eventType ?? EventType.None}";
 
-            BoardSystem.Instance.CreateBoardSlots(master.CreatureSlotCount);
+            BoardSystem.Instance.CreateBoardSlots(masterCard.CreatureSlotCount);
 
             LevelData levelData = LevelGroupData.GetLevelData(Player.Instance.levelId);
 
@@ -65,24 +64,26 @@ namespace ERang
             Debug.Log($"----------------- BATTLE START {Player.Instance.floor} 층 ({Player.Instance.levelId}) -----------------");
 
             // 마스터 카드 생성
-            StartCoroutine(BoardSystem.Instance.CreateMasterCard(master));
+            StartCoroutine(BoardSystem.Instance.CreateMasterCard(masterCard));
             masterCard = BoardSystem.Instance.MasterCard;
 
             // 마스터 크리쳐 카드 생성
-            deck.CreateMasterCards(master);
+            deck.CreateMasterCards(masterCard);
 
             // 골드 설정
-            BoardSystem.Instance.SetGold(master.Gold);
+            BoardSystem.Instance.SetGold(masterCard.Gold);
 
             // 루시 포만감 UI 설정
-            if (master.MasterType == MasterType.Luci)
+            if (masterCard.MasterType == MasterType.Luci)
             {
                 satietyUI.gameObject.SetActive(true);
 
                 if (keepSatiety)
-                    master.Satiety = PlayerPrefsUtility.GetInt("Satiety", master.Satiety);
+                {
+                    masterCard.SetSatiety(PlayerPrefsUtility.GetInt("Satiety", masterCard.Satiety));
+                }
 
-                satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
+                satietyUI.UpdateSatiety(masterCard.Satiety, masterCard.MaxSatiety);
             }
 
             // 몬스터 카드 생성
@@ -177,8 +178,8 @@ namespace ERang
             BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
             yield return StartCoroutine(CardPriorAbility(masterSlot));
 
-            BoardSystem.Instance.SetHp(master.Hp);
-            BoardSystem.Instance.SetMana(master.ManaPerTurn);
+            BoardSystem.Instance.SetHp(masterCard.State.Hp);
+            BoardSystem.Instance.SetMana(masterCard.ManaPerTurn);
 
             // 핸드 카드 만들기
             yield return StartCoroutine(deck.MakeHandCards());
@@ -235,7 +236,7 @@ namespace ERang
             deck.TrunEndProcess();
 
             // 마스터 마나 리셋
-            BoardSystem.Instance.ResetMana(master);
+            BoardSystem.Instance.ResetMasterMana();
 
             // 턴 다시 시작
             StartCoroutine(TurnStart());
@@ -490,7 +491,7 @@ namespace ERang
             boardSlot.EquipCard(hCard.Card);
 
             // 카드 비용 소모
-            BoardSystem.Instance.CardCost(master, hCard.Card);
+            BoardSystem.Instance.CardCost(masterCard, hCard.Card);
 
             Debug.Log($"{boardSlot.LogText} 에 {hCard.LogText} 장착");
         }
@@ -558,7 +559,7 @@ namespace ERang
                 yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
 
             // 카드 비용 소모
-            BoardSystem.Instance.CardCost(master, card);
+            BoardSystem.Instance.CardCost(masterCard, card);
         }
 
         /// <summary>
@@ -654,10 +655,10 @@ namespace ERang
             }
 
             // 필요 골드 확인
-            if (card is BuildingCard buildingCard && master.Gold < buildingCard.Gold)
+            if (card is BuildingCard buildingCard && masterCard.Gold < buildingCard.Gold)
             {
-                ToastNotification.Show($"gold({master.Gold}) is not enough");
-                Debug.LogWarning($"핸드 카드({buildingCard.Id}) 골드 부족으로 사용 불가능({master.Gold} < {buildingCard.Gold})");
+                ToastNotification.Show($"gold({masterCard.Gold}) is not enough");
+                Debug.LogWarning($"핸드 카드({buildingCard.Id}) 골드 부족으로 사용 불가능({masterCard.Gold} < {buildingCard.Gold})");
                 return false;
             }
 
@@ -715,11 +716,11 @@ namespace ERang
         public void UpdateSatietyGauge(int amount)
         {
             if (amount > 0)
-                master.IncreaseSatiety(amount);
+                masterCard.IncreaseSatiety(amount);
             else
-                master.DecreaseSatiety(-amount);
+                masterCard.DecreaseSatiety(-amount);
 
-            satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
+            satietyUI.UpdateSatiety(masterCard.Satiety, masterCard.MaxSatiety);
         }
 
         /// <summary>

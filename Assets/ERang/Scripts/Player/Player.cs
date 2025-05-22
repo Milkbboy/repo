@@ -10,7 +10,7 @@ namespace ERang
     {
         public static Player Instance { get; private set; }
 
-        public Master master;
+        public MasterCard masterCard;
 
         public int masterId;
         public int floor;
@@ -35,12 +35,12 @@ namespace ERang
 
         public void RecoverHp(int hp)
         {
-            master.RecoverHp(hp);
+            masterCard.RecoverHp(hp);
         }
 
         public void AddGold(int gold)
         {
-            master.AddGold(gold);
+            masterCard.AddGold(gold);
         }
 
         public void AddCard(int cardId)
@@ -57,9 +57,9 @@ namespace ERang
             allCards.Add(card);
 
             // 카드 타입별로 생성
-            master.CardIds.Add(cardId);
+            masterCard.CardIds.Add(cardId);
 
-            string cardIdsJson = JsonConvert.SerializeObject(master.CardIds);
+            string cardIdsJson = JsonConvert.SerializeObject(masterCard.CardIds);
             PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
         }
 
@@ -70,14 +70,14 @@ namespace ERang
             PlayerPrefsUtility.SetInt("MasterId", masterId);
             PlayerPrefsUtility.SetInt("LevelId", levelId);
             PlayerPrefsUtility.SetInt("LastLocationId", locationId);
-            PlayerPrefsUtility.SetInt("MasterHp", master.Hp);
-            PlayerPrefsUtility.SetInt("Gold", master.Gold);
+            PlayerPrefsUtility.SetInt("MasterHp", masterCard.State.Hp);
+            PlayerPrefsUtility.SetInt("Gold", masterCard.Gold);
 
             if (keepSatiety)
-                PlayerPrefsUtility.SetInt("Satiety", master.Satiety);
+                PlayerPrefsUtility.SetInt("Satiety", masterCard.Satiety);
 
             // Master 카드 ids 저장
-            string cardIdsJson = JsonConvert.SerializeObject(master.CardIds);
+            string cardIdsJson = JsonConvert.SerializeObject(masterCard.CardIds);
             PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
 
             floor = nextFloor;
@@ -98,21 +98,21 @@ namespace ERang
                 return;
             }
 
-            master = new Master(masterData);
+            masterCard = new MasterCard(masterData);
 
             string selectLocationJson = PlayerPrefsUtility.GetString("SelectLocation", null);
 
             if (selectLocationJson != null)
                 selectLocation = JsonConvert.DeserializeObject<MapLocation>(selectLocationJson);
 
-            Debug.Log($"마스터 인스턴스 생성될 때 카드: {string.Join(", ", master.CardIds)}");
+            Debug.Log($"마스터 인스턴스 생성될 때 카드: {string.Join(", ", masterCard.CardIds)}");
 
             // 저장된 마스터 HP가 있으면 설정
             int savedHp = PlayerPrefsUtility.GetInt("MasterHp", -1);
 
             if (savedHp != -1)
             {
-                master.SetHp(savedHp);
+                masterCard.SetHp(savedHp);
             }
 
             // 저장된 마스터 골드가 있으면 설정
@@ -120,7 +120,7 @@ namespace ERang
 
             if (savedGold != -1)
             {
-                master.SetGold(savedGold);
+                masterCard.SetGold(savedGold);
             }
 
             // 저장된 마스터 카드가 있으면 설정
@@ -129,7 +129,7 @@ namespace ERang
             if (!string.IsNullOrEmpty(savedCardsJson))
             {
                 Debug.Log($"저장된 마스터 카드: {savedCardsJson}");
-                master.CardIds = JsonConvert.DeserializeObject<List<int>>(savedCardsJson);
+                masterCard.SetCardIds(JsonConvert.DeserializeObject<List<int>>(savedCardsJson));
             }
         }
     }

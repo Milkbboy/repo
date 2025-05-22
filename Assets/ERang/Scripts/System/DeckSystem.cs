@@ -45,7 +45,7 @@ namespace ERang
         /// <summary>
         /// 마스터 덱 카드 생성
         /// </summary>
-        public void CreateMasterCards(Master master)
+        public void CreateMasterCards(MasterCard masterCard)
         {
             if (isCreatedStarCard == true)
             {
@@ -60,7 +60,7 @@ namespace ERang
                 return;
             }
 
-            foreach (int cardId in master.CardIds)
+            foreach (int cardId in masterCard.CardIds)
             {
                 CardData cardData = CardData.GetCardData(cardId);
 

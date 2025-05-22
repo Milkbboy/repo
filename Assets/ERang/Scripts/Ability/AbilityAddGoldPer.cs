@@ -24,9 +24,9 @@ namespace ERang
 
             float gainGold = aiData.value * abilityData.ratio;
             int gold = aiData.value + (int)gainGold;
-            int beforeGold = Master.Instance.Gold;
+            int beforeGold = Player.Instance.masterCard.Gold;
 
-            BoardSystem.Instance.AddGold(Master.Instance, gold);
+            BoardSystem.Instance.AddGold(Player.Instance.masterCard, gold);
 
             // 골드 획득량 표시. 슬롯이 아닌 보드 골드에 표시하는 걸로
             // selfSlot.SetFloatingGold(beforeGold, Master.Instance.Gold);

@@ -27,9 +27,9 @@ namespace ERang
             showAllCard = GetComponent<ShowAllCard>();
         }
 
-        public void CreateMasterCards(Master master)
+        public void CreateMasterCards(MasterCard masterCard)
         {
-            deckSystem.CreateMasterCards(master);
+            deckSystem.CreateMasterCards(masterCard);
 
             deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
         }
