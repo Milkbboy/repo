@@ -2,7 +2,7 @@ using ERang.Data;
 
 namespace ERang
 {
-    public class HpCard : BaseCard
+    public class HpCard : GameCard
     {
         public int Hp { get; set; }
 

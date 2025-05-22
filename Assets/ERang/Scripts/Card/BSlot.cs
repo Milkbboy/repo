@@ -17,7 +17,7 @@ namespace ERang
         /// 슬롯에 장착할 수 있는 카드 타입
         /// </summary>
         public CardType SlotCardType { get => slotCardType; set => slotCardType = value; }
-        public BaseCard Card => card;
+        public GameCard Card => card;
         public int SlotNum => slotNum;
         public int Index => index;
         public bool IsOverlapCard => isOverlapCard;
@@ -28,7 +28,7 @@ namespace ERang
         // LogText 속성 추가
         public string LogText => Utils.BoardSlotLog(this);
 
-        private BaseCard card = null;
+        private GameCard card = null;
         private SlotUI slotUI;
         private CardUI cardUI;
         private Ani_Attack aniAttack;
@@ -150,7 +150,7 @@ namespace ERang
             slotUI.SetSlot(cardType);
         }
 
-        public bool EquipCard(BaseCard card)
+        public bool EquipCard(GameCard card)
         {
             if (SlotCardType != card.CardType)
             {
@@ -170,24 +170,24 @@ namespace ERang
 
         public IEnumerator TakeDamage(int amount)
         {
-            int beforeHp = card.Hp;
-            int beforeDef = card.Def;
+            int beforeHp = card.State.Hp;
+            int beforeDef = card.State.Def;
 
             card.TakeDamage(amount);
 
-            cardUI.SetHp(card.Hp);
-            cardUI.SetDef(card.Def);
+            cardUI.SetHp(card.State.Hp);
+            cardUI.SetDef(card.State.Def);
 
             TakeDamageAnimation();
 
-            if (card.Hp <= 0)
+            if (card.State.Hp <= 0)
             {
                 RemoveCard();
 
                 yield return StartCoroutine(BattleLogic.Instance.RemoveBoardCard(slotNum));
             }
 
-            Debug.Log($"{card?.LogText ?? "카드 없음"} Damage: {amount}. Hp: {beforeHp} -> {card?.Hp ?? 0}, Def: {beforeDef} -> {card?.Def ?? 0} - TakeDamage");
+            Debug.Log($"{card?.LogText ?? "카드 없음"} Damage: {amount}. Hp: {beforeHp} -> {card?.State.Hp ?? 0}, Def: {beforeDef} -> {card?.State.Def ?? 0} - TakeDamage");
         }
 
         public void DrawAbilityIcons()
@@ -212,49 +212,37 @@ namespace ERang
         public void RestoreHealth(int amount)
         {
             card.RestoreHealth(amount);
-            cardUI.SetHp(card.Hp);
+            cardUI.SetHp(card.State.Hp);
         }
 
         public void SetDefense(int amount)
         {
             card.SetDefense(amount);
-            cardUI.SetDef(card.Def);
+            cardUI.SetDef(card.State.Def);
         }
 
         public void IncreaseDefense(int amount)
         {
             card.IncreaseDefense(amount);
-            cardUI.SetDef(card.Def);
+            cardUI.SetDef(card.State.Def);
         }
 
         public void DecreaseDefense(int amount)
         {
             card.DecreaseDefense(amount);
-            cardUI.SetDef(card.Def);
+            cardUI.SetDef(card.State.Def);
         }
 
         public void IncreaseAttack(int amount)
         {
-            if (card is not CreatureCard creatureCard)
-            {
-                Debug.LogWarning($"{LogText}: 슬롯 카드가 CreatureCard 가 아닙니다.");
-                return;
-            }
-
-            creatureCard.IncreaseAttack(amount);
-            cardUI.SetAtk(creatureCard.Atk);
+            card.IncreaseAttack(amount);
+            cardUI.SetAtk(card.State.Atk);
         }
 
         public void DecreaseAttack(int amount)
         {
-            if (card is not CreatureCard creatureCard)
-            {
-                Debug.LogWarning($"{LogText}: 슬롯 카드가 CreatureCard 가 아닙니다.");
-                return;
-            }
-
-            creatureCard.DecreaseAttack(amount);
-            cardUI.SetAtk(creatureCard.Atk);
+            card.DecreaseAttack(amount);
+            cardUI.SetAtk(card.State.Atk);
         }
 
         public void RemoveCard()
@@ -266,68 +254,33 @@ namespace ERang
 
         public void SetHp(int amount)
         {
-            if (card is not MasterCard masterCard)
-            {
-                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
-                return;
-            }
-
-            masterCard.SetHp(amount);
-
-            cardUI.SetHp(masterCard.Hp);
+            card.SetHp(amount);
+            cardUI.SetHp(card.State.Hp);
         }
 
         public void SetMana(int amount)
         {
-            if (card is not MasterCard masterCard)
-            {
-                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
-                return;
-            }
-
-            masterCard.SetMana(amount);
-
-            cardUI.SetMana(masterCard.Mana);
+            card.SetMana(amount);
+            cardUI.SetMana(card.State.Mana);
         }
 
         public void IncreaseMana(int amount)
         {
-            if (card is not MasterCard masterCard)
-            {
-                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
-                return;
-            }
-
-            masterCard.IncreaseMana(amount);
-
-            cardUI.SetMana(masterCard.Mana);
+            card.IncreaseMana(amount);
+            cardUI.SetMana(card.State.Mana);
         }
 
         public void DecreaseMana(int amount)
         {
-            if (card is not MasterCard masterCard)
-            {
-                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
-                return;
-            }
-
-            masterCard.DecreaseMana(amount);
-
-            cardUI.SetMana(masterCard.Mana);
+            card.DecreaseMana(amount);
+            cardUI.SetMana(card.State.Mana);
         }
 
         public void ResetMana()
         {
-            if (card is not MasterCard)
-            {
-                Debug.LogWarning($"{SlotNum} 슬롯 카드 타입이 마스터가 아닌 {(card != null ? card.CardType : "카드 없음")}");
-                return;
-            }
-
-            MasterCard masterCard = card as MasterCard;
-
-            masterCard.ResetMana();
-            cardUI.SetMana(masterCard.Mana);
+            // 마나 리셋
+            card.SetMana(0);
+            cardUI.SetMana(card.State.Mana);
         }
 
         public void ApplyDamageAnimation()

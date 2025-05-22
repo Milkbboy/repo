@@ -157,7 +157,7 @@ public class Reward : MonoBehaviour
 
             if (selectedCard.Card is HpCard hpCard)
             {
-                Debug.Log($"Selected Hp Card: ${selectedCard.Card.Hp}");
+                Debug.Log($"Selected Hp Card: ${selectedCard.Card.State.Hp}");
                 Player.Instance.RecoverHp(hpCard.Hp);
                 PlayerPrefsUtility.SetInt("MasterHp", Player.Instance.master.Hp);
             }

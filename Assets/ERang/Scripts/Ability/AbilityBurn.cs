@@ -11,7 +11,7 @@ namespace ERang
 
         public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -21,14 +21,14 @@ namespace ERang
 
             int value = cardAbility.abilityValue;
 
-            int beforeHp = card.Hp;
-            int beforeDef = card.Def;
+            int beforeHp = card.State.Hp;
+            int beforeDef = card.State.Def;
 
             yield return StartCoroutine(targetSlot.TakeDamage(value));
 
             // 카드가 hp 0 으로 제거되는 경우도 있음
-            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, targetSlot.Card.Hp, value));
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, targetSlot.Card.Def, value));
+            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.State.Hp, value));
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, card.State.Def, value));
         }
 
         public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)

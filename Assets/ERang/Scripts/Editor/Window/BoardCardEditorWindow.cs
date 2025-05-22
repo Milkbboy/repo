@@ -120,7 +120,7 @@ namespace ERang
                 EditorGUILayout.LabelField("SlotCardType");
                 bSlot.SlotCardType = (CardType)EditorGUILayout.EnumPopup(bSlot.SlotCardType);
 
-                BaseCard card = bSlot.Card;
+                GameCard card = bSlot.Card;
 
                 // CardData 선택 드롭다운 메뉴 추가
                 EditorGUILayout.BeginHorizontal();
@@ -185,7 +185,7 @@ namespace ERang
                             break;
                     }
 
-                    card.UpdateCardData(cardId, bSlot.SlotCardType, inUse, 0, cardTexture);
+                    // card.UpdateCardData(cardId, bSlot.SlotCardType, inUse, 0, cardTexture);
                     bSlot.EquipCard(card);
                 }
 
@@ -201,10 +201,10 @@ namespace ERang
 
                     // 카드 이미지 위에 스탯 표시
                     Rect lastRect = GUILayoutUtility.GetLastRect();
-                    GUI.Label(new Rect(lastRect.x, lastRect.y, 50, 20), $"Mana: {card.Mana}", statStyle);
-                    GUI.Label(new Rect(lastRect.xMax - 100, lastRect.y, 50, 20), $"Atk: {card.Atk}", statStyle);
-                    GUI.Label(new Rect(lastRect.xMax - 100, lastRect.y + 20, 50, 20), $"Def: {card.Def}", statStyle);
-                    GUI.Label(new Rect(lastRect.xMax - 100, lastRect.y + 40, 50, 20), $"Hp: {card.Hp}", statStyle);
+                    GUI.Label(new Rect(lastRect.x, lastRect.y, 50, 20), $"Mana: {card.State.Mana}", statStyle);
+                    GUI.Label(new Rect(lastRect.xMax - 100, lastRect.y, 50, 20), $"Atk: {card.State.Atk}", statStyle);
+                    GUI.Label(new Rect(lastRect.xMax - 100, lastRect.y + 20, 50, 20), $"Def: {card.State.Def}", statStyle);
+                    GUI.Label(new Rect(lastRect.xMax - 100, lastRect.y + 40, 50, 20), $"Hp: {card.State.Hp}", statStyle);
 
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.EndHorizontal();

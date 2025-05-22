@@ -9,7 +9,7 @@ namespace ERang
         public AbilityType AbilityType => AbilityType.ReducedMana;
         public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
 
-        public IEnumerator ApplySingle(BaseCard card)
+        public IEnumerator ApplySingle(GameCard card)
         {
             Debug.Log("<color=red>---- ReducedMana ----</color> 마나 감소!!!");
 
@@ -18,7 +18,7 @@ namespace ERang
             yield break;
         }
 
-        public IEnumerator Release(BaseCard card)
+        public IEnumerator Release(GameCard card)
         {
             Debug.Log("<color=red>---- ReducedMana ----</color> 감소된 마나 복구!!!");
 
@@ -37,28 +37,28 @@ namespace ERang
             yield break;
         }
 
-        private void Apply(BaseCard card, bool isReduced)
+        private void Apply(GameCard card, bool isReduced)
         {
             foreach (CardAbility cardAbility in card.AbilitySystem.HandAbilities)
             {
-                if (card is CreatureCard creatureCard)
+                if (card.CardType == CardType.Creature)
                 {
                     Debug.Log("크리처 카드!!!!");
 
                     if (isReduced)
-                        creatureCard.DecreaseMana(cardAbility.abilityValue);
+                        card.DecreaseMana(cardAbility.abilityValue);
                     else
-                        creatureCard.IncreaseMana(cardAbility.abilityValue);
+                        card.IncreaseMana(cardAbility.abilityValue);
                 }
 
-                if (card is MagicCard magicCard)
+                if (card.CardType == CardType.Magic)
                 {
                     Debug.Log("마법 카드!!!!");
 
                     if (isReduced)
-                        magicCard.DecreaseMana(cardAbility.abilityValue);
+                        card.DecreaseMana(cardAbility.abilityValue);
                     else
-                        magicCard.IncreaseMana(cardAbility.abilityValue);
+                        card.IncreaseMana(cardAbility.abilityValue);
                 }
             }
         }

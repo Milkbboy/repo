@@ -61,7 +61,7 @@ namespace ERang
 
                 // 선택한 카드 핸드 어빌리티 설정
                 // 1. 다음 턴에 핸드덱으로 선택되게
-                selectCard.Card.SetCardTraits(CardTraits.NextTurnSelect);
+                selectCard.Card.SetTraits(CardTraits.NextTurnSelect);
                 // 2. 사용 마나 감소 효과 적용
                 // 3. 사용되거나 그레이브덱으로 이동하면 마나 감소 효과 제거
                 selectCard.Card.AddHandCardAbility(handCardAbility);

@@ -7,7 +7,7 @@ namespace ERang
     public class TestCodeScript : MonoBehaviour
     {
         public GameObject cardPrefab;
-        public List<BaseCard> cards = new();
+        public List<GameCard> cards = new();
 
         public TargetingArrow targetingArrow;
 
@@ -54,12 +54,10 @@ namespace ERang
                     continue;
                 }
 
-                BaseCard card = cardData.cardType switch
+                GameCard card = cardData.cardType switch
                 {
                     CardType.Creature => new CreatureCard(cardData),
                     CardType.Building => new BuildingCard(cardData),
-                    CardType.Charm => new MagicCard(cardData),
-                    CardType.Curse => new MagicCard(cardData),
                     CardType.Magic => new MagicCard(cardData),
                     _ => null
                 };
@@ -74,12 +72,12 @@ namespace ERang
                 cards.Add(card);
             }
 
-            foreach (BaseCard card in cards)
+            foreach (GameCard card in cards)
             {
                 // Debug.Log($"CardType: {card.CardType}, class type: {card.GetType()}");
                 if (card is CreatureCard creatureCard)
                 {
-                    Debug.Log($"CreatureCard: {creatureCard.Hp}, {creatureCard.MaxHp}, {creatureCard.Def}, {creatureCard.Mana}");
+                    Debug.Log($"CreatureCard: {creatureCard.State.Hp}, {creatureCard.State.MaxHp}, {creatureCard.State.Def}, {creatureCard.State.Mana}");
                 }
 
                 if (card is BuildingCard buildingCard)
@@ -89,7 +87,7 @@ namespace ERang
 
                 if (card is MagicCard magicCard)
                 {
-                    Debug.Log($"MagicCard: {magicCard.Mana}");
+                    Debug.Log($"MagicCard: {magicCard.State.Mana}");
                 }
 
                 GameObject cardObject = Instantiate(cardPrefab, transform);

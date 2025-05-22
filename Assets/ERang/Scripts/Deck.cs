@@ -8,8 +8,8 @@ namespace ERang
     {
         public static Deck Instance { get; private set; }
 
-        public List<BaseCard> HandCards => deckSystem.HandCards;
-        public List<BaseCard> ExtinctionCards => deckSystem.ExtinctionCards;
+        public List<GameCard> HandCards => deckSystem.HandCards;
+        public List<GameCard> ExtinctionCards => deckSystem.ExtinctionCards;
 
         private DeckSystem deckSystem;
         private DeckUI deckUI;
@@ -40,7 +40,7 @@ namespace ERang
 
             for (int i = 0; i < deckSystem.HandCards.Count; ++i)
             {
-                BaseCard card = deckSystem.HandCards[i];
+                GameCard card = deckSystem.HandCards[i];
 
                 yield return handDeck.SpawnHandCard(card);
             }
@@ -74,7 +74,7 @@ namespace ERang
             deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
         }
 
-        public BaseCard FindHandCard(string cardUid)
+        public GameCard FindHandCard(string cardUid)
         {
             return deckSystem.FindHandCard(cardUid);
         }
@@ -89,21 +89,21 @@ namespace ERang
             deckUI.SetExtinctionCardCount(deckSystem.ExtinctionCardCount);
         }
 
-        public void AddHandCard(BaseCard card)
+        public void AddHandCard(GameCard card)
         {
             deckSystem.AddHandCard(card);
 
             deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
         }
 
-        public void AddGraveCard(BaseCard card)
+        public void AddGraveCard(GameCard card)
         {
             deckSystem.AddGraveCard(card);
 
             deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
         }
 
-        public void AddDeckCard(BaseCard card)
+        public void AddDeckCard(GameCard card)
         {
             deckSystem.AddDeckCard(card);
 

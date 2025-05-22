@@ -17,9 +17,9 @@ namespace ERang
         public int levelId;
         private MapLocation selectLocation;
         public int AllCardCount => allCards.Count;
-        public List<BaseCard> AllCards => allCards;
+        public List<GameCard> AllCards => allCards;
 
-        [SerializeField] private List<BaseCard> allCards = new();
+        [SerializeField] private List<GameCard> allCards = new();
 
         void Awake()
         {
@@ -53,7 +53,7 @@ namespace ERang
                 return;
             }
 
-            BaseCard card = Utils.MakeCard(cardData);
+            GameCard card = Utils.MakeCard(cardData);
             allCards.Add(card);
 
             // 카드 타입별로 생성

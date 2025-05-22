@@ -26,8 +26,8 @@ namespace ERang
 
             int value = 0;
 
-            if (selfSlot.Card is CreatureCard)
-                value = (selfSlot.Card as CreatureCard).Atk;
+            if (selfSlot.Card.CardType == CardType.Creature)
+                value = selfSlot.Card.State.Atk;
 
             // 카드 선택 공격 타입이면 어빌리티 데미지 값으로 설정
             if (Constants.SelectAttackTypes.Contains(aiAttackType))
@@ -39,7 +39,7 @@ namespace ERang
 
             // Debug.Log($"targetSlots: {string.Join(", ", targetSlots.Select(x => x.SlotNum))}");
 
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -47,18 +47,18 @@ namespace ERang
                 yield break;
             }
 
-            if (card is not CreatureCard && card is not MasterCard)
+            if (card.CardType != CardType.Creature && card.CardType != CardType.Master)
             {
                 Debug.LogWarning($"{targetSlot.LogText}: 타겟 슬롯 카드가 CreatureCard 또는 MasterCard 가 아닙니다.");
                 yield break;
             }
 
-            int beforeHp = card.Hp;
-            int beforeDef = card.Def;
+            int beforeHp = card.State.Hp;
+            int beforeDef = card.State.Def;
 
             for (int i = 0; i < atkCount; i++)
             {
-                Debug.Log($"{targetSlot.LogText}, hp: {card.Hp}, def: {card.Def}, damage : {value}");
+                Debug.Log($"{targetSlot.LogText}, hp: {card.State.Hp}, def: {card.State.Def}, damage : {value}");
 
                 yield return StartCoroutine(targetSlot.TakeDamage(value));
 
@@ -66,8 +66,8 @@ namespace ERang
             }
 
             // TakeDamage 에서 카드가 Destroy 되면 null 이 되는 경우도 있음
-            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card?.Id ?? 0, targetSlot.SlotCardType, beforeHp, card?.Hp ?? 0, value * atkCount));
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card?.Id ?? 0, targetSlot.SlotCardType, beforeDef, card?.Def ?? 0, value * atkCount));
+            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card?.Id ?? 0, targetSlot.SlotCardType, beforeHp, card?.State.Hp ?? 0, value * atkCount));
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card?.Id ?? 0, targetSlot.SlotCardType, beforeDef, card?.State.Def ?? 0, value * atkCount));
         }
 
         public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)

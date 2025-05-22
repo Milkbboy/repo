@@ -11,7 +11,7 @@ namespace ERang
 
         public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -19,20 +19,20 @@ namespace ERang
                 yield break;
             }
 
-            if (card is not CreatureCard && card is not MasterCard)
+            if (card.CardType != CardType.Creature && card.CardType != CardType.Master)
             {
                 Debug.LogWarning($"{targetSlot.LogText}: 타겟 슬롯 카드가 CreatureCard 또는 MasterCard 가 아닙니다.");
                 yield break;
             }
 
             int value = cardAbility.abilityValue;
-            int beforeHp = card.Hp;
-            int beforeDef = card.Def;
+            int beforeHp = card.State.Hp;
+            int beforeDef = card.State.Def;
 
             yield return StartCoroutine(targetSlot.TakeDamage(value));
 
-            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, targetSlot.Card.Hp, value));
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, targetSlot.Card.Def, value));
+            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.State.Hp, value));
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, card.State.Def, value));
         }
 
         public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)

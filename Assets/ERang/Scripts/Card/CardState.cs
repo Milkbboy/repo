@@ -15,6 +15,8 @@ namespace ERang
         public event System.Action<int> OnDefChanged;
         public event System.Action<int> OnManaChanged;
         public event System.Action<int> OnAtkChanged;
+        public event System.Action<int> OnMaxHpChanged;
+        public event System.Action<int> OnMaxManaChanged;
 
         public CardState(int hp, int def, int mana, int atk, int maxHp = 0, int maxMana = 0)
         {
@@ -30,6 +32,18 @@ namespace ERang
         {
             Hp = Mathf.Clamp(value, 0, MaxHp);
             OnHpChanged?.Invoke(Hp);
+        }
+
+        public void SetMaxHp(int value)
+        {
+            MaxHp = Mathf.Max(0, value);
+            OnMaxHpChanged?.Invoke(MaxHp);
+        }
+
+        public void SetMaxMana(int value)
+        {
+            MaxMana = Mathf.Max(0, value);
+            OnMaxManaChanged?.Invoke(MaxMana);
         }
 
         public void SetDef(int value)
@@ -87,6 +101,16 @@ namespace ERang
         public void DecreaseDefense(int amount)
         {
             SetDef(Def - amount);
+        }
+
+        public void IncreaseAttack(int amount)
+        {
+            SetAtk(Atk + amount);
+        }
+
+        public void DecreaseAttack(int amount)
+        {
+            SetAtk(Atk - amount);
         }
 
         public void IncreaseMana(int amount)

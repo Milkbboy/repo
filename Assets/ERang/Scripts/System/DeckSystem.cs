@@ -14,30 +14,30 @@ namespace ERang
         public int ExtinctionCardCount => extinctionCards.Count;
         public int GraveCardCount => graveCards.Count;
 
-        public List<BaseCard> DeckCards => deckCards;
-        public List<BaseCard> HandCards => handCards;
-        public List<BaseCard> GraveCards => graveCards;
-        public List<BaseCard> ExtinctionCards => extinctionCards;
-        public List<BaseCard> BuildingCards => buildingCards;
+        public List<GameCard> DeckCards => deckCards;
+        public List<GameCard> HandCards => handCards;
+        public List<GameCard> GraveCards => graveCards;
+        public List<GameCard> ExtinctionCards => extinctionCards;
+        public List<GameCard> BuildingCards => buildingCards;
 
         private bool isCreatedStarCard = false;
         private readonly int maxHandCardCount = 5;
         private readonly System.Random random = new();
 
-        private readonly List<BaseCard> creatureCards = new(); // 마스터 크리쳐 카드
-        private readonly List<BaseCard> buildingCards = new(); // 건물 카드
+        private readonly List<GameCard> creatureCards = new(); // 마스터 크리쳐 카드
+        private readonly List<GameCard> buildingCards = new(); // 건물 카드
 
-        [SerializeField] private List<BaseCard> deckCards = new List<BaseCard>();
-        private List<BaseCard> handCards = new();
-        private readonly List<BaseCard> graveCards = new();
-        private readonly List<BaseCard> extinctionCards = new();
+        [SerializeField] private List<GameCard> deckCards = new List<GameCard>();
+        private List<GameCard> handCards = new();
+        private readonly List<GameCard> graveCards = new();
+        private readonly List<GameCard> extinctionCards = new();
 
         void Awake()
         {
             Instance = this;
         }
 
-        public BaseCard FindHandCard(string cardUid)
+        public GameCard FindHandCard(string cardUid)
         {
             return handCards.Find(card => card.Uid == cardUid);
         }
@@ -70,7 +70,7 @@ namespace ERang
                     continue;
                 }
 
-                BaseCard card = Utils.MakeCard(cardData);
+                GameCard card = Utils.MakeCard(cardData);
 
                 if (card is MagicCard magicCard)
                     magicCard.SetSelectAttackType(AiLogic.Instance.IsSelectAttackType(card));
@@ -111,7 +111,7 @@ namespace ERang
 
                 if (deckCards.Count > 0)
                 {
-                    BaseCard card = deckCards[0];
+                    GameCard card = deckCards[0];
 
                     // 덱에서 카드를 뽑아 손에 추가
                     deckCards.RemoveAt(0);
@@ -128,7 +128,7 @@ namespace ERang
                 // Traits를 None으로 설정
                 if ((card.Traits & CardTraits.NextTurnSelect) == CardTraits.NextTurnSelect)
                 {
-                    card.SetCardTraits(CardTraits.None);
+                    card.SetTraits(CardTraits.None);
                 }
 
                 Debug.Log($"MakeHandCards. card: {card}, {card.LogText}, handAbilities.Count: {card.AbilitySystem.HandAbilities.Count}");
@@ -142,7 +142,7 @@ namespace ERang
         /// <summary>
         /// 핸드 카드를 보드로 이동
         /// </summary>
-        public void HandCardToBoard(BaseCard card)
+        public void HandCardToBoard(GameCard card)
         {
             if (card == null)
             {
@@ -185,7 +185,7 @@ namespace ERang
 
             for (int i = handCards.Count - 1; i >= 0; i--)
             {
-                BaseCard card = handCards[i];
+                GameCard card = handCards[i];
 
                 // 핸드 카드 어빌리티 해제
                 StartCoroutine(AbilityLogic.Instance.HandCardAbilityRelease(card));
@@ -200,7 +200,7 @@ namespace ERang
         /// </summary>
         public void RemoveUsedHandCard(string cardUid)
         {
-            BaseCard card = handCards.Find(card => card.Uid == cardUid);
+            GameCard card = handCards.Find(card => card.Uid == cardUid);
 
             if (card == null)
             {
@@ -222,7 +222,7 @@ namespace ERang
         /// <summary>
         /// 카드 덱으로 이동
         /// </summary>
-        public void HandCardToDeck(BaseCard card)
+        public void HandCardToDeck(GameCard card)
         {
             if (card == null)
             {
@@ -246,30 +246,30 @@ namespace ERang
         /// 카드 랜덤 섞기
         /// </summary>
         /// <param name="cards">카드 리스트</param>
-        private void ShuffleCards(List<BaseCard> cards)
+        private void ShuffleCards(List<GameCard> cards)
         {
             for (int i = 0; i < cards.Count; ++i)
             {
-                BaseCard temp = cards[i];
+                GameCard temp = cards[i];
                 int randomIdex = random.Next(i, cards.Count);
                 cards[i] = cards[randomIdex];
                 cards[randomIdex] = temp;
             }
         }
 
-        private void RemoveHandCard(BaseCard card)
+        private void RemoveHandCard(GameCard card)
         {
             handCards.Remove(card);
         }
 
-        public void AddHandCard(BaseCard card)
+        public void AddHandCard(GameCard card)
         {
             handCards.Add(card);
         }
 
-        public BaseCard GetHandCard(string cardUid)
+        public GameCard GetHandCard(string cardUid)
         {
-            BaseCard card = handCards.Find(card => card.Uid == cardUid);
+            GameCard card = handCards.Find(card => card.Uid == cardUid);
 
             if (card == null)
             {
@@ -280,12 +280,12 @@ namespace ERang
             return card;
         }
 
-        public void AddDeckCard(BaseCard card)
+        public void AddDeckCard(GameCard card)
         {
             deckCards.Add(card);
         }
 
-        public void AddGraveCard(BaseCard card)
+        public void AddGraveCard(GameCard card)
         {
             graveCards.Add(card);
         }

@@ -28,7 +28,7 @@ namespace ERang
 
         private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAtkUp)
         {
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -36,7 +36,7 @@ namespace ERang
                 yield break;
             }
 
-            int before = card.Atk;
+            int before = card.State.Atk;
             int value = cardAbility.abilityValue;
 
             if (isAtkUp)
@@ -44,7 +44,7 @@ namespace ERang
             else
                 targetSlot.DecreaseAttack(value);
 
-            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Atk, isAtkUp ? value : value * -1));
+            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.State.Atk, isAtkUp ? value : value * -1));
 
             yield return new WaitForSeconds(0.1f);
         }

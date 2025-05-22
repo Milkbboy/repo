@@ -23,7 +23,7 @@ namespace ERang
             for (int i = 0; i < rewards.Count; ++i)
             {
                 (RewardType rewardType, int value) = rewards[i];
-                BaseCard card = null;
+                GameCard card = null;
 
                 if (rewardType == RewardType.Card)
                 {

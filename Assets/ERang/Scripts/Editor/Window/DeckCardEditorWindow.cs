@@ -99,7 +99,7 @@ namespace ERang
             }
         }
 
-        private void DrawDeckCards(List<BaseCard> cards)
+        private void DrawDeckCards(List<GameCard> cards)
         {
             // 카드가 없으면 표시
             if (cards.Count == 0)
@@ -146,13 +146,13 @@ namespace ERang
                 EditorGUILayout.EndHorizontal();
 
                 // 카드 클래스 별로 스탯 표시
-                if (card is CreatureCard creatureCard)
+                if (card.CardType == CardType.Creature)
                 {
-                    CreatureCard(creatureCard);
+                    CreatureCard(card);
                 }
-                else if (card is MagicCard magicCard)
+                else if (card.CardType == CardType.Magic)
                 {
-                    MagicCard(magicCard);
+                    MagicCard(card as MagicCard);
                 }
 
                 EditorGUILayout.BeginHorizontal();
@@ -182,12 +182,12 @@ namespace ERang
             return null;
         }
 
-        private void CreatureCard(CreatureCard card)
+        private void CreatureCard(GameCard card)
         {
-            int hp = card.Hp;
-            int mana = card.Mana;
-            int atk = card.Atk;
-            int def = card.Def;
+            int hp = card.State.Hp;
+            int mana = card.State.Mana;
+            int atk = card.State.Atk;
+            int def = card.State.Def;
 
             DrawCardStatField("Hp", ref hp);
             DrawCardStatField("Mana", ref mana);
@@ -202,8 +202,8 @@ namespace ERang
 
         private void MagicCard(MagicCard card)
         {
-            int mana = card.Mana;
-            int atk = card.Atk;
+            int mana = card.State.Mana;
+            int atk = card.State.Atk;
 
             DrawCardStatField("Mana", ref mana);
             DrawCardStatField("Atk", ref atk);

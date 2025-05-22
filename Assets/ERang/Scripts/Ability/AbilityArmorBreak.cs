@@ -29,7 +29,7 @@ namespace ERang
         /// </summary>
         private IEnumerator Apply(BSlot targetSlot, bool isRelease)
         {
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -37,7 +37,7 @@ namespace ERang
                 yield break;
             }
 
-            int before = card.Def;
+            int before = card.State.Def;
             int value = 0;
 
             if (isRelease)
@@ -56,11 +56,11 @@ namespace ERang
             }
 
             Debug.Log($"<color=red>--------------------------- {(isRelease ? "Release" : "Apply")} ------------------------------</color>");
-            Debug.Log($"ArmorBreak {(isRelease ? "Release" : "Apply")}. card.Def: {card.Def} => {value}");
+            Debug.Log($"ArmorBreak {(isRelease ? "Release" : "Apply")}. card.Def: {card.State.Def} => {value}");
 
             targetSlot.SetDefense(value);
 
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Def, value));
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.State.Def, value));
 
             yield return new WaitForSeconds(0.1f);
         }

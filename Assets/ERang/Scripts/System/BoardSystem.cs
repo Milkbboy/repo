@@ -119,7 +119,7 @@ namespace ERang
 
         public IEnumerator CreateMasterCard(Master master)
         {
-            masterCard = new(master);
+            masterCard = new MasterCard(master);
 
             yield return null;
 
@@ -134,7 +134,7 @@ namespace ERang
         {
             Debug.Log($"몬스터 카드들 {string.Join(", ", cardIds)} 생성");
 
-            List<(int, BaseCard)> monsterCards = new();
+            List<(int, GameCard)> monsterCards = new();
 
             for (int i = 0; i < cardIds.Count; ++i)
             {
@@ -151,7 +151,7 @@ namespace ERang
                     continue;
                 }
 
-                BaseCard card = Utils.MakeCard(cardData);
+                GameCard card = Utils.MakeCard(cardData);
 
                 // 크리쳐 카드 슬롯 인덱스는 1부터 시자되므로 1을 더함
                 monsterCards.Add((i + 1, card));
@@ -182,7 +182,7 @@ namespace ERang
         {
             foreach (var slot in bSlots)
             {
-                BaseCard card = slot.Card;
+                GameCard card = slot.Card;
 
                 if (card == null)
                     continue;
@@ -253,17 +253,17 @@ namespace ERang
         /// </summary>
         /// <param name="master"></param>
         /// <param name="card"></param>
-        public void CardCost(Master master, BaseCard card)
+        public void CardCost(Master master, GameCard card)
         {
             switch (card)
             {
                 case CreatureCard creatureCard:
-                    Debug.Log($"CreatureCard: {creatureCard.Id} Mana: {creatureCard.Mana}");
-                    AddMana(-creatureCard.Mana);
+                    Debug.Log($"CreatureCard: {creatureCard.Id} Mana: {creatureCard.State.Mana}");
+                    AddMana(-creatureCard.State.Mana);
                     break;
                 case MagicCard magicCard:
-                    Debug.Log($"MagicCard: {magicCard.Id} Mana: {magicCard.Mana}");
-                    AddMana(-magicCard.Mana);
+                    Debug.Log($"MagicCard: {magicCard.Id} Mana: {magicCard.State.Mana}");
+                    AddMana(-magicCard.State.Mana);
                     break;
                 case BuildingCard buildingCard:
                     AddGold(master, -buildingCard.Gold);
@@ -321,7 +321,7 @@ namespace ERang
         /// - 슬롯 인덱스 3, 2, 1 순서
         /// </summary>
         /// <returns></returns>
-        public List<BaseCard> GetOccupiedCreatureCards()
+        public List<GameCard> GetOccupiedCreatureCards()
         {
             return GetLeftBoardSlots()
                 .Where(slot => slot.Card != null)
@@ -333,7 +333,7 @@ namespace ERang
         /// 몬스터 카드가 장착된 보드 슬롯 인덱스를 정렬한 카드 반환
         /// - 슬롯 인덱스 6, 7, 8 순서
         /// </summary>
-        public List<BaseCard> GetOccupiedMonsterCards()
+        public List<GameCard> GetOccupiedMonsterCards()
         {
             return GetRightBoardSlots()
                 .Where(slot => slot.Card != null)

@@ -26,18 +26,19 @@ namespace ERang
     {
         private static System.Random random = new();
 
-        public static BaseCard MakeCard(CardData cardData)
+        public static GameCard MakeCard(CardData cardData)
         {
-            BaseCard card = null;
+            GameCard card = null;
 
             switch (cardData.cardType)
             {
                 case CardType.Creature:
                 case CardType.Monster:
-                    card = new CreatureCard(cardData);
+                    card = CardFactory.CreateCard(cardData);
+
                     break;
                 case CardType.Building:
-                    card = new BuildingCard(cardData);
+                    card = CardFactory.CreateCard(cardData);
                     break;
                 case CardType.Charm:
                 case CardType.Curse:
@@ -67,12 +68,12 @@ namespace ERang
             // return card;
         }
 
-        public static BaseCard MakeHpCard(CardData cardData, int hp)
+        public static GameCard MakeHpCard(CardData cardData, int hp)
         {
             return new HpCard(cardData, hp);
         }
 
-        public static BaseCard MakeGoldCard(CardData cardData, int gold)
+        public static GameCard MakeGoldCard(CardData cardData, int gold)
         {
             return new GoldCard(cardData, gold);
         }
@@ -181,9 +182,9 @@ namespace ERang
             return $"{GetCardType(card.Card.CardType)} 카드({card.Card.Id})";
         }
 
-        public static string CardLog(BaseCard card)
+        public static string CardLog(GameCard card)
         {
-            return $"{GetCardType(card.CardType)} 카드({card.Id})";
+            return $"{GetCardType(card.CardType)} 카드({card.Id}), 타입: {card.GetType()}";
         }
 
         public static string AbilityLog(CardAbility cardAbility)

@@ -21,7 +21,7 @@ namespace ERang
 
         private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAdd)
         {
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -29,21 +29,21 @@ namespace ERang
                 yield break;
             }
 
-            if (card is not MasterCard masterCard)
+            if (card.CardType != CardType.Master)
             {
                 Debug.LogWarning($"{card.LogText} 마스터 카드 아님.");
                 yield break;
             }
 
-            int beforeMana = masterCard.Mana;
+            int beforeMana = card.State.Mana;
             int value = cardAbility.abilityValue;
 
             if (isAdd)
-                masterCard.IncreaseMana(value);
+                card.IncreaseMana(value);
             else
-                masterCard.DecreaseMana(value);
+                card.DecreaseMana(value);
 
-            Debug.Log($"<color=#257dca>마나 변화량 {(isAdd ? value : value * -1)}</color>({beforeMana} => {masterCard.Mana})");
+            Debug.Log($"<color=#257dca>마나 변화량 {(isAdd ? value : value * -1)}</color>({beforeMana} => {card.State.Mana})");
 
             yield return new WaitForSeconds(0.1f);
         }

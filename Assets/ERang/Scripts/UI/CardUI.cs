@@ -61,95 +61,57 @@ namespace ERang
 
             cardTypeText.text = card.CardType.ToString();
 
-            // 새로운 통합 값 시스템 활용
-            if (card is IValueCard valueCard)
+            if (card.CardType == CardType.Creature)
             {
-                if (card.CardType == CardType.Creature)
-                {
-                    ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Atk, StatType.Def }, true);
+                ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Atk, StatType.Def }, true);
 
-                    hpText.text = valueCard.GetValue(ValueType.Hp).ToString();
-                    manaText.text = valueCard.GetValue(ValueType.Mana).ToString();
-                    atkText.text = valueCard.GetValue(ValueType.Attack).ToString();
-                    defText.text = valueCard.GetValue(ValueType.Defense).ToString();
-                }
-                else if (card.CardType == CardType.Master || card.CardType == CardType.EnemyMaster)
-                {
-                    ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Def }, true);
-
-                    hpText.text = valueCard.GetValue(ValueType.Hp).ToString();
-                    manaText.text = valueCard.GetValue(ValueType.Mana).ToString();
-                    defText.text = valueCard.GetValue(ValueType.Defense).ToString();
-                }
-                else if (card.CardType == CardType.Magic)
-                {
-                    List<StatType> statTypes = new List<StatType> { StatType.Mana };
-                    
-                    int atk = valueCard.GetValue(ValueType.Attack);
-                    if (atk > 0)
-                    {
-                        statTypes.Add(StatType.Atk);
-                        atkText.text = atk.ToString();
-                    }
-
-                    ActiveStatObjects(statTypes, true);
-                    manaText.text = valueCard.GetValue(ValueType.Mana).ToString();
-                }
-                else if (card.CardType == CardType.Building)
-                {
-                    ActiveStatObjects(new List<StatType> { StatType.Mana, StatType.Gold }, true);
-                    manaText.text = valueCard.GetValue(ValueType.Mana).ToString();
-                }
-                else if (card.CardType == CardType.Item)
-                {
-                    // GoldCard 또는 HpCard와 같은 아이템 카드
-                    if (card is GoldCard)
-                    {
-                        descText.text = $"골드 {valueCard.GetValue(ValueType.Gold)} 획득";
-                    }
-                    else 
-                    {
-                        // HpCard 등 다른 아이템 카드
-                        int hpValue = valueCard.GetValue(ValueType.Hp);
-                        if (hpValue > 0)
-                        {
-                            descText.text = $"hp {hpValue} 회복";
-                        }
-                    }
-                }
+                hpText.text = card.State.Hp.ToString();
+                manaText.text = card.State.Mana.ToString();
+                atkText.text = card.State.Atk.ToString();
+                defText.text = card.State.Def.ToString();
             }
-            else 
+            else if (card.CardType == CardType.Master || card.CardType == CardType.EnemyMaster)
             {
-                // 이전 방식으로 fallback (IValueCard가 아닌 경우 - 호환성 유지)
-                if (card is CreatureCard creatureCard)
-                {
-                    ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Atk, StatType.Def }, true);
+                ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Def }, true);
 
-                    hpText.text = card.State.Hp.ToString();
-                    manaText.text = card.State.Mana.ToString();
-                    atkText.text = card.State.Atk.ToString();
-                    defText.text = card.State.Def.ToString();
-                }
-                else if (card is MasterCard masterCard)
-                {
-                    ActiveStatObjects(new List<StatType> { StatType.Hp, StatType.Mana, StatType.Def }, true);
+                hpText.text = card.State.Hp.ToString();
+                manaText.text = card.State.Mana.ToString();
+                defText.text = card.State.Def.ToString();
+            }
+            else if (card.CardType == CardType.Magic)
+            {
+                List<StatType> statTypes = new List<StatType> { StatType.Mana };
 
-                    hpText.text = card.State.Hp.ToString();
-                    manaText.text = card.State.Mana.ToString();
-                    defText.text = card.State.Def.ToString();
-                }
-                else if (card is MagicCard magicCard)
+                int atk = card.State.Atk;
+                if (atk > 0)
                 {
-                    List<StatType> statTypes = new List<StatType> { StatType.Mana };
-                    
-                    if (card.State.Atk > 0)
+                    statTypes.Add(StatType.Atk);
+                    atkText.text = atk.ToString();
+                }
+
+                ActiveStatObjects(statTypes, true);
+                manaText.text = card.State.Mana.ToString();
+            }
+            else if (card.CardType == CardType.Building)
+            {
+                ActiveStatObjects(new List<StatType> { StatType.Mana, StatType.Gold }, true);
+                manaText.text = card.State.Mana.ToString();
+            }
+            else if (card.CardType == CardType.Gold)
+            {
+                // GoldCard 또는 HpCard와 같은 아이템 카드
+                if (card is GoldCard)
+                {
+                    descText.text = $"골드 {card.Gold} 획득";
+                }
+                else
+                {
+                    // HpCard 등 다른 아이템 카드
+                    int hpValue = card.State.Hp;
+                    if (hpValue > 0)
                     {
-                        statTypes.Add(StatType.Atk);
-                        atkText.text = card.State.Atk.ToString();
+                        descText.text = $"hp {hpValue} 회복";
                     }
-
-                    ActiveStatObjects(statTypes, true);
-                    manaText.text = card.State.Mana.ToString();
                 }
             }
 
@@ -166,45 +128,6 @@ namespace ERang
             else
             {
                 cardImage.sprite = Sprite.Create(cardTexture, new Rect(0, 0, cardTexture.width, cardTexture.height), Vector2.zero);
-            }
-        }
-
-        // 이전 버전 호환성을 위한 메서드 (BaseCard용)
-        public void SetCard(BaseCard card)
-        {
-            // 임시로 GameCard로 변환하여 처리
-            SetCard(ConvertToGameCard(card));
-        }
-
-        // 임시 변환 메서드
-        private GameCard ConvertToGameCard(BaseCard baseCard)
-        {
-            // 기존 카드 타입에 따라 적절한 GameCard 하위 클래스 인스턴스 생성
-            CardData cardData = new CardData
-            {
-                card_id = baseCard.Id,
-                cardType = baseCard.CardType,
-                inUse = baseCard.InUse,
-                aiGroup_id = baseCard.AiGroupId,
-                hp = baseCard.State.Hp,
-                atk = baseCard.State.Atk,
-                def = baseCard.State.Def,
-                costMana = baseCard.State.Mana
-            };
-            
-            switch (baseCard.CardType)
-            {
-                case CardType.Creature:
-                    return new CreatureCard(cardData);
-                case CardType.Master:
-                case CardType.EnemyMaster:
-                    return new MasterCard(cardData);
-                case CardType.Magic:
-                    return new MagicCard(cardData);
-                case CardType.Building:
-                    return new BuildingCard(cardData);
-                default:
-                    return new CreatureCard(cardData);
             }
         }
 

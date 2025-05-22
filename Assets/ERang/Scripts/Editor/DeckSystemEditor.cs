@@ -23,7 +23,7 @@ namespace ERang
                 return;
             }
 
-            foreach (BaseCard card in deckSystem.DeckCards)
+            foreach (GameCard card in deckSystem.DeckCards)
             {
                 EditorGUILayout.BeginVertical("box");
                 EditorGUILayout.LabelField("Uid", card.Uid);
@@ -33,10 +33,10 @@ namespace ERang
                 EditorGUILayout.LabelField("AiGroupIndex", card.AiGroupIndex.ToString());
                 EditorGUILayout.LabelField("InUse", card.InUse.ToString());
                 EditorGUILayout.LabelField("IsExtinction", card.IsExtinction.ToString());
-                EditorGUILayout.LabelField("Hp", card.Hp.ToString());
-                EditorGUILayout.LabelField("Atk", card.Atk.ToString());
-                EditorGUILayout.LabelField("Def", card.Def.ToString());
-                EditorGUILayout.LabelField("Mana", card.Mana.ToString());
+                EditorGUILayout.LabelField("Hp", card.State.Hp.ToString());
+                EditorGUILayout.LabelField("Atk", card.State.Atk.ToString());
+                EditorGUILayout.LabelField("Def", card.State.Def.ToString());
+                EditorGUILayout.LabelField("Mana", card.State.Mana.ToString());
                 EditorGUILayout.LabelField("Traits", card.Traits.ToString());
                 EditorGUILayout.LabelField("HandAbility Count", card.AbilitySystem.HandAbilities.Count.ToString());
 
@@ -72,7 +72,7 @@ namespace ERang
             if (Player.Instance.AllCards.Count == 0)
                 return;
 
-            foreach (BaseCard card in Player.Instance.AllCards)
+            foreach (GameCard card in Player.Instance.AllCards)
             {
                 EditorGUILayout.BeginVertical("box");
                 EditorGUILayout.LabelField("Uid", card.Uid);
@@ -86,10 +86,10 @@ namespace ERang
                 GUILayout.Label(card.CardImage, GUILayout.Width(100), GUILayout.Height(123));
 
                 // 카드의 실제 타입에 따라 속성을 표시
-                EditorGUILayout.LabelField("Hp", card.Hp.ToString());
-                EditorGUILayout.LabelField("Atk", card.Atk.ToString());
-                EditorGUILayout.LabelField("Def", card.Def.ToString());
-                EditorGUILayout.LabelField("Mana", card.Mana.ToString());
+                EditorGUILayout.LabelField("Hp", card.State.Hp.ToString());
+                EditorGUILayout.LabelField("Atk", card.State.Atk.ToString());
+                EditorGUILayout.LabelField("Def", card.State.Def.ToString());
+                EditorGUILayout.LabelField("Mana", card.State.Mana.ToString());
                 EditorGUILayout.EndVertical();
             }
         }

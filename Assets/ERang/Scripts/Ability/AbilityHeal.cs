@@ -11,7 +11,7 @@ namespace ERang
 
         public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -20,11 +20,11 @@ namespace ERang
             }
 
             int value = cardAbility.abilityValue;
-            int before = targetSlot.Card.Hp;
+            int before = card.State.Hp;
 
             targetSlot.RestoreHealth(value);
 
-            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Hp, value));
+            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.State.Hp, value));
 
             yield return new WaitForSeconds(0.1f);
         }

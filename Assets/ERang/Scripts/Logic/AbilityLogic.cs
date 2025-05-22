@@ -69,7 +69,7 @@ namespace ERang
         {
             StartCoroutine(AbilityRelease(cardAbility, AbilityWhereFrom.EditorWindow));
 
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             card.RemoveCardAbility(cardAbility);
             targetSlot.DrawAbilityIcons();
@@ -85,7 +85,7 @@ namespace ERang
 
             foreach (BSlot targetSlot in targetSlots)
             {
-                BaseCard card = targetSlot.Card;
+                GameCard card = targetSlot.Card;
 
                 if (card == null)
                     continue;
@@ -130,7 +130,7 @@ namespace ERang
             }
         }
 
-        public IEnumerator HandCardAbilityAction(BaseCard handCard)
+        public IEnumerator HandCardAbilityAction(GameCard handCard)
         {
             foreach (CardAbility cardAbility in handCard.AbilitySystem.HandAbilities)
             {
@@ -149,7 +149,7 @@ namespace ERang
             }
         }
 
-        public IEnumerator HandCardAbilityRelease(BaseCard handCard)
+        public IEnumerator HandCardAbilityRelease(GameCard handCard)
         {
             for (int i = 0; i < handCard.AbilitySystem.HandAbilities.Count; ++i)
             {
@@ -248,25 +248,25 @@ namespace ERang
             }
 
             // MasterCard 가 CreatureCard 를 상속 받았기 때문에 하위 클래스 먼저 확인
-            if (boardSlot.Card is MasterCard masterCard)
+            if (boardSlot.Card.CardType == CardType.Master)
             {
                 // Debug.Log($"마스터 카드. cardId: {boardSlot.Card.Id} Slot: {boardSlot.SlotNum}, hp: {masterCard.Hp}, mana: {masterCard.Mana}");
                 return abilityType switch
                 {
-                    AbilityType.AddMana or AbilityType.SubMana => masterCard.Mana,
-                    AbilityType.DefUp or AbilityType.BrokenDef => masterCard.Def,
-                    AbilityType.Heal or AbilityType.Damage or AbilityType.ChargeDamage => masterCard.Hp,
+                    AbilityType.AddMana or AbilityType.SubMana => boardSlot.Card.State.Mana,
+                    AbilityType.DefUp or AbilityType.BrokenDef => boardSlot.Card.State.Def,
+                    AbilityType.Heal or AbilityType.Damage or AbilityType.ChargeDamage => boardSlot.Card.State.Hp,
                     _ => 0,
                 };
             }
 
-            if (boardSlot.Card is CreatureCard creatureCard)
+            if (boardSlot.Card.CardType == CardType.Creature)
             {
                 return abilityType switch
                 {
-                    AbilityType.AtkUp => creatureCard.Atk,
-                    AbilityType.DefUp or AbilityType.BrokenDef => creatureCard.Def,
-                    AbilityType.Heal or AbilityType.Damage or AbilityType.ChargeDamage => creatureCard.Hp,
+                    AbilityType.AtkUp => boardSlot.Card.State.Atk,
+                    AbilityType.DefUp or AbilityType.BrokenDef => boardSlot.Card.State.Def,
+                    AbilityType.Heal or AbilityType.Damage or AbilityType.ChargeDamage => boardSlot.Card.State.Hp,
                     _ => 0,
                 };
             }

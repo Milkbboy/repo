@@ -5,8 +5,6 @@ namespace ERang
 {
     public class GoldCard : GameCard
     {
-        public int Gold => GetValue(ValueType.Gold);
-        
         public GoldCard() : base()
         {
             // 골드 카드는 값 관리 기능만 사용
@@ -14,11 +12,10 @@ namespace ERang
             usesAbilities = false;
             usesValues = true;
             usesAi = false;
-            CardType = CardType.Item;
-            
-            SetValue(ValueType.Gold, 0);
+            CardType = CardType.Gold;
+            Gold = 0;
         }
-        
+
         public GoldCard(CardData cardData, int gold) : base(cardData)
         {
             // 골드 카드는 값 관리 기능만 사용
@@ -26,10 +23,10 @@ namespace ERang
             usesAbilities = false;
             usesValues = true;
             usesAi = false;
-            
-            SetValue(ValueType.Gold, gold);
+
+            Gold = gold;
         }
-        
+
         public GoldCard(int gold) : base()
         {
             // 골드 카드는 값 관리 기능만 사용
@@ -37,21 +34,21 @@ namespace ERang
             usesAbilities = false;
             usesValues = true;
             usesAi = false;
-            CardType = CardType.Item;
-            
-            SetValue(ValueType.Gold, gold);
+            CardType = CardType.Gold;
+
+            Gold = gold;
         }
-        
+
         public void SetGold(int amount)
         {
-            SetValue(ValueType.Gold, amount);
+            Gold = amount;
         }
-        
+
         public void AddGold(int amount)
         {
-            ModifyValue(ValueType.Gold, amount);
+            Gold += amount;
         }
-        
+
         public override void OnPlay()
         {
             // 골드 카드 사용 시 실행되는 코드

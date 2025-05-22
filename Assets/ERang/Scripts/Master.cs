@@ -14,7 +14,7 @@ namespace ERang
         public int MaxHp { get => maxHp; set => maxHp = value; }
         public int Mana => mana;
         public int MaxMana { get => maxMana; set => maxMana = value; }
-        public int RechargeMana { get => rechargeMana; set => rechargeMana = value; }
+        public int ManaPerTurn { get => manaPerTurn; set => manaPerTurn = value; }
         public int Atk { get => atk; set => atk = value; }
         public int Def { get => def; set => def = value; }
         public int Gold { get => gold; set => gold = value; }
@@ -32,7 +32,7 @@ namespace ERang
         private int maxHp;
         private int mana;
         private int maxMana;
-        private int rechargeMana;
+        private int manaPerTurn;
         private int atk;
         private int def;
         private int gold;
@@ -50,7 +50,7 @@ namespace ERang
             maxHp = hp = masterData.hp;
             mana = masterData.startMana;
             maxMana = masterData.maxMana;
-            rechargeMana = masterData.rechargeMana;
+            manaPerTurn = masterData.manaPerTurn;
             atk = masterData.atk;
             def = masterData.def;
             gold = 1000; // 임시

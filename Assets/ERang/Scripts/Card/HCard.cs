@@ -11,16 +11,16 @@ namespace ERang
     {
         public LayerMask slotLayerMask;
         public string LogText => Utils.CardLog(Card);
-        
+
         private Dragable dragable;
         private string cardUid;
-        
+
         protected override void Awake()
         {
             base.Awake();
             dragable = GetComponent<Dragable>();
         }
-        
+
         protected override void OnMouseEnter()
         {
             if (HandDeck.Instance.DraggingCard != null)
@@ -28,7 +28,7 @@ namespace ERang
 
             base.OnMouseEnter();
         }
-        
+
         protected override void OnMouseExit()
         {
             if (HandDeck.Instance.DraggingCard != null)
@@ -36,12 +36,12 @@ namespace ERang
 
             base.OnMouseExit();
         }
-        
+
         void OnMouseDown()
         {
             HandDeck.Instance.SetDraggingCard(this);
         }
-        
+
         void OnMouseUp()
         {
             HandDeck.Instance.SetDraggingCard(null);
@@ -52,7 +52,7 @@ namespace ERang
             if (Card is MagicCard magicCard)
             {
                 HandDeck.Instance.MagicCardUse(this);
-                
+
                 // IsSelectAttackType 속성이 현재 구현되어 있지 않아 임시로 주석 처리
                 /*
                 if (magicCard.IsSelectAttackType)
@@ -73,7 +73,7 @@ namespace ERang
 
             transform.DOMove(originalPosition, .1f);
         }
-        
+
         // Gizmos를 사용하여 Scene 뷰에서 구체를 그립니다.
         void OnDrawGizmos()
         {
@@ -96,7 +96,7 @@ namespace ERang
                 }
             }
         }
-        
+
         /// <summary>
         /// 카드 데이터 설정 - BaseCard에서 GameCard로 변경
         /// </summary>
@@ -105,36 +105,33 @@ namespace ERang
             base.SetCard(card);
             cardUid = card.Uid;
         }
-        
-        // 이 두 메서드는 MagicCard 클래스에서 아직 구현되지 않은 속성에 의존하므로 임시로 주석 처리
-        /*
+
         public bool IsSelectAttackTypeCard()
         {
             return Card is MagicCard magicCard && magicCard.IsSelectAttackType;
         }
-        
+
         public bool IsHandOnCard()
         {
             return Card is MagicCard magicCard && magicCard.IsHandOnCard;
         }
-        
+
         public bool IsContainsSlotNum(int slotNum)
         {
             return Card is MagicCard magicCard && magicCard.TargetSlotNumbers.Contains(slotNum);
         }
-        */
-        
+
         public void SetDrawPostion(Vector3 position)
         {
             transform.localPosition = position;
             originalPosition = transform.position;
         }
-        
+
         public bool IsDragging()
         {
             return dragable.IsDragging;
         }
-        
+
         private bool TryGetNearestSlot(Vector3 position, out BSlot nearestSlot)
         {
             nearestSlot = null;

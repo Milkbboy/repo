@@ -21,7 +21,7 @@ namespace ERang
 
         private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAtkUp)
         {
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -29,21 +29,21 @@ namespace ERang
                 yield break;
             }
 
-            if (card is not CreatureCard creatureCard)
+            if (card.CardType != CardType.Creature)
             {
                 Debug.LogWarning($"{card.LogText} 크리쳐 카드 아님.");
                 yield break;
             }
 
-            int before = creatureCard.Atk;
+            int before = card.State.Atk;
             int value = cardAbility.abilityValue;
 
             if (isAtkUp)
-                creatureCard.IncreaseAttack(value);
+                card.IncreaseAttack(value);
             else
-                creatureCard.DecreaseAttack(value);
+                card.DecreaseAttack(value);
 
-            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, creatureCard.Atk, isAtkUp ? value : value * -1));
+            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.State.Atk, isAtkUp ? value : value * -1));
 
             yield return new WaitForSeconds(0.1f);
         }

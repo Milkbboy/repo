@@ -7,7 +7,7 @@ namespace ERang
 {
     public class SelectCard : MonoBehaviour
     {
-        public BaseCard Card => card;
+        public GameCard Card => card;
 
         public bool isScaleFixed = false;
         public UnityAction<SelectCard> OnClick;
@@ -16,7 +16,7 @@ namespace ERang
         public float animationDuration = 0.1f;
         public float scaleFactor = 1.2f;
 
-        private BaseCard card;
+        private GameCard card;
         private CardUI cardUI;
 
         private Vector3 originalPosition;
@@ -62,7 +62,7 @@ namespace ERang
             // isScaleFixed = !isScaleFixed;
         }
 
-        public void SetCard(BaseCard card)
+        public void SetCard(GameCard card)
         {
             this.card = card;
             cardUI.SetCard(card);

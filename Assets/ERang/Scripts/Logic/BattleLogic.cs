@@ -34,7 +34,7 @@ namespace ERang
         private bool keepSatiety;
 
         // for test
-        BaseCard testCard;
+        GameCard testCard;
         private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
         private List<BSlot> flashingSlots = new List<BSlot>();
 
@@ -178,7 +178,7 @@ namespace ERang
             yield return StartCoroutine(CardPriorAbility(masterSlot));
 
             BoardSystem.Instance.SetHp(master.Hp);
-            BoardSystem.Instance.SetMana(master.RechargeMana);
+            BoardSystem.Instance.SetMana(master.ManaPerTurn);
 
             // 핸드 카드 만들기
             yield return StartCoroutine(deck.MakeHandCards());
@@ -224,7 +224,7 @@ namespace ERang
             yield return StartCoroutine(BoardTurnEnd(buildingSlots));
 
             // 핸드 온 카드 어빌리티 해제
-            List<BaseCard> allCards = BoardSystem.Instance.GetAllSlots().Where(slot => slot.Card != null).Select(slot => slot.Card).ToList();
+            List<GameCard> allCards = BoardSystem.Instance.GetAllSlots().Where(slot => slot.Card != null).Select(slot => slot.Card).ToList();
             yield return StartCoroutine(ReleaseHandOnCardAbility(allCards));
 
             // 지속 시간 종료 어빌리티 해제
@@ -296,7 +296,7 @@ namespace ERang
 
             foreach (BSlot boardSlot in reactionSlots)
             {
-                BaseCard card = boardSlot.Card;
+                GameCard card = boardSlot.Card;
 
                 if (card == null)
                 {
@@ -345,7 +345,7 @@ namespace ERang
 
         IEnumerator CardPriorAbility(BSlot boardSlot)
         {
-            BaseCard card = boardSlot.Card;
+            GameCard card = boardSlot.Card;
 
             if (card == null)
             {
@@ -361,7 +361,7 @@ namespace ERang
 
         IEnumerator CardPostAbility(BSlot boardSlot)
         {
-            BaseCard card = boardSlot.Card;
+            GameCard card = boardSlot.Card;
 
             if (card == null)
             {
@@ -377,7 +377,7 @@ namespace ERang
 
         IEnumerator CardAiAction(BSlot boardSlot)
         {
-            BaseCard card = boardSlot.Card;
+            GameCard card = boardSlot.Card;
 
             if (card == null)
             {
@@ -430,11 +430,11 @@ namespace ERang
         /// <summary>
         /// 핸드에 있을때 효과가 발동되는 카드 액션
         /// </summary>
-        IEnumerator HandOnCardAbilityAction(List<BaseCard> handCards)
+        IEnumerator HandOnCardAbilityAction(List<GameCard> handCards)
         {
             // 핸드 온 카드 액션의 주체는 마스터 슬롯
             BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
-            List<(BaseCard card, AiData aiData, List<AbilityData> abilityDatas)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
+            List<(GameCard card, AiData aiData, List<AbilityData> abilityDatas)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
 
             foreach (var (card, aiData, abilityDatas) in handOnCards)
             {
@@ -501,7 +501,7 @@ namespace ERang
         /// </summary>
         public IEnumerator HandCardUse(string cardUid, BSlot targetSlot)
         {
-            BaseCard card = deck.FindHandCard(cardUid);
+            GameCard card = deck.FindHandCard(cardUid);
 
             if (card == null)
             {
@@ -565,7 +565,7 @@ namespace ERang
         /// 핸드 카드에 있는 OnHand 어빌리티 해제
         /// - Ability 의 duration 상관 없이 바로 해제
         /// </summary>
-        IEnumerator ReleaseHandOnCardAbility(List<BaseCard> cards)
+        IEnumerator ReleaseHandOnCardAbility(List<GameCard> cards)
         {
             foreach (var card in cards)
             {
@@ -590,7 +590,7 @@ namespace ERang
                 if (boardSlot.Card == null)
                     continue;
 
-                BaseCard card = boardSlot.Card;
+                GameCard card = boardSlot.Card;
 
                 List<CardAbility> removedCardAbilities = new();
 
@@ -622,7 +622,7 @@ namespace ERang
         /// </summary>
         public bool CanHandCardUse(string cardUid)
         {
-            BaseCard card = deck.FindHandCard(cardUid);
+            GameCard card = deck.FindHandCard(cardUid);
 
             if (card == null)
             {
@@ -640,16 +640,16 @@ namespace ERang
             int requiredMana = 0;
 
             if (card is CreatureCard creatureCard)
-                requiredMana = creatureCard.Mana;
+                requiredMana = creatureCard.State.Mana;
 
             if (card is MagicCard magicCard)
-                requiredMana = magicCard.Mana;
+                requiredMana = magicCard.State.Mana;
 
             // 필요 마나 확인
-            if (masterCard.Mana < requiredMana)
+            if (masterCard.State.Mana < requiredMana)
             {
-                ToastNotification.Show($"mana({masterCard.Mana}) is not enough");
-                Debug.LogWarning($"핸드 카드({card.Id}) 마나 부족으로 사용 불가능({masterCard.Mana} < {requiredMana})");
+                ToastNotification.Show($"mana({masterCard.State.Mana}) is not enough");
+                Debug.LogWarning($"핸드 카드({card.Id}) 마나 부족으로 사용 불가능({masterCard.State.Mana} < {requiredMana})");
                 return false;
             }
 

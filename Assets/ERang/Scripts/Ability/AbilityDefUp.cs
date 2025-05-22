@@ -21,7 +21,7 @@ namespace ERang
 
         private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isDefUp)
         {
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -29,7 +29,7 @@ namespace ERang
                 yield break;
             }
 
-            int before = card.Def;
+            int before = card.State.Def;
             int value = cardAbility.abilityValue;
 
             if (isDefUp)
@@ -37,7 +37,7 @@ namespace ERang
             else
                 card.DecreaseDefense(value);
 
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Def, isDefUp ? value : value * -1));
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.State.Def, isDefUp ? value : value * -1));
 
             yield return new WaitForSeconds(0.1f);
         }

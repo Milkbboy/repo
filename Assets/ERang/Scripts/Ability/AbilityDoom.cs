@@ -19,7 +19,7 @@ namespace ERang
         /// </summary>
         public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -33,14 +33,14 @@ namespace ERang
                 yield break;
             }
 
-            int value = card.Hp + card.Def;
-            int beforeHp = card.Hp;
+            int value = card.State.Hp + card.State.Def;
+            int beforeHp = card.State.Hp;
 
             yield return StartCoroutine(targetSlot.TakeDamage(value));
 
             if (targetSlot.Card != null)
             {
-                Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.Hp, value));
+                Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.State.Hp, value));
                 yield break;
             }
         }

@@ -19,7 +19,7 @@ namespace ERang
         /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
         /// </summary>
         /// <returns></returns>
-        public int GetCardAiDataId(BaseCard card)
+        public int GetCardAiDataId(GameCard card)
         {
             BSlot boardSlot = null;
 
@@ -83,7 +83,7 @@ namespace ERang
                     totalValue += aiData.value;
 
                     aiDataList.Add((aiDataId, aiData.value));
-                };
+                }
 
                 string aiDataListLog = $"{card.Id} 카드. aiDataIds {string.Join(", ", aiDataIds)} 중 중 하나 선택";
 
@@ -110,7 +110,7 @@ namespace ERang
         /// <summary>
         /// 타겟 선택 카드 타입 확인
         /// </summary>
-        public bool IsSelectAttackType(BaseCard card)
+        public bool IsSelectAttackType(GameCard card)
         {
             int aiDataId = GetCardAiDataId(card);
 
@@ -125,7 +125,7 @@ namespace ERang
         /// <summary>
         /// 핸드 온 카드 확인
         /// </summary>
-        public bool IsHandOnCard(BaseCard card)
+        public bool IsHandOnCard(GameCard card)
         {
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
 
@@ -172,7 +172,7 @@ namespace ERang
         /// <summary>
         /// 공격 타입이 Select 이면 선택 가능한 슬롯 번호 얻기
         /// </summary>
-        public List<int> GetTargetSlotNumbers(BaseCard card)
+        public List<int> GetTargetSlotNumbers(GameCard card)
         {
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
 
@@ -220,11 +220,11 @@ namespace ERang
         /// <summary>
         /// HandOn 어빌리티를 가진 카드 얻기
         /// </summary>
-        public List<(BaseCard card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(List<BaseCard> handCards)
+        public List<(GameCard card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(List<GameCard> handCards)
         {
-            List<(BaseCard card, AiData aiData, List<AbilityData> abilities)> handOnCards = new List<(BaseCard, AiData, List<AbilityData>)>();
+            List<(GameCard card, AiData aiData, List<AbilityData> abilities)> handOnCards = new List<(GameCard, AiData, List<AbilityData>)>();
 
-            foreach (BaseCard handCard in handCards)
+            foreach (GameCard handCard in handCards)
             {
                 int aiDataId = GetCardAiDataId(handCard);
 
@@ -274,7 +274,7 @@ namespace ERang
         {
             var reactionAiData = (default(AiData), default(List<BSlot>));
 
-            BaseCard card = reactionSlot.Card;
+            GameCard card = reactionSlot.Card;
 
             if (card == null)
             {
@@ -333,7 +333,7 @@ namespace ERang
         /// </summary>
         public (AiData, List<BSlot>) GetTurnStartActionAiDataId(BSlot selfSlot, List<BSlot> opponentSlots)
         {
-            BaseCard card = selfSlot.Card;
+            GameCard card = selfSlot.Card;
 
             List<(AiGroupData.Reaction, ConditionData)> reactionPairs = GetCardReactionPairs(card, ConditionCheckPoint.TurnStart);
 
@@ -386,7 +386,7 @@ namespace ERang
         /// <param name="card"></param>
         /// <param name="checkPoint"></param>
         /// <returns></returns>
-        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(BaseCard card, ConditionCheckPoint checkPoint)
+        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(GameCard card, ConditionCheckPoint checkPoint)
         {
             List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new();
 

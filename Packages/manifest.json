@@ -4,6 +4,7 @@
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "2.4.3",
     "com.unity.feature.development": "1.0.1",
+    "com.unity.ide.windsurf": "https://github.com/Asuta/com.unity.ide.windsurf.git",
     "com.unity.netcode.gameobjects": "1.9.1",
     "com.unity.postprocessing": "3.4.0",
     "com.unity.render-pipelines.universal": "14.0.11",

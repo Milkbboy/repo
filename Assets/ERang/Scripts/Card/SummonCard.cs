@@ -18,7 +18,7 @@ namespace ERang
             discardAnimation = GetComponent<DiscardAnimation>();
         }
 
-        public void SetCard(BaseCard card)
+        public void SetCard(GameCard card)
         {
             cardUI.SetCard(card);
         }

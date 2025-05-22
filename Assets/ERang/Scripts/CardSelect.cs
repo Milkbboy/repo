@@ -40,9 +40,9 @@ namespace ERang
             selectCardCount.text = $"{selectCards.Count}/{this.maxSelectCount}";
         }
 
-        public void DrawCards(List<BaseCard> baseCards)
+        public void DrawCards(List<GameCard> gameCards)
         {
-            foreach (BaseCard card in baseCards)
+            foreach (GameCard card in gameCards)
             {
                 GameObject cardObject = Instantiate(cardPrefab, transform);
                 cardObject.name = $"SelectCard_{card.Id}";

@@ -31,8 +31,8 @@ namespace ERang
             // 카드 선택 공격 타입이면 어빌리티 데미지 값으로 설정
             int damage = 0;
 
-            if (selfSlot.Card is CreatureCard)
-                damage = (selfSlot.Card as CreatureCard).Atk;
+            if (selfSlot.Card.CardType == CardType.Creature)
+                damage = selfSlot.Card.State.Atk;
 
             if (Constants.SelectAttackTypes.Contains(aiData.attackType))
                 damage = cardAbility.abilityValue;
@@ -41,7 +41,7 @@ namespace ERang
             if (aiData.type == AiDataType.Ranged)
                 yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, new List<BSlot> { targetSlot }, atkCount, damage));
 
-            BaseCard card = targetSlot.Card;
+            GameCard card = targetSlot.Card;
 
             if (card == null)
             {
@@ -49,16 +49,16 @@ namespace ERang
                 yield break;
             }
 
-            int beforeHp = card.Hp;
-            int beforeDef = card.Def;
+            int beforeHp = card.State.Hp;
+            int beforeDef = card.State.Def;
 
             for (int i = 0; i < atkCount; i++)
             {
                 yield return StartCoroutine(targetSlot.TakeDamage(damage));
             }
 
-            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.Hp, damage * atkCount));
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, card.Def, damage * atkCount));
+            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.State.Hp, damage * atkCount));
+            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, card.State.Def, damage * atkCount));
         }
     }
 }

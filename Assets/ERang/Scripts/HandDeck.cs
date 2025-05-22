@@ -123,7 +123,7 @@ namespace ERang
         /// 카드 생성
         /// </summary>
         /// <param name="card"></param>
-        public IEnumerator SpawnHandCard(BaseCard card)
+        public IEnumerator SpawnHandCard(GameCard card)
         {
             GameObject cardObject = Instantiate(cardPrefab, handDeckTransform);
             cardObject.name = $"HandCard_{card.Id}";
@@ -179,7 +179,7 @@ namespace ERang
         /// <param name="cardUid"></param>
         public void RemoveHandCard(string cardUid)
         {
-            HCard handCard = hCards.Find(x => x.CardUid == cardUid);
+            HCard handCard = hCards.Find(x => x.Card.Uid == cardUid);
 
             if (handCard == null)
                 return;
@@ -221,7 +221,7 @@ namespace ERang
                 yield break;
             }
 
-            BaseCard card = Utils.MakeCard(cardData);
+            GameCard card = Utils.MakeCard(cardData);
 
             GameObject cardObject = Instantiate(summonCardPrefab, transform);
             cardObject.name = $"SummonCard_{card.Id}";

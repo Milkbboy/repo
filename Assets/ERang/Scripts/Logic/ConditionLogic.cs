@@ -46,7 +46,7 @@ namespace ERang
 
             foreach (var targetSlot in targetSlots)
             {
-                BaseCard targetCard = targetSlot.Card;
+                GameCard targetCard = targetSlot.Card;
 
                 // 슬롯에 카드가 없으면 패스
                 if (targetCard == null)
@@ -86,7 +86,7 @@ namespace ERang
                         // 대상의 체력 상태 확인
                         case ConditionType.Hp:
                             if (targetCard is CreatureCard creatureCard)
-                                compareValue = creatureCard.Hp;
+                                compareValue = creatureCard.State.Hp;
                             else
                                 Debug.LogWarning($"{selfSlot.SlotNum}번 슬롯 카드({selfSlot.Card.Id}). ConditionType.Hp 에 대한 {targetCard.CardType} 카드 아님");
                             break;
