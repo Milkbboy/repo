@@ -40,8 +40,6 @@ namespace ERang
 
             // TextMeshPro의 MeshRenderer를 제외한 Renderer 배열 생성
             renderers = System.Array.FindAll(renderers, r => !(r is MeshRenderer && r.GetComponent<TextMeshPro>() != null));
-
-            // Debug.Log($"textMeshPros.Length: {textMeshPros.Length}");
         }
 
         void Start()
@@ -67,7 +65,8 @@ namespace ERang
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
             mouseOffset = transform.position - objPosition;
 
-            // Debug.Log($"Draggable. 현재 위치: {transform.position}, originalPosition: {originalPosition}");
+            // 드래그 시작 이벤트 발생
+            CardEvents.TriggerDraggingCardChanged(gameObject);
         }
 
         void OnMouseDrag()
@@ -92,8 +91,7 @@ namespace ERang
                 if (hCard.Card is MagicCard magicCard && magicCard.IsSelectAttackType)
                 {
                     MoveCardToCenter();
-
-                    HandDeck.Instance.SetTargettingArraow(true);
+                    CardEvents.TriggerTargetingArrowVisibilityChanged(true);
                 }
             }
         }
@@ -104,15 +102,15 @@ namespace ERang
             isCentered = false;
 
             transform?.DOScale(originalScale, animationDuration);
-
             ResetSortingOrder();
+
+            // 드래그 종료 이벤트 발생
+            CardEvents.TriggerDraggingCardChanged(null);
+            CardEvents.TriggerTargetingArrowVisibilityChanged(false);
         }
 
         void OnMouseEnter()
         {
-            if (HandDeck.Instance.DraggingCard != null)
-                return;
-
             if (isDragging)
                 return;
 
@@ -136,9 +134,6 @@ namespace ERang
 
         void OnMouseExit()
         {
-            if (HandDeck.Instance.DraggingCard != null)
-                return;
-
             if (isDragging)
                 return;
 
@@ -171,7 +166,6 @@ namespace ERang
         private void MoveCardToCenter()
         {
             isCentered = true;
-
             transform.DOMove(new Vector3(0, initialYPosition, originalPosition.z), animationDuration);
         }
     }

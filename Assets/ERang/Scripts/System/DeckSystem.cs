@@ -20,17 +20,15 @@ namespace ERang
         public List<GameCard> ExtinctionCards => extinctionCards;
         public List<GameCard> BuildingCards => buildingCards;
 
-        private bool isCreatedStarCard = false;
         private readonly int maxHandCardCount = 5;
         private readonly System.Random random = new();
 
-        private readonly List<GameCard> creatureCards = new(); // 마스터 크리쳐 카드
-        private readonly List<GameCard> buildingCards = new(); // 건물 카드
-
-        [SerializeField] private List<GameCard> deckCards = new List<GameCard>();
+        [SerializeField] private List<GameCard> deckCards = new();
         private List<GameCard> handCards = new();
         private readonly List<GameCard> graveCards = new();
         private readonly List<GameCard> extinctionCards = new();
+        private readonly List<GameCard> buildingCards = new(); // 건물 카드
+        private readonly List<GameCard> creatureCards = new(); // 마스터 크리쳐 카드
 
         void Awake()
         {
@@ -45,22 +43,9 @@ namespace ERang
         /// <summary>
         /// 마스터 덱 카드 생성
         /// </summary>
-        public void CreateMasterCards(MasterCard masterCard)
+        public void CreateMasterCards(List<int> cardIds)
         {
-            if (isCreatedStarCard == true)
-            {
-                Debug.LogError("이미 마스터 시작 카드 생성으로 allCards => deckCards 복사");
-
-                Clear();
-
-                // allCards 를 deckCards 로 복사
-                deckCards.AddRange(Player.Instance.AllCards);
-
-                Debug.Log($"deckCards.Count: {deckCards.Count}, {string.Join(", ", deckCards.Select(card => card.Id))}");
-                return;
-            }
-
-            foreach (int cardId in masterCard.CardIds)
+            foreach (int cardId in cardIds)
             {
                 CardData cardData = CardData.GetCardData(cardId);
 
@@ -81,8 +66,6 @@ namespace ERang
                 Player.Instance.AllCards.Add(card);
                 deckCards.Add(card);
             }
-
-            isCreatedStarCard = true;
         }
 
         /// <summary>

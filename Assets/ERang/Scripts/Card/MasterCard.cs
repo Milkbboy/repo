@@ -54,11 +54,9 @@ namespace ERang
             CardType = CardType.Master;
             CardImage = masterData.masterTexture;
 
-            State.SetHp(masterData.maxHp);
-            State.SetMana(masterData.startMana);
-            State.SetMaxHp(masterData.maxHp);
-            State.SetMaxMana(masterData.maxMana);
-            ManaPerTurn = masterData.manaPerTurn;
+            this.masterData = masterData;
+
+            InitializeFromMasterData();
         }
 
         public void SetCardIds(List<int> cardIds)

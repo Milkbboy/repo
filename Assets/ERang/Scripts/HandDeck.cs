@@ -9,7 +9,7 @@ namespace ERang
     {
         public static HandDeck Instance { get; private set; }
 
-        public HCard DraggingCard => draggingCard;
+        public HCard DraggingCard { get; private set; }
 
         // 핸드 카드 생성을 위한 프리팹
         public GameObject cardPrefab;
@@ -23,8 +23,6 @@ namespace ERang
 
         // 핸드 카드 리스트
         private readonly List<HCard> hCards = new();
-
-        private HCard draggingCard;
 
         private float cardWidth = 0f;
         private float cardSpacing = 1f;
@@ -51,13 +49,35 @@ namespace ERang
             flipSound = Resources.Load<AudioClip>("Audio/flipcard");
         }
 
+        void OnEnable()
+        {
+            CardEvents.OnDraggingCardChanged += HandleDraggingCardChanged;
+            CardEvents.OnTargetingArrowVisibilityChanged += HandleTargetingArrowVisibilityChanged;
+        }
+
+        void OnDisable()
+        {
+            CardEvents.OnDraggingCardChanged -= HandleDraggingCardChanged;
+            CardEvents.OnTargetingArrowVisibilityChanged -= HandleTargetingArrowVisibilityChanged;
+        }
+
+        private void HandleDraggingCardChanged(GameObject card)
+        {
+            DraggingCard = card?.GetComponent<HCard>();
+        }
+
+        private void HandleTargetingArrowVisibilityChanged(bool isVisible)
+        {
+            SetTargettingArraow(isVisible);
+        }
+
         /// <summary>
         /// 드래깅 카드 설정
         /// - 다른 핸드 카드의 OnMouseEnter, OnMouseExit 이벤트를 방지하기 위해 설정
         /// </summary>
         public void SetDraggingCard(HCard hCard)
         {
-            draggingCard = hCard;
+            DraggingCard = hCard;
         }
 
         public void MagicCardUse(HCard hCard)
@@ -109,14 +129,10 @@ namespace ERang
         /// </summary>
         public bool IsTargetSlot(int slotNum)
         {
-            HCard dragginCard = hCards.Find(x => x.IsDragging());
-
-            // Debug.Log($"HandDeck. IsTargetSlot. Dragging Card: {dragginCard.Card.LogText}, 타겟 슬롯: {bSlot.LogText}, TargetSlotNumbers: {string.Join(", ", dragginCard.TargetSlotNumbers)}, SlotNum: {bSlot.SlotNum}");  
-
-            if (dragginCard == null)
+            if (DraggingCard == null)
                 return false;
 
-            return dragginCard.IsContainsSlotNum(slotNum);
+            return DraggingCard.IsContainsSlotNum(slotNum);
         }
 
         /// <summary>

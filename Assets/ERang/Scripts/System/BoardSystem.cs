@@ -16,8 +16,6 @@ namespace ERang
         public readonly CardType[] buildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
 
         public List<BSlot> AllSlots => bSlots;
-
-        public MasterCard MasterCard => masterCard;
         public BSlot bSlotPrefab;
 
         private BoardUI boardUI;
@@ -25,7 +23,6 @@ namespace ERang
         private readonly List<BSlot> leftBSlots = new();
         private readonly List<BSlot> rightBSlots = new();
         private readonly List<BSlot> buildingSlots = new();
-        private MasterCard masterCard;
 
         void Awake()
         {
@@ -117,7 +114,7 @@ namespace ERang
             }
         }
 
-        public IEnumerator CreateMasterCard(MasterCard masterCard)
+        public IEnumerator EquipMasterCard(MasterCard masterCard)
         {
             yield return null;
 

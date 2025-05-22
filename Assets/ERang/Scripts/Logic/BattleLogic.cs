@@ -64,11 +64,10 @@ namespace ERang
             Debug.Log($"----------------- BATTLE START {Player.Instance.floor} 층 ({Player.Instance.levelId}) -----------------");
 
             // 마스터 카드 생성
-            StartCoroutine(BoardSystem.Instance.CreateMasterCard(masterCard));
-            masterCard = BoardSystem.Instance.MasterCard;
+            StartCoroutine(BoardSystem.Instance.EquipMasterCard(masterCard));
 
             // 마스터 크리쳐 카드 생성
-            deck.CreateMasterCards(masterCard);
+            deck.CreateMasterCards(masterCard.CardIds);
 
             // 골드 설정
             BoardSystem.Instance.SetGold(masterCard.Gold);
