@@ -22,6 +22,7 @@ namespace ERang
     {
         string Uid { get; }
         int Id { get; }
+        string Name { get; }
         CardType CardType { get; }
         bool InUse { get; }
         Texture2D CardImage { get; }

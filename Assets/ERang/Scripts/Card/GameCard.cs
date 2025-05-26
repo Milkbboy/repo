@@ -20,6 +20,7 @@ namespace ERang
         // 기본 속성
         private string uid;
         private int id;
+        private string name;
         private CardType cardType;
         private int aiGroupId;
         private bool inUse;
@@ -28,6 +29,7 @@ namespace ERang
 
         public string Uid { get => uid; protected set => uid = value; }
         public int Id { get => id; protected set => id = value; }
+        public string Name { get => name; protected set => name = value; }
         public CardType CardType { get => cardType; protected set => cardType = value; }
         public int AiGroupId { get => usesAi ? aiGroupId : 0; protected set => aiGroupId = value; }
         public int AiGroupIndex { get; set; }
@@ -61,6 +63,7 @@ namespace ERang
         {
             Uid = Utils.GenerateShortUniqueID();
             Id = cardData.card_id;
+            Name = cardData.nameDesc;
             CardType = cardData.cardType;
             InUse = cardData.inUse;
             IsExtinction = cardData.extinction;
@@ -98,6 +101,7 @@ namespace ERang
         public void UpdateCardData(CardData cardData)
         {
             Id = cardData.card_id;
+            Name = cardData.nameDesc;
             CardType = cardData.cardType;
             InUse = cardData.inUse;
             IsExtinction = cardData.extinction;

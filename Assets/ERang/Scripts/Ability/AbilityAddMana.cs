@@ -25,13 +25,13 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
+                GameLogger.Log(LogCategory.ERROR, $"{targetSlot.LogText} 카드 없음");
                 yield break;
             }
 
             if (card.CardType != CardType.Master)
             {
-                Debug.LogWarning($"{card.LogText} 마스터 카드 아님.");
+                GameLogger.Log(LogCategory.ERROR, $"{card.LogText} 마스터 카드 아님");
                 yield break;
             }
 
@@ -43,7 +43,7 @@ namespace ERang
             else
                 card.DecreaseMana(value);
 
-            Debug.Log($"<color=#257dca>마나 변화량 {(isAdd ? value : value * -1)}</color>({beforeMana} => {card.State.Mana})");
+            GameLogger.LogCardState(card.Name, "마나", beforeMana, card.State.Mana, $"변화량: {(isAdd ? "+" : "-")}{value}");
 
             yield return new WaitForSeconds(0.1f);
         }

@@ -11,11 +11,13 @@ namespace ERang
 
         public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
+            GameLogger.LogAbilityDetail($"공격력 버프 적용 시작 - 대상: {targetSlot.Card?.Name ?? targetSlot.LogText}");
             yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
         public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
+            GameLogger.LogAbilityDetail($"공격력 버프 해제 시작 - 대상: {targetSlot.Card?.Name ?? targetSlot.LogText}");
             yield return StartCoroutine(Apply(cardAbility, targetSlot, false));
         }
 
@@ -25,25 +27,31 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {targetSlot.LogText} 카드 없음");
                 yield break;
             }
 
             if (card.CardType != CardType.Creature)
             {
-                Debug.LogWarning($"{card.LogText} 크리쳐 카드 아님.");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {card.LogText} 크리쳐 카드 아님. 현재 타입: {card.CardType}");
                 yield break;
             }
 
-            int before = card.State.Atk;
+            int beforeAtk = card.State.Atk;
             int value = cardAbility.abilityValue;
+
+            GameLogger.LogAbilityDetail($"공격력 {(isAtkUp ? "증가" : "감소")} - {card.Name}: {beforeAtk} {(isAtkUp ? "+" : "-")}{value}");
 
             if (isAtkUp)
                 card.IncreaseAttack(value);
             else
                 card.DecreaseAttack(value);
 
-            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.State.Atk, isAtkUp ? value : value * -1));
+            int afterAtk = card.State.Atk;
+
+            GameLogger.LogAbilityDetail($"공격력 변경 완료 - {card.Name}: {beforeAtk} → {afterAtk}");
+
+            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeAtk, card.State.Atk, isAtkUp ? value : value * -1));
 
             yield return new WaitForSeconds(0.1f);
         }

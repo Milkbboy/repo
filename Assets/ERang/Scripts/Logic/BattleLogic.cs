@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
-using Newtonsoft.Json;
 using ERang.Data;
 
 namespace ERang
@@ -32,6 +31,10 @@ namespace ERang
 
         private bool keepSatiety;
 
+        // 배틀 통계 추적용
+        private int usedCardCount = 0;
+        private int totalDamageDealt = 0;
+
         // for test
         GameCard testCard;
         private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
@@ -51,26 +54,30 @@ namespace ERang
             masterCard = Player.Instance.masterCard;
             // floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation?.eventType ?? EventType.None}";
 
+            GameLogger.LogGameFlow("BATTLE INITIALIZE", $"{Player.Instance.floor}층 ({Player.Instance.levelId})");
+            GameLogger.Log(LogCategory.DATA, $"마스터 카드: {masterCard.Name} (HP: {masterCard.State.Hp}, 마나: {masterCard.ManaPerTurn})");
+
             BoardSystem.Instance.CreateBoardSlots(masterCard.CreatureSlotCount);
+            GameLogger.Log(LogCategory.CARD, $"보드 슬롯 생성: {masterCard.CreatureSlotCount}개");
 
             LevelData levelData = LevelGroupData.GetLevelData(Player.Instance.levelId);
 
             if (levelData == null)
             {
-                Debug.LogError($"레벨({Player.Instance.levelId}) LevelGroupData {Utils.RedText("테이블 데이터 없음")}");
+                GameLogger.Log(LogCategory.ERROR, $"❌ 레벨({Player.Instance.levelId}) LevelGroupData 테이블 데이터 없음");
                 return;
             }
-
-            Debug.Log($"----------------- BATTLE START {Player.Instance.floor} 층 ({Player.Instance.levelId}) -----------------");
 
             // 마스터 카드 생성
             StartCoroutine(BoardSystem.Instance.EquipMasterCard(masterCard));
 
             // 마스터 크리쳐 카드 생성
             deck.CreateMasterCards(masterCard.CardIds);
+            GameLogger.Log(LogCategory.CARD, $"마스터 덱 생성: {string.Join(", ", masterCard.CardIds)}");
 
             // 골드 설정
             BoardSystem.Instance.SetGold(masterCard.Gold);
+            GameLogger.LogCardState("마스터", "골드", 0, masterCard.Gold, "초기 설정");
 
             // 루시 포만감 UI 설정
             if (masterCard.MasterType == MasterType.Luci)
@@ -79,7 +86,9 @@ namespace ERang
 
                 if (keepSatiety)
                 {
-                    masterCard.SetSatiety(PlayerPrefsUtility.GetInt("Satiety", masterCard.Satiety));
+                    int savedSatiety = PlayerPrefsUtility.GetInt("Satiety", masterCard.Satiety);
+                    masterCard.SetSatiety(savedSatiety);
+                    GameLogger.LogCardState("마스터", "포만감", masterCard.Satiety, savedSatiety, "이전 데이터 로드");
                 }
 
                 satietyUI.UpdateSatiety(masterCard.Satiety, masterCard.MaxSatiety);
@@ -93,6 +102,9 @@ namespace ERang
 
         void Update()
         {
+            // 런타임 로그 컨트롤
+            GameLogger.HandleRuntimeInput();
+
             ActionQueueProcess();
         }
 
@@ -167,21 +179,27 @@ namespace ERang
         {
             yield return new WaitForSeconds(.3f);
 
-            // ToastNotification.Show($"!! TURN START !! ({turnCount})");
-            Debug.Log($"----------------- {turnCount} TURN START -----------------");
+            GameLogger.LogGameFlow("TURN START", $"턴 {turnCount}");
 
             // 턴 카운트 설정
             BoardSystem.Instance.SetTurnCount(turnCount);
 
             // 마스터 행동 시작
             BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
+            GameLogger.Log(LogCategory.GAME_FLOW, "마스터 사전 어빌리티 실행 시작");
             yield return StartCoroutine(CardPriorAbility(masterSlot));
 
             BoardSystem.Instance.SetHp(masterCard.State.Hp);
+            GameLogger.LogCardState("마스터", "체력", masterCard.State.Hp, masterCard.State.Hp, "턴 시작 체력 설정");
+
+            int oldMana = masterCard.State.Mana;
             BoardSystem.Instance.SetMana(masterCard.ManaPerTurn);
+            GameLogger.LogCardState("마스터", "마나", oldMana, masterCard.ManaPerTurn, "턴 시작 보충");
 
             // 핸드 카드 만들기
+            GameLogger.Log(LogCategory.CARD, "핸드 카드 생성 시작");
             yield return StartCoroutine(deck.MakeHandCards());
+            GameLogger.Log(LogCategory.CARD, $"핸드 카드 생성 완료: {deck.HandCards.Count}장");
 
             // 핸드 카드 HandOn 어빌리티 액션
             yield return HandOnCardAbilityAction(deck.HandCards);
@@ -194,13 +212,16 @@ namespace ERang
         {
             if (isTruenEndProcessing)
             {
-                Debug.LogWarning("이미 턴 종료 처리 중");
+                GameLogger.Log(LogCategory.ERROR, "❌ 이미 턴 종료 처리 중");
                 return;
             }
 
             isTruenEndProcessing = true;
 
-            Debug.Log($"----------------- {turnCount} TURN END -----------------");
+            GameLogger.LogGameFlow("TURN END", $"턴 {turnCount}");
+
+            // 턴 요약 로그
+            GameLogger.LogBattleSummary(turnCount, masterCard.State.Hp, masterCard.State.MaxHp, usedCardCount, totalDamageDealt);
 
             StartCoroutine(TrunEndProcess());
         }
@@ -246,79 +267,6 @@ namespace ERang
             turnCount += 1;
 
             BoardSystem.Instance.SetTurnCount(turnCount);
-        }
-
-        IEnumerator BattleEnd(bool isWin)
-        {
-            int nextFloor = 0;
-            int locationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
-
-            if (isWin)
-            {
-                resultText.text = "YOU WIN";
-
-                // 이기면 층 증가
-                nextFloor = Player.Instance.floor + 1;
-                Player.Instance.SaveMaster(nextFloor, locationId, keepSatiety);
-            }
-            else
-            {
-                resultText.text = "YOU LOSE";
-
-                PlayerPrefsUtility.SetInt("MasterId", 0);
-                PlayerPrefsUtility.SetInt("LevelId", 0);
-                PlayerPrefsUtility.SetInt("LastLocationId", 0);
-                PlayerPrefsUtility.SetInt("MasterHp", 0);
-
-                PlayerPrefsUtility.SetInt("AreaId", 0);
-                PlayerPrefsUtility.SetString("MasterCards", null);
-            }
-
-            Debug.Log($"배틀 종료 {isWin}, loastLocationId: {locationId}, nextFloor: {nextFloor}");
-
-            yield return new WaitForSeconds(2f);
-
-            GameObject nextSceneObject = GameObject.Find("Scene Manager");
-
-            if (nextSceneObject.TryGetComponent<NextScene>(out NextScene nextScene))
-                nextScene.Play(isWin ? "Event" : "Lobby");
-
-            PlayerPrefsUtility.SetString("LastScene", "Battle");
-        }
-
-        /// <summary>
-        /// 턴 시작 액션
-        /// </summary>
-        IEnumerator TurnStartMonsterReaction()
-        {
-            List<BSlot> reactionSlots = BoardSystem.Instance.GetRightBoardSlots();
-            List<BSlot> opponentSlots = BoardSystem.Instance.GetLeftBoardSlots();
-
-            foreach (BSlot boardSlot in reactionSlots)
-            {
-                GameCard card = boardSlot.Card;
-
-                if (card == null)
-                {
-                    // Debug.LogWarning($"{boardSlot.Slot}번 슬롯 장착된 카드가 없어 액션 패스");
-                    continue;
-                }
-
-                // AiGroupData 액션 AiDtaId 얻기
-                (AiData aiData, List<BSlot> targetSlots) = AiLogic.Instance.GetTurnStartActionAiDataId(boardSlot, opponentSlots);
-
-                if (aiData == null)
-                {
-                    Debug.LogWarning($"{boardSlot.LogText} AiGroupData({card.AiGroupId})에 대한 이번 턴({turnCount}) 시작 리액션 안함");
-                    continue;
-                }
-
-                List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
-
-                // 어빌리티 적용
-                foreach (AbilityData abilityData in abilityDatas)
-                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
-            }
         }
 
         /// <summary>
@@ -373,58 +321,6 @@ namespace ERang
             {
                 yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(cardAbility, boardSlot, boardSlot));
             }
-        }
-
-        IEnumerator CardAiAction(BSlot boardSlot)
-        {
-            GameCard card = boardSlot.Card;
-
-            if (card == null)
-            {
-                // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
-                yield break;
-            }
-
-            if (card.AiGroupId == 0)
-            {
-                Debug.LogWarning($"{boardSlot.LogText} AiGroupId 가 {Utils.RedText(card.AiGroupId)}이라서 카드 액션 패스");
-                yield break;
-            }
-
-            // 카드의 행동 aiData 설정
-            int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
-
-            if (aiDataId == 0)
-            {
-                Debug.LogWarning($"{boardSlot.LogText} AiGroupData({card.AiGroupId})에 해당하는 aiDataId 얻기 실패");
-                yield break;
-            }
-
-            // 1. AiData 얻고
-            AiData aiData = AiData.GetAiData(aiDataId);
-
-            if (aiData == null)
-            {
-                Debug.LogError($"{boardSlot.LogText} AiData({aiDataId}) <color=red>테이블 데이터 없음</color> ");
-                yield break;
-            }
-
-            // 2. AiData 에 설정된 타겟 얻기
-            List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, boardSlot, "CardAiAction");
-
-            if (targetSlots.Count == 0)
-            {
-                Debug.LogWarning($"{boardSlot.LogText} 설정 타겟({aiData.target}) 없음 ");
-                yield break;
-            }
-
-            List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
-
-            // 어빌리티 적용
-            foreach (AbilityData abilityData in abilityDatas)
-                yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnEndBoardSlot));
-
-            yield return new WaitForSeconds(boardTurnEndDelay);
         }
 
         /// <summary>
@@ -505,19 +401,22 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"핸드에 카드({cardUid}) 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ 핸드에 카드({cardUid}) 없음");
                 yield break;
             }
 
-            int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
+            GameLogger.LogCardChain(card.Name, "효과 실행 시작");
 
+            int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
             AiData aiData = AiData.GetAiData(aiDataId);
 
             if (aiData == null)
             {
-                Debug.LogError($"{card.LogText} 카드 AiData 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {card.LogText} 카드 AiData 없음");
                 yield break;
             }
+
+            GameLogger.LogCardChain(card.Name, "AI 데이터 로드", $"AI_ID: {aiData.ai_Id}");
 
             // 타겟 설정 카드 확인
             bool isSelectAttackType = Constants.SelectAttackTypes.Contains(aiData.attackType);
@@ -530,35 +429,197 @@ namespace ERang
                 new List<BSlot> { targetSlot } :
                 TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandCardUse");
 
-            Debug.Log($"{card.LogText} 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData.ai_Id}, aiData.target: {aiData.target}, targetSlot: {targetSlot?.SlotNum ?? -1}, tagetSlots: {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
+            string targetInfo = string.Join(", ", targetSlots.Select(s => s.Card?.Name ?? $"빈슬롯{s.SlotNum}"));
+            GameLogger.LogCardChain(card.Name, "타겟 확정", targetInfo);
 
             // 대상 선택 사용 카드
             if (isSelectAttackType)
             {
                 if (targetSlot == null)
                 {
-                    Debug.LogError($"{card.LogText} 마법 대상이 없어서 카드 사용 실패");
+                    GameLogger.Log(LogCategory.ERROR, $"❌ {card.LogText} 마법 대상이 없어서 카드 사용 실패");
                     yield break;
                 }
 
                 if (targetSlots.Contains(targetSlot) == false)
                 {
-                    Debug.LogError($"{card.LogText} 대상 슬롯이 아닌 슬롯에 카드 사용 실패");
+                    GameLogger.Log(LogCategory.ERROR, $"❌ {card.LogText} 대상 슬롯이 아닌 슬롯에 카드 사용 실패");
                     yield break;
                 }
             }
 
             // 마스터 핸드 카드 제거 먼저 하고 어빌리티 발동 (먼저 삭제하지 않으면 핸드카드 선택 어빌리티에서 보일 수 있음)
             deck.RemoveHandCard(cardUid);
+            GameLogger.LogCardChain(card.Name, "핸드에서 제거");
+
+            List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
+            GameLogger.LogCardChain(card.Name, "어빌리티 체인 시작", $"{abilityDatas.Count}개 어빌리티");
+
+            // 어빌리티 적용
+            foreach (AbilityData abilityData in abilityDatas)
+            {
+                GameLogger.LogAbility(abilityData.nameDesc, card.Name, targetInfo);
+                yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
+            }
+
+            // 카드 비용 소모
+            int oldMana = masterCard.State.Mana;
+            int oldGold = masterCard.Gold;
+
+            // 카드 비용 소모
+            BoardSystem.Instance.CardCost(masterCard, card);
+
+            // 비용 변화 로그
+            if (card.State.Mana > 0)
+                GameLogger.LogCardState("마스터", "마나", oldMana, masterCard.State.Mana, card.Name);
+
+            if (card is IGoldCard goldCard && goldCard.Gold > 0)
+                GameLogger.LogCardState("마스터", "골드", oldGold, masterCard.Gold, card.Name);
+
+            usedCardCount++;
+            GameLogger.LogCardChain(card.Name, "사용 완료", "", $"마나 {card.State.Mana} 소모");
+
+        }
+
+        /// <summary>
+        /// 턴 시작 액션
+        /// </summary>
+        IEnumerator TurnStartMonsterReaction()
+        {
+            List<BSlot> reactionSlots = BoardSystem.Instance.GetRightBoardSlots();
+            List<BSlot> opponentSlots = BoardSystem.Instance.GetLeftBoardSlots();
+
+            GameLogger.Log(LogCategory.AI, "몬스터 턴 시작 리액션 시작");
+
+            foreach (BSlot boardSlot in reactionSlots)
+            {
+                GameCard card = boardSlot.Card;
+
+                if (card == null)
+                    continue;
+
+                // AiGroupData 액션 AiDtaId 얻기
+                (AiData aiData, List<BSlot> targetSlots) = AiLogic.Instance.GetTurnStartActionAiDataId(boardSlot, opponentSlots);
+
+                if (aiData == null)
+                {
+                    GameLogger.LogAI(boardSlot.LogText, $"턴 시작 리액션 없음", "", $"AiGroupData({card.AiGroupId})");
+                    continue;
+                }
+
+                string targetInfo = string.Join(", ", targetSlots.Select(s => s.Card?.Name ?? $"빈슬롯{s.SlotNum}"));
+                GameLogger.LogAI(boardSlot.LogText, "턴 시작 리액션", targetInfo, $"AI_ID: {aiData.ai_Id}");
+
+                List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
+
+                // 어빌리티 적용
+                foreach (AbilityData abilityData in abilityDatas)
+                {
+                    GameLogger.LogAbility(abilityData.nameDesc, boardSlot.LogText, targetInfo);
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
+                }
+            }
+        }
+
+        IEnumerator CardAiAction(BSlot boardSlot)
+        {
+            GameCard card = boardSlot.Card;
+
+            if (card == null)
+            {
+                // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
+                yield break;
+            }
+
+            if (card.AiGroupId == 0)
+            {
+                GameLogger.LogAI(boardSlot.LogText, "AI 행동 패스", "", $"AiGroupId가 {card.AiGroupId}");
+                yield break;
+            }
+
+            // 카드의 행동 aiData 설정
+            int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
+
+            if (aiDataId == 0)
+            {
+                GameLogger.Log(LogCategory.ERROR, $"❌ {boardSlot.LogText} AiGroupData({card.AiGroupId})에 해당하는 aiDataId 얻기 실패");
+                yield break;
+            }
+
+            // 1. AiData 얻고
+            AiData aiData = AiData.GetAiData(aiDataId);
+
+            if (aiData == null)
+            {
+                GameLogger.Log(LogCategory.ERROR, $"❌ {boardSlot.LogText} AiData({aiDataId}) 테이블 데이터 없음");
+                yield break;
+            }
+
+            // 2. AiData 에 설정된 타겟 얻기
+            List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, boardSlot, "CardAiAction");
+
+            if (targetSlots.Count == 0)
+            {
+                GameLogger.LogAI(boardSlot.LogText, "타겟 없음", aiData.target.ToString());
+                yield break;
+            }
+
+            string targetInfo = string.Join(", ", targetSlots.Select(s => s.Card?.Name ?? $"빈슬롯{s.SlotNum}"));
+            GameLogger.LogAI(boardSlot.LogText, "AI 행동 시작", targetInfo, $"AI_ID: {aiData.ai_Id}");
 
             List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
 
             // 어빌리티 적용
             foreach (AbilityData abilityData in abilityDatas)
-                yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
+            {
+                GameLogger.LogAbility(abilityData.nameDesc, boardSlot.LogText, targetInfo);
+                yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnEndBoardSlot));
+            }
 
-            // 카드 비용 소모
-            BoardSystem.Instance.CardCost(masterCard, card);
+            yield return new WaitForSeconds(boardTurnEndDelay);
+        }
+
+        IEnumerator BattleEnd(bool isWin)
+        {
+            GameLogger.LogGameFlow("BATTLE END", isWin ? "승리" : "패배");
+
+            int nextFloor = 0;
+            int locationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
+
+            if (isWin)
+            {
+                resultText.text = "YOU WIN";
+                nextFloor = Player.Instance.floor + 1;
+                Player.Instance.SaveMaster(nextFloor, locationId, keepSatiety);
+
+                GameLogger.Log(LogCategory.GAME_FLOW, $"🎉 승리! 다음 층: {nextFloor}");
+            }
+            else
+            {
+                resultText.text = "YOU LOSE";
+
+                PlayerPrefsUtility.SetInt("MasterId", 0);
+                PlayerPrefsUtility.SetInt("LevelId", 0);
+                PlayerPrefsUtility.SetInt("LastLocationId", 0);
+                PlayerPrefsUtility.SetInt("MasterHp", 0);
+
+                PlayerPrefsUtility.SetInt("AreaId", 0);
+                PlayerPrefsUtility.SetString("MasterCards", null);
+
+                GameLogger.Log(LogCategory.GAME_FLOW, "💀 패배 - 데이터 초기화");
+            }
+
+            // 최종 배틀 통계 출력
+            GameLogger.LogBattleSummary(turnCount, masterCard.State.Hp, masterCard.State.MaxHp, usedCardCount, totalDamageDealt);
+
+            yield return new WaitForSeconds(2f);
+
+            GameObject nextSceneObject = GameObject.Find("Scene Manager");
+
+            if (nextSceneObject.TryGetComponent<NextScene>(out NextScene nextScene))
+                nextScene.Play(isWin ? "Event" : "Lobby");
+
+            PlayerPrefsUtility.SetString("LastScene", "Battle");
         }
 
         /// <summary>
@@ -626,14 +687,14 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"핸드에 카드({card.Id}) 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ 핸드에 카드({cardUid}) 없음");
                 return false;
             }
 
             if (card.InUse == false)
             {
+                GameLogger.Log(LogCategory.ERROR, $"❌ 사용할 수 없는 카드({card.Id}) InUse: false");
                 ToastNotification.Show($"card({card.Id}) is not in use");
-                Debug.LogWarning($"사용할 수 없는 카드({card.Id}) InUse: false 설정");
                 return false;
             }
 
@@ -648,8 +709,8 @@ namespace ERang
             // 필요 마나 확인
             if (masterCard.State.Mana < requiredMana)
             {
+                GameLogger.LogCardState("마스터", "마나", masterCard.State.Mana, requiredMana, "부족");
                 ToastNotification.Show($"mana({masterCard.State.Mana}) is not enough");
-                Debug.LogWarning($"핸드 카드({card.Id}) 마나 부족으로 사용 불가능({masterCard.State.Mana} < {requiredMana})");
                 return false;
             }
 
@@ -658,14 +719,13 @@ namespace ERang
             {
                 if (masterGoldCard.Gold < goldRequiredCard.Gold)
                 {
+                    GameLogger.LogCardState("마스터", "골드", masterGoldCard.Gold, goldRequiredCard.Gold, "부족");
                     ToastNotification.Show($"gold({masterCard.Gold}) is not enough");
-                    Debug.LogWarning($"핸드 카드({card.Id}) 골드 부족으로 사용 불가능({masterCard.Gold} < {goldRequiredCard.Gold})");
                     return false;
                 }
             }
 
-            Debug.Log($"핸드 카드({card.Id}) 사용 가능");
-
+            GameLogger.Log(LogCategory.CARD, $"✅ {card.Name} 사용 가능 (마나: {masterCard.State.Mana}/{requiredMana})");
             return true;
         }
 

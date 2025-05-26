@@ -11,7 +11,7 @@ namespace ERang
 
         public IEnumerator ApplySingle(GameCard card)
         {
-            Debug.Log("<color=red>---- ReducedMana ----</color> 마나 감소!!!");
+            GameLogger.LogAbility("ReducedMana", card.Name, "자기자신", "마나 감소");
 
             Apply(card, true);
 
@@ -20,7 +20,7 @@ namespace ERang
 
         public IEnumerator Release(GameCard card)
         {
-            Debug.Log("<color=red>---- ReducedMana ----</color> 감소된 마나 복구!!!");
+            GameLogger.LogAbility("ReducedMana", card.Name, "자기자신", "마나 복구");
 
             Apply(card, false);
 
@@ -43,7 +43,7 @@ namespace ERang
             {
                 if (card.CardType == CardType.Creature)
                 {
-                    Debug.Log("크리처 카드!!!!");
+                    GameLogger.LogAbilityDetail($"크리처 카드 마나 {(isReduced ? "감소" : "복구")}: {cardAbility.abilityValue}");
 
                     if (isReduced)
                         card.DecreaseMana(cardAbility.abilityValue);
@@ -53,7 +53,7 @@ namespace ERang
 
                 if (card.CardType == CardType.Magic)
                 {
-                    Debug.Log("마법 카드!!!!");
+                    GameLogger.LogAbilityDetail($"마법 카드 마나 {(isReduced ? "감소" : "복구")}: {cardAbility.abilityValue}");
 
                     if (isReduced)
                         card.DecreaseMana(cardAbility.abilityValue);

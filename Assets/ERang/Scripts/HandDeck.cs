@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ERang.Data;
 using UnityEngine;
 
@@ -84,25 +85,28 @@ namespace ERang
         {
             if (hCard.Card != null && hCard.Card is not MagicCard)
             {
-                Debug.LogWarning($"{hCard.Card.LogText}. 마법 카드가 아닙니다.");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {hCard.Card.Name}는 마법 카드가 아닙니다.");
                 return;
             }
+
+            GameLogger.LogCardChain(hCard.Card.Name, "마법 카드 사용 시작");
 
             // 공격 타입이 Select가 아닌 경우
             if (hCard.IsSelectAttackTypeCard() == false)
             {
+                GameLogger.LogCardChain(hCard.Card.Name, "즉시 발동", "", "타겟 선택 불필요");
                 BattleLogic.Instance.HandCardUse(hCard, null);
                 return;
             }
 
             if (targetingArrow == null)
             {
-                Debug.Log($"{hCard.Card.LogText}. 타겟팅 화살표가 없습니다.");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {hCard.Card.LogText} - 타겟팅 화살표가 없습니다.");
             }
 
             if (targetingArrow.SelectedSlotNum == -1)
             {
-                Debug.LogWarning($"{hCard.Card.LogText}. 타겟 슬롯이 없습니다.");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {hCard.Card.LogText} - 타겟이 선택되지 않음");
                 return;
             }
 
@@ -110,12 +114,16 @@ namespace ERang
 
             if (targetSlot == null)
             {
-                Debug.LogWarning($"{hCard.Card.LogText}. 타겟 슬롯이 없습니다.");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {hCard.Card.LogText} - 유효하지 않은 슬롯 {targetingArrow.SelectedSlotNum}");
                 return;
             }
 
+            string targetInfo = targetSlot.Card?.Name ?? $"빈 슬롯 {targetingArrow.SelectedSlotNum}";
+            GameLogger.LogCardChain(hCard.Card.Name, "타겟 선택", targetInfo);
+
             targetingArrow.EnableArrow(false);
 
+            GameLogger.LogCardChain(hCard.Card.Name, "효과 발동 요청", "", "BattleLogic으로 전달");
             BattleLogic.Instance.HandCardUse(hCard, targetSlot);
         }
 
@@ -141,6 +149,8 @@ namespace ERang
         /// <param name="card"></param>
         public IEnumerator SpawnHandCard(GameCard card)
         {
+            GameLogger.LogCardChain(card.Name, "핸드에 추가");
+
             GameObject cardObject = Instantiate(cardPrefab, handDeckTransform);
             cardObject.name = $"HandCard_{card.Id}";
 
@@ -148,19 +158,23 @@ namespace ERang
             handCard.SetCard(card);
 
             hCards.Add(handCard);
-
             DrawHandCards();
+
+            // 현재 핸드 상태 로그
+            string handCards = string.Join(", ", hCards.Select(h => h.Card.Name));
+            GameLogger.Log(LogCategory.CARD, $"🃏 현재 핸드: {handCards}");
 
             // 오디오를 재생합니다.
             if (flipSound != null)
             {
+                GameLogger.Log(LogCategory.AUDIO, "카드 뒤집기 사운드 재생");
                 audioSource.pitch = 3f; // 재생 속도를 1.5배로 설정
                 audioSource.PlayOneShot(flipSound);
                 yield return new WaitForSeconds(flipSound.length / audioSource.pitch);
             }
             else
             {
-                Debug.LogWarning("flipcard.mp3 파일을 찾을 수 없습니다.");
+                GameLogger.Log(LogCategory.ERROR, "❌ flipcard.mp3 파일을 찾을 수 없습니다.");
                 yield return null;
             }
         }
@@ -198,12 +212,28 @@ namespace ERang
             HCard handCard = hCards.Find(x => x.Card.Uid == cardUid);
 
             if (handCard == null)
+            {
+                GameLogger.Log(LogCategory.ERROR, $"❌ 핸드에서 카드({cardUid})를 찾을 수 없음");
                 return;
+            }
+
+            GameLogger.LogCardChain(handCard.Card.Name, "핸드에서 제거");
 
             hCards.Remove(handCard);
             Destroy(handCard.gameObject);
 
             DrawHandCards();
+
+            // 제거 후 핸드 상태 로그
+            if (hCards.Count > 0)
+            {
+                string remainingCards = string.Join(", ", hCards.Select(h => h.Card.Name));
+                GameLogger.Log(LogCategory.CARD, $"🃏 남은 핸드: {remainingCards}");
+            }
+            else
+            {
+                GameLogger.Log(LogCategory.CARD, "🃏 핸드가 비었습니다");
+            }
         }
 
         /// <summary>
@@ -211,9 +241,14 @@ namespace ERang
         /// </summary>
         public void TurnEndRemoveHandCard(Transform discardPos)
         {
-            foreach (HCard handCard in hCards)
+            if (hCards.Count > 0)
             {
-                handCard.DiscardAnimation(discardPos);
+                string discardedCards = string.Join(", ", hCards.Select(h => h.Card.Name));
+                GameLogger.Log(LogCategory.CARD, $"🗑️ 턴 종료 - 핸드 카드 폐기: {discardedCards}");
+                foreach (HCard handCard in hCards)
+                {
+                    handCard.DiscardAnimation(discardPos);
+                }
             }
 
             hCards.Clear();
@@ -233,11 +268,12 @@ namespace ERang
 
             if (cardData == null)
             {
-                Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ CardData 테이블에 {cardId} 카드 없음");
                 yield break;
             }
 
             GameCard card = Utils.MakeCard(cardData);
+            GameLogger.LogCardChain(card.Name, "카드 생성", deckKind.ToString());
 
             GameObject cardObject = Instantiate(summonCardPrefab, transform);
             cardObject.name = $"SummonCard_{card.Id}";
@@ -253,16 +289,19 @@ namespace ERang
             {
                 case DeckKind.Hand:
                     Deck.Instance.AddHandCard(card);
+                    GameLogger.LogCardChain(card.Name, "핸드로 이동");
                     discardAnimation.PlaySequence(handDeckTransform, SpawnHandCard(card));
                     break;
 
                 case DeckKind.Grave:
                     Deck.Instance.AddGraveCard(card);
+                    GameLogger.LogCardChain(card.Name, "무덤으로 이동");
                     discardAnimation.PlaySequence(GraveTransform, null);
                     break;
 
                 case DeckKind.Deck:
                     Deck.Instance.AddDeckCard(card);
+                    GameLogger.LogCardChain(card.Name, "덱으로 이동");
                     discardAnimation.PlaySequence(DeckTransform, null);
                     break;
             }

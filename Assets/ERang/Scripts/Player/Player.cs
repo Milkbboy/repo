@@ -38,13 +38,17 @@ namespace ERang
             masterCard.RecoverHp(hp);
         }
 
+        /// <summary>
+        /// 마스터 카드에 카드 추가
+        /// </summary>
+        /// <param name="cardId"></param>
         public void AddCard(int cardId)
         {
             CardData cardData = CardData.GetCardData(cardId);
 
             if (cardData == null)
             {
-                Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음 - AddCard");
+                GameLogger.Log(LogCategory.ERROR, $"❌ 카드({cardId}) CardData 테이블 데이터 없음");
                 return;
             }
 
@@ -89,7 +93,7 @@ namespace ERang
 
             if (masterData == null)
             {
-                Debug.LogError($"마스터({masterId}) MasterData {Utils.RedText("테이블 데이터 없음")}");
+                GameLogger.Log(LogCategory.ERROR, $"❌ 마스터({masterId}) MasterData 테이블 데이터 없음");
                 return;
             }
 

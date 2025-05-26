@@ -35,6 +35,7 @@ namespace ERang
 
         public string abilityUid; // 어빌리티 고유 번호. abilityId + startTurn + abilityCount
         public int abilityId; // 어빌리티 Id
+        public string nameDesc; // 어빌리티 이름
         public int aiDataId; // AiData Id
         public int selfSlotNum;
         public int targetSlotNum;

@@ -49,7 +49,13 @@ namespace ERang
 
         public MasterCard(MasterData masterData) : base()
         {
+            // 마스터 카드는 모든 기능 사용
+            usesCombat = true;
+            usesAbilities = true;
+            usesAi = true;
+
             Id = masterData.master_Id;
+            Name = masterData.nameDesc;
             CardType = CardType.Master;
             CardImage = masterData.masterTexture;
 
