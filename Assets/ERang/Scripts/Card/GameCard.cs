@@ -15,7 +15,6 @@ namespace ERang
         // 기능 활성화 플래그
         protected bool usesCombat = true;
         protected bool usesAbilities = true;
-        protected bool usesValues = true;
         protected bool usesAi = true;
 
         // 기본 속성
@@ -26,7 +25,6 @@ namespace ERang
         private bool inUse;
         private bool isExtinction;
         private Texture2D cardImage;
-        private int gold;
 
         public string Uid { get => uid; protected set => uid = value; }
         public int Id { get => id; protected set => id = value; }
@@ -36,7 +34,6 @@ namespace ERang
         public bool InUse { get => inUse; protected set => inUse = value; }
         public bool IsExtinction { get => isExtinction; protected set => isExtinction = value; }
         public Texture2D CardImage { get => cardImage; protected set => cardImage = value; }
-        public int Gold { get => gold; protected set => gold = value; }
 
         // 게임 관련 멤버 변수
         public CardState State { get; protected set; }
@@ -81,17 +78,7 @@ namespace ERang
             Traits = CardTraits.None;
         }
 
-        // CardData 업데이트
-        public void UpdateCardData(CardData cardData)
-        {
-            Id = cardData.card_id;
-            CardType = cardData.cardType;
-            InUse = cardData.inUse;
-            IsExtinction = cardData.extinction;
-            AiGroupId = cardData.aiGroup_id;
-            CardImage = cardData.GetCardTexture();
-        }
-
+        #region 기본 값 접근 메서드 (모든 카드가 사용 가능)
         public void SetTraits(CardTraits traits)
         {
             Traits = traits;
@@ -106,6 +93,19 @@ namespace ERang
         {
             AiGroupId = aiGroupId;
         }
+
+        // CardData 업데이트
+        public void UpdateCardData(CardData cardData)
+        {
+            Id = cardData.card_id;
+            CardType = cardData.cardType;
+            InUse = cardData.inUse;
+            IsExtinction = cardData.extinction;
+            AiGroupId = cardData.aiGroup_id;
+            CardImage = cardData.GetCardTexture();
+        }
+
+        #endregion
 
         #region ICombatAbilityCard 구현
 
@@ -136,103 +136,39 @@ namespace ERang
 
             Debug.Log($"{cardAbility.LogText} {(found == null ? "신규" : "AbilityItem 만")} 추가. value: {cardAbility.abilityValue}, duration: {cardAbility.duration}, workType: {cardAbility.workType}");
 
-            // 값 시스템 연동
-            if (usesValues)
-            {
-                ApplyAbilityToValues(cardAbility);
-            }
+            ApplyAbilityToValues(cardAbility);
         }
 
         protected virtual void ApplyAbilityToValues(CardAbility cardAbility)
         {
             // 어빌리티 효과를 값 시스템에 적용
+            // 전투 관련 어빌리티는 usesCombat 체크
             switch (cardAbility.abilityType)
             {
                 case AbilityType.Damage:
-                    // 데미지는 TakeDamage 메서드에서 처리
+                    if (usesCombat) TakeDamage(cardAbility.abilityValue);
                     break;
                 case AbilityType.Heal:
-                    RestoreHealth(cardAbility.abilityValue);
+                    if (usesCombat) RestoreHealth(cardAbility.abilityValue);
                     break;
                 case AbilityType.AtkUp:
-                    IncreaseAttack(cardAbility.abilityValue);
+                    if (usesCombat) IncreaseAttack(cardAbility.abilityValue);
                     break;
                 case AbilityType.DefUp:
-                    IncreaseDefense(cardAbility.abilityValue);
+                    if (usesCombat) IncreaseDefense(cardAbility.abilityValue);
                     break;
                 case AbilityType.BrokenDef:
-                    DecreaseDefense(cardAbility.abilityValue);
+                    if (usesCombat) DecreaseDefense(cardAbility.abilityValue);
                     break;
-                    // 다른 어빌리티 타입도 필요에 따라 추가
+                case AbilityType.AddGoldPer:
+                    // 골드는 IGoldCard 인터페이스를 구현한 카드만 처리
+                    if (this is IGoldCard goldCard)
+                        goldCard.AddGold(cardAbility.abilityValue);
+                    break;
             }
         }
 
-        public virtual void AddHandCardAbility(CardAbility cardAbility)
-        {
-            if (!usesAbilities)
-            {
-                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 핸드 카드 어빌리티를 추가할 수 없습니다.");
-                return;
-            }
-
-            AbilitySystem.AddHandCardAbility(cardAbility);
-        }
-
-        public virtual List<CardAbility> DecreaseDuration()
-        {
-            if (!usesAbilities)
-            {
-                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 지속 시간을 감소할 수 없습니다.");
-                return new List<CardAbility>();
-            }
-
-            return AbilitySystem.DecreaseDuration();
-        }
-
-        public virtual void RemoveCardAbility(CardAbility cardAbility)
-        {
-            if (!usesAbilities)
-            {
-                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 어빌리티를 제거할 수 없습니다.");
-                return;
-            }
-
-            AbilitySystem.RemoveCardAbility(cardAbility);
-        }
-
-        public virtual void RemoveHandCardAbility(CardAbility cardAbility)
-        {
-            if (!usesAbilities)
-            {
-                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 핸드 카드 어빌리티를 제거할 수 없습니다.");
-                return;
-            }
-
-            AbilitySystem.RemoveHandCardAbility(cardAbility);
-        }
-
-        public virtual int GetBuffCount()
-        {
-            if (!usesAbilities)
-            {
-                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 버프 개수를 조회할 수 없습니다.");
-                return 0;
-            }
-
-            return AbilitySystem.GetBuffCount();
-        }
-
-        public virtual int GetDeBuffCount()
-        {
-            if (!usesAbilities)
-            {
-                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 디버프 개수를 조회할 수 없습니다.");
-                return 0;
-            }
-
-            return AbilitySystem.GetDeBuffCount();
-        }
-
+        // 전투 관련 메서드들 (useeCombat 체크)
         public void SetHp(int hp)
         {
             if (!usesCombat)
@@ -363,6 +299,73 @@ namespace ERang
             }
 
             State.DecreaseMana(amount);
+        }
+
+        // 어빌리티 관련 메서드들 (usesAbilities 체크)
+        public virtual void AddHandCardAbility(CardAbility cardAbility)
+        {
+            if (!usesAbilities)
+            {
+                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 핸드 카드 어빌리티를 추가할 수 없습니다.");
+                return;
+            }
+
+            AbilitySystem.AddHandCardAbility(cardAbility);
+        }
+
+        public virtual List<CardAbility> DecreaseDuration()
+        {
+            if (!usesAbilities)
+            {
+                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 지속 시간을 감소할 수 없습니다.");
+                return new List<CardAbility>();
+            }
+
+            return AbilitySystem.DecreaseDuration();
+        }
+
+        public virtual void RemoveCardAbility(CardAbility cardAbility)
+        {
+            if (!usesAbilities)
+            {
+                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 어빌리티를 제거할 수 없습니다.");
+                return;
+            }
+
+            AbilitySystem.RemoveCardAbility(cardAbility);
+        }
+
+        public virtual void RemoveHandCardAbility(CardAbility cardAbility)
+        {
+            if (!usesAbilities)
+            {
+                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 핸드 카드 어빌리티를 제거할 수 없습니다.");
+                return;
+            }
+
+            AbilitySystem.RemoveHandCardAbility(cardAbility);
+        }
+
+        public virtual int GetBuffCount()
+        {
+            if (!usesAbilities)
+            {
+                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 버프 개수를 조회할 수 없습니다.");
+                return 0;
+            }
+
+            return AbilitySystem.GetBuffCount();
+        }
+
+        public virtual int GetDeBuffCount()
+        {
+            if (!usesAbilities)
+            {
+                Debug.LogWarning($"카드({Id})는 어빌리티 카드가 아니므로 디버프 개수를 조회할 수 없습니다.");
+                return 0;
+            }
+
+            return AbilitySystem.GetDeBuffCount();
         }
 
         #endregion

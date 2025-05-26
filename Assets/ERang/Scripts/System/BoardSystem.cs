@@ -249,22 +249,21 @@ namespace ERang
         /// <param name="card"></param>
         public void CardCost(MasterCard masterCard, GameCard card)
         {
-            switch (card)
+            // 마나 소모
+            if (card.State.Mana > 0)
             {
-                case CreatureCard creatureCard:
-                    Debug.Log($"CreatureCard: {creatureCard.Id} Mana: {creatureCard.State.Mana}");
-                    AddMana(-creatureCard.State.Mana);
-                    break;
-                case MagicCard magicCard:
-                    Debug.Log($"MagicCard: {magicCard.Id} Mana: {magicCard.State.Mana}");
-                    AddMana(-magicCard.State.Mana);
-                    break;
-                case BuildingCard buildingCard:
-                    AddGold(masterCard, -buildingCard.Gold);
-                    break;
-                default:
-                    Debug.LogWarning("Unhandled card type");
-                    break;
+                masterCard.State.SetMana(masterCard.State.Mana - card.State.Mana);
+                Debug.Log($"마나 소모: {card.State.Mana} -> {masterCard.State.Mana}");
+            }
+
+            // 골드 소모 (IGoldCard 인터페이스 활용)
+            if (card is IGoldCard goldRequiredCard && masterCard is IGoldCard masterGoldCard)
+            {
+                if (goldRequiredCard.Gold > 0)
+                {
+                    masterGoldCard.DeductGold(goldRequiredCard.Gold);
+                    Debug.Log($"골드 소모: {goldRequiredCard.Gold} -> {masterGoldCard.Gold}");
+                }
             }
         }
 

@@ -50,7 +50,6 @@ namespace ERang
             // 마법 카드는 전투 기능과 어빌리티 기능만 사용
             usesCombat = true;
             usesAbilities = true;
-            usesValues = true;
             usesAi = true;
             CardType = CardType.Magic;
 
@@ -63,7 +62,6 @@ namespace ERang
             // 마법 카드는 전투 기능과 어빌리티 기능만 사용
             usesCombat = true;
             usesAbilities = true;
-            usesValues = false;
             usesAi = true;
 
             InitializeTargeting();

@@ -12,8 +12,7 @@ namespace ERang
         Mana,
         MaxMana,
         Attack,
-        Defense,
-        Gold
+        Defense
     }
 
     /// <summary>
@@ -76,5 +75,17 @@ namespace ERang
 
         bool IsValidTarget(ICard target);
         void OnTargetSelected(ICard target);
+    }
+
+    /// <summary>
+    /// 골드 기능을 가진 카드를 위한 인터페이스
+    /// </summary>
+    public interface IGoldCard : ICard
+    {
+        int Gold { get; }
+
+        void SetGold(int gold);
+        void AddGold(int gold);
+        void DeductGold(int gold);
     }
 }

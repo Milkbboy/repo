@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ERang
 {
-    public class MasterCard : GameCard
+    public class MasterCard : GameCard, IGoldCard
     {
         private MasterData masterData;
         private int gold;
@@ -22,13 +22,13 @@ namespace ERang
         public int CreatureSlotCount => creatureSlots;
         public List<int> CardIds { get => cardIds; private set => cardIds = value; }
         public int ManaPerTurn { get => manaPerTurn; private set => manaPerTurn = value; }
+        public int Gold => gold;
 
         public MasterCard() : base()
         {
             // 마스터 카드는 모든 기능 사용
             usesCombat = true;
             usesAbilities = true;
-            usesValues = true;
             usesAi = true;
             CardType = CardType.Master;
         }
@@ -38,7 +38,6 @@ namespace ERang
             // 마스터 카드는 모든 기능 사용
             usesCombat = true;
             usesAbilities = true;
-            usesValues = true;
             usesAi = true;
 
             if (masterData != null)
@@ -58,6 +57,29 @@ namespace ERang
 
             InitializeFromMasterData();
         }
+
+        #region IGoldCard 구현
+
+        public void SetGold(int amount)
+        {
+            gold = amount;
+        }
+
+        public void AddGold(int amount)
+        {
+            int beforeGold = gold;
+            gold += amount;
+            Debug.Log($"<color=#257dca>Add Gold({amount}): {beforeGold} -> {gold}</color>");
+        }
+
+        public void DeductGold(int amount)
+        {
+            int beforeGold = gold;
+            gold = Mathf.Max(0, gold - amount);
+            Debug.Log($"<color=#257dca>Deduct Gold({amount}): {beforeGold} -> {gold}</color>");
+        }
+
+        #endregion
 
         public void SetCardIds(List<int> cardIds)
         {
@@ -122,38 +144,26 @@ namespace ERang
             State.SetMana(State.Mana - card.State.Mana);
         }
 
-        public void AddGold(int amount)
-        {
-            int beforeGold = this.gold;
-            this.gold += amount;
-            Debug.Log($"<color=#257dca>Add Gold({amount}): {beforeGold} -> {this.gold}</color>");
-        }
-
-        public void SetGold(int amount)
-        {
-            Gold = amount;
-        }
-
         public void IncreaseSatiety(int amount)
         {
-            int beforeSatiety = this.satiety;
-            this.satiety += amount;
+            int beforeSatiety = satiety;
+            satiety += amount;
 
-            if (this.satiety > maxSatiety)
-                this.satiety = maxSatiety;
+            if (satiety > maxSatiety)
+                satiety = maxSatiety;
 
-            Debug.Log($"<color=#257dca>만복감 증가({amount}): {beforeSatiety} -> {this.satiety}</color>");
+            Debug.Log($"<color=#257dca>만복감 증가({amount}): {beforeSatiety} -> {satiety}</color>");
         }
 
         public void DecreaseSatiety(int amount)
         {
-            int beforeSatiety = this.satiety;
-            this.satiety -= amount;
+            int beforeSatiety = satiety;
+            satiety -= amount;
 
-            if (this.satiety < 0)
-                this.satiety = 0;
+            if (satiety < 0)
+                satiety = 0;
 
-            Debug.Log($"<color=#257dca>Decrease Satiety({amount}): {beforeSatiety} -> {this.satiety}</color>");
+            Debug.Log($"<color=#257dca>Decrease Satiety({amount}): {beforeSatiety} -> {satiety}</color>");
         }
 
         public void RecoverHp(int amount)

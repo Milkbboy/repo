@@ -174,7 +174,7 @@ public class Reward : MonoBehaviour
             if (selectedCard.Card is GoldCard goldCard)
             {
                 Debug.Log($"Selected Gold Card: ${goldCard.Gold}");
-                Player.Instance.AddGold(goldCard.Gold);
+                BoardSystem.Instance.AddGold(Player.Instance.masterCard, goldCard.Gold);
                 PlayerPrefsUtility.SetInt("MasterGold", Player.Instance.masterCard.Gold);
             }
             else

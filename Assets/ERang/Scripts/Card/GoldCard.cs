@@ -3,51 +3,61 @@ using ERang.Data;
 
 namespace ERang
 {
-    public class GoldCard : GameCard
+    public class GoldCard : GameCard, IGoldCard
     {
+        private int gold;
+        public int Gold => gold;
+
         public GoldCard() : base()
         {
-            // 골드 카드는 값 관리 기능만 사용
+            // 골드 카드는 전투/어빌리티/AI 기능 비활성화
             usesCombat = false;
             usesAbilities = false;
-            usesValues = true;
             usesAi = false;
+
             CardType = CardType.Gold;
-            Gold = 0;
+            gold = 0;
         }
 
         public GoldCard(CardData cardData, int gold) : base(cardData)
         {
-            // 골드 카드는 값 관리 기능만 사용
+            // 골드 카드는 전투/어빌리티/AI 기능 비활성화
             usesCombat = false;
             usesAbilities = false;
-            usesValues = true;
             usesAi = false;
 
-            Gold = gold;
+            this.gold = gold;
         }
 
         public GoldCard(int gold) : base()
         {
-            // 골드 카드는 값 관리 기능만 사용
+            // 골드 카드는 전투/어빌리티/AI 기능 비활성화
             usesCombat = false;
             usesAbilities = false;
-            usesValues = true;
             usesAi = false;
             CardType = CardType.Gold;
 
-            Gold = gold;
+            this.gold = gold;
         }
+
+        #region IGoldCard 구현
 
         public void SetGold(int amount)
         {
-            Gold = amount;
+            gold = amount;
         }
 
         public void AddGold(int amount)
         {
-            Gold += amount;
+            gold += amount;
         }
+
+        public void DeductGold(int amount)
+        {
+            gold = Mathf.Max(0, gold - amount);
+        }
+
+        #endregion
 
         public override void OnPlay()
         {

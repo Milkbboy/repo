@@ -653,12 +653,15 @@ namespace ERang
                 return false;
             }
 
-            // 필요 골드 확인
-            if (card is BuildingCard buildingCard && masterCard.Gold < buildingCard.Gold)
+            // 골드 인터페이스를 사용한 골드 체크 (건물, 마스터)
+            if (card is IGoldCard goldRequiredCard && masterCard is IGoldCard masterGoldCard)
             {
-                ToastNotification.Show($"gold({masterCard.Gold}) is not enough");
-                Debug.LogWarning($"핸드 카드({buildingCard.Id}) 골드 부족으로 사용 불가능({masterCard.Gold} < {buildingCard.Gold})");
-                return false;
+                if (masterGoldCard.Gold < goldRequiredCard.Gold)
+                {
+                    ToastNotification.Show($"gold({masterCard.Gold}) is not enough");
+                    Debug.LogWarning($"핸드 카드({card.Id}) 골드 부족으로 사용 불가능({masterCard.Gold} < {goldRequiredCard.Gold})");
+                    return false;
+                }
             }
 
             Debug.Log($"핸드 카드({card.Id}) 사용 가능");
@@ -720,19 +723,6 @@ namespace ERang
                 masterCard.DecreaseSatiety(-amount);
 
             satietyUI.UpdateSatiety(masterCard.Satiety, masterCard.MaxSatiety);
-        }
-
-        /// <summary>
-        /// 테스트 카드 깜빡임
-        /// </summary>
-        /// <param name="boardSlot"></param>
-        private void FlashingCard(BSlot boardSlot)
-        {
-            if (boardSlot == null)
-                return;
-
-            // boardSlot.StartFlashing();
-            // flashingSlots.Add(boardSlot);
         }
 
         /// <summary>

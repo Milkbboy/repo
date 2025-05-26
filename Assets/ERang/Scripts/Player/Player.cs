@@ -38,11 +38,6 @@ namespace ERang
             masterCard.RecoverHp(hp);
         }
 
-        public void AddGold(int gold)
-        {
-            masterCard.AddGold(gold);
-        }
-
         public void AddCard(int cardId)
         {
             CardData cardData = CardData.GetCardData(cardId);

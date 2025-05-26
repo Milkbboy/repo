@@ -100,9 +100,9 @@ namespace ERang
             else if (card.CardType == CardType.Gold)
             {
                 // GoldCard 또는 HpCard와 같은 아이템 카드
-                if (card is GoldCard)
+                if (card is IGoldCard goldCard)
                 {
-                    descText.text = $"골드 {card.Gold} 획득";
+                    descText.text = $"골드 {goldCard.Gold} 획득";
                 }
                 else
                 {
