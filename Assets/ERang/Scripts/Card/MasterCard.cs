@@ -75,14 +75,14 @@ namespace ERang
         {
             int beforeGold = gold;
             gold += amount;
-            Debug.Log($"<color=#257dca>Add Gold({amount}): {beforeGold} -> {gold}</color>");
+            GameLogger.Log(LogCategory.DEBUG, $"<color=#257dca>Add Gold({amount}): {beforeGold} -> {gold}</color>");
         }
 
         public void DeductGold(int amount)
         {
             int beforeGold = gold;
             gold = Mathf.Max(0, gold - amount);
-            Debug.Log($"<color=#257dca>Deduct Gold({amount}): {beforeGold} -> {gold}</color>");
+            GameLogger.Log(LogCategory.DEBUG, $"<color=#257dca>Deduct Gold({amount}): {beforeGold} -> {gold}</color>");
         }
 
         #endregion
@@ -105,10 +105,11 @@ namespace ERang
                 masterType = masterData.masterType;
 
                 // 마스터의 최대 체력/마나 설정
-                SetHp(masterData.maxHp);
-                SetMana(masterData.startMana);
                 State.SetMaxHp(masterData.maxHp);
                 State.SetMaxMana(masterData.maxMana);
+                // State 에서 hp 를 설정할때 maxHp 를 참고하기 때문에 maxHp 먼저 설정
+                SetHp(masterData.maxHp);
+                SetMana(masterData.startMana);
 
                 // 추가 속성 초기화
                 gold = 1000; // 임시
@@ -116,8 +117,6 @@ namespace ERang
                 satiety = masterData.satietyGauge;
                 maxSatiety = masterData.maxSatietyGauge;
                 cardIds = masterData.startCardIds;
-
-                Debug.Log($"마스터 카드: {string.Join(", ", cardIds)}");
             }
         }
 
@@ -129,7 +128,7 @@ namespace ERang
             int manaGain = masterData != null ? masterData.manaPerTurn : 1;
             State.SetMana(manaGain);
 
-            Debug.Log($"마스터 {Id} 턴 시작, 마나 {manaGain} 회복");
+            GameLogger.Log(LogCategory.DEBUG, $"마스터 {Name}({Id}) 턴 시작, 마나 {manaGain} 회복");
         }
 
         public override void OnTurnEnd()
@@ -158,7 +157,7 @@ namespace ERang
             if (satiety > maxSatiety)
                 satiety = maxSatiety;
 
-            Debug.Log($"<color=#257dca>만복감 증가({amount}): {beforeSatiety} -> {satiety}</color>");
+            GameLogger.Log(LogCategory.DEBUG, $"<color=#257dca>만복감 증가({amount}): {beforeSatiety} -> {satiety}</color>");
         }
 
         public void DecreaseSatiety(int amount)
@@ -169,7 +168,7 @@ namespace ERang
             if (satiety < 0)
                 satiety = 0;
 
-            Debug.Log($"<color=#257dca>Decrease Satiety({amount}): {beforeSatiety} -> {satiety}</color>");
+            GameLogger.Log(LogCategory.DEBUG, $"<color=#257dca>Decrease Satiety({amount}): {beforeSatiety} -> {satiety}</color>");
         }
 
         public void RecoverHp(int amount)

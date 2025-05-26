@@ -17,7 +17,7 @@ namespace ERang
                 GameObject playerObject = Instantiate(PlayerPrefab);
                 DontDestroyOnLoad(playerObject);
 
-                Debug.Log("Player를 씬 전환 시에도 유지되도록 설정");
+                GameLogger.Log(LogCategory.DEBUG, "Player를 씬 전환 시에도 유지되도록 설정");
             }
         }
     }

@@ -57,7 +57,7 @@ namespace ERang
             { LogCategory.UI, false },
             { LogCategory.AUDIO, false },
             { LogCategory.ERROR, true },
-            { LogCategory.DEBUG, false }
+            { LogCategory.DEBUG, true }
         };
 
         // 성능 모드 (릴리즈 빌드에서 로그 비활성화)
@@ -97,8 +97,7 @@ namespace ERang
         {
             if (!IsLoggingEnabled) return;
 
-            string separator = new string('=', 80);
-            Log(LogCategory.GAME_FLOW, $"\n{separator}\n🎯 {phase.ToUpper()}{(string.IsNullOrEmpty(details) ? "" : $" - {details}")}\n{separator}");
+            Log(LogCategory.GAME_FLOW, $"🎯 {phase.ToUpper()}{(string.IsNullOrEmpty(details) ? "" : $" - {details}")}");
         }
 
         // 카드 사용 체인 추적

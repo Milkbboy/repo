@@ -253,7 +253,6 @@ namespace ERang
             if (card.State.Mana > 0)
             {
                 masterCard.State.SetMana(masterCard.State.Mana - card.State.Mana);
-                Debug.Log($"마나 소모: {card.State.Mana} -> {masterCard.State.Mana}");
             }
 
             // 골드 소모 (IGoldCard 인터페이스 활용)
@@ -262,7 +261,6 @@ namespace ERang
                 if (goldRequiredCard.Gold > 0)
                 {
                     masterGoldCard.DeductGold(goldRequiredCard.Gold);
-                    Debug.Log($"골드 소모: {goldRequiredCard.Gold} -> {masterGoldCard.Gold}");
                 }
             }
         }

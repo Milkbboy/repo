@@ -27,7 +27,7 @@ namespace ERang
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
-                Debug.Log("Player 생성됨");
+                GameLogger.Log(LogCategory.DEBUG, "Player 인스턴스 생성됨");
 
                 LoadMaster();
             }
@@ -71,13 +71,19 @@ namespace ERang
             PlayerPrefsUtility.SetInt("LastLocationId", locationId);
             PlayerPrefsUtility.SetInt("MasterHp", masterCard.State.Hp);
             PlayerPrefsUtility.SetInt("Gold", masterCard.Gold);
+            GameLogger.Log(LogCategory.DEBUG, $"저장된 마스터 골드: {masterCard.Gold}");
+
 
             if (keepSatiety)
+            {
                 PlayerPrefsUtility.SetInt("Satiety", masterCard.Satiety);
+                GameLogger.Log(LogCategory.DEBUG, $"저장된 마스터 포만도: {masterCard.Satiety}");
+            }
 
             // Master 카드 ids 저장
             string cardIdsJson = JsonConvert.SerializeObject(masterCard.CardIds);
             PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
+            GameLogger.Log(LogCategory.DEBUG, $"저장된 마스터 카드: {cardIdsJson}");
 
             floor = nextFloor;
         }
@@ -102,15 +108,19 @@ namespace ERang
             string selectLocationJson = PlayerPrefsUtility.GetString("SelectLocation", null);
 
             if (selectLocationJson != null)
+            {
+                GameLogger.Log(LogCategory.DEBUG, $"저장된 맵 위치: {selectLocationJson}");
                 selectLocation = JsonConvert.DeserializeObject<MapLocation>(selectLocationJson);
+            }
 
-            Debug.Log($"마스터 인스턴스 생성될 때 카드: {string.Join(", ", masterCard.CardIds)}");
+            GameLogger.Log(LogCategory.DEBUG, $"마스터 인스턴스 생성될 때 카드: {string.Join(", ", masterCard.CardIds)}");
 
             // 저장된 마스터 HP가 있으면 설정
             int savedHp = PlayerPrefsUtility.GetInt("MasterHp", -1);
 
             if (savedHp != -1)
             {
+                GameLogger.Log(LogCategory.DEBUG, $"저장된 마스터 HP: {savedHp}");
                 masterCard.SetHp(savedHp);
             }
 
@@ -119,6 +129,7 @@ namespace ERang
 
             if (savedGold != -1)
             {
+                GameLogger.Log(LogCategory.DEBUG, $"저장된 마스터 골드: {savedGold}");
                 masterCard.SetGold(savedGold);
             }
 
@@ -127,7 +138,7 @@ namespace ERang
 
             if (!string.IsNullOrEmpty(savedCardsJson))
             {
-                Debug.Log($"저장된 마스터 카드: {savedCardsJson}");
+                GameLogger.Log(LogCategory.DEBUG, $"저장된 마스터 카드: {savedCardsJson}");
                 masterCard.SetCardIds(JsonConvert.DeserializeObject<List<int>>(savedCardsJson));
             }
         }

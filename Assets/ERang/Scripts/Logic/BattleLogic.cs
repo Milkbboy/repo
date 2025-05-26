@@ -46,7 +46,7 @@ namespace ERang
                 Instance = this;
 
             keepSatiety = PlayerPrefsUtility.GetValue<bool>("KeepSatiety", false);
-            Debug.Log($"포만감 저장 여부: {keepSatiety}");
+            GameLogger.Log(LogCategory.DEBUG, $"포만감 저장 여부: {keepSatiety}");
         }
 
         void Start()

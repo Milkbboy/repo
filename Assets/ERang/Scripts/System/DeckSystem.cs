@@ -51,7 +51,7 @@ namespace ERang
 
                 if (cardData == null)
                 {
-                    Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
+                    GameLogger.Log(LogCategory.ERROR, $"❌ 카드 ({cardId}) CardData 테이블 데이터 없음");
                     continue;
                 }
 
@@ -60,7 +60,7 @@ namespace ERang
                 if (card is MagicCard magicCard)
                     magicCard.SetSelectAttackType(AiLogic.Instance.IsSelectAttackType(card));
 
-                Debug.Log($"CreateMasterCards. cardId: {cardId}, card: {card}, {card.LogText}");
+                GameLogger.Log(LogCategory.CARD, $"마스터 덱 카드 생성: {cardId}, {card.LogText}");
 
                 // 카드 타입별로 생성
                 Player.Instance.AllCards.Add(card);
@@ -114,7 +114,7 @@ namespace ERang
                     card.SetTraits(CardTraits.None);
                 }
 
-                Debug.Log($"MakeHandCards. card: {card}, {card.LogText}, handAbilities.Count: {card.AbilitySystem.HandAbilities.Count}");
+                GameLogger.Log(LogCategory.CARD, $"핸드 카드 어빌리티 설정: {card.LogText}, 핸드 어빌리티 개수: {card.AbilitySystem.HandAbilities.Count}");
 
                 StartCoroutine(AbilityLogic.Instance.HandCardAbilityAction(card));
             }
@@ -129,7 +129,7 @@ namespace ERang
         {
             if (card == null)
             {
-                Debug.LogError($"핸드덱에 {card.Id} 카드 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ 핸드덱에 {card.Id} 카드 없음");
                 return;
             }
 
@@ -187,7 +187,7 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"핸드에 {card.Id} 카드 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ 핸드에 {card.Id} 카드 없음");
                 return;
             }
 
@@ -209,7 +209,7 @@ namespace ERang
         {
             if (card == null)
             {
-                Debug.LogError($"핸드덱에 {card.Id} 카드 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ 핸드덱에 {card.Id} 카드 없음");
                 return;
             }
 
@@ -256,7 +256,7 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogError($"핸드에 {card.Id} 카드 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ 핸드에 {card.Id} 카드 없음");
                 return null;
             }
 

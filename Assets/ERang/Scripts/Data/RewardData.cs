@@ -41,8 +41,6 @@ namespace ERang.Data
                 return;
             }
 
-            Debug.Log($"Total items in table: {rewardDataTable.items.Count}");
-
             foreach (var rewardDataEntity in rewardDataTable.items)
             {
                 var key = (rewardDataEntity.RewardID, rewardDataEntity.Master_Id);

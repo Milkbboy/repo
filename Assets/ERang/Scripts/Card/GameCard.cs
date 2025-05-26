@@ -49,6 +49,7 @@ namespace ERang
         {
             Uid = Utils.GenerateShortUniqueID();
             State = new CardState(0, 0, 0, 0);
+            State.SetCardName(Name); // CardState에 카드 이름 설정
 
             if (usesAbilities)
             {
@@ -72,6 +73,7 @@ namespace ERang
             CardImage = cardData.GetCardTexture();
 
             State = new CardState(cardData.hp, cardData.def, cardData.costMana, cardData.atk);
+            State.SetCardName(Name); // CardState에 카드 이름 설정
 
             if (usesAbilities)
             {
@@ -107,6 +109,7 @@ namespace ERang
             IsExtinction = cardData.extinction;
             AiGroupId = cardData.aiGroup_id;
             CardImage = cardData.GetCardTexture();
+            State.SetCardName(Name); // CardState에 카드 이름 설정
         }
 
         #endregion
@@ -140,11 +143,13 @@ namespace ERang
 
             Debug.Log($"{cardAbility.LogText} {(found == null ? "신규" : "AbilityItem 만")} 추가. value: {cardAbility.abilityValue}, duration: {cardAbility.duration}, workType: {cardAbility.workType}");
 
-            ApplyAbilityToValues(cardAbility);
+            // ApplyAbilityToValues(cardAbility);
         }
 
         protected virtual void ApplyAbilityToValues(CardAbility cardAbility)
         {
+            GameLogger.LogAbilityDetail($"{Name}에 {cardAbility.nameDesc} 어빌리티 적용 시작");
+
             // 어빌리티 효과를 값 시스템에 적용
             // 전투 관련 어빌리티는 usesCombat 체크
             switch (cardAbility.abilityType)
@@ -167,7 +172,13 @@ namespace ERang
                 case AbilityType.AddGoldPer:
                     // 골드는 IGoldCard 인터페이스를 구현한 카드만 처리
                     if (this is IGoldCard goldCard)
+                    {
                         goldCard.AddGold(cardAbility.abilityValue);
+                        GameLogger.LogCardState(Name, "골드", 0, cardAbility.abilityValue, "골드 획득");
+                    }
+                    break;
+                default:
+                    GameLogger.LogAbilityDetail($"{cardAbility.abilityType} 어빌리티는 값 시스템에 직접 적용되지 않음");
                     break;
             }
         }
@@ -225,7 +236,8 @@ namespace ERang
                 return;
             }
 
-            State.TakeDamage(amount);
+            GameLogger.LogAbilityDetail($"{Name} 데미지 처리 시작: {amount}");
+            State.TakeDamage(amount, "데미지 받음");
         }
 
         public virtual void RestoreHealth(int amount)
@@ -236,7 +248,8 @@ namespace ERang
                 return;
             }
 
-            State.RestoreHealth(amount);
+            GameLogger.LogAbilityDetail($"{Name} 체력 회복 시작: {amount}");
+            State.RestoreHealth(amount, "체력 회복");
         }
 
         public virtual void IncreaseDefense(int amount)
@@ -258,7 +271,7 @@ namespace ERang
                 return;
             }
 
-            State.DecreaseDefense(amount);
+            State.DecreaseDefense(amount, "버프");
         }
 
         public virtual void IncreaseAttack(int amount)
@@ -269,7 +282,7 @@ namespace ERang
                 return;
             }
 
-            State.IncreaseAttack(amount);
+            State.IncreaseAttack(amount, "버프");
         }
 
         public virtual void DecreaseAttack(int amount)
@@ -280,7 +293,7 @@ namespace ERang
                 return;
             }
 
-            State.DecreaseAttack(amount);
+            State.DecreaseAttack(amount, "디버프");
         }
 
         public virtual void IncreaseMana(int amount)
@@ -291,7 +304,7 @@ namespace ERang
                 return;
             }
 
-            State.IncreaseMana(amount);
+            State.IncreaseMana(amount, "마나 증가");
         }
 
         public virtual void DecreaseMana(int amount)
@@ -302,7 +315,7 @@ namespace ERang
                 return;
             }
 
-            State.DecreaseMana(amount);
+            State.DecreaseMana(amount, "마나 소모");
         }
 
         // 어빌리티 관련 메서드들 (usesAbilities 체크)
