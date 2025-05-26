@@ -78,6 +78,9 @@ namespace ERang
             if (!IsLoggingEnabled) return;
             if (!CategoryEnabled.GetValueOrDefault(category, true)) return;
 
+            // 통계 카운트 증가
+            IncrementLogCount(category);
+
             string color = CategoryColors[category];
             string formattedMessage = $"<color={color}>[{category}]</color> {message}";
 
@@ -139,6 +142,23 @@ namespace ERang
             if (!IsLoggingEnabled) return;
 
             Log(LogCategory.ABILITY, $"🔥 {abilityName} {phase}: {source} → {target}");
+        }
+
+        // 어빌리티 시작/완료 로그 (Phase 2 추가)
+        public static void LogAbilityStart(string abilityName, string source, string target, string additionalInfo = "")
+        {
+            if (!IsLoggingEnabled) return;
+
+            string info = string.IsNullOrEmpty(additionalInfo) ? "" : $" - {additionalInfo}";
+            Log(LogCategory.ABILITY, $"🔥 {abilityName} 시작: {source} → {target}{info}");
+        }
+
+        public static void LogAbilityComplete(string abilityName, string source, string target, string result = "")
+        {
+            if (!IsLoggingEnabled) return;
+
+            string resultText = string.IsNullOrEmpty(result) ? "" : $" - {result}";
+            Log(LogCategory.ABILITY, $"🔥 {abilityName} 완료: {source} → {target}{resultText}");
         }
 
         // 어빌리티 상세 로그
@@ -225,6 +245,88 @@ namespace ERang
             if (Input.GetKeyDown(KeyCode.F3))
             {
                 SetCategoryEnabled(LogCategory.AI, !CategoryEnabled[LogCategory.AI]);
+            }
+
+            // F4: 카드 상태 로그 토글 (Phase 2 추가)
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                SetCategoryEnabled(LogCategory.CARD_STATE, !CategoryEnabled[LogCategory.CARD_STATE]);
+            }
+
+            // F5: 에러만 보기 모드 토글
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+                ToggleErrorOnlyMode();
+            }
+        }
+
+        // 에러만 보기 모드 토글
+        private static bool _errorOnlyMode = false;
+        public static void ToggleErrorOnlyMode()
+        {
+            _errorOnlyMode = !_errorOnlyMode;
+            
+            if (_errorOnlyMode)
+            {
+                // 에러만 보기 모드: 에러와 게임 플로우만 활성화
+                foreach (var category in System.Enum.GetValues(typeof(LogCategory)))
+                {
+                    var cat = (LogCategory)category;
+                    CategoryEnabled[cat] = cat == LogCategory.ERROR || cat == LogCategory.GAME_FLOW;
+                }
+                Log(LogCategory.DEBUG, "⚠️ 에러만 보기 모드 활성화 (에러 + 게임플로우만)");
+            }
+            else
+            {
+                // 모든 로그 복원 (기본값으로)
+                CategoryEnabled[LogCategory.GAME_FLOW] = true;
+                CategoryEnabled[LogCategory.CARD] = true;
+                CategoryEnabled[LogCategory.CARD_STATE] = true;
+                CategoryEnabled[LogCategory.AI] = true;
+                CategoryEnabled[LogCategory.ABILITY] = true;
+                CategoryEnabled[LogCategory.ABILITY_DETAIL] = false;
+                CategoryEnabled[LogCategory.DATA] = true;
+                CategoryEnabled[LogCategory.UI] = false;
+                CategoryEnabled[LogCategory.AUDIO] = false;
+                CategoryEnabled[LogCategory.ERROR] = true;
+                CategoryEnabled[LogCategory.DEBUG] = true;
+                Log(LogCategory.DEBUG, "✅ 모든 로그 모드 복원");
+            }
+        }
+        
+        // 성능 측정 및 통계 (Phase 2 추가)
+        private static readonly System.Collections.Generic.Dictionary<LogCategory, int> _logCounts = new();
+        
+        public static void IncrementLogCount(LogCategory category)
+        {
+            if (!_logCounts.ContainsKey(category))
+                _logCounts[category] = 0;
+            _logCounts[category]++;
+        }
+        
+        public static void PrintLogStatistics()
+        {
+            if (!IsLoggingEnabled) return;
+            
+            var stats = new StringBuilder();
+            stats.AppendLine("📈 로그 통계 (세션 시작 이후)");
+            
+            foreach (var kvp in _logCounts)
+            {
+                stats.AppendLine($"   {kvp.Key}: {kvp.Value}회");
+            }
+            
+            Log(LogCategory.DEBUG, stats.ToString());
+        }
+        
+        // F6 키 추가: 로그 통계 출력
+        public static void HandleAdditionalInput()
+        {
+            if (!IsLoggingEnabled) return;
+            
+            if (Input.GetKeyDown(KeyCode.F6))
+            {
+                PrintLogStatistics();
             }
         }
     }
