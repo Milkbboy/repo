@@ -21,7 +21,7 @@ namespace ERang
 
             GameLogger.Log(LogCategory.DATA, $"어빌리티 시스템 초기화: {abilities.Length}개 컴포넌트 검사");
 
-            // 자식 객체의 이름을 출력
+            // 자식 객체의 이름을 출력            
             foreach (Transform abilityTransform in abilities)
             {
                 // 현재 게임 오브젝트 자신은 제외
@@ -154,7 +154,6 @@ namespace ERang
 
             // 어빌리티 완료 로그
             GameLogger.LogAbility(abilityData.nameDesc, sourceInfo, targetInfo, "완료");
-
         }
 
         public IEnumerator HandCardAbilityAction(GameCard handCard)
@@ -167,7 +166,7 @@ namespace ERang
 
                 if (abilityAction == null)
                 {
-                    GameLogger.Log(LogCategory.ERROR, $"❌ {cardAbility.LogText}에 대한 동작이 없음");
+                    GameLogger.Log(LogCategory.ERROR, $"❌ {Utils.CardLog(handCard)} {cardAbility.nameDesc}에 대한 동작이 없음");
                     yield break;
                 }
 
@@ -177,6 +176,8 @@ namespace ERang
                     yield return StartCoroutine(reducedMana.ApplySingle(handCard));
                 }
             }
+
+            GameLogger.LogAbility("핸드 카드 어빌리티", handCard.Name, "", "적용 완료");
         }
 
         public IEnumerator HandCardAbilityRelease(GameCard handCard)
@@ -191,7 +192,7 @@ namespace ERang
 
                 if (abilityAction == null)
                 {
-                    GameLogger.Log(LogCategory.ERROR, $"❌ {cardAbility.LogText}에 대한 해제 없음");
+                    GameLogger.Log(LogCategory.ERROR, $"❌ {Utils.CardLog(handCard)} {cardAbility.nameDesc}에 대한 해제 없음");
                     yield break;
                 }
 
@@ -202,7 +203,8 @@ namespace ERang
 
                     handCard.RemoveHandCardAbility(cardAbility);
 
-                    GameLogger.LogAbility("마나 감소", handCard.Name, "", $"해제 완료 - {Utils.StatChangesText(reducedMana.Changes)}");
+                    string effectText = Utils.StatChangesText(reducedMana.Changes);
+                    GameLogger.LogAbility("마나 감소", handCard.Name, "", $"해제 완료 - {effectText}");
                 }
             }
 
@@ -218,7 +220,7 @@ namespace ERang
 
             if (abilityAction == null)
             {
-                GameLogger.Log(LogCategory.ERROR, $"❌ {targetInfo} {cardAbility.LogText}에 대한 동작이 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {targetInfo} {cardAbility.nameDesc}에 대한 동작이 없음");
                 yield break;
             }
 
@@ -238,7 +240,6 @@ namespace ERang
                     string statName = change.Item1.ToString();
                     int beforeValue = change.Item6;
                     int afterValue = change.Item7;
-                    int changeValue = change.Item8;
 
                     if (beforeValue != afterValue)
                     {
@@ -266,19 +267,18 @@ namespace ERang
 
             if (abilityAction == null)
             {
-                GameLogger.Log(LogCategory.ERROR, $"❌ {cardAbility.LogText}에 대한 해제 없음. {abilityWhereFrom}");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {cardAbility.nameDesc}에 대한 해제 없음. {abilityWhereFrom}");
                 yield break;
             }
 
             BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.selfSlotNum);
+            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.targetSlotNum);
 
             if (selfSlot == null)
             {
                 GameLogger.Log(LogCategory.ERROR, $"❌ selfSlotNum({cardAbility.selfSlotNum}) 보드 슬롯 없음. {abilityWhereFrom}");
                 yield return null;
             }
-
-            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.targetSlotNum);
 
             if (targetSlot == null)
             {
@@ -313,6 +313,10 @@ namespace ERang
 
                 abilityAction.Changes.Clear();
             }
+            else
+            {
+                GameLogger.LogAbility(cardAbility.nameDesc, sourceInfo, targetInfo, "해제 완료 - 상태 변화 없음");
+            }
 
             GameLogger.LogAbility(cardAbility.nameDesc, sourceInfo, targetInfo, $"어빌리티 삭제 완료. {abilityWhereFrom}");
         }
@@ -324,14 +328,13 @@ namespace ERang
         {
             if (boardSlot.Card == null)
             {
-                GameLogger.Log(LogCategory.ERROR, $"❌ {boardSlot.LogText} {abilityType} 어빌리티 적용 슬롯 카드 없음");
+                GameLogger.Log(LogCategory.ERROR, $"❌ {Utils.BoardSlotLog(boardSlot)} {abilityType} 어빌리티 적용 슬롯 카드 없음");
                 return 0;
             }
 
             // MasterCard 가 CreatureCard 를 상속 받았기 때문에 하위 클래스 먼저 확인
             if (boardSlot.Card.CardType == CardType.Master)
             {
-                // Debug.Log($"마스터 카드. cardId: {boardSlot.Card.Id} Slot: {boardSlot.SlotNum}, hp: {masterCard.Hp}, mana: {masterCard.Mana}");
                 int value = abilityType switch
                 {
                     AbilityType.AddMana or AbilityType.SubMana => boardSlot.Card.State.Mana,
@@ -358,8 +361,7 @@ namespace ERang
                 return value;
             }
 
-            GameLogger.Log(LogCategory.ERROR, $"❌ {boardSlot.LogText} {abilityType} 어빌리티 - {boardSlot.Card.CardType} 카드에 대한 원래 stat 값 없음");
-
+            GameLogger.Log(LogCategory.ERROR, $"❌ {Utils.BoardSlotLog(boardSlot)} {abilityType} 어빌리티 - {boardSlot.Card.CardType} 카드에 대한 원래 stat 값 없음");
             return 0;
         }
     }
