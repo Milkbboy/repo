@@ -18,41 +18,30 @@ namespace ERang
         bool InUse { get; }
         bool IsExtinction { get; }
         Texture2D CardImage { get; }
-        
+
         // 카드 상태
         CardState State { get; }
         CardTraits Traits { get; }
-        
+
         // 어빌리티 시스템 관련
         CardAbilitySystem AbilitySystem { get; }
-        
+
         // 로그 정보
         string LogText { get; }
-        
+
         // 가상 속성 - 자식 클래스에서 구현
         int Hp { get; }
         int Def { get; }
         int Mana { get; }
         int Atk { get; }
-        
-        // 어빌리티 관리 메서드
-        void AddCardAbility(CardAbility cardAbility, int turnCount, AbilityWhereFrom whereFrom);
-        void AddHandCardAbility(CardAbility cardAbility);
-        List<CardAbility> DecreaseDuration();
-        void RemoveCardAbility(CardAbility cardAbility);
-        void RemoveHandCardAbility(CardAbility cardAbility);
-        
-        // 버프/디버프 관련
-        int GetBuffCount();
-        int GetDeBuffCount();
-        
+
         // 카드 상태 변경 메서드
         void TakeDamage(int amount);
         void RestoreHealth(int amount);
         void SetDefense(int amount);
         void IncreaseDefense(int amount);
         void DecreaseDefense(int amount);
-        
+
         // 카드 데이터 업데이트
         void UpdateCardData(CardData cardData);
     }
