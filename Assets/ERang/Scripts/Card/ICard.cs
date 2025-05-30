@@ -35,17 +35,6 @@ namespace ERang
         int Mana { get; }
         int Atk { get; }
 
-        // 어빌리티 관리 메서드
-        void AddCardAbility(CardAbility cardAbility, int turnCount, AbilityWhereFrom whereFrom);
-        void AddHandCardAbility(CardAbility cardAbility);
-        List<CardAbility> DecreaseDuration();
-        void RemoveCardAbility(CardAbility cardAbility);
-        void RemoveHandCardAbility(CardAbility cardAbility);
-
-        // 버프/디버프 관련
-        int GetBuffCount();
-        int GetDeBuffCount();
-
         // 카드 상태 변경 메서드
         void TakeDamage(int amount);
         void RestoreHealth(int amount);
