@@ -15,19 +15,46 @@ namespace ERang
             Instance = this;
         }
 
+        // 기존 메서드 호환성을 위한 오버로드 추가
+        public int GetCardAiDataId(BaseCard card)
+        {
+            // 첫 번째 AiGroupId만 사용하는 기존 방식 호환
+            if (card.AiGroupIds == null || card.AiGroupIds.Count == 0)
+                return 0;
+
+            return GetCardAiDataId(card, card.AiGroupIds[0]);
+        }
+
+        public (AiData, List<BSlot>) GetTurnStartActionAiDataId(BSlot selfSlot, List<BSlot> opponentSlots)
+        {
+            BaseCard card = selfSlot.Card;
+
+            if (card.AiGroupIds == null || card.AiGroupIds.Count == 0)
+                return (null, new List<BSlot>());
+
+            return GetTurnStartActionAiDataId(selfSlot, opponentSlots, card.AiGroupIds[0]);
+        }
+
+        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(BaseCard card, ConditionCheckPoint checkPoint)
+        {
+            if (card.AiGroupIds == null || card.AiGroupIds.Count == 0)
+                return new List<(AiGroupData.Reaction, ConditionData)>();
+
+            return GetCardReactionPairs(card, checkPoint, card.AiGroupIds[0]);
+        }
+
         /// <summary>
         /// 카드의 Ai 그룹을 호출하여 AiData를 가져온다.
         /// </summary>
-        /// <returns></returns>
-        public int GetCardAiDataId(BaseCard card)
+        public int GetCardAiDataId(BaseCard card, int aiGroupId)
         {
             BSlot boardSlot = null;
 
             if (BoardSystem.Instance != null)
                 BoardSystem.Instance.GetBoardSlot(card.Uid);
 
-            string aiGroupDataTableLog = $"{(boardSlot != null ? Utils.BoardSlotLog(boardSlot) : $"카드({card.Id})")}. <color=#78d641>AiGroupData</color> 테이블 {card.AiGroupId} 데이터 얻기";
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
+            string aiGroupDataTableLog = $"{(boardSlot != null ? Utils.BoardSlotLog(boardSlot) : $"카드({card.Id})")}. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
 
             if (aiGroupData == null)
             {
@@ -40,12 +67,16 @@ namespace ERang
             // 순차적으로 AI 그룹을 호출하고, 마지막 그룹에 도달 시 최초 그룹으로 순환한다.
             if (aiGroupData.aiGroupType == AiGroupType.Repeat)
             {
-                if (card.AiGroupIndex >= aiGroupData.ai_Groups.Count)
-                    card.AiGroupIndex = 0;
+                // AiGroupIndex를 개별 aiGroupId별로 관리
+                if (!card.AiGroupIndexes.ContainsKey(aiGroupId))
+                    card.AiGroupIndexes[aiGroupId] = 0;
 
-                aiDataIds = aiGroupData.ai_Groups[card.AiGroupIndex];
+                if (card.AiGroupIndexes[aiGroupId] >= aiGroupData.ai_Groups.Count)
+                    card.AiGroupIndexes[aiGroupId] = 0;
 
-                card.AiGroupIndex++;
+                aiDataIds = aiGroupData.ai_Groups[card.AiGroupIndexes[aiGroupId]];
+
+                card.AiGroupIndexes[aiGroupId]++;
             }
             else if (aiGroupData.aiGroupType == AiGroupType.Random)
             {
@@ -83,7 +114,8 @@ namespace ERang
                     totalValue += aiData.value;
 
                     aiDataList.Add((aiDataId, aiData.value));
-                };
+                }
+                ;
 
                 string aiDataListLog = $"{card.Id} 카드. aiDataIds {string.Join(", ", aiDataIds)} 중 중 하나 선택";
 
@@ -112,14 +144,20 @@ namespace ERang
         /// </summary>
         public bool IsSelectAttackType(BaseCard card)
         {
-            int aiDataId = GetCardAiDataId(card);
+            foreach (int aiGroupId in card.AiGroupIds)
+            {
+                int aiDataId = GetCardAiDataId(card, aiGroupId);
 
-            if (aiDataId == 0)
-                return false;
+                if (aiDataId == 0)
+                    return false;
 
-            AiData aiData = AiData.GetAiData(aiDataId);
+                AiData aiData = AiData.GetAiData(aiDataId);
 
-            return Constants.SelectAttackTypes.Contains(aiData.attackType);
+                if (Constants.SelectAttackTypes.Contains(aiData.attackType))
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -127,46 +165,49 @@ namespace ERang
         /// </summary>
         public bool IsHandOnCard(BaseCard card)
         {
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
-
-            if (aiGroupData == null)
+            foreach (int aiGroupId in card.AiGroupIds)
             {
-                Debug.LogError($"AiGroupData is null. AiGroupId: {card.AiGroupId} - IsHandOnCard");
-                return false;
-            }
+                AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
 
-            bool isHandOnCard = false;
-
-            foreach (List<int> aiDataIds in aiGroupData.ai_Groups)
-            {
-                foreach (int aiDataId in aiDataIds)
+                if (aiGroupData == null)
                 {
-                    AiData aiData = AiData.GetAiData(aiDataId);
+                    Debug.LogError($"AiGroupData is null. AiGroupId: {aiGroupId} - IsHandOnCard");
+                    continue;
+                }
 
-                    if (aiData == null)
+                bool isHandOnCard = false;
+
+                foreach (List<int> aiDataIds in aiGroupData.ai_Groups)
+                {
+                    foreach (int aiDataId in aiDataIds)
                     {
-                        Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId} - IsHandOnCard");
-                        continue;
-                    }
+                        AiData aiData = AiData.GetAiData(aiDataId);
 
-                    // 핸드 온 카드 설정
-                    foreach (int abilityId in aiData.ability_Ids)
-                    {
-                        AbilityData ability = AbilityData.GetAbilityData(abilityId);
-
-                        if (ability == null)
+                        if (aiData == null)
                         {
-                            Debug.LogWarning($"HCard.SetCard 함수. AbilityData({abilityId}) {Utils.RedText("테이블 데이터 없음")} - IsHandOnCard");
+                            Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId} - IsHandOnCard");
                             continue;
                         }
 
-                        if (ability.workType == AbilityWorkType.OnHand)
-                            isHandOnCard = true;
+                        // 핸드 온 카드 설정
+                        foreach (int abilityId in aiData.ability_Ids)
+                        {
+                            AbilityData ability = AbilityData.GetAbilityData(abilityId);
+
+                            if (ability == null)
+                            {
+                                Debug.LogWarning($"HCard.SetCard 함수. AbilityData({abilityId}) {Utils.RedText("테이블 데이터 없음")} - IsHandOnCard");
+                                continue;
+                            }
+
+                            if (ability.workType == AbilityWorkType.OnHand)
+                                return true;
+                        }
                     }
                 }
             }
 
-            return isHandOnCard;
+            return false;
         }
 
         /// <summary>
@@ -174,41 +215,44 @@ namespace ERang
         /// </summary>
         public List<int> GetTargetSlotNumbers(BaseCard card)
         {
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
-
-            if (aiGroupData == null)
-            {
-                Debug.LogError($"AiGroupData is null. AiGroupId: {card.AiGroupId} - IsHandOnCard");
-                return new List<int>();
-            }
-
             HashSet<int> targetSlotNumbers = new();
 
-            foreach (List<int> aiDataIds in aiGroupData.ai_Groups)
+            foreach (int aiGroupId in card.AiGroupIds)
             {
-                foreach (int aiDataId in aiDataIds)
+                AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
+
+                if (aiGroupData == null)
                 {
-                    AiData aiData = AiData.GetAiData(aiDataId);
+                    Debug.LogError($"AiGroupData is null. AiGroupId: {aiGroupId} - IsHandOnCard");
+                    continue;
+                }
 
-                    if (aiData == null)
+                foreach (List<int> aiDataIds in aiGroupData.ai_Groups)
+                {
+                    foreach (int aiDataId in aiDataIds)
                     {
-                        Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId} - IsHandOnCard");
-                        continue;
-                    }
+                        AiData aiData = AiData.GetAiData(aiDataId);
 
-                    if (aiData.attackType == AiDataAttackType.SelectEnemy || aiData.attackType == AiDataAttackType.SelectEnemyCreature)
-                    {
-                        foreach (var slotNumber in Constants.EnemySlotNumbers)
+                        if (aiData == null)
                         {
-                            targetSlotNumbers.Add(slotNumber);
+                            Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId} - IsHandOnCard");
+                            continue;
                         }
-                    }
 
-                    if (aiData.attackType == AiDataAttackType.SelectFriendly || aiData.attackType == AiDataAttackType.SelectFriendlyCreature)
-                    {
-                        foreach (var slotNumber in Constants.MySlotNumbers)
+                        if (aiData.attackType == AiDataAttackType.SelectEnemy || aiData.attackType == AiDataAttackType.SelectEnemyCreature)
                         {
-                            targetSlotNumbers.Add(slotNumber);
+                            foreach (var slotNumber in Constants.EnemySlotNumbers)
+                            {
+                                targetSlotNumbers.Add(slotNumber);
+                            }
+                        }
+
+                        if (aiData.attackType == AiDataAttackType.SelectFriendly || aiData.attackType == AiDataAttackType.SelectFriendlyCreature)
+                        {
+                            foreach (var slotNumber in Constants.MySlotNumbers)
+                            {
+                                targetSlotNumbers.Add(slotNumber);
+                            }
                         }
                     }
                 }
@@ -226,36 +270,37 @@ namespace ERang
 
             foreach (BaseCard handCard in handCards)
             {
-                int aiDataId = GetCardAiDataId(handCard);
-
-                AiData handCardAiData = AiData.GetAiData(aiDataId);
-
-                if (handCardAiData == null)
+                foreach (int aiGroupId in handCard.AiGroupIds)
                 {
-                    Debug.LogWarning($"{Utils.CardLog(handCard)} AiData({aiDataId}) <color=red>테이블에 데이터 없음</color> - AiLogic.GetHandOnCards");
-                    continue;
-                }
+                    int aiDataId = GetCardAiDataId(handCard, aiGroupId);
 
-                List<AbilityData> abilities = new List<AbilityData>();
+                    AiData handCardAiData = AiData.GetAiData(aiDataId);
 
-                foreach (int abilityId in handCardAiData.ability_Ids)
-                {
-                    AbilityData ability = AbilityData.GetAbilityData(abilityId);
-
-                    if (ability == null)
+                    if (handCardAiData == null)
                     {
-                        Debug.LogWarning($"{Utils.CardLog(handCard)} AbilityData({abilityId}) <color=red>테이블 데이터 없음</color> - AiLogic.GetHandOnCards");
+                        Debug.LogWarning($"{Utils.CardLog(handCard)} AiData({aiDataId}) <color=red>테이블에 데이터 없음</color> - AiLogic.GetHandOnCards");
                         continue;
                     }
 
-                    if (ability.workType == AbilityWorkType.OnHand)
-                        abilities.Add(ability);
+                    List<AbilityData> abilities = new List<AbilityData>();
+
+                    foreach (int abilityId in handCardAiData.ability_Ids)
+                    {
+                        AbilityData ability = AbilityData.GetAbilityData(abilityId);
+
+                        if (ability == null)
+                        {
+                            Debug.LogWarning($"{Utils.CardLog(handCard)} AbilityData({abilityId}) <color=red>테이블 데이터 없음</color> - AiLogic.GetHandOnCards");
+                            continue;
+                        }
+
+                        if (ability.workType == AbilityWorkType.OnHand)
+                            abilities.Add(ability);
+                    }
+
+                    if (abilities.Count > 0)
+                        handOnCards.Add((handCard, handCardAiData, abilities));
                 }
-
-                if (abilities.Count == 0)
-                    continue;
-
-                handOnCards.Add((handCard, handCardAiData, abilities));
             }
 
             if (handOnCards.Count > 0)
@@ -270,7 +315,7 @@ namespace ERang
         /// <param name="reactionSlot"></param>
         /// <param name="opponentSlots"></param>
         /// <returns></returns>
-        public (AiData aiData, List<BSlot> targetSlots) GetReacationAiData(BSlot reactionSlot, List<BSlot> opponentSlots)
+        public (AiData aiData, List<BSlot> targetSlots) GetReacationAiData(BSlot reactionSlot, List<BSlot> opponentSlots, int aiGroupId)
         {
             var reactionAiData = (default(AiData), default(List<BSlot>));
 
@@ -282,11 +327,11 @@ namespace ERang
                 return reactionAiData;
             }
 
-            List<(AiGroupData.Reaction, ConditionData)> reactionPairs = GetCardReactionPairs(card, ConditionCheckPoint.TurnStart);
+            List<(AiGroupData.Reaction, ConditionData)> reactionPairs = GetCardReactionPairs(card, ConditionCheckPoint.TurnStart, aiGroupId);
 
             if (reactionPairs.Count == 0)
             {
-                Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} AiGroupData({card.AiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color>");
+                Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} AiGroupData({string.Join(",", card.AiGroupIds)})에 해당하는 <color=red>리액션 데이터 없음</color>");
                 return reactionAiData;
             }
 
@@ -331,15 +376,15 @@ namespace ERang
         /// <summary>
         /// 턴 시작 액션 AiData id 얻기
         /// </summary>
-        public (AiData, List<BSlot>) GetTurnStartActionAiDataId(BSlot selfSlot, List<BSlot> opponentSlots)
+        public (AiData, List<BSlot>) GetTurnStartActionAiDataId(BSlot selfSlot, List<BSlot> opponentSlots, int aiGroupId)
         {
             BaseCard card = selfSlot.Card;
 
-            List<(AiGroupData.Reaction, ConditionData)> reactionPairs = GetCardReactionPairs(card, ConditionCheckPoint.TurnStart);
+            List<(AiGroupData.Reaction, ConditionData)> reactionPairs = GetCardReactionPairs(card, ConditionCheckPoint.TurnStart, aiGroupId);
 
             if (reactionPairs.Count == 0)
             {
-                Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} AiGroupData({card.AiGroupId})에 해당하는 <color=red>리액션 데이터 없음</color>");
+                Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} AiGroupData({string.Join(",", card.AiGroupIds)})에 해당하는 <color=red>리액션 데이터 없음</color>");
                 return (null, new List<BSlot>());
             }
 
@@ -386,13 +431,13 @@ namespace ERang
         /// <param name="card"></param>
         /// <param name="checkPoint"></param>
         /// <returns></returns>
-        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(BaseCard card, ConditionCheckPoint checkPoint)
+        public List<(AiGroupData.Reaction, ConditionData)> GetCardReactionPairs(BaseCard card, ConditionCheckPoint checkPoint, int aiGroupId)
         {
             List<(AiGroupData.Reaction, ConditionData)> reactionConditionPairs = new();
 
-            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(card.AiGroupId);
+            AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
 
-            string aiGroupDataTableLog = $"{card.Id} 카드. <color=#78d641>AiGroupData</color> 테이블 {card.AiGroupId} 데이터 얻기";
+            string aiGroupDataTableLog = $"{card.Id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
 
             if (aiGroupData == null)
             {
@@ -404,7 +449,7 @@ namespace ERang
 
             if (aiGroupData.reactions.Count == 0)
             {
-                Debug.LogWarning($"{card.Id} 카드. <color=#78d641>AiGroupData</color> 테이블 {card.AiGroupId}에 reaction 설정 없음 - AiLogic.GetTurnStartReaction");
+                Debug.LogWarning($"{card.Id} 카드. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId}에 reaction 설정 없음 - AiLogic.GetTurnStartReaction");
                 return reactionConditionPairs;
             }
 

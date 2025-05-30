@@ -20,7 +20,7 @@ MonoBehaviour:
     CardShortDesc_Id: MobShortDesc_901001
     CardType: Monster
     Grade: 
-    AiGroup_id: 11001
+    AiGroup_ids: 11001
     CostMana: 1
     CostGold: 0
     Hp: 8
@@ -43,7 +43,7 @@ MonoBehaviour:
     CardShortDesc_Id: MobShortDesc_901002
     CardType: Monster
     Grade: 
-    AiGroup_id: 11002
+    AiGroup_ids: 11002
     CostMana: 2
     CostGold: 0
     Hp: 5
@@ -66,7 +66,7 @@ MonoBehaviour:
     CardShortDesc_Id: MobShortDesc_901003
     CardType: Monster
     Grade: 
-    AiGroup_id: 11003
+    AiGroup_ids: 11003
     CostMana: 3
     CostGold: 50
     Hp: 1

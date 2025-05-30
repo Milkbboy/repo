@@ -7,7 +7,7 @@
       "dependencies": {
         "com.unity.test-framework": "1.1.9"
       },
-      "hash": "0a98b387a92cf9f1f47012fc46d4cf33576e5916"
+      "hash": "38fecf55e4fd94ccfe58a92ed8ad1a529ba1694e"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

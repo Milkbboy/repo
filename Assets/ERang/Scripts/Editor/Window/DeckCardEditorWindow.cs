@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -160,7 +161,26 @@ namespace ERang
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                card.SetAiGroupId(EditorGUILayout.IntField(card.AiGroupId));
+                // 임시 리스트를 만들어서 값 입력받기
+                List<int> tempIds = new List<int>(card.AiGroupIds);
+
+                int newCount = EditorGUILayout.IntField("AiGroupIds Count", tempIds.Count);
+                // 리스트 크기 조절
+                while (tempIds.Count < newCount) tempIds.Add(0);
+                while (tempIds.Count > newCount) tempIds.RemoveAt(tempIds.Count - 1);
+
+                // 각 요소 입력
+                for (int i = 0; i < tempIds.Count; i++)
+                {
+                    tempIds[i] = EditorGUILayout.IntField($"AiGroupId {i}", tempIds[i]);
+                }
+
+                // 값이 바뀌었으면 SetAiGroupIds 호출
+                if (!tempIds.SequenceEqual(card.AiGroupIds))
+                {
+                    card.SetAiGroupIds(tempIds);
+                }
+
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.EndVertical();

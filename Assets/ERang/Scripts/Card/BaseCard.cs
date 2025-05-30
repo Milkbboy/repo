@@ -16,7 +16,7 @@ namespace ERang
         private string uid;
         private int id;
         private CardType cardType;
-        private int aiGroupId;
+        private List<int> aiGroupIds;
         private bool inUse;
         private bool isExtinction;
         private Texture2D cardImage;
@@ -25,8 +25,8 @@ namespace ERang
         public string Uid { get => uid; protected set => uid = value; }
         public int Id { get => id; protected set => id = value; }
         public CardType CardType { get => cardType; protected set => cardType = value; }
-        public int AiGroupId { get => aiGroupId; protected set => aiGroupId = value; }
-        public int AiGroupIndex { get; set; } // 외부에서 변경 가능
+        public List<int> AiGroupIds { get => aiGroupIds; protected set => aiGroupIds = value; }
+        public Dictionary<int, int> AiGroupIndexes { get; set; } = new(); // 외부에서 변경 가능
         public bool InUse { get => inUse; protected set => inUse = value; }
         public bool IsExtinction { get => isExtinction; protected set => isExtinction = value; }
         public Texture2D CardImage { get => cardImage; protected set => cardImage = value; }
@@ -59,8 +59,12 @@ namespace ERang
             CardType = cardData.cardType;
             InUse = cardData.inUse;
             IsExtinction = cardData.extinction;
-            AiGroupId = cardData.aiGroup_id;
-            AiGroupIndex = 0;
+            AiGroupIds = cardData.aiGroup_ids != null ? new(cardData.aiGroup_ids) : new();
+            AiGroupIndexes = new Dictionary<int, int>();
+            foreach (int aiGroupId in AiGroupIds)
+            {
+                AiGroupIndexes[aiGroupId] = 0;
+            }
             CardImage = cardData.GetCardTexture();
             Traits = CardTraits.None;
 
@@ -74,13 +78,36 @@ namespace ERang
             Uid = Utils.GenerateShortUniqueID();
             Id = cardId;
             CardType = cardType;
-            AiGroupId = aiGroupId;
-            AiGroupIndex = 0;
+            AiGroupIds = new List<int> { aiGroupId };
+            AiGroupIndexes = new Dictionary<int, int> { { aiGroupId, 0 } };
             CardImage = cardImage;
             Traits = CardTraits.None;
 
             State = new CardState(0, 0, 0, 0);
             AbilitySystem = new CardAbilitySystem();
+        }
+
+        // CardData 업데이트
+        public virtual void UpdateCardData(CardData cardData)
+        {
+            Id = cardData.card_id;
+            CardType = cardData.cardType;
+            InUse = cardData.inUse;
+            IsExtinction = cardData.extinction;
+            AiGroupIds = new List<int>(cardData.aiGroup_ids);
+            AiGroupIndexes = AiGroupIds.ToDictionary(id => id, id => 0);
+            CardImage = cardData.GetCardTexture();
+        }
+
+        // 카드 데이터 직접 업데이트
+        public virtual void UpdateCardData(int cardId, CardType cardType, bool inUse, int aiGroupId, Texture2D cardImage)
+        {
+            Id = cardId;
+            CardType = cardType;
+            InUse = inUse;
+            AiGroupIds = new List<int> { aiGroupId };
+            AiGroupIndexes = AiGroupIds.ToDictionary(id => id, id => 0);
+            CardImage = cardImage;
         }
 
         public void SetCardTraits(CardTraits cardTraits)
@@ -93,31 +120,14 @@ namespace ERang
             CardType = cardType;
         }
 
-        public void SetAiGroupId(int aiGroupId)
+        public void SetAiGroupIds(List<int> aiGroupIds)
         {
-            AiGroupId = aiGroupId;
-        }
+            AiGroupIds = new List<int>(aiGroupIds);
 
-        // CardData 업데이트
-        public virtual void UpdateCardData(CardData cardData)
-        {
-            Id = cardData.card_id;
-            CardType = cardData.cardType;
-            InUse = cardData.inUse;
-            IsExtinction = cardData.extinction;
-            AiGroupId = cardData.aiGroup_id;
-            CardImage = cardData.GetCardTexture();
-        }
-
-        // 카드 데이터 직접 업데이트
-        public virtual void UpdateCardData(int cardId, CardType cardType, bool inUse, int aiGroupId, Texture2D cardImage)
-        {
-            Id = cardId;
-            CardType = cardType;
-            InUse = inUse;
-            AiGroupId = aiGroupId;
-            AiGroupIndex = 0;
-            CardImage = cardImage;
+            foreach (int aiGroupId in AiGroupIds)
+            {
+                AiGroupIndexes[aiGroupId] = 0;
+            }
         }
 
         /// <summary>

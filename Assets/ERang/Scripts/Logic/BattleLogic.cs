@@ -304,20 +304,23 @@ namespace ERang
                     continue;
                 }
 
-                // AiGroupData 액션 AiDtaId 얻기
-                (AiData aiData, List<BSlot> targetSlots) = AiLogic.Instance.GetTurnStartActionAiDataId(boardSlot, opponentSlots);
-
-                if (aiData == null)
+                foreach (int aiGroupId in card.AiGroupIds)
                 {
-                    Debug.LogWarning($"{boardSlot.LogText} AiGroupData({card.AiGroupId})에 대한 이번 턴({turnCount}) 시작 리액션 안함");
-                    continue;
+                    // AiGroupData 액션 AiDtaId 얻기
+                    (AiData aiData, List<BSlot> targetSlots) = AiLogic.Instance.GetTurnStartActionAiDataId(boardSlot, opponentSlots, aiGroupId);
+
+                    if (aiData == null)
+                    {
+                        Debug.LogWarning($"{boardSlot.LogText} AiGroupData({aiGroupId})에 대한 이번 턴({turnCount}) 시작 리액션 안함");
+                        continue;
+                    }
+
+                    List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
+
+                    // 어빌리티 적용
+                    foreach (AbilityData abilityData in abilityDatas)
+                        yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
                 }
-
-                List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
-
-                // 어빌리티 적용
-                foreach (AbilityData abilityData in abilityDatas)
-                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
             }
         }
 
@@ -385,46 +388,49 @@ namespace ERang
                 yield break;
             }
 
-            if (card.AiGroupId == 0)
+            if (card.AiGroupIds == null || card.AiGroupIds.Count == 0)
             {
-                Debug.LogWarning($"{boardSlot.LogText} AiGroupId 가 {Utils.RedText(card.AiGroupId)}이라서 카드 액션 패스");
+                Debug.LogWarning($"{boardSlot.LogText} AiGroupIds 가 {Utils.RedText(string.Join(", ", card.AiGroupIds))}이라서 카드 액션 패스");
                 yield break;
             }
 
-            // 카드의 행동 aiData 설정
-            int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
-
-            if (aiDataId == 0)
+            foreach (int aiGroupId in card.AiGroupIds)
             {
-                Debug.LogWarning($"{boardSlot.LogText} AiGroupData({card.AiGroupId})에 해당하는 aiDataId 얻기 실패");
-                yield break;
+                // 카드의 행동 aiData 설정
+                int aiDataId = AiLogic.Instance.GetCardAiDataId(card, aiGroupId);
+
+                if (aiDataId == 0)
+                {
+                    Debug.LogWarning($"{boardSlot.LogText} AiGroupData({aiGroupId})에 해당하는 aiDataId 얻기 실패");
+                    continue;
+                }
+
+                // 1. AiData 얻고
+                AiData aiData = AiData.GetAiData(aiDataId);
+
+                if (aiData == null)
+                {
+                    Debug.LogError($"{boardSlot.LogText} AiData({aiDataId}) <color=red>테이블 데이터 없음</color> ");
+                    continue;
+                }
+
+                // 2. AiData 에 설정된 타겟 얻기
+                List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, boardSlot, "CardAiAction");
+
+                if (targetSlots.Count == 0)
+                {
+                    Debug.LogWarning($"{boardSlot.LogText} 설정 타겟({aiData.target}) 없음 ");
+                    continue;
+                }
+
+                List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
+
+                // 어빌리티 적용
+                foreach (AbilityData abilityData in abilityDatas)
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnEndBoardSlot));
+
+                yield return new WaitForSeconds(boardTurnEndDelay);
             }
-
-            // 1. AiData 얻고
-            AiData aiData = AiData.GetAiData(aiDataId);
-
-            if (aiData == null)
-            {
-                Debug.LogError($"{boardSlot.LogText} AiData({aiDataId}) <color=red>테이블 데이터 없음</color> ");
-                yield break;
-            }
-
-            // 2. AiData 에 설정된 타겟 얻기
-            List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, boardSlot, "CardAiAction");
-
-            if (targetSlots.Count == 0)
-            {
-                Debug.LogWarning($"{boardSlot.LogText} 설정 타겟({aiData.target}) 없음 ");
-                yield break;
-            }
-
-            List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
-
-            // 어빌리티 적용
-            foreach (AbilityData abilityData in abilityDatas)
-                yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnEndBoardSlot));
-
-            yield return new WaitForSeconds(boardTurnEndDelay);
         }
 
         /// <summary>
@@ -509,53 +515,56 @@ namespace ERang
                 yield break;
             }
 
-            int aiDataId = AiLogic.Instance.GetCardAiDataId(card);
-
-            AiData aiData = AiData.GetAiData(aiDataId);
-
-            if (aiData == null)
+            foreach (int aiGroupId in card.AiGroupIds)
             {
-                Debug.LogError($"{card.LogText} 카드 AiData 없음");
-                yield break;
-            }
+                int aiDataId = AiLogic.Instance.GetCardAiDataId(card, aiGroupId);
 
-            // 타겟 설정 카드 확인
-            bool isSelectAttackType = Constants.SelectAttackTypes.Contains(aiData.attackType);
+                AiData aiData = AiData.GetAiData(aiDataId);
 
-            // 마법 사용 주체는 마스터 슬롯
-            BSlot selfSlot = BoardSystem.Instance.GetMasterSlot();
-
-            // 타겟팅이면 nearastSlot 을 대상으로 설정
-            List<BSlot> targetSlots = (aiData.target == AiDataTarget.SelectEnemy) ?
-                new List<BSlot> { targetSlot } :
-                TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandCardUse");
-
-            Debug.Log($"{card.LogText} 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData.ai_Id}, aiData.target: {aiData.target}, targetSlot: {targetSlot?.SlotNum ?? -1}, tagetSlots: {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
-
-            // 대상 선택 사용 카드
-            if (isSelectAttackType)
-            {
-                if (targetSlot == null)
+                if (aiData == null)
                 {
-                    Debug.LogError($"{card.LogText} 마법 대상이 없어서 카드 사용 실패");
-                    yield break;
+                    Debug.LogError($"{card.LogText} 카드 AiData({aiDataId}) 없음");
+                    continue;
                 }
 
-                if (targetSlots.Contains(targetSlot) == false)
+                // 타겟 설정 카드 확인
+                bool isSelectAttackType = Constants.SelectAttackTypes.Contains(aiData.attackType);
+
+                // 마법 사용 주체는 마스터 슬롯
+                BSlot selfSlot = BoardSystem.Instance.GetMasterSlot();
+
+                // 타겟팅이면 nearastSlot 을 대상으로 설정
+                List<BSlot> targetSlots = (aiData.target == AiDataTarget.SelectEnemy) ?
+                    new List<BSlot> { targetSlot } :
+                    TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandCardUse");
+
+                Debug.Log($"{card.LogText} 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData.ai_Id}, aiData.target: {aiData.target}, targetSlot: {targetSlot?.SlotNum ?? -1}, tagetSlots: {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
+
+                // 대상 선택 사용 카드
+                if (isSelectAttackType)
                 {
-                    Debug.LogError($"{card.LogText} 대상 슬롯이 아닌 슬롯에 카드 사용 실패");
-                    yield break;
+                    if (targetSlot == null)
+                    {
+                        Debug.LogError($"{card.LogText} 마법 대상이 없어서 카드 사용 실패");
+                        continue;
+                    }
+
+                    if (targetSlots.Contains(targetSlot) == false)
+                    {
+                        Debug.LogError($"{card.LogText} 대상 슬롯이 아닌 슬롯에 카드 사용 실패");
+                        continue;
+                    }
                 }
+
+                List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
+
+                // 어빌리티 적용
+                foreach (AbilityData abilityData in abilityDatas)
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
             }
 
             // 마스터 핸드 카드 제거 먼저 하고 어빌리티 발동 (먼저 삭제하지 않으면 핸드카드 선택 어빌리티에서 보일 수 있음)
             deck.RemoveHandCard(cardUid);
-
-            List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
-
-            // 어빌리티 적용
-            foreach (AbilityData abilityData in abilityDatas)
-                yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
 
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(master, card);

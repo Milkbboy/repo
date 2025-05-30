@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Table;
@@ -16,7 +17,7 @@ namespace ERang.Data
         public string cardShortDescId; // 카드 간단 설명
         public CardType cardType; // 해당 카드의 타입을 입력 (타입은 초안에서 총 6개의 타입으로 구분)
         public CardGrade cardGrade; // 해당 카드의 등급을 입력 (등급은 초안에서 총 3개의 등급으로 구분)
-        public int aiGroup_id; // 해당 카드가 가지고 있는 Ai 그룹의 Id 값
+        public List<int> aiGroup_ids = new(); // 해당 카드가 가지고 있는 Ai 그룹의 Id 값
         public int creatureAI_id; // Creature의 공격 Ai id (근접, 원거리 등)
         public int costMana; // 소환에 필요한 마나
         public int costGold; // 소환에 필요한 골드
@@ -51,7 +52,10 @@ namespace ERang.Data
             cardShortDescId = cardEntity.CardShortDesc_Id;
             cardGrade = ConvertCardGrade(cardEntity.Grade);
             cardType = ConvertCardType(cardEntity.CardType);
-            aiGroup_id = cardEntity.AiGroup_id;
+            if (!string.IsNullOrEmpty(cardEntity.AiGroup_ids))
+            {
+                aiGroup_ids = Utils.ParseIntArray(cardEntity.AiGroup_ids).ToList();
+            }
             costMana = cardEntity.CostMana;
             costGold = cardEntity.CostGold;
             hp = cardEntity.Hp;
@@ -84,7 +88,10 @@ namespace ERang.Data
             cardDescId = cardEntity.CardDesc_Id;
             cardShortDescId = cardEntity.CardShortDesc_Id;
             cardType = ConvertCardType(cardEntity.CardType);
-            aiGroup_id = cardEntity.AiGroup_id;
+            if (!string.IsNullOrEmpty(cardEntity.AiGroup_ids))
+            {
+                aiGroup_ids = Utils.ParseIntArray(cardEntity.AiGroup_ids).ToList();
+            }
             costMana = cardEntity.CostMana;
             hp = cardEntity.Hp;
             atk = cardEntity.Atk;

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
@@ -29,8 +28,8 @@ namespace ERang
                 EditorGUILayout.LabelField("Uid", card.Uid);
                 EditorGUILayout.LabelField("Id", card.Id.ToString());
                 EditorGUILayout.LabelField("CardType", card.CardType.ToString());
-                EditorGUILayout.LabelField("AiGroupId", card.AiGroupId.ToString());
-                EditorGUILayout.LabelField("AiGroupIndex", card.AiGroupIndex.ToString());
+                EditorGUILayout.LabelField("AiGroupId", string.Join(",", card.AiGroupIds));
+                EditorGUILayout.LabelField("AiGroupIndex", string.Join(", ", card.AiGroupIndexes.Select(kvp => $"{kvp.Key}:{kvp.Value}")));
                 EditorGUILayout.LabelField("InUse", card.InUse.ToString());
                 EditorGUILayout.LabelField("IsExtinction", card.IsExtinction.ToString());
                 EditorGUILayout.LabelField("Hp", card.Hp.ToString());
@@ -78,8 +77,8 @@ namespace ERang
                 EditorGUILayout.LabelField("Uid", card.Uid);
                 EditorGUILayout.LabelField("Id", card.Id.ToString());
                 EditorGUILayout.LabelField("CardType", card.CardType.ToString());
-                EditorGUILayout.LabelField("AiGroupId", card.AiGroupId.ToString());
-                EditorGUILayout.LabelField("AiGroupIndex", card.AiGroupIndex.ToString());
+                EditorGUILayout.LabelField("AiGroupId", string.Join(",", card.AiGroupIds));
+                EditorGUILayout.LabelField("AiGroupIndex", string.Join(", ", card.AiGroupIndexes.Select(kvp => $"{kvp.Key}:{kvp.Value}")));
                 EditorGUILayout.LabelField("InUse", card.InUse.ToString());
                 EditorGUILayout.LabelField("IsExtinction", card.IsExtinction.ToString());
                 EditorGUILayout.LabelField("abilityCount", card.AbilitySystem.CardAbilities.Count.ToString());
