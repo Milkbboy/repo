@@ -9,7 +9,6 @@ namespace ERang
     {
         public string CardUid => cardUid;
         public BaseCard Card => card;
-
         public LayerMask slotLayerMask;
         public string LogText => Utils.CardLog(card);
 
@@ -18,6 +17,9 @@ namespace ERang
         private BaseCard card;
         private CardUI cardUI;
         private string cardUid;
+        private GameObject gradeCommon;
+        private GameObject gradeRare;
+        private GameObject gradeLegend;
 
         private Vector3 originalPosition;
 
@@ -25,6 +27,11 @@ namespace ERang
         {
             dragable = GetComponent<Dragable>();
             cardUI = GetComponent<CardUI>();
+
+            // / 하위 오브젝트를 이름으로 찾아서 할당
+            gradeCommon = transform.Find("Grade_01_Common")?.gameObject;
+            gradeRare = transform.Find("Grade_02_Rare")?.gameObject;
+            gradeLegend = transform.Find("Grade_03_Legend")?.gameObject;
         }
 
         void Start()
@@ -125,6 +132,18 @@ namespace ERang
                 cardUI.SetCard(card);
             else
                 Debug.LogError("CardUI is null");
+
+            // 카드 등급 설정
+            GameObject cardGrade = card.CardGrade switch
+            {
+                CardGrade.Common => gradeCommon,
+                CardGrade.Rare => gradeRare,
+                CardGrade.Legendary => gradeLegend,
+                _ => null
+            };
+
+            if (cardGrade)
+                cardGrade.SetActive(true);
         }
 
         public bool IsSelectAttackTypeCard()

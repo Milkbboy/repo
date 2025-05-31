@@ -16,6 +16,7 @@ namespace ERang
         private string uid;
         private int id;
         private CardType cardType;
+        private CardGrade cardGrade;
         private List<int> aiGroupIds;
         private bool inUse;
         private bool isExtinction;
@@ -25,6 +26,7 @@ namespace ERang
         public string Uid { get => uid; protected set => uid = value; }
         public int Id { get => id; protected set => id = value; }
         public CardType CardType { get => cardType; protected set => cardType = value; }
+        public CardGrade CardGrade { get => cardGrade; protected set => cardGrade = value; }
         public List<int> AiGroupIds { get => aiGroupIds; protected set => aiGroupIds = value; }
         public Dictionary<int, int> AiGroupIndexes { get; set; } = new(); // 외부에서 변경 가능
         public bool InUse { get => inUse; protected set => inUse = value; }
@@ -67,6 +69,7 @@ namespace ERang
             }
             CardImage = cardData.GetCardTexture();
             Traits = CardTraits.None;
+            CardGrade = cardData.cardGrade;
 
             State = new CardState(cardData.hp, cardData.def, cardData.costMana, cardData.atk);
             AbilitySystem = new CardAbilitySystem();

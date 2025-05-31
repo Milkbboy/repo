@@ -1479,11 +1479,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_CardFrame
       objectReference: {fileID: 0}
-    - target: {fileID: 1253406716375538767, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6221956436652581614, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
         type: 3}
       propertyPath: DiscardPos
@@ -1542,7 +1537,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8558921083859622414, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7031510969763341693, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7493711368074159841, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6054054153215433612, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5716055432516845222, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6482499105545164725, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6775768924987776809, guid: 0b9dbedd2e8a2d44289756a9cba3212b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 0b9dbedd2e8a2d44289756a9cba3212b, type: 3}
 --- !u!1 &417366539
 GameObject:
@@ -7133,35 +7156,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5916829634067344274, guid: 0b527865a4067dd4b9f8f9fbdd0f3ff6,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 2677409998327092225, guid: 0b527865a4067dd4b9f8f9fbdd0f3ff6,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3736988469204861855, guid: 0b527865a4067dd4b9f8f9fbdd0f3ff6,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6474319182531211214, guid: 0b527865a4067dd4b9f8f9fbdd0f3ff6,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3299459722504984919, guid: 0b527865a4067dd4b9f8f9fbdd0f3ff6,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8002787567735021611, guid: 0b527865a4067dd4b9f8f9fbdd0f3ff6,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7668248676966655014, guid: 0b527865a4067dd4b9f8f9fbdd0f3ff6,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b527865a4067dd4b9f8f9fbdd0f3ff6, type: 3}
 --- !u!1001 &4816364523760888096
 PrefabInstance:
@@ -7304,11 +7299,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4605999407673836840, guid: 876a6d0a2e6699f45b2069835b6f9c73,
+    - target: {fileID: 6298667374528645718, guid: 876a6d0a2e6699f45b2069835b6f9c73,
         type: 3}
-      propertyPath: DiscardPos
+      propertyPath: cardObject
       value: 
-      objectReference: {fileID: 1318468664}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

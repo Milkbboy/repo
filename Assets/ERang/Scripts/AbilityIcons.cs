@@ -21,8 +21,11 @@ namespace ERang
         private float cardWidth;
         private Vector3 startPosition;
 
-        public void Start()
+        public void SetSlot(BSlot bSlot, GameObject cardObject)
         {
+            this.cardObject = cardObject;
+            this.bSlot = bSlot;
+
             // 아이콘 간격과 카드 크기 설정
             Transform cardFrameBackTransform = cardObject.transform.Find("Card_Frame_Back");
             MeshRenderer meshRenderer = cardFrameBackTransform.GetComponent<MeshRenderer>();
@@ -36,11 +39,6 @@ namespace ERang
             // Debug.Log($"{bSlot.LogText} 어빌리티 아이콘 시작 위치: {startPosition}");
 
             abilityIconDescUI.gameObject.SetActive(false);
-        }
-
-        public void SetSlot(BSlot bSlot)
-        {
-            this.bSlot = bSlot;
         }
 
         public void SetIcons(List<CardAbility> cardAbilities)

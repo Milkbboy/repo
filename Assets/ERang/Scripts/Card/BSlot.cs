@@ -21,13 +21,13 @@ namespace ERang
         public int SlotNum => slotNum;
         public int Index => index;
         public bool IsOverlapCard => isOverlapCard;
-
-        public GameObject cardObject;
+        public GameObject cardPrefab;
         public AbilityIcons abilityIcons;
 
         // LogText 속성 추가
         public string LogText => Utils.BoardSlotLog(this);
 
+        private GameObject cardObject;
         private BaseCard card = null;
         private SlotUI slotUI;
         private CardUI cardUI;
@@ -42,16 +42,22 @@ namespace ERang
         void Awake()
         {
             slotUI = GetComponent<SlotUI>();
-            cardUI = cardObject.GetComponent<CardUI>();
-
             aniAttack = GetComponent<Ani_Attack>();
             aniDamaged = GetComponent<Ani_Damaged>();
-
-            abilityIcons.SetSlot(this);
         }
 
         void Start()
         {
+            cardObject = Instantiate(cardPrefab, transform);
+            cardObject.transform.localScale = Vector3.one;
+            abilityIcons.SetSlot(this, cardObject);
+
+            cardUI = cardObject.GetComponent<CardUI>();
+            // Dragable 스크립트 동작 방지를 위해
+            BoxCollider boxCollider = cardObject.GetComponent<BoxCollider>();
+            if (boxCollider)
+                boxCollider.enabled = false;
+
             cardObject.SetActive(false);
         }
 
@@ -163,6 +169,7 @@ namespace ERang
             this.card = card;
 
             cardObject.SetActive(true);
+            cardObject.GetComponent<HCard>().SetCard(card);
             cardUI.SetCard(card);
 
             return true;
