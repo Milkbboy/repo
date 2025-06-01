@@ -10,6 +10,7 @@ namespace ERang
     public class TargetingArrow : MonoBehaviour
     {
         public int SelectedSlotNum => selectedSlotNum;
+
         [SerializeField]
         private GameObject bodyPrefab;
         [SerializeField]
@@ -35,9 +36,7 @@ namespace ERang
         private GameObject bottomRightVertex;
 
         private Camera mainCamera;
-
         private LayerMask boardSlotLayer;
-
         private bool isArrowEnabled;
 
         private int originalSortingOrder;
@@ -61,21 +60,16 @@ namespace ERang
 
             DisableSelectionBox();
 
-            mainCamera  = Camera.main;
-
+            mainCamera = Camera.main;
             boardSlotLayer = 1 << LayerMask.NameToLayer("BoardSlot");
 
-            // 모든 렌더러를 가져옵니다.
             renderers = GetComponentsInChildren<Renderer>(true);
-
-            // Debug.Log($"renderers.Length: {renderers.Length}");
 
             foreach (var part in arrows)
             {
                 part.SetActive(false);
             }
 
-            // 각 모서리를 나타내는 Vertex들의 색을 약간 노란색으로 변경
             SetVertexColor(topLeftVertex, Color.yellow);
             SetVertexColor(topRightVertex, Color.yellow);
             SetVertexColor(bottomLeftVertex, Color.yellow);
@@ -101,16 +95,13 @@ namespace ERang
                 UnselectEnemy();
             }
 
-            // 모든 렌더러의 sortingOrder를 높게 설정
             if (isArrowEnabled == true)
             {
                 for (int i = 0; i < renderers.Length; ++i)
                 {
                     var renderer = renderers[i];
-                    
                     originalSortingOrder = renderer.sortingOrder;
-                    renderer.sortingOrder = 2000 + i; // 높은 값으로 설정하여 맨 앞으로 이동
-                    // Debug.Log($"Renderer: {renderer.gameObject.name}, New SortingOrder: {renderer.sortingOrder}");
+                    renderer.sortingOrder = 2000 + i;
                 }
             }
         }
@@ -122,45 +113,59 @@ namespace ERang
                 return;
             }
 
-            // 마우스 위치를 가져오고, z 값을 카메라와의 거리로 설정
+            HandleTargetSelection();
+            DrawArrow();
+        }
+
+        /// <summary>
+        /// 타겟 선택 처리 - 기존 로직 복원 (타겟 락 제거)
+        /// </summary>
+        private void HandleTargetSelection()
+        {
             var mousePos = Input.mousePosition;
-
-            // 카메라와의 적절한 거리 계산 (예: 카메라가 z = -10 위치에 있고, 게임 월드의 평면이 z = 0 위치에 있는 경우)
             float cameraToPlaneDistance = Mathf.Abs(mainCamera.transform.position.z);
-
             mousePos.z = cameraToPlaneDistance;
-
-            var worldMousePos = mainCamera.ScreenToWorldPoint(mousePos);
-            var mouseX = worldMousePos.x;
-            var mouseY = worldMousePos.y;
-
-            // Debug.Log($"mousePos: {mousePos}, mouseX: {mouseX}, mouseY: {mouseY}");
 
             var ray = mainCamera.ScreenPointToRay(mousePos);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, boardSlotLayer))
             {
-                // Debug.Log($"HitInfo: {hitInfo.collider.gameObject.name}");
-
                 if (hitInfo.collider.gameObject != selectedSlot || selectedSlot == null)
                 {
                     BSlot boardSlot = hitInfo.collider.gameObject.GetComponent<BSlot>();
-                    // Debug.Log($"HitInfo: {hitInfo.collider.gameObject.name}, {(boardSlot.Card != null ? $"Card: {boardSlot.Card.LogText}" : "No Card")}");
+                    Debug.Log($"🔍 HandleTargetSelection: 마우스 over 슬롯 {boardSlot.SlotNum}");
 
                     if (HandDeck.Instance.IsTargetSlot(boardSlot.SlotNum))
                     {
+                        Debug.Log($"🔍 HandleTargetSelection: 타겟 슬롯 {boardSlot.SlotNum} 선택!");
                         SelectEnemy(hitInfo.collider.gameObject);
                     }
                     else
                     {
+                        Debug.Log($"🔍 HandleTargetSelection: 슬롯 {boardSlot.SlotNum}는 타겟 불가능, 선택 해제");
                         UnselectEnemy();
                     }
                 }
             }
             else
             {
+                Debug.Log($"🔍 HandleTargetSelection: 레이캐스트 히트 없음, 선택 해제");
                 UnselectEnemy();
             }
+        }
+
+        /// <summary>
+        /// 화살표 그리기
+        /// </summary>
+        private void DrawArrow()
+        {
+            var mousePos = Input.mousePosition;
+            float cameraToPlaneDistance = Mathf.Abs(mainCamera.transform.position.z);
+            mousePos.z = cameraToPlaneDistance;
+
+            var worldMousePos = mainCamera.ScreenToWorldPoint(mousePos);
+            var mouseX = worldMousePos.x;
+            var mouseY = worldMousePos.y;
 
             const float centerX = 0.0f;
             const float centerY = -4.0f;
@@ -206,11 +211,6 @@ namespace ERang
                 }
 
                 part.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(lenX, lenY) * Mathf.Rad2Deg);
-
-                // part.transform.localScale = new Vector3(
-                //     1.0f - 0.03f * (arrows.Count - 1 - i),
-                //     1.0f - 0.03f * (arrows.Count - 1 - i),
-                //     0);
             }
         }
 
@@ -221,18 +221,14 @@ namespace ERang
             {
                 renderer.material.color = color;
             }
-            else
-            {
-                Debug.Log($"Renderer is null for vertex: {vertext.name}");
-            }
         }
 
         private void SelectEnemy(GameObject go)
         {
             selectedSlot = go;
-
             selectedSlotNum = go.GetComponent<BSlot>().SlotNum;
-            Debug.Log($"{"SelectEnemy"}: {selectedSlot.name}, {selectedSlotNum}");
+
+            Debug.Log($"SelectEnemy: {selectedSlot.name}, {selectedSlotNum}");
 
             var boxCollider = go.GetComponent<BoxCollider>();
             var size = boxCollider.size;
@@ -255,9 +251,9 @@ namespace ERang
             bottomRightVertex.transform.position = bottomRightWorld;
         }
 
-        private void UnselectEnemy(int temp = 0)
+        private void UnselectEnemy()
         {
-            // Debug.Log($"<color=red>{selectedSlot?.name} unselected - {temp}</color>");
+            Debug.Log($"UnselectEnemy: {selectedSlot?.name} unselected");
             selectedSlot = null;
             selectedSlotNum = -1;
 
@@ -278,6 +274,31 @@ namespace ERang
             topRightVertex.SetActive(false);
             bottomLeftVertex.SetActive(false);
             bottomRightVertex.SetActive(false);
+        }
+
+        /// <summary>
+        /// 🔧 마우스 업 시점에 현재 마우스 위치에 있는 슬롯 번호 반환
+        /// </summary>
+        public int GetCurrentMouseOverSlotNum()
+        {
+            if (!isArrowEnabled)
+                return -1;
+
+            var mousePos = Input.mousePosition;
+            float cameraToPlaneDistance = Mathf.Abs(mainCamera.transform.position.z);
+            mousePos.z = cameraToPlaneDistance;
+
+            var ray = mainCamera.ScreenPointToRay(mousePos);
+
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, boardSlotLayer))
+            {
+                BSlot boardSlot = hitInfo.collider.gameObject.GetComponent<BSlot>();
+                Debug.Log($"GetCurrentMouseOverSlotNum: {boardSlot.SlotNum}");
+                return boardSlot.SlotNum;
+            }
+
+            Debug.Log($"GetCurrentMouseOverSlotNum: No slot found");
+            return -1;
         }
     }
 }

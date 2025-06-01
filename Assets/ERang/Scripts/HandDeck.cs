@@ -68,34 +68,46 @@ namespace ERang
                 return;
             }
 
-            // 공격 타입이 Select가 아닌 경우
+            // 공격 타입이 Select가 아닌 경우 (즉시 발동 마법)
             if (hCard.IsSelectAttackTypeCard() == false)
             {
+                Debug.Log($"🎉 {hCard.Card.LogText}. 즉시 발동 마법 카드 사용!");
                 BattleLogic.Instance.HandCardUse(hCard, null);
                 return;
             }
 
+            // 타겟팅 화살표 확인
             if (targetingArrow == null)
             {
-                Debug.Log($"{hCard.Card.LogText}. 타겟팅 화살표가 없습니다.");
-            }
-
-            if (targetingArrow.SelectedSlotNum == -1)
-            {
-                Debug.LogWarning($"{hCard.Card.LogText}. 타겟 슬롯이 없습니다.");
+                Debug.LogError($"{hCard.Card.LogText}. 타겟팅 화살표가 없습니다.");
                 return;
             }
 
-            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(targetingArrow.SelectedSlotNum);
+            // 🔧 중요: 선택된 타겟을 미리 저장 (나중에 화살표가 꺼져도 사용할 수 있도록)
+            int selectedSlot = targetingArrow.SelectedSlotNum;
+
+            Debug.Log($"🔍 MagicCardUse: selectedSlot={selectedSlot}");
+
+            if (selectedSlot == -1)
+            {
+                Debug.LogWarning($"{hCard.Card.LogText}. 타겟이 선택되지 않았습니다.");
+                return;
+            }
+
+            // 타겟 슬롯 가져오기
+            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(selectedSlot);
 
             if (targetSlot == null)
             {
-                Debug.LogWarning($"{hCard.Card.LogText}. 타겟 슬롯이 없습니다.");
+                Debug.LogError($"{hCard.Card.LogText}. 타겟 슬롯({selectedSlot})을 찾을 수 없습니다.");
                 return;
             }
 
+            // 🔧 화살표를 먼저 비활성화 (타겟 정보는 이미 저장했으므로)
             targetingArrow.EnableArrow(false);
 
+            // 마법 카드 사용 성공!
+            Debug.Log($"🎉 {hCard.Card.LogText}. 타겟: {targetSlot.LogText} - 마법 카드 사용 성공!");
             BattleLogic.Instance.HandCardUse(hCard, targetSlot);
         }
 
@@ -107,16 +119,32 @@ namespace ERang
         /// <summary>
         /// 드래깅 핸드 카드 타겟에 해당하는 보드 슬롯인지 확인
         /// </summary>
+        /// <summary>
+        /// 드래깅 핸드 카드 타겟에 해당하는 보드 슬롯인지 확인
+        /// </summary>
         public bool IsTargetSlot(int slotNum)
         {
+            Debug.Log($"🔍 IsTargetSlot 호출: slotNum={slotNum}");
+
             HCard dragginCard = hCards.Find(x => x.IsDragging());
 
-            // Debug.Log($"HandDeck. IsTargetSlot. Dragging Card: {dragginCard.Card.LogText}, 타겟 슬롯: {bSlot.LogText}, TargetSlotNumbers: {string.Join(", ", dragginCard.TargetSlotNumbers)}, SlotNum: {bSlot.SlotNum}");  
+            Debug.Log($"🔍 IsTargetSlot: dragginCard={dragginCard?.Card?.LogText ?? "null"}");
 
             if (dragginCard == null)
+            {
+                Debug.Log($"🔍 IsTargetSlot: dragginCard가 null이므로 false 반환");
                 return false;
+            }
 
-            return dragginCard.IsContainsSlotNum(slotNum);
+            bool result = dragginCard.IsContainsSlotNum(slotNum);
+            Debug.Log($"🔍 IsTargetSlot: dragginCard.IsContainsSlotNum({slotNum}) = {result}");
+
+            if (dragginCard.Card is MagicCard magicCard)
+            {
+                Debug.Log($"🔍 IsTargetSlot: MagicCard.TargetSlotNumbers = [{string.Join(", ", magicCard.TargetSlotNumbers)}]");
+            }
+
+            return result;
         }
 
         /// <summary>

@@ -4,6 +4,10 @@ using DG.Tweening;
 
 namespace ERang
 {
+    /// <summary>
+    /// 카드의 드래그 동작과 호버 효과를 담당하는 컴포넌트
+    /// 마우스 이벤트는 HCard에서 처리하고, 이 클래스는 순수하게 드래그/호버 로직만 담당
+    /// </summary>
     public class Dragable : MonoBehaviour
     {
         /// <summary>
@@ -12,24 +16,26 @@ namespace ERang
         public bool IsDragging => isDragging;
         public Vector3 OriginalPosition => originalPosition;
 
+        [Header("호버 효과 설정")]
         public float hoverHeight = 1f;
         public float animationDuration = 0.1f;
         public float scaleFactor = 1.5f;
 
+        [Header("드래그 설정")]
+        public float dragThreshold = 1f;
+
         private bool isDragging = false;
         private bool isCentered = false;
+        private bool isHovering = false;
 
         private Vector3 originalPosition;
         private Vector3 originalScale;
-        // 마우스 다운 시의 오프셋
         private Vector3 mouseOffset;
-        // y 방향으로 이동할 거리 임계값
-        private float dragThreshold = 1f;
         private float initialYPosition;
 
+        // 렌더링 관련
         private int originalSortingOrder;
         private int originalTextSortingOrder;
-
         private Renderer[] renderers;
         private TextMeshPro[] textMeshPros;
 
@@ -40,8 +46,6 @@ namespace ERang
 
             // TextMeshPro의 MeshRenderer를 제외한 Renderer 배열 생성
             renderers = System.Array.FindAll(renderers, r => !(r is MeshRenderer && r.GetComponent<TextMeshPro>() != null));
-
-            // Debug.Log($"textMeshPros.Length: {textMeshPros.Length}");
         }
 
         void Start()
@@ -50,16 +54,12 @@ namespace ERang
             originalScale = transform.localScale;
         }
 
-        void OnMouseDown()
+        /// <summary>
+        /// HCard에서 호출: 드래그 시작
+        /// </summary>
+        public void StartDrag()
         {
-            HCard hCard = GetComponent<HCard>();
-
-            // 핸드 온 카드 드래깅 안되게 처리
-            if (hCard.IsHandOnCard())
-                return;
-
             isDragging = true;
-            // 드래그 시작 시 y 위치 저장
             initialYPosition = transform.position.y;
 
             // 마우스 다운 시의 오프셋 계산
@@ -67,111 +67,162 @@ namespace ERang
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
             mouseOffset = transform.position - objPosition;
 
-            // Debug.Log($"Draggable. 현재 위치: {transform.position}, originalPosition: {originalPosition}");
+            Debug.Log($"Dragable.StartDrag: {transform.name}");
         }
 
-        void OnMouseDrag()
+        /// <summary>
+        /// HCard에서 호출: 드래그 업데이트
+        /// </summary>
+        public void UpdateDrag()
         {
-            if (isDragging == false)
+            if (!isDragging)
+            {
+                Debug.Log("UpdateDrag: not dragging");
                 return;
+            }
 
             if (isCentered)
+            {
+                Debug.Log("UpdateDrag: already centered");
                 return;
+            }
 
             Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
             transform.position = objPosition + mouseOffset;
 
-            // y 방향으로 일정 거리 이상 이동했는지 확인
-            if (Mathf.Abs(transform.position.y - initialYPosition) >= dragThreshold)
+            // 드래그 거리 체크
+            float dragDistance = Mathf.Abs(transform.position.y - initialYPosition);
+            Debug.Log($"UpdateDrag: dragDistance={dragDistance}, threshold={dragThreshold}");
+
+            // 타겟 선택 카드 처리 (기존 로직 유지)
+            if (dragDistance >= dragThreshold)
             {
                 HCard hCard = GetComponent<HCard>();
+                Debug.Log($"UpdateDrag: Threshold exceeded! Card type: {hCard.Card?.GetType().Name}");
 
-                // 매직 카드인 경우 중앙으로 이동
                 if (hCard.Card is MagicCard magicCard && magicCard.IsSelectAttackType)
                 {
+                    Debug.Log($"UpdateDrag: Target select card detected! Moving to center and showing arrow");
                     MoveCardToCenter();
-
                     HandDeck.Instance.SetTargettingArraow(true);
+                }
+                else
+                {
+                    Debug.Log($"UpdateDrag: Not a target select card. IsSelectAttackType: {(hCard.Card as MagicCard)?.IsSelectAttackType}");
                 }
             }
         }
 
-        void OnMouseUp()
+        /// <summary>
+        /// HCard에서 호출: 드래그 종료
+        /// </summary>
+        public void EndDrag()
         {
             isDragging = false;
             isCentered = false;
 
+            // 🔧 타겟팅 화살표 끄는 로직 제거 (MagicCardUse에서 처리)
+            // 타겟 선택이 유지되어야 MagicCardUse에서 사용할 수 있음
+
+            // 크기 복원
             transform?.DOScale(originalScale, animationDuration);
 
+            // 렌더링 순서 복원
             ResetSortingOrder();
+
+            Debug.Log($"Dragable.EndDrag: {transform.name}");
         }
 
-        void OnMouseEnter()
+        /// <summary>
+        /// HCard에서 호출: 호버 효과 시작
+        /// </summary>
+        public void StartHover()
         {
-            if (HandDeck.Instance.DraggingCard != null)
+            if (isDragging || isHovering)
                 return;
 
-            if (isDragging)
-                return;
+            isHovering = true;
 
+            // 위치 및 크기 변경
             transform.DOMoveY(originalPosition.y + hoverHeight, animationDuration);
             transform.DOScale(originalScale * scaleFactor, animationDuration);
 
-            // 모든 렌더러의 sortingOrder를 높게 설정
-            foreach (var renderer in renderers)
-            {
-                originalSortingOrder = renderer.sortingOrder;
-                renderer.sortingOrder = 1000; // 높은 값으로 설정하여 맨 앞으로 이동
-            }
+            // 렌더링 순서 변경
+            SetHighSortingOrder();
 
-            // 모든 TextMeshPro의 sortingOrder를 높게 설정
-            foreach (var textMeshPro in textMeshPros)
-            {
-                originalTextSortingOrder = textMeshPro.sortingOrder;
-                textMeshPro.sortingOrder = 1001; // 높은 값으로 설정하여 맨 앞으로 이동
-            }
+            Debug.Log($"Dragable.StartHover: {transform.name}");
         }
 
-        void OnMouseExit()
+        /// <summary>
+        /// HCard에서 호출: 호버 효과 종료
+        /// </summary>
+        public void EndHover()
         {
-            if (HandDeck.Instance.DraggingCard != null)
+            if (isDragging || !isHovering)
                 return;
 
-            if (isDragging)
-                return;
+            isHovering = false;
 
+            // 원래 위치 및 크기로 복원
             transform.DOMoveY(originalPosition.y, animationDuration);
             transform.DOScale(originalScale, animationDuration);
 
+            // 렌더링 순서 복원
             ResetSortingOrder();
+
+            Debug.Log($"Dragable.EndHover: {transform.name}");
         }
 
+        /// <summary>
+        /// 원래 위치로 이동
+        /// </summary>
         public void MoveToOriginalPosition()
         {
             transform.DOMove(originalPosition, animationDuration);
         }
 
+        /// <summary>
+        /// 높은 렌더링 순서 설정 (호버 시)
+        /// </summary>
+        private void SetHighSortingOrder()
+        {
+            foreach (var renderer in renderers)
+            {
+                originalSortingOrder = renderer.sortingOrder;
+                renderer.sortingOrder = 1000;
+            }
+
+            foreach (var textMeshPro in textMeshPros)
+            {
+                originalTextSortingOrder = textMeshPro.sortingOrder;
+                textMeshPro.sortingOrder = 1001;
+            }
+        }
+
+        /// <summary>
+        /// 렌더링 순서 복원
+        /// </summary>
         private void ResetSortingOrder()
         {
-            // 모든 렌더러의 sortingOrder를 원래 값으로 복원
             foreach (var renderer in renderers)
             {
                 renderer.sortingOrder = originalSortingOrder;
             }
 
-            // 모든 TextMeshPro의 sortingOrder를 원래 값으로 복원
             foreach (var textMeshPro in textMeshPros)
             {
                 textMeshPro.sortingOrder = originalTextSortingOrder;
             }
         }
 
+        /// <summary>
+        /// 카드를 중앙으로 이동 (타겟 선택 카드용)
+        /// </summary>
         private void MoveCardToCenter()
         {
             isCentered = true;
-
             transform.DOMove(new Vector3(0, initialYPosition, originalPosition.z), animationDuration);
         }
     }
