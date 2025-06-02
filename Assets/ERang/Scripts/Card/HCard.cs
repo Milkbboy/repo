@@ -2,6 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using System;
 
 namespace ERang
 {
@@ -22,20 +23,48 @@ namespace ERang
         private GameObject gradeLegend;
 
         private Vector3 originalPosition;
+        private bool hasTriggeredTargetSelection = false;
 
         void Awake()
         {
             dragable = GetComponent<Dragable>();
             cardUI = GetComponent<CardUI>();
 
+            dragable.OnDragDistanceChanged += OnDragDistanceChanged;
+
             gradeCommon = transform.Find("Grade_01_Common")?.gameObject;
             gradeRare = transform.Find("Grade_02_Rare")?.gameObject;
             gradeLegend = transform.Find("Grade_03_Legend")?.gameObject;
         }
 
+        void OnDestroy()
+        {
+            dragable.OnDragDistanceChanged -= OnDragDistanceChanged;
+        }
+
         void Start()
         {
             originalPosition = transform.position;
+        }
+
+        private void OnDragDistanceChanged(float dragDistance)
+        {
+            // 임계값 도달 시 한 번만 실행
+            if (dragDistance >= dragable.dragThreshold && !hasTriggeredTargetSelection)
+            {
+                HandleTargetSelection();
+                hasTriggeredTargetSelection = true;
+            }
+        }
+
+        private void HandleTargetSelection()
+        {
+            if (card is MagicCard magicCard && magicCard.IsSelectAttackType)
+            {
+                Debug.Log($"Target select card detected! Moving to center");
+                dragable.MoveCardToCenter();
+                HandDeck.Instance.SetTargettingArraow(true);
+            }
         }
 
         void OnMouseEnter()
@@ -68,6 +97,8 @@ namespace ERang
 
         void OnMouseDown()
         {
+            hasTriggeredTargetSelection = false;
+
             // 핸드 온 카드 드래깅 안되게 처리
             if (IsHandOnCard())
                 return;

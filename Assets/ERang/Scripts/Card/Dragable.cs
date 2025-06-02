@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
-using TMPro;
 using DG.Tweening;
+using TMPro;
 
 namespace ERang
 {
@@ -10,6 +11,9 @@ namespace ERang
     /// </summary>
     public class Dragable : MonoBehaviour
     {
+        // 드래그 거리 체크 결과를 이벤트로 전달
+        public Action<float> OnDragDistanceChanged;
+
         /// <summary>
         /// 드래그 상태를 외부에서 확인할 수 있는 프로퍼티
         /// </summary>
@@ -45,7 +49,7 @@ namespace ERang
             textMeshPros = GetComponentsInChildren<TextMeshPro>(includeInactive: true);
 
             // TextMeshPro의 MeshRenderer를 제외한 Renderer 배열 생성
-            renderers = System.Array.FindAll(renderers, r => !(r is MeshRenderer && r.GetComponent<TextMeshPro>() != null));
+            renderers = Array.FindAll(renderers, r => !(r is MeshRenderer && r.GetComponent<TextMeshPro>() != null));
         }
 
         void Start()
@@ -94,25 +98,16 @@ namespace ERang
 
             // 드래그 거리 체크
             float dragDistance = Mathf.Abs(transform.position.y - initialYPosition);
-            Debug.Log($"UpdateDrag: dragDistance={dragDistance}, threshold={dragThreshold}");
+            OnDragDistanceChanged?.Invoke(dragDistance);
+        }
 
-            // 타겟 선택 카드 처리 (기존 로직 유지)
-            if (dragDistance >= dragThreshold)
-            {
-                HCard hCard = GetComponent<HCard>();
-                Debug.Log($"UpdateDrag: Threshold exceeded! Card type: {hCard.Card?.GetType().Name}");
-
-                if (hCard.Card is MagicCard magicCard && magicCard.IsSelectAttackType)
-                {
-                    Debug.Log($"UpdateDrag: Target select card detected! Moving to center and showing arrow");
-                    MoveCardToCenter();
-                    HandDeck.Instance.SetTargettingArraow(true);
-                }
-                else
-                {
-                    Debug.Log($"UpdateDrag: Not a target select card. IsSelectAttackType: {(hCard.Card as MagicCard)?.IsSelectAttackType}");
-                }
-            }
+        /// <summary>
+        /// 카드를 중앙으로 이동 (타겟 선택 카드용)
+        /// </summary>
+        public void MoveCardToCenter()
+        {
+            isCentered = true;
+            transform.DOMove(new Vector3(0, initialYPosition, originalPosition.z), animationDuration);
         }
 
         /// <summary>
@@ -215,15 +210,6 @@ namespace ERang
             {
                 textMeshPro.sortingOrder = originalTextSortingOrder;
             }
-        }
-
-        /// <summary>
-        /// 카드를 중앙으로 이동 (타겟 선택 카드용)
-        /// </summary>
-        private void MoveCardToCenter()
-        {
-            isCentered = true;
-            transform.DOMove(new Vector3(0, initialYPosition, originalPosition.z), animationDuration);
         }
     }
 }
