@@ -52,8 +52,8 @@ namespace ERang
         public void TrunEndProcess()
         {
             deckSystem.RemoveTurnEndHandCard();
+            handDeck.TurnEndRemoveHandCard();
 
-            deckUI.RemoveTurnEndHandCard();
             deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
             deckUI.SetGraveCardCount(deckSystem.GraveCardCount);
         }
@@ -61,16 +61,16 @@ namespace ERang
         public void HandCardToBaord(HCard hCard)
         {
             deckSystem.HandCardToBoard(hCard.Card);
+            handDeck.RemoveHandCard(hCard.Card.Uid);
 
-            deckUI.RemoveHandCard(hCard.Card.Uid);
             deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
         }
 
         public void HandCardToDeck(SelectCard selectCard)
         {
             deckSystem.HandCardToDeck(selectCard.Card);
+            handDeck.RemoveHandCard(selectCard.Card.Uid);
 
-            deckUI.RemoveHandCard(selectCard.Card.Uid);
             deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
         }
 
@@ -82,7 +82,7 @@ namespace ERang
         public void RemoveHandCard(string cardUid)
         {
             deckSystem.RemoveUsedHandCard(cardUid);
-            deckUI.RemoveHandCard(cardUid);
+            handDeck.RemoveHandCard(cardUid);
 
             deckUI.SetDeckCardCount(deckSystem.DeckCardCount);
             deckUI.SetGraveCardCount(deckSystem.GraveCardCount);

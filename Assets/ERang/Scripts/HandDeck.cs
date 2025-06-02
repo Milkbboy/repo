@@ -221,11 +221,11 @@ namespace ERang
         /// <summary>
         /// 턴 종료 핸드 카드 모두 제거
         /// </summary>
-        public void TurnEndRemoveHandCard(Transform discardPos)
+        public void TurnEndRemoveHandCard()
         {
             foreach (HCard handCard in hCards)
             {
-                handCard.DiscardAnimation(discardPos);
+                handCard.DiscardAnimation(GraveTransform);
             }
 
             hCards.Clear();

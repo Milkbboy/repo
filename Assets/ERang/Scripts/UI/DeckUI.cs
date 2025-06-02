@@ -11,14 +11,6 @@ namespace ERang
         public TextMeshProUGUI deckCardCountText;
         public TextMeshProUGUI graveCardCountText;
         public TextMeshProUGUI extinctionCardCountText;
-        public Transform gravePosition;
-
-        private HandDeck handDeck;
-
-        void Awake()
-        {
-            handDeck = GetComponent<HandDeck>();
-        }
 
         /// <summary>
         /// 덱 카드 개수 표시
@@ -45,16 +37,6 @@ namespace ERang
         public void SetExtinctionCardCount(int count)
         {
             extinctionCardCountText.text = count.ToString();
-        }
-
-        public void RemoveTurnEndHandCard()
-        {
-            handDeck.TurnEndRemoveHandCard(gravePosition);
-        }
-
-        public void RemoveHandCard(string cardUid)
-        {
-            handDeck.RemoveHandCard(cardUid);
         }
     }
 }
