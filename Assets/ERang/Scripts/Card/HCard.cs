@@ -114,7 +114,7 @@ namespace ERang
 
         void OnMouseDrag()
         {
-            Debug.Log($"HCard.OnMouseDrag called for {card?.LogText}");
+            // Debug.Log($"HCard.OnMouseDrag called for {card?.LogText}");
             // Dragable 컴포넌트에 드래그 업데이트 전달
             dragable.UpdateDrag();
         }

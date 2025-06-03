@@ -105,8 +105,8 @@ namespace ERang
                 Destroy(removeIcon.gameObject);
             }
 
-            foreach (string logText in lotTexts)
-                Debug.Log(logText);
+            // foreach (string logText in lotTexts)
+            //     Debug.Log(logText);
 
             UpdateIconPosition();
         }

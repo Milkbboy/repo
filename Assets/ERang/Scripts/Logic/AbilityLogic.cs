@@ -81,7 +81,7 @@ namespace ERang
         /// </summary>
         public IEnumerator AbilityProcess(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
         {
-            Debug.Log($"{selfSlot.LogText} {abilityData.LogText} 실행 - AbilityProcess");
+            Debug.Log($"{selfSlot.LogText} {abilityData.LogText} 실행. {string.Join(", ", targetSlots.Select(slot => slot.LogText))} - AbilityProcess");
 
             foreach (BSlot targetSlot in targetSlots)
             {
@@ -123,7 +123,7 @@ namespace ERang
                     // 행동 전, 후 어빌리티는 여기서 발동 안함
                     // 행동 전 어빌리티는 PriorAbilityAction, 행동 후 어빌리티는 PostAbilityAction 에서 발동
                     if (Constants.CardPriorAbilities.Contains(abilityData.abilityType) || Constants.CardPostAbilities.Contains(abilityData.abilityType))
-                        yield break;
+                        continue;
 
                     yield return StartCoroutine(AbilityAction(cardAbility, selfSlot, targetSlot));
                 }

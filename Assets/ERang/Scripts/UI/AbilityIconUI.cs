@@ -35,7 +35,7 @@ namespace ERang
                 bgMeshRenderer.materials[0].SetTexture("_MainTex", debuffBGTexture);
             }
 
-            Debug.Log($"TextMeshPro sortingOrder: {turnCountText.sortingOrder}");
+            // Debug.Log($"TextMeshPro sortingOrder: {turnCountText.sortingOrder}");
         }
 
         public void SetTurnCount(int turn)

@@ -112,39 +112,6 @@ namespace ERang
                     }
                 }
             }
-            //             BoxCollider collider = GetComponent<BoxCollider>();
-            //             if (collider != null)
-            //             {
-            //                 Bounds bounds = collider.bounds;
-
-            //                 Vector3[] corners = new Vector3[8];
-
-            //                 // 콜라이더의 8개 모서리 좌표 계산
-            //                 corners[0] = new Vector3(bounds.min.x, bounds.min.y, bounds.min.z);
-            //                 corners[1] = new Vector3(bounds.max.x, bounds.min.y, bounds.min.z);
-            //                 corners[2] = new Vector3(bounds.min.x, bounds.max.y, bounds.min.z);
-            //                 corners[3] = new Vector3(bounds.max.x, bounds.max.y, bounds.min.z);
-            //                 corners[4] = new Vector3(bounds.min.x, bounds.min.y, bounds.max.z);
-            //                 corners[5] = new Vector3(bounds.max.x, bounds.min.y, bounds.max.z);
-            //                 corners[6] = new Vector3(bounds.min.x, bounds.max.y, bounds.max.z);
-            //                 corners[7] = new Vector3(bounds.max.x, bounds.max.y, bounds.max.z);
-
-            //                 Gizmos.color = Color.red;
-
-            //                 // 각 모서리에 구를 그려서 표시
-            //                 // 각 모서리에 구를 그려서 표시하고 인덱스 라벨 추가
-            //                 for (int i = 0; i < corners.Length; i++)
-            //                 {
-            //                     Gizmos.DrawSphere(corners[i], 0.01f);
-            // #if UNITY_EDITOR
-            //                     Handles.Label(corners[i], i.ToString());
-            // #endif
-            //                 }
-            //                 // foreach (Vector3 corner in corners)
-            //                 // {
-            //                 //     Gizmos.DrawSphere(corner, 0.01f);
-            //                 // }
-            //             }
         }
 
         public void CreateSlot(int slot, int index, CardType cardType)
