@@ -276,7 +276,12 @@ namespace ERang
 
         public BSlot GetMasterSlot()
         {
-            return bSlots[0];
+            return bSlots[Constants.MasterSlotNumber];
+        }
+
+        public BSlot GetEnemyMasterSlot()
+        {
+            return bSlots[Constants.EnemyMasterSlotNumber];
         }
 
         public BSlot GetBoardSlot(int slotNum)

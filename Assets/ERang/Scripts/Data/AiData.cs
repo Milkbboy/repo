@@ -120,11 +120,13 @@ namespace ERang.Data
             {
                 "NearEnemy" => AiDataTarget.NearEnemy,
                 "Enemy" => AiDataTarget.Enemy,
+                "EnemyMaster" => AiDataTarget.EnemyMaster,
                 "RandomEnemy" => AiDataTarget.RandomEnemy,
                 "RandomEnemyCreature" => AiDataTarget.RandomEnemyCreature,
                 "AllEnemy" => AiDataTarget.AllEnemy,
                 "AllEnemyCreature" => AiDataTarget.AllEnemyCreature,
                 "Friendly" => AiDataTarget.Friendly,
+                "FriendlyMaster" => AiDataTarget.FriendlyMaster,
                 "AllFriendly" => AiDataTarget.AllFriendly,
                 "AllFriendlyCreature" => AiDataTarget.AllFriendlyCreature,
                 "Self" => AiDataTarget.Self,
