@@ -1,47 +1,56 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityDoom : MonoBehaviour, IAbility
+    public class AbilityDoom : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.Doom;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.Doom;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
+            if (!ValidateTargetSlot(targetSlot, "Doom"))
+                yield break;
+
+            // 파멸은 CreatureCard와 MasterCard만 가능
+            if (!ValidateCardType<CreatureCard>(targetSlot.Card, "Doom") &&
+                !ValidateCardType<MasterCard>(targetSlot.Card, "Doom"))
+            {
+                LogAbility($"파멸을 받을 수 없는 카드 타입: {targetSlot.Card.CardType}", LogType.Warning);
+                yield break;
+            }
+
+            LogAbility($"파멸 상태 적용 - {cardAbility.duration}턴 후 즉사");
+
+            // 파멸은 적용 시점에는 별다른 효과 없음 (시각적 표시만)
+            // 실제 효과는 Release에서 발동
             yield break;
         }
 
-        /// <summary>
-        /// Hp 0 설정
-        /// </summary>
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BaseCard card = targetSlot.Card;
-
-            if (card == null)
-            {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
+            if (!ValidateTargetSlot(targetSlot, "Doom"))
                 yield break;
-            }
 
-            if (card is not CreatureCard && card is not MasterCard)
-            {
-                Debug.LogWarning($"{targetSlot.LogText}: 타겟 슬롯 카드가 CreatureCard 또는 MasterCard 가 아닙니다.");
-                yield break;
-            }
+            BaseCard targetCard = targetSlot.Card;
 
-            int value = card.Hp + card.Def;
-            int beforeHp = card.Hp;
+            // 파멸 발동: 현재 HP + DEF를 모두 뚫는 데미지로 즉사
+            int lethalDamage = targetCard.Hp + targetCard.Def;
+            int beforeHp = targetCard.Hp;
 
-            yield return StartCoroutine(targetSlot.TakeDamage(value));
+            LogAbility($"파멸 발동! 즉사 데미지: {lethalDamage}");
+            yield return StartCoroutine(targetSlot.TakeDamage(lethalDamage));
 
+            // 카드가 파괴되었을 가능성이 높으므로 null 체크
             if (targetSlot.Card != null)
             {
-                Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, card.Hp, value));
-                yield break;
+                RecordChange(StatType.Hp, targetSlot, beforeHp, targetSlot.Card.Hp, lethalDamage);
+                LogAbility("파멸 완료 - 대상이 생존함 (예상외)");
+            }
+            else
+            {
+                RecordChange(StatType.Hp, targetSlot, beforeHp, 0, lethalDamage);
+                LogAbility("파멸 완료 - 대상 제거됨");
             }
         }
     }

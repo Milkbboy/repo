@@ -1,41 +1,58 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
 
 namespace ERang
 {
-    public class AbilityAddGoldPer : MonoBehaviour, IAbility
+    public class AbilityAddGoldPer : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.AddGoldPer;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.AddGoldPer;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             AiData aiData = Utils.CheckData(AiData.GetAiData, "AiData", cardAbility.aiDataId);
-
             if (aiData == null)
+            {
+                LogAbility("AiData를 찾을 수 없습니다.", LogType.Error);
                 yield break;
+            }
 
             AbilityData abilityData = Utils.CheckData(AbilityData.GetAbilityData, "AbilityData", cardAbility.abilityId);
-
             if (abilityData == null)
+            {
+                LogAbility("AbilityData를 찾을 수 없습니다.", LogType.Error);
                 yield break;
+            }
 
-            float gainGold = aiData.value * abilityData.ratio;
-            int gold = aiData.value + (int)gainGold;
+            if (Master.Instance == null)
+            {
+                LogAbility("Master 인스턴스가 없습니다.", LogType.Error);
+                yield break;
+            }
+
+            // 퍼센트 기반 골드 계산
+            float baseGold = aiData.value;
+            float bonusGold = baseGold * abilityData.ratio;
+            int totalGold = (int)(baseGold + bonusGold);
+
             int beforeGold = Master.Instance.Gold;
+            BoardSystem.Instance.AddGold(Master.Instance, totalGold);
 
-            BoardSystem.Instance.AddGold(Master.Instance, gold);
+            LogAbility($"골드 획득: {totalGold} (기본: {baseGold}, 보너스: {bonusGold:F1}, 비율: {abilityData.ratio:P0})");
+            LogAbility($"골드 변화: {beforeGold} -> {Master.Instance.Gold}");
 
-            // 골드 획득량 표시. 슬롯이 아닌 보드 골드에 표시하는 걸로
+            // TODO: 골드 획득 플로팅 텍스트 표시
             // selfSlot.SetFloatingGold(beforeGold, Master.Instance.Gold);
+
+            RecordChange(StatType.Gold, selfSlot, beforeGold, Master.Instance.Gold, totalGold);
 
             yield return new WaitForSeconds(0.1f);
         }
 
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
+            // 골드는 해제되지 않는 즉시 효과
+            LogAbility("골드는 해제할 수 없는 즉시 효과입니다.");
             yield break;
         }
     }

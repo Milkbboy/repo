@@ -1,50 +1,57 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityBrokenDef : MonoBehaviour, IAbility
+    public class AbilityBrokenDef : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.BrokenDef;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.BrokenDef;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            yield return StartCoroutine(Apply(cardAbility, targetSlot, false));
+            yield return StartCoroutine(Apply(cardAbility, targetSlot, false)); // 방어력 감소
         }
 
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
+            yield return StartCoroutine(Apply(cardAbility, targetSlot, true)); // 방어력 복구
         }
 
         private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isDefUp)
         {
-            BaseCard card = targetSlot.Card;
-
-            if (card == null)
-            {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
+            if (!ValidateTargetSlot(targetSlot, "BrokenDef"))
                 yield break;
-            }
 
-            int before = card.Def;
+            BaseCard targetCard = targetSlot.Card;
             int value = cardAbility.abilityValue;
 
-            if (isDefUp)
-                card.IncreaseDefense(value);
-            else
-                card.DecreaseDefense(value);
-
-            // 카드 어빌리티 중 ArmorBreak 가 있으면 방어력 감소 적용 안함
-            if (card.AbilitySystem.ArmorBreakAbility != null)
+            if (value <= 0)
             {
-                Debug.Log($"{targetSlot.LogText} 카드 어빌리티 중 ArmorBreak 있어 def {(isDefUp ? "증가" : "감소")} 적용 안함.");
+                LogAbility($"잘못된 방어력 변경 값: {value}", LogType.Warning);
                 yield break;
             }
 
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Def, isDefUp ? value : value * -1));
+            if (targetCard.AbilitySystem.ArmorBreakAbility != null)
+            {
+                LogAbility($"ArmorBreak 상태로 인해 방어력 {(isDefUp ? "증가" : "감소")} 무시");
+                yield break;
+            }
+
+            int beforeDef = targetCard.Def;
+
+            if (isDefUp)
+            {
+                targetCard.IncreaseDefense(value);
+                LogAbility($"방어력 복구: {beforeDef} -> {targetCard.Def} (+{value})");
+            }
+            else
+            {
+                targetCard.DecreaseDefense(value);
+                LogAbility($"방어력 감소: {beforeDef} -> {targetCard.Def} (-{value})");
+            }
+
+            int changeValue = isDefUp ? value : -value;
+            RecordChange(StatType.Def, targetSlot, beforeDef, targetCard.Def, changeValue);
 
             yield return new WaitForSeconds(0.1f);
         }

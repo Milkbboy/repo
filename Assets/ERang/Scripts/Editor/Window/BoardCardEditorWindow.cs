@@ -220,7 +220,7 @@ namespace ERang
                         {
                             Debug.Log($"Add Ability: {selectedAbilityId}");
 
-                            AbilityLogic.Instance.AbilityAction(selectedAbilityId, bSlot);
+                            // AbilityLogic.Instance.AbilityAction(selectedAbilityId, bSlot);
                             Repaint();
                         });
                     }
@@ -234,7 +234,7 @@ namespace ERang
                         EditorGUILayout.BeginHorizontal();
                         if (GUILayout.Button("X", GUILayout.Width(20)))
                         {
-                            AbilityLogic.Instance.ReleaseAction(bSlot, cardAbility);
+                            // AbilityLogic.Instance.ReleaseAction(bSlot, cardAbility);
                             i--;
                         }
                         EditorGUILayout.LabelField($"[{cardAbility.abilityId}] {abilityData.workType}: {AbilityData.GetAbilityData(abilityData.abilityId).abilityType}", GUILayout.Width(elementWidth));

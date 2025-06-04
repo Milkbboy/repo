@@ -1,25 +1,23 @@
 using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
 
 namespace ERang
 {
-    public class AbilityArmorBreak : MonoBehaviour, IAbility
+    public class AbilityArmorBreak : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.ArmorBreak;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.ArmorBreak;
 
         /// <summary>
         /// def 0 설정
         /// </summary>
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             yield return StartCoroutine(Apply(targetSlot, false));
         }
 
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             yield return StartCoroutine(Apply(targetSlot, true));
         }
@@ -29,40 +27,44 @@ namespace ERang
         /// </summary>
         private IEnumerator Apply(BSlot targetSlot, bool isRelease)
         {
-            BaseCard card = targetSlot.Card;
-
-            if (card == null)
-            {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
+            if (!ValidateTargetSlot(targetSlot, "ArmorBreak"))
                 yield break;
-            }
 
-            int before = card.Def;
-            int value = 0;
+            BaseCard targetCard = targetSlot.Card;
+            int beforeDef = targetCard.Def;
+            int newDef = 0;
 
             if (isRelease)
             {
-                // 감소할 def
-                int sumBrokeDef = card.AbilitySystem.BrokenDefAbilities.Sum(ability => ability.abilityValue);
-                // 더할 def
-                int sumDefUp = card.AbilitySystem.DefUpAbilities.Sum(ability => ability.abilityValue);
-
-                CardData cardData = Utils.CheckData(CardData.GetCardData, "CardData", card.Id);
-
-                if (cardData == null)
-                    yield break;
-
-                value = cardData.def + sumDefUp - sumBrokeDef;
+                // 방어구 파괴 해제: 원래 방어력 복구
+                newDef = CalculateRestoredDefense(targetCard);
+                LogAbility($"방어구 파괴 해제: {beforeDef} -> {newDef}");
+            }
+            else
+            {
+                // 방어구 파괴 적용: 방어력 0으로 설정
+                newDef = 0;
+                LogAbility($"방어구 파괴 적용: {beforeDef} -> {newDef}");
             }
 
-            Debug.Log($"<color=red>--------------------------- {(isRelease ? "Release" : "Apply")} ------------------------------</color>");
-            Debug.Log($"ArmorBreak {(isRelease ? "Release" : "Apply")}. card.Def: {card.Def} => {value}");
-
-            targetSlot.SetDefense(value);
-
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Def, value));
+            targetSlot.SetDefense(newDef);
+            RecordChange(StatType.Def, targetSlot, beforeDef, newDef, newDef - beforeDef);
 
             yield return new WaitForSeconds(0.1f);
+        }
+
+        private int CalculateRestoredDefense(BaseCard card)
+        {
+            // 원래 방어력에서 다른 효과들을 계산
+            var cardData = Utils.CheckData(CardData.GetCardData, "CardData", card.Id);
+            if (cardData == null) return 0;
+
+            int originalDef = cardData.def;
+            int sumBrokenDef = card.AbilitySystem.BrokenDefAbilities.Sum(ability => ability.abilityValue);
+            int sumDefUp = card.AbilitySystem.DefUpAbilities.Sum(ability => ability.abilityValue);
+
+            int restoredDef = originalDef + sumDefUp - sumBrokenDef;
+            return Mathf.Max(0, restoredDef); // 최소 0
         }
     }
 }

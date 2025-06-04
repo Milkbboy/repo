@@ -1,23 +1,41 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityAddSatiety : MonoBehaviour, IAbility
+    public class AbilityAddSatiety : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.AddSatiety;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.AddSatiety;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BattleLogic.Instance.UpdateSatietyGauge(cardAbility.abilityValue);
+            int value = cardAbility.abilityValue;
+
+            if (value <= 0)
+            {
+                LogAbility($"잘못된 포만감 값: {value}", LogType.Warning);
+                yield break;
+            }
+
+            if (BattleLogic.Instance == null)
+            {
+                LogAbility("BattleLogic 인스턴스가 없습니다.", LogType.Error);
+                yield break;
+            }
+
+            LogAbility($"포만감 증가: +{value}");
+            BattleLogic.Instance.UpdateSatietyGauge(value);
+
+            // 포만감은 전역 자원이므로 슬롯 정보는 -1로 기록
+            RecordChange(StatType.None, selfSlot, 0, value, value); // TODO: 포만감용 StatType 추가 고려
 
             yield return new WaitForSeconds(0.1f);
         }
 
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
+            // 포만감은 해제되지 않는 즉시 효과
+            LogAbility("포만감은 해제할 수 없는 즉시 효과입니다.");
             yield break;
         }
     }

@@ -1,8 +1,10 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
-using System.Linq;
+
 
 namespace ERang
 {
@@ -10,69 +12,58 @@ namespace ERang
     {
         public static AbilityLogic Instance { get; private set; }
 
-        public Dictionary<AbilityType, IAbility> abilityActions = new();
+        // 타입 안전성을 위한 읽기 전용 딕셔너리
+        public IReadOnlyDictionary<AbilityType, IAbility> AbilityActions => abilityActions;
+        private Dictionary<AbilityType, IAbility> abilityActions = new();
+        private Dictionary<AbilityType, IHandAbility> handAbilityActions = new();
 
         void Awake()
         {
-            Instance = this;
-
-            // 현재 게임 오브젝트와 모든 자식 게임 오브젝트의 Transform 컴포넌트를 얻음
-            Transform[] abilities = GetComponentsInChildren<Transform>();
-
-            // Debug.Log($"AbilityLogic Awake. abilities: {abilities.Length}");
-
-            // 자식 객체의 이름을 출력
-            foreach (Transform abilityTransform in abilities)
+            if (Instance != null && Instance != this)
             {
-                // 현재 게임 오브젝트 자신은 제외
-                if (abilityTransform == this.transform)
-                    continue;
-
-                IAbility ability = abilityTransform.GetComponent<IAbility>();
-
-                if (abilityActions.ContainsKey(ability.AbilityType))
-                {
-                    Debug.LogError($"어빌리티 {ability.AbilityType} 중복. 어빌리티 스크립트의 AbilityType 확인 필요");
-                    continue;
-                }
-
-                abilityActions.Add(ability.AbilityType, ability);
+                Destroy(gameObject);
+                return;
             }
 
-            // abilityActions 딕셔너리의 값들이 null 확인
-            // foreach (var kvp in abilityActions)
-            // {
-            //     if (kvp.Value != null)
-            //         Debug.Log($"AbilityAction[{kvp.Key}] found: {kvp.Value.AbilityType}");
-            //     else
-            //         Debug.LogError($"AbilityAction[{kvp.Key}] is null.");
-            // }
-        }
+            Instance = this;
 
-        /// <summary>
-        /// BoardCardEditorWindow 에서 호출되는 어빌리티 액션
-        /// </summary>
-        public void AbilityAction(int abilityId, BSlot targetSlot)
-        {
-            AbilityData abilityData = Utils.CheckData(AbilityData.GetAbilityData, "AbilityData", abilityId);
+            // IAbility 컴포넌트 검색 (성능 개선)
+            IAbility[] abilities = GetComponentsInChildren<IAbility>();
 
-            if (abilityData == null)
-                return;
+            Debug.Log($"<color=cyan>[AbilityLogic]</color> 초기화 시작. 발견된 어빌리티: {abilities.Length}개");
 
-            StartCoroutine(AbilityProcess(null, abilityData, targetSlot, new List<BSlot> { targetSlot }, AbilityWhereFrom.EditorWindow));
-        }
+            foreach (IAbility ability in abilities)
+            {
+                try
+                {
+                    if (ability == null)
+                        throw new InvalidOperationException("어빌리티가 null입니다.");
 
-        /// <summary>
-        /// BoardCardEditorWindow 에서 호출되는 어빌리티 해제
-        /// </summary>
-        public void ReleaseAction(BSlot targetSlot, CardAbility cardAbility)
-        {
-            StartCoroutine(AbilityRelease(cardAbility, AbilityWhereFrom.EditorWindow));
+                    if (abilityActions.ContainsKey(ability.AbilityType))
+                    {
+                        throw new InvalidOperationException($"어빌리티 {ability.AbilityType} 중복 등록 감지! " +
+                            $"Abilities 게임 오브젝트에서 중복된 어빌리티를 제거해주세요.");
+                    }
 
-            BaseCard card = targetSlot.Card;
+                    abilityActions.Add(ability.AbilityType, ability);
 
-            card.RemoveCardAbility(cardAbility);
-            targetSlot.DrawAbilityIcons();
+                    // 핸드 어빌리티 별도 등록
+                    if (ability is IHandAbility handAbility)
+                    {
+                        handAbilityActions.Add(ability.AbilityType, handAbility);
+                        Debug.Log($"<color=green>[AbilityLogic]</color> 핸드 어빌리티 등록: {ability.AbilityType}");
+                    }
+
+                    Debug.Log($"<color=green>[AbilityLogic]</color> 어빌리티 등록 완료: {ability.AbilityType}");
+
+                }
+                catch (Exception ex)
+                {
+                    // 중복 등록 시 게임 중단
+                    Debug.LogError($"<color=red>[AbilityLogic]</color> 어빌리티 등록 실패: {ex.Message}");
+                    throw; // 게임 중단
+                }
+            }
         }
 
         /// <summary>
@@ -81,19 +72,19 @@ namespace ERang
         /// </summary>
         public IEnumerator AbilityProcess(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
         {
-            Debug.Log($"{selfSlot.LogText} {abilityData.LogText} 실행. {string.Join(", ", targetSlots.Select(slot => slot.LogText))} - AbilityProcess");
+            if (!ValidateAbilityProcess(abilityData, selfSlot, targetSlots))
+                yield break;
 
-            foreach (BSlot targetSlot in targetSlots)
+            Debug.Log($"<color=cyan>[AbilityProcess]</color> {selfSlot.LogText} {abilityData.LogText} 실행. 대상: {string.Join(", ", targetSlots.Select(slot => slot.LogText))}");
+
+            foreach (BSlot targetSlot in targetSlots.Where(slot => slot?.Card != null))
             {
                 BaseCard card = targetSlot.Card;
-
-                if (card == null)
-                    continue;
 
                 CardAbility cardAbility = card.AbilitySystem.CardAbilities.Find(cardAbility => cardAbility.abilityId == abilityData.abilityId);
 
                 // 어빌리티 발동 여부
-                bool isAbilityAction = cardAbility == null;
+                bool isNewAbility = cardAbility == null;
 
                 cardAbility ??= new()
                 {
@@ -117,93 +108,119 @@ namespace ERang
 
                 targetSlot.DrawAbilityIcons();
 
-                // 신규 어빌리티인 경우 어빌리티 발동
-                if (isAbilityAction)
+                // 신규 어빌리티이고 즉시 발동 타입인 경우 실행
+                if (isNewAbility && ShouldActivateImmediately(abilityData))
                 {
-                    // 행동 전, 후 어빌리티는 여기서 발동 안함
-                    // 행동 전 어빌리티는 PriorAbilityAction, 행동 후 어빌리티는 PostAbilityAction 에서 발동
-                    if (Constants.CardPriorAbilities.Contains(abilityData.abilityType) || Constants.CardPostAbilities.Contains(abilityData.abilityType))
-                        continue;
-
                     yield return StartCoroutine(AbilityAction(cardAbility, selfSlot, targetSlot));
                 }
             }
         }
 
+        private bool ValidateAbilityProcess(AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
+        {
+            if (abilityData == null)
+            {
+                Debug.LogError("<color=red>[AbilityProcess]</color> AbilityData가 null입니다.");
+                return false;
+            }
+
+            if (selfSlot == null)
+            {
+                Debug.LogError("<color=red>[AbilityProcess]</color> selfSlot이 null입니다.");
+                return false;
+            }
+
+            if (targetSlots == null || targetSlots.Count == 0)
+            {
+                Debug.LogError("<color=red>[AbilityProcess]</color> targetSlots가 비어있습니다.");
+                return false;
+            }
+
+            return true;
+        }
+
+        // Burn(행동 전), Poison(행동 후) 어빌리티는 즉시 발동하지 않음
+        // BattleLogic.BoardTurnEnd에서 별도 타이밍에 실행됨
+        private bool ShouldActivateImmediately(AbilityData abilityData)
+        {
+            return !Constants.CardPriorAbilities.Contains(abilityData.abilityType) &&
+                   !Constants.CardPostAbilities.Contains(abilityData.abilityType);
+        }
+
         public IEnumerator HandCardAbilityAction(BaseCard handCard)
         {
+            if (handCard?.AbilitySystem?.HandAbilities == null || handCard.AbilitySystem.HandAbilities.Count == 0)
+                yield break;
+
+            Debug.Log($"<color=yellow>[HandAbility]</color> {handCard.LogText} 핸드 어빌리티 적용 시작");
+
             foreach (CardAbility cardAbility in handCard.AbilitySystem.HandAbilities)
             {
-                IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
-
-                if (abilityAction == null)
+                if (handAbilityActions.TryGetValue(cardAbility.abilityType, out IHandAbility handAbility))
                 {
-                    Debug.LogWarning($"{cardAbility.LogText} 에 대한 동작이 없음");
-                    yield break;
+                    yield return StartCoroutine(handAbility.ApplySingle(handCard));
                 }
-
-                if (abilityAction is AbilityReducedMana reducedMana)
+                else
                 {
-                    yield return StartCoroutine(reducedMana.ApplySingle(handCard));
+                    Debug.LogWarning($"<color=orange>[HandAbility]</color> {cardAbility.abilityType}에 대한 핸드 어빌리티 동작이 없음");
                 }
             }
         }
 
         public IEnumerator HandCardAbilityRelease(BaseCard handCard)
         {
-            for (int i = 0; i < handCard.AbilitySystem.HandAbilities.Count; ++i)
+            if (handCard?.AbilitySystem?.HandAbilities == null || handCard.AbilitySystem.HandAbilities.Count == 0)
+                yield break;
+
+            Debug.Log($"<color=yellow>[HandAbility]</color> {handCard.LogText} 핸드 어빌리티 해제 시작");
+
+            var abilitiesToRemove = handCard.AbilitySystem.HandAbilities.ToList();
+
+            foreach (CardAbility cardAbility in abilitiesToRemove)
             {
-                CardAbility cardAbility = handCard.AbilitySystem.HandAbilities[i];
-
-                IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
-
-                if (abilityAction == null)
+                if (handAbilityActions.TryGetValue(cardAbility.abilityType, out IHandAbility handAbility))
                 {
-                    Debug.LogWarning($"{cardAbility.LogText} 에 대한 해제 없음");
-                    yield break;
-                }
-
-                if (abilityAction is AbilityReducedMana reducedMana)
-                {
-                    yield return StartCoroutine(reducedMana.Release(handCard));
+                    yield return StartCoroutine(handAbility.Release(handCard));
 
                     handCard.RemoveHandCardAbility(cardAbility);
 
-                    Debug.Log($"{handCard.LogText} {cardAbility.LogText} 해제. 어빌리티 효과: {Utils.StatChangesText(reducedMana.Changes)} - HandCardAbilityRelease");
+                    if (handAbility is IAbility ability && ability.Changes.Count > 0)
+                        Debug.Log($"<color=yellow>[HandAbility]</color> {handCard.LogText} {cardAbility.LogText} 해제 완료. 효과: {Utils.StatChangesText(ability.Changes)}");
+                }
+                else
+                {
+                    Debug.LogWarning($"<color=orange>[HandAbility]</color> {cardAbility.abilityType}에 대한 핸드 어빌리티 해제가 없음");
                 }
             }
         }
 
+        /// <summary>
+        /// 어빌리티 실행
+        /// </summary>
         public IEnumerator AbilityAction(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
-
-            if (abilityAction == null)
+            if (!abilityActions.TryGetValue(cardAbility.abilityType, out IAbility abilityAction))
             {
-                Debug.LogWarning($"{targetSlot?.LogText ?? "targetSlot 없음"} {cardAbility.LogText} 에 대한 동작이 없음");
+                Debug.LogWarning($"<color=orange>[AbilityAction]</color> {targetSlot?.LogText ?? "targetSlot 없음."} {cardAbility.LogText}에 대한 동작이 없음.");
                 yield break;
             }
 
             yield return StartCoroutine(abilityAction.ApplySingle(cardAbility, selfSlot, targetSlot));
 
-            Debug.Log($"{targetSlot?.LogText ?? "targetSlot 없음"} {cardAbility.LogText} 실행. 어빌리티 효과: {Utils.StatChangesText(abilityAction.Changes)} - AbilityAction");
-
-            if (abilityAction.Changes.Count == 0)
-                yield break;
+            if (abilityAction.Changes.Count > 0)
+                Debug.Log($"<color=lime>[AbilityAction]</color> {targetSlot?.LogText ?? "targetSlot 없음."} {cardAbility.LogText} 실행 완료. 효과: {Utils.StatChangesText(abilityAction.Changes)}");
 
             abilityAction.Changes.Clear();
         }
 
         /// <summary>
-        /// 카드 ability 해제 동작
+        /// 어빌리티 해제
         /// </summary>
         public IEnumerator AbilityRelease(CardAbility cardAbility, AbilityWhereFrom abilityWhereFrom = AbilityWhereFrom.None)
         {
-            IAbility abilityAction = abilityActions.TryGetValue(cardAbility.abilityType, out IAbility action) ? action : null;
-
-            if (abilityAction == null)
+            if (!abilityActions.TryGetValue(cardAbility.abilityType, out IAbility abilityAction))
             {
-                Debug.LogWarning($"{cardAbility.LogText} 에 대한 해제 없음. {abilityWhereFrom} - AbilityRelease");
+                Debug.LogWarning($"<color=orange>[AbilityRelease]</color> {cardAbility.LogText}에 대한 해제가 없음. {abilityWhereFrom}");
                 yield break;
             }
 
@@ -211,29 +228,27 @@ namespace ERang
 
             if (selfSlot == null)
             {
-                Debug.LogError($"selfSlotNum({cardAbility.selfSlotNum}) 보드 슬롯 없음. {abilityWhereFrom} - AbilityRelease");
-                yield return null;
+                Debug.LogError($"<color=red>[AbilityRelease]</color> selfSlotNum({cardAbility.selfSlotNum}) 보드 슬롯 없음. {abilityWhereFrom}");
+                yield break;
             }
 
             BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.targetSlotNum);
 
             if (targetSlot == null)
             {
-                Debug.LogError($"targetSlotNum({cardAbility.targetSlotNum}) 보드 슬롯 없음. {abilityWhereFrom} - AbilityRelease");
-                yield return null;
+                Debug.LogError($"<color=red>[AbilityRelease]</color> targetSlotNum({cardAbility.targetSlotNum}) 보드 슬롯 없음. {abilityWhereFrom}");
+                yield break;
             }
-
-            string abilityActionLog = $"{targetSlot.LogText} {cardAbility.LogText} 효과 지속 시간(<color=yellow>{cardAbility.duration}</color>)";
 
             yield return StartCoroutine(abilityAction.Release(cardAbility, selfSlot, targetSlot));
 
-            if (abilityAction.Changes.Count > 0)
-            {
-                Debug.Log($"{abilityActionLog} 해제. {Utils.StatChangesText(abilityAction.Changes)}");
-                abilityAction.Changes.Clear();
-            }
+            string abilityActionLog = $"{targetSlot.LogText} {cardAbility.LogText} 지속시간(<color=yellow>{cardAbility.duration}</color>)";
 
-            Debug.Log($"삭제 어빌리티 동작. {targetSlot.LogText} {cardAbility.LogText}. {abilityWhereFrom} - AbilityRelease");
+            if (abilityAction.Changes.Count > 0)
+                Debug.Log($"<color=orange>[AbilityRelease]</color> {abilityActionLog} 해제. 효과: {Utils.StatChangesText(abilityAction.Changes)}");
+
+            Debug.Log($"<color=orange>[AbilityRelease]</color> {targetSlot.LogText} {cardAbility.LogText} 삭제. 출처: {abilityWhereFrom}");
+            abilityAction.Changes.Clear();
         }
 
         /// <summary>

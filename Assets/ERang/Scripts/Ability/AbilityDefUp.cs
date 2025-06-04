@@ -1,43 +1,51 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityDefUp : MonoBehaviour, IAbility
+    public class AbilityDefUp : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.DefUp;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.DefUp;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, false));
         }
 
         private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isDefUp)
         {
-            BaseCard card = targetSlot.Card;
+            if (!ValidateTargetSlot(targetSlot, "DefUp"))
+                yield break;
 
-            if (card == null)
+            BaseCard targetCard = targetSlot.Card;
+            int beforeDef = targetCard.Def;
+            int value = cardAbility.abilityValue;
+
+            if (value <= 0)
             {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
+                LogAbility($"잘못된 방어력 변경 값: {value}", LogType.Warning);
                 yield break;
             }
 
-            int before = card.Def;
-            int value = cardAbility.abilityValue;
-
+            // 방어력 증가
             if (isDefUp)
-                card.IncreaseDefense(value);
+            {
+                targetCard.IncreaseDefense(value);
+                LogAbility($"방어력 증가: {beforeDef} -> {targetCard.Def} (+{value})");
+            }
             else
-                card.DecreaseDefense(value);
+            {
+                targetCard.DecreaseDefense(value);
+                LogAbility($"방어력 감소: {beforeDef} -> {targetCard.Def} (-{value})");
+            }
 
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, card.Def, isDefUp ? value : value * -1));
+            int changeValue = isDefUp ? value : -value;
+            RecordChange(StatType.Def, targetSlot, beforeDef, targetCard.Def, changeValue);
 
             yield return new WaitForSeconds(0.1f);
         }

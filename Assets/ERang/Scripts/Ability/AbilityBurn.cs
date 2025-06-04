@@ -1,38 +1,41 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityBurn : MonoBehaviour, IAbility
+    public class AbilityBurn : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.Burn;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.Burn;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BaseCard card = targetSlot.Card;
+            if (!ValidateTargetSlot(targetSlot, "Burn"))
+                yield break;
 
-            if (card == null)
+            int burnDamage = cardAbility.abilityValue;
+
+            if (burnDamage <= 0)
             {
-                Debug.LogWarning($"{targetSlot.LogText}: 카드가 null 입니다.");
+                LogAbility($"잘못된 화상 데미지 값: {burnDamage}", LogType.Warning);
                 yield break;
             }
 
-            int value = cardAbility.abilityValue;
+            BaseCard targetCard = targetSlot.Card;
+            int beforeHp = targetCard.Hp;
+            int beforeDef = targetCard.Def;
 
-            int beforeHp = card.Hp;
-            int beforeDef = card.Def;
+            LogAbility($"화상 데미지 적용: {burnDamage} (행동 전 발동)");
+            yield return StartCoroutine(targetSlot.TakeDamage(burnDamage));
 
-            yield return StartCoroutine(targetSlot.TakeDamage(value));
-
-            // 카드가 hp 0 으로 제거되는 경우도 있음
-            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeHp, targetSlot.Card.Hp, value));
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, beforeDef, targetSlot.Card.Def, value));
+            // 변경사항 기록 (카드가 파괴될 수 있음)
+            RecordChange(StatType.Hp, targetSlot, beforeHp, targetCard?.Hp ?? 0, burnDamage);
+            RecordChange(StatType.Def, targetSlot, beforeDef, targetCard?.Def ?? 0, burnDamage);
         }
 
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
+            // 화상은 지속 시간이 끝나면 자동으로 해제
+            LogAbility("화상 상태 해제");
             yield break;
         }
     }

@@ -1,37 +1,49 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityHeal : MonoBehaviour, IAbility
+    public class AbilityHeal : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.Heal;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.Heal;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            BaseCard card = targetSlot.Card;
+            if (!ValidateTargetSlot(targetSlot, "Heal"))
+                yield break;
 
-            if (card == null)
+            int healAmount = cardAbility.abilityValue;
+            if (healAmount <= 0)
             {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
+                LogAbility($"잘못된 힐 값: {healAmount}", LogType.Warning);
                 yield break;
             }
 
-            int value = cardAbility.abilityValue;
-            int before = targetSlot.Card.Hp;
+            BaseCard targetCard = targetSlot.Card;
+            int beforeHp = targetCard.Hp;
+            int maxHp = targetCard.MaxHp;
 
-            targetSlot.RestoreHealth(value);
+            // 이미 최대 체력인 경우
+            if (beforeHp >= maxHp)
+            {
+                LogAbility($"이미 최대 체력입니다. 현재: {beforeHp}/{maxHp}");
+                yield break;
+            }
 
-            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, targetSlot.Card.Hp, value));
+            targetSlot.RestoreHealth(healAmount);
 
+            int actualHeal = targetCard.Hp - beforeHp;
+            RecordChange(StatType.Hp, targetSlot, beforeHp, targetCard.Hp, -actualHeal); // 음수로 기록 (회복)
+
+            LogAbility($"체력 회복 완료: {beforeHp} -> {targetCard.Hp} (+{actualHeal})");
             yield return new WaitForSeconds(0.1f);
         }
 
         // 즉시 효과는 해제 불필요
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
+            // 힐은 해제되지 않는 즉시 효과
+            LogAbility("힐은 해제할 수 없는 즉시 효과입니다.");
             yield break;
         }
     }

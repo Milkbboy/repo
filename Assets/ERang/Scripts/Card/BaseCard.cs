@@ -41,6 +41,7 @@ namespace ERang
 
         // 가상 속성 - 상속 클래스에서 재정의 가능
         public virtual int Hp => State.Hp;
+        public virtual int MaxHp => State.MaxHp;
         public virtual int Def => State.Def;
         public virtual int Mana => State.Mana;
         public virtual int Atk => State.Atk;

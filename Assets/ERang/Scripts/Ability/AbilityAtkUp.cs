@@ -1,49 +1,54 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityAtkUp : MonoBehaviour, IAbility
+    public class AbilityAtkUp : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.AtkUp;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.AtkUp;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, false));
         }
 
         private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAtkUp)
         {
-            BaseCard card = targetSlot.Card;
-
-            if (card == null)
-            {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
+            if (!ValidateTargetSlot(targetSlot, "AtkUp"))
                 yield break;
-            }
 
-            if (card is not CreatureCard creatureCard)
-            {
-                Debug.LogWarning($"{card.LogText} 크리쳐 카드 아님.");
+            if (!ValidateCardType<CreatureCard>(targetSlot.Card, "AtkUp"))
                 yield break;
-            }
 
-            int before = creatureCard.Atk;
+            CreatureCard creatureCard = targetSlot.Card as CreatureCard;
             int value = cardAbility.abilityValue;
 
-            if (isAtkUp)
-                creatureCard.IncreaseAttack(value);
-            else
-                creatureCard.DecreaseAttack(value);
+            if (value <= 0)
+            {
+                LogAbility($"잘못된 공격력 변경 값: {value}", LogType.Warning);
+                yield break;
+            }
 
-            Changes.Add((StatType.Atk, true, targetSlot.SlotNum, card.Id, targetSlot.SlotCardType, before, creatureCard.Atk, isAtkUp ? value : value * -1));
+            int beforeAtk = creatureCard.Atk;
+
+            if (isAtkUp)
+            {
+                creatureCard.IncreaseAttack(value);
+                LogAbility($"공격력 증가: {beforeAtk} -> {creatureCard.Atk} (+{value})");
+            }
+            else
+            {
+                creatureCard.DecreaseAttack(value);
+                LogAbility($"공격력 감소: {beforeAtk} -> {creatureCard.Atk} (-{value})");
+            }
+
+            int changeValue = isAtkUp ? value : -value;
+            RecordChange(StatType.Atk, targetSlot, beforeAtk, creatureCard.Atk, changeValue);
 
             yield return new WaitForSeconds(0.1f);
         }

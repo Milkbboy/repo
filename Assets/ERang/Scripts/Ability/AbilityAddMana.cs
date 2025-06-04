@@ -1,49 +1,55 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityAddMana : MonoBehaviour, IAbility
+    public class AbilityAddMana : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.AddMana;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.AddMana;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, selfSlot, false));
         }
 
         private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAdd)
         {
-            BaseCard card = targetSlot.Card;
-
-            if (card == null)
-            {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
+            if (!ValidateTargetSlot(targetSlot, "AddMana"))
                 yield break;
-            }
 
-            if (card is not MasterCard masterCard)
+            // 마나는 마스터 카드만 가능
+            if (!ValidateCardType<MasterCard>(targetSlot.Card, "AddMana"))
+                yield break;
+
+            MasterCard masterCard = targetSlot.Card as MasterCard;
+            int value = cardAbility.abilityValue;
+
+            if (value <= 0)
             {
-                Debug.LogWarning($"{card.LogText} 마스터 카드 아님.");
+                LogAbility($"잘못된 마나 값: {value}", LogType.Warning);
                 yield break;
             }
 
             int beforeMana = masterCard.Mana;
-            int value = cardAbility.abilityValue;
 
             if (isAdd)
+            {
                 masterCard.IncreaseMana(value);
+                LogAbility($"마나 증가: {beforeMana} -> {masterCard.Mana} (+{value})");
+            }
             else
+            {
                 masterCard.DecreaseMana(value);
+                LogAbility($"마나 감소: {beforeMana} -> {masterCard.Mana} (-{value})");
+            }
 
-            Debug.Log($"<color=#257dca>마나 변화량 {(isAdd ? value : value * -1)}</color>({beforeMana} => {masterCard.Mana})");
+            int changeValue = isAdd ? value : -value;
+            RecordChange(StatType.Mana, targetSlot, beforeMana, masterCard.Mana, changeValue);
 
             yield return new WaitForSeconds(0.1f);
         }

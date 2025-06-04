@@ -1,64 +1,82 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityReducedMana : MonoBehaviour, IAbility
+    /// <summary>
+    /// 마나 감소 어빌리티 - 핸드 카드 전용
+    /// 해당 턴에서 카드 소비 마나가 줄어드는 효과
+    /// </summary>
+    public class AbilityReducedMana : BaseHandAbility
     {
-        public AbilityType AbilityType => AbilityType.ReducedMana;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.ReducedMana;
 
-        public IEnumerator ApplySingle(BaseCard card)
+        /// <summary>
+        /// 마나 감소 적용 (핸드에 카드가 들어올 때)
+        /// </summary>
+        public override IEnumerator ApplySingle(BaseCard card)
         {
-            Debug.Log("<color=red>---- ReducedMana ----</color> 마나 감소!!!");
+            if (!ValidateHandCard(card)) yield break;
 
+            LogAbility($"마나 감소 적용 시작: {card.LogText}");
             Apply(card, true);
 
             yield break;
         }
 
-        public IEnumerator Release(BaseCard card)
+        /// <summary>
+        /// 마나 감소 해제 (핸드에서 카드가 나갈 때)
+        /// </summary>
+        public override IEnumerator Release(BaseCard card)
         {
-            Debug.Log("<color=red>---- ReducedMana ----</color> 감소된 마나 복구!!!");
+            if (!ValidateHandCard(card)) yield break;
 
+            LogAbility($"마나 감소 해제 시작: {card.LogText}");
             Apply(card, false);
 
             yield break;
         }
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
-        {
-            yield break;
-        }
-
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
-        {
-            yield break;
-        }
-
+        /// <summary>
+        /// 마나 증감 적용 실행
+        /// </summary>
+        /// <param name="card">대상 카드</param>
+        /// <param name="isReduced">true: 감소 적용, false: 감소 해제</param>
         private void Apply(BaseCard card, bool isReduced)
         {
-            foreach (CardAbility cardAbility in card.AbilitySystem.HandAbilities)
+            if (card?.AbilitySystem?.HandAbilities == null)
             {
-                if (card is CreatureCard creatureCard)
-                {
-                    Debug.Log("크리처 카드!!!!");
+                LogAbility("카드의 어빌리티 시스템이 없습니다.", LogType.Warning);
+                return;
+            }
 
-                    if (isReduced)
-                        creatureCard.DecreaseMana(cardAbility.abilityValue);
-                    else
-                        creatureCard.IncreaseMana(cardAbility.abilityValue);
+            // ReducedMana 타입의 핸드 어빌리티만 처리
+            var reducedManaAbilities = card.AbilitySystem.HandAbilities.FindAll(
+                ability => ability.abilityType == AbilityType.ReducedMana);
+
+            if (reducedManaAbilities.Count == 0)
+            {
+                LogAbility("ReducedMana 어빌리티가 없습니다.", LogType.Warning);
+                return;
+            }
+
+            foreach (CardAbility cardAbility in reducedManaAbilities)
+            {
+                int value = cardAbility.abilityValue;
+
+                if (value <= 0)
+                {
+                    LogAbility($"잘못된 어빌리티 값: {value}", LogType.Warning);
+                    continue;
                 }
 
-                if (card is MagicCard magicCard)
-                {
-                    Debug.Log("마법 카드!!!!");
+                // 마나 변경 처리 (BaseHandAbility의 헬퍼 메서드 사용)
+                bool success = TryChangeMana(card, value, isReduced);
 
-                    if (isReduced)
-                        magicCard.DecreaseMana(cardAbility.abilityValue);
-                    else
-                        magicCard.IncreaseMana(cardAbility.abilityValue);
+                if (success)
+                {
+                    string action = isReduced ? "감소" : "복구";
+                    LogAbility($"{action} 완료 - 값: {value}, 최종 마나: {card.Mana}");
                 }
             }
         }

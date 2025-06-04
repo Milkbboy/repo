@@ -1,77 +1,77 @@
 using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
 
 namespace ERang
 {
-    public class AbilityDamage : MonoBehaviour, IAbility
+    public class AbilityDamage : BaseAbility
     {
-        public AbilityType AbilityType => AbilityType.Damage;
-        public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
+        public override AbilityType AbilityType => AbilityType.Damage;
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
+            if (!ValidateTargetSlot(targetSlot, "Damage"))
+                yield break;
+
+            if (!ValidateCardType<CreatureCard>(targetSlot.Card, "Damage") &&
+                !ValidateCardType<MasterCard>(targetSlot.Card, "Damage"))
+            {
+                LogAbility($"데미지를 받을 수 없는 카드 타입: {targetSlot.Card.CardType}", LogType.Warning);
+                yield break;
+            }
+
             AiData aiData = Utils.CheckData(AiData.GetAiData, "AiData", cardAbility.aiDataId);
 
             if (aiData == null)
+            {
+                LogAbility("AiData를 찾을 수 없습니다.", LogType.Error);
                 yield break;
+            }
 
-            AiDataType aiDataType = aiData.type;
-            AiDataAttackType aiAttackType = aiData.attackType;
+            int damage = 0;
+
+            // 크리처 카드의 경우 공격력 사용
+            if (selfSlot.Card is CreatureCard)
+                damage = (selfSlot.Card as CreatureCard).Atk;
+
+            // 카드 선택 공격 타입이면 어빌리티 데미지 값으로 설정
+            if (Constants.SelectAttackTypes.Contains(aiData.attackType))
+                damage = cardAbility.abilityValue;
+
+            LogAbility($"계산된 데미지: {damage} (공격 타입: {aiData.attackType})");
+
             int atkCount = aiData.atk_Cnt;
 
             selfSlot.ApplyDamageAnimation();
 
-            int value = 0;
-
-            if (selfSlot.Card is CreatureCard)
-                value = (selfSlot.Card as CreatureCard).Atk;
-
-            // 카드 선택 공격 타입이면 어빌리티 데미지 값으로 설정
-            if (Constants.SelectAttackTypes.Contains(aiAttackType))
-                value = cardAbility.abilityValue;
-
             // 원거리 미사일 발사
-            if (aiDataType == AiDataType.Ranged)
-                yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, targetSlot, atkCount, value));
+            if (aiData.type == AiDataType.Ranged)
+                yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, targetSlot, atkCount, damage));
 
-            // Debug.Log($"targetSlots: {string.Join(", ", targetSlots.Select(x => x.SlotNum))}");
+            BaseCard targetCard = targetSlot.Card;
+            int beforeHp = targetCard.Hp;
+            int beforeDef = targetCard.Def;
 
-            BaseCard card = targetSlot.Card;
-
-            if (card == null)
-            {
-                Debug.LogWarning($"{targetSlot.LogText} 카드 없음.");
-                yield break;
-            }
-
-            if (card is not CreatureCard && card is not MasterCard)
-            {
-                Debug.LogWarning($"{targetSlot.LogText}: 타겟 슬롯 카드가 CreatureCard 또는 MasterCard 가 아닙니다.");
-                yield break;
-            }
-
-            int beforeHp = card.Hp;
-            int beforeDef = card.Def;
-
+            // 공격 횟수만큼 데미지 적용
             for (int i = 0; i < atkCount; i++)
             {
-                Debug.Log($"{targetSlot.LogText}, hp: {card.Hp}, def: {card.Def}, damage : {value}");
+                LogAbility($"데미지 적용 {i + 1}/{atkCount} - 대상: {targetSlot.LogText}, HP: {targetCard.Hp}, DEF: {targetCard.Def}, 데미지: {damage}");
 
-                yield return StartCoroutine(targetSlot.TakeDamage(value));
-
+                yield return StartCoroutine(targetSlot.TakeDamage(damage));
                 yield return new WaitForSeconds(0.5f);
             }
 
-            // TakeDamage 에서 카드가 Destroy 되면 null 이 되는 경우도 있음
-            Changes.Add((StatType.Hp, true, targetSlot.SlotNum, card?.Id ?? 0, targetSlot.SlotCardType, beforeHp, card?.Hp ?? 0, value * atkCount));
-            Changes.Add((StatType.Def, true, targetSlot.SlotNum, card?.Id ?? 0, targetSlot.SlotCardType, beforeDef, card?.Def ?? 0, value * atkCount));
+            // 변경사항 기록 (카드가 파괴되면 null이 될 수 있음)
+            int totalDamage = damage * atkCount;
+            RecordChange(StatType.Hp, targetSlot, beforeHp, targetCard?.Hp ?? 0, totalDamage);
+            RecordChange(StatType.Def, targetSlot, beforeDef, targetCard?.Def ?? 0, totalDamage);
         }
 
-        public IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
+            // 데미지는 해제되지 않는 즉시 효과
+            LogAbility("데미지는 해제할 수 없는 즉시 효과입니다.");
             yield break;
         }
     }
