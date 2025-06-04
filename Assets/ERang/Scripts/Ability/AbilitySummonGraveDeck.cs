@@ -1,15 +1,26 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
 
 namespace ERang
 {
-    public abstract class BaseSummonAbility : BaseAbility
+    public class AbilitySummonGraveDeck : BaseAbility
     {
-        protected abstract DeckKind TargetDeck { get; }
+        public override AbilityType AbilityType => AbilityType.SummonGraveDeck;
 
         public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        {
+            yield return StartCoroutine(SummonCardToLocation(cardAbility, DeckKind.Grave));
+        }
+
+        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        {
+            // 소환은 해제되지 않는 즉시 효과
+            LogAbility("소환은 해제할 수 없는 즉시 효과입니다.");
+            yield break;
+        }
+
+        private IEnumerator SummonCardToLocation(CardAbility cardAbility, DeckKind targetDeck)
         {
             AbilityData abilityData = Utils.CheckData(AbilityData.GetAbilityData, "AbilityData", cardAbility.abilityId);
             if (abilityData == null)
@@ -37,12 +48,12 @@ namespace ERang
             var cardData = Utils.CheckData(CardData.GetCardData, "CardData", cardId);
             string cardName = cardData?.nameDesc ?? $"카드 ID {cardId}";
 
-            LogAbility($"카드 소환: {cardName} -> {TargetDeck}");
+            LogAbility($"카드 소환: {cardName} -> {targetDeck}");
 
             // 핸드덱에 카드 소환
             if (HandDeck.Instance != null)
             {
-                yield return StartCoroutine(HandDeck.Instance.SummonCardToDeck(cardId, TargetDeck));
+                yield return StartCoroutine(HandDeck.Instance.SummonCardToDeck(cardId, targetDeck));
                 LogAbility($"소환 완료: {cardName}");
             }
             else
@@ -50,30 +61,5 @@ namespace ERang
                 LogAbility("HandDeck 인스턴스가 없습니다.", LogType.Error);
             }
         }
-
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
-        {
-            // 소환은 해제되지 않는 즉시 효과
-            LogAbility("소환은 해제할 수 없는 즉시 효과입니다.");
-            yield break;
-        }
-    }
-
-    public class AbilitySummonHand : BaseSummonAbility
-    {
-        public override AbilityType AbilityType => AbilityType.SummonHand;
-        protected override DeckKind TargetDeck => DeckKind.Hand;
-    }
-
-    public class AbilitySummonDrawDeck : BaseSummonAbility
-    {
-        public override AbilityType AbilityType => AbilityType.SummonDrawDeck;
-        protected override DeckKind TargetDeck => DeckKind.Deck;
-    }
-
-    public class AbilitySummonGraveDeck : BaseSummonAbility
-    {
-        public override AbilityType AbilityType => AbilityType.SummonGraveDeck;
-        protected override DeckKind TargetDeck => DeckKind.Grave;
     }
 }
