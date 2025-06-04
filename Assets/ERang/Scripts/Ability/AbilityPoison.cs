@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ERang
 {
-    public class AbilityPosion : MonoBehaviour, IAbility
+    public class AbilityPoison : MonoBehaviour, IAbility
     {
         public AbilityType AbilityType => AbilityType.Poison;
         public List<(StatType, bool, int, int, CardType, int, int, int)> Changes { get; set; } = new();
