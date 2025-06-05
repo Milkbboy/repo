@@ -2,9 +2,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using TMPro;
-using Newtonsoft.Json;
 using ERang.Data;
 
 namespace ERang
@@ -13,30 +11,28 @@ namespace ERang
     {
         public static BattleLogic Instance { get; private set; }
 
-        public int turnCount = 1;
-        public float turnStartActionDelay = .5f;
-        public float boardTurnEndDelay = .5f;
-        public float abilityReleaseDelay = .5f;
+        [Header("UI 참조")]
         public TextMeshProUGUI floorText;
         public TextMeshProUGUI resultText;
-
-        public Master Master => master;
-
         public SatietyUI satietyUI;
 
+        [Header("게임 오브젝트")]
         public Deck deck;
         public CardSelect cardSelect;
 
+        [Header("딜레이 설정")]
+        public float abilityReleaseDelay = 0.5f;
+
+        public int TurnCount => turnManager.TurnCount;
+
+        // 게임 상태
+        public Master Master => master;
         private Master master;
         private MasterCard masterCard;
-        private bool isTruenEndProcessing = false;
-
         private bool keepSatiety;
 
-        // for test
-        BaseCard testCard;
-        private Queue<NamedAction> actionQueue = new Queue<NamedAction>();
-        private List<BSlot> flashingSlots = new List<BSlot>();
+        // 턴 매니저 참조
+        private TurnManager turnManager;
 
         void Awake()
         {
@@ -49,8 +45,16 @@ namespace ERang
 
         void Start()
         {
+            InitializeGame();
+            StartCoroutine(StartBattle());
+        }
+
+        private void InitializeGame()
+        {
             master = Player.Instance.master;
-            // floorText.text = $"{floor} 층\n({levelId}) \n{selectLocation?.eventType ?? EventType.None}";
+
+            // 턴 매니저 초기화
+            turnManager = TurnManager.Instance;
 
             BoardSystem.Instance.CreateBoardSlots(master.CreatureSlotCount);
 
@@ -84,372 +88,29 @@ namespace ERang
 
                 satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
             }
+        }
+
+        public IEnumerator StartBattle()
+        {
+            LevelData levelData = LevelGroupData.GetLevelData(Player.Instance.levelId);
+
+            // 턴 매니저 초기화
+            turnManager.Initialize(master, masterCard, deck);
 
             // 몬스터 카드 생성
-            StartCoroutine(BoardSystem.Instance.CreateMonsterCards(levelData.cardIds));
+            yield return StartCoroutine(BoardSystem.Instance.CreateMonsterCards(levelData.cardIds));
 
-            StartCoroutine(TurnStart());
-        }
-
-        void Update()
-        {
-            ActionQueueProcess();
+            // 첫 턴 시작
+            yield return StartCoroutine(turnManager.StartTurn());
         }
 
         /// <summary>
-        /// 테스트
+        /// 턴 관리 (TurnManager 로 위임)
+        /// Battle Scene => Board => Canvas => Turn => Button 에서 호출
         /// </summary>
-        public void Test()
-        {
-            // BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(6);
-            // List<BoardSlot> targetSlots = BoardSystem.Instance.GetBoardSlots(new List<int> { 3, 2 });
-
-            // AiData aiData = AiData.GetAiData(1001);
-            // AbilityData abilityData = AbilityData.GetAbilityData(70001); // 기본 근거리 공격
-
-            // StartCoroutine(AbilityLogic.Instance.AbilityAction(aiData, abilityData, selfSlot, targetSlots));
-
-            // BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
-
-            // List<BSlot> firstSlots = TargetLogic.Instance.TargetFirstEnemy(selfSlot);
-            // Debug.Log($"TargetFirstEnemy - first Slot: {firstSlots[0].SlotNum}, index: {firstSlots[0].Index}");
-
-            // List<BSlot> secondsSlots = TargetLogic.Instance.TargetSecondEnemy(selfSlot);
-            // Debug.Log($"TargetSecondEnemy - first Slot: {secondsSlots[0].SlotNum}, index: {secondsSlots[0].Index}");
-
-            // UpdateSatietyGauge(10);
-
-            // StartCoroutine(AbilityTest());
-            cardSelect.gameObject.SetActive(true);
-            cardSelect.DrawCards(deck.HandCards);
-        }
-
-        private IEnumerator AbilityTest()
-        {
-            int testSlotNum = 0;
-            int[] abilityIds = { 70017, 70018, 100024, 100025 };
-
-            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(testSlotNum);
-            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(testSlotNum);
-
-            // 테스트 아쳐 카드 생성 후 테스트 어빌리티 추가
-            if (testCard == null)
-            {
-                // int testCardId = 100201;
-                // CardData cardData = CardData.GetCardData(testCardId);
-                // testCard = Utils.MakeCard(cardData);
-                // testCard.CardType = CardType.Monster;
-
-                // // 테스트 아쳐 카드 장착
-                // selfSlot.EquipCard(testCard);
-
-                AiData aiData = AiData.GetAiData(3003);
-
-                List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(new List<int>(abilityIds));
-
-                foreach (AbilityData abilityData in abilityDatas)
-                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, new List<BSlot> { targetSlot }, AbilityWhereFrom.Test));
-            }
-            else
-            {
-                // List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(new List<int>(abilityIds));
-
-                // foreach (AbilityData abilityData in abilityDatas)
-                //     StartCoroutine(AbilityLogic.Instance.AbilityAction(abilityData, null, selfSlot, targetSlot));
-
-                yield return StartCoroutine(CardPriorAbility(targetSlot));
-                yield return StartCoroutine(CardAiAction(targetSlot));
-                yield return StartCoroutine(CardPostAbility(targetSlot));
-            }
-        }
-
-        public IEnumerator TurnStart()
-        {
-            yield return new WaitForSeconds(.3f);
-
-            // ToastNotification.Show($"!! TURN START !! ({turnCount})");
-            Debug.Log($"----------------- {turnCount} TURN START -----------------");
-
-            // 턴 카운트 설정
-            BoardSystem.Instance.SetTurnCount(turnCount);
-
-            // 마스터 행동 시작
-            BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
-            yield return StartCoroutine(CardPriorAbility(masterSlot));
-
-            BoardSystem.Instance.SetHp(master.Hp);
-            BoardSystem.Instance.SetMana(master.RechargeMana);
-
-            // 핸드 카드 만들기
-            yield return StartCoroutine(deck.MakeHandCards());
-
-            // 핸드 카드 HandOn 어빌리티 액션
-            yield return HandOnCardAbilityAction(deck.HandCards);
-
-            // 턴 시작시 실행되는 몬스터 카드 Reaction
-            StartCoroutine(TurnStartMonsterReaction());
-        }
-
         public void TurnEnd()
         {
-            if (isTruenEndProcessing)
-            {
-                Debug.LogWarning("이미 턴 종료 처리 중");
-                return;
-            }
-
-            isTruenEndProcessing = true;
-
-            Debug.Log($"----------------- {turnCount} TURN END -----------------");
-
-            StartCoroutine(TrunEndProcess());
-        }
-
-        private IEnumerator TrunEndProcess()
-        {
-            // 크리쳐 카드 행동
-            List<BSlot> creatureSlots = BoardSystem.Instance.GetLeftBoardSlots();
-            yield return StartCoroutine(BoardTurnEnd(creatureSlots));
-
-            // 마스터 행동 후 어빌리티
-            BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
-            yield return StartCoroutine(CardPostAbility(masterSlot));
-
-            // 몬스터 카드 행동
-            List<BSlot> monsterSlots = BoardSystem.Instance.GetRightBoardSlots();
-            yield return StartCoroutine(BoardTurnEnd(monsterSlots));
-
-            // 건물 카드 행동
-            List<BSlot> buildingSlots = BoardSystem.Instance.GetBuildingBoardSlots();
-            yield return StartCoroutine(BoardTurnEnd(buildingSlots));
-
-            // 핸드 온 카드 어빌리티 해제
-            List<BaseCard> allCards = BoardSystem.Instance.GetAllSlots().Where(slot => slot.Card != null).Select(slot => slot.Card).ToList();
-            yield return StartCoroutine(ReleaseHandOnCardAbility(allCards));
-
-            // 지속 시간 종료 어빌리티 해제
-            yield return StartCoroutine(ReleaseBoardCardAbility(BoardSystem.Instance.GetLeftBoardSlots()));
-            yield return StartCoroutine(ReleaseBoardCardAbility(BoardSystem.Instance.GetRightBoardSlots()));
-
-            // 핸드덱에 카드 제거
-            deck.TrunEndProcess();
-
-            // 마스터 마나 리셋
-            BoardSystem.Instance.ResetMana(master);
-
-            // 턴 다시 시작
-            StartCoroutine(TurnStart());
-
-            isTruenEndProcessing = false;
-
-            // 보드 - 턴 카운트 증가
-            turnCount += 1;
-
-            BoardSystem.Instance.SetTurnCount(turnCount);
-        }
-
-        IEnumerator BattleEnd(bool isWin)
-        {
-            int nextFloor = 0;
-            int locationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
-
-            if (isWin)
-            {
-                resultText.text = "YOU WIN";
-
-                // 이기면 층 증가
-                nextFloor = Player.Instance.floor + 1;
-                Player.Instance.SaveMaster(nextFloor, locationId, keepSatiety);
-            }
-            else
-            {
-                resultText.text = "YOU LOSE";
-
-                PlayerPrefsUtility.SetInt("MasterId", 0);
-                PlayerPrefsUtility.SetInt("LevelId", 0);
-                PlayerPrefsUtility.SetInt("LastLocationId", 0);
-                PlayerPrefsUtility.SetInt("MasterHp", 0);
-
-                PlayerPrefsUtility.SetInt("AreaId", 0);
-                PlayerPrefsUtility.SetString("MasterCards", null);
-            }
-
-            Debug.Log($"배틀 종료 {isWin}, loastLocationId: {locationId}, nextFloor: {nextFloor}");
-
-            yield return new WaitForSeconds(2f);
-
-            GameObject nextSceneObject = GameObject.Find("Scene Manager");
-
-            if (nextSceneObject.TryGetComponent<NextScene>(out NextScene nextScene))
-                nextScene.Play(isWin ? "Event" : "Lobby");
-
-            PlayerPrefsUtility.SetString("LastScene", "Battle");
-        }
-
-        /// <summary>
-        /// 턴 시작 액션
-        /// </summary>
-        IEnumerator TurnStartMonsterReaction()
-        {
-            List<BSlot> reactionSlots = BoardSystem.Instance.GetRightBoardSlots();
-            List<BSlot> opponentSlots = BoardSystem.Instance.GetLeftBoardSlots();
-
-            foreach (BSlot boardSlot in reactionSlots)
-            {
-                BaseCard card = boardSlot.Card;
-
-                if (card == null)
-                {
-                    // Debug.LogWarning($"{boardSlot.Slot}번 슬롯 장착된 카드가 없어 액션 패스");
-                    continue;
-                }
-
-                foreach (int aiGroupId in card.AiGroupIds)
-                {
-                    // AiGroupData 액션 AiDtaId 얻기
-                    (AiData aiData, List<BSlot> targetSlots) = AiLogic.Instance.GetTurnStartActionAiDataId(boardSlot, opponentSlots, aiGroupId);
-
-                    if (aiData == null)
-                    {
-                        Debug.LogWarning($"{boardSlot.LogText} AiGroupData({aiGroupId})에 대한 이번 턴({turnCount}) 시작 리액션 안함");
-                        continue;
-                    }
-
-                    List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
-
-                    // 어빌리티 적용
-                    foreach (AbilityData abilityData in abilityDatas)
-                        yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnStartAction));
-                }
-            }
-        }
-
-        /// <summary>
-        /// 턴 종료 보드 슬롯 카드 행동
-        /// </summary>
-        IEnumerator BoardTurnEnd(List<BSlot> actorSlots)
-        {
-            foreach (BSlot boardSlot in actorSlots)
-            {
-                // 유저 마스터 카드는 여기서 동작 안하고 따로 함
-                if (boardSlot.SlotNum == 0 && boardSlot.SlotCardType == CardType.Master)
-                    continue;
-
-                // 카드 액션 전 적용 어빌리티 (기존 어빌리티)
-                yield return StartCoroutine(CardPriorAbility(boardSlot));
-
-                // 카드 AI 액션 (신규 어빌리티)
-                yield return StartCoroutine(CardAiAction(boardSlot));
-
-                // 카드 액션 후 적용 어빌리티 (기존 어빌리티)
-                yield return StartCoroutine(CardPostAbility(boardSlot));
-            }
-        }
-
-        IEnumerator CardPriorAbility(BSlot boardSlot)
-        {
-            BaseCard card = boardSlot.Card;
-
-            if (card == null)
-            {
-                // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
-                yield break;
-            }
-
-            foreach (CardAbility cardAbility in card.AbilitySystem.PriorCardAbilities)
-            {
-                yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(cardAbility, boardSlot, boardSlot));
-            }
-        }
-
-        IEnumerator CardPostAbility(BSlot boardSlot)
-        {
-            BaseCard card = boardSlot.Card;
-
-            if (card == null)
-            {
-                // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
-                yield break;
-            }
-
-            foreach (CardAbility cardAbility in card.AbilitySystem.PostCardAbilities)
-            {
-                yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(cardAbility, boardSlot, boardSlot));
-            }
-        }
-
-        IEnumerator CardAiAction(BSlot boardSlot)
-        {
-            BaseCard card = boardSlot.Card;
-
-            if (card == null)
-            {
-                // Debug.LogWarning($"{boardSlot.Slot}번 슬롯에 카드가 없어 카드 액션 패스");
-                yield break;
-            }
-
-            if (card.AiGroupIds == null || card.AiGroupIds.Count == 0)
-            {
-                Debug.LogWarning($"{boardSlot.LogText} AiGroupIds 가 {Utils.RedText(string.Join(", ", card.AiGroupIds))}이라서 카드 액션 패스");
-                yield break;
-            }
-
-            foreach (int aiGroupId in card.AiGroupIds)
-            {
-                // 카드의 행동 aiData 설정
-                int aiDataId = AiLogic.Instance.GetCardAiDataId(card, aiGroupId);
-
-                if (aiDataId == 0)
-                {
-                    Debug.LogWarning($"{boardSlot.LogText} AiGroupData({aiGroupId})에 해당하는 aiDataId 얻기 실패");
-                    continue;
-                }
-
-                // 1. AiData 얻고
-                AiData aiData = AiData.GetAiData(aiDataId);
-
-                if (aiData == null)
-                {
-                    Debug.LogError($"{boardSlot.LogText} AiData({aiDataId}) <color=red>테이블 데이터 없음</color> ");
-                    continue;
-                }
-
-                // 2. AiData 에 설정된 타겟 얻기
-                List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, boardSlot, "CardAiAction");
-
-                if (targetSlots.Count == 0)
-                {
-                    Debug.LogWarning($"{boardSlot.LogText} 설정 타겟({aiData.target}) 없음 ");
-                    continue;
-                }
-
-                List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
-
-                // 어빌리티 적용
-                foreach (AbilityData abilityData in abilityDatas)
-                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, boardSlot, targetSlots, AbilityWhereFrom.TurnEndBoardSlot));
-
-                yield return new WaitForSeconds(boardTurnEndDelay);
-            }
-        }
-
-        /// <summary>
-        /// 핸드에 있을때 효과가 발동되는 카드 액션
-        /// </summary>
-        IEnumerator HandOnCardAbilityAction(List<BaseCard> handCards)
-        {
-            // 핸드 온 카드 액션의 주체는 마스터 슬롯
-            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
-            List<(BaseCard card, AiData aiData, List<AbilityData> abilityDatas)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
-
-            foreach (var (card, aiData, abilityDatas) in handOnCards)
-            {
-                List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandOnCardAbilityAction");
-
-                // 어빌리티 적용
-                foreach (AbilityData abilityData in abilityDatas)
-                    yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.TurnStarHandOn));
-            }
+            StartCoroutine(turnManager.EndTurn());
         }
 
         public bool HandCardUse(HCard hCard, BSlot targetSlot)
@@ -474,12 +135,9 @@ namespace ERang
             return false;
         }
 
-        /// <summary>
-        /// 보드 슬롯에 카드 장착
-        /// - BSlot OnMouseUp 에서 호출
-        /// </summary>
-        /// <param name="boardSlot"></param>
-        /// <param name="cardUid"></param>
+        // ========================================
+        // 카드 관리 로직
+        // ========================================
         public void BoardSlotEquipCard(HCard hCard, BSlot boardSlot)
         {
             if (boardSlot.SlotCardType != hCard.Card.CardType)
@@ -501,10 +159,6 @@ namespace ERang
             Debug.Log($"{boardSlot.LogText} 에 {hCard.LogText} 장착");
         }
 
-        /// <summary>
-        /// 핸드 카드 사용
-        // - 카드 사용 주체는 마스터 슬롯
-        /// </summary>
         public IEnumerator HandCardUse(string cardUid, BSlot targetSlot)
         {
             BaseCard card = deck.FindHandCard(cardUid);
@@ -570,65 +224,6 @@ namespace ERang
             BoardSystem.Instance.CardCost(master, card);
         }
 
-        /// <summary>
-        /// 핸드 카드에 있는 OnHand 어빌리티 해제
-        /// - Ability 의 duration 상관 없이 바로 해제
-        /// </summary>
-        IEnumerator ReleaseHandOnCardAbility(List<BaseCard> cards)
-        {
-            foreach (var card in cards)
-            {
-                List<CardAbility> onHandCardAbilities = card.AbilitySystem.CardAbilities.Where(ability => ability.workType == AbilityWorkType.OnHand).ToList();
-
-                foreach (var cardAbility in onHandCardAbilities)
-                {
-                    yield return StartCoroutine(AbilityLogic.Instance.AbilityRelease(cardAbility, AbilityWhereFrom.TurnEndHandOn));
-
-                    card.RemoveCardAbility(cardAbility);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 보드 카드 지속시간 감소하고 duration 이 0 이 되면 카드 어빌리티 해제
-        /// </summary>
-        IEnumerator ReleaseBoardCardAbility(List<BSlot> boardSlots)
-        {
-            foreach (BSlot boardSlot in boardSlots)
-            {
-                if (boardSlot.Card == null)
-                    continue;
-
-                BaseCard card = boardSlot.Card;
-
-                List<CardAbility> removedCardAbilities = new();
-
-                foreach (CardAbility cardAbility in card.AbilitySystem.CardAbilities)
-                {
-                    cardAbility.DecreaseDuration();
-
-                    if (cardAbility.duration == 0)
-                    {
-                        yield return StartCoroutine(AbilityLogic.Instance.AbilityRelease(cardAbility, AbilityWhereFrom.TurnEndBoardSlot));
-
-                        removedCardAbilities.Add(cardAbility);
-                    }
-                }
-
-                foreach (CardAbility cardAbility in removedCardAbilities)
-                {
-                    card.RemoveCardAbility(cardAbility);
-                }
-
-                boardSlot.DrawAbilityIcons();
-
-                Debug.Log($"{boardSlot.LogText} 해제된 어빌리티 {string.Join(", ", removedCardAbilities.Select(ability => ability.abilityId))} - ReleaseBoardCardAbility");
-            }
-        }
-
-        /// <summary>
-        /// 핸드 카드 사용 가능 확인
-        /// </summary>
         public bool CanHandCardUse(string cardUid)
         {
             BaseCard card = deck.FindHandCard(cardUid);
@@ -675,10 +270,6 @@ namespace ERang
             return true;
         }
 
-        /// <summary>
-        /// 보드 슬롯에 장착된 카드 제거
-        /// </summary>
-        /// <param name="boardSlot"></param>
         public IEnumerator RemoveBoardCard(int slotNum)
         {
             BSlot boardSlot = BoardSystem.Instance.GetBoardSlot(slotNum);
@@ -696,6 +287,58 @@ namespace ERang
             // 배틀 종료
             if (monsterCount == 0 || boardSlot.SlotNum == 0)
                 yield return StartCoroutine(BattleEnd(monsterCount == 0));
+        }
+
+        IEnumerator BattleEnd(bool isWin)
+        {
+            int nextFloor = 0;
+            int locationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
+
+            if (isWin)
+            {
+                resultText.text = "YOU WIN";
+
+                // 이기면 층 증가
+                nextFloor = Player.Instance.floor + 1;
+                Player.Instance.SaveMaster(nextFloor, locationId, keepSatiety);
+            }
+            else
+            {
+                resultText.text = "YOU LOSE";
+
+                PlayerPrefsUtility.SetInt("MasterId", 0);
+                PlayerPrefsUtility.SetInt("LevelId", 0);
+                PlayerPrefsUtility.SetInt("LastLocationId", 0);
+                PlayerPrefsUtility.SetInt("MasterHp", 0);
+
+                PlayerPrefsUtility.SetInt("AreaId", 0);
+                PlayerPrefsUtility.SetString("MasterCards", null);
+            }
+
+            Debug.Log($"배틀 종료 {isWin}, loastLocationId: {locationId}, nextFloor: {nextFloor}");
+
+            yield return new WaitForSeconds(2f);
+
+            GameObject nextSceneObject = GameObject.Find("Scene Manager");
+
+            if (nextSceneObject.TryGetComponent(out NextScene nextScene))
+                nextScene.Play(isWin ? "Event" : "Lobby");
+
+            PlayerPrefsUtility.SetString("LastScene", "Battle");
+        }
+
+        // ========================================
+        // 기타 유틸리티 및 테스트 메서드들
+        // ========================================
+
+        public void UpdateSatietyGauge(int amount)
+        {
+            if (amount > 0)
+                master.IncreaseSatiety(amount);
+            else
+                master.DecreaseSatiety(-amount);
+
+            satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
         }
 
         /// <summary>
@@ -719,73 +362,6 @@ namespace ERang
             AbilityData abilityData = AbilityData.GetAbilityData(70004); // 기본 원거리 공격
 
             StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.Test));
-        }
-
-        public void UpdateSatietyGauge(int amount)
-        {
-            if (amount > 0)
-                master.IncreaseSatiety(amount);
-            else
-                master.DecreaseSatiety(-amount);
-
-            satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
-        }
-
-        /// <summary>
-        /// 테스트 카드 깜빡임
-        /// </summary>
-        /// <param name="boardSlot"></param>
-        private void FlashingCard(BSlot boardSlot)
-        {
-            if (boardSlot == null)
-                return;
-
-            // boardSlot.StartFlashing();
-            // flashingSlots.Add(boardSlot);
-        }
-
-        /// <summary>
-        /// 이름이 있는 액션을 저장하는 클래스
-        /// </summary>
-        private class NamedAction
-        {
-            public string Name { get; }
-            public UnityAction Action { get; }
-
-            public NamedAction(string name, UnityAction action)
-            {
-                Name = name;
-                Action = action;
-            }
-        }
-
-        private void EnqueueAction(string name, UnityAction action)
-        {
-            Debug.Log($"<color=#257dca>EnqueueAction</color>: {name}");
-            actionQueue.Enqueue(new NamedAction(name, action));
-        }
-
-        private void ActionQueueProcess()
-        {
-            if (Input.GetKeyDown(KeyCode.Space) == false)
-                return;
-
-            Debug.Log($"액션 큐 개수: {actionQueue.Count}");
-
-            if (flashingSlots.Count > 0)
-            {
-                // foreach (BSlot slot in flashingSlots)
-                //     slot.StopFlashing();
-
-                flashingSlots.Clear();
-            }
-
-            if (actionQueue.Count > 0)
-            {
-                var namedAction = actionQueue.Dequeue();
-                Debug.Log($"<color=#dd3333>Execution action</color>: {namedAction.Name}");
-                namedAction.Action?.Invoke();
-            }
         }
     }
 }

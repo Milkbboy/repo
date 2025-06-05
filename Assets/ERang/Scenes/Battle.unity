@@ -5057,6 +5057,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1494334407}
+  - component: {fileID: 1494334420}
   - component: {fileID: 1494334408}
   - component: {fileID: 1494334410}
   - component: {fileID: 1494334411}
@@ -5098,15 +5099,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23177e8c2ce6e0742899261b238b328e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnCount: 1
-  turnStartActionDelay: 0.5
-  boardTurnEndDelay: 0.5
-  abilityReleaseDelay: 0.5
   floorText: {fileID: 1857619272}
   resultText: {fileID: 1864985192}
   satietyUI: {fileID: 1515668104}
   deck: {fileID: 127787042}
   cardSelect: {fileID: 228970557}
+  abilityReleaseDelay: 0.5
 --- !u!114 &1494334410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5183,6 +5181,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnCount: {fileID: 816965881}
   gold: {fileID: 86170081}
+--- !u!114 &1494334420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494334405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5b4531aae64e9846812b26874e20eaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnStartActionDelay: 0.5
+  boardTurnEndDelay: 0.5
 --- !u!114 &1507728445 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8028014065667705318, guid: c43864c6cfd24c4478e0e145c4fa8eae,
