@@ -5058,6 +5058,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1494334407}
   - component: {fileID: 1494334420}
+  - component: {fileID: 1494334421}
   - component: {fileID: 1494334408}
   - component: {fileID: 1494334410}
   - component: {fileID: 1494334411}
@@ -5195,6 +5196,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnStartActionDelay: 0.5
   boardTurnEndDelay: 0.5
+--- !u!114 &1494334421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494334405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a0aa03eccb96644fb2481797333b662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1507728445 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8028014065667705318, guid: c43864c6cfd24c4478e0e145c4fa8eae,
