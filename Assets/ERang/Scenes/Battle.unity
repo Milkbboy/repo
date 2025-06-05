@@ -5059,6 +5059,7 @@ GameObject:
   - component: {fileID: 1494334407}
   - component: {fileID: 1494334420}
   - component: {fileID: 1494334421}
+  - component: {fileID: 1494334422}
   - component: {fileID: 1494334408}
   - component: {fileID: 1494334410}
   - component: {fileID: 1494334411}
@@ -5100,11 +5101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23177e8c2ce6e0742899261b238b328e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorText: {fileID: 1857619272}
-  resultText: {fileID: 1864985192}
-  satietyUI: {fileID: 1515668104}
-  deck: {fileID: 127787042}
-  cardSelect: {fileID: 228970557}
   abilityReleaseDelay: 0.5
 --- !u!114 &1494334410
 MonoBehaviour:
@@ -5208,6 +5204,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a0aa03eccb96644fb2481797333b662, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1494334422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494334405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5164d508ec0636459e5190edd3e7ad5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorText: {fileID: 1857619272}
+  resultText: {fileID: 1864985192}
+  satietyUI: {fileID: 1515668104}
+  deck: {fileID: 127787042}
 --- !u!114 &1507728445 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8028014065667705318, guid: c43864c6cfd24c4478e0e145c4fa8eae,
