@@ -641,7 +641,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81015
     CardType: Magic
     Grade: Rare
-    AiGroup_ids: 810150
+    AiGroup_ids: 810150, 31002, 810130
     CostMana: 2
     CostGold: 0
     Hp: 0

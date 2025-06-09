@@ -19,6 +19,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -30,6 +31,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 3
     Atk_Interval: 0.5
     Value: 100
@@ -41,6 +43,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1, 2
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -52,6 +55,7 @@ MonoBehaviour:
     Target: Enemy
     Atk_Type: Automatic
     Atk_Range: 4
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -63,6 +67,7 @@ MonoBehaviour:
     Target: Enemy
     Atk_Type: Automatic
     Atk_Range: 4
+    isSameTime: 0
     Atk_Cnt: 2
     Atk_Interval: 0.5
     Value: 100
@@ -74,6 +79,7 @@ MonoBehaviour:
     Target: Enemy
     Atk_Type: Automatic
     Atk_Range: 3, 4
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -85,6 +91,7 @@ MonoBehaviour:
     Target: Enemy
     Atk_Type: Automatic
     Atk_Range: 4
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -97,6 +104,7 @@ MonoBehaviour:
     Target: Random Enemy
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -109,6 +117,7 @@ MonoBehaviour:
     Target: Random Enemy Creature
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 4
     Atk_Interval: 0.5
     Value: 100
@@ -120,6 +129,7 @@ MonoBehaviour:
     Target: Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -131,6 +141,7 @@ MonoBehaviour:
     Target: All Enemy
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 2
     Atk_Interval: 0.5
     Value: 100
@@ -142,6 +153,7 @@ MonoBehaviour:
     Target: All Enemy Creature
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -153,6 +165,7 @@ MonoBehaviour:
     Target: Friendly
     Atk_Type: Select Friendly
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -164,6 +177,7 @@ MonoBehaviour:
     Target: All Friendly Creature
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -175,6 +189,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -186,6 +201,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 50
@@ -197,6 +213,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -208,6 +225,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -219,6 +237,7 @@ MonoBehaviour:
     Target: Enemy
     Atk_Type: Automatic
     Atk_Range: 4
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -230,6 +249,7 @@ MonoBehaviour:
     Target: Enemy
     Atk_Type: Automatic
     Atk_Range: 3, 4
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -241,6 +261,7 @@ MonoBehaviour:
     Target: Enemy
     Atk_Type: Automatic
     Atk_Range: 4
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -252,6 +273,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -263,6 +285,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 50
@@ -274,6 +297,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 1, 2
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -285,6 +309,7 @@ MonoBehaviour:
     Target: All Enemy Creature
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -296,6 +321,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -307,6 +333,7 @@ MonoBehaviour:
     Target: Select Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -318,6 +345,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Select Field
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -329,6 +357,7 @@ MonoBehaviour:
     Target: All Friendly Creature
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -340,6 +369,7 @@ MonoBehaviour:
     Target: All Friendly Creature
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -351,6 +381,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -362,6 +393,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -373,6 +405,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -384,6 +417,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -395,6 +429,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -406,6 +441,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -417,6 +453,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -428,6 +465,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1, 2
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -439,6 +477,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 2
     Atk_Interval: 0.5
     Value: 100
@@ -450,6 +489,7 @@ MonoBehaviour:
     Target: All Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -461,6 +501,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -472,6 +513,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -483,6 +525,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1, 2, 3
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -494,6 +537,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -505,6 +549,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 2
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -516,6 +561,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -527,6 +573,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -538,6 +585,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -549,6 +597,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1, 2, 3
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -560,6 +609,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -571,6 +621,7 @@ MonoBehaviour:
     Target: Select Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -582,17 +633,19 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1, 2, 3
+    isSameTime: 1
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 81015000, 81015001, 81015002
+    Ability_id: 81015000
   - Ai_Id: 8101600
     NameDesc: "\uD55C\uC785"
     Type: Melee
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1, 2
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -604,6 +657,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 2
     Atk_Interval: 0
     Value: 100
@@ -615,6 +669,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1, 2, 3
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -626,6 +681,7 @@ MonoBehaviour:
     Target: Select Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -637,6 +693,7 @@ MonoBehaviour:
     Target: All Friendly Creature
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -648,6 +705,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -659,6 +717,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -670,6 +729,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1, 2, 3
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -681,6 +741,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Select Enemy
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -692,6 +753,7 @@ MonoBehaviour:
     Target: All Friendly Creature
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -703,6 +765,7 @@ MonoBehaviour:
     Target: Select Enemy
     Atk_Type: Select Enemy
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -714,6 +777,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -725,6 +789,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -736,6 +801,7 @@ MonoBehaviour:
     Target: Self
     Atk_Type: Automatic
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 0
     Atk_Interval: 0
     Value: 100
@@ -747,6 +813,7 @@ MonoBehaviour:
     Target: Friendly
     Atk_Type: Select Friendly
     Atk_Range: 
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
@@ -758,6 +825,7 @@ MonoBehaviour:
     Target: Near Enemy
     Atk_Type: Automatic
     Atk_Range: 1
+    isSameTime: 0
     Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100

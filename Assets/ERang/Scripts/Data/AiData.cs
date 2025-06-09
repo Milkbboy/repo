@@ -26,6 +26,7 @@ namespace ERang.Data
         // - Ranged의 경우 자신의 위치를 기준으로 지정된 값 만큼의 거리를 의미한다. 
         //   (Ex 4의 경우 자신의 4칸 앞을 향해 공격한다는 것을 의미, 4와 5가 입력된 경우 자신의 앞 4번째 그리고 5번째 적까지 공격한다는 의미)
         public List<int> attackRanges = new List<int>();
+        public bool isSameTime; // 동시에 행동이 이루어지는지 여부
         public List<int> BuffAbilityIds => buffAbilityIds;
         public List<int> DebuffAbilityIds => debuffAbilityIds;
 
@@ -44,6 +45,7 @@ namespace ERang.Data
             explosion_Shock = entity.Explosion_Shock;
             ability_Ids.AddRange(Utils.ParseIntArray(entity.Ability_id).Where(x => x != 0));
             attackRanges.AddRange(Utils.ParseIntArray(entity.Atk_Range).Where(x => x != 0));
+            isSameTime = entity.isSameTime;
 
             if (type == AiDataType.Buff)
             {
