@@ -46,6 +46,14 @@ namespace ERang
         public virtual int Mana => State.Mana;
         public virtual int Atk => State.Atk;
 
+        public virtual void AddCardAbility(CardAbility cardAbility, int turnCount, AbilityWhereFrom whereFrom) => AbilitySystem.AddCardAbility(cardAbility, turnCount, whereFrom);
+        public virtual void AddHandCardAbility(CardAbility cardAbility) => AbilitySystem.AddHandCardAbility(cardAbility);
+        public virtual List<CardAbility> DecreaseDuration() => AbilitySystem.DecreaseDuration();
+        public virtual void RemoveCardAbility(CardAbility cardAbility) => AbilitySystem.RemoveCardAbility(cardAbility);
+        public virtual void RemoveHandCardAbility(CardAbility cardAbility) => AbilitySystem.RemoveHandCardAbility(cardAbility);
+        public virtual int GetBuffCount() => AbilitySystem.GetBuffCount();
+        public virtual int GetDeBuffCount() => AbilitySystem.GetDeBuffCount();
+
         // 기본 생성자
         protected BaseCard()
         {
@@ -132,91 +140,6 @@ namespace ERang
             {
                 AiGroupIndexes[aiGroupId] = 0;
             }
-        }
-
-        /// <summary>
-        /// 보드 슬롯에서 지속되어야 하는 어빌리티 추가
-        /// - 턴 표시
-        /// - duration 0 되었을때 발동되어야 하는 어빌리티
-        /// </summary>
-        public virtual void AddCardAbility(CardAbility cardAbility, int turnCount, AbilityWhereFrom whereFrom)
-        {
-            // 어빌리티 아이템 - 동일한 어빌리티가 추가되면 AbilityItem 이 추가되고 duration 이 증가. 효과는 변하지 않음
-            AbilityItem abilityItem = new()
-            {
-                whereFrom = whereFrom,
-                applyTurn = turnCount,
-                value = cardAbility.abilityValue,
-                duration = cardAbility.duration,
-                createdDt = DateTime.UtcNow.Ticks
-            };
-
-            CardAbility found = AbilitySystem.CardAbilities.Find(ability => ability.abilityId == cardAbility.abilityId);
-
-            if (found == null)
-            {
-                // ArmorBreak 는 다른 def 효과를 무시하기 때문에 제일 앞에 추가해서 가장 먼저 적용되게 설정
-                if (cardAbility.abilityType == AbilityType.ArmorBreak)
-                    AbilitySystem.CardAbilities.Insert(0, cardAbility);
-                else
-                    AbilitySystem.CardAbilities.Add(cardAbility);
-            }
-
-            cardAbility.AddAbilityItem(abilityItem);
-
-            Debug.Log($"{cardAbility.LogText} {(found == null ? "신규" : "AbilityItem 만")} 추가. value: {cardAbility.abilityValue}, duration: {cardAbility.duration}, workType: {cardAbility.workType}");
-        }
-
-        /// <summary>
-        /// 핸드에 들어올때 적용되는 어빌리티 추가
-        /// </summary>
-        public virtual void AddHandCardAbility(CardAbility cardAbility)
-        {
-            Debug.Log($"AddHandCardAbility. cardAbility: {cardAbility.LogText}");
-            AbilitySystem.HandAbilities.Add(cardAbility);
-        }
-
-        /// <summary>
-        /// 어빌리티 duration 감소
-        /// - AbilityItem 의 duration 감소
-        /// </summary>
-        public virtual List<CardAbility> DecreaseDuration()
-        {
-            List<CardAbility> removedCardAbilities = new();
-
-            foreach (CardAbility cardAbility in AbilitySystem.CardAbilities)
-            {
-                cardAbility.DecreaseDuration();
-
-                if (cardAbility.duration == 0)
-                    removedCardAbilities.Add(cardAbility);
-            }
-
-            return removedCardAbilities;
-        }
-
-        // 카드 어빌리티 제거
-        public virtual void RemoveCardAbility(CardAbility cardAbility)
-        {
-            AbilitySystem.CardAbilities.Remove(cardAbility);
-        }
-
-        // 핸드 카드 어빌리티 제거
-        public virtual void RemoveHandCardAbility(CardAbility cardAbility)
-        {
-            AbilitySystem.HandAbilities.Remove(cardAbility);
-        }
-
-        // 버프 카운트 반환
-        public virtual int GetBuffCount()
-        {
-            return AbilitySystem.CardAbilities.Count(ability => ability.aiType == AiDataType.Buff);
-        }
-
-        // 디버프 카운트 반환
-        public virtual int GetDeBuffCount()
-        {
-            return AbilitySystem.CardAbilities.Count(ability => ability.aiType == AiDataType.Debuff);
         }
 
         // 데미지 처리
