@@ -249,7 +249,9 @@ namespace ERang
                 yield break;
             }
 
-            BaseCard card = Utils.MakeCard(cardData);
+            CardFactory cardFactory = new(AiLogic.Instance);
+
+            BaseCard card = cardFactory.CreateCard(cardData);
 
             GameObject cardObject = Instantiate(summonCardPrefab, transform);
             cardObject.name = $"SummonCard_{card.Id}";

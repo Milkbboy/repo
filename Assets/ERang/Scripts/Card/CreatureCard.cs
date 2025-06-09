@@ -9,7 +9,6 @@ namespace ERang
         public override int Def => State.Def;
         public override int Mana => State.Mana;
         public override int Atk => State.Atk;
-        public int MaxHp => State.MaxHp;
 
         public CreatureCard()
         {

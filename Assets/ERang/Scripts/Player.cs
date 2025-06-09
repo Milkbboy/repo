@@ -53,7 +53,9 @@ namespace ERang
                 return;
             }
 
-            BaseCard card = Utils.MakeCard(cardData);
+            CardFactory cardFactory = new(AiLogic.Instance);
+
+            BaseCard card = cardFactory.CreateCard(cardData);
             allCards.Add(card);
 
             // 카드 타입별로 생성

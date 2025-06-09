@@ -60,6 +60,8 @@ namespace ERang
                 return;
             }
 
+            CardFactory cardFactory = new(AiLogic.Instance);
+
             foreach (int cardId in master.CardIds)
             {
                 CardData cardData = CardData.GetCardData(cardId);
@@ -70,7 +72,8 @@ namespace ERang
                     continue;
                 }
 
-                BaseCard card = Utils.MakeCard(cardData);
+
+                BaseCard card = cardFactory.CreateCard(cardData);
 
                 if (card is MagicCard magicCard)
                     magicCard.SetSelectAttackType(AiLogic.Instance.IsSelectAttackType(card));

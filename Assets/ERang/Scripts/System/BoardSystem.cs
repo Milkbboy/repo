@@ -135,6 +135,7 @@ namespace ERang
             Debug.Log($"몬스터 카드들 {string.Join(", ", cardIds)} 생성");
 
             List<(int, BaseCard)> monsterCards = new();
+            CardFactory cardFactory = new(AiLogic.Instance);
 
             for (int i = 0; i < cardIds.Count; ++i)
             {
@@ -151,7 +152,7 @@ namespace ERang
                     continue;
                 }
 
-                BaseCard card = Utils.MakeCard(cardData);
+                BaseCard card = cardFactory.CreateCard(cardData);
 
                 // 크리쳐 카드 슬롯 인덱스는 1부터 시자되므로 1을 더함
                 monsterCards.Add((i + 1, card));

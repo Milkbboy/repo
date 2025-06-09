@@ -20,6 +20,8 @@ namespace ERang
             float cardSpacing = 2f;
             float startX = worldCenter.x - (rewards.Count - 1) * cardSpacing / 2;
 
+            CardFactory cardFactory = new(AiLogic.Instance);
+
             for (int i = 0; i < rewards.Count; ++i)
             {
                 (RewardType rewardType, int value) = rewards[i];
@@ -35,15 +37,15 @@ namespace ERang
                         continue;
                     }
 
-                    card = Utils.MakeCard(cardData);
+                    card = cardFactory.CreateCard(cardData);
                 }
                 else if (rewardType == RewardType.HP)
                 {
-                    card = Utils.MakeHpCard(CardData.GetHpCardData(), value);
+                    card = cardFactory.CreateHpCard(CardData.GetHpCardData(), value);
                 }
                 else if (rewardType == RewardType.Gold)
                 {
-                    card = Utils.MakeGoldCard(CardData.GetGoldCardData(), value);
+                    card = cardFactory.CreateGoldCard(CardData.GetGoldCardData(), value);
                 }
 
                 Vector3 cardPosition = new(startX + i * cardSpacing, worldCenter.y, worldCenter.z);

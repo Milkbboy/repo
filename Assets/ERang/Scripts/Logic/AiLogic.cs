@@ -175,8 +175,6 @@ namespace ERang
                     continue;
                 }
 
-                bool isHandOnCard = false;
-
                 foreach (List<int> aiDataIds in aiGroupData.ai_Groups)
                 {
                     foreach (int aiDataId in aiDataIds)
