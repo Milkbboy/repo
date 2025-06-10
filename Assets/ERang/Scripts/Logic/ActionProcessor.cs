@@ -120,7 +120,6 @@ namespace ERang
 
                 List<AbilityData> abilityDatas = AiLogic.Instance.GetAbilityDatas(aiData.ability_Ids);
 
-                // 어빌리티 적용
                 foreach (AbilityData abilityData in abilityDatas)
                     yield return StartCoroutine(AbilityLogic.Instance.AbilityProcess(aiData, abilityData, selfSlot, targetSlots, AbilityWhereFrom.HandUse));
             }

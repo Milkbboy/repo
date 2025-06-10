@@ -14,8 +14,8 @@ namespace ERang
 
         // 타입 안전성을 위한 읽기 전용 딕셔너리
         public IReadOnlyDictionary<AbilityType, IAbility> AbilityActions => abilityActions;
-        private Dictionary<AbilityType, IAbility> abilityActions = new();
-        private Dictionary<AbilityType, IHandAbility> handAbilityActions = new();
+        private readonly Dictionary<AbilityType, IAbility> abilityActions = new();
+        private readonly Dictionary<AbilityType, IHandAbility> handAbilityActions = new();
 
         void Awake()
         {
@@ -77,6 +77,8 @@ namespace ERang
 
             Debug.Log($"<color=cyan>[AbilityProcess]</color> {selfSlot.LogText} {abilityData.LogText} 실행. 대상: {string.Join(", ", targetSlots.Select(slot => slot.LogText))}");
 
+            List<Coroutine> runningCoroutines = new List<Coroutine>();
+
             foreach (BSlot targetSlot in targetSlots.Where(slot => slot?.Card != null))
             {
                 BaseCard card = targetSlot.Card;
@@ -111,7 +113,23 @@ namespace ERang
                 // 신규 어빌리티이고 즉시 발동 타입인 경우 실행
                 if (isNewAbility && ShouldActivateImmediately(abilityData))
                 {
-                    yield return StartCoroutine(AbilityAction(cardAbility, selfSlot, targetSlot));
+                    if (aiData?.isSameTime ?? false)
+                    {
+                        runningCoroutines.Add(StartCoroutine(AbilityAction(cardAbility, selfSlot, targetSlot)));
+                    }
+                    else
+                    {
+                        yield return StartCoroutine(AbilityAction(cardAbility, selfSlot, targetSlot));
+                    }
+                }
+            }
+
+            // isSameTime이 true일 경우 모든 코루틴이 완료될 때까지 대기
+            if (runningCoroutines.Count > 0)
+            {
+                foreach (var coroutine in runningCoroutines)
+                {
+                    yield return coroutine;
                 }
             }
         }

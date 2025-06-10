@@ -81,13 +81,13 @@ namespace ERang
         {
             if (!isDragging)
             {
-                Debug.Log("UpdateDrag: not dragging");
+                // Debug.Log("UpdateDrag: not dragging");
                 return;
             }
 
             if (isCentered)
             {
-                Debug.Log("UpdateDrag: already centered");
+                // Debug.Log("UpdateDrag: already centered");
                 return;
             }
 

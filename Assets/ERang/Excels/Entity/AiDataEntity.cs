@@ -9,6 +9,7 @@ namespace ERang
         public string Target; // 대상 혹은 복수 대상을 설정한다.
         public string Atk_Type; // 행동이 이루어지는 절차를 설정한다.
         public string Atk_Range; // 공격 범위를 설정한다.
+        public bool isSameTime; // 동시에 행동이 이루어지는지 여부
         public int Atk_Cnt; // 공격 횟수
         public float Atk_Interval; // 공격 횟수가 1이 아닐 경우 공격이 진행되는 텀을 지정
         public int Value; // 해당 행동의 무게 값으로 Ai Group에서 참조된다.
