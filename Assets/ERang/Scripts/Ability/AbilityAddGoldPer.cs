@@ -24,9 +24,9 @@ namespace ERang
                 yield break;
             }
 
-            if (Master.Instance == null)
+            if (Player.Instance == null)
             {
-                LogAbility("Master 인스턴스가 없습니다.", LogType.Error);
+                LogAbility("Player 인스턴스가 없습니다.", LogType.Error);
                 yield break;
             }
 
@@ -35,16 +35,16 @@ namespace ERang
             float bonusGold = baseGold * abilityData.ratio;
             int totalGold = (int)(baseGold + bonusGold);
 
-            int beforeGold = Master.Instance.Gold;
-            BoardSystem.Instance.AddGold(Master.Instance, totalGold);
+            int beforeGold = Player.Instance.Gold;
+            BoardSystem.Instance.AddGold(Player.Instance, totalGold);
 
             LogAbility($"골드 획득: {totalGold} (기본: {baseGold}, 보너스: {bonusGold:F1}, 비율: {abilityData.ratio:P0})");
-            LogAbility($"골드 변화: {beforeGold} -> {Master.Instance.Gold}");
+            LogAbility($"골드 변화: {beforeGold} -> {Player.Instance.Gold}");
 
             // TODO: 골드 획득 플로팅 텍스트 표시
-            // selfSlot.SetFloatingGold(beforeGold, Master.Instance.Gold);
+            // selfSlot.SetFloatingGold(beforeGold, Player.Instance.Gold);
 
-            RecordChange(StatType.Gold, selfSlot, beforeGold, Master.Instance.Gold, totalGold);
+            RecordChange(StatType.Gold, selfSlot, beforeGold, Player.Instance.Gold, totalGold);
 
             yield return new WaitForSeconds(0.1f);
         }

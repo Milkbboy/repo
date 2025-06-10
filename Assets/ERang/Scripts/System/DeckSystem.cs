@@ -45,7 +45,7 @@ namespace ERang
         /// <summary>
         /// 마스터 덱 카드 생성
         /// </summary>
-        public void CreateMasterCards(Master master)
+        public void CreateMasterCards(Player player)
         {
             if (isCreatedStarCard == true)
             {
@@ -62,7 +62,7 @@ namespace ERang
 
             CardFactory cardFactory = new(AiLogic.Instance);
 
-            foreach (int cardId in master.CardIds)
+            foreach (int cardId in player.CardIds)
             {
                 CardData cardData = CardData.GetCardData(cardId);
 

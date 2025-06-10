@@ -117,9 +117,9 @@ namespace ERang
             }
         }
 
-        public IEnumerator CreateMasterCard(Master master)
+        public IEnumerator CreateMasterCard(Player player)
         {
-            masterCard = new(master);
+            masterCard = new(player);
 
             yield return null;
 
@@ -214,8 +214,7 @@ namespace ERang
         /// <summary>
         /// 마스터 마나 초기화
         /// </summary>
-        /// <param name="master"></param>
-        public void ResetMana(Master master)
+        public void ResetMana()
         {
             bSlots[0].ResetMana();
         }
@@ -223,7 +222,6 @@ namespace ERang
         /// <summary>
         /// 마스터 마나 설정
         /// </summary>
-        /// <param name="master"></param>
         /// <param name="mana"></param>
         public void AddMana(int amount)
         {
@@ -236,12 +234,12 @@ namespace ERang
         /// <summary>
         /// 마스터 골드 설정
         /// </summary>
-        /// <param name="master"></param>
+        /// <param name="player"></param>
         /// <param name="gold"></param>
-        public void AddGold(Master master, int gold)
+        public void AddGold(Player player, int gold)
         {
-            master.AddGold(gold);
-            boardUI.SetGold(master.Gold);
+            player.AddGold(gold);
+            boardUI.SetGold(player.Gold);
         }
 
         public void SetGold(int gold)
@@ -252,9 +250,9 @@ namespace ERang
         /// <summary>
         /// 카드 비용 소모
         /// </summary>
-        /// <param name="master"></param>
+        /// <param name="player"></param>
         /// <param name="card"></param>
-        public void CardCost(Master master, BaseCard card)
+        public void CardCost(Player player, BaseCard card)
         {
             switch (card)
             {
@@ -267,7 +265,7 @@ namespace ERang
                     AddMana(-magicCard.Mana);
                     break;
                 case BuildingCard buildingCard:
-                    AddGold(master, -buildingCard.Gold);
+                    AddGold(player, -buildingCard.Gold);
                     break;
                 default:
                     Debug.LogWarning("Unhandled card type");

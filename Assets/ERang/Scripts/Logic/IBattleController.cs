@@ -5,7 +5,7 @@ namespace ERang
     public interface IBattleController
     {
         // 배틀 상태
-        Master Master { get; }
+        Player Player { get; }
         int TurnCount { get; }
 
         // 배틀 흐름 제어

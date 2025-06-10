@@ -33,7 +33,7 @@ namespace ERang
         private bool isTurnEndProcessing = false;
 
         // 외부 시스템 참조 (DI 패턴으로 개선 가능)
-        private Master master;
+        private Player player;
         private MasterCard masterCard;
         private Deck deck;
 
@@ -43,9 +43,9 @@ namespace ERang
                 Instance = this;
         }
 
-        public void Initialize(Master master, MasterCard masterCard, Deck deck)
+        public void Initialize(Player player, MasterCard masterCard, Deck deck)
         {
-            this.master = master;
+            this.player = player;
             this.masterCard = masterCard;
             this.deck = deck;
         }
@@ -63,8 +63,8 @@ namespace ERang
             BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
             yield return StartCoroutine(CardPriorAbility(masterSlot));
 
-            BoardSystem.Instance.SetHp(master.Hp);
-            BoardSystem.Instance.SetMana(master.RechargeMana);
+            BoardSystem.Instance.SetHp(player.Hp);
+            BoardSystem.Instance.SetMana(player.RechargeMana);
 
             // 핸드 카드 만들기
             yield return StartCoroutine(deck.MakeHandCards());
@@ -118,7 +118,7 @@ namespace ERang
             deck.TrunEndProcess();
 
             // 마스터 마나 리셋
-            BoardSystem.Instance.ResetMana(master);
+            BoardSystem.Instance.ResetMana();
 
             // 턴 증가
             turnCount++;

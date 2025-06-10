@@ -10,7 +10,7 @@ namespace ERang
     {
         public static ActionProcessor Instance { get; private set; }
 
-        private Master master;
+        private Player player;
         private MasterCard masterCard;
         private Deck deck;
 
@@ -20,9 +20,9 @@ namespace ERang
                 Instance = this;
         }
 
-        public void Initialize(Master master, MasterCard masterCard, Deck deck)
+        public void Initialize(Player player, MasterCard masterCard, Deck deck)
         {
-            this.master = master;
+            this.player = player;
             this.masterCard = masterCard;
             this.deck = deck;
         }
@@ -63,7 +63,7 @@ namespace ERang
             boardSlot.EquipCard(hCard.Card);
 
             // 카드 비용 소모
-            BoardSystem.Instance.CardCost(master, hCard.Card);
+            BoardSystem.Instance.CardCost(player, hCard.Card);
 
             Debug.Log($"{boardSlot.LogText} 에 {hCard.LogText} 장착");
         }
@@ -79,7 +79,7 @@ namespace ERang
             }
 
             // 카드 비용 소모
-            BoardSystem.Instance.CardCost(master, card);
+            BoardSystem.Instance.CardCost(player, card);
 
             foreach (int aiGroupId in card.AiGroupIds)
             {
@@ -165,10 +165,10 @@ namespace ERang
             }
 
             // 필요 골드 확인
-            if (card is BuildingCard buildingCard && master.Gold < buildingCard.Gold)
+            if (card is BuildingCard buildingCard && player.Gold < buildingCard.Gold)
             {
-                ToastNotification.Show($"gold({master.Gold}) is not enough");
-                Debug.LogWarning($"핸드 카드({buildingCard.Id}) 골드 부족으로 사용 불가능({master.Gold} < {buildingCard.Gold})");
+                ToastNotification.Show($"gold({player.Gold}) is not enough");
+                Debug.LogWarning($"핸드 카드({buildingCard.Id}) 골드 부족으로 사용 불가능({player.Gold} < {buildingCard.Gold})");
                 return false;
             }
 

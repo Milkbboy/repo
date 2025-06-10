@@ -19,7 +19,7 @@ namespace ERang
         public int TurnCount => battleController.TurnCount;
 
         // 게임 상태
-        public Master Master => battleController.Master;
+        public Player Player => battleController.Player;
 
         void Awake()
         {

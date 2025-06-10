@@ -18,7 +18,7 @@ namespace ERang
         public Deck deck;
 
         // 인터페이스 구현
-        public Master Master => master;
+        public Player Player => player;
         public int TurnCount => turnManager?.TurnCount ?? 0;
 
         // 의존성 주입을 위한 인터페이스 참조
@@ -26,7 +26,7 @@ namespace ERang
         private IActionProcessor actionProcessor;
 
         // 게임 상태
-        private Master master;
+        private Player player;
         private MasterCard masterCard;
         private bool keepSatiety;
 
@@ -50,13 +50,13 @@ namespace ERang
         /// </summary>
         public void InitializeBattle()
         {
-            master = Player.Instance.master;
+            player = Player.Instance;
 
             // 의존성 주입 방식으로 변경 (추후 단계에서 개선)
             turnManager = TurnManager.Instance;
             actionProcessor = ActionProcessor.Instance;
 
-            BoardSystem.Instance.CreateBoardSlots(master.CreatureSlotCount);
+            BoardSystem.Instance.CreateBoardSlots(player.CreatureSlotCount);
 
             LevelData levelData = LevelGroupData.GetLevelData(Player.Instance.levelId);
 
@@ -69,24 +69,24 @@ namespace ERang
             Debug.Log($"----------------- BATTLE START {Player.Instance.floor} 층 ({Player.Instance.levelId}) -----------------");
 
             // 마스터 카드 생성
-            StartCoroutine(BoardSystem.Instance.CreateMasterCard(master));
+            StartCoroutine(BoardSystem.Instance.CreateMasterCard(player));
             masterCard = BoardSystem.Instance.MasterCard;
 
             // 마스터 크리쳐 카드 생성
-            deck.CreateMasterCards(master);
+            deck.CreateMasterCards(player);
 
             // 골드 설정
-            BoardSystem.Instance.SetGold(master.Gold);
+            BoardSystem.Instance.SetGold(player.Gold);
 
             // 루시 포만감 UI 설정
-            if (master.MasterType == MasterType.Luci)
+            if (player.MasterType == MasterType.Luci)
             {
                 satietyUI.gameObject.SetActive(true);
 
                 if (keepSatiety)
-                    master.Satiety = PlayerPrefsUtility.GetInt("Satiety", master.Satiety);
+                    player.Satiety = PlayerPrefsUtility.GetInt("Satiety", player.Satiety);
 
-                satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
+                satietyUI.UpdateSatiety(player.Satiety, player.MaxSatiety);
             }
         }
 
@@ -99,10 +99,10 @@ namespace ERang
 
             // 의존성 있는 매니저들 초기화
             if (turnManager is TurnManager tm)
-                tm.Initialize(master, masterCard, deck);
+                tm.Initialize(player, masterCard, deck);
 
             if (actionProcessor is ActionProcessor ap)
-                ap.Initialize(master, masterCard, deck);
+                ap.Initialize(player, masterCard, deck);
 
             // 몬스터 카드 생성
             yield return StartCoroutine(BoardSystem.Instance.CreateMonsterCards(levelData.cardIds));
@@ -158,11 +158,11 @@ namespace ERang
         public void UpdateSatietyGauge(int amount)
         {
             if (amount > 0)
-                master.IncreaseSatiety(amount);
+                player.IncreaseSatiety(amount);
             else
-                master.DecreaseSatiety(-amount);
+                player.DecreaseSatiety(-amount);
 
-            satietyUI.UpdateSatiety(master.Satiety, master.MaxSatiety);
+            satietyUI.UpdateSatiety(player.Satiety, player.MaxSatiety);
         }
 
         // ========================================

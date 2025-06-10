@@ -159,7 +159,7 @@ public class Reward : MonoBehaviour
             {
                 Debug.Log($"Selected Hp Card: ${selectedCard.Card.Hp}");
                 Player.Instance.RecoverHp(hpCard.Hp);
-                PlayerPrefsUtility.SetInt("MasterHp", Player.Instance.master.Hp);
+                PlayerPrefsUtility.SetInt("MasterHp", Player.Instance.Hp);
             }
             else
             {
@@ -175,7 +175,7 @@ public class Reward : MonoBehaviour
             {
                 Debug.Log($"Selected Gold Card: ${goldCard.Gold}");
                 Player.Instance.AddGold(goldCard.Gold);
-                PlayerPrefsUtility.SetInt("MasterGold", Player.Instance.master.Gold);
+                PlayerPrefsUtility.SetInt("MasterGold", Player.Instance.Gold);
             }
             else
             {

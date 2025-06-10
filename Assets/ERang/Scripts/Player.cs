@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
@@ -10,9 +9,41 @@ namespace ERang
     {
         public static Player Instance { get; private set; }
 
-        public Master master;
+        #region 마스터 정보
+        // 기본 정보
+        public int MasterId => masterId;
+        public MasterType MasterType => masterType;
+        public Texture2D CardImage => masterTexture;
+        public List<int> CardIds { get => cardIds; set => cardIds = value; }
 
-        public int masterId;
+        // CardState 스탯 관리
+        public CardState State { get; protected set; }
+        public int Hp => State.Hp;
+        public int MaxHp => State.MaxHp;
+        public int Mana => State.Mana;
+        public int MaxMana => State.MaxMana;
+        public int Atk => State.Atk;
+        public int Def => State.Def;
+
+        // 추가 속성들
+        public int RechargeMana { get => rechargeMana; set => rechargeMana = value; }
+        public int Gold { get => gold; set => gold = value; }
+        public int CreatureSlotCount => creatureSlots;
+        public int Satiety { get => satiety; set => satiety = value; }
+        public int MaxSatiety => maxSatiety;
+
+        private int masterId;
+        private MasterType masterType;
+        private List<int> cardIds = new();
+        private int rechargeMana;
+        private int gold;
+        private int creatureSlots;
+        private int satiety;
+        private int maxSatiety;
+        private Texture2D masterTexture;
+        #endregion
+
+        #region 게임 진행 상황
         public int floor;
         public int levelId;
         private MapLocation selectLocation;
@@ -20,6 +51,7 @@ namespace ERang
         public List<BaseCard> AllCards => allCards;
 
         [SerializeField] private List<BaseCard> allCards = new();
+        #endregion
 
         void Awake()
         {
@@ -29,20 +61,39 @@ namespace ERang
                 DontDestroyOnLoad(gameObject);
                 Debug.Log("Player 생성됨");
 
-                LoadMaster();
+                LoadPlayer();
             }
         }
 
-        public void RecoverHp(int hp)
+        #region 마스터 기능
+        public void AddGold(int amount)
         {
-            master.RecoverHp(hp);
+            int oldGold = gold;
+            gold += amount;
+            Debug.Log($"<color=#257dca>Add Gold({gold}): {oldGold} -> {gold}</color>");
         }
 
-        public void AddGold(int gold)
+        public void IncreaseSatiety(int amount)
         {
-            master.AddGold(gold);
+            int oldSatiety = satiety;
+            satiety = Mathf.Clamp(satiety + amount, 0, maxSatiety);
+            Debug.Log($"<color=#257dca>만복감 증가({amount}): {oldSatiety} -> {satiety}</color>");
         }
 
+        public void DecreaseSatiety(int amount)
+        {
+            int oldSatiety = satiety;
+            satiety = Mathf.Clamp(satiety - amount, 0, maxSatiety);
+            Debug.Log($"<color=#257dca>만복감 감소({amount}): {oldSatiety} -> {satiety}</color>");
+        }
+
+        public void SetHp(int amount) => State.SetHp(amount);
+        public void SetGold(int amount) => Gold = amount;
+        public void SetMana(int amount) => State.SetMana(amount);
+        public void RecoverHp(int amount) => State.RestoreHealth(amount);
+        #endregion
+
+        #region 카드 관리
         public void AddCard(int cardId)
         {
             CardData cardData = CardData.GetCardData(cardId);
@@ -54,38 +105,37 @@ namespace ERang
             }
 
             CardFactory cardFactory = new(AiLogic.Instance);
-
             BaseCard card = cardFactory.CreateCard(cardData);
             allCards.Add(card);
-
             // 카드 타입별로 생성
-            master.CardIds.Add(cardId);
+            CardIds.Add(cardId);
 
-            string cardIdsJson = JsonConvert.SerializeObject(master.CardIds);
+            string cardIdsJson = JsonConvert.SerializeObject(CardIds);
             PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
         }
+        #endregion
 
+        #region 저장 및 불러오기
         public void SaveMaster(int nextFloor, int locationId, bool keepSatiety)
         {
             PlayerPrefsUtility.SetInt("Floor", nextFloor);
-
             PlayerPrefsUtility.SetInt("MasterId", masterId);
             PlayerPrefsUtility.SetInt("LevelId", levelId);
             PlayerPrefsUtility.SetInt("LastLocationId", locationId);
-            PlayerPrefsUtility.SetInt("MasterHp", master.Hp);
-            PlayerPrefsUtility.SetInt("Gold", master.Gold);
+            PlayerPrefsUtility.SetInt("MasterHp", Hp);
+            PlayerPrefsUtility.SetInt("Gold", Gold);
 
             if (keepSatiety)
-                PlayerPrefsUtility.SetInt("Satiety", master.Satiety);
+                PlayerPrefsUtility.SetInt("Satiety", Satiety);
 
             // Master 카드 ids 저장
-            string cardIdsJson = JsonConvert.SerializeObject(master.CardIds);
+            string cardIdsJson = JsonConvert.SerializeObject(CardIds);
             PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
 
             floor = nextFloor;
         }
 
-        private void LoadMaster()
+        private void LoadPlayer()
         {
             masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
             floor = PlayerPrefsUtility.GetInt("Floor", 1);
@@ -93,28 +143,45 @@ namespace ERang
 
             // 마스터
             MasterData masterData = MasterData.GetMasterData(masterId);
-
             if (masterData == null)
             {
                 Debug.LogError($"마스터({masterId}) MasterData {Utils.RedText("테이블 데이터 없음")}");
                 return;
             }
 
-            master = new Master(masterData);
+            InitializeMasterData(masterData);
+            LoadSavedPlayerData();
+        }
 
+        private void InitializeMasterData(MasterData masterData)
+        {
+            masterType = masterData.masterType;
+            rechargeMana = masterData.rechargeMana;
+            gold = 1000; // 임시
+            creatureSlots = masterData.creatureSlots;
+            satiety = masterData.satietyGauge;
+            maxSatiety = masterData.maxSatietyGauge;
+            cardIds = masterData.startCardIds;
+            masterTexture = masterData.masterTexture;
+
+            State = new CardState(masterData.hp, masterData.def, masterData.startMana, masterData.atk, masterData.hp, masterData.maxMana);
+
+            Debug.Log($"MasterData 데이터 먼저 설정: masterId: {masterId}, masterType: {masterType}, 카드: {string.Join(", ", cardIds)}");
+        }
+
+        private void LoadSavedPlayerData()
+        {
             string selectLocationJson = PlayerPrefsUtility.GetString("SelectLocation", null);
-
             if (selectLocationJson != null)
                 selectLocation = JsonConvert.DeserializeObject<MapLocation>(selectLocationJson);
-
-            Debug.Log($"마스터 인스턴스 생성될 때 카드: {string.Join(", ", master.CardIds)}");
 
             // 저장된 마스터 HP가 있으면 설정
             int savedHp = PlayerPrefsUtility.GetInt("MasterHp", -1);
 
             if (savedHp != -1)
             {
-                master.SetHp(savedHp);
+                Debug.Log($"저장된 마스터 HP 로드: {savedHp}");
+                SetHp(savedHp);
             }
 
             // 저장된 마스터 골드가 있으면 설정
@@ -122,7 +189,8 @@ namespace ERang
 
             if (savedGold != -1)
             {
-                master.SetGold(savedGold);
+                Debug.Log($"저장된 마스터 골드 로드: {savedGold}");
+                SetGold(savedGold);
             }
 
             // 저장된 마스터 카드가 있으면 설정
@@ -130,9 +198,10 @@ namespace ERang
 
             if (!string.IsNullOrEmpty(savedCardsJson))
             {
-                Debug.Log($"저장된 마스터 카드: {savedCardsJson}");
-                master.CardIds = JsonConvert.DeserializeObject<List<int>>(savedCardsJson);
+                Debug.Log($"저장된 마스터 카드 로드: {savedCardsJson}");
+                CardIds = JsonConvert.DeserializeObject<List<int>>(savedCardsJson);
             }
         }
+        #endregion
     }
 }
