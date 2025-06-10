@@ -130,11 +130,5 @@ namespace ERang
             AiGroupIndexes = AiGroupIds.ToDictionary(id => id, id => 0);
             CardImage = cardImage;
         }
-
-        // 하위 클래스에서 구현할 수 있는 카드 라이프사이클 이벤트 메서드
-        public virtual void OnPlay() { }
-        public virtual void OnTurnStart() { }
-        public virtual void OnTurnEnd() { }
-        public virtual void OnDiscard() { }
     }
 }
