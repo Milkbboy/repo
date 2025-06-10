@@ -78,6 +78,9 @@ namespace ERang
                 yield break;
             }
 
+            // 카드 비용 소모
+            BoardSystem.Instance.CardCost(master, card);
+
             foreach (int aiGroupId in card.AiGroupIds)
             {
                 int aiDataId = AiLogic.Instance.GetCardAiDataId(card, aiGroupId);
@@ -126,9 +129,6 @@ namespace ERang
 
             // 마스터 핸드 카드 제거 먼저 하고 어빌리티 발동
             deck.RemoveHandCard(cardUid);
-
-            // 카드 비용 소모
-            BoardSystem.Instance.CardCost(master, card);
         }
 
         public bool CanUseHandCard(string cardUid)
