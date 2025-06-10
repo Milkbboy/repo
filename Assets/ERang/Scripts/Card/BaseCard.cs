@@ -46,6 +46,14 @@ namespace ERang
         public virtual int Mana => State.Mana;
         public virtual int Atk => State.Atk;
 
+        // 스탯
+        public virtual void TakeDamage(int amount) => State.TakeDamage(amount);
+        public virtual void RestoreHealth(int amount) => State.RestoreHealth(amount);
+        public virtual void SetDefense(int amount) => State.SetDef(amount);
+        public virtual void IncreaseDefense(int amount) => State.IncreaseDefense(amount);
+        public virtual void DecreaseDefense(int amount) => State.DecreaseDefense(amount);
+
+        // 어빌리티
         public virtual void AddCardAbility(CardAbility cardAbility, int turnCount, AbilityWhereFrom whereFrom) => AbilitySystem.AddCardAbility(cardAbility, turnCount, whereFrom);
         public virtual void AddHandCardAbility(CardAbility cardAbility) => AbilitySystem.AddHandCardAbility(cardAbility);
         public virtual List<CardAbility> DecreaseDuration() => AbilitySystem.DecreaseDuration();
@@ -53,6 +61,7 @@ namespace ERang
         public virtual void RemoveHandCardAbility(CardAbility cardAbility) => AbilitySystem.RemoveHandCardAbility(cardAbility);
         public virtual int GetBuffCount() => AbilitySystem.GetBuffCount();
         public virtual int GetDeBuffCount() => AbilitySystem.GetDeBuffCount();
+        public void SetCardTraits(CardTraits cardTraits) => Traits = cardTraits;
 
         // 기본 생성자
         protected BaseCard()
@@ -120,56 +129,6 @@ namespace ERang
             AiGroupIds = new List<int> { aiGroupId };
             AiGroupIndexes = AiGroupIds.ToDictionary(id => id, id => 0);
             CardImage = cardImage;
-        }
-
-        public void SetCardTraits(CardTraits cardTraits)
-        {
-            Traits = cardTraits;
-        }
-
-        public void SetCardType(CardType cardType)
-        {
-            CardType = cardType;
-        }
-
-        public void SetAiGroupIds(List<int> aiGroupIds)
-        {
-            AiGroupIds = new List<int>(aiGroupIds);
-
-            foreach (int aiGroupId in AiGroupIds)
-            {
-                AiGroupIndexes[aiGroupId] = 0;
-            }
-        }
-
-        // 데미지 처리
-        public virtual void TakeDamage(int amount)
-        {
-            State.TakeDamage(amount);
-        }
-
-        // 체력 회복
-        public virtual void RestoreHealth(int amount)
-        {
-            State.RestoreHealth(amount);
-        }
-
-        // 방어력 설정
-        public virtual void SetDefense(int amount)
-        {
-            State.SetDef(amount);
-        }
-
-        // 방어력 증가
-        public virtual void IncreaseDefense(int amount)
-        {
-            State.IncreaseDefense(amount);
-        }
-
-        // 방어력 감소
-        public virtual void DecreaseDefense(int amount)
-        {
-            State.DecreaseDefense(amount);
         }
 
         // 하위 클래스에서 구현할 수 있는 카드 라이프사이클 이벤트 메서드

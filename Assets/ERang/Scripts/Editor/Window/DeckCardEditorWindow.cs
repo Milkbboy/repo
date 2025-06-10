@@ -142,9 +142,9 @@ namespace ERang
                 EditorGUILayout.LabelField("Card Type");
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.BeginHorizontal();
-                card.SetCardType((CardType)EditorGUILayout.EnumPopup(card.CardType));
-                EditorGUILayout.EndHorizontal();
+                // EditorGUILayout.BeginHorizontal();
+                // card.SetCardType((CardType)EditorGUILayout.EnumPopup(card.CardType));
+                // EditorGUILayout.EndHorizontal();
 
                 // 카드 클래스 별로 스탯 표시
                 if (card is CreatureCard creatureCard)
@@ -176,10 +176,10 @@ namespace ERang
                 }
 
                 // 값이 바뀌었으면 SetAiGroupIds 호출
-                if (!tempIds.SequenceEqual(card.AiGroupIds))
-                {
-                    card.SetAiGroupIds(tempIds);
-                }
+                // if (!tempIds.SequenceEqual(card.AiGroupIds))
+                // {
+                //     card.SetAiGroupIds(tempIds);
+                // }
 
                 EditorGUILayout.EndHorizontal();
 

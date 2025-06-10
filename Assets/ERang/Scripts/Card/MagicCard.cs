@@ -23,39 +23,13 @@ namespace ERang
             State = new CardState(0, 0, cardData.costMana, cardData.atk);
         }
 
-        public void SetMana(int amount)
-        {
-            State.SetMana(amount);
-        }
+        public void SetMana(int amount) => State.SetMana(amount);
+        public void SetAttack(int amount) => State.SetAtk(amount);
+        public void SetHandOnCard(bool isHandOnCard) => IsHandOnCard = isHandOnCard;
+        public void SetSelectAttackType(bool isSelectAttackType) => IsSelectAttackType = isSelectAttackType;
+        public void SetTargetSlotNumbers(List<int> slotNumbers) => targetSlotNumbers = slotNumbers;
 
-        public void SetAttack(int amount)
-        {
-            State.SetAtk(amount);
-        }
-
-        public void SetHandOnCard(bool isHandOnCard)
-        {
-            IsHandOnCard = isHandOnCard;
-        }
-
-        public void SetSelectAttackType(bool isSelectAttackType)
-        {
-            IsSelectAttackType = isSelectAttackType;
-        }
-
-        public void SetTargetSlotNumbers(List<int> slotNumbers)
-        {
-            targetSlotNumbers = slotNumbers;
-        }
-
-        public void IncreaseMana(int amount)
-        {
-            State.IncreaseMana(amount);
-        }
-
-        public void DecreaseMana(int amount)
-        {
-            State.DecreaseMana(amount);
-        }
+        public void IncreaseMana(int amount) => State.IncreaseMana(amount);
+        public void DecreaseMana(int amount) => State.DecreaseMana(amount);
     }
 }

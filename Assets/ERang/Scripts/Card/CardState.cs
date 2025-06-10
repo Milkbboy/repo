@@ -50,6 +50,16 @@ namespace ERang
             OnAtkChanged?.Invoke(Atk);
         }
 
+        public void IncreaseAtk(int value)
+        {
+            SetAtk(Atk + value);
+        }
+
+        public void DecreaseAtk(int value)
+        {
+            SetAtk(Atk - value);
+        }
+
         public void TakeDamage(int amount)
         {
             int remainingDamage = amount;
