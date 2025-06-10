@@ -131,7 +131,7 @@ namespace ERang
                 if (newSelectedIndex != selectedIndex)
                 {
                     CardData selectedCardData = CardData.GetCardData(cardDataIds[newSelectedIndex]);
-                    card.UpdateCardData(selectedCardData);
+                    // card.UpdateCardData(selectedCardData);
                 }
 
                 // 카드 이미지 표시

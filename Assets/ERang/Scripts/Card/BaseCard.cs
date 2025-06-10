@@ -107,28 +107,5 @@ namespace ERang
             State = new CardState(0, 0, 0, 0);
             AbilitySystem = new CardAbilitySystem();
         }
-
-        // CardData 업데이트
-        public virtual void UpdateCardData(CardData cardData)
-        {
-            Id = cardData.card_id;
-            CardType = cardData.cardType;
-            InUse = cardData.inUse;
-            IsExtinction = cardData.extinction;
-            AiGroupIds = new List<int>(cardData.aiGroup_ids);
-            AiGroupIndexes = AiGroupIds.ToDictionary(id => id, id => 0);
-            CardImage = cardData.GetCardTexture();
-        }
-
-        // 카드 데이터 직접 업데이트
-        public virtual void UpdateCardData(int cardId, CardType cardType, bool inUse, int aiGroupId, Texture2D cardImage)
-        {
-            Id = cardId;
-            CardType = cardType;
-            InUse = inUse;
-            AiGroupIds = new List<int> { aiGroupId };
-            AiGroupIndexes = AiGroupIds.ToDictionary(id => id, id => 0);
-            CardImage = cardImage;
-        }
     }
 }

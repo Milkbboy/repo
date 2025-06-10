@@ -26,45 +26,6 @@ namespace ERang
     {
         private static System.Random random = new();
 
-        // public static BaseCard MakeCard(CardData cardData)
-        // {
-        //     BaseCard card = null;
-
-        //     switch (cardData.cardType)
-        //     {
-        //         case CardType.Creature:
-        //         case CardType.Monster:
-        //             card = new CreatureCard(cardData);
-        //             break;
-        //         case CardType.Building:
-        //             card = new BuildingCard(cardData);
-        //             break;
-        //         case CardType.Charm:
-        //         case CardType.Curse:
-        //         case CardType.Magic:
-        //             card = new MagicCard(cardData);
-        //             // 추가 동작 수행
-        //             MagicCard magicCard = card as MagicCard;
-
-        //             magicCard.SetHandOnCard(AiLogic.Instance.IsHandOnCard(card));
-        //             magicCard.SetTargetSlotNumbers(AiLogic.Instance.GetTargetSlotNumbers(card));
-        //             magicCard.SetSelectAttackType(AiLogic.Instance.IsSelectAttackType(card));
-        //             break;
-        //     }
-
-        //     return card;
-        // }
-
-        // public static BaseCard MakeHpCard(CardData cardData, int hp)
-        // {
-        //     return new HpCard(cardData, hp);
-        // }
-
-        // public static BaseCard MakeGoldCard(CardData cardData, int gold)
-        // {
-        //     return new GoldCard(cardData, gold);
-        // }
-
         public static void GetMasterText(int masterId, out string cardName, out string cardDesc, out string cardShortDesc)
         {
             MasterData masterData = MasterData.GetMasterData(masterId);

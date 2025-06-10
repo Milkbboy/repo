@@ -41,9 +41,6 @@ namespace ERang
         void SetDefense(int amount);
         void IncreaseDefense(int amount);
         void DecreaseDefense(int amount);
-
-        // 카드 데이터 업데이트
-        void UpdateCardData(CardData cardData);
     }
 
     /// <summary>

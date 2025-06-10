@@ -185,7 +185,7 @@ namespace ERang
                             break;
                     }
 
-                    card.UpdateCardData(cardId, bSlot.SlotCardType, inUse, 0, cardTexture);
+                    // card.UpdateCardData(cardId, bSlot.SlotCardType, inUse, 0, cardTexture);
                     bSlot.EquipCard(card);
                 }
 
