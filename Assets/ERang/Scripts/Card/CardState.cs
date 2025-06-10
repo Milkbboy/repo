@@ -11,11 +11,6 @@ namespace ERang
         public int MaxHp { get; private set; }
         public int MaxMana { get; private set; }
 
-        public event System.Action<int> OnHpChanged;
-        public event System.Action<int> OnDefChanged;
-        public event System.Action<int> OnManaChanged;
-        public event System.Action<int> OnAtkChanged;
-
         public CardState(int hp, int def, int mana, int atk, int maxHp = 0, int maxMana = 0)
         {
             Hp = hp;
@@ -26,39 +21,19 @@ namespace ERang
             MaxMana = maxMana > 0 ? maxMana : mana;
         }
 
-        public void SetHp(int value)
-        {
-            Hp = Mathf.Clamp(value, 0, MaxHp);
-            OnHpChanged?.Invoke(Hp);
-        }
+        public void SetHp(int value) => Hp = Mathf.Clamp(value, 0, MaxHp);
+        public void SetDef(int value) => Def = Mathf.Max(0, value);
+        public void SetMana(int value) => Mana = Mathf.Clamp(value, 0, MaxMana);
+        public void SetAtk(int value) => Atk = Mathf.Max(0, value);
 
-        public void SetDef(int value)
-        {
-            Def = Mathf.Max(0, value);
-            OnDefChanged?.Invoke(Def);
-        }
-
-        public void SetMana(int value)
-        {
-            Mana = Mathf.Clamp(value, 0, MaxMana);
-            OnManaChanged?.Invoke(Mana);
-        }
-
-        public void SetAtk(int value)
-        {
-            Atk = Mathf.Max(0, value);
-            OnAtkChanged?.Invoke(Atk);
-        }
-
-        public void IncreaseAtk(int value)
-        {
-            SetAtk(Atk + value);
-        }
-
-        public void DecreaseAtk(int value)
-        {
-            SetAtk(Atk - value);
-        }
+        public void RestoreHealth(int amount) => SetHp(Hp + amount);
+        public void IncreaseAtk(int value) => SetAtk(Atk + value);
+        public void DecreaseAtk(int value) => SetAtk(Atk - value);
+        public void IncreaseDefense(int amount) => SetDef(Def + amount);
+        public void DecreaseDefense(int amount) => SetDef(Def - amount);
+        public void IncreaseMana(int amount) => SetMana(Mana + amount);
+        public void DecreaseMana(int amount) => SetMana(Mana - amount);
+        public void ResetMana() => SetMana(0);
 
         public void TakeDamage(int amount)
         {
@@ -82,36 +57,6 @@ namespace ERang
             {
                 SetHp(Hp - remainingDamage);
             }
-        }
-
-        public void RestoreHealth(int amount)
-        {
-            SetHp(Hp + amount);
-        }
-
-        public void IncreaseDefense(int amount)
-        {
-            SetDef(Def + amount);
-        }
-
-        public void DecreaseDefense(int amount)
-        {
-            SetDef(Def - amount);
-        }
-
-        public void IncreaseMana(int amount)
-        {
-            SetMana(Mana + amount);
-        }
-
-        public void DecreaseMana(int amount)
-        {
-            SetMana(Mana - amount);
-        }
-
-        public void ResetMana()
-        {
-            SetMana(0);
         }
     }
 }
