@@ -40,7 +40,7 @@ namespace ERang
             selectCardCount.text = $"{selectCards.Count}/{this.maxSelectCount}";
         }
 
-        public void DrawCards(List<BaseCard> baseCards)
+        public void DrawCards(IReadOnlyList<BaseCard> baseCards)
         {
             foreach (BaseCard card in baseCards)
             {
@@ -115,7 +115,7 @@ namespace ERang
             // 선택한 카드를 HandCard 에서 제거하고 다음 턴 핸드 카드에 바로 나오게 해야 한다.
             foreach (SelectCard selectCard in selectCards)
             {
-                Deck.Instance.HandCardToDeck(selectCard);
+                DeckManager.Instance.HandCardToBoard(selectCard.Card);
                 yield return StartCoroutine(selectCard.DiscardAnimation(discardTransform));
             }
 

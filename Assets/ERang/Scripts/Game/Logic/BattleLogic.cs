@@ -111,15 +111,15 @@ namespace ERang
         /// </summary>
         public void ExtinctionCards()
         {
-            var deck = FindObjectOfType<Deck>();
+            var deckManager = FindObjectOfType<DeckManager>();
 
-            if (deck == null)
+            if (deckManager == null)
             {
                 Debug.LogError("Deck 인스턴스가 없습니다.");
                 return;
             }
 
-            string extinctionCardIds = string.Join(", ", deck.ExtinctionCards.Select(card => card.Id));
+            string extinctionCardIds = string.Join(", ", deckManager.Data.ExtinctionCards.Select(card => card.Id));
             ToastNotification.Show($"Extinction Card Ids: {extinctionCardIds}");
         }
 

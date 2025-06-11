@@ -12,7 +12,7 @@ namespace ERang
 
         private Player player;
         private MasterCard masterCard;
-        private Deck deck;
+        private DeckManager deckManager;
 
         void Awake()
         {
@@ -20,11 +20,11 @@ namespace ERang
                 Instance = this;
         }
 
-        public void Initialize(Player player, MasterCard masterCard, Deck deck)
+        public void Initialize(Player player, MasterCard masterCard, DeckManager deckManager)
         {
             this.player = player;
             this.masterCard = masterCard;
-            this.deck = deck;
+            this.deckManager = deckManager;
         }
 
         public bool UseHandCard(HCard hCard, BSlot targetSlot)
@@ -57,7 +57,7 @@ namespace ERang
             }
 
             // 핸드 카드 => 보드 카드 이동
-            deck.HandCardToBaord(hCard);
+            deckManager.HandCardToBoard(hCard.Card);
 
             // 보드 슬롯에 카드 장착
             boardSlot.EquipCard(hCard.Card);
@@ -70,7 +70,7 @@ namespace ERang
 
         public IEnumerator UseHandCard(string cardUid, BSlot targetSlot)
         {
-            BaseCard card = deck.FindHandCard(cardUid);
+            BaseCard card = deckManager.FindHandCard(cardUid);
 
             if (card == null)
             {
@@ -128,12 +128,12 @@ namespace ERang
             }
 
             // 마스터 핸드 카드 제거 먼저 하고 어빌리티 발동
-            deck.RemoveHandCard(cardUid);
+            deckManager.RemoveHandCard(cardUid);
         }
 
         public bool CanUseHandCard(string cardUid)
         {
-            BaseCard card = deck.FindHandCard(cardUid);
+            BaseCard card = deckManager.FindHandCard(cardUid);
 
             if (card == null)
             {

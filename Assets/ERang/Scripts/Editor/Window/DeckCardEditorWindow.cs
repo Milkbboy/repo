@@ -8,7 +8,7 @@ namespace ERang
 {
     public class DeckCardEditorWindow : EditorWindow
     {
-        private DeckSystem deckSystem;
+        private DeckManager deckManager;
         private Vector2 scrollPosition;
         private int[] cardDataIds;
         private string[] cardDataNames;
@@ -22,7 +22,7 @@ namespace ERang
 
         private void OnEnable()
         {
-            deckSystem = FindObjectOfType<DeckSystem>();
+            deckManager = FindObjectOfType<DeckManager>();
 
             List<(int, string)> cardIdNames = CardData.GetCardIdNames();
 
@@ -38,9 +38,9 @@ namespace ERang
 
         private void OnGUI()
         {
-            if (deckSystem == null)
+            if (deckManager == null)
             {
-                EditorGUILayout.HelpBox("DeckSystem을 찾을 수 없습니다.", MessageType.Error);
+                EditorGUILayout.HelpBox("DeckManager을 찾을 수 없습니다.", MessageType.Error);
                 return;
             }
 
@@ -59,35 +59,35 @@ namespace ERang
             EditorGUILayout.LabelField("덱 카드", EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
-            DrawDeckCards(deckSystem.DeckCards);
+            DrawDeckCards(deckManager.Data.DeckCards);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             EditorGUILayout.LabelField("핸드 카드", EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
-            DrawDeckCards(deckSystem.HandCards);
+            DrawDeckCards(deckManager.Data.HandCards);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             EditorGUILayout.LabelField("건물 카드", EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
-            DrawDeckCards(deckSystem.BuildingCards);
+            DrawDeckCards(deckManager.Data.BuildingCards);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             EditorGUILayout.LabelField("그레이브 카드", EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
-            DrawDeckCards(deckSystem.GraveCards);
+            DrawDeckCards(deckManager.Data.GraveCards);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             EditorGUILayout.LabelField("삭제 카드", EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
-            DrawDeckCards(deckSystem.ExtinctionCards);
+            DrawDeckCards(deckManager.Data.ExtinctionCards);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndScrollView();
@@ -95,12 +95,12 @@ namespace ERang
             // 변경 사항을 적용합니다
             if (GUILayout.Button("Apply Changes"))
             {
-                EditorUtility.SetDirty(deckSystem);
-                // deckSystem.UpdateHandCardUI();
+                EditorUtility.SetDirty(deckManager);
+                // deckManager.UpdateHandCardUI();
             }
         }
 
-        private void DrawDeckCards(List<BaseCard> cards)
+        private void DrawDeckCards(IReadOnlyList<BaseCard> cards)
         {
             // 카드가 없으면 표시
             if (cards.Count == 0)

@@ -31,7 +31,7 @@ namespace ERang
                 yield break;
             }
 
-            if (Deck.Instance?.HandCards == null || Deck.Instance.HandCards.Count == 0)
+            if (DeckManager.Instance?.Data.HandCards == null || DeckManager.Instance.Data.HandCards.Count == 0)
             {
                 LogAbility("선택할 핸드 카드가 없습니다.", LogType.Warning);
                 yield break;
@@ -72,7 +72,7 @@ namespace ERang
         {
             cardSelectObject.gameObject.SetActive(true);
             cardSelectObject.SetMaxSelectCardCount(selectCount);
-            cardSelectObject.DrawCards(Deck.Instance.HandCards);
+            cardSelectObject.DrawCards(DeckManager.Instance.Data.HandCards);
 
             LogAbility($"카드 선택 UI 활성화 - 최대 선택 수: {selectCount}");
             yield return new WaitForSeconds(0.1f); // UI 초기화 대기
@@ -154,7 +154,7 @@ namespace ERang
                 LogAbility($"카드 처리 완료: {selectCard.Card.LogText}");
 
                 // 카드를 덱으로 이동
-                Deck.Instance.HandCardToDeck(selectCard);
+                DeckManager.Instance.HandCardToBoard(selectCard.Card);
             }
         }
     }

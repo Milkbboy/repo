@@ -35,7 +35,7 @@ namespace ERang
         // 외부 시스템 참조 (DI 패턴으로 개선 가능)
         private Player player;
         private MasterCard masterCard;
-        private Deck deck;
+        private DeckManager deckManager;
 
         void Awake()
         {
@@ -43,11 +43,11 @@ namespace ERang
                 Instance = this;
         }
 
-        public void Initialize(Player player, MasterCard masterCard, Deck deck)
+        public void Initialize(Player player, MasterCard masterCard, DeckManager deckManager)
         {
             this.player = player;
             this.masterCard = masterCard;
-            this.deck = deck;
+            this.deckManager = deckManager;
         }
 
         public IEnumerator StartTurn()
@@ -67,10 +67,10 @@ namespace ERang
             BoardSystem.Instance.SetMana(player.RechargeMana);
 
             // 핸드 카드 만들기
-            yield return StartCoroutine(deck.MakeHandCards());
+            yield return StartCoroutine(deckManager.MakeHandCards());
 
             // 핸드 카드 HandOn 어빌리티 액션
-            yield return StartCoroutine(HandOnCardAbilityAction(deck.HandCards));
+            yield return StartCoroutine(HandOnCardAbilityAction(deckManager.Data.HandCards));
 
             // 턴 시작시 실행되는 몬스터 카드 Reaction
             yield return StartCoroutine(TurnStartMonsterReaction());
@@ -115,7 +115,7 @@ namespace ERang
             yield return StartCoroutine(ReleaseBoardCardAbility(BoardSystem.Instance.GetRightBoardSlots()));
 
             // 핸드덱에 카드 제거
-            deck.TrunEndProcess();
+            deckManager.TurnEndProcess();
 
             // 마스터 마나 리셋
             BoardSystem.Instance.ResetMana();
@@ -263,7 +263,7 @@ namespace ERang
             }
         }
 
-        private IEnumerator HandOnCardAbilityAction(List<BaseCard> handCards)
+        private IEnumerator HandOnCardAbilityAction(IReadOnlyList<BaseCard> handCards)
         {
             // 핸드 온 카드 액션의 주체는 마스터 슬롯
             BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
@@ -279,7 +279,7 @@ namespace ERang
             }
         }
 
-        private IEnumerator ReleaseHandOnCardAbility(List<BaseCard> cards)
+        private IEnumerator ReleaseHandOnCardAbility(IReadOnlyList<BaseCard> cards)
         {
             foreach (var card in cards)
             {

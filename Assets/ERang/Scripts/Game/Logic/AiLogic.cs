@@ -262,7 +262,7 @@ namespace ERang
         /// <summary>
         /// HandOn 어빌리티를 가진 카드 얻기
         /// </summary>
-        public List<(BaseCard card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(List<BaseCard> handCards)
+        public List<(BaseCard card, AiData aiData, List<AbilityData> abilities)> GetHandOnCards(IReadOnlyList<BaseCard> handCards)
         {
             List<(BaseCard card, AiData aiData, List<AbilityData> abilities)> handOnCards = new List<(BaseCard, AiData, List<AbilityData>)>();
 

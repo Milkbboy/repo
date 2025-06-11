@@ -8,7 +8,7 @@ namespace ERang
         public GameObject mapEventObject;
         public GameObject rewardObject;
 
-        public DeckSystem deckSystem;
+        public DeckManager deckManager;
 
         void Awake()
         {
@@ -33,7 +33,7 @@ namespace ERang
             mapEventObject.SetActive(lastScene == "Map");
             rewardObject.SetActive(lastScene == "Battle");
 
-            Debug.Log($"DeckSystem allCards: {string.Join(", ", Player.Instance.AllCards)}");
+            Debug.Log($"DeckManager allCards: {string.Join(", ", Player.Instance.AllCards)}");
         }
 
         public void NextScene()

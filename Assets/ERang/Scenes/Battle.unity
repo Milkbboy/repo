@@ -489,7 +489,6 @@ GameObject:
   m_Component:
   - component: {fileID: 127787041}
   - component: {fileID: 127787042}
-  - component: {fileID: 127787045}
   - component: {fileID: 127787043}
   - component: {fileID: 127787044}
   - component: {fileID: 127787046}
@@ -564,18 +563,6 @@ MonoBehaviour:
   deckCardCountText: {fileID: 514885756}
   graveCardCountText: {fileID: 392837571}
   extinctionCardCountText: {fileID: 1025752001}
---- !u!114 &127787045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 127787040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ad38bd11599d2d43b8a693481c8b1e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &127787046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5219,7 +5206,7 @@ MonoBehaviour:
   floorText: {fileID: 1857619272}
   resultText: {fileID: 1864985192}
   satietyUI: {fileID: 1515668104}
-  deck: {fileID: 127787042}
+  deckManager: {fileID: 127787042}
 --- !u!114 &1507728445 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8028014065667705318, guid: c43864c6cfd24c4478e0e145c4fa8eae,

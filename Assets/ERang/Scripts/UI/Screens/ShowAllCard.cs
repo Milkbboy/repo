@@ -15,7 +15,7 @@ namespace ERang
             ShowCards(Player.Instance.AllCards);
         }
 
-        public void ShowCards(List<BaseCard> cards)
+        public void ShowCards(IReadOnlyList<BaseCard> cards)
         {
             ClearAllCards();
 
@@ -86,7 +86,7 @@ namespace ERang
             }
         }
 
-        public void ToggleShowCards(List<BaseCard> cards)
+        public void ToggleShowCards(IReadOnlyList<BaseCard> cards)
         {
             if (cardObjects.Count > 0)
             {

@@ -15,7 +15,7 @@ namespace ERang
         public SatietyUI satietyUI;
 
         [Header("게임 오브젝트")]
-        public Deck deck;
+        public DeckManager deckManager;
 
         // 인터페이스 구현
         public Player Player => player;
@@ -41,8 +41,26 @@ namespace ERang
 
         void Start()
         {
+            // ✅ 필수 시스템 초기화 대기
+            StartCoroutine(InitializeAndStartBattle());
+        }
+
+        /// <summary>
+        /// 시스템 초기화 대기 후 배틀 시작
+        /// </summary>
+        private IEnumerator InitializeAndStartBattle()
+        {
+            // 필수 시스템들이 초기화될 때까지 대기
+            while (AiLogic.Instance == null)
+            {
+                Debug.Log("🔄 AiLogic.Instance 초기화 대기 중...");
+                yield return null;
+            }
+
+            Debug.Log("✅ 모든 필수 시스템 초기화 완료. 배틀 시작");
+            
             InitializeBattle();
-            StartCoroutine(StartBattle());
+            yield return StartCoroutine(StartBattle());
         }
 
         /// <summary>
@@ -73,7 +91,7 @@ namespace ERang
             masterCard = BoardSystem.Instance.MasterCard;
 
             // 마스터 크리쳐 카드 생성
-            deck.CreateMasterCards(player);
+            deckManager.CreateMasterCards(player);
 
             // 골드 설정
             BoardSystem.Instance.SetGold(player.Gold);
@@ -99,10 +117,10 @@ namespace ERang
 
             // 의존성 있는 매니저들 초기화
             if (turnManager is TurnManager tm)
-                tm.Initialize(player, masterCard, deck);
+                tm.Initialize(player, masterCard, deckManager);
 
             if (actionProcessor is ActionProcessor ap)
-                ap.Initialize(player, masterCard, deck);
+                ap.Initialize(player, masterCard, deckManager);
 
             // 몬스터 카드 생성
             yield return StartCoroutine(BoardSystem.Instance.CreateMonsterCards(levelData.cardIds));

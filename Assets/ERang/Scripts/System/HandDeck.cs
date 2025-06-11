@@ -266,17 +266,17 @@ namespace ERang
             switch (deckKind)
             {
                 case DeckKind.Hand:
-                    Deck.Instance.AddHandCard(card);
+                    DeckManager.Instance.Data.AddToHand(card);
                     discardAnimation.PlaySequence(handDeckTransform, SpawnHandCard(card));
                     break;
 
                 case DeckKind.Grave:
-                    Deck.Instance.AddGraveCard(card);
+                    DeckManager.Instance.Data.AddToGrave(card);
                     discardAnimation.PlaySequence(GraveTransform, null);
                     break;
 
                 case DeckKind.Deck:
-                    Deck.Instance.AddDeckCard(card);
+                    DeckManager.Instance.Data.AddToDeck(card);
                     discardAnimation.PlaySequence(DeckTransform, null);
                     break;
             }
