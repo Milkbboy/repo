@@ -639,6 +639,30 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81015000
+  - Ai_Id: 8101501
+    NameDesc: "\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
+    Type: DeBuff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81015001
+  - Ai_Id: 8101502
+    NameDesc: "\uD608\uD1A0 \uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81015002
   - Ai_Id: 8101600
     NameDesc: "\uD55C\uC785"
     Type: Melee

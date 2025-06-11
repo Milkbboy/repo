@@ -1224,24 +1224,7 @@ MonoBehaviour:
     Summon_GroupId: 0
     ChainAbilityId: 0
   - AbilityData_Id: 81015001
-    NameDesc: "\uAD6C\uD1A0 \uC18C\uD658"
-    AbilityType: Summon_Hand
-    Value: 1
-    Ratio: 0
-    Type: Active
-    Duration: 0
-    SkillAnim: 
-    SkillFx: 
-    HitFx: 
-    PtojectileFx: 
-    SkillIcon: 
-    SkillIconDesc: 
-    SkillViewIcon: 
-    FxSound: 
-    Summon_GroupId: 1004
-    ChainAbilityId: 0
-  - AbilityData_Id: 81015002
-    NameDesc: "\uD608\uD1A0_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8"
+    NameDesc: "\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
     AbilityType: SubSatiety
     Value: 20
     Ratio: 0
@@ -1256,6 +1239,23 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81015002
+    NameDesc: "\uD608\uD1A0 \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
     ChainAbilityId: 0
   - AbilityData_Id: 81016000
     NameDesc: "\uD55C\uC785_\uACF5\uACA9"
