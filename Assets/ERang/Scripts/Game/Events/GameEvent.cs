@@ -19,7 +19,7 @@ namespace ERang
             RewardData.Load("TableExports/RewardDataTable");
 
             mapEventObject.GetComponent<MapEvent>().OnClickNextScene += NextScene;
-            rewardObject.GetComponent<Reward>().OnClickNextScene += NextScene;
+            rewardObject.GetComponent<RewardEvent>().OnClickNextScene += NextScene;
         }
 
         void Start()

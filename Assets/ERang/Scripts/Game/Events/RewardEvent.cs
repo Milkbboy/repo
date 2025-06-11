@@ -6,7 +6,7 @@ using ERang.Data;
 using ERang;
 using Newtonsoft.Json;
 
-public class Reward : MonoBehaviour
+public class RewardEvent : MonoBehaviour
 {
     public Transform deckPosition;
 
