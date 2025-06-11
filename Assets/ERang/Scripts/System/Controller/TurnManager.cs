@@ -6,7 +6,7 @@ using ERang.Data;
 
 namespace ERang
 {
-    public class TurnManager : MonoBehaviour, ITurnManager
+    public class TurnManager : MonoBehaviour
     {
         public static TurnManager Instance { get; private set; }
 

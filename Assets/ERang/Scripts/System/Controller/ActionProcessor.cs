@@ -6,7 +6,7 @@ using ERang.Data;
 
 namespace ERang
 {
-    public class ActionProcessor : MonoBehaviour, IActionProcessor
+    public class ActionProcessor : MonoBehaviour
     {
         public static ActionProcessor Instance { get; private set; }
 

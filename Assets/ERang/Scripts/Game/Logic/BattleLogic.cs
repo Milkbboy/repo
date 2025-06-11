@@ -14,7 +14,7 @@ namespace ERang
         [Header("딜레이 설정")]
         public float abilityReleaseDelay = 0.5f;
 
-        private IBattleController battleController;
+        private BattleController battleController;
 
         public int TurnCount => battleController.TurnCount;
 

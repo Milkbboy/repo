@@ -5,7 +5,7 @@ using ERang.Data;
 
 namespace ERang
 {
-    public class BattleController : MonoBehaviour, IBattleController
+    public class BattleController : MonoBehaviour
     {
         public static BattleController Instance { get; private set; }
 
@@ -22,8 +22,8 @@ namespace ERang
         public int TurnCount => turnManager?.TurnCount ?? 0;
 
         // 의존성 주입을 위한 인터페이스 참조
-        private ITurnManager turnManager;
-        private IActionProcessor actionProcessor;
+        private TurnManager turnManager;
+        private ActionProcessor actionProcessor;
 
         // 게임 상태
         private Player player;
