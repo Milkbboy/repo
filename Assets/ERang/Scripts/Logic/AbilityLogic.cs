@@ -105,7 +105,7 @@ namespace ERang
                 // 핸드 온 어빌리티는 턴 종료시 해제되기 때문에 저장. 효과 지속 시간이 있는 어빌리티 저장.
                 if (abilityData.workType == AbilityWorkType.OnHand || abilityData.duration > 0)
                 {
-                    card.AddCardAbility(cardAbility, TurnManager.Instance.TurnCount, whereFrom);
+                    card.AbilitySystem.AddCardAbility(cardAbility, TurnManager.Instance.TurnCount, whereFrom);
                 }
 
                 targetSlot.DrawAbilityIcons();
@@ -200,7 +200,7 @@ namespace ERang
                 {
                     yield return StartCoroutine(handAbility.Release(handCard));
 
-                    handCard.RemoveHandCardAbility(cardAbility);
+                    handCard.AbilitySystem.RemoveHandCardAbility(cardAbility);
 
                     if (handAbility is IAbility ability && ability.Changes.Count > 0)
                         Debug.Log($"<color=yellow>[HandAbility]</color> {handCard.LogText} {cardAbility.LogText} 해제 완료. 효과: {Utils.StatChangesText(ability.Changes)}");

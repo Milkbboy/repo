@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ERang
 {
-    public class CardState
+    public class CardStat
     {
         public int Hp { get; private set; }
         public int Def { get; private set; }
@@ -11,7 +11,7 @@ namespace ERang
         public int MaxHp { get; private set; }
         public int MaxMana { get; private set; }
 
-        public CardState(int hp, int def, int mana, int atk, int maxHp = 0, int maxMana = 0)
+        public CardStat(int hp, int def, int mana, int atk, int maxHp = 0, int maxMana = 0)
         {
             Hp = hp;
             Def = def;

@@ -148,7 +148,7 @@ namespace ERang
                 LogAbility($"다음 턴 선택 설정: {card.LogText}");
 
                 // 2. 핸드 어빌리티 추가 (주로 마나 감소 효과)
-                card.AddHandCardAbility(handCardAbility);
+                card.AbilitySystem.AddHandCardAbility(handCardAbility);
                 LogAbility($"핸드 어빌리티 추가: {handCardAbility.abilityType} (값: {handCardAbility.abilityValue})");
 
                 LogAbility($"카드 처리 완료: {selectCard.Card.LogText}");

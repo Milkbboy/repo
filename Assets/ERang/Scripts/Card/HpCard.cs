@@ -6,7 +6,7 @@ namespace ERang
     {
         public HpCard(CardData cardData, int hp) : base(cardData)
         {
-            State.SetHp(hp);
+            Stat.SetHp(hp);
         }
     }
 }

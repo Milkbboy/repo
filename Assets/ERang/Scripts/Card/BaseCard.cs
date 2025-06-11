@@ -34,39 +34,31 @@ namespace ERang
         public Texture2D CardImage { get => cardImage; protected set => cardImage = value; }
 
         // 게임 관련 멤버 변수
-        public CardState State { get; protected set; }
+        public CardStat Stat { get; protected set; }
         public CardAbilitySystem AbilitySystem { get; protected set; }
         public CardTraits Traits { get; protected set; }
         public string LogText => Utils.CardLog(this);
 
         // 가상 속성 - 상속 클래스에서 재정의 가능
-        public virtual int Hp => State.Hp;
-        public virtual int MaxHp => State.MaxHp;
-        public virtual int Def => State.Def;
-        public virtual int Mana => State.Mana;
-        public virtual int Atk => State.Atk;
+        public virtual int Hp => Stat.Hp;
+        public virtual int MaxHp => Stat.MaxHp;
+        public virtual int Def => Stat.Def;
+        public virtual int Mana => Stat.Mana;
+        public virtual int Atk => Stat.Atk;
 
         // 스탯
-        public virtual void TakeDamage(int amount) => State.TakeDamage(amount);
-        public virtual void RestoreHealth(int amount) => State.RestoreHealth(amount);
-        public virtual void SetDefense(int amount) => State.SetDef(amount);
-        public virtual void IncreaseDefense(int amount) => State.IncreaseDefense(amount);
-        public virtual void DecreaseDefense(int amount) => State.DecreaseDefense(amount);
+        public virtual void TakeDamage(int amount) => Stat.TakeDamage(amount);
+        public virtual void RestoreHealth(int amount) => Stat.RestoreHealth(amount);
+        public virtual void SetDefense(int amount) => Stat.SetDef(amount);
+        public virtual void IncreaseDefense(int amount) => Stat.IncreaseDefense(amount);
+        public virtual void DecreaseDefense(int amount) => Stat.DecreaseDefense(amount);
 
-        // 어빌리티
-        public virtual void AddCardAbility(CardAbility cardAbility, int turnCount, AbilityWhereFrom whereFrom) => AbilitySystem.AddCardAbility(cardAbility, turnCount, whereFrom);
-        public virtual void AddHandCardAbility(CardAbility cardAbility) => AbilitySystem.AddHandCardAbility(cardAbility);
-        public virtual List<CardAbility> DecreaseDuration() => AbilitySystem.DecreaseDuration();
-        public virtual void RemoveCardAbility(CardAbility cardAbility) => AbilitySystem.RemoveCardAbility(cardAbility);
-        public virtual void RemoveHandCardAbility(CardAbility cardAbility) => AbilitySystem.RemoveHandCardAbility(cardAbility);
-        public virtual int GetBuffCount() => AbilitySystem.GetBuffCount();
-        public virtual int GetDeBuffCount() => AbilitySystem.GetDeBuffCount();
         public void SetCardTraits(CardTraits cardTraits) => Traits = cardTraits;
 
         // 기본 생성자
         protected BaseCard()
         {
-            State = new CardState(0, 0, 0, 0);
+            Stat = new CardStat(0, 0, 0, 0);
             AbilitySystem = new CardAbilitySystem();
             Traits = CardTraits.None;
         }
@@ -89,7 +81,7 @@ namespace ERang
             Traits = CardTraits.None;
             CardGrade = cardData.cardGrade;
 
-            State = new CardState(cardData.hp, cardData.def, cardData.costMana, cardData.atk);
+            Stat = new CardStat(cardData.hp, cardData.def, cardData.costMana, cardData.atk);
             AbilitySystem = new CardAbilitySystem();
         }
 
@@ -104,7 +96,7 @@ namespace ERang
             CardImage = cardImage;
             Traits = CardTraits.None;
 
-            State = new CardState(0, 0, 0, 0);
+            Stat = new CardStat(0, 0, 0, 0);
             AbilitySystem = new CardAbilitySystem();
         }
     }

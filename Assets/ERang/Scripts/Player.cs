@@ -17,13 +17,13 @@ namespace ERang
         public List<int> CardIds { get => cardIds; set => cardIds = value; }
 
         // CardState 스탯 관리
-        public CardState State { get; protected set; }
-        public int Hp => State.Hp;
-        public int MaxHp => State.MaxHp;
-        public int Mana => State.Mana;
-        public int MaxMana => State.MaxMana;
-        public int Atk => State.Atk;
-        public int Def => State.Def;
+        public CardStat Stat { get; protected set; }
+        public int Hp => Stat.Hp;
+        public int MaxHp => Stat.MaxHp;
+        public int Mana => Stat.Mana;
+        public int MaxMana => Stat.MaxMana;
+        public int Atk => Stat.Atk;
+        public int Def => Stat.Def;
 
         // 추가 속성들
         public int RechargeMana { get => rechargeMana; set => rechargeMana = value; }
@@ -87,10 +87,10 @@ namespace ERang
             Debug.Log($"<color=#257dca>만복감 감소({amount}): {oldSatiety} -> {satiety}</color>");
         }
 
-        public void SetHp(int amount) => State.SetHp(amount);
+        public void SetHp(int amount) => Stat.SetHp(amount);
         public void SetGold(int amount) => Gold = amount;
-        public void SetMana(int amount) => State.SetMana(amount);
-        public void RecoverHp(int amount) => State.RestoreHealth(amount);
+        public void SetMana(int amount) => Stat.SetMana(amount);
+        public void RecoverHp(int amount) => Stat.RestoreHealth(amount);
         #endregion
 
         #region 카드 관리
@@ -164,7 +164,7 @@ namespace ERang
             cardIds = masterData.startCardIds;
             masterTexture = masterData.masterTexture;
 
-            State = new CardState(masterData.hp, masterData.def, masterData.startMana, masterData.atk, masterData.hp, masterData.maxMana);
+            Stat = new CardStat(masterData.hp, masterData.def, masterData.startMana, masterData.atk, masterData.hp, masterData.maxMana);
 
             Debug.Log($"MasterData 데이터 먼저 설정: masterId: {masterId}, masterType: {masterType}, 카드: {string.Join(", ", cardIds)}");
         }

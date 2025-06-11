@@ -4,7 +4,7 @@ namespace ERang
     {
         const int AI_GROUP_ID = 0;
 
-        public int MaxMana => State.MaxMana;
+        public int MaxMana => Stat.MaxMana;
         private Player player;
 
         public MasterCard()
@@ -14,50 +14,50 @@ namespace ERang
         public MasterCard(Player player) : base(player.MasterId, CardType.Master, AI_GROUP_ID, player.CardImage)
         {
             this.player = player;
-            State = new CardState(player.Hp, player.Def, player.Mana, AI_GROUP_ID, player.MaxHp, player.MaxMana);
+            Stat = new CardStat(player.Hp, player.Def, player.Mana, AI_GROUP_ID, player.MaxHp, player.MaxMana);
         }
 
         public override void TakeDamage(int amount)
         {
-            State.TakeDamage(amount);
-            player.SetHp(State.Hp);
+            Stat.TakeDamage(amount);
+            player.SetHp(Stat.Hp);
         }
 
         public override void RestoreHealth(int amount)
         {
-            State.RestoreHealth(amount);
-            player.SetHp(State.Hp);
+            Stat.RestoreHealth(amount);
+            player.SetHp(Stat.Hp);
         }
 
         // IManaManageable 인터페이스 정의
         public void IncreaseMana(int amount)
         {
-            State.IncreaseMana(amount);
-            player.SetMana(State.Mana);
+            Stat.IncreaseMana(amount);
+            player.SetMana(Stat.Mana);
         }
         public void DecreaseMana(int amount)
         {
-            State.DecreaseMana(amount);
-            player.SetMana(State.Mana);
+            Stat.DecreaseMana(amount);
+            player.SetMana(Stat.Mana);
         }
 
         // 마스터 카드 함수 정의
         public void SetHp(int amount)
         {
-            State.SetHp(amount);
-            player.SetHp(State.Hp);
+            Stat.SetHp(amount);
+            player.SetHp(Stat.Hp);
         }
 
         public void SetMana(int amount)
         {
-            State.SetMana(amount);
-            player.SetMana(State.Mana);
+            Stat.SetMana(amount);
+            player.SetMana(Stat.Mana);
         }
 
         public void ResetMana()
         {
-            State.SetMana(0);
-            player.SetMana(State.Mana);
+            Stat.SetMana(0);
+            player.SetMana(Stat.Mana);
         }
     }
 }

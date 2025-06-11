@@ -20,7 +20,7 @@ namespace ERang
         Texture2D CardImage { get; }
 
         // 카드 상태
-        CardState State { get; }
+        CardStat Stat { get; }
         CardTraits Traits { get; }
 
         // 어빌리티 시스템 관련

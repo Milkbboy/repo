@@ -290,7 +290,7 @@ namespace ERang
                 foreach (var cardAbility in onHandCardAbilities)
                 {
                     yield return StartCoroutine(AbilityLogic.Instance.AbilityRelease(cardAbility, AbilityWhereFrom.TurnEndHandOn));
-                    card.RemoveCardAbility(cardAbility);
+                    card.AbilitySystem.RemoveCardAbility(cardAbility);
                 }
             }
         }
@@ -318,7 +318,7 @@ namespace ERang
 
                 foreach (CardAbility cardAbility in removedCardAbilities)
                 {
-                    card.RemoveCardAbility(cardAbility);
+                    card.AbilitySystem.RemoveCardAbility(cardAbility);
                 }
 
                 boardSlot.DrawAbilityIcons();
