@@ -64,8 +64,8 @@ namespace ERang
 
             // 변경사항 기록 (카드가 파괴되면 null이 될 수 있음)
             int totalDamage = damage * atkCount;
-            RecordChange(StatType.Hp, targetSlot, beforeHp, targetCard?.Hp ?? 0, totalDamage);
             RecordChange(StatType.Def, targetSlot, beforeDef, targetCard?.Def ?? 0, totalDamage);
+            RecordChange(StatType.Hp, targetSlot, beforeHp, targetCard?.Hp ?? 0, totalDamage);
         }
 
         public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)

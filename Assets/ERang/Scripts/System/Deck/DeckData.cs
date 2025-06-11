@@ -80,9 +80,10 @@ namespace ERang
         {
             foreach (BaseCard graveCard in graveCards)
             {
-                graveCards.Remove(graveCard);
                 deckCards.Add(graveCard);
             }
+
+            graveCards.Clear();
         }
 
         public void Clear()

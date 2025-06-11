@@ -149,7 +149,7 @@ namespace ERang
             }
             else
             {
-                Debug.Log($"🔍 HandleTargetSelection: 레이캐스트 히트 없음, 선택 해제");
+                // Debug.Log($"🔍 HandleTargetSelection: 레이캐스트 히트 없음, 선택 해제");
                 UnselectEnemy();
             }
         }
@@ -253,6 +253,9 @@ namespace ERang
 
         private void UnselectEnemy()
         {
+            if (selectedSlot == null)
+                return;
+
             Debug.Log($"UnselectEnemy: {selectedSlot?.name} unselected");
             selectedSlot = null;
             selectedSlotNum = -1;
