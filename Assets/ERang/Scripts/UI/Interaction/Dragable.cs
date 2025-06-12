@@ -70,8 +70,7 @@ namespace ERang
             Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
             Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
             mouseOffset = transform.position - objPosition;
-
-            Debug.Log($"Dragable.StartDrag: {transform.name}");
+            // Debug.Log($"Dragable.StartDrag: {transform.name}");
         }
 
         /// <summary>
@@ -126,8 +125,7 @@ namespace ERang
 
             // 렌더링 순서 복원
             ResetSortingOrder();
-
-            Debug.Log($"Dragable.EndDrag: {transform.name}");
+            // Debug.Log($"Dragable.EndDrag: {transform.name}");
         }
 
         /// <summary>
@@ -146,8 +144,7 @@ namespace ERang
 
             // 렌더링 순서 변경
             SetHighSortingOrder();
-
-            Debug.Log($"Dragable.StartHover: {transform.name}");
+            // Debug.Log($"Dragable.StartHover: {transform.name}");
         }
 
         /// <summary>
@@ -166,8 +163,7 @@ namespace ERang
 
             // 렌더링 순서 복원
             ResetSortingOrder();
-
-            Debug.Log($"Dragable.EndHover: {transform.name}");
+            // Debug.Log($"Dragable.EndHover: {transform.name}");
         }
 
         /// <summary>
