@@ -11,7 +11,7 @@ namespace ERang
         {
         }
 
-        public MasterCard(Player player) : base(player.MasterId, CardType.Master, AI_GROUP_ID, player.CardImage)
+        public MasterCard(Player player) : base(player.MasterId, CardType.Master, player.NameDesc, AI_GROUP_ID, player.CardImage)
         {
             this.player = player;
             Stat = new CardStat(player.Hp, player.Def, player.Mana, AI_GROUP_ID, player.MaxHp, player.MaxMana);

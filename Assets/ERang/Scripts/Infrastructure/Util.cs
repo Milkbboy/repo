@@ -132,7 +132,7 @@ namespace ERang
 
         public static string CardLog(BaseCard card)
         {
-            return $"{GetCardType(card.CardType)} 카드({card.Id})";
+            return $"{GetCardType(card.CardType)} {card.Name} 카드({card.Id})";
         }
 
         public static string AbilityLog(CardAbility cardAbility)

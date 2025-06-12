@@ -75,7 +75,10 @@ namespace ERang
             if (!ValidateAbilityProcess(abilityData, selfSlot, targetSlots))
                 yield break;
 
-            Debug.Log($"<color=cyan>[AbilityProcess]</color> {selfSlot.LogText} {abilityData.LogText} 실행. 대상: {string.Join(", ", targetSlots.Select(slot => slot.LogText))}");
+            FlatLogger.LogAbility(abilityData.abilityId, abilityData.nameDesc);
+
+            // 효과 로깅
+            LogAbilityEffects(abilityData, targetSlots);
 
             List<Coroutine> runningCoroutines = new List<Coroutine>();
 
@@ -307,6 +310,17 @@ namespace ERang
             Debug.LogWarning($"{boardSlot.LogText} <color=#f4872e>{abilityType} 어빌리티</color> {boardSlot.Card.CardType} 카드에 대한 원래 stat 값 없음");
 
             return 0;
+        }
+
+        /// <summary>
+        /// 어빌리티 효과 로깅
+        /// </summary>
+        private void LogAbilityEffects(AbilityData abilityData, List<BSlot> targetSlots)
+        {
+            foreach (BSlot targetSlot in targetSlots.Where(slot => slot?.Card != null))
+            {
+                FlatLogger.LogEffect(targetSlot.ToSlotLogInfo(), abilityData.GetEffectDescription());
+            }
         }
     }
 }

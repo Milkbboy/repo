@@ -12,6 +12,7 @@ namespace ERang.Data
     public class AiData
     {
         public int ai_Id; // Ai의 Id 값
+        public string name;
         public AiDataType type; // 행동의 타입을 정의
         public AiDataTarget target; // 대상 혹은 복수 대상을 설정한다.
         public AiDataAttackType attackType; // 행동이 이루어지는 절차를 설정한다.
@@ -36,6 +37,7 @@ namespace ERang.Data
         public void Initialize(AiDataEntity entity)
         {
             ai_Id = entity.Ai_Id;
+            name = entity.NameDesc;
             type = ConvertAiDataType(entity.Type);
             target = ConvertAiDataTarget(entity.Target);
             attackType = ConvertAiDataAtackType(entity.Atk_Type);

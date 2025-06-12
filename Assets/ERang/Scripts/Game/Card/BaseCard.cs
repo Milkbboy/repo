@@ -15,6 +15,7 @@ namespace ERang
         // 테이블 관련 멤버 변수 - 대부분은 설정자를 protected로 제한
         private string uid;
         private int id;
+        private string name;
         private CardType cardType;
         private CardGrade cardGrade;
         private List<int> aiGroupIds;
@@ -25,6 +26,7 @@ namespace ERang
         // 인터페이스 구현 - 대부분 읽기 전용, 일부만 쓰기 가능
         public string Uid { get => uid; protected set => uid = value; }
         public int Id { get => id; protected set => id = value; }
+        public string Name { get => name; protected set => name = value; }
         public CardType CardType { get => cardType; protected set => cardType = value; }
         public CardGrade CardGrade { get => cardGrade; protected set => cardGrade = value; }
         public List<int> AiGroupIds { get => aiGroupIds; protected set => aiGroupIds = value; }
@@ -68,6 +70,7 @@ namespace ERang
         {
             Uid = Utils.GenerateShortUniqueID();
             Id = cardData.card_id;
+            Name = cardData.nameDesc;
             CardType = cardData.cardType;
             InUse = cardData.inUse;
             IsExtinction = cardData.extinction;
@@ -86,10 +89,11 @@ namespace ERang
         }
 
         // ID, Type, AiGroupId 기반 생성자
-        protected BaseCard(int cardId, CardType cardType, int aiGroupId, Texture2D cardImage)
+        protected BaseCard(int cardId, CardType cardType, string name, int aiGroupId, Texture2D cardImage)
         {
             Uid = Utils.GenerateShortUniqueID();
             Id = cardId;
+            Name = name;
             CardType = cardType;
             AiGroupIds = new List<int> { aiGroupId };
             AiGroupIndexes = new Dictionary<int, int> { { aiGroupId, 0 } };

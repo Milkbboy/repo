@@ -81,8 +81,12 @@ namespace ERang
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(player, card);
 
+            FlatLogger.LogCard($"{card.ToCardLogInfo()} 사용");
+
             foreach (int aiGroupId in card.AiGroupIds)
             {
+                FlatLogger.LogAiGroup(aiGroupId);
+
                 int aiDataId = AiLogic.Instance.GetCardAiDataId(card, aiGroupId);
                 AiData aiData = AiData.GetAiData(aiDataId);
 
@@ -91,6 +95,8 @@ namespace ERang
                     Debug.LogError($"{card.LogText} 카드 AiData({aiDataId}) 없음");
                     continue;
                 }
+
+                FlatLogger.LogAiData(aiData);
 
                 // 타겟 설정 카드 확인
                 bool isSelectAttackType = Constants.SelectAttackTypes.Contains(aiData.attackType);

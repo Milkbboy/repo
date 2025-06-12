@@ -13,6 +13,7 @@ namespace ERang
         // 기본 정보
         public int MasterId => masterId;
         public MasterType MasterType => masterType;
+        public string NameDesc => nameDesc;
         public Texture2D CardImage => masterTexture;
         public List<int> CardIds { get => cardIds; set => cardIds = value; }
 
@@ -40,6 +41,7 @@ namespace ERang
         private int creatureSlots;
         private int satiety;
         private int maxSatiety;
+        private string nameDesc;
         private Texture2D masterTexture;
         #endregion
 
@@ -162,6 +164,7 @@ namespace ERang
             satiety = masterData.satietyGauge;
             maxSatiety = masterData.maxSatietyGauge;
             cardIds = masterData.startCardIds;
+            nameDesc = masterData.nameDesc;
             masterTexture = masterData.masterTexture;
 
             Stat = new CardStat(masterData.hp, masterData.def, masterData.startMana, masterData.atk, masterData.hp, masterData.maxMana);
