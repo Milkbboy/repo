@@ -56,6 +56,7 @@ namespace ERang
         }
 
         public void RemoveHandCard(string cardUid) => Operations.RemoveHandCard(cardUid, handDeck);
+        public void HandCardToDeck(BaseCard card) => Operations.HandCardToDeck(card, handDeck);
         public void HandCardToBoard(BaseCard card) => Operations.HandCardToBoard(card, handDeck);
         public void TurnEndProcess() => Operations.TurnEndProcess(handDeck);
 

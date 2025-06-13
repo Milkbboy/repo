@@ -88,6 +88,9 @@ namespace ERang
     {
         public static string ToCardLogInfo(this BaseCard card)
         {
+            if (card == null)
+                return "null 카드";
+
             return $"<b><color=orange>{card.Id}</color></b> <color=lightblue>{card.Name}</color> 카드";
         }
 
@@ -106,6 +109,7 @@ namespace ERang
 
         public static string ToCardAbilityLogInfo(this CardAbility cardAbility)
         {
+            Debug.Log($"ToCardAbilityLogInfo. cardAbility: {cardAbility.cardId}");
             CardData cardData = CardData.GetCardData(cardAbility.cardId);
             return $"{cardData.nameDesc} 카드 {cardAbility.abilityType} {cardAbility.abilityName} 어빌리티({cardAbility.abilityId})";
         }
@@ -129,7 +133,7 @@ namespace ERang
                 _ => $"{abilityData.nameDesc} 효과 적용"
             };
         }
-        
+
         private static string GetCardType(CardType cardType)
         {
             return cardType switch

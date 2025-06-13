@@ -2649,8 +2649,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0/0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f14212f486489004ebc9acda07be5470, type: 2}
-  m_sharedMaterial: {fileID: 47893883802922286, guid: f14212f486489004ebc9acda07be5470,
+  m_fontAsset: {fileID: 11400000, guid: fc6a0e0b658ea77439c6aae5c36b1931, type: 2}
+  m_sharedMaterial: {fileID: -8601499812426933187, guid: fc6a0e0b658ea77439c6aae5c36b1931,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4073,8 +4073,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: OK
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f14212f486489004ebc9acda07be5470, type: 2}
-  m_sharedMaterial: {fileID: 47893883802922286, guid: f14212f486489004ebc9acda07be5470,
+  m_fontAsset: {fileID: 11400000, guid: fc6a0e0b658ea77439c6aae5c36b1931, type: 2}
+  m_sharedMaterial: {fileID: -8601499812426933187, guid: fc6a0e0b658ea77439c6aae5c36b1931,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4839,8 +4839,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uCE74\uB4DC \uC120\uD0DD"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f14212f486489004ebc9acda07be5470, type: 2}
-  m_sharedMaterial: {fileID: 47893883802922286, guid: f14212f486489004ebc9acda07be5470,
+  m_fontAsset: {fileID: 11400000, guid: fc6a0e0b658ea77439c6aae5c36b1931, type: 2}
+  m_sharedMaterial: {fileID: -8601499812426933187, guid: fc6a0e0b658ea77439c6aae5c36b1931,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

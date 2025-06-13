@@ -131,7 +131,7 @@ namespace ERang
 
         private void OnSelectCard(SelectCard selectedCard)
         {
-            Debug.Log($"Selected Card: {selectedCard.Card.Uid}");
+            Debug.Log($"Selected Card: {selectedCard.Card.ToCardLogInfo()}");
 
             selectedCard.isScaleFixed = !selectedCard.isScaleFixed;
 

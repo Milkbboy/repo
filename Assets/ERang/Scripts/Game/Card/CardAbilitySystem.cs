@@ -49,8 +49,8 @@ namespace ERang
 
         public void AddHandCardAbility(CardAbility cardAbility)
         {
-            handAbilities.Add(cardAbility);
             Debug.Log($"AddHandCardAbility. {cardAbility.ToCardAbilityLogInfo()}");
+            handAbilities.Add(cardAbility);
         }
 
         public List<CardAbility> DecreaseDuration()

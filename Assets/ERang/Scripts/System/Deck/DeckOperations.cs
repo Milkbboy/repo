@@ -116,6 +116,23 @@ namespace ERang
             events.TriggerCardCountChanged(CreateCountInfo());
         }
 
+        // 핸드 카드를 덱으로 이동
+        public void HandCardToDeck(BaseCard card, HandDeck handDeck)
+        {
+            if (card == null)
+            {
+                Debug.LogError($"핸드덱에 카드 없음");
+                return;
+            }
+
+            deckData.RemoveFromHand(card);
+            handDeck.RemoveHandCard(card.Uid);
+
+            deckData.AddToDeck(card);
+
+            events.TriggerCardCountChanged(CreateCountInfo());
+        }
+
         // 핸드 카드를 보드로 이동
         public void HandCardToBoard(BaseCard card, HandDeck handDeck)
         {
@@ -124,9 +141,6 @@ namespace ERang
                 Debug.LogError($"핸드덱에 카드 없음");
                 return;
             }
-
-            // 핸드 카드 어빌리티 해제
-            owner.StartCoroutine(AbilityLogic.Instance.HandCardAbilityRelease(card));
 
             deckData.RemoveFromHand(card);
             handDeck.RemoveHandCard(card.Uid);
@@ -146,9 +160,6 @@ namespace ERang
                 return;
             }
 
-            // 어빌리티 해제
-            owner.StartCoroutine(AbilityLogic.Instance.HandCardAbilityRelease(card));
-
             deckData.RemoveFromHand(card);
             handDeck.RemoveHandCard(cardUid);
 
@@ -165,7 +176,9 @@ namespace ERang
         {
             foreach (var card in deckData.HandCards.ToList())
             {
+                // 핸드 카드 어빌리티 해제
                 owner.StartCoroutine(AbilityLogic.Instance.HandCardAbilityRelease(card));
+
                 deckData.RemoveFromHand(card);
                 deckData.AddToGrave(card);
             }
