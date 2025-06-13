@@ -1,4 +1,3 @@
-// 수정된 HCard.cs - 모든 마우스 이벤트 통합 관리
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;

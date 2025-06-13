@@ -5,22 +5,22 @@ using UnityEngine.SceneManagement;
 public class Intro : MonoBehaviour
 {
     [SerializeField]
-    public float logoDisplayTime = 3.0f; // �ΰ� ǥ�� �ð� (��)
+    public float logoDisplayTime = 3.0f; // 로고 표시 시간 (초)
 
     [SerializeField]
-    public string nextSceneName; // ���� ���� �̸� (�ν����Ϳ��� ���� ����)
+    public string nextSceneName; // 다음 씬 이름 (네비게이션 씬 이름)
 
-    private bool isKeyPressed = false; // Ű �Է��� �����Ǿ����� ����
+    private bool isKeyPressed = false; // 키 입력 여부
 
     void Start()
     {
-        // �ΰ� ǥ�� �ð��� ���� �� Ÿ��Ʋ ������ ��ȯ
+        // 로고 표시 시간 후 다음 씬으로 이동
         StartCoroutine(LoadNextSceneAfterDelay(logoDisplayTime));
     }
 
     void Update()
     {
-        // �ƹ� Ű�� �Է¹����� �ٷ� ���� ������ ��ȯ
+        // 키 입력 시 다음 씬으로 이동
         if (Input.anyKeyDown)
         {
             isKeyPressed = true;
@@ -30,10 +30,10 @@ public class Intro : MonoBehaviour
 
     IEnumerator LoadNextSceneAfterDelay(float delay)
     {
-        // ������ �ð���ŭ ���
+        // 로고 표시 시간 후 다음 씬으로 이동
         yield return new WaitForSeconds(delay);
 
-        // Ű �Է��� ������ ��쿡�� ���� ��ȯ
+        // 키 입력 시 다음 씬으로 이동
         if (!isKeyPressed)
         {
             SceneManager.LoadScene(nextSceneName);

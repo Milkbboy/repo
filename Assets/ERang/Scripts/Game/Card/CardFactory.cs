@@ -2,7 +2,7 @@ using ERang.Data;
 
 namespace ERang
 {
-    public class CardFactory : ICardFactory
+    public class CardFactory
     {
         private readonly AiLogic aiLogic;
 

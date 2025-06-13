@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
@@ -10,7 +9,7 @@ namespace ERang
     /// 모든 카드 타입의 기본 기능을 구현하는 추상 클래스
     /// </summary>
     [Serializable]
-    public abstract class BaseCard : ICard
+    public abstract class BaseCard
     {
         // 테이블 관련 멤버 변수 - 대부분은 설정자를 protected로 제한
         private string uid;

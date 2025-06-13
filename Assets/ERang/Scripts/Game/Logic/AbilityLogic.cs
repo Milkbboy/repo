@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using ERang.Data;
 
-
 namespace ERang
 {
     public class AbilityLogic : MonoBehaviour
