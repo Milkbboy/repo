@@ -36,7 +36,6 @@ namespace ERang
 
             // 파멸 발동: 현재 HP + DEF를 모두 뚫는 데미지로 즉사
             int lethalDamage = targetCard.Hp + targetCard.Def;
-            int beforeHp = targetCard.Hp;
 
             LogAbility($"파멸 발동! 즉사 데미지: {lethalDamage}");
             yield return StartCoroutine(targetSlot.TakeDamage(lethalDamage));
@@ -44,12 +43,10 @@ namespace ERang
             // 카드가 파괴되었을 가능성이 높으므로 null 체크
             if (targetSlot.Card != null)
             {
-                RecordChange(StatType.Hp, targetSlot, beforeHp, targetSlot.Card.Hp, lethalDamage);
                 LogAbility("파멸 완료 - 대상이 생존함 (예상외)");
             }
             else
             {
-                RecordChange(StatType.Hp, targetSlot, beforeHp, 0, lethalDamage);
                 LogAbility("파멸 완료 - 대상 제거됨");
             }
         }

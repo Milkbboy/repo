@@ -50,9 +50,6 @@ namespace ERang
                 LogAbility($"방어력 감소: {beforeDef} -> {targetCard.Def} (-{value})");
             }
 
-            int changeValue = isDefUp ? value : -value;
-            RecordChange(StatType.Def, targetSlot, beforeDef, targetCard.Def, changeValue);
-
             yield return new WaitForSeconds(0.1f);
         }
     }

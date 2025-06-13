@@ -33,9 +33,8 @@ namespace ERang
             targetSlot.RestoreHealth(healAmount);
 
             int actualHeal = targetCard.Hp - beforeHp;
-            RecordChange(StatType.Hp, targetSlot, beforeHp, targetCard.Hp, -actualHeal); // 음수로 기록 (회복)
-
             LogAbility($"체력 회복 완료: {beforeHp} -> {targetCard.Hp} (+{actualHeal})");
+
             yield return new WaitForSeconds(0.1f);
         }
 

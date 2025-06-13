@@ -44,9 +44,6 @@ namespace ERang
                 LogAbility($"약화 적용: {beforeAtk} -> {targetCard.Atk} (-{value})");
             }
 
-            int changeValue = isAtkUp ? value : -value;
-            RecordChange(StatType.Atk, targetSlot, beforeAtk, targetCard.Atk, changeValue);
-
             yield return new WaitForSeconds(0.1f);
         }
     }

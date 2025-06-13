@@ -70,23 +70,17 @@ namespace ERang
         #region 마스터 기능
         public void AddGold(int amount)
         {
-            int oldGold = gold;
             gold += amount;
-            Debug.Log($"<color=#257dca>Add Gold({gold}): {oldGold} -> {gold}</color>");
         }
 
         public void IncreaseSatiety(int amount)
         {
-            int oldSatiety = satiety;
             satiety = Mathf.Clamp(satiety + amount, 0, maxSatiety);
-            Debug.Log($"<color=#257dca>만복감 증가({amount}): {oldSatiety} -> {satiety}</color>");
         }
 
         public void DecreaseSatiety(int amount)
         {
-            int oldSatiety = satiety;
             satiety = Mathf.Clamp(satiety - amount, 0, maxSatiety);
-            Debug.Log($"<color=#257dca>만복감 감소({amount}): {oldSatiety} -> {satiety}</color>");
         }
 
         public void SetHp(int amount) => Stat.SetHp(amount);

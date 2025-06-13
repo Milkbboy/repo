@@ -10,7 +10,6 @@ namespace ERang
     public interface IAbility
     {
         public AbilityType AbilityType => AbilityType.None;
-        public List<(StatType statType, bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> Changes { get; set; }
 
         IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot);
         IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot);
@@ -31,7 +30,6 @@ namespace ERang
     public abstract class BaseAbility : MonoBehaviour, IAbility
     {
         public abstract AbilityType AbilityType { get; }
-        public List<(StatType statType, bool isAffect, int slot, int cardId, CardType cardType, int before, int after, int changeValue)> Changes { get; set; } = new();
 
         public abstract IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot);
         public abstract IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot);
@@ -60,27 +58,6 @@ namespace ERang
                 return false;
             }
             return true;
-        }
-
-        /// <summary>
-        /// 변경사항 기록 - 공통 기록 로직
-        /// </summary>
-        protected void RecordChange(StatType statType, BSlot targetSlot, int before, int after, int changeValue)
-        {
-            if (targetSlot?.Card == null) return;
-
-            Changes.Add((statType, true, targetSlot.SlotNum, targetSlot.Card.Id, targetSlot.SlotCardType, before, after, changeValue));
-        }
-
-        /// <summary>
-        /// 핸드 카드용 변경사항 기록 (슬롯이 없는 경우)
-        /// </summary>
-        protected void RecordHandCardChange(StatType statType, BaseCard card, int before, int after, int changeValue)
-        {
-            if (card == null) return;
-
-            // 핸드 카드는 슬롯이 없으므로 -1로 설정
-            Changes.Add((statType, true, -1, card.Id, card.CardType, before, after, changeValue));
         }
 
         /// <summary>
@@ -152,10 +129,13 @@ namespace ERang
         /// </summary>
         protected bool TryChangeMana(BaseCard card, int value, bool isDecrease)
         {
-            if (!ValidateHandCard(card)) return false;
+            if (!ValidateHandCard(card))
+            {
+                LogAbility("대상 카드가 null입니다.", LogType.Warning);
+                return false;
+            }
 
             int before = card.Mana;
-            bool success = false;
 
             switch (card)
             {
@@ -164,7 +144,6 @@ namespace ERang
                         creatureCard.DecreaseMana(value);
                     else
                         creatureCard.IncreaseMana(value);
-                    success = true;
                     break;
 
                 case MagicCard magicCard:
@@ -172,7 +151,6 @@ namespace ERang
                         magicCard.DecreaseMana(value);
                     else
                         magicCard.IncreaseMana(value);
-                    success = true;
                     break;
 
                 default:
@@ -180,14 +158,10 @@ namespace ERang
                     return false;
             }
 
-            if (success)
-            {
-                int changeValue = isDecrease ? -value : value;
-                RecordHandCardChange(StatType.Mana, card, before, card.Mana, changeValue);
-                LogAbility($"마나 변경: {before} -> {card.Mana} (변경량: {changeValue})");
-            }
+            int changeValue = isDecrease ? -value : value;
+            LogAbility($"마나 변경: {before} -> {card.Mana} (변경량: {changeValue})");
 
-            return success;
+            return true;
         }
     }
 }

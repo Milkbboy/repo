@@ -42,9 +42,6 @@ namespace ERang
                     break;
             }
 
-            if (targetSlots.Count > 0)
-                Debug.Log($"{selfSlot.LogText} AiData({aiData.ai_Id})에 설정된 {aiData.target} 타겟. [{string.Join(", ", targetSlots.Select(slot => (slot.SlotNum, slot.Card?.Id ?? 0)))}] 얻기 완료. ({whereFrom})");
-
             return targetSlots;
         }
 

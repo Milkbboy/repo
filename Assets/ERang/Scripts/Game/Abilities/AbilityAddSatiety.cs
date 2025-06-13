@@ -26,9 +26,6 @@ namespace ERang
             LogAbility($"포만감 증가: +{value}");
             BattleLogic.Instance.UpdateSatietyGauge(value);
 
-            // 포만감은 전역 자원이므로 슬롯 정보는 -1로 기록
-            RecordChange(StatType.None, selfSlot, 0, value, value); // TODO: 포만감용 StatType 추가 고려
-
             yield return new WaitForSeconds(0.1f);
         }
 

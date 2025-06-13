@@ -143,9 +143,6 @@ namespace ERang
 
         public IEnumerator TakeDamage(int amount)
         {
-            int beforeHp = card.Hp;
-            int beforeDef = card.Def;
-
             card.TakeDamage(amount);
 
             cardUI.SetHp(card.Hp);
@@ -159,15 +156,12 @@ namespace ERang
 
                 yield return StartCoroutine(BattleLogic.Instance.RemoveBoardCard(slotNum));
             }
-
-            Debug.Log($"{card?.LogText ?? "카드 없음"} Damage: {amount}. Hp: {beforeHp} -> {card?.Hp ?? 0}, Def: {beforeDef} -> {card?.Def ?? 0} - TakeDamage");
         }
 
         public void DrawAbilityIcons()
         {
             if (card == null)
             {
-                // Debug.LogError($"{LogText} 카드가 없습니다.");
                 return;
             }
 

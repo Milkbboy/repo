@@ -27,16 +27,9 @@ namespace ERang
                 yield break;
             }
 
-            BaseCard targetCard = targetSlot.Card;
-            int beforeHp = targetCard.Hp;
-            int beforeDef = targetCard.Def;
-
             LogAbility($"중독 데미지 적용: {poisonDamage} (행동 후 발동)");
-            yield return StartCoroutine(targetSlot.TakeDamage(poisonDamage));
 
-            // 변경사항 기록 (카드가 파괴될 수 있음)
-            RecordChange(StatType.Hp, targetSlot, beforeHp, targetCard?.Hp ?? 0, poisonDamage);
-            RecordChange(StatType.Def, targetSlot, beforeDef, targetCard?.Def ?? 0, poisonDamage);
+            yield return StartCoroutine(targetSlot.TakeDamage(poisonDamage));
         }
 
         public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)

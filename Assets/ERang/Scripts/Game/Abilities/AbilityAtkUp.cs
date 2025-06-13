@@ -47,9 +47,6 @@ namespace ERang
                 LogAbility($"공격력 감소: {beforeAtk} -> {creatureCard.Atk} (-{value})");
             }
 
-            int changeValue = isAtkUp ? value : -value;
-            RecordChange(StatType.Atk, targetSlot, beforeAtk, creatureCard.Atk, changeValue);
-
             yield return new WaitForSeconds(0.1f);
         }
     }

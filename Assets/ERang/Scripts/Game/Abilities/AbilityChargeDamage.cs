@@ -58,10 +58,6 @@ namespace ERang
                 yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, new List<BSlot> { targetSlot }, atkCount, damage));
             }
 
-            BaseCard targetCard = targetSlot.Card;
-            int beforeHp = targetCard.Hp;
-            int beforeDef = targetCard.Def;
-
             // 공격 횟수만큼 데미지 적용
             for (int i = 0; i < atkCount; i++)
             {
@@ -79,11 +75,7 @@ namespace ERang
             }
 
             // 변경사항 기록
-            int totalDamage = damage * atkCount;
-            RecordChange(StatType.Hp, targetSlot, beforeHp, targetCard?.Hp ?? 0, totalDamage);
-            RecordChange(StatType.Def, targetSlot, beforeDef, targetCard?.Def ?? 0, totalDamage);
-
-            LogAbility($"차지 데미지 완료 - 총 데미지: {totalDamage}");
+            LogAbility($"차지 데미지 완료 - 총 데미지: {damage * atkCount}");
         }
     }
 }

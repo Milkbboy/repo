@@ -83,8 +83,6 @@ namespace ERang
 
             isArrowEnabled = arrowEnabled;
 
-            Debug.Log($"EnableArrow called with: {isArrowEnabled}");
-
             foreach (var part in arrows)
             {
                 part.SetActive(arrowEnabled);
@@ -133,7 +131,6 @@ namespace ERang
                 if (hitInfo.collider.gameObject != selectedSlot || selectedSlot == null)
                 {
                     BSlot boardSlot = hitInfo.collider.gameObject.GetComponent<BSlot>();
-                    Debug.Log($"🔍 HandleTargetSelection: 마우스 over 슬롯 {boardSlot.SlotNum}");
 
                     if (HandDeck.Instance.IsTargetSlot(boardSlot.SlotNum))
                     {
@@ -149,7 +146,6 @@ namespace ERang
             }
             else
             {
-                // Debug.Log($"🔍 HandleTargetSelection: 레이캐스트 히트 없음, 선택 해제");
                 UnselectEnemy();
             }
         }
@@ -228,8 +224,6 @@ namespace ERang
             selectedSlot = go;
             selectedSlotNum = go.GetComponent<BSlot>().SlotNum;
 
-            Debug.Log($"SelectEnemy: {selectedSlot.name}, {selectedSlotNum}");
-
             var boxCollider = go.GetComponent<BoxCollider>();
             var size = boxCollider.size;
             var center = boxCollider.center;
@@ -256,7 +250,6 @@ namespace ERang
             if (selectedSlot == null)
                 return;
 
-            Debug.Log($"UnselectEnemy: {selectedSlot?.name} unselected");
             selectedSlot = null;
             selectedSlotNum = -1;
 
@@ -296,11 +289,9 @@ namespace ERang
             if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, boardSlotLayer))
             {
                 BSlot boardSlot = hitInfo.collider.gameObject.GetComponent<BSlot>();
-                Debug.Log($"GetCurrentMouseOverSlotNum: {boardSlot.SlotNum}");
                 return boardSlot.SlotNum;
             }
 
-            Debug.Log($"GetCurrentMouseOverSlotNum: No slot found");
             return -1;
         }
     }

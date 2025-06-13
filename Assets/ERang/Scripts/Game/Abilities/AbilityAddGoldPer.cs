@@ -41,11 +41,6 @@ namespace ERang
             LogAbility($"골드 획득: {totalGold} (기본: {baseGold}, 보너스: {bonusGold:F1}, 비율: {abilityData.ratio:P0})");
             LogAbility($"골드 변화: {beforeGold} -> {Player.Instance.Gold}");
 
-            // TODO: 골드 획득 플로팅 텍스트 표시
-            // selfSlot.SetFloatingGold(beforeGold, Player.Instance.Gold);
-
-            RecordChange(StatType.Gold, selfSlot, beforeGold, Player.Instance.Gold, totalGold);
-
             yield return new WaitForSeconds(0.1f);
         }
 

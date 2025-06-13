@@ -40,7 +40,7 @@ namespace ERang
             if (EnableColorLogging)
                 Debug.Log($"     └▶ <color=orange>[AiData]</color> AiDataId: {aiData.name} ({aiData.ai_Id}) 선택");
             else
-                Debug.Log($"     └▶ [AiData] AiDataId: {aiData.name} ({aiData.ai_Id}) 선택");
+                Debug.Log($"     └▶ [AiData] AiDataId: {aiData.ai_Id} ({aiData.name}) 선택");
         }
 
         public static void LogAbility(int abilityId, string abilityName)
@@ -96,7 +96,7 @@ namespace ERang
             if (slot?.Card == null)
                 return $"{slot?.SlotNum ?? -1}번 슬롯 (빈 슬롯)";
 
-            return $"{slot.SlotNum}번 슬롯 '{slot.Card.Name}'";
+            return $"<color=cyan>[{slot.SlotNum}번 슬롯]</color> {GetCardType(slot.Card.CardType)} 카드({slot.Card.Id})";
         }
 
         public static string GetEffectDescription(this AbilityData abilityData)
@@ -116,6 +116,23 @@ namespace ERang
                 AbilityType.AddSatiety => $"포만감 {abilityData.value} 증가",
                 AbilityType.SubSatiety => $"포만감 {abilityData.value} 감소",
                 _ => $"{abilityData.nameDesc} 효과 적용"
+            };
+        }
+        
+        private static string GetCardType(CardType cardType)
+        {
+            return cardType switch
+            {
+                CardType.Master => "마스터",
+                CardType.Magic => "마법",
+                CardType.Individuality => "전용 마법",
+                CardType.Creature => "크리쳐",
+                CardType.Building => "건물",
+                CardType.Charm => "축복",
+                CardType.Curse => "저주",
+                CardType.Monster => "몬스터",
+                CardType.EnemyMaster => "적 마스터",
+                _ => "없음",
             };
         }
     }

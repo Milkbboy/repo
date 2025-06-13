@@ -204,9 +204,6 @@ namespace ERang
                     yield return StartCoroutine(handAbility.Release(handCard));
 
                     handCard.AbilitySystem.RemoveHandCardAbility(cardAbility);
-
-                    if (handAbility is IAbility ability && ability.Changes.Count > 0)
-                        Debug.Log($"<color=yellow>[HandAbility]</color> {handCard.LogText} {cardAbility.LogText} 해제 완료. 효과: {Utils.StatChangesText(ability.Changes)}");
                 }
                 else
                 {
@@ -227,11 +224,6 @@ namespace ERang
             }
 
             yield return StartCoroutine(abilityAction.ApplySingle(cardAbility, selfSlot, targetSlot));
-
-            if (abilityAction.Changes.Count > 0)
-                Debug.Log($"<color=lime>[AbilityAction]</color> {targetSlot?.LogText ?? "targetSlot 없음."} {cardAbility.LogText} 실행 완료. 효과: {Utils.StatChangesText(abilityAction.Changes)}");
-
-            abilityAction.Changes.Clear();
         }
 
         /// <summary>
@@ -262,14 +254,6 @@ namespace ERang
             }
 
             yield return StartCoroutine(abilityAction.Release(cardAbility, selfSlot, targetSlot));
-
-            string abilityActionLog = $"{targetSlot.LogText} {cardAbility.LogText} 지속시간(<color=yellow>{cardAbility.duration}</color>)";
-
-            if (abilityAction.Changes.Count > 0)
-                Debug.Log($"<color=orange>[AbilityRelease]</color> {abilityActionLog} 해제. 효과: {Utils.StatChangesText(abilityAction.Changes)}");
-
-            Debug.Log($"<color=orange>[AbilityRelease]</color> {targetSlot.LogText} {cardAbility.LogText} 삭제. 출처: {abilityWhereFrom}");
-            abilityAction.Changes.Clear();
         }
 
         /// <summary>

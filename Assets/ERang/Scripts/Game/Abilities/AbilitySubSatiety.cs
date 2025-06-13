@@ -27,10 +27,8 @@ namespace ERang
             int reductionValue = -value;
 
             LogAbility($"포만감 감소: {reductionValue}");
-            BattleLogic.Instance.UpdateSatietyGauge(reductionValue);
 
-            // 포만감은 전역 자원이므로 슬롯 정보는 -1로 기록
-            RecordChange(StatType.None, selfSlot, 0, reductionValue, reductionValue);
+            BattleLogic.Instance.UpdateSatietyGauge(reductionValue);
 
             yield return new WaitForSeconds(0.1f);
         }

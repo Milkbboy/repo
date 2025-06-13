@@ -48,7 +48,6 @@ namespace ERang
             }
 
             targetSlot.SetDefense(newDef);
-            RecordChange(StatType.Def, targetSlot, beforeDef, newDef, newDef - beforeDef);
 
             yield return new WaitForSeconds(0.1f);
         }

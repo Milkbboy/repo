@@ -109,7 +109,7 @@ namespace ERang
                     new List<BSlot> { targetSlot } :
                     TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandCardUse");
 
-                Debug.Log($"{card.LogText} 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData.ai_Id}, aiData.target: {aiData.target}, targetSlot: {targetSlot?.SlotNum ?? -1}, tagetSlots: {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
+                // Debug.Log($"{card.LogText} 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData.ai_Id}, aiData.target: {aiData.target}, targetSlot: {targetSlot?.SlotNum ?? -1}, tagetSlots: {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
 
                 // 대상 선택 사용 카드
                 if (isSelectAttackType)
@@ -178,7 +178,7 @@ namespace ERang
                 return false;
             }
 
-            Debug.Log($"핸드 카드({card.Id}) 사용 가능");
+            // Debug.Log($"핸드 카드({card.Id}) 사용 가능");
             return true;
         }
 

@@ -48,9 +48,6 @@ namespace ERang
                 LogAbility($"마나 감소: {beforeMana} -> {masterCard.Mana} (-{value})");
             }
 
-            int changeValue = isAdd ? value : -value;
-            RecordChange(StatType.Mana, targetSlot, beforeMana, masterCard.Mana, changeValue);
-
             yield return new WaitForSeconds(0.1f);
         }
     }

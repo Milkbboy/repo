@@ -26,10 +26,6 @@ namespace ERang
 
             LogAbility($"화상 데미지 적용: {burnDamage} (행동 전 발동)");
             yield return StartCoroutine(targetSlot.TakeDamage(burnDamage));
-
-            // 변경사항 기록 (카드가 파괴될 수 있음)
-            RecordChange(StatType.Hp, targetSlot, beforeHp, targetCard?.Hp ?? 0, burnDamage);
-            RecordChange(StatType.Def, targetSlot, beforeDef, targetCard?.Def ?? 0, burnDamage);
         }
 
         public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)

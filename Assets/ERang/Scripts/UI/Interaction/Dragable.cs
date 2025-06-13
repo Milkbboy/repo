@@ -80,13 +80,11 @@ namespace ERang
         {
             if (!isDragging)
             {
-                // Debug.Log("UpdateDrag: not dragging");
                 return;
             }
 
             if (isCentered)
             {
-                // Debug.Log("UpdateDrag: already centered");
                 return;
             }
 
@@ -125,7 +123,6 @@ namespace ERang
 
             // 렌더링 순서 복원
             ResetSortingOrder();
-            // Debug.Log($"Dragable.EndDrag: {transform.name}");
         }
 
         /// <summary>
@@ -144,7 +141,6 @@ namespace ERang
 
             // 렌더링 순서 변경
             SetHighSortingOrder();
-            // Debug.Log($"Dragable.StartHover: {transform.name}");
         }
 
         /// <summary>
@@ -163,7 +159,6 @@ namespace ERang
 
             // 렌더링 순서 복원
             ResetSortingOrder();
-            // Debug.Log($"Dragable.EndHover: {transform.name}");
         }
 
         /// <summary>
