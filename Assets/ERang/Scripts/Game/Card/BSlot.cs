@@ -122,11 +122,11 @@ namespace ERang
         {
             if (SlotCardType != card.CardType)
             {
-                Debug.LogError($"카드 타입이 일치하지 않습니다. 슬롯 타입: {SlotCardType}, 카드 타입: {card.CardType}");
+                Debug.LogError($"{card.ToCardLogInfo()} 타입이 일치하지 않습니다. 슬롯 타입: {SlotCardType}, 카드 타입: {card.CardType}");
                 return false;
             }
 
-            Debug.Log($"{card.CardType} 카드({card.Id}) 장착. {card.GetType()} ");
+            Debug.Log($"{card.ToCardLogInfo()} 장착. {card.GetType()} ");
 
             this.card = card;
 

@@ -134,12 +134,10 @@ namespace ERang
 
                     if (HandDeck.Instance.IsTargetSlot(boardSlot.SlotNum))
                     {
-                        Debug.Log($"🔍 HandleTargetSelection: 타겟 슬롯 {boardSlot.ToSlotLogInfo()} 선택!");
                         SelectEnemy(hitInfo.collider.gameObject);
                     }
                     else
                     {
-                        Debug.Log($"🔍 HandleTargetSelection: 슬롯 {boardSlot.ToSlotLogInfo()}는 타겟 불가능, 선택 해제");
                         UnselectEnemy();
                     }
                 }
