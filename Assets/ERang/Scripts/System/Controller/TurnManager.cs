@@ -153,7 +153,7 @@ namespace ERang
 
                     if (aiData == null)
                     {
-                        Debug.LogWarning($"{boardSlot.LogText} AiGroupData({aiGroupId})에 대한 이번 턴({turnCount}) 시작 리액션 안함");
+                        Debug.LogWarning($"{boardSlot.ToSlotLogInfo()} AiGroupData({aiGroupId})에 대한 이번 턴({turnCount}) 시작 리액션 안함");
                         continue;
                     }
 
@@ -220,7 +220,7 @@ namespace ERang
 
             if (card.AiGroupIds == null || card.AiGroupIds.Count == 0)
             {
-                Debug.LogWarning($"{boardSlot.LogText} AiGroupIds 가 {Utils.RedText(string.Join(", ", card.AiGroupIds))}이라서 카드 액션 패스");
+                Debug.LogWarning($"{boardSlot.ToSlotLogInfo()} AiGroupIds 가 {string.Join(", ", card.AiGroupIds)}이라서 카드 액션 패스");
                 yield break;
             }
 
@@ -231,7 +231,7 @@ namespace ERang
 
                 if (aiDataId == 0)
                 {
-                    Debug.LogWarning($"{boardSlot.LogText} AiGroupData({aiGroupId})에 해당하는 aiDataId 얻기 실패");
+                    Debug.LogWarning($"{boardSlot.ToSlotLogInfo()} AiGroupData({aiGroupId})에 해당하는 aiDataId 얻기 실패");
                     continue;
                 }
 
@@ -240,7 +240,7 @@ namespace ERang
 
                 if (aiData == null)
                 {
-                    Debug.LogError($"{boardSlot.LogText} AiData({aiDataId}) <color=red>테이블 데이터 없음</color> ");
+                    Debug.LogError($"{boardSlot.ToSlotLogInfo()} AiData({aiDataId}) <color=red>테이블 데이터 없음</color> ");
                     continue;
                 }
 
@@ -249,7 +249,7 @@ namespace ERang
 
                 if (targetSlots.Count == 0)
                 {
-                    Debug.LogWarning($"{boardSlot.LogText} 설정 타겟({aiData.target}) 없음 ");
+                    Debug.LogWarning($"{boardSlot.ToSlotLogInfo()} 설정 타겟({aiData.target}) 없음 ");
                     continue;
                 }
 
@@ -323,7 +323,7 @@ namespace ERang
 
                 boardSlot.DrawAbilityIcons();
 
-                Debug.Log($"{boardSlot.LogText} 해제된 어빌리티 {string.Join(", ", removedCardAbilities.Select(ability => ability.abilityId))} - ReleaseBoardCardAbility");
+                Debug.Log($"{boardSlot.ToSlotLogInfo()} 해제된 어빌리티 {string.Join(", ", removedCardAbilities.Select(ability => ability.abilityId))} - ReleaseBoardCardAbility");
             }
         }
     }

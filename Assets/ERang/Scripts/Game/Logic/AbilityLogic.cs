@@ -103,6 +103,8 @@ namespace ERang
                     abilityValue = abilityData.value,
                     workType = abilityData.workType,
                     duration = abilityData.duration,
+                    abilityName = abilityData.nameDesc,
+                    cardId = card.Id,
                 };
 
                 // 핸드 온 어빌리티는 턴 종료시 해제되기 때문에 저장. 효과 지속 시간이 있는 어빌리티 저장.
@@ -173,7 +175,7 @@ namespace ERang
             if (handCard?.AbilitySystem?.HandAbilities == null || handCard.AbilitySystem.HandAbilities.Count == 0)
                 yield break;
 
-            Debug.Log($"<color=yellow>[HandAbility]</color> {handCard.LogText} 핸드 어빌리티 적용 시작");
+            Debug.Log($"<color=yellow>[HandAbility]</color> {handCard.ToCardLogInfo()} 핸드 어빌리티 적용 시작");
 
             foreach (CardAbility cardAbility in handCard.AbilitySystem.HandAbilities)
             {
@@ -193,7 +195,7 @@ namespace ERang
             if (handCard?.AbilitySystem?.HandAbilities == null || handCard.AbilitySystem.HandAbilities.Count == 0)
                 yield break;
 
-            Debug.Log($"<color=yellow>[HandAbility]</color> {handCard.LogText} 핸드 어빌리티 해제 시작");
+            Debug.Log($"<color=yellow>[HandAbility]</color> {handCard.ToCardLogInfo()} 핸드 어빌리티 해제 시작");
 
             var abilitiesToRemove = handCard.AbilitySystem.HandAbilities.ToList();
 
@@ -219,7 +221,7 @@ namespace ERang
         {
             if (!abilityActions.TryGetValue(cardAbility.abilityType, out IAbility abilityAction))
             {
-                Debug.LogWarning($"<color=orange>[AbilityAction]</color> {targetSlot?.LogText ?? "targetSlot 없음."} {cardAbility.LogText}에 대한 동작이 없음.");
+                Debug.LogWarning($"<color=orange>[AbilityAction]</color> {targetSlot?.ToSlotLogInfo() ?? "targetSlot 없음."} {cardAbility.ToCardAbilityLogInfo()}에 대한 동작이 없음.");
                 yield break;
             }
 
@@ -233,7 +235,7 @@ namespace ERang
         {
             if (!abilityActions.TryGetValue(cardAbility.abilityType, out IAbility abilityAction))
             {
-                Debug.LogWarning($"<color=orange>[AbilityRelease]</color> {cardAbility.LogText}에 대한 해제가 없음. {abilityWhereFrom}");
+                Debug.LogWarning($"<color=orange>[AbilityRelease]</color> {cardAbility.ToCardAbilityLogInfo()}에 대한 해제가 없음. {abilityWhereFrom}");
                 yield break;
             }
 
@@ -263,7 +265,7 @@ namespace ERang
         {
             if (boardSlot.Card == null)
             {
-                Debug.LogWarning($"{boardSlot.LogText} <color=#f4872e>{abilityType} 어빌리티</color> 적용 슬롯 카드 없음");
+                Debug.LogWarning($"{boardSlot.ToSlotLogInfo()} <color=#f4872e>{abilityType} 어빌리티</color> 적용 슬롯 카드 없음");
                 return 0;
             }
 
@@ -291,7 +293,7 @@ namespace ERang
                 };
             }
 
-            Debug.LogWarning($"{boardSlot.LogText} <color=#f4872e>{abilityType} 어빌리티</color> {boardSlot.Card.CardType} 카드에 대한 원래 stat 값 없음");
+            Debug.LogWarning($"{boardSlot.ToSlotLogInfo()} <color=#f4872e>{abilityType} 어빌리티</color> {boardSlot.Card.CardType} 카드에 대한 원래 stat 값 없음");
 
             return 0;
         }

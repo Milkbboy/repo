@@ -51,7 +51,7 @@ namespace ERang
 
                 if (abilityData == null)
                 {
-                    Debug.LogError($"{abilityData.LogText} {Utils.RedText("테이블 데이터 없음")} - AbilityIcons: SetIcons");
+                    Debug.LogError($"AbilityIcons: SetIcons. AbilityData({cardAbility.abilityId}) 데이터 없음");
                     return;
                 }
 
@@ -77,7 +77,7 @@ namespace ERang
 
                     abilityIcons.Add(icon);
 
-                    lotTexts.Add($"{bSlot.LogText} 어빌리티 아이콘 생성: {cardAbility.abilityId} duration: {cardAbility.duration}");
+                    lotTexts.Add($"{bSlot.ToSlotLogInfo()} 어빌리티 아이콘 생성: {cardAbility.abilityId} duration: {cardAbility.duration}");
                     continue;
                 }
 
@@ -90,14 +90,14 @@ namespace ERang
 
                 abilityIcon.SetTurnCount(cardAbility.duration);
 
-                lotTexts.Add($"{bSlot.LogText} 어빌리티 아이콘 업데이트: {cardAbility.abilityId} duration: {cardAbility.duration}");
+                lotTexts.Add($"{bSlot.ToSlotLogInfo()} 어빌리티 아이콘 업데이트: {cardAbility.abilityId} duration: {cardAbility.duration}");
             }
 
             // cardAbilities 와 차이나는 아이콘 제거
             List<AbilityIcon> removeIcons = abilityIcons.Where(x => !cardAbilities.Exists(y => y.abilityId == x.AbilityId)).ToList();
 
             if (removeIcons.Count > 0)
-                Debug.Log($"{bSlot.LogText} 차이나는 어빌리티 아이콘 제거: {removeIcons.Count} {string.Join(", ", removeIcons.Select(x => x.AbilityId))}");
+                Debug.Log($"{bSlot.ToSlotLogInfo()} 차이나는 어빌리티 아이콘 제거: {removeIcons.Count} {string.Join(", ", removeIcons.Select(x => x.AbilityId))}");
 
             foreach (AbilityIcon removeIcon in removeIcons)
             {
@@ -148,7 +148,7 @@ namespace ERang
 
                 if (icon == null)
                 {
-                    Debug.LogError($"{bSlot.LogText} 어빌리티 아이콘 없음 - UpdateIconPosition");
+                    Debug.LogError($"{bSlot.ToSlotLogInfo()} 어빌리티 아이콘 없음 - UpdateIconPosition");
                     continue;
                 }
 

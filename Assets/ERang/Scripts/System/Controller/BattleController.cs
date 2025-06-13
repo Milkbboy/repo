@@ -80,7 +80,7 @@ namespace ERang
 
             if (levelData == null)
             {
-                Debug.LogError($"레벨({Player.Instance.levelId}) LevelGroupData {Utils.RedText("테이블 데이터 없음")}");
+                Debug.LogError($"BattleController - InitializeBattle. LevelGroupData({Player.Instance.levelId}) 데이터 없음");
                 return;
             }
 

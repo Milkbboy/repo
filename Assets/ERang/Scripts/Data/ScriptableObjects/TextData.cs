@@ -68,7 +68,7 @@ namespace ERang.Data
         {
             TextData textData = GetTextData(textId);
 
-            return textData != null ? textData.descKo : $"{Utils.RedText(textId)} TextData 없음";
+            return textData != null ? textData.descKo : $"{textId} TextData 없음";
         }
     }
 }

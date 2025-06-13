@@ -65,7 +65,7 @@ namespace ERang
             // 카드 비용 소모
             BoardSystem.Instance.CardCost(player, hCard.Card);
 
-            Debug.Log($"{boardSlot.LogText} 에 {hCard.LogText} 장착");
+            Debug.Log($"{boardSlot.ToSlotLogInfo()} 에 {hCard.Card.ToCardLogInfo()} 장착");
         }
 
         public IEnumerator UseHandCard(string cardUid, BSlot targetSlot)
@@ -92,7 +92,7 @@ namespace ERang
 
                 if (aiData == null)
                 {
-                    Debug.LogError($"{card.LogText} 카드 AiData({aiDataId}) 없음");
+                    Debug.LogError($"{card.ToCardLogInfo()} 카드 AiData({aiDataId}) 없음");
                     continue;
                 }
 
@@ -116,13 +116,13 @@ namespace ERang
                 {
                     if (targetSlot == null)
                     {
-                        Debug.LogError($"{card.LogText} 마법 대상이 없어서 카드 사용 실패");
+                        Debug.LogError($"{card.ToCardLogInfo()} 마법 대상이 없어서 카드 사용 실패");
                         continue;
                     }
 
                     if (targetSlots.Contains(targetSlot) == false)
                     {
-                        Debug.LogError($"{card.LogText} 대상 슬롯이 아닌 슬롯에 카드 사용 실패");
+                        Debug.LogError($"{card.ToCardLogInfo()} 대상 슬롯이 아닌 슬롯에 카드 사용 실패");
                         continue;
                     }
                 }
@@ -192,7 +192,7 @@ namespace ERang
                 yield break;
             }
 
-            Debug.Log($"{boardSlot.LogText} {Utils.RedText("카드 제거")}");
+            Debug.Log($"{boardSlot.ToSlotLogInfo()} 카드 제거");
 
             int monsterCount = BoardSystem.Instance.GetRightBoardSlots().Count(slot => slot.Card != null);
 

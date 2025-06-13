@@ -49,7 +49,7 @@ namespace ERang
                 CardData cardData = CardData.GetCardData(cardId);
                 if (cardData == null)
                 {
-                    Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
+                    Debug.LogError($"DeckOperations - CreateMasterCards. CardData({cardId}) 데이터 없음");
                     continue;
                 }
 
@@ -78,7 +78,7 @@ namespace ERang
             foreach (var card in nextTurnSelectCards)
             {
                 deckData.AddToHand(card);
-                Debug.Log($"MakeHandCards. NextTurnSelect 카드 핸드 보장: {card.LogText}");
+                Debug.Log($"MakeHandCards. NextTurnSelect 카드 핸드 보장: {card.ToCardLogInfo()}");
             }
 
             // 2 단계: 나머지 슬롯을 일반 카드로 채우기
@@ -97,7 +97,7 @@ namespace ERang
                 if (card != null)
                 {
                     deckData.AddToHand(card);
-                    Debug.Log($"MakeHandCards. 일반 카드 추가: {card.LogText}");
+                    Debug.Log($"MakeHandCards. 일반 카드 추가: {card.ToCardLogInfo()}");
                 }
             }
 

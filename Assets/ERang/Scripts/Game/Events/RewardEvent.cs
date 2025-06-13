@@ -37,7 +37,7 @@ public class RewardEvent : MonoBehaviour
 
         if (levelData == null)
         {
-            Debug.LogError($"levelId({levelId}) LevelGroupData {Utils.RedText("테이블 데이터 없음")}");
+            Debug.LogError($"RewardEvent - RewardCards - LevelData({levelId}) 테이블 데이터 없음");
             return;
         }
 
@@ -50,7 +50,7 @@ public class RewardEvent : MonoBehaviour
 
         if (rewardData == null)
         {
-            Debug.LogError($"rewardId({levelData.rewardId}) RewardData {Utils.RedText("테이블 데이터 없음")}");
+            Debug.LogError($"rewardId({levelData.rewardId}) RewardData 테이블 데이터 없음");
             return;
         }
 

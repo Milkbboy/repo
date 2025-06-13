@@ -64,14 +64,14 @@ namespace ERang
         {
             if (hCard.Card != null && hCard.Card is not MagicCard)
             {
-                Debug.LogWarning($"{hCard.Card.LogText}. 마법 카드가 아닙니다.");
+                Debug.LogWarning($"{hCard.Card.ToCardLogInfo()}. 마법 카드가 아닙니다.");
                 return;
             }
 
             // 공격 타입이 Select가 아닌 경우 (즉시 발동 마법)
             if (hCard.IsSelectAttackTypeCard() == false)
             {
-                Debug.Log($"{hCard.Card.LogText}. 즉시 발동 마법 카드 사용!");
+                Debug.Log($"{hCard.Card.ToCardLogInfo()}. 즉시 발동 마법 카드 사용!");
                 BattleLogic.Instance.HandCardUse(hCard, null);
                 return;
             }
@@ -79,7 +79,7 @@ namespace ERang
             // 타겟팅 화살표 확인
             if (targetingArrow == null)
             {
-                Debug.LogError($"{hCard.Card.LogText}. 타겟팅 화살표가 없습니다.");
+                Debug.LogError($"{hCard.Card.ToCardLogInfo()}. 타겟팅 화살표가 없습니다.");
                 return;
             }
 
@@ -88,7 +88,7 @@ namespace ERang
 
             if (selectedSlot == -1)
             {
-                Debug.LogWarning($"{hCard.Card.LogText}. 타겟이 선택되지 않았습니다.");
+                Debug.LogWarning($"{hCard.Card.ToCardLogInfo()}. 타겟이 선택되지 않았습니다.");
                 return;
             }
 
@@ -97,7 +97,7 @@ namespace ERang
 
             if (targetSlot == null)
             {
-                Debug.LogError($"{hCard.Card.LogText}. 타겟 슬롯({selectedSlot})을 찾을 수 없습니다.");
+                Debug.LogError($"{hCard.Card.ToCardLogInfo()}. 타겟 슬롯({selectedSlot})을 찾을 수 없습니다.");
                 return;
             }
 
@@ -105,7 +105,7 @@ namespace ERang
             targetingArrow.EnableArrow(false);
 
             // 마법 카드 사용 성공!
-            Debug.Log($"{hCard.Card.LogText}. 타겟: {targetSlot.LogText} - 마법 카드 사용 성공!");
+            Debug.Log($"{hCard.Card.ToCardLogInfo()}. 타겟: {targetSlot.ToSlotLogInfo()} - 마법 카드 사용 성공!");
             BattleLogic.Instance.HandCardUse(hCard, targetSlot);
         }
 
@@ -228,7 +228,7 @@ namespace ERang
 
             if (cardData == null)
             {
-                Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
+                Debug.LogError($"HandDeck - SummonCardToDeck. CardData({cardId}) 데이터 없음");
                 yield break;
             }
 

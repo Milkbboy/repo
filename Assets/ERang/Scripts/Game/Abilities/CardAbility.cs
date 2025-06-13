@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ERang.Data;
 
 namespace ERang
 {
@@ -38,9 +39,10 @@ namespace ERang
         public int aiDataId; // AiData Id
         public int selfSlotNum;
         public int targetSlotNum;
+        public string abilityName; // 어빌리티 이름
+        public int cardId; // 카드 Id
 
         public List<BSlot> targetSlots = new();
-        public string LogText => Utils.AbilityLog(abilityId, abilityUid);
 
         // 어빌리티 아이템
         // 실제 어빌리티 총 value, 총 duration 을 계산할때 사용

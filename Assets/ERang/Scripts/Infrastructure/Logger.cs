@@ -38,7 +38,7 @@ namespace ERang
             if (!EnableLogging) return;
 
             if (EnableColorLogging)
-                Debug.Log($"     └▶ <color=orange>[AiData]</color> AiDataId: {aiData.name} ({aiData.ai_Id}) 선택");
+                Debug.Log($"     └▶ <color=orange>[AiData]</color> AiDataId: {aiData.ai_Id} ({aiData.name}) 선택");
             else
                 Debug.Log($"     └▶ [AiData] AiDataId: {aiData.ai_Id} ({aiData.name}) 선택");
         }
@@ -88,7 +88,7 @@ namespace ERang
     {
         public static string ToCardLogInfo(this BaseCard card)
         {
-            return $"{card.Id}번 {card.Name} 카드";
+            return $"<b><color=orange>{card.Id}</color></b> <color=lightblue>{card.Name}</color> 카드";
         }
 
         public static string ToSlotLogInfo(this BSlot slot)
@@ -97,6 +97,17 @@ namespace ERang
                 return $"{slot?.SlotNum ?? -1}번 슬롯 (빈 슬롯)";
 
             return $"<color=cyan>[{slot.SlotNum}번 슬롯]</color> {GetCardType(slot.Card.CardType)} 카드({slot.Card.Id})";
+        }
+
+        public static string ToAbilityLogInfo(this AbilityData abilityData)
+        {
+            return $"{abilityData.nameDesc} 어빌리티({abilityData.abilityId})";
+        }
+
+        public static string ToCardAbilityLogInfo(this CardAbility cardAbility)
+        {
+            CardData cardData = CardData.GetCardData(cardAbility.cardId);
+            return $"{cardData.nameDesc} 카드 {cardAbility.abilityType} {cardAbility.abilityName} 어빌리티({cardAbility.abilityId})";
         }
 
         public static string GetEffectDescription(this AbilityData abilityData)

@@ -33,7 +33,7 @@ namespace ERang
 
                     if (cardData == null)
                     {
-                        Debug.LogError($"cardId({value}) CardData {Utils.RedText("테이블 데이터 없음")}");
+                        Debug.LogError($"RewardUI - ShowRewardCards. CardData({value}) 데이터 없음");
                         continue;
                     }
 

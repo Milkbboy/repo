@@ -10,14 +10,14 @@ namespace ERang
 
         public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
         {
-            AiData aiData = Utils.CheckData(AiData.GetAiData, "AiData", cardAbility.aiDataId);
+            AiData aiData = AiData.GetAiData(cardAbility.aiDataId);
             if (aiData == null)
             {
                 LogAbility("AiData를 찾을 수 없습니다.", LogType.Error);
                 yield break;
             }
 
-            AbilityData abilityData = Utils.CheckData(AbilityData.GetAbilityData, "AbilityData", cardAbility.abilityId);
+            AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
             if (abilityData == null)
             {
                 LogAbility("AbilityData를 찾을 수 없습니다.", LogType.Error);

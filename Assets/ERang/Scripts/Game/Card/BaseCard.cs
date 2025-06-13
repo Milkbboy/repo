@@ -39,7 +39,6 @@ namespace ERang
         public CardStat Stat { get; protected set; }
         public CardAbilitySystem AbilitySystem { get; protected set; }
         public CardTraits Traits { get; protected set; }
-        public string LogText => Utils.CardLog(this);
 
         // 가상 속성 - 상속 클래스에서 재정의 가능
         public virtual int Hp => Stat.Hp;

@@ -21,11 +21,11 @@ namespace ERang
                 yield break;
             }
 
-            AiData aiData = Utils.CheckData(AiData.GetAiData, "AiData", cardAbility.aiDataId);
+            AiData aiData = AiData.GetAiData(cardAbility.aiDataId);
 
             if (aiData == null)
             {
-                LogAbility("AiData를 찾을 수 없습니다.", LogType.Error);
+                LogAbility($"AiData({cardAbility.aiDataId})를 찾을 수 없습니다.", LogType.Error);
                 yield break;
             }
 
@@ -54,16 +54,16 @@ namespace ERang
             // 공격 횟수만큼 데미지 적용
             for (int i = 0; i < atkCount; i++)
             {
-                LogAbility($"데미지 적용 총 {atkCount}회 중 {i + 1}회 - 대상: {targetSlot.LogText}, HP: {targetCard.Hp}, DEF: {targetCard.Def}, 데미지: {damage}");
+                LogAbility($"데미지 적용 총 {atkCount}회 중 {i + 1}회 - 대상: {targetSlot.ToSlotLogInfo()}, HP: {targetCard.Hp}, DEF: {targetCard.Def}, 데미지: {damage}");
 
                 yield return StartCoroutine(targetSlot.TakeDamage(damage));
                 yield return new WaitForSeconds(0.5f);
 
                 // 데미지 적용 후 타겟 카드 확인
-                LogAbility($"데미지 적용 후 타겟 카드 확인 - 대상: {targetSlot.LogText}, HP: {targetCard.Hp}, DEF: {targetCard.Def}");
+                LogAbility($"데미지 적용 후 타겟 카드 확인 - 대상: {targetSlot.ToSlotLogInfo()}, HP: {targetCard.Hp}, DEF: {targetCard.Def}");
             }
 
-            LogAbility($"데미지 완료 - 대상: {targetSlot.LogText}, 총 데미지: {damage * atkCount}");
+            // LogAbility($"데미지 완료 - 대상: {targetSlot.ToSlotLogInfo()}, 총 데미지: {damage * atkCount}");
         }
 
         public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)

@@ -31,7 +31,7 @@ namespace ERang
 
             if (cardData == null)
             {
-                Debug.LogError($"CardData 테이블에 {Utils.RedText(1006)} 카드 없음");
+                Debug.LogError($"TestCodeScript - Test. CardData({1006}) 데이터 없음");
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace ERang
 
                 if (cardData == null)
                 {
-                    Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
+                    Debug.LogError($"TestCodeScript - Start. CardData({cardId}) 데이터 없음");
                     continue;
                 }
 
@@ -66,7 +66,7 @@ namespace ERang
 
                 if (card == null)
                 {
-                    Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
+                    Debug.LogError($"TestCodeScript - Start. CardData({cardId}) 데이터 없음");
                     continue;
                 }
 

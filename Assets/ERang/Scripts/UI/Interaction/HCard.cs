@@ -11,7 +11,6 @@ namespace ERang
         public string CardUid => cardUid;
         public BaseCard Card => card;
         public LayerMask slotLayerMask;
-        public string LogText => Utils.CardLog(card);
 
         private Dragable dragable;
 
@@ -103,7 +102,7 @@ namespace ERang
             if (IsHandOnCard())
                 return;
 
-            Debug.Log($"HCard. OnMouseDown. {card?.Uid} {card?.LogText}");
+            Debug.Log($"HCard. OnMouseDown. {card?.ToCardLogInfo()}");
 
             // 1. 드래깅 카드 설정 (다른 카드 호버 방지용)
             HandDeck.Instance.SetDraggingCard(this);
@@ -121,7 +120,7 @@ namespace ERang
 
         void OnMouseUp()
         {
-            Debug.Log($"HCard. OnMouseUp. {card?.Uid} {card?.LogText}");
+            Debug.Log($"HCard. OnMouseUp. {card?.ToCardLogInfo()}");
 
             // 1. Dragable 컴포넌트에 드래그 종료 알림
             dragable.EndDrag();

@@ -23,9 +23,6 @@ namespace ERang
         public GameObject cardPrefab;
         public AbilityIcons abilityIcons;
 
-        // LogText 속성 추가
-        public string LogText => Utils.BoardSlotLog(this);
-
         private GameObject cardObject;
         private BaseCard card = null;
         private SlotUI slotUI;
@@ -204,7 +201,7 @@ namespace ERang
         {
             if (card is not CreatureCard creatureCard)
             {
-                Debug.LogWarning($"{LogText}: 슬롯 카드가 CreatureCard 가 아닙니다.");
+                Debug.LogWarning($"{this.ToSlotLogInfo()}: 슬롯 카드가 CreatureCard 가 아닙니다.");
                 return;
             }
 
@@ -216,7 +213,7 @@ namespace ERang
         {
             if (card is not CreatureCard creatureCard)
             {
-                Debug.LogWarning($"{LogText}: 슬롯 카드가 CreatureCard 가 아닙니다.");
+                Debug.LogWarning($"{this.ToSlotLogInfo()}: 슬롯 카드가 CreatureCard 가 아닙니다.");
                 return;
             }
 

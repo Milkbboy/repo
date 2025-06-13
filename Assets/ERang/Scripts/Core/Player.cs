@@ -93,10 +93,9 @@ namespace ERang
         public void AddCard(int cardId)
         {
             CardData cardData = CardData.GetCardData(cardId);
-
             if (cardData == null)
             {
-                Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음 - AddCard");
+                Debug.LogError($"Player - AddCard. CardData({cardId}) 데이터 없음");
                 return;
             }
 
@@ -141,7 +140,7 @@ namespace ERang
             MasterData masterData = MasterData.GetMasterData(masterId);
             if (masterData == null)
             {
-                Debug.LogError($"마스터({masterId}) MasterData {Utils.RedText("테이블 데이터 없음")}");
+                Debug.LogError($"Player - LoadPlayer. MasterData({masterId}) 데이터 없음");
                 return;
             }
 

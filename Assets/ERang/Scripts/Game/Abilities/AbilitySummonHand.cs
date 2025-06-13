@@ -22,10 +22,10 @@ namespace ERang
 
         private IEnumerator SummonCardToLocation(CardAbility cardAbility, DeckKind targetDeck)
         {
-            AbilityData abilityData = Utils.CheckData(AbilityData.GetAbilityData, "AbilityData", cardAbility.abilityId);
+            AbilityData abilityData = AbilityData.GetAbilityData(cardAbility.abilityId);
             if (abilityData == null)
             {
-                LogAbility("AbilityData를 찾을 수 없습니다.", LogType.Error);
+                LogAbility($"AbilityData({cardAbility.abilityId})를 찾을 수 없습니다.", LogType.Error);
                 yield break;
             }
 
@@ -45,7 +45,7 @@ namespace ERang
             }
 
             // 카드 이름 가져오기 (로그용)
-            var cardData = Utils.CheckData(CardData.GetCardData, "CardData", cardId);
+            var cardData = CardData.GetCardData(cardId);
             string cardName = cardData?.nameDesc ?? $"카드 ID {cardId}";
 
             LogAbility($"카드 소환: {cardName} -> {targetDeck}");

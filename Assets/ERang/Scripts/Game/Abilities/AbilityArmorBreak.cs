@@ -55,8 +55,12 @@ namespace ERang
         private int CalculateRestoredDefense(BaseCard card)
         {
             // 원래 방어력에서 다른 효과들을 계산
-            var cardData = Utils.CheckData(CardData.GetCardData, "CardData", card.Id);
-            if (cardData == null) return 0;
+            var cardData = CardData.GetCardData(card.Id);
+            if (cardData == null)
+            {
+                Debug.LogError($"AbilityArmorBreak: CalculateRestoredDefense. CardData({card.Id}) 데이터 없음");
+                return 0;
+            }
 
             int originalDef = cardData.def;
             int sumBrokenDef = card.AbilitySystem.BrokenDefAbilities.Sum(ability => ability.abilityValue);

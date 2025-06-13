@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using ERang.Data;
 
 namespace ERang
 {
@@ -25,9 +24,6 @@ namespace ERang
 
         // 어빌리티 시스템 관련
         CardAbilitySystem AbilitySystem { get; }
-
-        // 로그 정보
-        string LogText { get; }
 
         // 가상 속성 - 자식 클래스에서 구현
         int Hp { get; }

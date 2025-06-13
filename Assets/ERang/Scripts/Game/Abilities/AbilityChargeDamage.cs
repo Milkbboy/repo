@@ -27,10 +27,10 @@ namespace ERang
             if (!ValidateTargetSlot(targetSlot, "ChargeDamage") || !ValidateTargetSlot(selfSlot, "ChargeDamage"))
                 yield break;
 
-            AiData aiData = Utils.CheckData(AiData.GetAiData, "AiData", cardAbility.aiDataId);
+            AiData aiData = AiData.GetAiData(cardAbility.aiDataId);
             if (aiData == null)
             {
-                LogAbility("AiData를 찾을 수 없습니다.", LogType.Error);
+                LogAbility($"AiData({cardAbility.aiDataId})를 찾을 수 없습니다.", LogType.Error);
                 yield break;
             }
 

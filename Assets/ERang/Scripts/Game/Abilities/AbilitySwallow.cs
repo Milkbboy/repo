@@ -122,7 +122,7 @@ namespace ERang
                 yield break;
             }
 
-            LogAbility($"연쇄 어빌리티 적용: {chainAbilityData.LogText}");
+            LogAbility($"연쇄 어빌리티 적용: {chainAbilityData.ToAbilityLogInfo()}");
 
             foreach (SelectCard selectCard in selectedCards)
             {
@@ -145,13 +145,13 @@ namespace ERang
                 // 선택된 카드에 효과 적용
                 // 1. 다음 턴에 핸드로 선택되도록 설정
                 card.SetCardTraits(CardTraits.NextTurnSelect);
-                LogAbility($"다음 턴 선택 설정: {card.LogText}");
+                LogAbility($"다음 턴 선택 설정: {card.ToCardLogInfo()}");
 
                 // 2. 핸드 어빌리티 추가 (주로 마나 감소 효과)
                 card.AbilitySystem.AddHandCardAbility(handCardAbility);
                 LogAbility($"핸드 어빌리티 추가: {handCardAbility.abilityType} (값: {handCardAbility.abilityValue})");
 
-                LogAbility($"카드 처리 완료: {selectCard.Card.LogText}");
+                LogAbility($"카드 처리 완료: {selectCard.Card.ToCardLogInfo()}");
 
                 // 카드를 덱으로 이동
                 DeckManager.Instance.HandCardToBoard(selectCard.Card);

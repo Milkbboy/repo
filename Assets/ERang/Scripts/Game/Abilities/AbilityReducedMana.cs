@@ -18,7 +18,7 @@ namespace ERang
         {
             if (!ValidateHandCard(card)) yield break;
 
-            LogAbility($"마나 감소 적용 시작: {card.LogText}");
+            LogAbility($"마나 감소 적용 시작: {card.ToCardLogInfo()}");
             Apply(card, true);
 
             yield break;
@@ -31,7 +31,7 @@ namespace ERang
         {
             if (!ValidateHandCard(card)) yield break;
 
-            LogAbility($"마나 감소 해제 시작: {card.LogText}");
+            LogAbility($"마나 감소 해제 시작: {card.ToCardLogInfo()}");
             Apply(card, false);
 
             yield break;

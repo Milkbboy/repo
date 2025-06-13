@@ -11,7 +11,7 @@ namespace ERang
             abilityIcon = GetComponentInParent<AbilityIcon>();
 
             if (abilityIcon == null)
-                Debug.LogError($"{Utils.RedText("AbilityIcon 컴포넌트를 찾을 수 없습니다.")} - AbilityEventHandler: Awake");
+                Debug.LogError($"AbilityIcon 컴포넌트를 찾을 수 없습니다. - AbilityEventHandler: Awake");
         }
 
         public void OnMouseEnter()

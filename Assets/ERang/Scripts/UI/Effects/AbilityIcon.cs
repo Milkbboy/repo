@@ -24,7 +24,7 @@ namespace ERang
 
             if (abilityData == null)
             {
-                Debug.LogError($"{abilityData.LogText} {Utils.RedText("테이블 데이터 없음")} - AbilityIconUI: SetIcon");
+                Debug.LogError($"AbilityIconUI: SetIcon. AbilityData({abilityId}) 데이터 없음");
                 return;
             }
 
@@ -36,7 +36,7 @@ namespace ERang
             abilityIconUI.SetIcon(abilityData.iconTexture, aiDataType);
             abilityIconUI.SetTurnCount(duration);
 
-            Debug.Log($"{abilityData.LogText} abilityId: {this.abilityId} 아이콘 설정 완료");
+            Debug.Log($"{abilityData.ToAbilityLogInfo()} 아이콘 설정");
         }
 
         public void SetTurnCount(int turnCount)

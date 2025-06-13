@@ -31,8 +31,6 @@ namespace ERang.Data
         [Header("Display")]
         public Texture2D iconTexture;
 
-        public string LogText => Utils.AbilityLog(this);
-
         public void Initialize(AbilityDataEntity entity)
         {
             abilityId = entity.AbilityData_Id;

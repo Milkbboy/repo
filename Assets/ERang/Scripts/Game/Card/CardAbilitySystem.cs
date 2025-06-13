@@ -45,14 +45,12 @@ namespace ERang
             }
 
             cardAbility.AddAbilityItem(abilityItem);
-
-            Debug.Log($"{cardAbility.LogText} {(found == null ? "신규" : "AbilityItem 만")} 추가. value: {cardAbility.abilityValue}, duration: {cardAbility.duration}, workType: {cardAbility.workType}");
         }
 
         public void AddHandCardAbility(CardAbility cardAbility)
         {
             handAbilities.Add(cardAbility);
-            Debug.Log($"AddHandCardAbility. cardAbility: {cardAbility.LogText}");
+            Debug.Log($"AddHandCardAbility. {cardAbility.ToCardAbilityLogInfo()}");
         }
 
         public List<CardAbility> DecreaseDuration()

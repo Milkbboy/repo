@@ -41,7 +41,7 @@ namespace ERang
         {
             if (targetSlot?.Card == null)
             {
-                Debug.LogWarning($"<color=orange>[{abilityName}]</color> {targetSlot?.LogText ?? "null"} 카드가 없습니다.");
+                Debug.LogWarning($"<color=orange>[{abilityName}]</color> {targetSlot?.ToSlotLogInfo() ?? "null"} 카드가 없습니다.");
                 return false;
             }
             return true;
@@ -54,7 +54,7 @@ namespace ERang
         {
             if (card is not T)
             {
-                Debug.LogWarning($"<color=orange>[{abilityName}]</color> {card.LogText}는 {typeof(T).Name} 타입이 아닙니다.");
+                Debug.LogWarning($"<color=orange>[{abilityName}]</color> {card.ToCardLogInfo()}는 {typeof(T).Name} 타입이 아닙니다.");
                 return false;
             }
             return true;
@@ -71,6 +71,7 @@ namespace ERang
                 AbilityType.Heal => $"<color=green>[{AbilityType}]</color> {message}",
                 AbilityType.AtkUp or AbilityType.DefUp => $"<color=blue>[{AbilityType}]</color> {message}",
                 AbilityType.ReducedMana => $"<color=cyan>[{AbilityType}]</color> {message}",
+                AbilityType.SubSatiety => $"<color=yellow>[{AbilityType}]</color> {message}",
                 _ => $"<color=white>[{AbilityType}]</color> {message}"
             };
 

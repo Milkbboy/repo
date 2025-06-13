@@ -53,7 +53,7 @@ namespace ERang
             if (BoardSystem.Instance != null)
                 BoardSystem.Instance.GetBoardSlot(card.Uid);
 
-            string aiGroupDataTableLog = $"{(boardSlot != null ? Utils.BoardSlotLog(boardSlot) : $"카드({card.Id})")}. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
+            string aiGroupDataTableLog = $"{(boardSlot != null ? boardSlot.ToSlotLogInfo() : $"{card.ToCardLogInfo()}")}. <color=#78d641>AiGroupData</color> 테이블 {aiGroupId} 데이터 얻기";
             AiGroupData aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
 
             if (aiGroupData == null)
@@ -171,7 +171,7 @@ namespace ERang
 
                 if (aiGroupData == null)
                 {
-                    Debug.LogError($"AiGroupData is null. AiGroupId: {aiGroupId} - IsHandOnCard");
+                    Debug.LogError($"{card.ToCardLogInfo()} AiGroupData({aiGroupId}) 데이터 없음. AiLogic.IsHandOnCard");
                     continue;
                 }
 
@@ -183,7 +183,7 @@ namespace ERang
 
                         if (aiData == null)
                         {
-                            Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId} - IsHandOnCard");
+                            Debug.LogError($"{card.ToCardLogInfo()} AiData({aiDataId}) 데이터 없음. AiLogic.IsHandOnCard");
                             continue;
                         }
 
@@ -191,10 +191,9 @@ namespace ERang
                         foreach (int abilityId in aiData.ability_Ids)
                         {
                             AbilityData ability = AbilityData.GetAbilityData(abilityId);
-
                             if (ability == null)
                             {
-                                Debug.LogWarning($"HCard.SetCard 함수. AbilityData({abilityId}) {Utils.RedText("테이블 데이터 없음")} - IsHandOnCard");
+                                Debug.LogWarning($"{card.ToCardLogInfo()} AbilityData({abilityId}) 데이터 없음. AiLogic.IsHandOnCard");
                                 continue;
                             }
 
@@ -233,7 +232,7 @@ namespace ERang
 
                         if (aiData == null)
                         {
-                            Debug.LogError($"HCard.SetCard 함수. AiData is null. AiDataId: {aiDataId} - IsHandOnCard");
+                            Debug.LogError($"{card.ToCardLogInfo()} AiData({aiDataId}) 데이터 없음. AiLogic.GetTargetSlotNumbers");
                             continue;
                         }
 
@@ -276,7 +275,7 @@ namespace ERang
 
                     if (handCardAiData == null)
                     {
-                        Debug.LogWarning($"{Utils.CardLog(handCard)} AiData({aiDataId}) <color=red>테이블에 데이터 없음</color> - AiLogic.GetHandOnCards");
+                        Debug.LogWarning($"{handCard.ToCardLogInfo()} AiData({aiDataId}) 데이터 없음. - AiLogic.GetHandOnCards");
                         continue;
                     }
 
@@ -288,7 +287,7 @@ namespace ERang
 
                         if (ability == null)
                         {
-                            Debug.LogWarning($"{Utils.CardLog(handCard)} AbilityData({abilityId}) <color=red>테이블 데이터 없음</color> - AiLogic.GetHandOnCards");
+                            Debug.LogWarning($"{handCard.ToCardLogInfo()} AbilityData({abilityId}) <color=red>테이블 데이터 없음</color> - AiLogic.GetHandOnCards");
                             continue;
                         }
 
@@ -321,7 +320,7 @@ namespace ERang
 
             if (card == null)
             {
-                Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} 장착된 카드가 없어 리액션 패스");
+                Debug.LogWarning($"{reactionSlot.ToSlotLogInfo()} 장착된 카드가 없어 리액션 패스");
                 return reactionAiData;
             }
 
@@ -329,7 +328,7 @@ namespace ERang
 
             if (reactionPairs.Count == 0)
             {
-                Debug.LogWarning($"{Utils.BoardSlotLog(reactionSlot)} AiGroupData({string.Join(",", card.AiGroupIds)})에 해당하는 <color=red>리액션 데이터 없음</color>");
+                Debug.LogWarning($"{reactionSlot.ToSlotLogInfo()} AiGroupData({string.Join(",", card.AiGroupIds)})에 해당하는 <color=red>리액션 데이터 없음</color>");
                 return reactionAiData;
             }
 
@@ -340,17 +339,15 @@ namespace ERang
 
                 if (aiDataId == 0)
                 {
-                    Debug.Log($"{Utils.BoardSlotLog(reactionSlot)} 이번 턴 리액션 컨디션({condition.id}) 없음");
+                    Debug.Log($"{reactionSlot.ToSlotLogInfo()} 이번 턴 리액션 컨디션({condition.id}) 없음");
                     continue;
                 }
 
                 AiData aiData = AiData.GetAiData(aiDataId);
 
-                string aiGroupDataTableLog = $"{Utils.BoardSlotLog(reactionSlot)} <color=#78d641>AiData</color> 테이블 {aiDataId} 데이터 얻기";
-
                 if (aiData == null)
                 {
-                    Debug.LogWarning($"{aiGroupDataTableLog} - 실패. <color=red>테이블에 데이터 없음</color>");
+                    Debug.LogWarning($"{reactionSlot.ToSlotLogInfo()} AiData({aiDataId}) 데이터 없음. AiLogic.GetReacationAiData");
                     continue;
                 }
 
@@ -358,11 +355,11 @@ namespace ERang
 
                 if (aiTargetSlots.Count == 0)
                 {
-                    Debug.LogWarning($"{aiGroupDataTableLog} - 실패. 대상 슬롯 없음");
+                    Debug.LogWarning($"{reactionSlot.ToSlotLogInfo()} 대상 슬롯 없음. AiLogic.GetReacationAiData");
                     continue;
                 }
 
-                Debug.Log($"{aiGroupDataTableLog} 성공 - {Utils.BoardSlotLog(reactionSlot)}. 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동");
+                Debug.Log($"{reactionSlot.ToSlotLogInfo()} 리액션 컨디션({condition.id}) AiData({aiDataId}) 작동");
 
                 reactionAiData = (aiData, aiTargetSlots);
                 break;
@@ -382,7 +379,7 @@ namespace ERang
 
             if (reactionPairs.Count == 0)
             {
-                Debug.LogWarning($"{Utils.BoardSlotLog(selfSlot)} AiGroupData({string.Join(",", card.AiGroupIds)})에 해당하는 <color=red>리액션 데이터 없음</color>");
+                Debug.LogWarning($"{selfSlot.ToSlotLogInfo()} AiGroupData({string.Join(",", card.AiGroupIds)})에 해당하는 <color=red>리액션 데이터 없음</color>");
                 return (null, new List<BSlot>());
             }
 
@@ -399,11 +396,9 @@ namespace ERang
 
                 AiData aiData = AiData.GetAiData(aiDataId);
 
-                string aiGroupDataTableLog = $"{Utils.BoardSlotLog(selfSlot)} <color=#78d641>AiData</color> 테이블 리액션 {aiDataId} 얻기";
-
                 if (aiData == null)
                 {
-                    Debug.LogWarning($"{aiGroupDataTableLog} - 실패. <color=red>테이블에 데이터 없음</color>");
+                    Debug.LogWarning($"{selfSlot.ToSlotLogInfo()} AiData({aiDataId}) 데이터 없음. AiLogic.GetTurnStartActionAiDataId");
                     continue;
                 }
 
@@ -411,11 +406,11 @@ namespace ERang
 
                 if (aiTargetSlots.Count == 0)
                 {
-                    Debug.LogWarning($"{aiGroupDataTableLog} - 실패. 대상 슬롯 없음");
+                    Debug.LogWarning($"{selfSlot.ToSlotLogInfo()} 대상 슬롯 없음. AiLogic.GetTurnStartActionAiDataId");
                     continue;
                 }
 
-                Debug.Log($"{aiGroupDataTableLog} 성공 - 리액션 컨디션({condition.id})에 해당하는 AiData({aiDataId})의 <color=#f4872e>어빌리티({string.Join(", ", aiData.ability_Ids)})</color>{(aiData.ability_Ids.Count > 1 ? " 중 하나" : "")} 작동");
+                Debug.Log($"{selfSlot.ToSlotLogInfo()} 리액션 컨디션({condition.id})에 해당하는 AiData({aiDataId})의 <color=#f4872e>어빌리티({string.Join(", ", aiData.ability_Ids)})</color>{(aiData.ability_Ids.Count > 1 ? " 중 하나" : "")} 작동");
 
                 return (aiData, aiTargetSlots);
             }

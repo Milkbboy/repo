@@ -148,7 +148,7 @@ namespace ERang
 
                 if (cardData == null)
                 {
-                    Debug.LogError($"CardData 테이블에 {Utils.RedText(cardId)} 카드 없음");
+                    Debug.LogError($"BoardSystem - CreateMonsterCards. CardData({cardId}) 데이터 없음");
                     continue;
                 }
 
@@ -254,21 +254,28 @@ namespace ERang
         /// <param name="card"></param>
         public void CardCost(Player player, BaseCard card)
         {
+            if (card == null)
+            {
+                Debug.LogWarning("카드 비용 소모 처리 불가: 카드가 없음");
+                return;
+            }
+
             switch (card)
             {
                 case CreatureCard creatureCard:
-                    Debug.Log($"CreatureCard: {creatureCard.Id} Mana: {creatureCard.Mana}");
+                    Debug.Log($"{creatureCard.ToCardLogInfo()} 마나 소모: {creatureCard.Mana}");
                     AddMana(-creatureCard.Mana);
                     break;
                 case MagicCard magicCard:
-                    Debug.Log($"MagicCard: {magicCard.Id} Mana: {magicCard.Mana}");
+                    Debug.Log($"{magicCard.ToCardLogInfo()} 마나 소모: {magicCard.Mana}");
                     AddMana(-magicCard.Mana);
                     break;
                 case BuildingCard buildingCard:
+                    Debug.Log($"{buildingCard.ToCardLogInfo()} 골드 소모: {buildingCard.Gold}");
                     AddGold(player, -buildingCard.Gold);
                     break;
                 default:
-                    Debug.LogWarning("Unhandled card type");
+                    Debug.LogWarning($"카드 비용 소모 처리 불가: {card.ToCardLogInfo()}");
                     break;
             }
         }
