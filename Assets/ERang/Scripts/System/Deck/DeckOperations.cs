@@ -163,6 +163,9 @@ namespace ERang
             deckData.RemoveFromHand(card);
             handDeck.RemoveHandCard(cardUid);
 
+            // 핸드 카드 어빌리티 해제
+            owner.StartCoroutine(AbilityLogic.Instance.HandCardAbilityRelease(card));
+
             if (card.IsExtinction)
                 deckData.AddToExtinction(card);
             else
