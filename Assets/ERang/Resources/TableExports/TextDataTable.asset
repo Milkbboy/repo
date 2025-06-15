@@ -410,8 +410,8 @@ MonoBehaviour:
     Desc_En: 
   - DescID: CardDesc_81010
     NameDesc: "\uCD0C\uCDA9"
-    Desc_Ko: "\uCD0C\uCDA9\uC740 \uCCB4\uB825\uC774 \uB192\uC9C0\uB9CC \uC2A4\uC2A4\uB85C
-      \uC790\uBA78\uD55C\uB2E4."
+    Desc_Ko: "1\uC5F4\uC758 \uC801\uC5D0\uAC8C 1\uD53C\uD574. \uACF5\uACA9 \uC2DC
+      \uC2A4\uC2A4\uB85C\uC5D0\uAC8C 1 \uD53C\uD574"
     Desc_En: 
   - DescID: CardShortDesc_81010
     NameDesc: "\uCD0C\uCDA9"
@@ -423,12 +423,12 @@ MonoBehaviour:
     Desc_En: 
   - DescID: CardDesc_81011
     NameDesc: "\uACE0\uB798\uD68C\uCDA9"
-    Desc_Ko: "\uC778\uC811\uD55C \uC801\uC5D0\uAC8C 1\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0,
-      \uC911\uB3C5\uC2DC\uCF1C 3\uD134\uAC04 1\uC758 \uD53C\uD574\uB97C \uBC1B\uC2B5\uB2C8\uB2E4."
+    Desc_Ko: "1\uC5F4\uC758 \uC801\uC5D0\uAC8C 3\uD53C\uD574. \uACF5\uACA9 \uC2DC
+      \uC2A4\uC2A4\uB85C\uC5D0\uAC8C 1 \uD53C\uD574"
     Desc_En: 
   - DescID: CardShortDesc_81011
     NameDesc: "\uACE0\uB798\uD68C\uCDA9"
-    Desc_Ko: "\uC778\uC811\uD55C \uC801 1 \uD53C\uD574. 3\uD134\uAC04 \uC911\uB3C5"
+    Desc_Ko: "\uADFC\uAC70\uB9AC"
     Desc_En: 
   - DescID: 81011001_IconDesc
     NameDesc: "\uACE0\uB798\uD68C\uCDA9_\uD6A8\uACFC \uC124\uBA85"
@@ -440,14 +440,13 @@ MonoBehaviour:
     Desc_En: 
   - DescID: CardDesc_81012
     NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC"
-    Desc_Ko: "\uC778\uC811\uD55C \uC801 1,2,3\uC5F4\uC758 \uC801\uC5D0\uAC8C 1 \uD53C\uD574\uB97C
-      \uC8FC\uACE0, \uC911\uB3C5\uC2DC\uCF1C 3\uD134\uAC04 1\uC758 \uD53C\uD574\uB97C
-      \uBC1B\uC2B5\uB2C8\uB2E4. "
+    Desc_Ko: "1,2,3\uC5F4\uC758 \uC801\uC5D0\uAC8C 1\uD53C\uD574. 2\uD134\uAC04 2\uC758
+      \uD53C\uD574\uB97C \uC8FC\uB294 \uC911\uB3C5. \uC2A4\uC2A4\uB85C\uC5D0\uAC8C
+      1 \uD53C\uD574 "
     Desc_En: 
   - DescID: CardShortDesc_81012
     NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC"
-    Desc_Ko: "\uC778\uC811\uD55C \uC801 1,2,3\uC5F4 1 \uD53C\uD574. 3\uD134\uAC04
-      \uC911\uB3C5"
+    Desc_Ko: "\uC6D0\uAC70\uB9AC"
     Desc_En: 
   - DescID: 81012001_IconDesc
     NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC_\uD6A8\uACFC \uC124\uBA85"

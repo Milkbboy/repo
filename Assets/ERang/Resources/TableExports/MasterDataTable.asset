@@ -19,7 +19,7 @@ MonoBehaviour:
     MasterDesc_Id: MasterDesc_1001
     MasterShortDesc_Id: MasterShortDesc_1001
     MasterAi_id: 10001
-    Hp: 8
+    Hp: 99
     Atk: 0
     Def: 2
     StartMana: 2
@@ -28,7 +28,7 @@ MonoBehaviour:
     CreatureSlots: 2
     SatietyGauge: 20
     MaxSatietyGauge: 100
-    StartCardDeck_Id: 81015
+    StartCardDeck_Id: 81031
     StartArtiFact_Id: 1001
     StartAbility_Id: 9001001
   - Master_Id: 1002

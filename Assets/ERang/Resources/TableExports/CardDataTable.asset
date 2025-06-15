@@ -526,10 +526,10 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81010
     CardType: Creature
     Grade: Common
-    AiGroup_ids: 810100
+    AiGroup_ids: 810100, 810101
     CostMana: 0
     CostGold: 0
-    Hp: 5
+    Hp: 14
     Atk: 1
     Def: 0
     InUse: 1
@@ -549,11 +549,11 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81011
     CardType: Creature
     Grade: Rare
-    AiGroup_ids: 810110
+    AiGroup_ids: 810110, 810111
     CostMana: 2
     CostGold: 0
     Hp: 8
-    Atk: 1
+    Atk: 4
     Def: 0
     InUse: 1
     Extinction: 1
@@ -572,7 +572,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81012
     CardType: Creature
     Grade: Legendary
-    AiGroup_ids: 810120
+    AiGroup_ids: 810120, 810121
     CostMana: 2
     CostGold: 0
     Hp: 6
@@ -595,7 +595,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81013
     CardType: Magic
     Grade: Common
-    AiGroup_ids: 810130
+    AiGroup_ids: 810130, 810131
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -618,7 +618,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81014
     CardType: Magic
     Grade: Common
-    AiGroup_ids: 810140
+    AiGroup_ids: 810140, 810141, 810142
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -733,7 +733,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81019
     CardType: Magic
     Grade: Common
-    AiGroup_ids: 810190
+    AiGroup_ids: 810190, 810191
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -848,7 +848,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81024
     CardType: Magic
     Grade: Rare
-    AiGroup_ids: 810240
+    AiGroup_ids: 810240, 810241
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -871,7 +871,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81025
     CardType: Magic
     Grade: Legendary
-    AiGroup_ids: 810250
+    AiGroup_ids: 810250, 810251
     CostMana: 2
     CostGold: 0
     Hp: 0

@@ -1053,10 +1053,27 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81010001
+    NameDesc: "\uCD0C\uCDA9_\uC790\uAE30 \uD53C\uD574"
+    AbilityType: Poison
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 81011000
     NameDesc: "\uACE0\uB798\uD68C\uCDA9_\uACF5\uACA9"
     AbilityType: Damage
-    Value: 1
+    Value: 4
     Ratio: 0
     Type: Active
     Duration: 0
@@ -1071,18 +1088,18 @@ MonoBehaviour:
     Summon_GroupId: 0
     ChainAbilityId: 0
   - AbilityData_Id: 81011001
-    NameDesc: "\uACE0\uB798\uD68C\uCDA9_\uC911\uB3C5"
+    NameDesc: "\uACE0\uB798\uD68C\uCDA9_\uC790\uAE30 \uD53C\uD574"
     AbilityType: Poison
     Value: 1
     Ratio: 0
     Type: Active
-    Duration: 3
+    Duration: 1
     SkillAnim: 
     SkillFx: 
     HitFx: 
     PtojectileFx: 
-    SkillIcon: Poison_01
-    SkillIconDesc: 81011001_IconDesc
+    SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -1107,16 +1124,33 @@ MonoBehaviour:
   - AbilityData_Id: 81012001
     NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC_\uC911\uB3C5"
     AbilityType: Poison
-    Value: 1
+    Value: 2
     Ratio: 0
     Type: Active
-    Duration: 3
+    Duration: 2
     SkillAnim: 
     SkillFx: 
     HitFx: 
     PtojectileFx: 
     SkillIcon: Poison_01
     SkillIconDesc: 81012001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81012002
+    NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC_\uC790\uAE30 \uD53C\uD574"
+    AbilityType: Poison
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 0
@@ -1207,7 +1241,7 @@ MonoBehaviour:
     Summon_GroupId: 0
     ChainAbilityId: 0
   - AbilityData_Id: 81015000
-    NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC"
+    NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC_\uACF5\uACA9"
     AbilityType: Damage
     Value: 2
     Ratio: 0
@@ -1224,24 +1258,7 @@ MonoBehaviour:
     Summon_GroupId: 0
     ChainAbilityId: 0
   - AbilityData_Id: 81015001
-    NameDesc: "\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
-    AbilityType: SubSatiety
-    Value: 20
-    Ratio: 0
-    Type: Active
-    Duration: 0
-    SkillAnim: 
-    SkillFx: 
-    HitFx: 
-    PtojectileFx: 
-    SkillIcon: 
-    SkillIconDesc: 
-    SkillViewIcon: 
-    FxSound: 
-    Summon_GroupId: 0
-    ChainAbilityId: 0
-  - AbilityData_Id: 81015002
-    NameDesc: "\uD608\uD1A0 \uC18C\uD658"
+    NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC_\uC18C\uD658"
     AbilityType: Summon_Hand
     Value: 1
     Ratio: 0
@@ -1256,6 +1273,23 @@ MonoBehaviour:
     SkillViewIcon: 
     FxSound: 
     Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81015002
+    NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
+    AbilityType: SubSatiety
+    Value: 20
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
     ChainAbilityId: 0
   - AbilityData_Id: 81016000
     NameDesc: "\uD55C\uC785_\uACF5\uACA9"
@@ -1328,7 +1362,7 @@ MonoBehaviour:
   - AbilityData_Id: 81018000
     NameDesc: "\uD06C\uAC8C \uD55C\uC785_\uACF5\uACA9"
     AbilityType: Damage
-    Value: 1
+    Value: 2
     Ratio: 0
     Type: Active
     Duration: 0
@@ -1377,7 +1411,7 @@ MonoBehaviour:
     Summon_GroupId: 0
     ChainAbilityId: 0
   - AbilityData_Id: 81019001
-    NameDesc: "\uB9CC\uBCF5\uB3C4 \uCC44\uC6B0\uAE30"
+    NameDesc: "\uBE68\uC544 \uBA39\uAE30_\uB9CC\uBCF5\uB3C4 \uCC44\uC6B0\uAE30"
     AbilityType: AddSatiety
     Value: 10
     Ratio: 0
@@ -1394,7 +1428,7 @@ MonoBehaviour:
     Summon_GroupId: 0
     ChainAbilityId: 0
   - AbilityData_Id: 81019002
-    NameDesc: "\uB9C8\uB098 \uCC44\uC6B0\uAE30"
+    NameDesc: "\uBE68\uC544 \uBA39\uAE30_\uB9C8\uB098 \uCC44\uC6B0\uAE30"
     AbilityType: AddMana
     Value: 1
     Ratio: 0
@@ -1564,7 +1598,7 @@ MonoBehaviour:
     Summon_GroupId: 0
     ChainAbilityId: 0
   - AbilityData_Id: 81025001
-    NameDesc: "\uC18C\uD654\uBD88\uB7C9 \uCE74\uB4DC \uC18C\uD658"
+    NameDesc: "\uD478\uC640\uADF8\uB77C_\uCE74\uB4DC \uC18C\uD658"
     AbilityType: Summon_Hand
     Value: 1
     Ratio: 0
@@ -1581,7 +1615,7 @@ MonoBehaviour:
     Summon_GroupId: 1005
     ChainAbilityId: 0
   - AbilityData_Id: 81025002
-    NameDesc: "\uC544\uAD70 \uACF5\uACA9\uB825 \uC99D\uAC00"
+    NameDesc: "\uD478\uC640\uADF8\uB77C_\uACF5\uACA9\uB825 \uC99D\uAC00"
     AbilityType: AtkUp
     Value: 2
     Ratio: 0
@@ -1617,10 +1651,10 @@ MonoBehaviour:
   - AbilityData_Id: 81026001
     NameDesc: "\uBC29\uC5B4\uB825 \uC601\uAD6C \uD30C\uAD34"
     AbilityType: BrokenDef
-    Value: 3
+    Value: 99
     Ratio: 0
     Type: Active
-    Duration: 0
+    Duration: 99
     SkillAnim: 
     SkillFx: 
     HitFx: 

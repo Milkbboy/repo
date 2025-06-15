@@ -83,9 +83,6 @@ namespace ERang
             {
                 List<StatType> statTypes = new List<StatType> { StatType.Mana, StatType.Atk };
 
-                if (magicCard.Atk > 0)
-                    statTypes.Add(StatType.Atk);
-
                 ActiveStatObjects(statTypes, true);
 
                 hpText.text = string.Empty;
