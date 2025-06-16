@@ -22,7 +22,7 @@ namespace ERang
         /// <param name="selfSlot"></param>
         /// <param name="opponentSlots"></param>
         /// <returns></returns>
-        public (int aiDataId, List<int> targetSlots) GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, BSlot selfSlot, List<BSlot> opponentSlots)
+        public (int aiDataId, List<int> targetSlots) GetReactionConditionAiDataId((AiGroupData.Reaction, ConditionData) reactionPairs, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
         {
             var (reaction, condition) = reactionPairs;
 
@@ -30,7 +30,7 @@ namespace ERang
 
             string conditionTargetLog = $"{selfSlot.SlotNum}번 슬롯 카드({selfSlot.Card.Id}). 리액션 컨디션({condition.id}) 타겟 {condition.target} 슬롯 찾기";
 
-            List<BSlot> targetSlots = GetConditionTargets(condition, selfSlot, opponentSlots);
+            List<BoardSlot> targetSlots = GetConditionTargets(condition, selfSlot, opponentSlots);
 
             if (targetSlots.Count == 0)
             {
@@ -123,14 +123,14 @@ namespace ERang
         /// <param name="selfSlot">내 보드 슬롯</param>
         /// <param name="opponentCards">상대(적)</param>
         /// <returns></returns>
-        public List<BSlot> GetConditionTargets(ConditionData conditionData, BSlot selfSlot, List<BSlot> opponentSlots)
+        public List<BoardSlot> GetConditionTargets(ConditionData conditionData, BoardSlot selfSlot, List<BoardSlot> opponentSlots)
         {
-            List<BSlot> targetSlots = new List<BSlot>();
+            List<BoardSlot> targetSlots = new List<BoardSlot>();
 
             switch (conditionData.target)
             {
                 case ConditionTarget.NearEnemy:
-                    BSlot occupiedSlot = opponentSlots.Find(slot => slot.Card != null);
+                    BoardSlot occupiedSlot = opponentSlots.Find(slot => slot.Card != null);
 
                     // 타겟 슬롯에 카드가 없으면 제일 첫번째 슬롯 반환 (타겟 슬롯 확인 용도)
                     if (occupiedSlot != null)

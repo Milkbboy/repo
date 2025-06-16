@@ -11,13 +11,13 @@ namespace ERang
     {
         private static Action<int> onAbilitySelected;
         private static List<AbilityData> abilities;
-        private static BSlot selfSlot;
+        private static BoardSlot selfSlot;
         private Vector2 scrollPosition;
         private Dictionary<int, Dictionary<int, bool>> selectedTargetSlots = new Dictionary<int, Dictionary<int, bool>>(); // 선택된 타겟 슬롯을 저장할 딕셔너리
 
-        public static void ShowWindow(BSlot bSlot, Action<int> onAbilitySelectedAction)
+        public static void ShowWindow(BoardSlot boardSlot, Action<int> onAbilitySelectedAction)
         {
-            selfSlot = bSlot;
+            selfSlot = boardSlot;
             abilities = AbilityData.abilityData_list.OrderByDescending(x => x.iconTexture != null).ToList();
             onAbilitySelected = onAbilitySelectedAction;
             GetWindow<AbilitySelectorWindow>("Ability 선택");
@@ -70,9 +70,9 @@ namespace ERang
             EditorGUILayout.EndScrollView();
         }
 
-        private List<BSlot> GetSelectableSlots(AiData aiData, BSlot selfSlot)
+        private List<BoardSlot> GetSelectableSlots(AiData aiData, BoardSlot selfSlot)
         {
-            List<BSlot> targetSlots = new List<BSlot>();
+            List<BoardSlot> targetSlots = new List<BoardSlot>();
 
             switch (aiData.target)
             {

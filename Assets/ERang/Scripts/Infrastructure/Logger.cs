@@ -94,7 +94,7 @@ namespace ERang
             return $"<b><color=orange>{card.Id}</color></b> <color=lightblue>{card.Name}</color> 카드";
         }
 
-        public static string ToSlotLogInfo(this BSlot slot)
+        public static string ToSlotLogInfo(this BoardSlot slot)
         {
             if (slot?.Card == null)
                 return $"{slot?.SlotNum ?? -1}번 슬롯 (빈 슬롯)";

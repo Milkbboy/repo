@@ -60,7 +60,7 @@ namespace ERang
             BoardSystem.Instance.SetTurnCount(turnCount);
 
             // 마스터 행동 시작
-            BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
+            BoardSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
             yield return StartCoroutine(CardPriorAbility(masterSlot));
 
             BoardSystem.Instance.SetHp(player.Hp);
@@ -88,19 +88,19 @@ namespace ERang
             Debug.Log($"----------------- {turnCount} TURN END -----------------");
 
             // 크리쳐 카드 행동
-            List<BSlot> creatureSlots = BoardSystem.Instance.GetLeftBoardSlots();
+            List<BoardSlot> creatureSlots = BoardSystem.Instance.GetLeftBoardSlots();
             yield return StartCoroutine(BoardTurnEnd(creatureSlots));
 
             // 마스터 행동 후 어빌리티
-            BSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
+            BoardSlot masterSlot = BoardSystem.Instance.GetMasterSlot();
             yield return StartCoroutine(CardPostAbility(masterSlot));
 
             // 몬스터 카드 행동
-            List<BSlot> monsterSlots = BoardSystem.Instance.GetRightBoardSlots();
+            List<BoardSlot> monsterSlots = BoardSystem.Instance.GetRightBoardSlots();
             yield return StartCoroutine(BoardTurnEnd(monsterSlots));
 
             // 건물 카드 행동
-            List<BSlot> buildingSlots = BoardSystem.Instance.GetBuildingBoardSlots();
+            List<BoardSlot> buildingSlots = BoardSystem.Instance.GetBuildingBoardSlots();
             yield return StartCoroutine(BoardTurnEnd(buildingSlots));
 
             // 핸드 온 카드 어빌리티 해제
@@ -136,10 +136,10 @@ namespace ERang
 
         private IEnumerator TurnStartMonsterReaction()
         {
-            List<BSlot> reactionSlots = BoardSystem.Instance.GetRightBoardSlots();
-            List<BSlot> opponentSlots = BoardSystem.Instance.GetLeftBoardSlots();
+            List<BoardSlot> reactionSlots = BoardSystem.Instance.GetRightBoardSlots();
+            List<BoardSlot> opponentSlots = BoardSystem.Instance.GetLeftBoardSlots();
 
-            foreach (BSlot boardSlot in reactionSlots)
+            foreach (BoardSlot boardSlot in reactionSlots)
             {
                 BaseCard card = boardSlot.Card;
 
@@ -149,7 +149,7 @@ namespace ERang
                 foreach (int aiGroupId in card.AiGroupIds)
                 {
                     // AiGroupData 액션 AiDtaId 얻기
-                    (AiData aiData, List<BSlot> targetSlots) = AiLogic.Instance.GetTurnStartActionAiDataId(boardSlot, opponentSlots, aiGroupId);
+                    (AiData aiData, List<BoardSlot> targetSlots) = AiLogic.Instance.GetTurnStartActionAiDataId(boardSlot, opponentSlots, aiGroupId);
 
                     if (aiData == null)
                     {
@@ -166,9 +166,9 @@ namespace ERang
             }
         }
 
-        private IEnumerator BoardTurnEnd(List<BSlot> actorSlots)
+        private IEnumerator BoardTurnEnd(List<BoardSlot> actorSlots)
         {
-            foreach (BSlot boardSlot in actorSlots)
+            foreach (BoardSlot boardSlot in actorSlots)
             {
                 // 유저 마스터 카드는 여기서 동작 안하고 따로 함
                 if (boardSlot.SlotNum == 0 && boardSlot.SlotCardType == CardType.Master)
@@ -185,7 +185,7 @@ namespace ERang
             }
         }
 
-        private IEnumerator CardPriorAbility(BSlot boardSlot)
+        private IEnumerator CardPriorAbility(BoardSlot boardSlot)
         {
             BaseCard card = boardSlot.Card;
 
@@ -198,7 +198,7 @@ namespace ERang
             }
         }
 
-        private IEnumerator CardPostAbility(BSlot boardSlot)
+        private IEnumerator CardPostAbility(BoardSlot boardSlot)
         {
             BaseCard card = boardSlot.Card;
 
@@ -211,7 +211,7 @@ namespace ERang
             }
         }
 
-        private IEnumerator CardAiAction(BSlot boardSlot)
+        private IEnumerator CardAiAction(BoardSlot boardSlot)
         {
             BaseCard card = boardSlot.Card;
 
@@ -245,7 +245,7 @@ namespace ERang
                 }
 
                 // 2. AiData 에 설정된 타겟 얻기
-                List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, boardSlot, "CardAiAction");
+                List<BoardSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, boardSlot, "CardAiAction");
 
                 if (targetSlots.Count == 0)
                 {
@@ -266,12 +266,12 @@ namespace ERang
         private IEnumerator HandOnCardAbilityAction(IReadOnlyList<BaseCard> handCards)
         {
             // 핸드 온 카드 액션의 주체는 마스터 슬롯
-            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
+            BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(0);
             List<(BaseCard card, AiData aiData, List<AbilityData> abilityDatas)> handOnCards = AiLogic.Instance.GetHandOnCards(handCards);
 
             foreach (var (card, aiData, abilityDatas) in handOnCards)
             {
-                List<BSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandOnCardAbilityAction");
+                List<BoardSlot> targetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandOnCardAbilityAction");
 
                 // 어빌리티 적용
                 foreach (AbilityData abilityData in abilityDatas)
@@ -295,9 +295,9 @@ namespace ERang
             }
         }
 
-        private IEnumerator ReleaseBoardCardAbility(List<BSlot> boardSlots)
+        private IEnumerator ReleaseBoardCardAbility(List<BoardSlot> boardSlots)
         {
-            foreach (BSlot boardSlot in boardSlots)
+            foreach (BoardSlot boardSlot in boardSlots)
             {
                 if (boardSlot.Card == null)
                     continue;

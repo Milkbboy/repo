@@ -199,17 +199,17 @@ namespace ERang
         // ActionProcessor 위임 메서드들
         // ========================================
 
-        public bool UseHandCard(HandCard handCard, BSlot targetSlot)
+        public bool UseHandCard(HandCard handCard, BoardSlot targetSlot)
         {
             return actionProcessor.UseHandCard(handCard, targetSlot);
         }
 
-        public void EquipCardToSlot(HandCard handCard, BSlot boardSlot)
+        public void EquipCardToSlot(HandCard handCard, BoardSlot boardSlot)
         {
             actionProcessor.EquipCardToSlot(handCard, boardSlot);
         }
 
-        public IEnumerator UseHandCard(string cardUid, BSlot targetSlot)
+        public IEnumerator UseHandCard(string cardUid, BoardSlot targetSlot)
         {
             return actionProcessor.UseHandCard(cardUid, targetSlot);
         }

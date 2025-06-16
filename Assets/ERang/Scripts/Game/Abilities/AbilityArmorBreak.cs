@@ -12,12 +12,12 @@ namespace ERang
         /// <summary>
         /// def 0 설정
         /// </summary>
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(Apply(targetSlot, false));
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(Apply(targetSlot, true));
         }
@@ -25,7 +25,7 @@ namespace ERang
         /// <summary>
         /// def 원복
         /// </summary>
-        private IEnumerator Apply(BSlot targetSlot, bool isRelease)
+        private IEnumerator Apply(BoardSlot targetSlot, bool isRelease)
         {
             if (!ValidateTargetSlot(targetSlot, "ArmorBreak"))
                 yield break;

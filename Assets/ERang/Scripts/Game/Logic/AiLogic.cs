@@ -25,12 +25,12 @@ namespace ERang
             return GetCardAiDataId(card, card.AiGroupIds[0]);
         }
 
-        public (AiData, List<BSlot>) GetTurnStartActionAiDataId(BSlot selfSlot, List<BSlot> opponentSlots)
+        public (AiData, List<BoardSlot>) GetTurnStartActionAiDataId(BoardSlot selfSlot, List<BoardSlot> opponentSlots)
         {
             BaseCard card = selfSlot.Card;
 
             if (card.AiGroupIds == null || card.AiGroupIds.Count == 0)
-                return (null, new List<BSlot>());
+                return (null, new List<BoardSlot>());
 
             return GetTurnStartActionAiDataId(selfSlot, opponentSlots, card.AiGroupIds[0]);
         }
@@ -48,7 +48,7 @@ namespace ERang
         /// </summary>
         public int GetCardAiDataId(BaseCard card, int aiGroupId)
         {
-            BSlot boardSlot = null;
+            BoardSlot boardSlot = null;
 
             if (BoardSystem.Instance != null)
                 BoardSystem.Instance.GetBoardSlot(card.Uid);
@@ -312,9 +312,9 @@ namespace ERang
         /// <param name="reactionSlot"></param>
         /// <param name="opponentSlots"></param>
         /// <returns></returns>
-        public (AiData aiData, List<BSlot> targetSlots) GetReacationAiData(BSlot reactionSlot, List<BSlot> opponentSlots, int aiGroupId)
+        public (AiData aiData, List<BoardSlot> targetSlots) GetReacationAiData(BoardSlot reactionSlot, List<BoardSlot> opponentSlots, int aiGroupId)
         {
-            var reactionAiData = (default(AiData), default(List<BSlot>));
+            var reactionAiData = (default(AiData), default(List<BoardSlot>));
 
             BaseCard card = reactionSlot.Card;
 
@@ -351,7 +351,7 @@ namespace ERang
                     continue;
                 }
 
-                List<BSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, reactionSlot, "GetReacationAiData");
+                List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, reactionSlot, "GetReacationAiData");
 
                 if (aiTargetSlots.Count == 0)
                 {
@@ -371,7 +371,7 @@ namespace ERang
         /// <summary>
         /// 턴 시작 액션 AiData id 얻기
         /// </summary>
-        public (AiData, List<BSlot>) GetTurnStartActionAiDataId(BSlot selfSlot, List<BSlot> opponentSlots, int aiGroupId)
+        public (AiData, List<BoardSlot>) GetTurnStartActionAiDataId(BoardSlot selfSlot, List<BoardSlot> opponentSlots, int aiGroupId)
         {
             BaseCard card = selfSlot.Card;
 
@@ -380,7 +380,7 @@ namespace ERang
             if (reactionPairs.Count == 0)
             {
                 Debug.LogWarning($"{selfSlot.ToSlotLogInfo()} AiGroupData({string.Join(",", card.AiGroupIds)})에 해당하는 <color=red>리액션 데이터 없음</color>");
-                return (null, new List<BSlot>());
+                return (null, new List<BoardSlot>());
             }
 
             foreach (var (reaction, condition) in reactionPairs)
@@ -402,7 +402,7 @@ namespace ERang
                     continue;
                 }
 
-                List<BSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "GetTurnStartActionAiDataId");
+                List<BoardSlot> aiTargetSlots = TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "GetTurnStartActionAiDataId");
 
                 if (aiTargetSlots.Count == 0)
                 {
@@ -415,7 +415,7 @@ namespace ERang
                 return (aiData, aiTargetSlots);
             }
 
-            return (null, new List<BSlot>());
+            return (null, new List<BoardSlot>());
         }
 
         /// <summary>

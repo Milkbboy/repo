@@ -8,7 +8,7 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.AddGoldPer;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             AiData aiData = AiData.GetAiData(cardAbility.aiDataId);
             if (aiData == null)
@@ -44,7 +44,7 @@ namespace ERang
             yield return new WaitForSeconds(0.1f);
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             // 골드는 해제되지 않는 즉시 효과
             LogAbility("골드는 해제할 수 없는 즉시 효과입니다.");

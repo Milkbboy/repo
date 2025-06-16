@@ -7,17 +7,17 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.DefUp;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, false));
         }
 
-        private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isDefUp)
+        private IEnumerator Apply(CardAbility cardAbility, BoardSlot targetSlot, bool isDefUp)
         {
             if (!ValidateTargetSlot(targetSlot, "DefUp"))
                 yield break;

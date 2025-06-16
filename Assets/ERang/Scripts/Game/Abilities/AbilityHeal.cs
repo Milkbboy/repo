@@ -7,7 +7,7 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.Heal;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             if (!ValidateTargetSlot(targetSlot, "Heal"))
                 yield break;
@@ -39,7 +39,7 @@ namespace ERang
         }
 
         // 즉시 효과는 해제 불필요
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             // 힐은 해제되지 않는 즉시 효과
             LogAbility("힐은 해제할 수 없는 즉시 효과입니다.");

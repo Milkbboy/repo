@@ -8,12 +8,12 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.SummonDrawDeck;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(SummonCardToLocation(cardAbility, DeckKind.Deck));
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             // 소환은 해제되지 않는 즉시 효과
             LogAbility("소환은 해제할 수 없는 즉시 효과입니다.");

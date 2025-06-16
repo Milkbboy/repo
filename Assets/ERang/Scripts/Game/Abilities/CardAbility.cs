@@ -41,7 +41,7 @@ namespace ERang
         public string abilityName; // 어빌리티 이름
         public int cardId; // 카드 Id
 
-        public List<BSlot> targetSlots = new();
+        public List<BoardSlot> targetSlots = new();
 
         // 어빌리티 아이템
         // 실제 어빌리티 총 value, 총 duration 을 계산할때 사용

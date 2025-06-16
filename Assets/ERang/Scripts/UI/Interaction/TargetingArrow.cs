@@ -130,7 +130,7 @@ namespace ERang
             {
                 if (hitInfo.collider.gameObject != selectedSlot || selectedSlot == null)
                 {
-                    BSlot boardSlot = hitInfo.collider.gameObject.GetComponent<BSlot>();
+                    BoardSlot boardSlot = hitInfo.collider.gameObject.GetComponent<BoardSlot>();
 
                     if (HandDeck.Instance.IsTargetSlot(boardSlot.SlotNum))
                     {
@@ -220,7 +220,7 @@ namespace ERang
         private void SelectEnemy(GameObject go)
         {
             selectedSlot = go;
-            selectedSlotNum = go.GetComponent<BSlot>().SlotNum;
+            selectedSlotNum = go.GetComponent<BoardSlot>().SlotNum;
 
             var boxCollider = go.GetComponent<BoxCollider>();
             var size = boxCollider.size;
@@ -286,7 +286,7 @@ namespace ERang
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, boardSlotLayer))
             {
-                BSlot boardSlot = hitInfo.collider.gameObject.GetComponent<BSlot>();
+                BoardSlot boardSlot = hitInfo.collider.gameObject.GetComponent<BoardSlot>();
                 return boardSlot.SlotNum;
             }
 

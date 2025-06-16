@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace ERang
 {
-    public class BSlot : MonoBehaviour
+    public class BoardSlot : MonoBehaviour
     {
         /// <summary>
         /// 슬롯에 장착할 수 있는 카드 타입

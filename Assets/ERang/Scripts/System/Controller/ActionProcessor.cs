@@ -27,7 +27,7 @@ namespace ERang
             this.deckManager = deckManager;
         }
 
-        public bool UseHandCard(HandCard handCard, BSlot targetSlot)
+        public bool UseHandCard(HandCard handCard, BoardSlot targetSlot)
         {
             if (CanUseHandCard(handCard.Card.Uid) == false)
                 return false;
@@ -47,7 +47,7 @@ namespace ERang
             return false;
         }
 
-        public void EquipCardToSlot(HandCard handCard, BSlot boardSlot)
+        public void EquipCardToSlot(HandCard handCard, BoardSlot boardSlot)
         {
             if (boardSlot.SlotCardType != handCard.Card.CardType)
             {
@@ -68,7 +68,7 @@ namespace ERang
             Debug.Log($"{boardSlot.ToSlotLogInfo()} 에 {handCard.Card.ToCardLogInfo()} 장착");
         }
 
-        public IEnumerator UseHandCard(string cardUid, BSlot targetSlot)
+        public IEnumerator UseHandCard(string cardUid, BoardSlot targetSlot)
         {
             BaseCard card = deckManager.FindHandCard(cardUid);
 
@@ -102,11 +102,11 @@ namespace ERang
                 bool isSelectAttackType = Constants.SelectAttackTypes.Contains(aiData.attackType);
 
                 // 마법 사용 주체는 마스터 슬롯
-                BSlot selfSlot = BoardSystem.Instance.GetMasterSlot();
+                BoardSlot selfSlot = BoardSystem.Instance.GetMasterSlot();
 
                 // 타겟팅이면 nearastSlot 을 대상으로 설정
-                List<BSlot> targetSlots = (aiData.target == AiDataTarget.SelectEnemy) ?
-                    new List<BSlot> { targetSlot } :
+                List<BoardSlot> targetSlots = (aiData.target == AiDataTarget.SelectEnemy) ?
+                    new List<BoardSlot> { targetSlot } :
                     TargetLogic.Instance.GetAiTargetSlots(aiData, selfSlot, "HandCardUse");
 
                 // Debug.Log($"{card.LogText} 사용. isSelectAttackType: {isSelectAttackType}, aiDataId: {aiData.ai_Id}, aiData.target: {aiData.target}, targetSlot: {targetSlot?.SlotNum ?? -1}, tagetSlots: {string.Join(", ", targetSlots.Select(slot => slot.SlotNum))}");
@@ -184,7 +184,7 @@ namespace ERang
 
         public IEnumerator RemoveBoardCard(int slotNum)
         {
-            BSlot boardSlot = BoardSystem.Instance.GetBoardSlot(slotNum);
+            BoardSlot boardSlot = BoardSystem.Instance.GetBoardSlot(slotNum);
 
             if (boardSlot == null)
             {

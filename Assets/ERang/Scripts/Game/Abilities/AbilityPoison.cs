@@ -7,7 +7,7 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.Poison;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             if (!ValidateTargetSlot(targetSlot, "Poison"))
                 yield break;
@@ -32,7 +32,7 @@ namespace ERang
             yield return StartCoroutine(targetSlot.TakeDamage(poisonDamage));
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             // 중독은 지속 시간이 끝나면 자동으로 해제
             LogAbility("중독 상태 해제");

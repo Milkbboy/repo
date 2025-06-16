@@ -69,7 +69,7 @@ namespace ERang
         /// 어빌리티 추가하고 발동까지
         /// - 몇몇 어빌리티는 발동 안함
         /// </summary>
-        public IEnumerator AbilityProcess(AiData aiData, AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots, AbilityWhereFrom whereFrom)
+        public IEnumerator AbilityProcess(AiData aiData, AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots, AbilityWhereFrom whereFrom)
         {
             if (!ValidateAbilityProcess(abilityData, selfSlot, targetSlots))
                 yield break;
@@ -81,7 +81,7 @@ namespace ERang
 
             List<Coroutine> runningCoroutines = new List<Coroutine>();
 
-            foreach (BSlot targetSlot in targetSlots.Where(slot => slot?.Card != null))
+            foreach (BoardSlot targetSlot in targetSlots.Where(slot => slot?.Card != null))
             {
                 BaseCard card = targetSlot.Card;
 
@@ -138,7 +138,7 @@ namespace ERang
             }
         }
 
-        private bool ValidateAbilityProcess(AbilityData abilityData, BSlot selfSlot, List<BSlot> targetSlots)
+        private bool ValidateAbilityProcess(AbilityData abilityData, BoardSlot selfSlot, List<BoardSlot> targetSlots)
         {
             if (abilityData == null)
             {
@@ -216,7 +216,7 @@ namespace ERang
         /// <summary>
         /// 어빌리티 실행
         /// </summary>
-        public IEnumerator AbilityAction(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public IEnumerator AbilityAction(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             if (!abilityActions.TryGetValue(cardAbility.abilityType, out IAbility abilityAction))
             {
@@ -238,7 +238,7 @@ namespace ERang
                 yield break;
             }
 
-            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.selfSlotNum);
+            BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.selfSlotNum);
 
             if (selfSlot == null)
             {
@@ -246,7 +246,7 @@ namespace ERang
                 yield break;
             }
 
-            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.targetSlotNum);
+            BoardSlot targetSlot = BoardSystem.Instance.GetBoardSlot(cardAbility.targetSlotNum);
 
             if (targetSlot == null)
             {
@@ -260,7 +260,7 @@ namespace ERang
         /// <summary>
         /// 어빌리티 타입에 따른 원래 stat 얻기
         /// </summary>
-        private int GetOriginStatValue(AbilityType abilityType, BSlot boardSlot)
+        private int GetOriginStatValue(AbilityType abilityType, BoardSlot boardSlot)
         {
             if (boardSlot.Card == null)
             {
@@ -300,9 +300,9 @@ namespace ERang
         /// <summary>
         /// 어빌리티 효과 로깅
         /// </summary>
-        private void LogAbilityEffects(AbilityData abilityData, List<BSlot> targetSlots)
+        private void LogAbilityEffects(AbilityData abilityData, List<BoardSlot> targetSlots)
         {
-            foreach (BSlot targetSlot in targetSlots.Where(slot => slot?.Card != null))
+            foreach (BoardSlot targetSlot in targetSlots.Where(slot => slot?.Card != null))
             {
                 FlatLogger.LogEffect(targetSlot.ToSlotLogInfo(), abilityData.GetEffectDescription());
             }

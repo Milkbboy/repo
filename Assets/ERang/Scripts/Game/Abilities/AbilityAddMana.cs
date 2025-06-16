@@ -7,17 +7,17 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.AddMana;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, selfSlot, false));
         }
 
-        private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAdd)
+        private IEnumerator Apply(CardAbility cardAbility, BoardSlot targetSlot, bool isAdd)
         {
             if (!ValidateTargetSlot(targetSlot, "AddMana"))
                 yield break;

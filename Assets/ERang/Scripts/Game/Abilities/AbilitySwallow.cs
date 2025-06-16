@@ -16,7 +16,7 @@ namespace ERang
 
         private List<SelectCard> selectedCards; // 결과 저장 변수 추가
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             int selectCount = cardAbility.abilityValue;
             if (selectCount <= 0)
@@ -61,7 +61,7 @@ namespace ERang
             LogAbility("카드 삼키기 완료");
         }
 
-        public override IEnumerator Release(CardAbility ability, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility ability, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             // 삼키기는 해제되지 않는 즉시 효과
             LogAbility("삼키기는 해제할 수 없는 즉시 효과입니다.");

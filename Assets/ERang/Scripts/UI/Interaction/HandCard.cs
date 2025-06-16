@@ -149,7 +149,7 @@ namespace ERang
             else
             {
                 // 일반 카드 (크리쳐, 빌딩 등) 사용
-                if (TryGetNearestSlot(transform.position, out BSlot nearestSlot))
+                if (TryGetNearestSlot(transform.position, out BoardSlot nearestSlot))
                 {
                     Debug.Log($"HCard. Nearest Slot: {nearestSlot.Index}, card: {nearestSlot.Card}");
 
@@ -228,7 +228,7 @@ namespace ERang
             return dragable.IsDragging;
         }
 
-        private bool TryGetNearestSlot(Vector3 position, out BSlot nearestSlot)
+        private bool TryGetNearestSlot(Vector3 position, out BoardSlot nearestSlot)
         {
             nearestSlot = null;
             float minDistance = float.MaxValue;
@@ -245,7 +245,7 @@ namespace ERang
 
             foreach (Collider hitCollider in hitColliders)
             {
-                BSlot bSlot = hitCollider.GetComponent<BSlot>();
+                BoardSlot bSlot = hitCollider.GetComponent<BoardSlot>();
 
                 if (bSlot == null || bSlot.IsOverlapCard == false)
                     continue;

@@ -7,7 +7,7 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.Burn;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             if (!ValidateTargetSlot(targetSlot, "Burn"))
                 yield break;
@@ -28,7 +28,7 @@ namespace ERang
             yield return StartCoroutine(targetSlot.TakeDamage(burnDamage));
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             // 화상은 지속 시간이 끝나면 자동으로 해제
             LogAbility("화상 상태 해제");

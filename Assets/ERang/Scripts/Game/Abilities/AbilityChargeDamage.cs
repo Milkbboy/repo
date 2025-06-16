@@ -10,7 +10,7 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.ChargeDamage;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             if (!ValidateTargetSlot(targetSlot, "ChargeDamage"))
                 yield break;
@@ -22,7 +22,7 @@ namespace ERang
             yield break;
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             if (!ValidateTargetSlot(targetSlot, "ChargeDamage") || !ValidateTargetSlot(selfSlot, "ChargeDamage"))
                 yield break;
@@ -55,7 +55,7 @@ namespace ERang
             // 원거리 미사일 발사 (기존 코드와 호환성 유지)
             if (aiData.type == AiDataType.Ranged)
             {
-                yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, new List<BSlot> { targetSlot }, atkCount, damage));
+                yield return StartCoroutine(BoardLogic.Instance.FireMissile(selfSlot, new List<BoardSlot> { targetSlot }, atkCount, damage));
             }
 
             // 공격 횟수만큼 데미지 적용

@@ -69,7 +69,7 @@ namespace ERang
         // ActionProcessor 위임 메서드들 (기존 호환성)
         // ========================================
 
-        public bool HandCardUse(HandCard handCard, BSlot targetSlot)
+        public bool HandCardUse(HandCard handCard, BoardSlot targetSlot)
         {
             if (battleController is BattleController bc)
                 return bc.UseHandCard(handCard, targetSlot);
@@ -77,13 +77,13 @@ namespace ERang
             return false;
         }
 
-        public void BoardSlotEquipCard(HandCard handCard, BSlot boardSlot)
+        public void BoardSlotEquipCard(HandCard handCard, BoardSlot boardSlot)
         {
             if (battleController is BattleController bc)
                 bc.EquipCardToSlot(handCard, boardSlot);
         }
 
-        public IEnumerator HandCardUse(string cardUid, BSlot targetSlot)
+        public IEnumerator HandCardUse(string cardUid, BoardSlot targetSlot)
         {
             if (battleController is BattleController bc)
                 return bc.UseHandCard(cardUid, targetSlot);
@@ -127,8 +127,8 @@ namespace ERang
         /// </summary>
         public void TestRanged()
         {
-            BSlot selfSlot = BoardSystem.Instance.GetBoardSlot(7);
-            List<BSlot> targetSlots = BoardSystem.Instance.GetBoardSlots(new List<int> { 3, 2, 1 });
+            BoardSlot selfSlot = BoardSystem.Instance.GetBoardSlot(7);
+            List<BoardSlot> targetSlots = BoardSystem.Instance.GetBoardSlots(new List<int> { 3, 2, 1 });
 
             AiData aiData = AiData.GetAiData(1004);
             AbilityData abilityData = AbilityData.GetAbilityData(70004); // 기본 원거리 공격

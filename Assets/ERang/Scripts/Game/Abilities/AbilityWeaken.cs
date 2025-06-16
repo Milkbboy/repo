@@ -7,17 +7,17 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.Weaken;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, false)); // 공격력 감소
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(Apply(cardAbility, targetSlot, true));
         }
 
-        private IEnumerator Apply(CardAbility cardAbility, BSlot targetSlot, bool isAtkUp)
+        private IEnumerator Apply(CardAbility cardAbility, BoardSlot targetSlot, bool isAtkUp)
         {
             if (!ValidateTargetSlot(targetSlot, "Weaken"))
                 yield break;

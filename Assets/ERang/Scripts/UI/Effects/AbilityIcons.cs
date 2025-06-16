@@ -16,15 +16,15 @@ namespace ERang
 
         public List<AbilityIcon> abilityIcons = new();
 
-        private BSlot bSlot;
+        private BoardSlot boardSlot;
         private float iconSpacing = .01f;
         private float cardWidth;
         private Vector3 startPosition;
 
-        public void SetSlot(BSlot bSlot, GameObject cardObject)
+        public void SetSlot(BoardSlot boardSlot, GameObject cardObject)
         {
             this.cardObject = cardObject;
-            this.bSlot = bSlot;
+            this.boardSlot = boardSlot;
 
             // 아이콘 간격과 카드 크기 설정
             Transform cardFrameBackTransform = cardObject.transform.Find("Card_Frame_Back");
@@ -36,7 +36,7 @@ namespace ERang
 
             // 카드 이미지의 왼쪽 하단 위치 계산
             startPosition = bounds.min;
-            // Debug.Log($"{bSlot.LogText} 어빌리티 아이콘 시작 위치: {startPosition}");
+            // Debug.Log($"{boardSlot.LogText} 어빌리티 아이콘 시작 위치: {startPosition}");
 
             abilityIconDescUI.gameObject.SetActive(false);
         }
@@ -77,7 +77,7 @@ namespace ERang
 
                     abilityIcons.Add(icon);
 
-                    lotTexts.Add($"{bSlot.ToSlotLogInfo()} 어빌리티 아이콘 생성: {cardAbility.abilityId} duration: {cardAbility.duration}");
+                    lotTexts.Add($"{boardSlot.ToSlotLogInfo()} 어빌리티 아이콘 생성: {cardAbility.abilityId} duration: {cardAbility.duration}");
                     continue;
                 }
 
@@ -90,14 +90,14 @@ namespace ERang
 
                 abilityIcon.SetTurnCount(cardAbility.duration);
 
-                lotTexts.Add($"{bSlot.ToSlotLogInfo()} 어빌리티 아이콘 업데이트: {cardAbility.abilityId} duration: {cardAbility.duration}");
+                lotTexts.Add($"{boardSlot.ToSlotLogInfo()} 어빌리티 아이콘 업데이트: {cardAbility.abilityId} duration: {cardAbility.duration}");
             }
 
             // cardAbilities 와 차이나는 아이콘 제거
             List<AbilityIcon> removeIcons = abilityIcons.Where(x => !cardAbilities.Exists(y => y.abilityId == x.AbilityId)).ToList();
 
             if (removeIcons.Count > 0)
-                Debug.Log($"{bSlot.ToSlotLogInfo()} 차이나는 어빌리티 아이콘 제거: {removeIcons.Count} {string.Join(", ", removeIcons.Select(x => x.AbilityId))}");
+                Debug.Log($"{boardSlot.ToSlotLogInfo()} 차이나는 어빌리티 아이콘 제거: {removeIcons.Count} {string.Join(", ", removeIcons.Select(x => x.AbilityId))}");
 
             foreach (AbilityIcon removeIcon in removeIcons)
             {
@@ -125,11 +125,11 @@ namespace ERang
 
             if (abilityIcon == null)
             {
-                Debug.LogError($"{bSlot} 어빌리티 아이콘 없음 - RemoveIcon: {abilityId}");
+                Debug.LogError($"{boardSlot} 어빌리티 아이콘 없음 - RemoveIcon: {abilityId}");
                 return;
             }
 
-            Debug.Log($"{bSlot} 어빌리티 아이콘 제거: {abilityId}");
+            Debug.Log($"{boardSlot} 어빌리티 아이콘 제거: {abilityId}");
 
             abilityIcons.Remove(abilityIcon);
             Destroy(abilityIcon.gameObject);
@@ -148,7 +148,7 @@ namespace ERang
 
                 if (icon == null)
                 {
-                    Debug.LogError($"{bSlot.ToSlotLogInfo()} 어빌리티 아이콘 없음 - UpdateIconPosition");
+                    Debug.LogError($"{boardSlot.ToSlotLogInfo()} 어빌리티 아이콘 없음 - UpdateIconPosition");
                     continue;
                 }
 

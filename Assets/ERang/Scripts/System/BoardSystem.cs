@@ -15,16 +15,16 @@ namespace ERang
         public readonly CardType[] rightSlotCardTypes = { CardType.None, CardType.Monster, CardType.Monster, CardType.Monster, CardType.Master };
         public readonly CardType[] buildingSlotCardTypes = { CardType.Building, CardType.Building, CardType.None, CardType.None };
 
-        public List<BSlot> AllSlots => bSlots;
+        public List<BoardSlot> AllSlots => boardSlots;
 
         public MasterCard MasterCard => masterCard;
-        public BSlot bSlotPrefab;
+        public BoardSlot bSlotPrefab;
 
         private BoardUI boardUI;
-        private readonly List<BSlot> bSlots = new();
-        private readonly List<BSlot> leftBSlots = new();
-        private readonly List<BSlot> rightBSlots = new();
-        private readonly List<BSlot> buildingSlots = new();
+        private readonly List<BoardSlot> boardSlots = new();
+        private readonly List<BoardSlot> leftBSlots = new();
+        private readonly List<BoardSlot> rightBSlots = new();
+        private readonly List<BoardSlot> buildingSlots = new();
         private MasterCard masterCard;
 
         void Awake()
@@ -63,11 +63,11 @@ namespace ERang
                 }
 
                 // 새로운 슬롯
-                BSlot bSlot = Instantiate(bSlotPrefab);
+                BoardSlot bSlot = Instantiate(bSlotPrefab);
                 bSlot.name = $"Slot_{i}_{leftSlotStartIndex - i}";
                 bSlot.CreateSlot(i, leftSlotStartIndex - i, cardType);
 
-                bSlots.Add(bSlot);
+                boardSlots.Add(bSlot);
                 leftBSlots.Add(bSlot);
             }
 
@@ -77,11 +77,11 @@ namespace ERang
                 int slotNum = i + rightSlotCardTypes.Length;
                 CardType cardType = rightSlotCardTypes[i];
 
-                BSlot bSlot = Instantiate(bSlotPrefab);
+                BoardSlot bSlot = Instantiate(bSlotPrefab);
                 bSlot.name = $"Slot_{slotNum}_{slotNum - rightSlotStartIndex}";
                 bSlot.CreateSlot(slotNum, slotNum - rightSlotStartIndex, cardType);
 
-                bSlots.Add(bSlot);
+                boardSlots.Add(bSlot);
                 rightBSlots.Add(bSlot);
             }
 
@@ -91,12 +91,12 @@ namespace ERang
             float startX = -totalWidth / 2;
 
             // 보드 슬롯 위치 설정
-            for (int i = 0; i < bSlots.Count; i++)
+            for (int i = 0; i < boardSlots.Count; i++)
             {
                 float xPosition = startX + i * (boardWidth + boardSpacing);
                 Vector3 slotPosition = new(xPosition, bSlotPrefab.transform.position.y, bSlotPrefab.transform.position.z);
 
-                bSlots[i].transform.position = slotPosition;
+                boardSlots[i].transform.position = slotPosition;
                 // Debug.Log($"Slot: {boardSlots[i].Slot} Index: {boardSlots[i].Index} Type: {boardSlots[i].CardType}");
             }
 
@@ -109,7 +109,7 @@ namespace ERang
                 float xPosition = startX + i * (boardWidth + boardSpacing);
                 Vector3 slotPosition = new(xPosition, startY, bSlotPrefab.transform.position.z);
 
-                BSlot bSlot = Instantiate(bSlotPrefab, slotPosition, Quaternion.identity);
+                BoardSlot bSlot = Instantiate(bSlotPrefab, slotPosition, Quaternion.identity);
                 bSlot.name = $"Building_{i}";
                 bSlot.CreateSlot(i, i, buildingSlotCardTypes[i]);
 
@@ -123,7 +123,7 @@ namespace ERang
 
             yield return null;
 
-            bSlots[0].EquipCard(masterCard);
+            boardSlots[0].EquipCard(masterCard);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace ERang
 
             foreach (var (slotNum, card) in monsterCards)
             {
-                BSlot slot = rightBSlots.Find(slot => slot.Index == slotNum);
+                BoardSlot slot = rightBSlots.Find(slot => slot.Index == slotNum);
 
                 if (slot == null)
                 {
@@ -181,7 +181,7 @@ namespace ERang
 
         public void RefreshBoardSlot()
         {
-            foreach (var slot in bSlots)
+            foreach (var slot in boardSlots)
             {
                 BaseCard card = slot.Card;
 
@@ -203,12 +203,12 @@ namespace ERang
 
         public void SetHp(int amount)
         {
-            bSlots[0].SetHp(amount);
+            boardSlots[0].SetHp(amount);
         }
 
         public void SetMana(int amount)
         {
-            bSlots[0].SetMana(amount);
+            boardSlots[0].SetMana(amount);
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace ERang
         /// </summary>
         public void ResetMana()
         {
-            bSlots[0].ResetMana();
+            boardSlots[0].ResetMana();
         }
 
         /// <summary>
@@ -226,9 +226,9 @@ namespace ERang
         public void AddMana(int amount)
         {
             if (amount > 0)
-                bSlots[0].IncreaseMana(amount);
+                boardSlots[0].IncreaseMana(amount);
             else
-                bSlots[0].DecreaseMana(Math.Abs(amount));
+                boardSlots[0].DecreaseMana(Math.Abs(amount));
         }
 
         /// <summary>
@@ -280,36 +280,36 @@ namespace ERang
             }
         }
 
-        public BSlot GetMasterSlot()
+        public BoardSlot GetMasterSlot()
         {
-            return bSlots[Constants.MasterSlotNumber];
+            return boardSlots[Constants.MasterSlotNumber];
         }
 
-        public BSlot GetEnemyMasterSlot()
+        public BoardSlot GetEnemyMasterSlot()
         {
-            return bSlots[Constants.EnemyMasterSlotNumber];
+            return boardSlots[Constants.EnemyMasterSlotNumber];
         }
 
-        public BSlot GetBoardSlot(int slotNum)
+        public BoardSlot GetBoardSlot(int slotNum)
         {
-            return bSlots.Find(x => x.SlotNum == slotNum);
+            return boardSlots.Find(x => x.SlotNum == slotNum);
         }
 
-        public List<BSlot> GetBoardSlots(List<int> slots)
+        public List<BoardSlot> GetBoardSlots(List<int> slots)
         {
-            return bSlots.FindAll(x => slots.Contains(x.SlotNum));
+            return boardSlots.FindAll(x => slots.Contains(x.SlotNum));
         }
 
-        public BSlot GetBoardSlot(string cardUid)
+        public BoardSlot GetBoardSlot(string cardUid)
         {
-            return bSlots.Find(x => x.Card != null && x.Card.Uid == cardUid);
+            return boardSlots.Find(x => x.Card != null && x.Card.Uid == cardUid);
         }
 
         /// <summary>
         /// 크리쳐 보드 슬롯 인덱스로 정렬
         /// - 슬롯 3, 2, 1, 0 순서
         /// </summary>
-        public List<BSlot> GetLeftBoardSlots()
+        public List<BoardSlot> GetLeftBoardSlots()
         {
             return leftBSlots.OrderBy(slot => slot.Index).ToList();
         }
@@ -317,12 +317,12 @@ namespace ERang
         /// <summary>
         /// - 슬롯 6, 7, 8, 9 순서
         /// </summary>
-        public List<BSlot> GetRightBoardSlots()
+        public List<BoardSlot> GetRightBoardSlots()
         {
             return rightBSlots.OrderBy(slot => slot.Index).ToList();
         }
 
-        public List<BSlot> GetBuildingBoardSlots()
+        public List<BoardSlot> GetBuildingBoardSlots()
         {
             return buildingSlots;
         }
@@ -355,7 +355,7 @@ namespace ERang
         /// <summary>
         /// 슬롯으로 상대 슬롯 리스트 얻기
         /// </summary>
-        public List<BSlot> GetOpponentSlots(BSlot self)
+        public List<BoardSlot> GetOpponentSlots(BoardSlot self)
         {
             if (self.SlotCardType == CardType.Creature || self.SlotCardType == CardType.Master)
                 return GetRightBoardSlots();
@@ -363,13 +363,13 @@ namespace ERang
             if (self.SlotCardType == CardType.Monster || self.SlotCardType == CardType.EnemyMaster)
                 return GetLeftBoardSlots();
 
-            return new List<BSlot>();
+            return new List<BoardSlot>();
         }
 
         /// <summary>
         /// 슬롯으로 친구 슬롯 리스트 얻기
         /// </summary>
-        public List<BSlot> GetFriendlySlots(BSlot self)
+        public List<BoardSlot> GetFriendlySlots(BoardSlot self)
         {
             if (self.SlotCardType == CardType.Creature || self.SlotCardType == CardType.Master)
                 return GetLeftBoardSlots();
@@ -377,12 +377,12 @@ namespace ERang
             if (self.SlotCardType == CardType.Monster || self.SlotCardType == CardType.EnemyMaster)
                 return GetRightBoardSlots();
 
-            return new List<BSlot>();
+            return new List<BoardSlot>();
         }
 
-        public List<BSlot> GetAllSlots()
+        public List<BoardSlot> GetAllSlots()
         {
-            return bSlots;
+            return boardSlots;
         }
     }
 }

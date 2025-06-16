@@ -93,7 +93,7 @@ namespace ERang
             }
 
             // 타겟 슬롯 가져오기
-            BSlot targetSlot = BoardSystem.Instance.GetBoardSlot(selectedSlot);
+            BoardSlot targetSlot = BoardSystem.Instance.GetBoardSlot(selectedSlot);
 
             if (targetSlot == null)
             {

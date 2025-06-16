@@ -9,7 +9,7 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.Damage;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             if (!ValidateTargetSlot(targetSlot, "Damage"))
                 yield break;
@@ -66,7 +66,7 @@ namespace ERang
             // LogAbility($"데미지 완료 - 대상: {targetSlot.ToSlotLogInfo()}, 총 데미지: {damage * atkCount}");
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             // 데미지는 해제되지 않는 즉시 효과
             LogAbility("데미지는 해제할 수 없는 즉시 효과입니다.");

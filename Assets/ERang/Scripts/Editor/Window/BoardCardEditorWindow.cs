@@ -92,17 +92,17 @@ namespace ERang
                 EditorUtility.SetDirty(boardSystem);
                 boardSystem.RefreshBoardSlot();
 
-                foreach (BSlot bSlot in boardSystem.AllSlots)
+                foreach (BoardSlot boardSlot in boardSystem.AllSlots)
                 {
-                    if (bSlot.Card == null)
+                    if (boardSlot.Card == null)
                         continue;
 
-                    Debug.Log($"SlotNum: {bSlot.SlotNum}, {string.Join(", ", bSlot.Card.AbilitySystem.CardAbilities.Select(ability => ability.abilityId))}");
+                    Debug.Log($"SlotNum: {boardSlot.SlotNum}, {string.Join(", ", boardSlot.Card.AbilitySystem.CardAbilities.Select(ability => ability.abilityId))}");
                 }
             }
         }
 
-        private void DrawBoardCards(List<BSlot> bSlots)
+        private void DrawBoardCards(List<BoardSlot> boardSlots)
         {
             GUIStyle redTextStyle = new();
             redTextStyle.normal.textColor = new Color(244 / 255f, 100 / 255f, 81 / 255f);
@@ -111,27 +111,27 @@ namespace ERang
             statStyle.normal.background = MakeTex(2, 2, new Color(0f, 0f, 0f, 0.8f)); // 반투명 검정 배경
             statStyle.normal.textColor = Color.white;
 
-            foreach (BSlot bSlot in bSlots)
+            foreach (BoardSlot boardSlot in boardSlots)
             {
                 EditorGUILayout.BeginVertical("box", GUILayout.Width(elementWidth));
-                EditorGUILayout.LabelField($"SlotNum: {bSlot.SlotNum}");
-                EditorGUILayout.LabelField($"Index: {bSlot.Index}");
-                EditorGUILayout.LabelField($"IsOverlapCard: {bSlot.IsOverlapCard}");
+                EditorGUILayout.LabelField($"SlotNum: {boardSlot.SlotNum}");
+                EditorGUILayout.LabelField($"Index: {boardSlot.Index}");
+                EditorGUILayout.LabelField($"IsOverlapCard: {boardSlot.IsOverlapCard}");
                 EditorGUILayout.LabelField("SlotCardType");
-                bSlot.SlotCardType = (CardType)EditorGUILayout.EnumPopup(bSlot.SlotCardType);
+                boardSlot.SlotCardType = (CardType)EditorGUILayout.EnumPopup(boardSlot.SlotCardType);
 
-                BaseCard card = bSlot.Card;
+                BaseCard card = boardSlot.Card;
 
                 // CardData 선택 드롭다운 메뉴 추가
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Select Card Data");
                 if (GUILayout.Button("X", GUILayout.Width(20), GUILayout.Height(20)))
                 {
-                    bSlot.RemoveCard();
+                    boardSlot.RemoveCard();
                 }
                 EditorGUILayout.EndHorizontal();
 
-                int[] ids = bSlot.SlotCardType switch
+                int[] ids = boardSlot.SlotCardType switch
                 {
                     CardType.Master => masterCardDataIds,
                     CardType.Creature => cardDataIds,
@@ -139,7 +139,7 @@ namespace ERang
                     _ => cardDataIds,
                 };
 
-                string[] names = bSlot.SlotCardType switch
+                string[] names = boardSlot.SlotCardType switch
                 {
                     CardType.Master => masterCardDataNames,
                     CardType.Creature => cardDataNames,
@@ -152,7 +152,7 @@ namespace ERang
 
                 if (newSelectedIndex != selectedIndex)
                 {
-                    int cardId = bSlot.SlotCardType switch
+                    int cardId = boardSlot.SlotCardType switch
                     {
                         CardType.Master => masterCardDataIds[newSelectedIndex],
                         CardType.Creature => cardDataIds[newSelectedIndex],
@@ -163,7 +163,7 @@ namespace ERang
                     bool inUse = false;
                     Texture2D cardTexture = null;
 
-                    switch (bSlot.SlotCardType)
+                    switch (boardSlot.SlotCardType)
                     {
                         case CardType.Master:
                             MasterData selectedMasterCardData = MasterData.GetMasterData(cardId);
@@ -186,7 +186,7 @@ namespace ERang
                     }
 
                     // card.UpdateCardData(cardId, bSlot.SlotCardType, inUse, 0, cardTexture);
-                    bSlot.EquipCard(card);
+                    boardSlot.EquipCard(card);
                 }
 
                 if (card != null)
@@ -194,8 +194,8 @@ namespace ERang
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.BeginVertical();
                     // 카드 이미지 표시
-                    if (bSlot.Card.CardImage != null)
-                        GUILayout.Label(bSlot.Card.CardImage, GUILayout.Width(elementWidth), GUILayout.Height(150));
+                    if (boardSlot.Card.CardImage != null)
+                        GUILayout.Label(boardSlot.Card.CardImage, GUILayout.Width(elementWidth), GUILayout.Height(150));
                     else
                         GUILayout.Label("No Image", GUILayout.Width(elementWidth), GUILayout.Height(150));
 
@@ -216,7 +216,7 @@ namespace ERang
                     // 카드 ability 추가
                     if (GUILayout.Button("+", GUILayout.Width(20)))
                     {
-                        AbilitySelectorWindow.ShowWindow(bSlot, (selectedAbilityId) =>
+                        AbilitySelectorWindow.ShowWindow(boardSlot, (selectedAbilityId) =>
                         {
                             Debug.Log($"Add Ability: {selectedAbilityId}");
 

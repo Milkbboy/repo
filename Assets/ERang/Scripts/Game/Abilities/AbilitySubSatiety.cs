@@ -7,7 +7,7 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.SubSatiety;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             int value = cardAbility.abilityValue;
 
@@ -33,7 +33,7 @@ namespace ERang
             yield return new WaitForSeconds(0.1f);
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             // 포만감은 해제되지 않는 즉시 효과
             LogAbility("포만감은 해제할 수 없는 즉시 효과입니다.");

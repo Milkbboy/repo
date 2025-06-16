@@ -13,12 +13,12 @@ namespace ERang
             Instance = this;
         }
 
-        public IEnumerator FireMissile(BSlot selfSlot, List<BSlot> targetSlots, int ackCount, int damage)
+        public IEnumerator FireMissile(BoardSlot selfSlot, List<BoardSlot> targetSlots, int ackCount, int damage)
         {
             Vector3 startPosition = selfSlot.transform.position;
             List<(GameObject, Vector3)> missiles = new List<(GameObject, Vector3)>();
 
-            foreach (BSlot targetSlot in targetSlots)
+            foreach (BoardSlot targetSlot in targetSlots)
             {
                 Vector3 targetPosition = targetSlot.transform.position;
 
@@ -47,7 +47,7 @@ namespace ERang
                 Destroy(missile.Item1);
         }
 
-        public IEnumerator FireMissile(BSlot selfSlot, BSlot targetSlot, int ackCount, int damage)
+        public IEnumerator FireMissile(BoardSlot selfSlot, BoardSlot targetSlot, int ackCount, int damage)
         {
             Vector3 startPosition = selfSlot.transform.position;
 

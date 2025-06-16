@@ -10,8 +10,8 @@ namespace ERang
     {
         public AbilityType AbilityType => AbilityType.None;
 
-        IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot);
-        IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot);
+        IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot);
+        IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot);
     }
 
     /// <summary>
@@ -30,13 +30,13 @@ namespace ERang
     {
         public abstract AbilityType AbilityType { get; }
 
-        public abstract IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot);
-        public abstract IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot);
+        public abstract IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot);
+        public abstract IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot);
 
         /// <summary>
         /// 대상 슬롯 검증 - 공통 검증 로직
         /// </summary>
-        protected bool ValidateTargetSlot(BSlot targetSlot, string abilityName)
+        protected bool ValidateTargetSlot(BoardSlot targetSlot, string abilityName)
         {
             if (targetSlot?.Card == null)
             {
@@ -99,13 +99,13 @@ namespace ERang
         public abstract IEnumerator Release(BaseCard card);
 
         // 보드 슬롯용 메서드는 기본적으로 경고 출력
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             LogAbility("이 어빌리티는 핸드 카드 전용입니다.", LogType.Warning);
             yield break;
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BSlot selfSlot, BSlot targetSlot)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             LogAbility("이 어빌리티는 핸드 카드 전용입니다.", LogType.Warning);
             yield break;
