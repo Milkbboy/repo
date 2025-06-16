@@ -69,18 +69,18 @@ namespace ERang
         // ActionProcessor 위임 메서드들 (기존 호환성)
         // ========================================
 
-        public bool HandCardUse(HCard hCard, BSlot targetSlot)
+        public bool HandCardUse(HandCard handCard, BSlot targetSlot)
         {
             if (battleController is BattleController bc)
-                return bc.UseHandCard(hCard, targetSlot);
+                return bc.UseHandCard(handCard, targetSlot);
 
             return false;
         }
 
-        public void BoardSlotEquipCard(HCard hCard, BSlot boardSlot)
+        public void BoardSlotEquipCard(HandCard handCard, BSlot boardSlot)
         {
             if (battleController is BattleController bc)
-                bc.EquipCardToSlot(hCard, boardSlot);
+                bc.EquipCardToSlot(handCard, boardSlot);
         }
 
         public IEnumerator HandCardUse(string cardUid, BSlot targetSlot)

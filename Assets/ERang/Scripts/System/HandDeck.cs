@@ -9,7 +9,7 @@ namespace ERang
     {
         public static HandDeck Instance { get; private set; }
 
-        public HCard DraggingCard => draggingCard;
+        public HandCard DraggingCard => draggingCard;
 
         // 핸드 카드 생성을 위한 프리팹
         public GameObject cardPrefab;
@@ -22,9 +22,9 @@ namespace ERang
         public Transform GraveTransform;
 
         // 핸드 카드 리스트
-        private readonly List<HCard> hCards = new();
+        private readonly List<HandCard> handCards = new();
 
-        private HCard draggingCard;
+        private HandCard draggingCard;
 
         private float cardWidth = 0f;
         private float cardSpacing = 1f;
@@ -55,31 +55,31 @@ namespace ERang
         /// 드래깅 카드 설정
         /// - 다른 핸드 카드의 OnMouseEnter, OnMouseExit 이벤트를 방지하기 위해 설정
         /// </summary>
-        public void SetDraggingCard(HCard hCard)
+        public void SetDraggingCard(HandCard handCard)
         {
-            draggingCard = hCard;
+            draggingCard = handCard;
         }
 
-        public void MagicCardUse(HCard hCard)
+        public void MagicCardUse(HandCard handCard)
         {
-            if (hCard.Card != null && hCard.Card is not MagicCard)
+            if (handCard.Card != null && handCard.Card is not MagicCard)
             {
-                Debug.LogWarning($"{hCard.Card.ToCardLogInfo()}. 마법 카드가 아닙니다.");
+                Debug.LogWarning($"{handCard.Card.ToCardLogInfo()}. 마법 카드가 아닙니다.");
                 return;
             }
 
             // 공격 타입이 Select가 아닌 경우 (즉시 발동 마법)
-            if (hCard.IsSelectAttackTypeCard() == false)
+            if (handCard.IsSelectAttackTypeCard() == false)
             {
-                Debug.Log($"{hCard.Card.ToCardLogInfo()}. 즉시 발동 마법 카드 사용!");
-                BattleLogic.Instance.HandCardUse(hCard, null);
+                Debug.Log($"{handCard.Card.ToCardLogInfo()}. 즉시 발동 마법 카드 사용!");
+                BattleLogic.Instance.HandCardUse(handCard, null);
                 return;
             }
 
             // 타겟팅 화살표 확인
             if (targetingArrow == null)
             {
-                Debug.LogError($"{hCard.Card.ToCardLogInfo()}. 타겟팅 화살표가 없습니다.");
+                Debug.LogError($"{handCard.Card.ToCardLogInfo()}. 타겟팅 화살표가 없습니다.");
                 return;
             }
 
@@ -88,7 +88,7 @@ namespace ERang
 
             if (selectedSlot == -1)
             {
-                Debug.LogWarning($"{hCard.Card.ToCardLogInfo()}. 타겟이 선택되지 않았습니다.");
+                Debug.LogWarning($"{handCard.Card.ToCardLogInfo()}. 타겟이 선택되지 않았습니다.");
                 return;
             }
 
@@ -97,7 +97,7 @@ namespace ERang
 
             if (targetSlot == null)
             {
-                Debug.LogError($"{hCard.Card.ToCardLogInfo()}. 타겟 슬롯({selectedSlot})을 찾을 수 없습니다.");
+                Debug.LogError($"{handCard.Card.ToCardLogInfo()}. 타겟 슬롯({selectedSlot})을 찾을 수 없습니다.");
                 return;
             }
 
@@ -105,8 +105,8 @@ namespace ERang
             targetingArrow.EnableArrow(false);
 
             // 마법 카드 사용 성공!
-            Debug.Log($"{hCard.Card.ToCardLogInfo()}. 타겟: {targetSlot.ToSlotLogInfo()} - 마법 카드 사용 성공!");
-            BattleLogic.Instance.HandCardUse(hCard, targetSlot);
+            Debug.Log($"{handCard.Card.ToCardLogInfo()}. 타겟: {targetSlot.ToSlotLogInfo()} - 마법 카드 사용 성공!");
+            BattleLogic.Instance.HandCardUse(handCard, targetSlot);
         }
 
         public void SetTargettingArraow(bool isShow)
@@ -119,7 +119,7 @@ namespace ERang
         /// </summary>
         public bool IsTargetSlot(int slotNum)
         {
-            HCard dragginCard = hCards.Find(x => x.IsDragging());
+            HandCard dragginCard = handCards.Find(x => x.IsDragging());
 
             if (dragginCard == null)
             {
@@ -139,10 +139,10 @@ namespace ERang
             GameObject cardObject = Instantiate(cardPrefab, handDeckTransform);
             cardObject.name = $"HandCard_{card.Id}";
 
-            HCard handCard = cardObject.GetComponent<HCard>();
+            HandCard handCard = cardObject.GetComponent<HandCard>();
             handCard.SetCard(card);
 
-            hCards.Add(handCard);
+            handCards.Add(handCard);
 
             DrawHandCards();
 
@@ -170,17 +170,17 @@ namespace ERang
             cardSpacing = cardWidth + overlap;
 
             // 카드 정렬 로직 시작
-            float totalWidth = (hCards.Count - 1) * cardSpacing;
+            float totalWidth = (handCards.Count - 1) * cardSpacing;
             float startX = -totalWidth / 2;
 
-            for (int i = 0; i < hCards.Count; i++)
+            for (int i = 0; i < handCards.Count; i++)
             {
                 // 카드의 X 위치 설정, Y와 Z 위치는 고정
                 float xPosition = startX + i * cardSpacing;
                 // 카드의 Z 위치를 인덱스에 따라 조정하여 위에 있는 카드가 앞으로 오도록 설정
                 // float zPosition = i * zOffset;
 
-                hCards[i].SetDrawPostion(new Vector3(xPosition, 0, 0));
+                handCards[i].SetDrawPostion(new Vector3(xPosition, 0, 0));
             }
         }
 
@@ -190,12 +190,12 @@ namespace ERang
         /// <param name="cardUid"></param>
         public void RemoveHandCard(string cardUid)
         {
-            HCard handCard = hCards.Find(x => x.CardUid == cardUid);
+            HandCard handCard = handCards.Find(x => x.CardUid == cardUid);
 
             if (handCard == null)
                 return;
 
-            hCards.Remove(handCard);
+            handCards.Remove(handCard);
             Destroy(handCard.gameObject);
 
             DrawHandCards();
@@ -206,17 +206,17 @@ namespace ERang
         /// </summary>
         public void TurnEndRemoveHandCard()
         {
-            foreach (HCard handCard in hCards)
+            foreach (HandCard handCard in handCards)
             {
                 handCard.DiscardAnimation(GraveTransform);
             }
 
-            hCards.Clear();
+            handCards.Clear();
         }
 
         public void UpdateHandCardUI()
         {
-            foreach (HCard handCard in hCards)
+            foreach (HandCard handCard in handCards)
             {
                 handCard.UpdateCardUI();
             }

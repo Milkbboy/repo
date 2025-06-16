@@ -131,7 +131,7 @@ namespace ERang
             this.card = card;
 
             cardObject.SetActive(true);
-            cardObject.GetComponent<HCard>().SetCard(card);
+            cardObject.GetComponent<HandCard>().SetCard(card);
             cardUI.SetCard(card);
 
             return true;

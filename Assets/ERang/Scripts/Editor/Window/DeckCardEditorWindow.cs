@@ -188,15 +188,15 @@ namespace ERang
             }
         }
 
-        private HCard FindHCardByCardUid(string cardUid)
+        private HandCard FindHandCardByCardUid(string cardUid)
         {
-            HCard[] hCards = FindObjectsOfType<HCard>();
+            HandCard[] handCards = FindObjectsOfType<HandCard>();
 
-            foreach (HCard hCard in hCards)
+            foreach (HandCard handCard in handCards)
             {
-                if (hCard.Card.Uid == cardUid)
+                if (handCard.Card.Uid == cardUid)
                 {
-                    return hCard;
+                    return handCard;
                 }
             }
             return null;

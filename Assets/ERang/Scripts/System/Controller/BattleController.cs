@@ -58,7 +58,7 @@ namespace ERang
             }
 
             Debug.Log("✅ 모든 필수 시스템 초기화 완료. 배틀 시작");
-            
+
             InitializeBattle();
             yield return StartCoroutine(StartBattle());
         }
@@ -199,14 +199,14 @@ namespace ERang
         // ActionProcessor 위임 메서드들
         // ========================================
 
-        public bool UseHandCard(HCard hCard, BSlot targetSlot)
+        public bool UseHandCard(HandCard handCard, BSlot targetSlot)
         {
-            return actionProcessor.UseHandCard(hCard, targetSlot);
+            return actionProcessor.UseHandCard(handCard, targetSlot);
         }
 
-        public void EquipCardToSlot(HCard hCard, BSlot boardSlot)
+        public void EquipCardToSlot(HandCard handCard, BSlot boardSlot)
         {
-            actionProcessor.EquipCardToSlot(hCard, boardSlot);
+            actionProcessor.EquipCardToSlot(handCard, boardSlot);
         }
 
         public IEnumerator UseHandCard(string cardUid, BSlot targetSlot)

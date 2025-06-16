@@ -27,45 +27,45 @@ namespace ERang
             this.deckManager = deckManager;
         }
 
-        public bool UseHandCard(HCard hCard, BSlot targetSlot)
+        public bool UseHandCard(HandCard handCard, BSlot targetSlot)
         {
-            if (CanUseHandCard(hCard.Card.Uid) == false)
+            if (CanUseHandCard(handCard.Card.Uid) == false)
                 return false;
 
-            if (hCard.Card.CardType == CardType.Creature || hCard.Card.CardType == CardType.Building)
+            if (handCard.Card.CardType == CardType.Creature || handCard.Card.CardType == CardType.Building)
             {
-                EquipCardToSlot(hCard, targetSlot);
+                EquipCardToSlot(handCard, targetSlot);
                 return true;
             }
 
-            if (hCard.Card.CardType == CardType.Magic)
+            if (handCard.Card.CardType == CardType.Magic)
             {
-                StartCoroutine(UseHandCard(hCard.Card.Uid, targetSlot));
+                StartCoroutine(UseHandCard(handCard.Card.Uid, targetSlot));
                 return true;
             }
 
             return false;
         }
 
-        public void EquipCardToSlot(HCard hCard, BSlot boardSlot)
+        public void EquipCardToSlot(HandCard handCard, BSlot boardSlot)
         {
-            if (boardSlot.SlotCardType != hCard.Card.CardType)
+            if (boardSlot.SlotCardType != handCard.Card.CardType)
             {
-                hCard.GoBackPosition();
-                Debug.LogError($"카드 타입이 일치하지 않아 장착 실패. {boardSlot.SlotCardType}에 {hCard.Card.CardType} 장착 시도");
+                handCard.GoBackPosition();
+                Debug.LogError($"카드 타입이 일치하지 않아 장착 실패. {boardSlot.SlotCardType}에 {handCard.Card.CardType} 장착 시도");
                 return;
             }
 
             // 핸드 카드 => 보드 카드 이동
-            deckManager.HandCardToBoard(hCard.Card);
+            deckManager.HandCardToBoard(handCard.Card);
 
             // 보드 슬롯에 카드 장착
-            boardSlot.EquipCard(hCard.Card);
+            boardSlot.EquipCard(handCard.Card);
 
             // 카드 비용 소모
-            BoardSystem.Instance.CardCost(player, hCard.Card);
+            BoardSystem.Instance.CardCost(player, handCard.Card);
 
-            Debug.Log($"{boardSlot.ToSlotLogInfo()} 에 {hCard.Card.ToCardLogInfo()} 장착");
+            Debug.Log($"{boardSlot.ToSlotLogInfo()} 에 {handCard.Card.ToCardLogInfo()} 장착");
         }
 
         public IEnumerator UseHandCard(string cardUid, BSlot targetSlot)

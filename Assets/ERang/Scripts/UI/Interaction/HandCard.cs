@@ -5,7 +5,7 @@ using System;
 
 namespace ERang
 {
-    public class HCard : MonoBehaviour
+    public class HandCard : MonoBehaviour
     {
         public string CardUid => cardUid;
         public BaseCard Card => card;

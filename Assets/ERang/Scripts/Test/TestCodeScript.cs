@@ -13,7 +13,7 @@ namespace ERang
 
         private float cardWidth = 0f;
         private float cardSpacing = 1f;
-        private List<HCard> handCards = new();
+        private List<HandCard> handCards = new();
         private bool flip = false;
 
         void Awake()
@@ -94,7 +94,7 @@ namespace ERang
 
                 GameObject cardObject = Instantiate(cardPrefab, transform);
 
-                HCard handCard = cardObject.GetComponent<HCard>();
+                HandCard handCard = cardObject.GetComponent<HandCard>();
                 handCard.SetCard(card);
 
                 handCards.Add(handCard);
