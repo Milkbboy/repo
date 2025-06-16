@@ -116,11 +116,9 @@ namespace ERang
             LevelData levelData = LevelGroupData.GetLevelData(Player.Instance.levelId);
 
             // 의존성 있는 매니저들 초기화
-            if (turnManager is TurnManager tm)
-                tm.Initialize(player, masterCard, deckManager);
+            turnManager.Initialize(player, masterCard, deckManager);
 
-            if (actionProcessor is ActionProcessor ap)
-                ap.Initialize(player, masterCard, deckManager);
+            actionProcessor.Initialize(player, masterCard, deckManager);
 
             // 몬스터 카드 생성
             yield return StartCoroutine(BoardSystem.Instance.CreateMonsterCards(levelData.cardIds));
@@ -189,6 +187,7 @@ namespace ERang
 
         /// <summary>
         /// 턴 종료 (UI에서 호출됨)
+        /// Battle Scene => Board => Canvas => Turn => Button 에서 호출
         /// </summary>
         public void EndTurn()
         {

@@ -17,14 +17,8 @@ namespace ERang
                 yield break;
             }
 
-            if (BattleLogic.Instance == null)
-            {
-                LogAbility("BattleLogic 인스턴스가 없습니다.", LogType.Error);
-                yield break;
-            }
-
             LogAbility($"포만감 증가: +{value}");
-            BattleLogic.Instance.UpdateSatietyGauge(value);
+            BattleController.Instance.UpdateSatietyGauge(value);
 
             yield return new WaitForSeconds(0.1f);
         }

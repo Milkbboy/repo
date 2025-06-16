@@ -153,7 +153,7 @@ namespace ERang
                 {
                     Debug.Log($"HCard. Nearest Slot: {nearestSlot.Index}, card: {nearestSlot.Card}");
 
-                    if (nearestSlot.Card == null && BattleLogic.Instance.HandCardUse(this, nearestSlot))
+                    if (nearestSlot.Card == null && BattleController.Instance.UseHandCard(this, nearestSlot))
                         return;
                 }
             }

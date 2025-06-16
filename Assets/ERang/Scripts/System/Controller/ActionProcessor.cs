@@ -200,7 +200,7 @@ namespace ERang
             if (monsterCount == 0 || boardSlot.SlotNum == 0)
             {
                 // 배틀 종료 이벤트 발생 (추후 이벤트 시스템 도입 시)
-                yield return StartCoroutine(BattleLogic.Instance.BattleEnd(monsterCount == 0));
+                yield return StartCoroutine(BattleController.Instance.EndBattle(monsterCount == 0));
             }
         }
     }

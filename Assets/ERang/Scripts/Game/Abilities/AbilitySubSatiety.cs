@@ -17,18 +17,12 @@ namespace ERang
                 yield break;
             }
 
-            if (BattleLogic.Instance == null)
-            {
-                LogAbility("BattleLogic 인스턴스가 없습니다.", LogType.Error);
-                yield break;
-            }
-
             // 음수로 변환하여 포만감 감소
             int reductionValue = -value;
 
             LogAbility($"포만감 감소: {reductionValue}");
 
-            BattleLogic.Instance.UpdateSatietyGauge(reductionValue);
+            BattleController.Instance.UpdateSatietyGauge(reductionValue);
 
             yield return new WaitForSeconds(0.1f);
         }

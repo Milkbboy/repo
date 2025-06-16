@@ -150,7 +150,7 @@ namespace ERang
             {
                 RemoveCard();
 
-                yield return StartCoroutine(BattleLogic.Instance.RemoveBoardCard(slotNum));
+                yield return StartCoroutine(BattleController.Instance.RemoveBoardCard(slotNum));
             }
         }
 

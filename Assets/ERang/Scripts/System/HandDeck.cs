@@ -72,7 +72,7 @@ namespace ERang
             if (handCard.IsSelectAttackTypeCard() == false)
             {
                 Debug.Log($"{handCard.Card.ToCardLogInfo()}. 즉시 발동 마법 카드 사용!");
-                BattleLogic.Instance.HandCardUse(handCard, null);
+                BattleController.Instance.UseHandCard(handCard, null);
                 return;
             }
 
@@ -106,7 +106,7 @@ namespace ERang
 
             // 마법 카드 사용 성공!
             Debug.Log($"{handCard.Card.ToCardLogInfo()}. 타겟: {targetSlot.ToSlotLogInfo()} - 마법 카드 사용 성공!");
-            BattleLogic.Instance.HandCardUse(handCard, targetSlot);
+            BattleController.Instance.UseHandCard(handCard, targetSlot);
         }
 
         public void SetTargettingArraow(bool isShow)
