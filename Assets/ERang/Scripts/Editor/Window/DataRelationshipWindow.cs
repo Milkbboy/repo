@@ -34,7 +34,7 @@ namespace ERang
         private GUIStyle abilityStyle;
         private GUIStyle valueStyle;
 
-        [MenuItem("ERang/Data Relationship Analyzer")]
+        [MenuItem("ERang/Tools/Data Relationship Analyzer")]
         public static void ShowWindow()
         {
             DataRelationshipWindow window = GetWindow<DataRelationshipWindow>("Data Relationship Analyzer");
