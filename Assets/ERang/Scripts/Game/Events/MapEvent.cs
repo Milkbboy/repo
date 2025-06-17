@@ -15,7 +15,7 @@ namespace ERang
         void Start()
         {
             // 맵 랜덤 이벤트
-            string randomEventsJson = PlayerPrefsUtility.GetString("RandomEvents", null);
+            string randomEventsJson = PlayerDataManager.GetValue(PlayerDataKeys.RandomEvents);
 
             if (string.IsNullOrEmpty(randomEventsJson))
             {
@@ -34,10 +34,10 @@ namespace ERang
             }
 
             // 층 증가
-            int floor = PlayerPrefsUtility.GetInt("Floor", 1);
+            int floor = PlayerDataManager.GetValue(PlayerDataKeys.Floor);
             Player.Instance.floor = floor + 1;
 
-            PlayerPrefsUtility.SetInt("Floor", Player.Instance.floor);
+            PlayerDataManager.SetValue(PlayerDataKeys.Floor, Player.Instance.floor);
         }
 
         public void ChangeScene()

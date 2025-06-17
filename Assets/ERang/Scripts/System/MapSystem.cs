@@ -215,11 +215,11 @@ namespace ERang
 
             // 생성된 맵 너비 저장
             string depthWidthJson = JsonConvert.SerializeObject(depthWidths, Formatting.None);
-            PlayerPrefsUtility.SetString("DepthWidths", depthWidthJson);
+            PlayerDataManager.SetValue(PlayerDataKeys.DepthWidths, depthWidthJson);
 
             // 생성된 맵 위치 저장
             string locationsJson = JsonConvert.SerializeObject(locations);
-            PlayerPrefsUtility.SetString("Locations", locationsJson);
+            PlayerDataManager.SetValue(PlayerDataKeys.Locations, locationsJson);
         }
 
         private MapLocation GetLocation(int d, int i)

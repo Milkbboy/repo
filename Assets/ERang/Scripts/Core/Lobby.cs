@@ -107,7 +107,7 @@ namespace ERang
                 return;
 
             // 선택된 MasterId를 PlayerPrefs에 저장
-            PlayerPrefsUtility.SetInt("MasterId", selectedMasterId);
+            PlayerDataManager.SetValue(PlayerDataKeys.MasterId, selectedMasterId);
 
             nextScene.Play();
         }

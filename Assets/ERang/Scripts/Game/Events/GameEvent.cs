@@ -25,7 +25,7 @@ namespace ERang
         void Start()
         {
             // 맵 이벤트 or 보상 이벤트 구분
-            string lastScene = PlayerPrefsUtility.GetString("LastScene", "Battle");
+            string lastScene = PlayerDataManager.GetValue(PlayerDataKeys.LastScene);
 
             if (lastScene == "Event")
                 lastScene = "Battle";
@@ -38,7 +38,7 @@ namespace ERang
 
         public void NextScene()
         {
-            PlayerPrefsUtility.SetString("LastScene", "Event");
+            PlayerDataManager.SetValue(PlayerDataKeys.LastScene, "Event");
 
             NextScene nextScene = GetComponent<NextScene>();
             nextScene.Play("Map");

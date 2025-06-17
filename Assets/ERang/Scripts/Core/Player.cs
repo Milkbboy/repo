@@ -106,35 +106,37 @@ namespace ERang
             CardIds.Add(cardId);
 
             string cardIdsJson = JsonConvert.SerializeObject(CardIds);
-            PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
+            PlayerDataManager.SetValue(PlayerDataKeys.MasterCards, cardIdsJson);
         }
         #endregion
 
         #region 저장 및 불러오기
         public void SaveMaster(int nextFloor, int locationId, bool keepSatiety)
         {
-            PlayerPrefsUtility.SetInt("Floor", nextFloor);
-            PlayerPrefsUtility.SetInt("MasterId", masterId);
-            PlayerPrefsUtility.SetInt("LevelId", levelId);
-            PlayerPrefsUtility.SetInt("LastLocationId", locationId);
-            PlayerPrefsUtility.SetInt("MasterHp", Hp);
-            PlayerPrefsUtility.SetInt("Gold", Gold);
+            PlayerDataManager.SetValues(
+                (PlayerDataKeys.MasterId, masterId),
+                (PlayerDataKeys.Floor, floor),
+                (PlayerDataKeys.LevelId, levelId),
+                (PlayerDataKeys.LastLocationId, locationId),
+                (PlayerDataKeys.MasterHp, Hp),
+                (PlayerDataKeys.Gold, Gold)
+            );
 
             if (keepSatiety)
-                PlayerPrefsUtility.SetInt("Satiety", Satiety);
+                PlayerDataManager.SetValue(PlayerDataKeys.Satiety, Satiety);
 
             // Master 카드 ids 저장
             string cardIdsJson = JsonConvert.SerializeObject(CardIds);
-            PlayerPrefsUtility.SetString("MasterCards", cardIdsJson);
+            PlayerDataManager.SetValue(PlayerDataKeys.MasterCards, cardIdsJson);
 
             floor = nextFloor;
         }
 
         private void LoadPlayer()
         {
-            masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
-            floor = PlayerPrefsUtility.GetInt("Floor", 1);
-            levelId = PlayerPrefsUtility.GetInt("LevelId", 100100101);
+            masterId = PlayerDataManager.GetValue(PlayerDataKeys.MasterId);
+            floor = PlayerDataManager.GetValue(PlayerDataKeys.Floor);
+            levelId = PlayerDataManager.GetValue(PlayerDataKeys.LevelId);
 
             // 마스터
             MasterData masterData = MasterData.GetMasterData(masterId);
@@ -167,12 +169,12 @@ namespace ERang
 
         private void LoadSavedPlayerData()
         {
-            string selectLocationJson = PlayerPrefsUtility.GetString("SelectLocation", null);
+            string selectLocationJson = PlayerDataManager.GetValue(PlayerDataKeys.SelectLocation);
             if (selectLocationJson != null)
                 selectLocation = JsonConvert.DeserializeObject<MapLocation>(selectLocationJson);
 
             // 저장된 마스터 HP가 있으면 설정
-            int savedHp = PlayerPrefsUtility.GetInt("MasterHp", -1);
+            int savedHp = PlayerDataManager.GetValue(PlayerDataKeys.MasterHp);
 
             if (savedHp != -1)
             {
@@ -181,7 +183,7 @@ namespace ERang
             }
 
             // 저장된 마스터 골드가 있으면 설정
-            int savedGold = PlayerPrefsUtility.GetInt("Gold", -1);
+            int savedGold = PlayerDataManager.GetValue(PlayerDataKeys.Gold);
 
             if (savedGold != -1)
             {
@@ -190,7 +192,7 @@ namespace ERang
             }
 
             // 저장된 마스터 카드가 있으면 설정
-            string savedCardsJson = PlayerPrefsUtility.GetString("MasterCards", null);
+            string savedCardsJson = PlayerDataManager.GetValue(PlayerDataKeys.MasterCards);
 
             if (!string.IsNullOrEmpty(savedCardsJson))
             {

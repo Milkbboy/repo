@@ -36,17 +36,17 @@ namespace ERang
             mapSystem = GetComponent<MapSystem>();
             mapViewer = GetComponent<MapViewer>();
 
-            actId = PlayerPrefsUtility.GetInt("ActId", 0);
-            floor = PlayerPrefsUtility.GetInt("Floor", 1);
-            lastLocationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
+            actId = PlayerDataManager.GetValue(PlayerDataKeys.ActId);
+            floor = PlayerDataManager.GetValue(PlayerDataKeys.Floor);
+            lastLocationId = PlayerDataManager.GetValue(PlayerDataKeys.LastLocationId);
 
-            string seletedDepthIndiesJson = PlayerPrefsUtility.GetString("SelectedDepthIndies", null);
+            string seletedDepthIndiesJson = PlayerDataManager.GetValue(PlayerDataKeys.SelectedDepthIndies);
 
             if (!string.IsNullOrEmpty(seletedDepthIndiesJson))
                 selectedDepthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(seletedDepthIndiesJson);
 
             // 맵 랜덤 이벤트
-            string randomEventsJson = PlayerPrefsUtility.GetString("RandomEvents", null);
+            string randomEventsJson = PlayerDataManager.GetValue(PlayerDataKeys.RandomEvents);
 
             if (!string.IsNullOrEmpty(randomEventsJson))
                 randomEvents = JsonConvert.DeserializeObject<List<int>>(randomEventsJson);
@@ -189,7 +189,7 @@ namespace ERang
 
             NextScene(levelId == 0 ? "Event" : "Battle");
 
-            PlayerPrefsUtility.SetString("LastScene", "Map");
+            PlayerDataManager.SetValue(PlayerDataKeys.LastScene, "Map");
         }
 
         public void NextScene(string sceneName)
@@ -214,17 +214,17 @@ namespace ERang
         private bool LoadMapData()
         {
             // floor 로드
-            floor = PlayerPrefsUtility.GetInt("Floor", 1);
+            floor = PlayerDataManager.GetValue(PlayerDataKeys.Floor);
 
             // 선택한 위치 인덱스 리스트 로드
             // selectedDepthIndies: [3, 0], [4, 0], selectedDepthIndiesJson: {"3":0,"4":0}, selectedDepthIndies2: [3, 0], [4, 0]
-            string selectedDepthIndiesJson = PlayerPrefsUtility.GetString("SelectedDepthIndies", "{\"1\":0}");
+            string selectedDepthIndiesJson = PlayerDataManager.GetValue(PlayerDataKeys.SelectedDepthIndies);
             selectedDepthIndies = JsonConvert.DeserializeObject<Dictionary<int, int>>(selectedDepthIndiesJson);
 
             Debug.Log($"selectedDepthIndies: {string.Join(", ", selectedDepthIndies)}, selectedDepthIndiesJson: {selectedDepthIndiesJson}");
 
             // Load depthWidth
-            string depthWidthsJson = PlayerPrefsUtility.GetString("DepthWidths", null);
+            string depthWidthsJson = PlayerDataManager.GetValue(PlayerDataKeys.DepthWidths);
 
             if (string.IsNullOrEmpty(depthWidthsJson))
                 return false;
@@ -232,7 +232,7 @@ namespace ERang
             mapSystem.depthWidths = JsonConvert.DeserializeObject<Dictionary<int, int>>(depthWidthsJson);
 
             // Load locations
-            string locationsJson = PlayerPrefsUtility.GetString("Locations", null);
+            string locationsJson = PlayerDataManager.GetValue(PlayerDataKeys.Locations);
 
             if (string.IsNullOrEmpty(locationsJson))
                 return false;
@@ -247,24 +247,22 @@ namespace ERang
 
         private void SaveMapData()
         {
-            PlayerPrefsUtility.SetInt("ActId", actId);
-            PlayerPrefsUtility.SetInt("Floor", floor);
-            PlayerPrefsUtility.SetInt("LevelId", levelId);
-            PlayerPrefsUtility.SetInt("LastLocationId", selectLocationId);
-
             // 선택한 위치
             string selectLocationJson = JsonConvert.SerializeObject(selectLocation, Formatting.None);
-            PlayerPrefsUtility.SetString("SelectLocation", selectLocationJson);
-
             // 선택한 위치 인덱스 리스트
             string selectedDepthIndiesJson = JsonConvert.SerializeObject(selectedDepthIndies, Formatting.None);
-            PlayerPrefsUtility.SetString("SelectedDepthIndies", selectedDepthIndiesJson);
-
             // 뽑힌 랜덤 이벤트
             string randomEventsJson = JsonConvert.SerializeObject(randomEvents, Formatting.None);
-            PlayerPrefsUtility.SetString("RandomEvents", randomEventsJson);
 
-            PlayerPrefsUtility.Save();
+            PlayerDataManager.SetValues(
+                (PlayerDataKeys.ActId, actId),
+                (PlayerDataKeys.Floor, floor),
+                (PlayerDataKeys.LevelId, levelId),
+                (PlayerDataKeys.LastLocationId, selectLocationId),
+                (PlayerDataKeys.SelectLocation, selectLocationJson),
+                (PlayerDataKeys.SelectedDepthIndies, selectedDepthIndiesJson),
+                (PlayerDataKeys.RandomEvents, randomEventsJson)
+            );
 
             Debug.Log($"맵 저장 {actId} 액트 {floor} 층, lastLocationId: {selectLocationId}");
         }

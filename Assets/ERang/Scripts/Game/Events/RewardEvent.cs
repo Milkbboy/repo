@@ -27,11 +27,8 @@ public class RewardEvent : MonoBehaviour
 
     public void RewardCards()
     {
-        int masterId = PlayerPrefsUtility.GetInt("MasterId", 1001);
-        int levelId = PlayerPrefsUtility.GetInt("LevelId", 100100101);
-
-        PlayerPrefsUtility.SetInt("MasterId", masterId);
-        PlayerPrefsUtility.SetInt("LevelId", levelId);
+        int masterId = PlayerDataManager.GetValue(PlayerDataKeys.MasterId);
+        int levelId = PlayerDataManager.GetValue(PlayerDataKeys.LevelId);
 
         LevelData levelData = LevelGroupData.GetLevelData(levelId);
 
@@ -159,7 +156,7 @@ public class RewardEvent : MonoBehaviour
             {
                 Debug.Log($"Selected Hp Card: ${selectedCard.Card.Hp}");
                 Player.Instance.RecoverHp(hpCard.Hp);
-                PlayerPrefsUtility.SetInt("MasterHp", Player.Instance.Hp);
+                PlayerDataManager.SetValue(PlayerDataKeys.MasterHp, Player.Instance.Hp);
             }
             else
             {
@@ -175,7 +172,7 @@ public class RewardEvent : MonoBehaviour
             {
                 Debug.Log($"Selected Gold Card: ${goldCard.Gold}");
                 Player.Instance.AddGold(goldCard.Gold);
-                PlayerPrefsUtility.SetInt("MasterGold", Player.Instance.Gold);
+                PlayerDataManager.SetValue(PlayerDataKeys.MasterGold, Player.Instance.Gold);
             }
             else
             {
@@ -189,7 +186,7 @@ public class RewardEvent : MonoBehaviour
 
             Player.Instance.AddCard(selectedCard.Card.Id);
 
-            PlayerPrefsUtility.SetString("MasterCards", JsonConvert.SerializeObject(Player.Instance.AllCards.Select(card => card.Id)));
+            PlayerDataManager.SetValue(PlayerDataKeys.MasterCards, JsonConvert.SerializeObject(Player.Instance.AllCards.Select(card => card.Id)));
 
             selectedCard.DiscardAnimation(deckPosition);
 

@@ -35,7 +35,7 @@ namespace ERang
             if (Instance == null)
                 Instance = this;
 
-            keepSatiety = PlayerPrefsUtility.GetValue<bool>("KeepSatiety", false);
+            keepSatiety = PlayerDataManager.GetValue(PlayerDataKeys.KeepSatiety);
             Debug.Log($"포만감 저장 여부: {keepSatiety}");
         }
 
@@ -102,7 +102,7 @@ namespace ERang
                 satietyUI.gameObject.SetActive(true);
 
                 if (keepSatiety)
-                    player.Satiety = PlayerPrefsUtility.GetInt("Satiety", player.Satiety);
+                    player.Satiety = PlayerDataManager.GetValue(PlayerDataKeys.Satiety);
 
                 satietyUI.UpdateSatiety(player.Satiety, player.MaxSatiety);
             }
@@ -133,7 +133,7 @@ namespace ERang
         public IEnumerator EndBattle(bool isWin)
         {
             int nextFloor = 0;
-            int locationId = PlayerPrefsUtility.GetInt("LastLocationId", 0);
+            int locationId = PlayerDataManager.GetValue(PlayerDataKeys.LastLocationId);
 
             if (isWin)
             {
@@ -147,13 +147,14 @@ namespace ERang
             {
                 resultText.text = "YOU LOSE";
 
-                PlayerPrefsUtility.SetInt("MasterId", 0);
-                PlayerPrefsUtility.SetInt("LevelId", 0);
-                PlayerPrefsUtility.SetInt("LastLocationId", 0);
-                PlayerPrefsUtility.SetInt("MasterHp", 0);
-
-                PlayerPrefsUtility.SetInt("AreaId", 0);
-                PlayerPrefsUtility.SetString("MasterCards", null);
+                PlayerDataManager.SetValues(
+                    (PlayerDataKeys.MasterId, 0),
+                    (PlayerDataKeys.LevelId, 0),
+                    (PlayerDataKeys.LastLocationId, 0),
+                    (PlayerDataKeys.MasterHp, 0),
+                    (PlayerDataKeys.AreaId, 0),
+                    (PlayerDataKeys.MasterCards, null)
+                );
             }
 
             Debug.Log($"배틀 종료 {isWin}, loastLocationId: {locationId}, nextFloor: {nextFloor}");
@@ -165,7 +166,7 @@ namespace ERang
             if (nextSceneObject.TryGetComponent(out NextScene nextScene))
                 nextScene.Play(isWin ? "Event" : "Lobby");
 
-            PlayerPrefsUtility.SetString("LastScene", "Battle");
+            PlayerDataManager.SetValue(PlayerDataKeys.LastScene, "Battle");
         }
 
         /// <summary>
