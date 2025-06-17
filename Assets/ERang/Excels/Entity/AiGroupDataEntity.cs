@@ -4,6 +4,7 @@ namespace ERang
     public class AiGroupDataEntity
     {
         public int AiGroup_Id;
+        public string NameDesc;
         public string Type;
         public string Ai_Group_1;
         public string Ai_Group_2;

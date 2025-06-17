@@ -85,15 +85,21 @@ public class ExcelImporter : AssetPostprocessor
 	{
 		Directory.CreateDirectory(Path.GetDirectoryName(assetPath));
 
-		var asset = AssetDatabase.LoadAssetAtPath(assetPath, assetType);
-
-		if (asset == null)
+		// 🔄 기존 asset이 있으면 삭제하고 새로 생성 (Excel 데이터로 완전 초기화)
+		var existingAsset = AssetDatabase.LoadAssetAtPath(assetPath, assetType);
+		if (existingAsset != null)
 		{
-			asset = ScriptableObject.CreateInstance(assetType.Name);
-			AssetDatabase.CreateAsset((ScriptableObject)asset, assetPath);
-			asset.hideFlags = HideFlags.None;
+			Debug.Log($"[ExcelImporter] Deleting existing asset for fresh import: {assetPath}");
+			AssetDatabase.DeleteAsset(assetPath);
+			AssetDatabase.Refresh();
 		}
 
+		// 새로운 asset 생성
+		var asset = ScriptableObject.CreateInstance(assetType.Name);
+		AssetDatabase.CreateAsset((ScriptableObject)asset, assetPath);
+		asset.hideFlags = HideFlags.None;
+
+		Debug.Log($"[ExcelImporter] Created fresh asset: {assetPath}");
 		return asset;
 	}
 

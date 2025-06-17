@@ -71,6 +71,10 @@ namespace ERang
         private bool isEditMode = false;
         private ChangeTracker changeTracker = new ChangeTracker();
 
+        // 연결 필드 편집용 데이터
+        private Dictionary<string, bool> connectionEditStates = new Dictionary<string, bool>();
+        private Dictionary<string, int> selectedDropdownIndices = new Dictionary<string, int>();
+
         // GUI 스타일
         private GUIStyle headerStyle;
         private GUIStyle cardStyle;
@@ -325,6 +329,7 @@ namespace ERang
                     changeTracker.RecordOriginal($"card_{card.card_id}_def", card.def);
                     changeTracker.RecordOriginal($"card_{card.card_id}_costMana", card.costMana);
                     changeTracker.RecordOriginal($"card_{card.card_id}_costGold", card.costGold);
+                    changeTracker.RecordOriginal($"card_{card.card_id}_aiGroup_ids", string.Join(",", card.aiGroup_ids));
                 }
 
                 if (currentRelationship?.aiDatas != null)
@@ -336,6 +341,7 @@ namespace ERang
                             changeTracker.RecordOriginal($"ai_{aiData.ai_Id}_atk_Cnt", aiData.atk_Cnt);
                             changeTracker.RecordOriginal($"ai_{aiData.ai_Id}_atk_Interval", aiData.atk_Interval);
                             changeTracker.RecordOriginal($"ai_{aiData.ai_Id}_value", aiData.value);
+                            changeTracker.RecordOriginal($"ai_{aiData.ai_Id}_ability_Ids", string.Join(",", aiData.ability_Ids));
                         }
                     }
                 }
@@ -730,6 +736,19 @@ namespace ERang
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField($"AI Groups: [{string.Join(", ", card.aiGroup_ids)}]");
+
+            // 연결 필드 편집 - AI Groups
+            if (isEditMode)
+            {
+                var availableAiGroupIds = GetAvailableAiGroupIds();
+                DrawConnectionFieldEditor("AiGroup", card.aiGroup_ids, availableAiGroupIds,
+                    (newIds) =>
+                    {
+                        card.aiGroup_ids = newIds;
+                        // 카드 관계 재분석
+                        AnalyzeCardRelationship(card);
+                    });
+            }
         }
 
         // 편집 가능한 AI 데이터 상세 정보
@@ -771,6 +790,22 @@ namespace ERang
 
             EditorGUILayout.LabelField($"    Ranges: [{string.Join(", ", ai.attackRanges)}]");
             EditorGUILayout.LabelField($"    Abilities: [{string.Join(", ", ai.ability_Ids)}]");
+
+            // 연결 필드 편집 - Abilities
+            if (isEditMode)
+            {
+                var availableAbilityIds = GetAvailableAbilityIds();
+                DrawConnectionFieldEditor("Ability", ai.ability_Ids, availableAbilityIds,
+                    (newIds) =>
+                    {
+                        ai.ability_Ids = newIds;
+                        // AI 관계 재분석
+                        if (currentRelationship?.cardData != null)
+                        {
+                            AnalyzeCardRelationship(currentRelationship.cardData);
+                        }
+                    });
+            }
         }
 
         // 편집 가능한 어빌리티 상세 정보
@@ -897,7 +932,8 @@ namespace ERang
                    changeTracker.currentValues.ContainsKey($"card_{card.card_id}_atk") ||
                    changeTracker.currentValues.ContainsKey($"card_{card.card_id}_def") ||
                    changeTracker.currentValues.ContainsKey($"card_{card.card_id}_costMana") ||
-                   changeTracker.currentValues.ContainsKey($"card_{card.card_id}_costGold");
+                   changeTracker.currentValues.ContainsKey($"card_{card.card_id}_costGold") ||
+                   changeTracker.currentValues.ContainsKey($"card_{card.card_id}_aiGroup_ids");
         }
 
         private bool HasAiChanges()
@@ -908,7 +944,8 @@ namespace ERang
                     ai != null && (
                     changeTracker.currentValues.ContainsKey($"ai_{ai.ai_Id}_atk_Cnt") ||
                     changeTracker.currentValues.ContainsKey($"ai_{ai.ai_Id}_atk_Interval") ||
-                    changeTracker.currentValues.ContainsKey($"ai_{ai.ai_Id}_value"))) ?? false;
+                    changeTracker.currentValues.ContainsKey($"ai_{ai.ai_Id}_value") ||
+                    changeTracker.currentValues.ContainsKey($"ai_{ai.ai_Id}_ability_Ids"))) ?? false;
             }
             catch
             {
@@ -951,8 +988,9 @@ namespace ERang
                         cardEntity.Def = cardData.def;
                         cardEntity.CostMana = cardData.costMana;
                         cardEntity.CostGold = cardData.costGold;
+                        cardEntity.AiGroup_ids = string.Join(",", cardData.aiGroup_ids);
 
-                        Debug.Log($"Updated CardEntity [{cardData.card_id}]: HP={cardEntity.Hp}, ATK={cardEntity.Atk}, DEF={cardEntity.Def}");
+                        Debug.Log($"Updated CardEntity [{cardData.card_id}]: HP={cardEntity.Hp}, ATK={cardEntity.Atk}, DEF={cardEntity.Def}, AiGroups=[{string.Join(",", cardEntity.AiGroup_ids)}]");
                     }
 
                     EditorUtility.SetDirty(cardDataTable);
@@ -986,8 +1024,9 @@ namespace ERang
                                 aiEntity.Atk_Cnt = aiData.atk_Cnt;
                                 aiEntity.Atk_Interval = aiData.atk_Interval;
                                 aiEntity.Value = aiData.value;
+                                aiEntity.Ability_id = string.Join(",", aiData.ability_Ids);
 
-                                Debug.Log($"Updated AiEntity [{aiData.ai_Id}]: Atk_Cnt={aiEntity.Atk_Cnt}, Atk_Interval={aiEntity.Atk_Interval}, Value={aiEntity.Value}");
+                                Debug.Log($"Updated AiEntity [{aiData.ai_Id}]: Atk_Cnt={aiEntity.Atk_Cnt}, Atk_Interval={aiEntity.Atk_Interval}, Value={aiEntity.Value}, Abilities=[{string.Join(",", aiEntity.Ability_id)}]");
                             }
                         }
                     }
@@ -1070,6 +1109,12 @@ namespace ERang
                         card.costMana = (int)changeTracker.originalValues[$"card_{card.card_id}_costMana"];
                     if (changeTracker.originalValues.ContainsKey($"card_{card.card_id}_costGold"))
                         card.costGold = (int)changeTracker.originalValues[$"card_{card.card_id}_costGold"];
+                    if (changeTracker.originalValues.ContainsKey($"card_{card.card_id}_aiGroup_ids"))
+                    {
+                        var originalIds = ((string)changeTracker.originalValues[$"card_{card.card_id}_aiGroup_ids"])
+                            .Split(',').Where(s => !string.IsNullOrEmpty(s)).Select(int.Parse).ToList();
+                        card.aiGroup_ids = originalIds;
+                    }
                 }
 
                 if (currentRelationship?.aiDatas != null)
@@ -1084,6 +1129,12 @@ namespace ERang
                                 aiData.atk_Interval = (float)changeTracker.originalValues[$"ai_{aiData.ai_Id}_atk_Interval"];
                             if (changeTracker.originalValues.ContainsKey($"ai_{aiData.ai_Id}_value"))
                                 aiData.value = (int)changeTracker.originalValues[$"ai_{aiData.ai_Id}_value"];
+                            if (changeTracker.originalValues.ContainsKey($"ai_{aiData.ai_Id}_ability_Ids"))
+                            {
+                                var originalIds = ((string)changeTracker.originalValues[$"ai_{aiData.ai_Id}_ability_Ids"])
+                                    .Split(',').Where(s => !string.IsNullOrEmpty(s)).Select(int.Parse).ToList();
+                                aiData.ability_Ids = originalIds;
+                            }
                         }
                     }
                 }
@@ -1112,6 +1163,222 @@ namespace ERang
             {
                 Debug.LogError($"Error discarding data changes: {e.Message}");
                 changeTracker.Reset();
+            }
+        }
+
+        // ========================================
+        // 연결 필드 편집 관련 메서드들
+        // ========================================
+
+        /// <summary>
+        /// 사용 가능한 AI Group ID 목록 반환
+        /// </summary>
+        private List<int> GetAvailableAiGroupIds()
+        {
+            try
+            {
+                if (AiGroupData.aiGroups_list != null)
+                {
+                    return AiGroupData.aiGroups_list.Select(data => data.aiGroup_Id).ToList();
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Error getting available AI Group IDs: {e.Message}");
+            }
+            return new List<int>();
+        }
+
+        /// <summary>
+        /// 사용 가능한 Ability ID 목록 반환
+        /// </summary>
+        private List<int> GetAvailableAbilityIds()
+        {
+            try
+            {
+                if (AbilityData.abilityData_list != null)
+                {
+                    return AbilityData.abilityData_list.Select(data => data.abilityId).ToList();
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Error getting available Ability IDs: {e.Message}");
+            }
+            return new List<int>();
+        }
+
+        /// <summary>
+        /// 연결 필드 편집 UI - 개별 추가/삭제 버튼과 드롭다운 방식 (B + C 방식 합체)
+        /// </summary>
+        private void DrawConnectionFieldEditor(string fieldName, List<int> currentIds, List<int> availableIds, System.Action<List<int>> onChanged)
+        {
+            if (!isEditMode || currentIds == null || availableIds == null) return;
+
+            try
+            {
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
+                // 헤더
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField($"🔗 {fieldName} Connections ({currentIds.Count})", EditorStyles.boldLabel);
+
+                // 전체 추가 버튼
+                Color originalBg = GUI.backgroundColor;
+                GUI.backgroundColor = Color.green;
+                if (GUILayout.Button("➕ Add", GUILayout.Width(60)))
+                {
+                    // 사용 가능한 ID들 중 현재 연결되지 않은 것들만 표시
+                    var unconnectedIds = availableIds.Where(id => !currentIds.Contains(id)).ToList();
+
+                    if (unconnectedIds.Count > 0)
+                    {
+                        // 드롭다운 메뉴 생성 (정렬된 순서)
+                        GenericMenu menu = new GenericMenu();
+
+                        foreach (int id in unconnectedIds.OrderBy(x => x))
+                        {
+                            string displayName = GetDisplayNameForId(fieldName, id);
+                            int capturedId = id; // 클로저 문제 해결
+                            menu.AddItem(new GUIContent($"[{id}] {displayName}"), false, () =>
+                            {
+                                try
+                                {
+                                    if (!currentIds.Contains(capturedId))
+                                    {
+                                        currentIds.Add(capturedId);
+                                        onChanged?.Invoke(currentIds);
+                                        changeTracker.RecordChange($"{fieldName}_connections", string.Join(",", currentIds));
+                                        Debug.Log($"Added {fieldName} connection: {capturedId}");
+                                        Repaint();
+                                    }
+                                }
+                                catch (System.Exception e)
+                                {
+                                    Debug.LogError($"Error adding {fieldName} connection: {e.Message}");
+                                }
+                            });
+                        }
+
+                        menu.ShowAsContext();
+                    }
+                    else
+                    {
+                        EditorUtility.DisplayDialog("No Available IDs",
+                            $"All available {fieldName} IDs ({availableIds.Count}) are already connected.", "OK");
+                    }
+                }
+                GUI.backgroundColor = originalBg;
+
+                // 전체 삭제 버튼
+                if (currentIds.Count > 0)
+                {
+                    GUI.backgroundColor = Color.yellow;
+                    if (GUILayout.Button("🗑️ Clear All", GUILayout.Width(80)))
+                    {
+                        if (EditorUtility.DisplayDialog("Clear All Connections",
+                            $"Are you sure you want to remove all {currentIds.Count} {fieldName} connections?", "Yes", "No"))
+                        {
+                            currentIds.Clear();
+                            onChanged?.Invoke(currentIds);
+                            changeTracker.RecordChange($"{fieldName}_connections", string.Join(",", currentIds));
+                            Debug.Log($"Cleared all {fieldName} connections");
+                            Repaint();
+                        }
+                    }
+                    GUI.backgroundColor = originalBg;
+                }
+
+                EditorGUILayout.EndHorizontal();
+
+                // 현재 연결된 ID들 표시 및 개별 삭제
+                if (currentIds.Count > 0)
+                {
+                    EditorGUILayout.Space(5);
+
+                    // 정렬된 순서로 표시
+                    var sortedIds = currentIds.OrderBy(x => x).ToList();
+
+                    // 삭제할 ID들을 임시로 저장 (iteration 중 수정 방지)
+                    List<int> idsToRemove = new List<int>();
+
+                    foreach (int id in sortedIds)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+
+                        // ID 정보 표시
+                        string displayName = GetDisplayNameForId(fieldName, id);
+                        EditorGUILayout.LabelField($"    [{id}] {displayName}", GUILayout.ExpandWidth(true));
+
+                        // 개별 삭제 버튼
+                        GUI.backgroundColor = Color.red;
+                        if (GUILayout.Button("X", GUILayout.Width(25), GUILayout.Height(18)))
+                        {
+                            idsToRemove.Add(id);
+                        }
+                        GUI.backgroundColor = originalBg;
+
+                        EditorGUILayout.EndHorizontal();
+                    }
+
+                    // 삭제 처리
+                    if (idsToRemove.Count > 0)
+                    {
+                        try
+                        {
+                            foreach (int idToRemove in idsToRemove)
+                            {
+                                currentIds.Remove(idToRemove);
+                                Debug.Log($"Removed {fieldName} connection: {idToRemove}");
+                            }
+                            onChanged?.Invoke(currentIds);
+                            changeTracker.RecordChange($"{fieldName}_connections", string.Join(",", currentIds));
+                            Repaint();
+                        }
+                        catch (System.Exception e)
+                        {
+                            Debug.LogError($"Error removing {fieldName} connections: {e.Message}");
+                        }
+                    }
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("    🚫 No connections", EditorStyles.centeredGreyMiniLabel);
+                }
+
+                EditorGUILayout.EndVertical();
+            }
+            catch (System.Exception e)
+            {
+                EditorGUILayout.LabelField($"Error in connection editor: {e.Message}", EditorStyles.helpBox);
+                Debug.LogError($"DrawConnectionFieldEditor error: {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// ID에 따른 표시 이름 반환
+        /// </summary>
+        private string GetDisplayNameForId(string fieldType, int id)
+        {
+            try
+            {
+                switch (fieldType)
+                {
+                    case "AiGroup":
+                        var aiGroupData = AiGroupData.GetAiGroupData(id);
+                        return aiGroupData?.nameDesc ?? "Unknown";
+
+                    case "Ability":
+                        var abilityData = AbilityData.GetAbilityData(id);
+                        return abilityData?.nameDesc ?? "Unknown";
+
+                    default:
+                        return "Unknown";
+                }
+            }
+            catch
+            {
+                return "Error";
             }
         }
     }

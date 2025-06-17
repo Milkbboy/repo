@@ -93,4 +93,51 @@ public class ExcelAssetScriptMenu
 
 		return scriptString;
 	}
+
+	// 🔄 엑셀 데이터 강제 새로고침 메뉴
+	// [MenuItem("ERang/Tools/Force Refresh All Excel Assets", false, 100)]
+	static void ForceRefreshAllExcelAssets()
+	{
+		bool confirmed = EditorUtility.DisplayDialog(
+			"Force Refresh Excel Assets",
+			"This will DELETE all existing ScriptableObject assets and recreate them from Excel data.\n\n" +
+			"⚠️ WARNING: Any manual changes made through the Data Relationship Window will be LOST!\n\n" +
+			"Are you sure you want to continue?",
+			"Yes, Refresh from Excel",
+			"Cancel"
+		);
+
+		if (!confirmed) return;
+
+		try
+		{
+			// TableExports 폴더의 모든 .asset 파일 삭제
+			string[] assetFiles = Directory.GetFiles(Application.dataPath + "/ERang/Resources/TableExports", "*.asset");
+
+			foreach (string assetFile in assetFiles)
+			{
+				string relativePath = "Assets" + assetFile.Substring(Application.dataPath.Length).Replace('\\', '/');
+				AssetDatabase.DeleteAsset(relativePath);
+				Debug.Log($"[ForceRefresh] Deleted: {relativePath}");
+			}
+
+			AssetDatabase.Refresh();
+
+			// 엑셀 파일들 재임포트 유도
+			EditorUtility.DisplayDialog(
+				"Assets Deleted",
+				"All ScriptableObject assets have been deleted.\n\n" +
+				"Now please manually re-import your Excel files by:\n" +
+				"1. Right-click on Excel files in Project window\n" +
+				"2. Select 'Reimport'\n\n" +
+				"This will recreate fresh assets from Excel data.",
+				"OK"
+			);
+		}
+		catch (System.Exception e)
+		{
+			Debug.LogError($"[ForceRefresh] Error: {e.Message}");
+			EditorUtility.DisplayDialog("Error", $"Failed to delete assets: {e.Message}", "OK");
+		}
+	}
 }

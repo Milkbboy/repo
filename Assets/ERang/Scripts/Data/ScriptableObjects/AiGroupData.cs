@@ -8,6 +8,7 @@ namespace ERang.Data
     public class AiGroupData
     {
         public int aiGroup_Id;
+        public string nameDesc;
         public string ai_Group_1;
         public string ai_Group_2;
         public string ai_Group_3;
@@ -51,6 +52,7 @@ namespace ERang.Data
         public void Initialize(AiGroupDataEntity entity)
         {
             aiGroup_Id = entity.AiGroup_Id;
+            nameDesc = entity.NameDesc;
 
             switch (entity.Type)
             {
