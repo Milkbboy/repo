@@ -559,6 +559,23 @@ namespace ERang
 
                 EditorGUILayout.Space();
 
+                // AI Group 정보
+                if (currentRelationship.aiGroupDatas.Count > 0)
+                {
+                    EditorGUILayout.LabelField($"AI Groups ({currentRelationship.aiGroupDatas.Count})", headerStyle);
+
+                    foreach (var aiGroupData in currentRelationship.aiGroupDatas)
+                    {
+                        EditorGUILayout.BeginVertical(groupStyle);
+                        EditorGUILayout.LabelField($"AI Group [{aiGroupData.aiGroup_Id}] - Type: {aiGroupData.aiGroupType}");
+                        DrawAiGroupDetails(aiGroupData);
+                        EditorGUILayout.EndVertical();
+                        EditorGUILayout.Space(5);
+                    }
+                }
+
+                EditorGUILayout.Space();
+
                 // AI Data 정보
                 if (currentRelationship.aiDatas.Count > 0)
                 {
@@ -861,6 +878,16 @@ namespace ERang
             EditorGUILayout.LabelField($"Cost: {card.costMana} Mana, {card.costGold} Gold");
             EditorGUILayout.LabelField($"Stats: HP {card.hp} | ATK {card.atk} | DEF {card.def}");
             EditorGUILayout.LabelField($"AI Groups: [{string.Join(", ", card.aiGroup_ids)}]");
+        }
+
+        private void DrawAiGroupDetails(AiGroupData aiGroup)
+        {
+            EditorGUILayout.LabelField($"    Groups: {string.Join(" | ", new[] { aiGroup.ai_Group_1, aiGroup.ai_Group_2, aiGroup.ai_Group_3, aiGroup.ai_Group_4, aiGroup.ai_Group_5, aiGroup.ai_Group_6 }.Where(x => !string.IsNullOrEmpty(x)))}");
+
+            if (aiGroup.reactions.Count > 0)
+            {
+                EditorGUILayout.LabelField($"    Reactions: {aiGroup.reactions.Count} conditional reactions");
+            }
         }
 
         private void DrawAiDataDetails(AiData ai)
