@@ -1269,7 +1269,9 @@ namespace ERang
                 if (GUILayout.Button("[+] Add", GUILayout.Width(60)))
                 {
                     // 사용 가능한 ID들 중 현재 연결되지 않은 것들만 표시
-                    var unconnectedIds = availableIds.Where(id => !currentIds.Contains(id)).ToList();
+                    // var unconnectedIds = availableIds.Where(id => !currentIds.Contains(id)).ToList();
+                    // 모든 ID 표시
+                    var unconnectedIds = availableIds;
 
                     if (unconnectedIds.Count > 0)
                     {
@@ -1284,7 +1286,8 @@ namespace ERang
                             {
                                 try
                                 {
-                                    if (!currentIds.Contains(capturedId))
+                                    // 모든 ID 주기
+                                    // if (!currentIds.Contains(capturedId))
                                     {
                                         currentIds.Add(capturedId);
                                         onChanged?.Invoke(currentIds);
