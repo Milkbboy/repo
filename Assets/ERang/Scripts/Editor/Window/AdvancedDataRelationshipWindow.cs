@@ -85,6 +85,8 @@ namespace ERang
         private GUIStyle editModeStyle;
         private GUIStyle saveButtonStyle;
 
+        private bool useCustomColors = true; // true: 컬러 사용, false: 기본 스타일
+
         [MenuItem("ERang/Tools/Advanced Data Relationship Analyzer")]
         public static void ShowWindow()
         {
@@ -101,49 +103,56 @@ namespace ERang
         {
             if (headerStyle != null) return; // 이미 초기화됨
 
-            headerStyle = new GUIStyle(EditorStyles.boldLabel)
+            if (useCustomColors)
             {
-                fontSize = 16,
-                normal = { textColor = Color.white }
-            };
-
-            cardStyle = new GUIStyle(EditorStyles.helpBox)
+                headerStyle = new GUIStyle(EditorStyles.boldLabel)
+                {
+                    fontSize = 16,
+                    normal = { textColor = Color.white }
+                };
+                cardStyle = new GUIStyle(EditorStyles.helpBox)
+                {
+                    normal = { background = MakeTexture(1, 1, new Color(0.3f, 0.6f, 0.9f, 0.3f)) }
+                };
+                groupStyle = new GUIStyle(EditorStyles.helpBox)
+                {
+                    normal = { background = MakeTexture(1, 1, new Color(0.6f, 0.9f, 0.3f, 0.3f)) }
+                };
+                aiStyle = new GUIStyle(EditorStyles.helpBox)
+                {
+                    normal = { background = MakeTexture(1, 1, new Color(0.9f, 0.6f, 0.3f, 0.3f)) }
+                };
+                abilityStyle = new GUIStyle(EditorStyles.helpBox)
+                {
+                    normal = { background = MakeTexture(1, 1, new Color(0.9f, 0.3f, 0.6f, 0.3f)) }
+                };
+                valueStyle = new GUIStyle(EditorStyles.boldLabel)
+                {
+                    normal = { textColor = Color.red },
+                    fontSize = 12
+                };
+                saveButtonStyle = new GUIStyle(GUI.skin.button)
+                {
+                    normal = { textColor = Color.white },
+                    fontStyle = FontStyle.Bold
+                };
+            }
+            else
             {
-                normal = { background = MakeTexture(1, 1, new Color(0.3f, 0.6f, 0.9f, 0.3f)) }
-            };
-
-            groupStyle = new GUIStyle(EditorStyles.helpBox)
-            {
-                normal = { background = MakeTexture(1, 1, new Color(0.6f, 0.9f, 0.3f, 0.3f)) }
-            };
-
-            aiStyle = new GUIStyle(EditorStyles.helpBox)
-            {
-                normal = { background = MakeTexture(1, 1, new Color(0.9f, 0.6f, 0.3f, 0.3f)) }
-            };
-
-            abilityStyle = new GUIStyle(EditorStyles.helpBox)
-            {
-                normal = { background = MakeTexture(1, 1, new Color(0.9f, 0.3f, 0.6f, 0.3f)) }
-            };
-
-            valueStyle = new GUIStyle(EditorStyles.boldLabel)
-            {
-                normal = { textColor = Color.red },
-                fontSize = 12
-            };
-
-            editModeStyle = new GUIStyle(EditorStyles.boldLabel)
-            {
-                normal = { textColor = Color.yellow },
-                fontSize = 14
-            };
-
-            saveButtonStyle = new GUIStyle(GUI.skin.button)
-            {
-                normal = { textColor = Color.white },
-                fontStyle = FontStyle.Bold
-            };
+                headerStyle = new GUIStyle(EditorStyles.boldLabel);
+                cardStyle = new GUIStyle(EditorStyles.helpBox);
+                groupStyle = new GUIStyle(EditorStyles.helpBox);
+                aiStyle = new GUIStyle(EditorStyles.helpBox);
+                abilityStyle = new GUIStyle(EditorStyles.helpBox);
+                editModeStyle = new GUIStyle(EditorStyles.boldLabel)
+                {
+                    fontSize = 14
+                };
+                saveButtonStyle = new GUIStyle(GUI.skin.button)
+                {
+                    fontStyle = FontStyle.Bold
+                };
+            }
         }
 
         private Texture2D MakeTexture(int width, int height, Color color)
@@ -230,6 +239,12 @@ namespace ERang
                     LoadAllData();
                 }
                 return;
+            }
+
+            useCustomColors = EditorGUILayout.ToggleLeft("Use Custom Colors", useCustomColors);
+            if (GUI.changed)
+            {
+                headerStyle = null; // 스타일 재초기화 유도
             }
 
             DrawHeader();
@@ -902,7 +917,6 @@ namespace ERang
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.SelectableLabel($"    [{ability.abilityId}] {ability.nameDesc}", EditorStyles.boldLabel);
-            GUILayout.FlexibleSpace();
             EditorGUILayout.LabelField($"Type: {ability.abilityType}", GUILayout.Width(150));
             EditorGUILayout.EndHorizontal();
 
