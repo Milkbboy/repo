@@ -256,7 +256,7 @@ namespace ERang
                 EditorGUI.BeginChangeCheck();
                 Color originalColor = GUI.backgroundColor;
                 GUI.backgroundColor = isEditMode ? Color.yellow : Color.white;
-                isEditMode = GUILayout.Toggle(isEditMode, isEditMode ? "🔧 Edit Mode" : "👁️ View Mode",
+                isEditMode = GUILayout.Toggle(isEditMode, isEditMode ? "Edit Mode" : "View Mode",
                     EditorStyles.miniButton, GUILayout.Width(100));
                 GUI.backgroundColor = originalColor;
 
@@ -275,7 +275,7 @@ namespace ERang
                 // 변경사항 표시
                 if (isEditMode && changeTracker.HasChanges)
                 {
-                    EditorGUILayout.LabelField("🟡 Changes Pending", editModeStyle ?? EditorStyles.boldLabel, GUILayout.Width(120));
+                    EditorGUILayout.LabelField("[!] Changes Pending", editModeStyle ?? EditorStyles.boldLabel, GUILayout.Width(120));
                 }
 
                 EditorGUILayout.EndHorizontal();
@@ -532,14 +532,13 @@ namespace ERang
                 // 카드 정보
                 EditorGUILayout.BeginVertical(cardStyle ?? EditorStyles.helpBox);
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"🃏 CARD: [{currentRelationship.cardData.card_id}] {currentRelationship.cardData.nameDesc}", headerStyle ?? EditorStyles.boldLabel);
-                GUILayout.FlexibleSpace();
+                EditorGUILayout.SelectableLabel($"[{currentRelationship.cardData.card_id}] {currentRelationship.cardData.nameDesc}", headerStyle ?? EditorStyles.boldLabel, GUILayout.ExpandWidth(true));
 
                 // Card Save 버튼
                 EditorGUI.BeginDisabledGroup(!isEditMode || !HasCardChanges());
                 Color originalBg = GUI.backgroundColor;
                 GUI.backgroundColor = HasCardChanges() ? Color.green : Color.gray;
-                if (GUILayout.Button("💾 Save Card", GUILayout.Width(100)))
+                if (GUILayout.Button("Save Card", GUILayout.Width(100)))
                 {
                     SaveCardData();
                 }
@@ -564,13 +563,13 @@ namespace ERang
                 if (currentRelationship.aiDatas.Count > 0)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"⚔️ Connected AI Actions ({currentRelationship.aiDatas.Count})", headerStyle);
+                    EditorGUILayout.LabelField($"AIData ({currentRelationship.aiDatas.Count})", headerStyle);
                     GUILayout.FlexibleSpace();
 
                     // AI Save 버튼
                     EditorGUI.BeginDisabledGroup(!isEditMode || !HasAiChanges());
                     GUI.backgroundColor = HasAiChanges() ? Color.green : Color.gray;
-                    if (GUILayout.Button("💾 Save AI", GUILayout.Width(100)))
+                    if (GUILayout.Button("Save AI", GUILayout.Width(100)))
                     {
                         SaveAiData();
                     }
@@ -582,7 +581,7 @@ namespace ERang
                     foreach (var aiData in currentRelationship.aiDatas)
                     {
                         EditorGUILayout.BeginVertical(aiStyle);
-                        EditorGUILayout.LabelField($"  🎯 AI [{aiData.ai_Id}] {aiData.name} - {aiData.type}");
+                        EditorGUILayout.SelectableLabel($"  [{aiData.ai_Id}] {aiData.name} - {aiData.type}");
 
                         if (isEditMode)
                         {
@@ -604,13 +603,13 @@ namespace ERang
                 if (currentRelationship.abilityDatas.Count > 0)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"✨ FINAL ABILITY VALUES ({currentRelationship.abilityDatas.Count})", headerStyle);
+                    EditorGUILayout.LabelField($"AbilityData ({currentRelationship.abilityDatas.Count})", headerStyle);
                     GUILayout.FlexibleSpace();
 
                     // Ability Save 버튼
                     EditorGUI.BeginDisabledGroup(!isEditMode || !HasAbilityChanges());
                     GUI.backgroundColor = HasAbilityChanges() ? Color.green : Color.gray;
-                    if (GUILayout.Button("💾 Save Abilities", GUILayout.Width(120)))
+                    if (GUILayout.Button("Save Abilities", GUILayout.Width(120)))
                     {
                         SaveAbilityData();
                     }
@@ -644,7 +643,7 @@ namespace ERang
 
                     EditorGUI.BeginDisabledGroup(!changeTracker.HasChanges);
                     GUI.backgroundColor = changeTracker.HasChanges ? Color.red : Color.gray;
-                    if (GUILayout.Button("💾 SAVE ALL CHANGES", GUILayout.Width(200), GUILayout.Height(30)))
+                    if (GUILayout.Button("SAVE ALL CHANGES", GUILayout.Width(200), GUILayout.Height(30)))
                     {
                         SaveAllChanges();
                     }
@@ -653,7 +652,7 @@ namespace ERang
 
                     if (changeTracker.HasChanges)
                     {
-                        if (GUILayout.Button("🔄 Discard Changes", GUILayout.Width(120)))
+                        if (GUILayout.Button("Discard Changes", GUILayout.Width(120)))
                         {
                             DiscardDataChanges();
                         }
@@ -812,7 +811,7 @@ namespace ERang
         private void DrawEditableAbilityDetails(AbilityData ability)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField($"🔥 [{ability.abilityId}] {ability.nameDesc}", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"[{ability.abilityId}] {ability.nameDesc}", EditorStyles.boldLabel);
             GUILayout.FlexibleSpace();
             EditorGUILayout.LabelField($"Type: {ability.abilityType}", GUILayout.Width(150));
             EditorGUILayout.EndHorizontal();
@@ -875,27 +874,27 @@ namespace ERang
         private void DrawAbilityDetails(AbilityData ability)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField($"🔥 [{ability.abilityId}] {ability.nameDesc}", EditorStyles.boldLabel);
+            EditorGUILayout.SelectableLabel($"    [{ability.abilityId}] {ability.nameDesc}", EditorStyles.boldLabel);
             GUILayout.FlexibleSpace();
             EditorGUILayout.LabelField($"Type: {ability.abilityType}", GUILayout.Width(150));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField($"    💥 VALUE: {ability.value}", valueStyle);
-            EditorGUILayout.LabelField($"    📊 RATIO: {ability.ratio:F2}", valueStyle);
-            EditorGUILayout.LabelField($"    ⏱️ DURATION: {ability.duration}", valueStyle);
+            EditorGUILayout.LabelField($"      VALUE: {ability.value}", valueStyle);
+            EditorGUILayout.LabelField($"      RATIO: {ability.ratio:F2}", valueStyle);
+            EditorGUILayout.LabelField($"      DURATION: {ability.duration}", valueStyle);
             EditorGUILayout.EndHorizontal();
 
             if (!string.IsNullOrEmpty(ability.skillIcon))
             {
-                EditorGUILayout.LabelField($"    Icon: {ability.skillIcon}");
+                EditorGUILayout.LabelField($"      Icon: {ability.skillIcon}");
             }
         }
 
         private void DrawSummary()
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            EditorGUILayout.LabelField("📋 Summary", headerStyle);
+            EditorGUILayout.LabelField("SUMMARY", headerStyle);
 
             var damageAbilities = currentRelationship.abilityDatas.Where(a => a.abilityType == AbilityType.Damage).ToList();
             var healAbilities = currentRelationship.abilityDatas.Where(a => a.abilityType == AbilityType.Heal).ToList();
@@ -904,21 +903,21 @@ namespace ERang
             if (damageAbilities.Count > 0)
             {
                 int totalDamage = damageAbilities.Sum(a => a.value);
-                EditorGUILayout.LabelField($"💀 Total Damage Potential: {totalDamage}", valueStyle);
+                EditorGUILayout.LabelField($"Total Damage Potential: {totalDamage}", valueStyle);
             }
 
             if (healAbilities.Count > 0)
             {
                 int totalHeal = healAbilities.Sum(a => a.value);
-                EditorGUILayout.LabelField($"💚 Total Heal Potential: {totalHeal}", valueStyle);
+                EditorGUILayout.LabelField($"Total Heal Potential: {totalHeal}", valueStyle);
             }
 
             if (buffAbilities.Count > 0)
             {
-                EditorGUILayout.LabelField($"⬆️ Buff Abilities: {buffAbilities.Count}", valueStyle);
+                EditorGUILayout.LabelField($"Buff Abilities: {buffAbilities.Count}", valueStyle);
             }
 
-            EditorGUILayout.LabelField($"🔗 Total Connection Depth: Card → {currentRelationship.aiGroupDatas.Count} Groups → {currentRelationship.aiDatas.Count} Actions → {currentRelationship.abilityDatas.Count} Abilities");
+            EditorGUILayout.LabelField($"Total Connection Depth: Card -> {currentRelationship.aiGroupDatas.Count} Groups -> {currentRelationship.aiDatas.Count} Actions -> {currentRelationship.abilityDatas.Count} Abilities");
 
             EditorGUILayout.EndVertical();
         }
@@ -1221,12 +1220,12 @@ namespace ERang
 
                 // 헤더
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"🔗 {fieldName} Connections ({currentIds.Count})", EditorStyles.boldLabel);
+                EditorGUILayout.LabelField($"{fieldName} Connections ({currentIds.Count})", EditorStyles.boldLabel);
 
                 // 전체 추가 버튼
                 Color originalBg = GUI.backgroundColor;
                 GUI.backgroundColor = Color.green;
-                if (GUILayout.Button("➕ Add", GUILayout.Width(60)))
+                if (GUILayout.Button("[+] Add", GUILayout.Width(60)))
                 {
                     // 사용 가능한 ID들 중 현재 연결되지 않은 것들만 표시
                     var unconnectedIds = availableIds.Where(id => !currentIds.Contains(id)).ToList();
@@ -1274,7 +1273,7 @@ namespace ERang
                 if (currentIds.Count > 0)
                 {
                     GUI.backgroundColor = Color.yellow;
-                    if (GUILayout.Button("🗑️ Clear All", GUILayout.Width(80)))
+                    if (GUILayout.Button("[X] Clear All", GUILayout.Width(80)))
                     {
                         if (EditorUtility.DisplayDialog("Clear All Connections",
                             $"Are you sure you want to remove all {currentIds.Count} {fieldName} connections?", "Yes", "No"))
@@ -1343,7 +1342,7 @@ namespace ERang
                 }
                 else
                 {
-                    EditorGUILayout.LabelField("    🚫 No connections", EditorStyles.centeredGreyMiniLabel);
+                    EditorGUILayout.LabelField("    No connections", EditorStyles.centeredGreyMiniLabel);
                 }
 
                 EditorGUILayout.EndVertical();
