@@ -41,12 +41,12 @@ namespace ERang
 
             if (isDefUp)
             {
-                targetCard.IncreaseDefense(value);
+                targetSlot.IncreaseDefense(value);
                 LogAbility($"방어력 복구: {beforeDef} -> {targetCard.Def} (+{value})");
             }
             else
             {
-                targetCard.DecreaseDefense(value);
+                targetSlot.DecreaseDefense(value);
                 LogAbility($"방어력 감소: {beforeDef} -> {targetCard.Def} (-{value})");
             }
 

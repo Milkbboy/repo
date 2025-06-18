@@ -35,12 +35,12 @@ namespace ERang
             // 방어력 증가
             if (isDefUp)
             {
-                targetCard.IncreaseDefense(value);
+                targetSlot.IncreaseDefense(value);
                 LogAbility($"방어력 증가: {beforeDef} -> {targetCard.Def} (+{value})");
             }
             else
             {
-                targetCard.DecreaseDefense(value);
+                targetSlot.DecreaseDefense(value);
                 LogAbility($"방어력 감소: {beforeDef} -> {targetCard.Def} (-{value})");
             }
 

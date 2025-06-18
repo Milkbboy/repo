@@ -38,12 +38,12 @@ namespace ERang
 
             if (isAtkUp)
             {
-                creatureCard.IncreaseAttack(value);
+                targetSlot.IncreaseAttack(value);
                 LogAbility($"공격력 증가: {beforeAtk} -> {creatureCard.Atk} (+{value})");
             }
             else
             {
-                creatureCard.DecreaseAttack(value);
+                targetSlot.DecreaseAttack(value);
                 LogAbility($"공격력 감소: {beforeAtk} -> {creatureCard.Atk} (-{value})");
             }
 

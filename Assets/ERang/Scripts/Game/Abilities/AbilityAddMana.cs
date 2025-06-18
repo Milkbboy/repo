@@ -39,12 +39,12 @@ namespace ERang
 
             if (isAdd)
             {
-                masterCard.IncreaseMana(value);
+                targetSlot.IncreaseMana(value);
                 LogAbility($"마나 증가: {beforeMana} -> {masterCard.Mana} (+{value})");
             }
             else
             {
-                masterCard.DecreaseMana(value);
+                targetSlot.DecreaseMana(value);
                 LogAbility($"마나 감소: {beforeMana} -> {masterCard.Mana} (-{value})");
             }
 
