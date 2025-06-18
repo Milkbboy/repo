@@ -83,9 +83,7 @@ namespace ERang
             satiety = Mathf.Clamp(satiety - amount, 0, maxSatiety);
         }
 
-        public void SetHp(int amount) => Stat.SetHp(amount);
         public void SetGold(int amount) => Gold = amount;
-        public void SetMana(int amount) => Stat.SetMana(amount);
         public void RecoverHp(int amount) => Stat.RestoreHealth(amount);
         #endregion
 
@@ -179,7 +177,7 @@ namespace ERang
             if (savedHp != -1)
             {
                 Debug.Log($"저장된 마스터 HP 로드: {savedHp}");
-                SetHp(savedHp);
+                Stat.SetHp(savedHp);
             }
 
             // 저장된 마스터 골드가 있으면 설정
