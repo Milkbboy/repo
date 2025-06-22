@@ -754,7 +754,7 @@ MonoBehaviour:
     Atk_Type: Select Enemy
     Atk_Range: 1
     isSameTime: 0
-    Atk_Cnt: 2
+    Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0

@@ -1328,7 +1328,7 @@ MonoBehaviour:
   - AbilityData_Id: 81017000
     NameDesc: "\uB450\uC785_\uACF5\uACA9"
     AbilityType: Damage
-    Value: 2
+    Value: 6
     Ratio: 0
     Type: Active
     Duration: 0

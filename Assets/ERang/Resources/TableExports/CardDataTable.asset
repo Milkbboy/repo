@@ -687,7 +687,7 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81017
     CardType: Magic
     Grade: Common
-    AiGroup_ids: 810170
+    AiGroup_ids: 810170, 810170
     CostMana: 1
     CostGold: 0
     Hp: 0
