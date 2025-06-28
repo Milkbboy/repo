@@ -12,4 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1814885f738b7ef4997ede9e9ce1d5e8, type: 3}
   m_Name: EventsDataTable
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - EventsID: 1001
+    NameDesc: "\uC561\uD2B81 \uC0C1\uC810 \uC124\uC815"
+    EventType: Store
+    ExcludeFloor: 1, 2, 3, 4
+    ExcludeEndFloor: 1
+    IncludeFloor: 
+    Prefab: Store_01
+    MinValue: 3
+    MaxValue: 4
+    EliteBattleLevelGroupID: 0
+    RandomEventID: 
+  - EventsID: 1002
+    NameDesc: "\uC561\uD2B81 \uC568\uB9AC\uD2B8 \uBCF4\uC2A4"
+    EventType: EliteBattle
+    ExcludeFloor: 1, 2, 3, 4
+    ExcludeEndFloor: 1
+    IncludeFloor: 7, 8, 11, 12
+    Prefab: EliteBattle_01
+    MinValue: 4
+    MaxValue: 5
+    EliteBattleLevelGroupID: 1001006
+    RandomEventID: 
+  - EventsID: 1003
+    NameDesc: "\uC561\uD2B81 \uB79C\uB364 \uC774\uBCA4\uD2B8"
+    EventType: RandomEvent
+    ExcludeFloor: 1
+    ExcludeEndFloor: 1
+    IncludeFloor: 
+    Prefab: 
+    MinValue: 10
+    MaxValue: 12
+    EliteBattleLevelGroupID: 0
+    RandomEventID: 1001, 1002, 1003, 1004, 1005, 1006, 1007

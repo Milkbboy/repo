@@ -12,4 +12,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60d244a67e71f01468f297f7bd70d844, type: 3}
   m_Name: AreaDataTable
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - AreaID: 100101
+    NameDesc: "\uC561\uD2B81_\uC2DC\uC791"
+    isEnd: 0
+    FloorMax: 1
+    LevelGroupID: 1001001
+  - AreaID: 100102
+    NameDesc: "\uC561\uD2B81_1\uAD6C\uC5ED"
+    isEnd: 0
+    FloorMax: 4
+    LevelGroupID: 1001002
+  - AreaID: 100103
+    NameDesc: "\uC561\uD2B81_2\uAD6C\uC5ED"
+    isEnd: 0
+    FloorMax: 8
+    LevelGroupID: 1001003
+  - AreaID: 100104
+    NameDesc: "\uC561\uD2B81_3\uAD6C\uC5ED"
+    isEnd: 0
+    FloorMax: 99
+    LevelGroupID: 1001004
+  - AreaID: 100105
+    NameDesc: "\uC561\uD2B81_\uBCF4\uC2A4"
+    isEnd: 1
+    FloorMax: 0
+    LevelGroupID: 1001005
+  - AreaID: 100201
+    NameDesc: "\uC561\uD2B82_\uC2DC\uC791"
+    isEnd: 0
+    FloorMax: 0
+    LevelGroupID: 1002001
+  - AreaID: 100202
+    NameDesc: "\uC561\uD2B82_1\uAD6C\uC5ED"
+    isEnd: 0
+    FloorMax: 4
+    LevelGroupID: 1002002
+  - AreaID: 100203
+    NameDesc: "\uC561\uD2B82_2\uAD6C\uC5ED"
+    isEnd: 0
+    FloorMax: 8
+    LevelGroupID: 1002003
+  - AreaID: 100204
+    NameDesc: "\uC561\uD2B82_3\uAD6C\uC5ED"
+    isEnd: 0
+    FloorMax: 99
+    LevelGroupID: 1002004
+  - AreaID: 100205
+    NameDesc: "\uC561\uD2B82_\uBCF4\uC2A4"
+    isEnd: 1
+    FloorMax: 0
+    LevelGroupID: 1002005
+  - AreaID: 100301
+    NameDesc: "\uC561\uD2B83_\uC2DC\uC791"
+    isEnd: 0
+    FloorMax: 0
+    LevelGroupID: 1003001
+  - AreaID: 100302
+    NameDesc: "\uC561\uD2B83_1\uAD6C\uC5ED"
+    isEnd: 0
+    FloorMax: 4
+    LevelGroupID: 1003002
+  - AreaID: 100303
+    NameDesc: "\uC561\uD2B83_2\uAD6C\uC5ED"
+    isEnd: 0
+    FloorMax: 8
+    LevelGroupID: 1003003
+  - AreaID: 100304
+    NameDesc: "\uC561\uD2B83_3\uAD6C\uC5ED"
+    isEnd: 0
+    FloorMax: 99
+    LevelGroupID: 1003004
+  - AreaID: 100305
+    NameDesc: "\uC561\uD2B83_\uBCF4\uC2A4"
+    isEnd: 1
+    FloorMax: 0
+    LevelGroupID: 1003005

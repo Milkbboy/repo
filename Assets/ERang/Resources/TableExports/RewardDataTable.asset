@@ -12,4 +12,268 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 137c1d5c6db3fb344a6a990fa2c2c569, type: 3}
   m_Name: RewardDataTable
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - RewardID: 1001
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 100101
+    CardNameDesc: "\uC544\uADC0"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Rare
+    CardId: 100301
+    CardNameDesc: "\uD30C\uC774\uC5B4 \uBCFC"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Legendary
+    CardId: 200101
+    CardNameDesc: "\uAE08\uAD11"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 300101
+    CardNameDesc: "\uD48D\uC694\uC758 \uBD80\uC801"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 300201
+    CardNameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Gold
+    CardGrade: 
+    CardId: 0
+    CardNameDesc: "\uACE8\uB4DC"
+    GoldMin: 30
+    GoldMax: 50
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: HP
+    CardGrade: 
+    CardId: 0
+    CardNameDesc: "\uCCB4\uB825"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 1
+    HpMax: 1
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 100101
+    CardNameDesc: "\uC544\uADC0"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Rare
+    CardId: 100301
+    CardNameDesc: "\uD30C\uC774\uC5B4 \uBCFC"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Legendary
+    CardId: 200101
+    CardNameDesc: "\uAE08\uAD11"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 300101
+    CardNameDesc: "\uD48D\uC694\uC758 \uBD80\uC801"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1001
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_01"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 300201
+    CardNameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1002
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 100101
+    CardNameDesc: "\uC544\uADC0"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1002
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Rare
+    CardId: 100301
+    CardNameDesc: "\uD30C\uC774\uC5B4 \uBCFC"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 10
+  - RewardID: 1002
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Legendary
+    CardId: 200101
+    CardNameDesc: "\uAE08\uAD11"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 10
+  - RewardID: 1002
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 300101
+    CardNameDesc: "\uD48D\uC694\uC758 \uBD80\uC801"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1002
+    Master_Id: 1001
+    NameDesc: "\uB8E8\uC2DC \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 300201
+    CardNameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1002
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 100101
+    CardNameDesc: "\uC544\uADC0"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1002
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Rare
+    CardId: 100301
+    CardNameDesc: "\uD30C\uC774\uC5B4 \uBCFC"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 10
+  - RewardID: 1002
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Legendary
+    CardId: 200101
+    CardNameDesc: "\uAE08\uAD11"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 10
+  - RewardID: 1002
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 300101
+    CardNameDesc: "\uD48D\uC694\uC758 \uBD80\uC801"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0
+  - RewardID: 1002
+    Master_Id: 1002
+    NameDesc: "\uD06C\uB864 \uBCF4\uC0C1 \uC561\uD2B81_02"
+    RewardType: Card
+    CardGrade: Common
+    CardId: 300201
+    CardNameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
+    GoldMin: 0
+    GoldMax: 0
+    HpMin: 0
+    HpMax: 0
+    WeightValue: 0

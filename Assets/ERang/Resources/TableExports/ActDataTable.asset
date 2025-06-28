@@ -12,4 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94935ddf8c77f34984a9739af004aa4, type: 3}
   m_Name: ActDataTable
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - ActID: 1001
+    NameDesc: "\uC561\uD2B8_01"
+    AreaID: 100101, 100102, 100103, 100104, 100105
+    WidthMin: 2
+    WidthMax: 4
+    HeightMin: 15
+    HeightMax: 17
+    EventID: 1001, 1002, 1003
+  - ActID: 1002
+    NameDesc: "\uC561\uD2B8_02"
+    AreaID: 100201, 100202, 100203, 100204, 100205
+    WidthMin: 2
+    WidthMax: 4
+    HeightMin: 15
+    HeightMax: 17
+    EventID: 1001, 1002, 1003
+  - ActID: 1003
+    NameDesc: "\uC561\uD2B8_03"
+    AreaID: 100301, 100302, 100303, 100304, 100305
+    WidthMin: 2
+    WidthMax: 4
+    HeightMin: 15
+    HeightMax: 17
+    EventID: 1001, 1002, 1003

@@ -12,4 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72416a31a376b154caa7ec12fb5f8902, type: 3}
   m_Name: RewardSetDataTable
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - RewardType: Card
+    CardGrade: Common
+    NameDesc: "\uC77C\uBC18 \uBE44\uC911"
+    Value: 800
+    IsOnce: 0
+  - RewardType: Card
+    CardGrade: Rare
+    NameDesc: "\uB808\uC5B4 \uBE44\uC911"
+    Value: 150
+    IsOnce: 0
+  - RewardType: Card
+    CardGrade: Legendary
+    NameDesc: "\uC804\uC124 \uBE44\uC911"
+    Value: 50
+    IsOnce: 0
+  - RewardType: Gold
+    CardGrade: 
+    NameDesc: "\uACE8\uB4DC \uBE44\uC911"
+    Value: 800
+    IsOnce: 1
+  - RewardType: HP
+    CardGrade: 
+    NameDesc: "\uCCB4\uB825 \uBE44\uC911"
+    Value: 300
+    IsOnce: 1

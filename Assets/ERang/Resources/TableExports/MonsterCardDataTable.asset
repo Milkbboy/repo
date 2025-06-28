@@ -12,4 +12,73 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a26730dce0bfdc4383bb157519f053e, type: 3}
   m_Name: MonsterCardDataTable
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - Card_Id: 901001
+    NameDesc: "\uC18C\uB4DC\uB9E8_Lv1"
+    CardNameDesc_Id: CardName_1001
+    CardDesc_Id: CardDesc_1001
+    CardShortDesc_Id: CardShortDesc_1001
+    CardType: Monster
+    Grade: 
+    AiGroup_ids: 11001
+    CostMana: 1
+    CostGold: 0
+    Hp: 8
+    Atk: 3
+    Def: 1
+    Ability_Id: 
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: Crotch_Lv1
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 0
+  - Card_Id: 901002
+    NameDesc: "\uC544\uCCD0_Lv1"
+    CardNameDesc_Id: CardName_901002
+    CardDesc_Id: CardDesc_901002
+    CardShortDesc_Id: MobShortDesc_901002
+    CardType: Monster
+    Grade: 
+    AiGroup_ids: 11002
+    CostMana: 2
+    CostGold: 0
+    Hp: 5
+    Atk: 4
+    Def: 0
+    Ability_Id: 
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: witch_female
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 0
+  - Card_Id: 901003
+    NameDesc: "\uAD11\uC804\uC0AC_Lv1"
+    CardNameDesc_Id: CardName_901003
+    CardDesc_Id: CardDesc_901003
+    CardShortDesc_Id: MobShortDesc_901003
+    CardType: Monster
+    Grade: 
+    AiGroup_ids: 11003
+    CostMana: 3
+    CostGold: 50
+    Hp: 1
+    Atk: 6
+    Def: 3
+    Ability_Id: 
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 1
+    Level_1_img: Character_02_Croll
+    Level_3_img: 
+    Level_5_img: 
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 0
