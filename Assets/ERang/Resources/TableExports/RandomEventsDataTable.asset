@@ -12,46 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6031fd783b4a1354aa5b1fef007ae127, type: 3}
   m_Name: RandomEventsDataTable
   m_EditorClassIdentifier: 
-  items:
-  - RandomEventsID: 1001
-    NameDesc: "\uB79C\uB364 \uC804\uD22C \uC774\uBCA4\uD2B8"
-    Prefab: RandomBattle
-    RatioValue: 100
-    ReductionValue: 34
-    LevelGroupID: 0
-  - RandomEventsID: 1002
-    NameDesc: "\uB79C\uB364 \uC804\uD22C \uC774\uBCA4\uD2B8(\uC9C0\uC815)"
-    Prefab: RandomBattle
-    RatioValue: 100
-    ReductionValue: 100
-    LevelGroupID: 1001007
-  - RandomEventsID: 1003
-    NameDesc: "\uB8F0\uB81B \uC774\uBCA4\uD2B8"
-    Prefab: Random Events_01
-    RatioValue: 100
-    ReductionValue: 100
-    LevelGroupID: 0
-  - RandomEventsID: 1004
-    NameDesc: "\uC9DD\uB9DE\uCD94\uAE30 \uC774\uBCA4\uD2B8"
-    Prefab: EliteBattle_01
-    RatioValue: 100
-    ReductionValue: 100
-    LevelGroupID: 0
-  - RandomEventsID: 1005
-    NameDesc: "\uCCB4\uB825 \uAC10\uC18C \uC774\uBCA4\uD2B8"
-    Prefab: Random Events_01
-    RatioValue: 100
-    ReductionValue: 100
-    LevelGroupID: 0
-  - RandomEventsID: 1006
-    NameDesc: "\uC720\uBB3C \uD68D\uB4DD \uC774\uBCA4\uD2B8"
-    Prefab: EliteBattle_01
-    RatioValue: 50
-    ReductionValue: 50
-    LevelGroupID: 0
-  - RandomEventsID: 1007
-    NameDesc: "\uCE74\uB4DC \uD68D\uB4DD \uC774\uBCA4\uD2B8"
-    Prefab: EliteBattle_01
-    RatioValue: 100
-    ReductionValue: 100
-    LevelGroupID: 0
+  items: []
