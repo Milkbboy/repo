@@ -25,6 +25,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1002
     NameDesc: "\uB2E4\uB2E8 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     Type: Melee
@@ -37,6 +39,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70002
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1003
     NameDesc: "\uAD00\uD1B5 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     Type: Melee
@@ -49,6 +53,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70003
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1004
     NameDesc: "\uAE30\uBCF8 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     Type: Ranged
@@ -61,6 +67,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70004
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1005
     NameDesc: "\uB2E4\uB2E8 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     Type: Ranged
@@ -73,6 +81,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70005
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1006
     NameDesc: "\uBC94\uC704 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     Type: Ranged
@@ -85,6 +95,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70006
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1007
     NameDesc: "\uD3ED\uD30C \uC6D0\uAC70\uB9AC \uACF5\uACA9"
     Type: Explosion
@@ -97,6 +109,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: -2
     Ability_id: 70007
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1008
     NameDesc: "\uB79C\uB364 \uD0C0\uAC9F \uC6D0\uAC70\uB9AC \uACF5\uACA9_1 (\uC801
       \uB9C8\uC655 \uD3EC\uD568)"
@@ -110,6 +124,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70008
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1009
     NameDesc: "\uB79C\uB364 \uD0C0\uAC9F \uC6D0\uAC70\uB9AC \uACF5\uACA9_2 (\uC801
       \uD06C\uB9AC\uCCD0\uB9CC)"
@@ -123,6 +139,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70009
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1010
     NameDesc: "\uD30C\uC774\uC5B4 \uBCFC (\uB9C8\uBC95)"
     Type: Ranged
@@ -135,6 +153,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70010
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1011
     NameDesc: "\uBE14\uB9AC\uC790\uB4DC (\uC804\uCCB4 \uB9C8\uBC95)"
     Type: Ranged
@@ -147,6 +167,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70011
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1012
     NameDesc: "\uD30C\uC774\uC5B4 \uC6D4 (\uD06C\uCE58\uCCD0 \uC804\uCCB4 \uB9C8\uBC95)"
     Type: Ranged
@@ -159,6 +181,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70012
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1013
     NameDesc: "\uD790\uB9C1 (\uD0C0\uAC9F \uD790\uB9C1 \uB9C8\uBC95)"
     Type: Ranged
@@ -171,6 +195,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70013
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 1014
     NameDesc: "\uACF5\uACA9\uB825 \uAC15\uD654 (\uC544\uAD70 \uC804\uCCB4)"
     Type: Ranged
@@ -183,6 +209,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70014
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 2001
     NameDesc: "\uC18C\uB4DC\uB9E8 \uAE30\uBCF8 \uADFC\uAC70\uB9AC \uACF5\uACA9"
     Type: Melee
@@ -195,6 +223,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70015
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 2002
     NameDesc: "\uC18C\uB4DC\uB9E8 \uAE30\uBCF8 \uADFC\uAC70\uB9AC \uAC15\uACF5\uACA9"
     Type: Melee
@@ -207,6 +237,8 @@ MonoBehaviour:
     Value: 50
     Explosion_Shock: 0
     Ability_id: 70016
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 2003
     NameDesc: "\uC18C\uB4DC\uB9E8 \uBC29\uC5B4\uB825 \uC99D\uAC00"
     Type: Buff
@@ -219,6 +251,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70017
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 2004
     NameDesc: "\uC18C\uB4DC\uB9E8 \uBC29\uC5B4\uB825 \uD30C\uAD34"
     Type: DeBuff
@@ -231,6 +265,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70018
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 3001
     NameDesc: "\uC544\uCCD0 \uAE30\uBCF8 \uC0AC\uACA9"
     Type: Ranged
@@ -243,6 +279,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70019
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 3002
     NameDesc: "\uC544\uCCD0 \uBC94\uC704 \uC0AC\uACA9"
     Type: Ranged
@@ -255,6 +293,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70020
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 3003
     NameDesc: "\uC544\uCCD0 \uCDA9\uC804 \uC0AC\uACA9"
     Type: Ranged
@@ -267,6 +307,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70021
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 4001
     NameDesc: "\uAD11\uC804\uC0AC \uACF5\uACA9"
     Type: Melee
@@ -279,6 +321,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70022
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 4002
     NameDesc: "\uAD11\uC804\uC0AC \uB2E4\uB2E8 \uACF5\uACA9"
     Type: Melee
@@ -291,6 +335,8 @@ MonoBehaviour:
     Value: 50
     Explosion_Shock: 0
     Ability_id: 70023
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 4003
     NameDesc: "\uAD11\uC804\uC0AC \uACF5\uACA9\uB825 \uC99D\uAC00"
     Type: Buff
@@ -303,6 +349,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70024
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 4004
     NameDesc: "\uAD11\uC804\uC0AC \uC804\uCCB4 \uACF5\uACA9"
     Type: Melee
@@ -315,6 +363,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 70025
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 90001
     NameDesc: "\uCE74\uB4DC_\uC544\uADC0 \uAE30\uBCF8 \uACF5\uACA9"
     Type: Melee
@@ -327,6 +377,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 90001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 90002
     NameDesc: "\uD30C\uC774\uC5B4 \uBCFC"
     Type: Ranged
@@ -339,6 +391,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 90002
+    ChainTrigger: DamageDealt
+    ChainAiDataId: 100001
   - Ai_Id: 90003
     NameDesc: "\uAE08\uAD11"
     Type: Build
@@ -351,6 +405,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 90003
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 90004
     NameDesc: "\uD48D\uC694\uC758 \uBD80\uC801"
     Type: Buff
@@ -363,6 +419,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 90004
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 90005
     NameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
     Type: DeBuff
@@ -375,6 +433,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 90005
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 90006
     NameDesc: "\uB808\uD504\uB9AC\uCE78\uC758 \uAE08\uB2E8\uC9C0"
     Type: Buff
@@ -387,6 +447,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 90006, 90007
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 100001
     NameDesc: "\uB9CC\uBCF5\uB3C4 \uCC44\uC6B0\uAE30"
     Type: Buff
@@ -399,6 +461,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 100001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 100002
     NameDesc: "\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
     Type: DeBuff
@@ -411,6 +475,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 100002
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 100011
     NameDesc: "\uCE74\uB4DC \uC190\uC73C\uB85C \uC18C\uD658"
     Type: Buff
@@ -423,6 +489,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 100011
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 100012
     NameDesc: "\uCE74\uB4DC \uBF51\uC744 \uCE74\uB4DC\uB85C \uC18C\uD658"
     Type: Buff
@@ -435,6 +503,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 100012
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 100013
     NameDesc: "\uCE74\uB4DC \uADF8\uB808\uC774\uBE0C\uB85C \uC18C\uD658"
     Type: Buff
@@ -447,6 +517,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 100013
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 100014
     NameDesc: "\uCE74\uB4DC \uC0BC\uD0A4\uAE30"
     Type: Buff
@@ -459,6 +531,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 100026
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100100
     NameDesc: "\uCC0C\uB974\uAE30"
     Type: Melee
@@ -471,6 +545,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81001000, 81001001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100200
     NameDesc: "\uC790\uB974\uAE30"
     Type: Melee
@@ -483,6 +559,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81002000, 81002001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100300
     NameDesc: "\uD565\uAE30"
     Type: Melee
@@ -495,6 +573,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81003000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100400
     NameDesc: "\uB178\uB824\uBCF4\uAE30"
     Type: DeBuff
@@ -507,6 +587,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81004000, 81004001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100500
     NameDesc: "\uCC0C\uB974\uACE0 \uC790\uB974\uAE30"
     Type: Melee
@@ -519,6 +601,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81005000, 81005001, 81005002, 81005003
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100600
     NameDesc: "\uB2E4\uC9C0\uAE30"
     Type: Melee
@@ -531,6 +615,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81006000, 81006001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100700
     NameDesc: "\uC784\uD504 \uAE30\uBCF8 \uACF5\uACA9"
     Type: Melee
@@ -543,6 +629,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81007000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100800
     NameDesc: "\uC784\uD504 \uAD81\uC218 \uAE30\uBCF8 \uACF5\uACA9"
     Type: Ranged
@@ -555,6 +643,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81008000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100900
     NameDesc: "\uACB9\uC8FC\uB984 \uC704 \uAE30\uBCF8 \uD589\uB3D9"
     Type: Buff
@@ -567,6 +657,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81009000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101000
     NameDesc: "\uCD0C\uCDA9 \uAE30\uBCF8 \uACF5\uACA9"
     Type: Melee
@@ -579,6 +671,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81010000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101001
     NameDesc: "\uCD0C\uCDA9 \uC790\uAE30 \uD53C\uD574"
     Type: DeBuff
@@ -591,6 +685,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81010001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101100
     NameDesc: "\uACE0\uB798\uD68C\uCDA9 \uACF5\uACA9"
     Type: Melee
@@ -603,6 +699,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81011000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101101
     NameDesc: "\uACE0\uB798\uD68C\uCDA9 \uC790\uAE30 \uD53C\uD574"
     Type: DeBuff
@@ -615,6 +713,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81011001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101200
     NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC \uACF5\uACA9"
     Type: Melee
@@ -627,6 +727,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81012000, 81012001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101201
     NameDesc: "\uC544\uBA54\uBC14\uB1CC\uC5FC_\uC790\uAE30 \uD53C\uD574"
     Type: DeBuff
@@ -639,6 +741,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81012002
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101300
     NameDesc: "\uAD6C\uD1A0"
     Type: Buff
@@ -651,6 +755,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81013000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101301
     NameDesc: "\uAD6C\uD1A0_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8"
     Type: DeBuff
@@ -663,6 +769,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81013001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101400
     NameDesc: "\uAD6C\uD1A0 \uBC1C\uC0AC_\uACF5\uACA9"
     Type: Ranged
@@ -675,6 +783,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81014000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101401
     NameDesc: "\uAD6C\uD1A0 \uBC1C\uC0AC_\uCE74\uB4DC \uC18C\uD658"
     Type: Buff
@@ -687,6 +797,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81014001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101402
     NameDesc: "\uAD6C\uD1A0 \uBC1C\uC0AC_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8"
     Type: DeBuff
@@ -699,6 +811,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81014002
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101500
     NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC_\uACF5\uACA9"
     Type: Ranged
@@ -711,6 +825,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81015000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101501
     NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC_\uCE74\uB4DC \uC18C\uD658"
     Type: Buff
@@ -723,6 +839,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81015001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101502
     NameDesc: "\uD608\uD1A0 \uBC1C\uC0AC_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
     Type: DeBuff
@@ -735,6 +853,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81015002
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101600
     NameDesc: "\uD55C\uC785"
     Type: Melee
@@ -747,6 +867,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81016000, 81016001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101700
     NameDesc: "\uB450\uC785"
     Type: Melee
@@ -759,6 +881,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81017000, 81017001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101800
     NameDesc: "\uD06C\uAC8C \uD55C\uC785"
     Type: Melee
@@ -771,6 +895,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81018000, 81018001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101900
     NameDesc: "\uBE68\uC544 \uBA39\uAE30"
     Type: Ranged
@@ -783,6 +909,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81019000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8101901
     NameDesc: "\uBE68\uC544 \uBA39\uAE30_\uBC84\uD504"
     Type: Buff
@@ -795,6 +923,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81019001, 81019002
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102000
     NameDesc: "\uD3EC\uB9CC\uAC10"
     Type: Buff
@@ -807,6 +937,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81020000, 81020001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102100
     NameDesc: "\uAE40\uCE58"
     Type: Buff
@@ -819,6 +951,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81021000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102200
     NameDesc: "\uACE8\uB3D9\uD488"
     Type: Buff
@@ -831,6 +965,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81022000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102300
     NameDesc: "\uBD88\uC758 \uC228\uACB0"
     Type: Melee
@@ -843,6 +979,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81023000, 81023001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102400
     NameDesc: "\uBE44\uD504 \uC6F0\uB9C1\uD134"
     Type: Buff
@@ -855,6 +993,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81024000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102401
     NameDesc: "\uBE44\uD504 \uC6F0\uB9C1\uD134_\uCE74\uB4DC \uC18C\uD658"
     Type: Buff
@@ -867,6 +1007,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81024001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102500
     NameDesc: "\uD478\uC640\uADF8\uB77C_\uB9CC\uBCF5\uB3C4, \uCE74\uB4DC \uC18C\uD658"
     Type: Buff
@@ -879,6 +1021,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81025000, 81025001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102501
     NameDesc: "\uD478\uC640\uADF8\uB77C_\uACF5\uACA9\uB825 \uC99D\uAC00"
     Type: Buff
@@ -891,6 +1035,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81025002
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102600
     NameDesc: "\uBB34\uB77C\uB9C8\uC0AC"
     Type: Ranged
@@ -903,6 +1049,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81026000, 81026001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102700
     NameDesc: "\uB2E8\uC2DD"
     Type: Buff
@@ -915,6 +1063,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81027000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102800
     NameDesc: "\uD3ED\uC2DD"
     Type: Buff
@@ -927,6 +1077,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81028000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8102900
     NameDesc: "\uD5DB\uAD6C\uC5ED\uC9C8"
     Type: Buff
@@ -939,6 +1091,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81029000, 81029001
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8103000
     NameDesc: "\uACE0\uB300\uC758 \uBA85\uC57D"
     Type: Buff
@@ -951,6 +1105,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81030000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8103100
     NameDesc: "\uC9C0\uC625 \uC544\uADC0 \uACF5\uACA9"
     Type: Melee
@@ -963,6 +1119,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81031000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8103200
     NameDesc: "\uC784\uD504 \uC9C0\uD718\uAD00 \uACF5\uACA9"
     Type: Melee
@@ -975,6 +1133,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81032000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8103300
     NameDesc: "\uC784\uD504 \uC790\uD3ED\uBCD1 \uC790\uD3ED"
     Type: Ranged
@@ -987,6 +1147,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81033000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8103301
     NameDesc: "\uC784\uD504 \uC790\uD3ED\uBCD1 \uC790\uD3ED \uBC94\uC704 \uACF5\uACA9"
     Type: Ranged
@@ -999,3 +1161,5 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81033001
+    ChainTrigger: 
+    ChainAiDataId: 0
