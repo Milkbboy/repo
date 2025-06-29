@@ -30,6 +30,8 @@ namespace ERang.Data
         public bool isSameTime; // 동시에 행동이 이루어지는지 여부
         public List<int> BuffAbilityIds => buffAbilityIds;
         public List<int> DebuffAbilityIds => debuffAbilityIds;
+        public ChainAbilityTrigger chainTrigger;
+        public int chainAiDataId;
 
         private static List<int> buffAbilityIds = new List<int>();
         private static List<int> debuffAbilityIds = new List<int>();
@@ -48,6 +50,8 @@ namespace ERang.Data
             ability_Ids.AddRange(Utils.ParseIntArray(entity.Ability_id).Where(x => x != 0));
             attackRanges.AddRange(Utils.ParseIntArray(entity.Atk_Range).Where(x => x != 0));
             isSameTime = entity.isSameTime;
+            chainTrigger = ConvertChainTrigger(entity.ChainTrigger);
+            chainAiDataId = entity.ChainAiDataId;
 
             if (type == AiDataType.Buff)
             {
@@ -152,6 +156,27 @@ namespace ERang.Data
                 "SelectEnemyCreature" => AiDataAttackType.SelectEnemyCreature,
                 "SelectFriendlyCreature" => AiDataAttackType.SelectFriendlyCreature,
                 _ => AiDataAttackType.None,
+            };
+        }
+
+        ChainAbilityTrigger ConvertChainTrigger(string trigger)
+        {
+            // Remove spaces from the trigger string
+            trigger = trigger?.Replace(" ", "") ?? "";
+
+            return trigger switch
+            {
+                "DamageDealt" => ChainAbilityTrigger.DamageDealt,
+                "DamageReceived" => ChainAbilityTrigger.DamageReceived,
+                "AbilityCompleted" => ChainAbilityTrigger.AbilityCompleted,
+                "TurnStart" => ChainAbilityTrigger.TurnStart,
+                "TurnEnd" => ChainAbilityTrigger.TurnEnd,
+                "CardPlayed" => ChainAbilityTrigger.CardPlayed,
+                "CardDestroyed" => ChainAbilityTrigger.CardDestroyed,
+                // "HPBelow50" => ChainAbilityTrigger.HPBelow50,
+                // "HPBelow25" => ChainAbilityTrigger.HPBelow25,
+                // "ManaFull" => ChainAbilityTrigger.ManaFull,
+                _ => ChainAbilityTrigger.None,
             };
         }
     }

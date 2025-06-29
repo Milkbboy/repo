@@ -57,10 +57,14 @@ namespace ERang
                 LogAbility($"데미지 적용 총 {atkCount}회 중 {i + 1}회 - 대상: {targetSlot.ToSlotLogInfo()}, HP: {targetCard.Hp}, DEF: {targetCard.Def}, 데미지: {damage}");
 
                 yield return StartCoroutine(targetSlot.TakeDamage(damage));
-                yield return new WaitForSeconds(0.5f);
 
                 // 데미지 적용 후 타겟 카드 확인
                 LogAbility($"데미지 적용 후 타겟 카드 확인 - 대상: {targetSlot.ToSlotLogInfo()}, HP: {targetCard.Hp}, DEF: {targetCard.Def}");
+
+                // ⭐ 체인 어빌리티 트리거 - 데미지를 가할 때마다 호출!
+                ChainAbilityEvents.TriggerDamageDealt(selfSlot, cardAbility.aiDataId);
+
+                yield return new WaitForSeconds(0.5f);
             }
 
             // LogAbility($"데미지 완료 - 대상: {targetSlot.ToSlotLogInfo()}, 총 데미지: {damage * atkCount}");

@@ -15,5 +15,7 @@ namespace ERang
         public int Value; // 해당 행동의 무게 값으로 Ai Group에서 참조된다.
         public int Explosion_Shock; // Type이 Explosion일 경우에만 입력
         public string Ability_id; // 실질적인 효과를 주는 Ability의 Id를 입력
+        public string ChainTrigger; // 체인 어빌리티 발동 조건 (DamageDealt, DamageReceived, AbilityCompleted, TurnStart, TurnEnd, CardPlayed, CardDestroyed)
+        public int ChainAiDataId; // 체인 어빌리티의 아이덴티티 값
     }
 }
