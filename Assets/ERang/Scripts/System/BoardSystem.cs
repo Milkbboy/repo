@@ -327,6 +327,11 @@ namespace ERang
             return buildingSlots;
         }
 
+        public BoardSlot GetEnemySlotPos(int pos)
+        {
+            return boardSlots.Find(x => x.Index == pos);
+        }
+
         /// <summary>
         /// 크리쳐 카드가 장착된 보드 슬롯 인덱스를 정렬한 카드 반화
         /// - 슬롯 인덱스 3, 2, 1 순서

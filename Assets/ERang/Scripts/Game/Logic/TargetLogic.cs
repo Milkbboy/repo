@@ -36,6 +36,10 @@ namespace ERang
                 case AiDataTarget.AllFriendlyCreature: targetSlots = TargetAllFriendly(selfSlot); break;
                 case AiDataTarget.FirstEnemy: targetSlots = TargetFirstEnemy(selfSlot); break;
                 case AiDataTarget.SecondEnemy: targetSlots = TargetSecondEnemy(selfSlot); break;
+                case AiDataTarget.EnemyPos1: targetSlots = new List<BoardSlot> { BoardSystem.Instance.GetEnemySlotPos(1) }; break;
+                case AiDataTarget.EnemyPos2: targetSlots = new List<BoardSlot> { BoardSystem.Instance.GetEnemySlotPos(2) }; break;
+                case AiDataTarget.EnemyPos3: targetSlots = new List<BoardSlot> { BoardSystem.Instance.GetEnemySlotPos(3) }; break;
+                case AiDataTarget.EnemyPos4: targetSlots = new List<BoardSlot> { BoardSystem.Instance.GetEnemySlotPos(4) }; break;
                 case AiDataTarget.None:
                 default:
                     Debug.LogWarning($"{aiData.ai_Id} - 대상이 없음. {whereFrom} 에서 호출");
