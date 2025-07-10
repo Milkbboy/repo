@@ -1852,3 +1852,37 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81035000
+    NameDesc: "\uC18C\uD654\uC81C_\uCCB4\uB825 \uD68C\uBCF5"
+    AbilityType: Heal
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitHeal_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81035001
+    NameDesc: "\uCE74\uB4DC \uBF51\uC744 \uCE74\uB4DC\uB85C \uC18C\uD658"
+    AbilityType: Summon_DrawDeck
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1005
+    ChainAbilityId: 0

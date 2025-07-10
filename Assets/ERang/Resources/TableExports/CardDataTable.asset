@@ -1085,12 +1085,35 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 0
+    Extinction: 1
     CompleteExtinction: 0
     Level: 0
     Level_1_img: Lucy_034
     Level_3_img: Lucy_034
     Level_5_img: Lucy_034
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81035
+    NameDesc: "\uC18C\uD654\uC81C"
+    CardNameDesc_Id: CardName_81035
+    CardDesc_Id: CardDesc_81035
+    CardShortDesc_Id: CardShortDesc_81035
+    CardType: Magic
+    Grade: Rare
+    AiGroup_ids: 810350, 810351
+    CostMana: 1
+    CostGold: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_035
+    Level_3_img: Lucy_035
+    Level_5_img: Lucy_035
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
