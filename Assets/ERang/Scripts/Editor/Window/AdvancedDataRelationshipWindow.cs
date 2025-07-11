@@ -911,6 +911,7 @@ namespace ERang
             EditorGUILayout.LabelField($"    Attack Count: {ai.atk_Cnt} | Interval: {ai.atk_Interval}s");
             EditorGUILayout.LabelField($"    Ranges: [{string.Join(", ", ai.attackRanges)}]");
             EditorGUILayout.LabelField($"    Abilities: [{string.Join(", ", ai.ability_Ids)}]");
+            EditorGUILayout.LabelField($"    ChainAiData: {ai.chainAiDataId} | Trigger Type: {ai.chainTrigger}");
         }
 
         private void DrawAbilityDetails(AbilityData ability)

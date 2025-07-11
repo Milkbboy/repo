@@ -52,78 +52,78 @@ namespace ERang
 
         private void HandleDamageDealt(ChainAbilityEventData eventData)
         {
-            StartCoroutine(ProcessChainAbility(eventData));
+            StartCoroutine(ProcessAiDataChain(eventData));
         }
 
         private void HandleDamageReceived(ChainAbilityEventData eventData)
         {
-            StartCoroutine(ProcessChainAbility(eventData));
+            StartCoroutine(ProcessAiDataChain(eventData));
         }
 
         private void HandleAbilityCompleted(ChainAbilityEventData eventData)
         {
-            StartCoroutine(ProcessChainAbility(eventData));
+            StartCoroutine(ProcessAiDataChain(eventData));
         }
 
         private void HandleTurnStart(ChainAbilityEventData eventData)
         {
-            StartCoroutine(ProcessChainAbility(eventData));
+            StartCoroutine(ProcessAiDataChain(eventData));
         }
 
         private void HandleTurnEnd(ChainAbilityEventData eventData)
         {
-            StartCoroutine(ProcessChainAbility(eventData));
+            StartCoroutine(ProcessAiDataChain(eventData));
         }
 
         private void HandleCardPlayed(ChainAbilityEventData eventData)
         {
-            StartCoroutine(ProcessChainAbility(eventData));
+            StartCoroutine(ProcessAiDataChain(eventData));
         }
 
-        private IEnumerator ProcessChainAbility(ChainAbilityEventData eventData)
+        private IEnumerator ProcessAiDataChain(ChainAbilityEventData eventData)
         {
             if (enableDebugLog)
                 Debug.Log($"<color=cyan>[ChainAbility]</color> 이벤트 처리: {eventData.trigger}, 소스 어빌리티 ID: {eventData.sourceAbilityId}");
 
-            // 해당 트리거에 맞는 체인 어빌리티들 찾기
-            var chainAiDataList = FindChainAbilitiesForTrigger(eventData);
+            // ⭐ sourceAbilityId로 직접 AiData 찾기 (순회 불필요!)
+            AiData sourceAiData = AiData.GetAiData(eventData.sourceAbilityId);
 
-            foreach (var chainAiData in chainAiDataList)
+            if (sourceAiData == null)
             {
                 if (enableDebugLog)
-                    Debug.Log($"<color=yellow>[ChainAbility]</color> 체인 어빌리티 실행: {chainAiData.name}");
-
-                // 체인 AiData 실행 (기존 시스템 활용)
-                yield return StartCoroutine(ExecuteChainAiData(chainAiData, eventData));
+                    Debug.LogWarning($"<color=orange>[ChainAbility]</color> AiData({eventData.sourceAbilityId})를 찾을 수 없습니다.");
+                yield break;
             }
-        }
 
-        private List<AiData> FindChainAbilitiesForTrigger(ChainAbilityEventData eventData)
-        {
-            var result = new List<AiData>();
-
-            // ⭐ 모든 AiData에서 해당 트리거 조건을 만족하는 체인 찾기
-            foreach (var aiData in AiData.ai_list)
+            // 체인 어빌리티가 설정되어 있고 트리거 조건이 맞는지 확인
+            if (sourceAiData.chainAiDataId == 0)
             {
-                // 체인 설정이 있고, 트리거가 일치하는지 확인
-                if (aiData.chainAiDataId != 0 && aiData.chainTrigger == eventData.trigger)
-                {
-                    // 추가 조건 확인 (있는 경우)
-                    // if (CheckChainCondition(aiData, eventData))
-                    // {
-                    var chainAiData = AiData.GetAiData(aiData.chainAiDataId);
-                    if (chainAiData != null)
-                    {
-                        result.Add(chainAiData);
-
-                        if (enableDebugLog)
-                            Debug.Log($"<color=green>[ChainAbility]</color> 체인 조건 만족: {aiData.name} -> {chainAiData.name} (트리거: {eventData.trigger})");
-                    }
-                    // }
-                }
+                if (enableDebugLog)
+                    Debug.Log($"<color=gray>[ChainAbility]</color> {sourceAiData.name}에 체인 어빌리티가 설정되지 않았습니다.");
+                yield break;
             }
 
-            return result;
+            if (sourceAiData.chainTrigger != eventData.trigger)
+            {
+                if (enableDebugLog)
+                    Debug.Log($"<color=gray>[ChainAbility]</color> 트리거 불일치: {sourceAiData.chainTrigger} ≠ {eventData.trigger}");
+                yield break;
+            }
+
+            // ⭐ 체인 AiData 가져오기
+            AiData chainAiData = AiData.GetAiData(sourceAiData.chainAiDataId);
+            if (chainAiData == null)
+            {
+                if (enableDebugLog)
+                    Debug.LogError($"<color=red>[ChainAbility]</color> 체인 AiData({sourceAiData.chainAiDataId})를 찾을 수 없습니다.");
+                yield break;
+            }
+
+            if (enableDebugLog)
+                Debug.Log($"<color=yellow>[ChainAbility]</color> 체인 실행: {sourceAiData.name} → {chainAiData.name}");
+
+            // 체인 어빌리티 실행
+            yield return StartCoroutine(ExecuteChainAiData(chainAiData, eventData));
         }
 
         /// <summary>
@@ -160,7 +160,6 @@ namespace ERang
             if (enableDebugLog)
                 Debug.Log($"<color=yellow>[ChainAbility]</color> 체인 AiData 실행: {chainAiData.name}, 타겟: {chainAiData.target}");
 
-            // ⭐ 기존 어빌리티 시스템 활용 - AbilityDamage, AbilityHeal 등의 클래스들 사용
             foreach (var abilityId in chainAiData.ability_Ids)
             {
                 var abilityData = AbilityData.GetAbilityData(abilityId);
@@ -270,37 +269,7 @@ namespace ERang
 
                 yield return new WaitForSeconds(0.1f);
             }
-
-            // 체인 데미지로 인한 추가 체인 어빌리티 방지 (무한 루프 방지)
-            // ChainAbilityEvents.TriggerDamageDealt는 호출하지 않음
-        }
-
-        /// <summary>
-        /// 기존 AbilityDamage 시스템을 재사용하는 방법 (대안)
-        /// </summary>
-        private IEnumerator ExecuteDamageWithFullSystem(AbilityData abilityData, BoardSlot sourceSlot, BoardSlot targetSlot)
-        {
-            // 기존 AbilityDamage 클래스를 직접 사용하는 방법
-            var damageAbility = FindObjectOfType<AbilityDamage>();
-            if (damageAbility != null)
-            {
-                // CardAbility 객체 생성
-                var chainCardAbility = new CardAbility
-                {
-                    abilityId = abilityData.abilityId,
-                    abilityType = abilityData.abilityType,
-                    abilityValue = abilityData.value,
-                    aiDataId = 0 // 체인 어빌리티는 별도 AiData 없음
-                };
-
-                // 기존 시스템으로 데미지 적용 (단, 체인 이벤트 발생 방지 필요)
-                yield return StartCoroutine(damageAbility.ApplySingle(chainCardAbility, sourceSlot, targetSlot));
-            }
-            else
-            {
-                if (enableDebugLog)
-                    Debug.LogError($"<color=red>[ChainAbility]</color> AbilityDamage 컴포넌트를 찾을 수 없습니다.");
-            }
+            yield return null;
         }
 
         private IEnumerator ExecuteAddSatiety(AbilityData abilityData, List<BoardSlot> targetSlots)
@@ -342,7 +311,7 @@ namespace ERang
                 if (targetSlot?.Card != null)
                 {
                     int healAmount = abilityData.value;
-                    targetSlot.Card.RestoreHealth(healAmount);
+                    targetSlot.RestoreHealth(healAmount);
 
                     if (enableDebugLog)
                         Debug.Log($"<color=green>[ChainAbility]</color> 체력 회복: +{healAmount} ({targetSlot.ToSlotLogInfo()})");
@@ -355,10 +324,10 @@ namespace ERang
         {
             foreach (var targetSlot in targetSlots)
             {
-                if (targetSlot?.Card is CreatureCard creatureCard)
+                if (targetSlot?.Card is CreatureCard)
                 {
                     int atkIncrease = abilityData.value;
-                    creatureCard.IncreaseAttack(atkIncrease);
+                    targetSlot.IncreaseAttack(atkIncrease);
 
                     if (enableDebugLog)
                         Debug.Log($"<color=red>[ChainAbility]</color> 공격력 증가: +{atkIncrease} ({targetSlot.ToSlotLogInfo()})");
@@ -371,10 +340,10 @@ namespace ERang
         {
             foreach (var targetSlot in targetSlots)
             {
-                if (targetSlot?.Card is CreatureCard creatureCard)
+                if (targetSlot?.Card is CreatureCard)
                 {
                     int defIncrease = abilityData.value;
-                    creatureCard.IncreaseDefense(defIncrease);
+                    targetSlot.IncreaseDefense(defIncrease);
 
                     if (enableDebugLog)
                         Debug.Log($"<color=blue>[ChainAbility]</color> 방어력 증가: +{defIncrease} ({targetSlot.ToSlotLogInfo()})");
@@ -424,10 +393,10 @@ namespace ERang
         {
             foreach (var targetSlot in targetSlots)
             {
-                if (targetSlot?.Card is CreatureCard creatureCard)
+                if (targetSlot?.Card is CreatureCard)
                 {
                     int weakenAmount = abilityData.value;
-                    creatureCard.DecreaseAttack(weakenAmount);
+                    targetSlot.DecreaseAttack(weakenAmount);
 
                     if (enableDebugLog)
                         Debug.Log($"<color=purple>[ChainAbility]</color> 공격력 감소: -{weakenAmount} ({targetSlot.ToSlotLogInfo()})");
@@ -443,7 +412,7 @@ namespace ERang
                 if (targetSlot?.Card != null)
                 {
                     int armorBreakAmount = abilityData.value;
-                    targetSlot.Card.DecreaseDefense(armorBreakAmount);
+                    targetSlot.DecreaseDefense(armorBreakAmount);
 
                     if (enableDebugLog)
                         Debug.Log($"<color=brown>[ChainAbility]</color> 방어력 감소: -{armorBreakAmount} ({targetSlot.ToSlotLogInfo()})");
