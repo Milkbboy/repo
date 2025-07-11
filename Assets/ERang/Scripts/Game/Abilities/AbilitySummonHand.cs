@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using ERang.Data;
+using System.Collections.Generic;
 
 namespace ERang
 {
@@ -37,28 +38,35 @@ namespace ERang
             }
 
             // 소환할 카드 선택
-            int cardId = SummonData.PickUpCard(summonGroupId);
-            if (cardId == 0)
+            List<int> cardIds = SummonData.PickUpCard(summonGroupId, abilityData.value);
+            if (cardIds.Count == 0)
             {
-                LogAbility($"소환 그룹 {summonGroupId}에서 카드 뽑기 실패. 확률을 확인해주세요.", LogType.Error);
+                LogAbility($"핸드 카드 소환 그룹 {summonGroupId}에서 카드 뽑기 실패. 확률을 확인해주세요.", LogType.Error);
                 yield break;
-            }
-
-            // 카드 이름 가져오기 (로그용)
-            var cardData = CardData.GetCardData(cardId);
-            string cardName = cardData?.nameDesc ?? $"카드 ID {cardId}";
-
-            LogAbility($"카드 소환: {cardName} -> {targetDeck}");
-
-            // 핸드덱에 카드 소환
-            if (HandDeck.Instance != null)
-            {
-                yield return StartCoroutine(HandDeck.Instance.SummonCardToDeck(cardId, targetDeck));
-                LogAbility($"소환 완료: {cardName}");
             }
             else
             {
-                LogAbility("HandDeck 인스턴스가 없습니다.", LogType.Error);
+                LogAbility($"핸드 카드 소환 그룹 {summonGroupId}에서 {string.Join(",", cardIds)}");
+            }
+
+            foreach (int cardId in cardIds)
+            {
+                // 카드 이름 가져오기 (로그용)
+                var cardData = CardData.GetCardData(cardId);
+                string cardName = cardData?.nameDesc ?? $"카드 ID {cardId}";
+
+                LogAbility($"핸드 카드 소환: {cardName} -> {targetDeck}");
+
+                // 핸드덱에 카드 소환
+                if (HandDeck.Instance != null)
+                {
+                    yield return StartCoroutine(HandDeck.Instance.SummonCardToDeck(cardId, targetDeck));
+                    LogAbility($"소환 완료: {cardName}");
+                }
+                else
+                {
+                    LogAbility("HandDeck 인스턴스가 없습니다.", LogType.Error);
+                }
             }
         }
     }

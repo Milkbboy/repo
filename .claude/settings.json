@@ -1,0 +1,41 @@
+{
+  "model": "claude-3-5-sonnet-20241022",
+  "maxTokens": 8192,
+  "temperature": 0.0,
+  "systemPrompt": "항상 한국어로 응답해주세요. 모든 설명과 코드 주석, 메시지를 한글로 작성해주세요. Always respond in Korean. Write all explanations, code comments, and messages in Korean language.",
+  "tools": {
+    "bash": true,
+    "edit": true,
+    "read": true,
+    "write": true,
+    "grep": true,
+    "glob": true,
+    "ls": true
+  },
+  "projectContext": {
+    "description": "Unity Card Game Project - TCG Roguelike Engine",
+    "framework": "Unity 3D",
+    "language": "C#",
+    "type": "game-development"
+  },
+  "gitIntegration": {
+    "enabled": true,
+    "autoCommit": false,
+    "autoStage": false
+  },
+  "codeStyle": {
+    "indentation": "spaces",
+    "indentSize": 4,
+    "maxLineLength": 120,
+    "fileEncoding": "utf-8"
+  },
+  "excludePatterns": [
+    "**/Library/**",
+    "**/Temp/**",
+    "**/Logs/**",
+    "**/UserSettings/**",
+    "**/.vs/**",
+    "**/obj/**",
+    "**/bin/**"
+  ]
+}
