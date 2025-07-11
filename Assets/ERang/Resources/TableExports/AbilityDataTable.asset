@@ -1886,3 +1886,37 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 1005
     ChainAbilityId: 0
+  - AbilityData_Id: 81037000
+    NameDesc: "\uB9CC\uB4DC\uB77C\uACE0\uB77C_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
+    AbilityType: SubSatiety
+    Value: 30
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81037001
+    NameDesc: "\uB9CC\uB4DC\uB77C\uACE0\uB77C_\uB9C8\uB098 \uC99D\uAC00"
+    AbilityType: AddMana
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
