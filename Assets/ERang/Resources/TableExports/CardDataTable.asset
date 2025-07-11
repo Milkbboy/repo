@@ -21,6 +21,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Common
     AiGroup_ids: 21001
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 3
@@ -44,6 +45,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 21002
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -67,6 +69,7 @@ MonoBehaviour:
     CardType: Building
     Grade: Legendary
     AiGroup_ids: 21003
+    IsSameTime: 0
     CostMana: 3
     CostGold: 150
     Hp: 0
@@ -90,6 +93,7 @@ MonoBehaviour:
     CardType: Charm
     Grade: Common
     AiGroup_ids: 21004
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -113,6 +117,7 @@ MonoBehaviour:
     CardType: Curse
     Grade: Common
     AiGroup_ids: 21005
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -136,6 +141,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 21006
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -159,6 +165,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Common
     AiGroup_ids: 11002
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 5
@@ -182,6 +189,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 31002
+    IsSameTime: 0
     CostMana: 0
     CostGold: 20
     Hp: 0
@@ -205,6 +213,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 41001
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -228,6 +237,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 41002
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -251,6 +261,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 41003
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -274,6 +285,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 41004
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -297,6 +309,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 41004
+    IsSameTime: 0
     CostMana: 99
     CostGold: 0
     Hp: 0
@@ -320,6 +333,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810010
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -343,6 +357,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810020
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -366,6 +381,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810030
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -389,6 +405,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810040
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -412,6 +429,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810050
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -435,6 +453,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810060
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -458,6 +477,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Common
     AiGroup_ids: 810070
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 3
@@ -481,6 +501,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Common
     AiGroup_ids: 810080
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 2
@@ -504,6 +525,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Rare
     AiGroup_ids: 810090
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 6
@@ -527,6 +549,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Common
     AiGroup_ids: 810100, 810101
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 14
@@ -550,6 +573,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Rare
     AiGroup_ids: 810110, 810111
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 8
@@ -573,6 +597,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Legendary
     AiGroup_ids: 810120, 810121
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 6
@@ -596,6 +621,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810130, 810131
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -619,6 +645,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810140, 810141, 810142
+    IsSameTime: 1
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -642,6 +669,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810150, 810151, 810152
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -665,6 +693,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810160
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -688,6 +717,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810170, 810170
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -711,6 +741,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810180
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -734,6 +765,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810190, 810191
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -757,6 +789,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810200
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -780,6 +813,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810210
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -803,6 +837,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Common
     AiGroup_ids: 810220
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -826,6 +861,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810230
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -849,6 +885,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810240, 810241
+    IsSameTime: 0
     CostMana: 0
     CostGold: 0
     Hp: 0
@@ -872,6 +909,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Legendary
     AiGroup_ids: 810250, 810251
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -895,6 +933,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Legendary
     AiGroup_ids: 810260
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -918,6 +957,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810270
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -941,6 +981,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810280
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -964,6 +1005,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810290
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -987,6 +1029,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810300
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 0
@@ -1010,6 +1053,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Common
     AiGroup_ids: 810310
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 4
@@ -1033,6 +1077,7 @@ MonoBehaviour:
     CardType: Creature
     Grade: Rare
     AiGroup_ids: 810320
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 6
@@ -1055,7 +1100,8 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81033
     CardType: Creature
     Grade: Rare
-    AiGroup_ids: 810330, 810331
+    AiGroup_ids: 810330
+    IsSameTime: 0
     CostMana: 2
     CostGold: 0
     Hp: 99
@@ -1079,6 +1125,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810340, 810341
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0
@@ -1102,6 +1149,7 @@ MonoBehaviour:
     CardType: Magic
     Grade: Rare
     AiGroup_ids: 810350, 810351
+    IsSameTime: 0
     CostMana: 1
     CostGold: 0
     Hp: 0

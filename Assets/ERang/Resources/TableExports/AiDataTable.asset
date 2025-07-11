@@ -1147,8 +1147,8 @@ MonoBehaviour:
     Value: 100
     Explosion_Shock: 0
     Ability_id: 81033000
-    ChainTrigger: 
-    ChainAiDataId: 0
+    ChainTrigger: DamageDealt
+    ChainAiDataId: 8103301
   - Ai_Id: 8103301
     NameDesc: "\uC784\uD504 \uC790\uD3ED\uBCD1 \uC790\uD3ED \uBC94\uC704 \uACF5\uACA9"
     Type: Ranged
