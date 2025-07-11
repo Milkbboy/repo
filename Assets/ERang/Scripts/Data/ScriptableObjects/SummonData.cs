@@ -84,32 +84,74 @@ namespace ERang.Data
             return null;
         }
 
-        public static int PickUpCard(int summonGroupId)
+        public static List<int> PickUpCard(int summonGroupId, int count, bool allowDuplicate = true)
         {
+            List<int> pickedCardIds = new List<int>();
+
             if (summonDataDict.TryGetValue(summonGroupId, out SummonData summonData))
             {
-                int totalValue = 0;
-
-                foreach (var summonCardData in summonData.summonCardDatas)
+                if (allowDuplicate)
                 {
-                    totalValue += summonCardData.value;
-                }
+                    // 중복 허용 - 기존 로직
+                    int totalValue = 0;
 
-                int randomValue = Random.Range(0, totalValue);
-                int sumValue = 0;
-
-                foreach (var summonCardData in summonData.summonCardDatas)
-                {
-                    sumValue += summonCardData.value;
-
-                    if (randomValue < sumValue)
+                    foreach (var summonCardData in summonData.summonCardDatas)
                     {
-                        return summonCardData.cardId;
+                        totalValue += summonCardData.value;
+                    }
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        int randomValue = Random.Range(0, totalValue);
+                        int sumValue = 0;
+
+                        foreach (var summonCardData in summonData.summonCardDatas)
+                        {
+                            sumValue += summonCardData.value;
+
+                            if (randomValue < sumValue)
+                            {
+                                pickedCardIds.Add(summonCardData.cardId);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // 중복 비허용 - 뽑힌 카드는 일시적으로 제외
+                    List<SummonCardData> availableCards = new List<SummonCardData>(summonData.summonCardDatas);
+                    int totalValue = 0;
+
+                    foreach (var summonCardData in availableCards)
+                    {
+                        totalValue += summonCardData.value;
+                    }
+
+                    for (int i = 0; i < count && availableCards.Count > 0; i++)
+                    {
+                        int randomValue = Random.Range(0, totalValue);
+                        int sumValue = 0;
+
+                        for (int j = 0; j < availableCards.Count; j++)
+                        {
+                            sumValue += availableCards[j].value;
+
+                            if (randomValue < sumValue)
+                            {
+                                int cardId = availableCards[j].cardId;
+                                pickedCardIds.Add(cardId);
+
+                                totalValue -= availableCards[j].value;
+                                availableCards.RemoveAt(j);
+                                break;
+                            }
+                        }
                     }
                 }
             }
 
-            return 0;
+            return pickedCardIds;
         }
     }
 }
