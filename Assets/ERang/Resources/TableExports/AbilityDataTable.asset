@@ -1971,3 +1971,71 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81040000
+    NameDesc: "\uB0A8\uB3D9\uC0DD \uC758\uBBF8 \uC5C6\uB294 \uBC84\uD504"
+    AbilityType: DefUp
+    Value: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81041000
+    NameDesc: "\uC791\uC740 \uC5B8\uB2C8 \uC6D0\uAC70\uB9AC \uACF5\uACA9"
+    AbilityType: Damage
+    Value: 4
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81042000
+    NameDesc: "\uC624\uBE60 \uADFC\uAC70\uB9AC \uACF5\uACA9"
+    AbilityType: Damage
+    Value: 4
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Melee_01
+    SkillFx: Skill_Use_01
+    HitFx: Hit_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_03
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81043000
+    NameDesc: "\uD070 \uC5B8\uB9AC \uACF5\uACA9"
+    AbilityType: Damage
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0

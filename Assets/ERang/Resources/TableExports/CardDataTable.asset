@@ -1209,3 +1209,95 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
+  - Card_Id: 81040
+    NameDesc: "\uB0A8\uB3D9\uC0DD12"
+    CardNameDesc_Id: CardName_81040
+    CardDesc_Id: CardDesc_81040
+    CardShortDesc_Id: CardShortDesc_81040
+    CardType: Creature
+    Grade: Rare
+    AiGroup_ids: 810400
+    CostMana: 1
+    CostGold: 0
+    Hp: 10
+    Atk: 0
+    Def: 3
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_040
+    Level_3_img: Lucy_040
+    Level_5_img: Lucy_040
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81041
+    NameDesc: "\uC5B8\uB2C831"
+    CardNameDesc_Id: CardName_81041
+    CardDesc_Id: CardDesc_81041
+    CardShortDesc_Id: CardShortDesc_81041
+    CardType: Creature
+    Grade: Rare
+    AiGroup_ids: 810410
+    CostMana: 1
+    CostGold: 0
+    Hp: 5
+    Atk: 4
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_041
+    Level_3_img: Lucy_041
+    Level_5_img: Lucy_041
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81042
+    NameDesc: "\uC624\uBE6043"
+    CardNameDesc_Id: CardName_81042
+    CardDesc_Id: CardDesc_81042
+    CardShortDesc_Id: CardShortDesc_81042
+    CardType: Creature
+    Grade: Rare
+    AiGroup_ids: 810420
+    CostMana: 1
+    CostGold: 0
+    Hp: 8
+    Atk: 4
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_042
+    Level_3_img: Lucy_042
+    Level_5_img: Lucy_042
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81043
+    NameDesc: "\uC5B8\uB2C8666"
+    CardNameDesc_Id: CardName_81043
+    CardDesc_Id: CardDesc_81043
+    CardShortDesc_Id: CardShortDesc_81043
+    CardType: Creature
+    Grade: Rare
+    AiGroup_ids: 810430
+    CostMana: 2
+    CostGold: 0
+    Hp: 3
+    Atk: 3
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_043
+    Level_3_img: Lucy_043
+    Level_5_img: Lucy_043
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
