@@ -1247,3 +1247,45 @@ MonoBehaviour:
     Ability_id: 81037001
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8103800
+    NameDesc: "\uCF08\uBC30 \uACF5\uACA9"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    isSameTime: 0
+    Atk_Cnt: 3
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81038000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8103900
+    NameDesc: "\uC8FC\uC2DC\uD558\uB294 \uC790 \uACF5\uACA9"
+    Type: Ranged
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 2
+    isSameTime: 0
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81039000
+    ChainTrigger: DamageDealt
+    ChainAiDataId: 8103901
+  - Ai_Id: 8103901
+    NameDesc: "\uC8FC\uC2DC\uD558\uB294 \uC790 \uBC94\uC704 \uACF5\uACA9"
+    Type: Ranged
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1, 3
+    isSameTime: 0
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81039001
+    ChainTrigger: 
+    ChainAiDataId: 0
