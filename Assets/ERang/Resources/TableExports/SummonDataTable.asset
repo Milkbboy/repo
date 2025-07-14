@@ -16,43 +16,59 @@ MonoBehaviour:
   - Summon_GroupId: 1001
     NameDesc: "\uC544\uADC0"
     Card_Id: 100101
-    Value: 50
+    Value: 500
   - Summon_GroupId: 1001
     NameDesc: "\uD30C\uC774\uC5B4 \uBCFC"
     Card_Id: 100301
-    Value: 40
+    Value: 400
   - Summon_GroupId: 1001
     NameDesc: "\uAE08\uAD11"
     Card_Id: 200101
-    Value: 10
+    Value: 100
   - Summon_GroupId: 1002
     NameDesc: "\uAE08\uAD11"
     Card_Id: 200101
-    Value: 20
+    Value: 200
   - Summon_GroupId: 1002
     NameDesc: "\uD48D\uC694\uC758 \uBD80\uC801"
     Card_Id: 300101
-    Value: 20
+    Value: 200
   - Summon_GroupId: 1003
     NameDesc: "\uC131\uB839\uC758 \uAC00\uD638"
     Card_Id: 300201
-    Value: 10
+    Value: 100
   - Summon_GroupId: 1003
     NameDesc: "\uB808\uD504\uB9AC\uCE78\uC758 \uAE08\uB2E8\uC9C0"
     Card_Id: 1006
-    Value: 10
+    Value: 100
   - Summon_GroupId: 1004
     NameDesc: "\uCC0C\uB974\uAE30"
     Card_Id: 81001
-    Value: 10
+    Value: 100
   - Summon_GroupId: 1004
     NameDesc: "\uC784\uD504"
     Card_Id: 81007
-    Value: 10
+    Value: 100
   - Summon_GroupId: 1004
     NameDesc: "\uCD0C\uCDA9"
     Card_Id: 81010
-    Value: 10
+    Value: 100
+  - Summon_GroupId: 1004
+    NameDesc: "\uB0A8\uB3D9\uC0DD"
+    Card_Id: 81040
+    Value: 50
+  - Summon_GroupId: 1004
+    NameDesc: "\uC791\uC740 \uC5B8\uB2C8"
+    Card_Id: 81041
+    Value: 50
+  - Summon_GroupId: 1004
+    NameDesc: "\uC624\uBE60"
+    Card_Id: 81042
+    Value: 30
+  - Summon_GroupId: 1004
+    NameDesc: "\uD070 \uC5B8\uB2C8"
+    Card_Id: 81043
+    Value: 20
   - Summon_GroupId: 1005
     NameDesc: "\uC18C\uD654\uBD88\uB7C9"
     Card_Id: 1015

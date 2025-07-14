@@ -2039,3 +2039,37 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81044000
+    NameDesc: "\uC0BC\uD0A4\uAE30"
+    AbilityType: Swallow
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 81044001
+  - AbilityData_Id: 81044001
+    NameDesc: "\uC0BC\uD0A8 \uCE74\uB4DC \uBE44\uC6A9 \uAC10\uC18C"
+    AbilityType: 'ReducedMana '
+    Value: 99
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
