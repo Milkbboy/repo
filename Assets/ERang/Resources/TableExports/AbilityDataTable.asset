@@ -2073,3 +2073,54 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81045000
+    NameDesc: "\uC545\uB9C8\uC758 \uD2B8\uB984"
+    AbilityType: BrokenDef
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 3
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefDown_01
+    SkillIconDesc: 81006000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81046000
+    NameDesc: "\uC624\uC5FC\uB41C \uC131\uC218_\uD790\uB9C1"
+    AbilityType: Heal
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitHeal_01
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81046001
+    NameDesc: "\uC624\uC5FC\uB41C \uC131\uC218_\uBCF4\uD638\uB9C9"
+    AbilityType: DefUp
+    Value: 3
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefUp_01
+    SkillIconDesc: 81020000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
