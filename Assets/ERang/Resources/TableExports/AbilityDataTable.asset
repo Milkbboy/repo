@@ -2124,3 +2124,88 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81047000
+    NameDesc: "\uC720\uD669\uACE0\uAD6C\uB9C8_\uB9CC\uBCF5\uB3C4"
+    AbilityType: AddSatiety
+    Value: 10
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefUp_01
+    SkillIconDesc: 81047000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 99991000
+    NameDesc: "\uD578\uB4DC\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
+    AbilityType: Summon_Hand_Sel
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 99992000
+    NameDesc: "\uBF51\uC744\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
+    AbilityType: Summon_DrawDeck_Sel
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 99993000
+    NameDesc: "\uBB34\uB364\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
+    AbilityType: Summon_GraveDeck_Sel
+    Value: 1
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 99994000
+    NameDesc: "\uCE74\uB4DC \uC0AD\uC81C "
+    AbilityType: DeleteCard
+    Value: 2
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0

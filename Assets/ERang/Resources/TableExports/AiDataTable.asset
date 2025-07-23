@@ -1401,3 +1401,73 @@ MonoBehaviour:
     Ability_id: 81046001
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8104700
+    NameDesc: "\uC720\uD56D\uACE0\uAD6C\uB9C8_\uB9CC\uBCF5\uB3C4"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81047000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 9999100
+    NameDesc: "\uD578\uB4DC\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 99991000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 9999200
+    NameDesc: "\uBF51\uC744\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 99992000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 9999300
+    NameDesc: "\uBB34\uB364\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 99993000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 9999400
+    NameDesc: "\uCE74\uB4DC \uC0AD\uC81C"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 99994000
+    ChainTrigger: 
+    ChainAiDataId: 0
