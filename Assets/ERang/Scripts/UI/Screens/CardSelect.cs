@@ -109,15 +109,8 @@ namespace ERang
             gameObject.SetActive(false);
         }
 
-        public IEnumerator OnConfirmClickCoroutine()
+        public void OnConfirmClickCoroutine()
         {
-            // 선택한 카드를 HandCard 에서 제거하고 다음 턴 핸드 카드에 바로 나오게 해야 한다.
-            foreach (SelectCard selectCard in selectCards)
-            {
-                DeckManager.Instance.HandCardToBoard(selectCard.Card);
-                yield return StartCoroutine(selectCard.DiscardAnimation(discardTransform));
-            }
-
             foreach (GameObject cardObject in cardObjects)
             {
                 Destroy(cardObject);
@@ -125,8 +118,6 @@ namespace ERang
 
             cards.Clear();
             selectCards.Clear();
-
-            gameObject.SetActive(false);
         }
 
         private void OnSelectCard(SelectCard selectedCard)

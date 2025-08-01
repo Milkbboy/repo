@@ -100,6 +100,7 @@ namespace ERang
                     aiType = aiData?.type ?? AiDataType.None,
                     abilityType = abilityData.abilityType,
                     abilityValue = abilityData.value,
+                    abilityValue2 = abilityData.value2,
                     workType = abilityData.workType,
                     duration = abilityData.duration,
                     abilityName = abilityData.nameDesc,

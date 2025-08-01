@@ -15,6 +15,8 @@ namespace ERang
         public int applyTurn;
         // 어빌리티 값
         public int value;
+        // 어빌리티 값2
+        public int value2;
         // 어빌리티 지속 턴
         public int duration;
         // 어빌리티 생성일
@@ -54,6 +56,7 @@ namespace ERang
         public AiDataType aiType; // Ai 타입. Buff, Debuff 구분
         public int duration;
         public int abilityValue;
+        public int abilityValue2;
         // -----------------------------------------------------------------------------------
 
         public void AddAbilityItem(AbilityItem abilityItem)

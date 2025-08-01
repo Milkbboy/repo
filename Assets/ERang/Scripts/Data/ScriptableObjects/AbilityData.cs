@@ -13,6 +13,7 @@ namespace ERang.Data
         public string nameDesc;
         public AbilityType abilityType;
         public int value;
+        public int value2;
         public float ratio;
         public AbilityWorkType workType;
         public int duration;
@@ -36,6 +37,7 @@ namespace ERang.Data
             nameDesc = entity.NameDesc;
             abilityType = ConvertAbilityType(entity.AbilityType);
             value = entity.Value;
+            value2 = entity.Value2;
             ratio = entity.Ratio;
             workType = ConvertAbilityWorkType(entity.Type);
             duration = entity.Duration;
@@ -121,6 +123,9 @@ namespace ERang.Data
                 "Poison" => AbilityType.Poison,
                 "Swallow" => AbilityType.Swallow,
                 "ReducedMana" => AbilityType.ReducedMana,
+                "SummonHandSelect" => AbilityType.SummonHandSelect,
+                "SummonDrawDeckSelect" => AbilityType.SummonDrawDeckSelect,
+                "SummonGraveDeckSelect" => AbilityType.SummonGraveDeckSelect,
                 _ => AbilityType.None,
             };
         }

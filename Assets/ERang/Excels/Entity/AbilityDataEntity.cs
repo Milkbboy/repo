@@ -7,6 +7,7 @@ namespace ERang
         public string NameDesc;
         public string AbilityType;
         public int Value;
+        public int Value2;
         public float Ratio;
         public string Type;
         public int Duration;

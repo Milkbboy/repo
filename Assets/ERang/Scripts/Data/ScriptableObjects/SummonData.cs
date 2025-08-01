@@ -84,7 +84,7 @@ namespace ERang.Data
             return null;
         }
 
-        public static List<int> PickUpCard(int summonGroupId, int count, bool allowDuplicate = true)
+        public static List<int> PickUpCard(int summonGroupId, int count, bool allowDuplicate = false)
         {
             List<int> pickedCardIds = new List<int>();
 
