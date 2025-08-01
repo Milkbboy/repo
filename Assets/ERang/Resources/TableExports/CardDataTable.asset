@@ -1439,7 +1439,7 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
-  - Card_Id: 99992
+  - Card_Id: 99993
     NameDesc: "\uBB34\uB364\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
     CardNameDesc_Id: CardName_99993
     CardDesc_Id: 
@@ -1462,7 +1462,7 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
-  - Card_Id: 99993
+  - Card_Id: 99994
     NameDesc: "\uCE74\uB4DC \uC0AD\uC81C"
     CardNameDesc_Id: CardName_99994
     CardDesc_Id: 

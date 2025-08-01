@@ -100,7 +100,7 @@ namespace ERang
                 LogAbility($"무덤으로 소환 완료: {selectCard.Card.Name}");
             }
 
-            // cardSelectObject.OnConfirmClickCoroutine();
+            cardSelectObject.OnConfirmClickCoroutine();
 
             LogAbility("선택 카드 GarveDeck 이동 완료");
         }

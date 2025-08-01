@@ -123,9 +123,9 @@ namespace ERang.Data
                 "Poison" => AbilityType.Poison,
                 "Swallow" => AbilityType.Swallow,
                 "ReducedMana" => AbilityType.ReducedMana,
-                "SummonHandSelect" => AbilityType.SummonHandSelect,
-                "SummonDrawDeckSelect" => AbilityType.SummonDrawDeckSelect,
-                "SummonGraveDeckSelect" => AbilityType.SummonGraveDeckSelect,
+                "Summon_Hand_Sel" => AbilityType.SummonHandSelect,
+                "Summon_DrawDeck_Sel" => AbilityType.SummonDrawDeckSelect,
+                "Summon_GraveDeck_Sel" => AbilityType.SummonGraveDeckSelect,
                 _ => AbilityType.None,
             };
         }
