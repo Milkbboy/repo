@@ -126,6 +126,7 @@ namespace ERang.Data
                 "Summon_Hand_Sel" => AbilityType.SummonHandSelect,
                 "Summon_DrawDeck_Sel" => AbilityType.SummonDrawDeckSelect,
                 "Summon_GraveDeck_Sel" => AbilityType.SummonGraveDeckSelect,
+                "DeleteCard" => AbilityType.DeleteCard,
                 _ => AbilityType.None,
             };
         }

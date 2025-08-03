@@ -194,6 +194,7 @@ namespace ERang
         SummonHandSelect, // 핸드덱으로 카드를 선택 소환한다.
         SummonDrawDeckSelect, // 뽑을 카드 덱으로 카드를 선택 소환한다.
         SummonGraveDeckSelect, // 무덤 덱으로 카드를 선택 소환한다.
+        DeleteCard, // 자신의 덱에 있는 카드 중 특정 카드를 특정 개수만큼 삭제하는 기능
     }
 
     /// <summary>

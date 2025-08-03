@@ -109,9 +109,9 @@ namespace ERang
 
         public static string ToCardAbilityLogInfo(this CardAbility cardAbility)
         {
-            Debug.Log($"ToCardAbilityLogInfo. cardAbility: {cardAbility.cardId}");
+            Debug.Log($"ToCardAbilityLogInfo. cardAbility: {cardAbility.abilityId}");
             CardData cardData = CardData.GetCardData(cardAbility.cardId);
-            return $"{cardData.nameDesc} 카드 {cardAbility.abilityType} {cardAbility.abilityName} 어빌리티({cardAbility.abilityId})";
+            return $"{cardData?.nameDesc ?? cardAbility.cardId.ToString()} 카드 {cardAbility.abilityType} {cardAbility.abilityName} 어빌리티({cardAbility.abilityId})";
         }
 
         public static string GetEffectDescription(this AbilityData abilityData)
