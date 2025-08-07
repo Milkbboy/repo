@@ -154,19 +154,11 @@ namespace ERang
                 return false;
             }
 
-            int requiredMana = 0;
-
-            if (card is CreatureCard creatureCard)
-                requiredMana = creatureCard.Mana;
-
-            if (card is MagicCard magicCard)
-                requiredMana = magicCard.Mana;
-
             // 필요 마나 확인
-            if (masterCard.Mana < requiredMana)
+            if (masterCard.Mana < card.Mana)
             {
                 ToastNotification.Show($"mana({masterCard.Mana}) is not enough");
-                Debug.LogWarning($"핸드 카드({card.Id}) 마나 부족으로 사용 불가능({masterCard.Mana} < {requiredMana})");
+                Debug.LogWarning($"핸드 카드({card.Id}) 마나 부족으로 사용 불가능({masterCard.Mana} < {card.Mana})");
                 return false;
             }
 
@@ -175,6 +167,14 @@ namespace ERang
             {
                 ToastNotification.Show($"gold({player.Gold}) is not enough");
                 Debug.LogWarning($"핸드 카드({buildingCard.Id}) 골드 부족으로 사용 불가능({player.Gold} < {buildingCard.Gold})");
+                return false;
+            }
+
+            // 필요 만복도 확인
+            if (player.Satiety < card.CostSatiety)
+            {
+                ToastNotification.Show($"만복도 ({player.Satiety}) is not enough");
+                Debug.LogWarning($"핸드 카드({card.Id}) 만복도 부족으로 사용 불가능({player.Satiety} < {card.CostSatiety})");
                 return false;
             }
 

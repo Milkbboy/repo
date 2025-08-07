@@ -23,6 +23,7 @@ MonoBehaviour:
     AiGroup_ids: 21001
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 3
     Atk: 3
     Def: 0
@@ -46,6 +47,7 @@ MonoBehaviour:
     AiGroup_ids: 21002
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -69,6 +71,7 @@ MonoBehaviour:
     AiGroup_ids: 21003
     CostMana: 3
     CostGold: 150
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -92,6 +95,7 @@ MonoBehaviour:
     AiGroup_ids: 21004
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -115,6 +119,7 @@ MonoBehaviour:
     AiGroup_ids: 21005
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -138,6 +143,7 @@ MonoBehaviour:
     AiGroup_ids: 21006
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -161,6 +167,7 @@ MonoBehaviour:
     AiGroup_ids: 11002
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 5
     Atk: 3
     Def: 0
@@ -184,6 +191,7 @@ MonoBehaviour:
     AiGroup_ids: 31002
     CostMana: 0
     CostGold: 20
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -207,6 +215,7 @@ MonoBehaviour:
     AiGroup_ids: 41001
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -230,6 +239,7 @@ MonoBehaviour:
     AiGroup_ids: 41002
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -253,6 +263,7 @@ MonoBehaviour:
     AiGroup_ids: 41003
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -276,6 +287,7 @@ MonoBehaviour:
     AiGroup_ids: 41004
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -299,6 +311,7 @@ MonoBehaviour:
     AiGroup_ids: 41004
     CostMana: 99
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -322,6 +335,7 @@ MonoBehaviour:
     AiGroup_ids: 810010
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -345,6 +359,7 @@ MonoBehaviour:
     AiGroup_ids: 810020
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -368,6 +383,7 @@ MonoBehaviour:
     AiGroup_ids: 810030
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -391,6 +407,7 @@ MonoBehaviour:
     AiGroup_ids: 810040
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -414,6 +431,7 @@ MonoBehaviour:
     AiGroup_ids: 810050
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -437,6 +455,7 @@ MonoBehaviour:
     AiGroup_ids: 810060
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -460,6 +479,7 @@ MonoBehaviour:
     AiGroup_ids: 810070
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 3
     Atk: 2
     Def: 0
@@ -483,6 +503,7 @@ MonoBehaviour:
     AiGroup_ids: 810080
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 2
     Atk: 3
     Def: 0
@@ -506,6 +527,7 @@ MonoBehaviour:
     AiGroup_ids: 810090
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 6
     Atk: 0
     Def: 0
@@ -529,6 +551,7 @@ MonoBehaviour:
     AiGroup_ids: 810100, 810101
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 14
     Atk: 1
     Def: 0
@@ -552,6 +575,7 @@ MonoBehaviour:
     AiGroup_ids: 810110, 810111
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 8
     Atk: 4
     Def: 0
@@ -575,6 +599,7 @@ MonoBehaviour:
     AiGroup_ids: 810120, 810121
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 6
     Atk: 1
     Def: 0
@@ -598,6 +623,7 @@ MonoBehaviour:
     AiGroup_ids: 810130, 810131
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -621,6 +647,7 @@ MonoBehaviour:
     AiGroup_ids: 810140, 810141, 810142
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -644,6 +671,7 @@ MonoBehaviour:
     AiGroup_ids: 810150, 810151, 810152
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -667,6 +695,7 @@ MonoBehaviour:
     AiGroup_ids: 810160
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -690,6 +719,7 @@ MonoBehaviour:
     AiGroup_ids: 810170, 810170
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -713,6 +743,7 @@ MonoBehaviour:
     AiGroup_ids: 810180
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -736,6 +767,7 @@ MonoBehaviour:
     AiGroup_ids: 810190, 810191
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -759,6 +791,7 @@ MonoBehaviour:
     AiGroup_ids: 810200
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -782,6 +815,7 @@ MonoBehaviour:
     AiGroup_ids: 810210
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -805,6 +839,7 @@ MonoBehaviour:
     AiGroup_ids: 810220
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -828,6 +863,7 @@ MonoBehaviour:
     AiGroup_ids: 810230
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -851,6 +887,7 @@ MonoBehaviour:
     AiGroup_ids: 810240, 810241
     CostMana: 0
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -874,6 +911,7 @@ MonoBehaviour:
     AiGroup_ids: 810250, 810251
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -897,6 +935,7 @@ MonoBehaviour:
     AiGroup_ids: 810260
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -920,6 +959,7 @@ MonoBehaviour:
     AiGroup_ids: 810270
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -943,6 +983,7 @@ MonoBehaviour:
     AiGroup_ids: 810280
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -966,6 +1007,7 @@ MonoBehaviour:
     AiGroup_ids: 810290
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -989,6 +1031,7 @@ MonoBehaviour:
     AiGroup_ids: 810300
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1012,6 +1055,7 @@ MonoBehaviour:
     AiGroup_ids: 810310
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 4
     Atk: 1
     Def: 0
@@ -1035,6 +1079,7 @@ MonoBehaviour:
     AiGroup_ids: 810320
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 6
     Atk: 2
     Def: 0
@@ -1058,6 +1103,7 @@ MonoBehaviour:
     AiGroup_ids: 810330
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 3
     Atk: 6
     Def: 0
@@ -1081,6 +1127,7 @@ MonoBehaviour:
     AiGroup_ids: 810340, 810341
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1104,6 +1151,7 @@ MonoBehaviour:
     AiGroup_ids: 810350, 810351
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1127,6 +1175,7 @@ MonoBehaviour:
     AiGroup_ids: 810350
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1150,6 +1199,7 @@ MonoBehaviour:
     AiGroup_ids: 810370, 810371
     CostMana: 0
     CostGold: 0
+    CostSatiety: 30
     Hp: 0
     Atk: 0
     Def: 0
@@ -1173,6 +1223,7 @@ MonoBehaviour:
     AiGroup_ids: 810380
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 5
     Atk: 2
     Def: 0
@@ -1196,6 +1247,7 @@ MonoBehaviour:
     AiGroup_ids: 810390
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 5
     Atk: 3
     Def: 0
@@ -1219,6 +1271,7 @@ MonoBehaviour:
     AiGroup_ids: 810400
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 10
     Atk: 0
     Def: 3
@@ -1242,6 +1295,7 @@ MonoBehaviour:
     AiGroup_ids: 810410
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 5
     Atk: 4
     Def: 0
@@ -1265,6 +1319,7 @@ MonoBehaviour:
     AiGroup_ids: 810420
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 8
     Atk: 4
     Def: 0
@@ -1288,6 +1343,7 @@ MonoBehaviour:
     AiGroup_ids: 810430
     CostMana: 2
     CostGold: 0
+    CostSatiety: 0
     Hp: 3
     Atk: 3
     Def: 0
@@ -1311,6 +1367,7 @@ MonoBehaviour:
     AiGroup_ids: 810440
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1334,6 +1391,7 @@ MonoBehaviour:
     AiGroup_ids: 810450
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1357,6 +1415,7 @@ MonoBehaviour:
     AiGroup_ids: 810460, 810461
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1380,6 +1439,7 @@ MonoBehaviour:
     AiGroup_ids: 810470
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1403,6 +1463,7 @@ MonoBehaviour:
     AiGroup_ids: 999910
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1426,6 +1487,7 @@ MonoBehaviour:
     AiGroup_ids: 999920
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1449,6 +1511,7 @@ MonoBehaviour:
     AiGroup_ids: 999930
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1472,6 +1535,7 @@ MonoBehaviour:
     AiGroup_ids: 999940
     CostMana: 1
     CostGold: 0
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0

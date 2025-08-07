@@ -260,23 +260,14 @@ namespace ERang
                 return;
             }
 
-            switch (card)
+            if (card.Mana > 0)
             {
-                case CreatureCard creatureCard:
-                    Debug.Log($"{creatureCard.ToCardLogInfo()} 마나 소모: {creatureCard.Mana}");
-                    AddMana(-creatureCard.Mana);
-                    break;
-                case MagicCard magicCard:
-                    Debug.Log($"{magicCard.ToCardLogInfo()} 마나 소모: {magicCard.Mana}");
-                    AddMana(-magicCard.Mana);
-                    break;
-                case BuildingCard buildingCard:
-                    Debug.Log($"{buildingCard.ToCardLogInfo()} 골드 소모: {buildingCard.Gold}");
-                    AddGold(player, -buildingCard.Gold);
-                    break;
-                default:
-                    Debug.LogWarning($"카드 비용 소모 처리 불가: {card.ToCardLogInfo()}");
-                    break;
+                AddMana(-card.Mana);
+            }
+
+            if (card is BuildingCard buildingCard && buildingCard.Gold > 0)
+            {
+                AddGold(player, -buildingCard.Gold);
             }
         }
 

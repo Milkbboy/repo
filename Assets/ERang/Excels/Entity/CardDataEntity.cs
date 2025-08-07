@@ -13,6 +13,7 @@ namespace ERang
         public string AiGroup_ids; // 해당 카드가 가지고 있는 Ai 그룹의 Id 값
         public int CostMana; // 소환에 필요한 마나
         public int CostGold; // 소환에 필요한 골드
+        public int CostSatiety; // 사용에 필요한 만복도
         public int Hp; // 체력 값
         public int Atk; // 공격력 값 (공격력 값이 0인 캐릭터는 공격을 시도하지 않는다)
         public int Def; // 초기 방어력 값

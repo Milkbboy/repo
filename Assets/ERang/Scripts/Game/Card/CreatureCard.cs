@@ -11,7 +11,7 @@ namespace ERang
 
         public CreatureCard(CardData cardData) : base(cardData)
         {
-            Stat = new CardStat(cardData.hp, cardData.def, cardData.costMana, cardData.atk, cardData.hp);
+            Stat = new CardStat(cardData.hp, cardData.def, cardData.costMana, cardData.atk, cardData.hp, cardData.costMana, cardData.costSatiety);
         }
 
         // IAttackable 인터페이스 정의

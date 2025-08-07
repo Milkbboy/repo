@@ -21,6 +21,7 @@ namespace ERang.Data
         public int creatureAI_id; // Creature의 공격 Ai id (근접, 원거리 등)
         public int costMana; // 소환에 필요한 마나
         public int costGold; // 소환에 필요한 골드
+        public int costSatiety; // 사용에 필요한 만복도
         public int hp; // 체력 값
         public int atk; // 공격력 값 (공격력 값이 0인 캐릭터는 공격을 시도하지 않는다)
         public int def; // 초기 방어력 값
@@ -58,6 +59,7 @@ namespace ERang.Data
             }
             costMana = cardEntity.CostMana;
             costGold = cardEntity.CostGold;
+            costSatiety = cardEntity.CostSatiety;
             hp = cardEntity.Hp;
             atk = cardEntity.Atk;
             def = cardEntity.Def;

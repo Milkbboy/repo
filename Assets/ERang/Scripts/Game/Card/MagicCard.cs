@@ -17,7 +17,11 @@ namespace ERang
 
         public MagicCard(CardData cardData) : base(cardData)
         {
-            Stat = new CardStat(0, 0, cardData.costMana, cardData.atk);
+            int hp = 0;
+            int def = 0;
+            int maxHp = 0;
+
+            Stat = new CardStat(hp, def, cardData.costMana, cardData.atk, maxHp, cardData.costMana, cardData.costSatiety);
         }
 
         // IManaManageable 인터페이스 정의

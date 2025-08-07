@@ -45,6 +45,7 @@ namespace ERang
         public virtual int Def => Stat.Def;
         public virtual int Mana => Stat.Mana;
         public virtual int Atk => Stat.Atk;
+        public virtual int CostSatiety => Stat.CostSatiety;
 
         // 스탯
         public virtual void TakeDamage(int amount) => Stat.TakeDamage(amount);
@@ -52,6 +53,7 @@ namespace ERang
         public virtual void SetDefense(int amount) => Stat.SetDef(amount);
         public virtual void IncreaseDefense(int amount) => Stat.IncreaseDefense(amount);
         public virtual void DecreaseDefense(int amount) => Stat.DecreaseDefense(amount);
+        public virtual void SetCostSatiety(int value) => Stat.SetCostSatiety(value);
 
         public void SetCardTraits(CardTraits cardTraits) => Traits = cardTraits;
 
