@@ -880,6 +880,42 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 99995000
+    NameDesc: "\uB9CC\uBCF5\uB3C4 \uC9C0\uC18D \uD68C\uBCF5"
+    AbilityType: AddSatiety_Buff
+    Value: 10
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 3
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 99996000
+    NameDesc: "\uB9CC\uBCF5\uB3C4 \uC9C0\uC18D \uAC10\uC18C"
+    AbilityType: SubSatiety_Buff
+    Value: 10
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 3
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 81001000
     NameDesc: "\uB8E8\uC2DC_\uCC0C\uB974\uAE30"
     AbilityType: Damage
