@@ -34,9 +34,7 @@ namespace ERang
             // 크리처 카드의 경우 공격력 사용
             if (selfSlot.Card is CreatureCard)
                 damage = (selfSlot.Card as CreatureCard).Atk;
-
-            // 카드 선택 공격 타입이면 어빌리티 데미지 값으로 설정
-            if (Constants.SelectAttackTypes.Contains(aiData.attackType))
+            else
                 damage = cardAbility.abilityValue;
 
             LogAbility($"계산된 데미지: {damage} (공격 타입: {aiData.attackType})");
