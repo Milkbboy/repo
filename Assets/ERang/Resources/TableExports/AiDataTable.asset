@@ -533,11 +533,67 @@ MonoBehaviour:
     Ability_id: 100026
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 9999100
+    NameDesc: "\uD578\uB4DC\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 99991000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 9999200
+    NameDesc: "\uBF51\uC744\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 99992000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 9999300
+    NameDesc: "\uBB34\uB364\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 99993000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 9999400
+    NameDesc: "\uCE74\uB4DC \uC0AD\uC81C"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 99994000
+    ChainTrigger: 
+    ChainAiDataId: 0
   - Ai_Id: 8100100
     NameDesc: "\uCC0C\uB974\uAE30"
     Type: Melee
     Target: Near Enemy
-    Atk_Type: Select Enemy
+    Atk_Type: Automatic
     Atk_Range: 1, 2
     isSameTime: 1
     Atk_Cnt: 1
@@ -551,7 +607,7 @@ MonoBehaviour:
     NameDesc: "\uC790\uB974\uAE30"
     Type: Melee
     Target: Near Enemy
-    Atk_Type: Select Enemy
+    Atk_Type: Automatic
     Atk_Range: 1
     isSameTime: 0
     Atk_Cnt: 2
@@ -565,7 +621,7 @@ MonoBehaviour:
     NameDesc: "\uD565\uAE30"
     Type: Melee
     Target: All Enemy
-    Atk_Type: Select Enemy
+    Atk_Type: Automatic
     Atk_Range: 1
     isSameTime: 0
     Atk_Cnt: 1
@@ -1415,59 +1471,31 @@ MonoBehaviour:
     Ability_id: 81047000
     ChainTrigger: 
     ChainAiDataId: 0
-  - Ai_Id: 9999100
-    NameDesc: "\uD578\uB4DC\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
-    Type: Buff
-    Target: Self
+  - Ai_Id: 8104800
+    NameDesc: "\uBB35\uC9C1\uD55C \uD55C\uBC29_\uCCAB\uC5F4"
+    Type: Melee
+    Target: Near Enemy
     Atk_Type: Automatic
-    Atk_Range: 
+    Atk_Range: 1
     isSameTime: 0
-    Atk_Cnt: 0
+    Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 99991000
+    Ability_id: 81048000
     ChainTrigger: 
     ChainAiDataId: 0
-  - Ai_Id: 9999200
-    NameDesc: "\uBF51\uC744\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
-    Type: Buff
-    Target: Self
+  - Ai_Id: 8104801
+    NameDesc: "\uBB35\uC9C1\uD55C \uD55C\uBC29_\uD6C4\uC5F4"
+    Type: Melee
+    Target: Near Enemy
     Atk_Type: Automatic
-    Atk_Range: 
-    isSameTime: 0
-    Atk_Cnt: 0
+    Atk_Range: 2, 3
+    isSameTime: 1
+    Atk_Cnt: 1
     Atk_Interval: 0
     Value: 100
     Explosion_Shock: 0
-    Ability_id: 99992000
-    ChainTrigger: 
-    ChainAiDataId: 0
-  - Ai_Id: 9999300
-    NameDesc: "\uBB34\uB364\uCE74\uB4DC \uC120\uD0DD \uC18C\uD658"
-    Type: Buff
-    Target: Self
-    Atk_Type: Automatic
-    Atk_Range: 
-    isSameTime: 0
-    Atk_Cnt: 0
-    Atk_Interval: 0
-    Value: 100
-    Explosion_Shock: 0
-    Ability_id: 99993000
-    ChainTrigger: 
-    ChainAiDataId: 0
-  - Ai_Id: 9999400
-    NameDesc: "\uCE74\uB4DC \uC0AD\uC81C"
-    Type: Buff
-    Target: Self
-    Atk_Type: Automatic
-    Atk_Range: 
-    isSameTime: 0
-    Atk_Cnt: 0
-    Atk_Interval: 0
-    Value: 100
-    Explosion_Shock: 0
-    Ability_id: 99994000
+    Ability_id: 81048001
     ChainTrigger: 
     ChainAiDataId: 0

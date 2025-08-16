@@ -28,7 +28,7 @@ MonoBehaviour:
     CreatureSlots: 2
     SatietyGauge: 20
     MaxSatietyGauge: 100
-    StartCardDeck_Id: 81024, 81037
+    StartCardDeck_Id: 81025, 81048
     StartArtiFact_Id: 1001
     StartAbility_Id: 9001001
   - Master_Id: 1002
