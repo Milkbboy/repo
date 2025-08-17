@@ -195,6 +195,8 @@ namespace ERang
         SummonDrawDeckSelect, // 뽑을 카드 덱으로 카드를 선택 소환한다.
         SummonGraveDeckSelect, // 무덤 덱으로 카드를 선택 소환한다.
         DeleteCard, // 자신의 덱에 있는 카드 중 특정 카드를 특정 개수만큼 삭제하는 기능
+        AddSatietyBuff, // 만복도 턴 증가
+        SubSatietyBuff, // 만복도 턴 감소
     }
 
     /// <summary>
@@ -315,6 +317,8 @@ namespace ERang
         public static readonly AbilityType[] CardPriorAbilities = new[]
         {
             AbilityType.Burn,
+            AbilityType.AddSatietyBuff,
+            AbilityType.SubSatietyBuff,
         };
 
         // 행동 후 효과 발생 어빌리티

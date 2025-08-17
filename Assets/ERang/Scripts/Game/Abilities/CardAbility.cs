@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace ERang
 {
@@ -72,6 +73,8 @@ namespace ERang
         /// </summary>
         public void DecreaseDuration()
         {
+            Debug.Log($"DecreaseDuration. {abilityType} 어빌리티: {abilityItems.Count} 개");
+
             if (abilityItems.Count == 0)
             {
                 return;
@@ -79,7 +82,10 @@ namespace ERang
 
             AbilityItem abilityItem = abilityItems.Peek();
 
+            int beforeDuration = abilityItem.duration;
             abilityItem.duration--;
+
+            Debug.Log($"DecreaseDuration. 어빌리티: {beforeDuration} -> {abilityItem.duration} 턴");
 
             if (abilityItem.duration <= 0)
                 abilityItems.Dequeue();

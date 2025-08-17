@@ -29,19 +29,18 @@ namespace ERang
             }
 
             this.abilityId = abilityData.abilityId;
-            duration = abilityData.duration;
 
             AiDataType aiDataType = AiData.GetAbilityAiDataType(abilityId);
 
             abilityIconUI.SetIcon(abilityData.iconTexture, aiDataType);
-            abilityIconUI.SetTurnCount(duration);
 
             Debug.Log($"{abilityData.ToAbilityLogInfo()} 아이콘 설정");
         }
 
-        public void SetTurnCount(int turnCount)
+        public void SetDuration(int turnCount)
         {
-            abilityIconUI.SetTurnCount(turnCount);
+            abilityIconUI.SetDuration(turnCount);
+            Debug.Log($"아이콘 턴 설정: {turnCount}");
         }
 
         public void OnIconMouseEnter()

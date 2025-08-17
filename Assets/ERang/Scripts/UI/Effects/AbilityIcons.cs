@@ -73,6 +73,7 @@ namespace ERang
                     // 하지만 아이콘이 너무 작아 보기 힘들어 2배 사이즈 유지
                     // icon.transform.localScale = new Vector3(0.3f / parentScale.x, 0.3f / parentScale.y, 0.3f / parentScale.z);
                     icon.GetComponent<AbilityIcon>().SetIcon(cardAbility.abilityId);
+                    icon.GetComponent<AbilityIcon>().SetDuration(cardAbility.duration);
                     icon.GetComponent<AbilityIcon>().OnIconMouseEnterAction += SetMouseOverAbilityIcon;
 
                     abilityIcons.Add(icon);
@@ -88,7 +89,7 @@ namespace ERang
                     continue;
                 }
 
-                abilityIcon.SetTurnCount(cardAbility.duration);
+                abilityIcon.SetDuration(cardAbility.duration);
 
                 lotTexts.Add($"{boardSlot.ToSlotLogInfo()} 어빌리티 아이콘 업데이트: {cardAbility.abilityId} duration: {cardAbility.duration}");
             }
@@ -105,8 +106,8 @@ namespace ERang
                 Destroy(removeIcon.gameObject);
             }
 
-            // foreach (string logText in lotTexts)
-            //     Debug.Log(logText);
+            foreach (string logText in lotTexts)
+                Debug.Log(logText);
 
             UpdateIconPosition();
         }

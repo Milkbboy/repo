@@ -134,6 +134,11 @@ namespace ERang
             };
         }
 
+        public static string GetAbilityDuration(this AbilityData abilityData)
+        {
+            return abilityData.duration > 0 ? $"({abilityData.duration}턴)" : "";
+        }
+
         private static string GetCardType(CardType cardType)
         {
             return cardType switch

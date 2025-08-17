@@ -44,6 +44,8 @@ namespace ERang
                     cardAbilities.Add(cardAbility);
             }
 
+            Debug.Log($"AddCardAbility. {cardAbility.ToCardAbilityLogInfo()}");
+
             cardAbility.AddAbilityItem(abilityItem);
         }
 

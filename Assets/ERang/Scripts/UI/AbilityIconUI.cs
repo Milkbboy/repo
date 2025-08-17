@@ -38,7 +38,7 @@ namespace ERang
             // Debug.Log($"TextMeshPro sortingOrder: {turnCountText.sortingOrder}");
         }
 
-        public void SetTurnCount(int turn)
+        public void SetDuration(int turn)
         {
             turnCountText.text = turn.ToString();
         }
