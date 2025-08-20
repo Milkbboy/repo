@@ -16,7 +16,7 @@ namespace ERang
             yield break;
         }
 
-        public IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+        public virtual IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             // 1. 효과 적용
             yield return StartCoroutine(ApplyEffect(cardAbility, selfSlot, targetSlot));
@@ -98,5 +98,4 @@ namespace ERang
             }
         }
     }
-
 }

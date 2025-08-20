@@ -12,14 +12,14 @@ namespace ERang
         public abstract IEnumerator ApplySingle(BaseCard card);
         public abstract IEnumerator Release(BaseCard card);
 
-        // 보드 슬롯용 메서드는 기본적으로 경고 출력
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+        // 보드 슬롯용 메서드는 sealed로 override 막음
+        public sealed override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             LogAbility("이 어빌리티는 핸드 카드 전용입니다.", LogType.Warning);
             yield break;
         }
 
-        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+        public sealed override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             LogAbility("이 어빌리티는 핸드 카드 전용입니다.", LogType.Warning);
             yield break;

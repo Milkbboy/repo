@@ -16,15 +16,16 @@
 ```csharp
 public abstract class BaseAbility : MonoBehaviour, IAbility
 {
-    // 기존 abstract ApplySingle을 protected virtual로 변경
+    public abstract AbilityType AbilityType { get; }
+
     protected virtual IEnumerator ApplyEffect(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
     {
         // 각 어빌리티의 실제 효과 구현
         yield break;
     }
 
-    // 새로운 public ApplySingle
-    public IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+    // ApplySingle을 virtual로 선언하여 override 가능하게 함
+    public virtual IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
     {
         // 1. 효과 적용
         yield return StartCoroutine(ApplyEffect(cardAbility, selfSlot, targetSlot));
@@ -53,7 +54,83 @@ public abstract class BaseAbility : MonoBehaviour, IAbility
 }
 ```
 
-### 2. 어빌리티 구현체 수정 예시 (AbilityAtkUp)
+### 2. BaseHandAbility 클래스 수정
+
+#### 설계 목적
+- 핸드 카드 전용 어빌리티를 위한 특수한 구현 제공
+- 보드 슬롯 관련 메서드의 잘못된 사용 방지
+- IHandAbility 인터페이스 구현을 통한 핸드 카드 전용 기능 제공
+
+#### 핵심 변경사항
+1. BaseAbility의 보드 슬롯 메서드를 sealed override로 막아서:
+   - 자식 클래스에서 보드 슬롯 메서드를 잘못 override하는 것을 방지
+   - 핸드 카드 전용 어빌리티가 보드 슬롯 메서드를 사용하지 못하도록 제한
+
+2. IHandAbility 인터페이스 구현:
+   - BaseCard를 파라미터로 받는 메서드 제공
+   - 핸드 카드 전용 어빌리티의 인터페이스 통일
+
+#### 구현 코드
+```csharp
+public abstract class BaseHandAbility : BaseAbility, IHandAbility
+{
+    // IHandAbility 구현
+    public abstract IEnumerator ApplySingle(BaseCard card);
+    public abstract IEnumerator Release(BaseCard card);
+
+    // 보드 슬롯용 메서드는 sealed로 override 막음
+    public sealed override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+    {
+        LogAbility("이 어빌리티는 핸드 카드 전용입니다.", LogType.Warning);
+        yield break;
+    }
+
+    public sealed override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+    {
+        LogAbility("이 어빌리티는 핸드 카드 전용입니다.", LogType.Warning);
+        yield break;
+    }
+}
+```
+
+#### 사용 예시 (AbilityReducedMana)
+```csharp
+public class AbilityReducedMana : BaseHandAbility
+{
+    public override AbilityType AbilityType => AbilityType.ReducedMana;
+
+    // BaseCard 버전의 ApplySingle 구현
+    public override IEnumerator ApplySingle(BaseCard card)
+    {
+        if (!ValidateHandCard(card)) yield break;
+
+        LogAbility($"마나 감소 적용 시작: {card.ToCardLogInfo()}");
+        Apply(card, true);
+
+        yield break;
+    }
+
+    // BaseCard 버전의 Release 구현
+    public override IEnumerator Release(BaseCard card)
+    {
+        if (!ValidateHandCard(card)) yield break;
+
+        LogAbility($"마나 감소 해제 시작: {card.ToCardLogInfo()}");
+        Apply(card, false);
+
+        yield break;
+    }
+
+    // 기존 BaseAbility의 메서드는 sealed로 막혀있어서 사용 불가
+}
+```
+
+#### 주의사항
+1. BaseHandAbility를 상속하는 클래스는 BaseCard 버전의 메서드만 구현해야 함
+2. BaseAbility의 메서드(ApplySingle, Release)는 sealed로 막혀있어서 override 불가
+3. 모든 핸드 카드 전용 어빌리티는 BaseHandAbility를 상속해야 함
+
+### 3. 어빌리티 구현체 수정 예시 (AbilityAtkUp)
 ```csharp
 public class AbilityAtkUp : BaseAbility
 {
@@ -75,7 +152,7 @@ public class AbilityAtkUp : BaseAbility
 }
 ```
 
-### 3. 제거해야 할 코드
+### 4. 제거해야 할 코드
 
 #### TurnManager.cs
 ```csharp
@@ -166,3 +243,4 @@ public List<CardAbility> DecreaseDuration()
 1. 기존 duration 감소 로직을 모두 제거했는지 확인
 2. 각 어빌리티의 ApplySingle을 ApplyEffect로 변경했는지 확인
 3. UI 갱신이 적절한 시점에 이루어지는지 확인
+4. BaseHandAbility 구현시 sealed override로 보드 슬롯 메서드 막았는지 확인
