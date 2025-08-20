@@ -307,8 +307,6 @@ namespace ERang
 
                 foreach (CardAbility cardAbility in card.AbilitySystem.CardAbilities)
                 {
-                    cardAbility.DecreaseDuration();
-
                     if (cardAbility.duration == 0)
                     {
                         yield return StartCoroutine(AbilityLogic.Instance.AbilityRelease(cardAbility, AbilityWhereFrom.TurnEndBoardSlot));

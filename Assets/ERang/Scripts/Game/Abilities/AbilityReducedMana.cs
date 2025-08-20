@@ -14,7 +14,7 @@ namespace ERang
         /// <summary>
         /// 마나 감소 적용 (핸드에 카드가 들어올 때)
         /// </summary>
-        public override IEnumerator ApplySingle(BaseCard card)
+        protected override IEnumerator ApplyEffect(BaseCard card)
         {
             if (!ValidateHandCard(card)) yield break;
 

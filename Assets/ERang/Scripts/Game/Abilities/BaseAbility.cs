@@ -10,7 +10,37 @@ namespace ERang
     {
         public abstract AbilityType AbilityType { get; }
 
-        public abstract IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot);
+        protected virtual IEnumerator ApplyEffect(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+        {
+            // 각 어빌리티의 실제 효과 구현
+            yield break;
+        }
+
+        public IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+        {
+            // 1. 효과 적용
+            yield return StartCoroutine(ApplyEffect(cardAbility, selfSlot, targetSlot));
+
+            // 2. duration 감소
+            cardAbility.DecreaseDuration();
+
+            // 3. duration 0 이면 release 처리
+            if (cardAbility.duration <= 0)
+            {
+                // ability 해제
+                yield return StartCoroutine(Release(cardAbility, selfSlot, targetSlot));
+
+                // ability 제거
+                if (targetSlot.Card != null)
+                {
+                    targetSlot.Card.AbilitySystem.RemoveCardAbility(cardAbility);
+                }
+            }
+
+            // 4. 아이콘 갱신
+            targetSlot.DrawAbilityIcons();
+        }
+
         public abstract IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot);
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace ERang
         /// <summary>
         /// def 0 설정
         /// </summary>
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+        protected override IEnumerator ApplyEffect(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             yield return StartCoroutine(Apply(targetSlot, false));
         }

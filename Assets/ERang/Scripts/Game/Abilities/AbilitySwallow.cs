@@ -16,7 +16,7 @@ namespace ERang
 
         private List<SelectCard> selectedCards; // 결과 저장 변수 추가
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+        protected override IEnumerator ApplyEffect(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             int selectCount = cardAbility.abilityValue;
             if (selectCount <= 0)

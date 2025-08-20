@@ -15,7 +15,7 @@ namespace ERang
 
         private List<SelectCard> selectedCards;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+        protected override IEnumerator ApplyEffect(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             if (cardSelectObject == null)
             {

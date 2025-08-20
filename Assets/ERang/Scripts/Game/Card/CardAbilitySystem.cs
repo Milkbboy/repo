@@ -55,21 +55,6 @@ namespace ERang
             handAbilities.Add(cardAbility);
         }
 
-        public List<CardAbility> DecreaseDuration()
-        {
-            List<CardAbility> removedCardAbilities = new();
-
-            foreach (CardAbility cardAbility in cardAbilities)
-            {
-                cardAbility.DecreaseDuration();
-
-                if (cardAbility.duration == 0)
-                    removedCardAbilities.Add(cardAbility);
-            }
-
-            return removedCardAbilities;
-        }
-
         public void RemoveCardAbility(CardAbility cardAbility)
         {
             cardAbilities.Remove(cardAbility);

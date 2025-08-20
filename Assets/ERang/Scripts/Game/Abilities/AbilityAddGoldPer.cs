@@ -8,7 +8,7 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.AddGoldPer;
 
-        public override IEnumerator ApplySingle(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
+        protected override IEnumerator ApplyEffect(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
             AiData aiData = AiData.GetAiData(cardAbility.aiDataId);
             if (aiData == null)
