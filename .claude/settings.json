@@ -29,6 +29,7 @@
     "maxLineLength": 120,
     "fileEncoding": "utf-8"
   },
+  "include_paths": ["Assets/ERang"],
   "excludePatterns": [
     "**/Library/**",
     "**/Temp/**",
