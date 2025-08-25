@@ -184,18 +184,6 @@ namespace ERang
             cardUI.SetDef(card.Def);
         }
 
-        public void IncreaseDefense(int amount)
-        {
-            card.IncreaseDefense(amount);
-            cardUI.SetDef(card.Def);
-        }
-
-        public void DecreaseDefense(int amount)
-        {
-            card.DecreaseDefense(amount);
-            cardUI.SetDef(card.Def);
-        }
-
         public void IncreaseAttack(int amount)
         {
             if (card is not CreatureCard creatureCard)

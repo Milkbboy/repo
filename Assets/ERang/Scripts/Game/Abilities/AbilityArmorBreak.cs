@@ -1,7 +1,5 @@
-using System.Linq;
 using System.Collections;
 using UnityEngine;
-using ERang.Data;
 
 namespace ERang
 {
@@ -9,65 +7,43 @@ namespace ERang
     {
         public override AbilityType AbilityType => AbilityType.ArmorBreak;
 
-        /// <summary>
-        /// def 0 설정
-        /// </summary>
         protected override IEnumerator ApplyEffect(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
-        {
-            yield return StartCoroutine(Apply(targetSlot, false));
-        }
-
-        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
-        {
-            yield return StartCoroutine(Apply(targetSlot, true));
-        }
-
-        /// <summary>
-        /// def 원복
-        /// </summary>
-        private IEnumerator Apply(BoardSlot targetSlot, bool isRelease)
         {
             if (!ValidateTargetSlot(targetSlot, "ArmorBreak"))
                 yield break;
 
-            BaseCard targetCard = targetSlot.Card;
-            int beforeDef = targetCard.Def;
-            int newDef = 0;
+            if (!ValidateCardType<CreatureCard>(targetSlot.Card, "ArmorBreak"))
+                yield break;
 
-            if (isRelease)
-            {
-                // 방어구 파괴 해제: 원래 방어력 복구
-                newDef = CalculateRestoredDefense(targetCard);
-                LogAbility($"방어구 파괴 해제: {beforeDef} -> {newDef}");
-            }
-            else
-            {
-                // 방어구 파괴 적용: 방어력 0으로 설정
-                newDef = 0;
-                LogAbility($"방어구 파괴 적용: {beforeDef} -> {newDef}");
-            }
+            CreatureCard creatureCard = targetSlot.Card as CreatureCard;
 
-            targetSlot.SetDefense(newDef);
+            // 이 어빌리티를 제외한 현재 방어력 계산
+            int beforeDef = creatureCard.Stat.CalculateStatWithoutAbility(StatType.Def, cardAbility);
+            // 어빌리티가 적용된 후의 방어력 (다음 Def 접근 시 자동 계산됨)
+            int afterDef = creatureCard.Def;
+
+            LogAbility($"방어구 파괴 적용: {beforeDef} -> {afterDef}");
 
             yield return new WaitForSeconds(0.1f);
         }
 
-        private int CalculateRestoredDefense(BaseCard card)
+        public override IEnumerator Release(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
-            // 원래 방어력에서 다른 효과들을 계산
-            var cardData = CardData.GetCardData(card.Id);
-            if (cardData == null)
-            {
-                Debug.LogError($"AbilityArmorBreak: CalculateRestoredDefense. CardData({card.Id}) 데이터 없음");
-                return 0;
-            }
+            if (!ValidateTargetSlot(targetSlot, "ArmorBreak"))
+                yield break;
 
-            int originalDef = cardData.def;
-            int sumBrokenDef = card.AbilitySystem.BrokenDefAbilities.Sum(ability => ability.abilityValue);
-            int sumDefUp = card.AbilitySystem.DefUpAbilities.Sum(ability => ability.abilityValue);
+            if (!ValidateCardType<CreatureCard>(targetSlot.Card, "ArmorBreak"))
+                yield break;
 
-            int restoredDef = originalDef + sumDefUp - sumBrokenDef;
-            return Mathf.Max(0, restoredDef); // 최소 0
+            CreatureCard creatureCard = targetSlot.Card as CreatureCard;
+            
+            // 해제되기 전의 방어력
+            int beforeDef = creatureCard.Def;
+            // 해제된 후의 방어력 (이 어빌리티 제외하고 계산)
+            int afterDef = creatureCard.Stat.CalculateStatWithoutAbility(StatType.Def, cardAbility);
+
+            LogAbility($"방어구 파괴 해제: {beforeDef} -> {afterDef}");
+            yield break;
         }
     }
 }

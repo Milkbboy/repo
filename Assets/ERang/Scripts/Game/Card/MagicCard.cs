@@ -19,18 +19,18 @@ namespace ERang
         {
             int hp = 0;
             int def = 0;
-            int maxHp = 0;
 
-            Stat = new CardStat(hp, def, cardData.costMana, cardData.atk, maxHp, cardData.costMana, cardData.costSatiety);
+            AbilitySystem = new CardAbilitySystem();
+            Stat = new CardStat(hp, def, cardData.costMana, cardData.atk, AbilitySystem, 0, cardData.costMana, cardData.costSatiety);
         }
 
         // IManaManageable 인터페이스 정의
-        public void IncreaseMana(int amount) => Stat.IncreaseMana(amount);
-        public void DecreaseMana(int amount) => Stat.DecreaseMana(amount);
+        public void IncreaseMana(int amount) => Stat.SetBaseMana(Stat.Mana + amount);
+        public void DecreaseMana(int amount) => Stat.SetBaseMana(Stat.Mana - amount);
 
         // 마법 카드 함수 정의
-        public void SetMana(int amount) => Stat.SetMana(amount);
-        public void SetAttack(int amount) => Stat.SetAtk(amount);
+        public void SetMana(int amount) => Stat.SetBaseMana(amount);
+        public void SetAttack(int amount) => Stat.SetBaseAtk(amount);
         public void SetHandOnCard(bool isHandOnCard) => IsHandOnCard = isHandOnCard;
         public void SetSelectAttackType(bool isSelectAttackType) => IsSelectAttackType = isSelectAttackType;
         public void SetTargetSlotNumbers(List<int> slotNumbers) => targetSlotNumbers = slotNumbers;

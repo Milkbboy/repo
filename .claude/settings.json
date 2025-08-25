@@ -2,7 +2,7 @@
   "model": "claude-3-5-sonnet-20241022",
   "maxTokens": 8192,
   "temperature": 0.0,
-  "systemPrompt": "항상 한국어로 응답해주세요. 모든 설명과 코드 주석, 메시지를 한글로 작성해주세요. Always respond in Korean. Write all explanations, code comments, and messages in Korean language.",
+  "systemPrompt": "항상 한국어로 응답해주세요. 모든 설명과 코드 주석, 메시지를 한글로 작성해주세요. Assets/ERang 폴더만 검색해주세요. Always respond in Korean. Write all explanations, code comments, and messages in Korean language. Only search in Assets/ERang folder.",
   "tools": {
     "bash": true,
     "edit": true,

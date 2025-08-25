@@ -100,5 +100,13 @@ namespace ERang
         {
             duration = abilityItems.Sum(abilityItem => abilityItem.duration);
         }
+
+        /// <summary>
+        /// 가장 최근의 AbilityItem 반환
+        /// </summary>
+        public AbilityItem GetLatestItem()
+        {
+            return abilityItems.LastOrDefault();
+        }
     }
 }

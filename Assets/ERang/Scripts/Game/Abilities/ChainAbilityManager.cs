@@ -340,13 +340,33 @@ namespace ERang
         {
             foreach (var targetSlot in targetSlots)
             {
-                if (targetSlot?.Card is CreatureCard)
+                if (targetSlot?.Card is CreatureCard creatureCard)
                 {
                     int defIncrease = abilityData.value;
-                    targetSlot.IncreaseDefense(defIncrease);
+                    
+                    // 현재 방어력을 저장
+                    int beforeDef = creatureCard.Def;
+                    
+                    // CardAbility 생성 및 추가
+                    var cardAbility = new CardAbility
+                    {
+                        abilityType = AbilityType.DefUp,
+                        abilityValue = defIncrease
+                    };
+                    var abilityItem = new AbilityItem
+                    {
+                        value = defIncrease,
+                        duration = abilityData.duration,
+                        createdDt = System.DateTime.Now.Ticks
+                    };
+                    cardAbility.AddAbilityItem(abilityItem);
+                    creatureCard.AbilitySystem.AddCardAbility(cardAbility, TurnManager.Instance.TurnCount, AbilityWhereFrom.BoardSlot);
+
+                    // 새로운 방어력을 가져옴 (자동 계산됨)
+                    int afterDef = creatureCard.Def;
 
                     if (enableDebugLog)
-                        Debug.Log($"<color=blue>[ChainAbility]</color> 방어력 증가: +{defIncrease} ({targetSlot.ToSlotLogInfo()})");
+                        Debug.Log($"<color=blue>[ChainAbility]</color> 방어력 증가: {beforeDef} -> {afterDef} (+{defIncrease}) ({targetSlot.ToSlotLogInfo()})");
                 }
             }
             yield return null;
@@ -412,10 +432,30 @@ namespace ERang
                 if (targetSlot?.Card != null)
                 {
                     int armorBreakAmount = abilityData.value;
-                    targetSlot.DecreaseDefense(armorBreakAmount);
+
+                    // 현재 방어력을 저장
+                    int beforeDef = targetSlot.Card.Def;
+
+                    // CardAbility 생성 및 추가
+                    var cardAbility = new CardAbility
+                    {
+                        abilityType = AbilityType.ArmorBreak,
+                        abilityValue = armorBreakAmount
+                    };
+                    var abilityItem = new AbilityItem
+                    {
+                        value = armorBreakAmount,
+                        duration = abilityData.duration,
+                        createdDt = System.DateTime.Now.Ticks
+                    };
+                    cardAbility.AddAbilityItem(abilityItem);
+                    targetSlot.Card.AbilitySystem.AddCardAbility(cardAbility, TurnManager.Instance.TurnCount, AbilityWhereFrom.BoardSlot);
+
+                    // 새로운 방어력을 가져옴 (자동 계산됨)
+                    int afterDef = targetSlot.Card.Def;
 
                     if (enableDebugLog)
-                        Debug.Log($"<color=brown>[ChainAbility]</color> 방어력 감소: -{armorBreakAmount} ({targetSlot.ToSlotLogInfo()})");
+                        Debug.Log($"<color=brown>[ChainAbility]</color> 방어력 감소: {beforeDef} -> {afterDef} (-{armorBreakAmount}) ({targetSlot.ToSlotLogInfo()})");
                 }
             }
             yield return null;

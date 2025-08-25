@@ -319,6 +319,10 @@ namespace ERang
             AbilityType.Burn,
             AbilityType.AddSatietyBuff,
             AbilityType.SubSatietyBuff,
+            AbilityType.AtkUp,
+            AbilityType.DefUp,
+            AbilityType.Weaken,
+            AbilityType.ArmorBreak,
         };
 
         // 행동 후 효과 발생 어빌리티

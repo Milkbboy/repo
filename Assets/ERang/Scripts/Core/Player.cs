@@ -160,7 +160,7 @@ namespace ERang
             nameDesc = masterData.nameDesc;
             masterTexture = masterData.masterTexture;
 
-            Stat = new CardStat(masterData.hp, masterData.def, masterData.startMana, masterData.atk, masterData.hp, masterData.maxMana);
+            Stat = new CardStat(masterData.hp, masterData.def, masterData.startMana, masterData.atk, new CardAbilitySystem(), masterData.hp, masterData.maxMana);
 
             Debug.Log($"MasterData 데이터 먼저 설정: masterId: {masterId}, masterType: {masterType}, 카드: {string.Join(", ", cardIds)}");
         }
@@ -177,7 +177,7 @@ namespace ERang
             if (savedHp != -1)
             {
                 Debug.Log($"저장된 마스터 HP 로드: {savedHp}");
-                Stat.SetHp(savedHp);
+                Stat.SetBaseHp(savedHp);
             }
 
             // 저장된 마스터 골드가 있으면 설정

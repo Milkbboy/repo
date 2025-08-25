@@ -50,9 +50,7 @@ namespace ERang
         // 스탯
         public virtual void TakeDamage(int amount) => Stat.TakeDamage(amount);
         public virtual void RestoreHealth(int amount) => Stat.RestoreHealth(amount);
-        public virtual void SetDefense(int amount) => Stat.SetDef(amount);
-        public virtual void IncreaseDefense(int amount) => Stat.IncreaseDefense(amount);
-        public virtual void DecreaseDefense(int amount) => Stat.DecreaseDefense(amount);
+        public virtual void SetDefense(int amount) => Stat.SetBaseDef(amount);
         public virtual void SetCostSatiety(int value) => Stat.SetCostSatiety(value);
 
         public void SetCardTraits(CardTraits cardTraits) => Traits = cardTraits;
@@ -60,8 +58,8 @@ namespace ERang
         // 기본 생성자
         protected BaseCard()
         {
-            Stat = new CardStat(0, 0, 0, 0);
             AbilitySystem = new CardAbilitySystem();
+            Stat = new CardStat(0, 0, 0, 0, AbilitySystem);
             Traits = CardTraits.None;
         }
 
@@ -84,8 +82,8 @@ namespace ERang
             Traits = CardTraits.None;
             CardGrade = cardData.cardGrade;
 
-            Stat = new CardStat(cardData.hp, cardData.def, cardData.costMana, cardData.atk);
             AbilitySystem = new CardAbilitySystem();
+            Stat = new CardStat(cardData.hp, cardData.def, cardData.costMana, cardData.atk, AbilitySystem);
         }
 
         // ID, Type, AiGroupId 기반 생성자
@@ -100,8 +98,8 @@ namespace ERang
             CardImage = cardImage;
             Traits = CardTraits.None;
 
-            Stat = new CardStat(0, 0, 0, 0);
             AbilitySystem = new CardAbilitySystem();
+            Stat = new CardStat(0, 0, 0, 0, AbilitySystem);
         }
     }
 }

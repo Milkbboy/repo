@@ -28,27 +28,27 @@ namespace ERang
         // IManaManageable 인터페이스 정의
         public void IncreaseMana(int amount)
         {
-            Stat.IncreaseMana(amount);
+            Stat.SetBaseMana(Stat.Mana + amount);
         }
         public void DecreaseMana(int amount)
         {
-            Stat.DecreaseMana(amount);
+            Stat.SetBaseMana(Stat.Mana - amount);
         }
 
         // 마스터 카드 함수 정의
         public void SetHp(int amount)
         {
-            Stat.SetHp(amount);
+            Stat.SetBaseHp(amount);
         }
 
         public void SetMana(int amount)
         {
-            Stat.SetMana(amount);
+            Stat.SetBaseMana(amount);
         }
 
         public void ResetMana()
         {
-            Stat.SetMana(0);
+            Stat.SetBaseMana(0);
         }
     }
 }
