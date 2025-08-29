@@ -51,7 +51,7 @@ namespace ERang
             foreach (var group in statModifyingAbilities.GroupBy(a => a.abilityId))
             {
                 var latestAbility = group
-                    .OrderByDescending(a => a.GetLatestItem()?.createdDt ?? 0)
+                    .OrderByDescending(a => a.GetLatestItem()?.createdTurn ?? 0)
                     .First();
 
                 finalValue = ApplyAbilityToStat(finalValue, latestAbility);
@@ -79,7 +79,7 @@ namespace ERang
             foreach (var group in statModifyingAbilities.GroupBy(a => a.abilityId))
             {
                 var latestAbility = group
-                    .OrderByDescending(a => a.GetLatestItem()?.createdDt ?? 0)
+                    .OrderByDescending(a => a.GetLatestItem()?.createdTurn ?? 0)
                     .First();
 
                 finalValue = ApplyAbilityToStat(finalValue, latestAbility);

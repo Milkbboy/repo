@@ -357,7 +357,7 @@ namespace ERang
                     {
                         value = defIncrease,
                         duration = abilityData.duration,
-                        createdDt = System.DateTime.Now.Ticks
+                        createdTurn = TurnManager.Instance.TurnCount
                     };
                     cardAbility.AddAbilityItem(abilityItem);
                     creatureCard.AbilitySystem.AddCardAbility(cardAbility, TurnManager.Instance.TurnCount, AbilityWhereFrom.BoardSlot);
@@ -446,7 +446,7 @@ namespace ERang
                     {
                         value = armorBreakAmount,
                         duration = abilityData.duration,
-                        createdDt = System.DateTime.Now.Ticks
+                        createdTurn = TurnManager.Instance.TurnCount
                     };
                     cardAbility.AddAbilityItem(abilityItem);
                     targetSlot.Card.AbilitySystem.AddCardAbility(cardAbility, TurnManager.Instance.TurnCount, AbilityWhereFrom.BoardSlot);

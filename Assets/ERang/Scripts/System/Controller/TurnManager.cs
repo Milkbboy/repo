@@ -307,6 +307,10 @@ namespace ERang
 
                 foreach (CardAbility cardAbility in card.AbilitySystem.CardAbilities)
                 {
+                    // 턴 종료시 모든 어빌리티 실행
+                    yield return StartCoroutine(AbilityLogic.Instance.AbilityAction(cardAbility, boardSlot, boardSlot));
+
+                    // duration이 0이 된 어빌리티는 해제
                     if (cardAbility.duration == 0)
                     {
                         yield return StartCoroutine(AbilityLogic.Instance.AbilityRelease(cardAbility, AbilityWhereFrom.TurnEndBoardSlot));
