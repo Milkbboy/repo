@@ -1543,3 +1543,57 @@ MonoBehaviour:
     Reaction_Condition_3: 0
     Reaction_Condition_3_Ratio: 0
     Reaction_Ai_3: 0
+  - AiGroup_Id: 810490
+    NameDesc: "\uC2AC\uB77C\uC784 \uD0B9 \uACF5\uACA9"
+    Type: Repeat
+    Ai_Group_1: 8104900
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810491
+    NameDesc: "\uC2AC\uB77C\uC784 \uD0B9 \uB9C8\uB098"
+    Type: Repeat
+    Ai_Group_1: 8104901
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0
+  - AiGroup_Id: 810492
+    NameDesc: "\uC2AC\uB77C\uC784 \uD0B9 \uB9CC\uBCF5\uB3C4"
+    Type: Repeat
+    Ai_Group_1: 8104902
+    Ai_Group_2: 
+    Ai_Group_3: 
+    Ai_Group_4: 
+    Ai_Group_5: 
+    Ai_Group_6: 
+    Reaction_Condition_1: 0
+    Reaction_Condition_1_Ratio: 0
+    Reaction_Ai_1: 0
+    Reaction_Condition_2: 0
+    Reaction_Condition_2_Ratio: 0
+    Reaction_Ai_2: 0
+    Reaction_Condition_3: 0
+    Reaction_Condition_3_Ratio: 0
+    Reaction_Ai_3: 0

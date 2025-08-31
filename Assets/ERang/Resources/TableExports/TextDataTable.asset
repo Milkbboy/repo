@@ -965,3 +965,17 @@ MonoBehaviour:
     Desc_Ko: "1\uC5F4\uC5D0 \uB370\uBBF8\uC9C0 4\uB97C 2,3\uC5F4\uC5D0 \uB370\uBBF8\uC9C0
       2"
     Desc_En: 
+  - DescID: CardName_81049
+    NameDesc: "\uD0B9\uC2AC\uB77C\uC784"
+    Desc_Ko: "\uD0B9\uC2AC\uB77C\uC784"
+    Desc_En: 
+  - DescID: CardDesc_81049
+    NameDesc: "\uD0B9\uC2AC\uB77C\uC784"
+    Desc_Ko: "1\uC5F4\uC758 \uC801\uC5D0\uAC8C 4\uC758 \uD53C\uD574\uB97C \uC785\uD788\uACE0,
+      \uB8E8\uC2DC\uC758 \uB9C8\uB098 1\uACFC \uB9CC\uBCF5\uB3C4 10\uC744 \uD68C\uBCF5\uD55C\uB2E4."
+    Desc_En: 
+  - DescID: CardShortDesc_81049
+    NameDesc: "\uD0B9\uC2AC\uB77C\uC784"
+    Desc_Ko: "1\uC5F4\uC5D0 \uB370\uBBF8\uC9C0 4, \uB9C8\uB098 1, \uB9CC\uBCF5\uB3C4
+      10 \uC99D\uAC00"
+    Desc_En: 
