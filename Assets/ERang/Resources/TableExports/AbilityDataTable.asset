@@ -2464,3 +2464,39 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81050000
+    NameDesc: "\uD0D0\uC2DD\uC758 \uC695\uB9DD_\uACF5\uACA9\uB825 \uC99D\uAC00"
+    AbilityType: AtkUp
+    Value: 5
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitAtkUp_01
+    PtojectileFx: 
+    SkillIcon: AtkUp_01
+    SkillIconDesc: 81050000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81050001
+    NameDesc: "\uD0D0\uC2DD\uC758 \uC695\uB9DD_\uB9CC\uBCF5\uB3C4 \uC18C\uBAA8\uD558\uAE30"
+    AbilityType: SubSatiety
+    Value: 10
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
