@@ -1583,3 +1583,31 @@ MonoBehaviour:
     Ability_id: 81050000, 81050001
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8105300
+    NameDesc: "\uC57C\uC2DD"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81053000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8105301
+    NameDesc: "\uC57C\uC2DD_\uCE74\uB4DC\uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81053001, 81053002, 81053003
+    ChainTrigger: 
+    ChainAiDataId: 0

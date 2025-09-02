@@ -2500,3 +2500,75 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81053000
+    NameDesc: "\uC57C\uC2DD_\uB9CC\uBCF5\uB3C4"
+    AbilityType: AddSatiety
+    Value: 50
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81053001
+    NameDesc: "\uC18C\uD654\uBD88\uB7C9 \uCE74\uB4DC \uC18C\uD658"
+    AbilityType: Summon_GraveDeck
+    Value: 1
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1005
+    ChainAbilityId: 0
+  - AbilityData_Id: 81053002
+    NameDesc: "\uC18C\uD654\uBD88\uB7C9 \uCE74\uB4DC \uC18C\uD658"
+    AbilityType: Summon_GraveDeck
+    Value: 1
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1005
+    ChainAbilityId: 0
+  - AbilityData_Id: 81053003
+    NameDesc: "\uC18C\uD654\uBD88\uB7C9 \uCE74\uB4DC \uC18C\uD658"
+    AbilityType: Summon_GraveDeck
+    Value: 1
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1005
+    ChainAbilityId: 0
