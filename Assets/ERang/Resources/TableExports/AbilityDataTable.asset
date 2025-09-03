@@ -916,6 +916,42 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 99997000
+    NameDesc: "\uB9CC\uBCF5\uB3C4 \uCD5C\uB300\uCE58"
+    AbilityType: MaxSatietyGauge
+    Value: 0
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 99998000
+    NameDesc: "\uC2A4\uD134"
+    AbilityType: Stun
+    Value: 1
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
   - AbilityData_Id: 81001000
     NameDesc: "\uB8E8\uC2DC_\uCC0C\uB974\uAE30"
     AbilityType: Damage

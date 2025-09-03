@@ -469,6 +469,54 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
+  - Card_Id: 99997
+    NameDesc: "\uB9CC\uBCF5\uB3C4 \uCD5C\uB300\uCE58 \uC870\uC808"
+    CardNameDesc_Id: CardName_99997
+    CardDesc_Id: 
+    CardShortDesc_Id: 
+    CardType: Magic
+    Grade: Common
+    AiGroup_ids: 999970
+    CostMana: 1
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_002
+    Level_3_img: Lucy_002
+    Level_5_img: Lucy_002
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 99998
+    NameDesc: "\uC2A4\uD134"
+    CardNameDesc_Id: CardName_99998
+    CardDesc_Id: 
+    CardShortDesc_Id: 
+    CardType: Magic
+    Grade: Common
+    AiGroup_ids: 999980
+    CostMana: 1
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_003
+    Level_3_img: Lucy_003
+    Level_5_img: Lucy_003
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
   - Card_Id: 81001
     NameDesc: "\uCC0C\uB974\uAE30"
     CardNameDesc_Id: CardName_81001
