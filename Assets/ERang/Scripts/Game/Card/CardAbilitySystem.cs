@@ -28,10 +28,10 @@ namespace ERang
             AbilityItem abilityItem = new()
             {
                 whereFrom = whereFrom,
-                applyTurn = turnCount,
+                applyTurn = 0,
                 value = cardAbility.abilityValue,
                 duration = cardAbility.duration,
-                createdDt = DateTime.UtcNow.Ticks
+                createdTurn = turnCount
             };
 
             CardAbility found = cardAbilities.Find(ability => ability.abilityId == cardAbility.abilityId);

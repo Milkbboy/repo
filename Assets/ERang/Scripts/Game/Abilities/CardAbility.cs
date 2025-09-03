@@ -20,8 +20,8 @@ namespace ERang
         public int value2;
         // 어빌리티 지속 턴
         public int duration;
-        // 어빌리티 생성일
-        public long createdDt;
+        // 어빌리티 생성 턴
+        public int createdTurn;
     }
 
     [Serializable]
@@ -71,7 +71,7 @@ namespace ERang
         /// 동일한 어빌리티의 duration 처리
         ///  - 추가된 순서대로 AbilityItem 의 duration 부터 감소
         /// </summary>
-        public void DecreaseDuration()
+        public void DecreaseDuration(int currentTurn)
         {
             Debug.Log($"DecreaseDuration. {abilityType} 어빌리티: {abilityItems.Count} 개");
 
@@ -82,15 +82,21 @@ namespace ERang
 
             AbilityItem abilityItem = abilityItems.Peek();
 
-            int beforeDuration = abilityItem.duration;
-            abilityItem.duration--;
+            // 현재 턴과 마지막으로 적용된 턴이 다를 때만 duration 감소
+            // applyTurn이 0이면 아직 한번도 감소된 적이 없는 상태
+            if (abilityItem.applyTurn == 0 || currentTurn != abilityItem.applyTurn)
+            {
+                int beforeDuration = abilityItem.duration;
+                abilityItem.duration--;
+                abilityItem.applyTurn = currentTurn;
 
-            Debug.Log($"DecreaseDuration. 어빌리티: {beforeDuration} -> {abilityItem.duration} 턴");
+                Debug.Log($"DecreaseDuration. 어빌리티: {beforeDuration} -> {abilityItem.duration} 턴");
 
-            if (abilityItem.duration <= 0)
-                abilityItems.Dequeue();
+                if (abilityItem.duration <= 0)
+                    abilityItems.Dequeue();
 
-            CalcDuration();
+                CalcDuration();
+            }
         }
 
         /// <summary>

@@ -22,20 +22,19 @@ namespace ERang
             yield return StartCoroutine(ApplyEffect(cardAbility, selfSlot, targetSlot));
 
             // 2. duration 감소
-            cardAbility.DecreaseDuration();
+            cardAbility.DecreaseDuration(TurnManager.Instance.TurnCount);
 
-            // 3. duration 0 이면 release 처리
-            if (cardAbility.duration <= 0)
-            {
-                // ability 해제
-                yield return StartCoroutine(Release(cardAbility, selfSlot, targetSlot));
-
-                // ability 제거
-                if (targetSlot.Card != null)
-                {
-                    targetSlot.Card.AbilitySystem.RemoveCardAbility(cardAbility);
-                }
-            }
+            // 3. duration 0 이면 release 처리는 외부에서
+            // if (cardAbility.duration <= 0)
+            // {
+            //     // ability 해제
+            //     yield return StartCoroutine(Release(cardAbility, selfSlot, targetSlot));
+            //     // ability 제거
+            //     if (targetSlot.Card != null)
+            //     {
+            //         targetSlot.Card.AbilitySystem.RemoveCardAbility(cardAbility);
+            //     }
+            // }
 
             // 4. 아이콘 갱신
             targetSlot.DrawAbilityIcons();

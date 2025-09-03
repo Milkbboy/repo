@@ -212,7 +212,35 @@ namespace ERang
             {
                 if (filteredCards != null && filteredCards.Count > 0)
                 {
-                    cardNames = filteredCards.Select(card => $"[{card?.card_id ?? 0}] {card?.nameDesc ?? "Unknown"}").ToArray();
+                    cardNames = filteredCards.Select(card => {
+                        var cardIndicators = new List<string>();
+                        if (card.aiGroup_ids != null) {
+                            foreach (var aiGroupId in card.aiGroup_ids) {
+                                var aiGroupData = AiGroupData.GetAiGroupData(aiGroupId);
+                                if (aiGroupData?.ai_Groups != null) {
+                                    foreach (var aiGroup in aiGroupData.ai_Groups) {
+                                        foreach (int aiId in aiGroup) {
+                                            var aiData = AiData.GetAiData(aiId);
+                                            if (aiData?.ability_Ids != null) {
+                                                foreach (int abilityId in aiData.ability_Ids) {
+                                                    var abilityData = AbilityData.GetAbilityData(abilityId);
+                                                    if (abilityData != null) {
+                                                        if (abilityData.abilityType == AbilityType.AtkUp || abilityData.abilityType == AbilityType.DefUp) {
+                                                            if (!cardIndicators.Contains("BUFF")) cardIndicators.Add("BUFF");
+                                                        } else if (abilityData.abilityType == AbilityType.Weaken || abilityData.abilityType == AbilityType.BrokenDef) {
+                                                            if (!cardIndicators.Contains("DEBUFF")) cardIndicators.Add("DEBUFF");
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        string indicators = cardIndicators.Count > 0 ? $" [{string.Join(", ", cardIndicators)}]" : "";
+                        return $"[{card?.card_id ?? 0}] {card?.nameDesc ?? "Unknown"}{indicators}";
+                    }).ToArray();
                 }
                 else
                 {
@@ -1283,7 +1311,16 @@ namespace ERang
                         {
                             string displayName = GetDisplayNameForId(fieldName, id);
                             int capturedId = id; // 클로저 문제 해결
-                            menu.AddItem(new GUIContent($"[{id}] {displayName}"), false, () =>
+                            var abilityData = AbilityData.GetAbilityData(id);
+                            string buffIndicator = "";
+                            if (abilityData != null) {
+                                if (abilityData.abilityType == AbilityType.AtkUp || abilityData.abilityType == AbilityType.DefUp) {
+                                    buffIndicator = " [BUFF]";
+                                } else if (abilityData.abilityType == AbilityType.Weaken || abilityData.abilityType == AbilityType.BrokenDef) {
+                                    buffIndicator = " [DEBUFF]";
+                                }
+                            }
+                            menu.AddItem(new GUIContent($"[{id}] {displayName}{buffIndicator}"), false, () =>
                             {
                                 try
                                 {

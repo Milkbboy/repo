@@ -1527,3 +1527,87 @@ MonoBehaviour:
     Ability_id: 81048001
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8104900
+    NameDesc: "\uC2AC\uB77C\uC784 \uD0B9 \uADFC\uAC70\uB9AC \uACF5\uACA9"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    isSameTime: 0
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81049000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8104901
+    NameDesc: "\uC2AC\uB77C\uC784 \uD0B9 \uADFC\uAC70\uB9AC \uBC84\uD504"
+    Type: Buff
+    Target: All Friendly Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81049001
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8104902
+    NameDesc: "\uC2AC\uB77C\uC784 \uD0B9 \uADFC\uAC70\uB9AC \uBC84\uD504"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81049002
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8105000
+    NameDesc: "\uD0D0\uC2DD\uC758 \uC695\uB9DD"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81050000, 81050001
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8105300
+    NameDesc: "\uC57C\uC2DD"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81053000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8105301
+    NameDesc: "\uC57C\uC2DD_\uCE74\uB4DC\uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81053001, 81053002, 81053003
+    ChainTrigger: 
+    ChainAiDataId: 0
