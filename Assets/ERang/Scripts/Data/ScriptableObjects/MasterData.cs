@@ -19,7 +19,7 @@ namespace ERang.Data
         public int def; // 마왕 캐릭터의 초기 방어력 값
         public int startMana; // 마왕 캐릭터의 초기 마나 값
         public int maxMana; // 마왕 캐릭터의 최대 마나 값
-        public int rechargeMana; // 턴이 다시 시작 될 때 얻게 되는 마나 초기 값
+        public int rechargeMana; // 턴이 다시 시작 될 때 얻게 되는 마나
         public string startCardDeckIds; // 마왕이 처음 스테이지에 진입 할 때 갖게되는 카드의 복수 값
         public int startArtiFact_id; // 마왕이 처음 시작 시 갖고 있는 아티팩트의 id 값
         public string StartAbilityIds; // 마왕이 선천적으로 가지고 있는 특성 id 값

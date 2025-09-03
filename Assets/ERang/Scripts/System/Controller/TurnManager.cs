@@ -64,7 +64,9 @@ namespace ERang
             yield return StartCoroutine(CardPriorAbility(masterSlot));
 
             BoardSystem.Instance.SetHp(player.Hp);
-            BoardSystem.Instance.SetMana(player.RechargeMana);
+            // 마스터 마나 설정
+            if (turnCount != 1)
+                BoardSystem.Instance.AddMana(player.RechargeMana);
 
             // 핸드 카드 만들기
             yield return StartCoroutine(deckManager.MakeHandCards());
@@ -117,8 +119,8 @@ namespace ERang
             // 핸드덱에 카드 제거
             deckManager.TurnEndProcess();
 
-            // 마스터 마나 리셋
-            BoardSystem.Instance.ResetMana();
+            // 마스터 마나 충전
+            // BoardSystem.Instance.ResetMana();
 
             // 턴 증가
             turnCount++;
