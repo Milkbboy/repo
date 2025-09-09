@@ -2608,3 +2608,129 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 1005
     ChainAbilityId: 0
+  - AbilityData_Id: 81054000
+    NameDesc: "\uD3ED\uC2DD_\uB9CC\uBCF5\uB3C4"
+    AbilityType: AddSatiety
+    Value: 100
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81054001
+    NameDesc: "\uD3ED\uC2DD_\uCE74\uB4DC \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81054002
+    NameDesc: "\uD3ED\uC2DD_\uCE74\uB4DC \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81054003
+    NameDesc: "\uD3ED\uC2DD_\uCE74\uB4DC \uC18C\uD658"
+    AbilityType: Summon_Hand
+    Value: 1
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81054004
+    NameDesc: "\uD3ED\uC2DD_\uB9CC\uBCF5\uB3C4 \uAC10\uC18C"
+    AbilityType: SubSatiety
+    Value: 60
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81055000
+    NameDesc: "\uC704\uC561 \uC2AC\uB77C\uC784_\uACF5\uACA9"
+    AbilityType: Damage
+    Value: 2
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81055001
+    NameDesc: "\uC704\uC561 \uC2AC\uB77C\uC784_\uD761\uD608"
+    AbilityType: Heal
+    Value: 2
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0

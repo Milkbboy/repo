@@ -1639,3 +1639,59 @@ MonoBehaviour:
     Ability_id: 81053001, 81053002, 81053003
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8105400
+    NameDesc: "\uD3ED\uC2DD_\uB9CC\uBCF5\uB3C4 \uC99D\uAC00"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81054000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8105401
+    NameDesc: "\uD3ED\uC2DD_\uCE74\uB4DC \uC18C\uD658"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81054001, 81054002, 81054003, 81054004
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8105500
+    NameDesc: "\uC704\uC561 \uC2AC\uB77C\uC784 \uADFC\uAC70\uB9AC \uACF5\uACA9"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    isSameTime: 0
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81055000
+    ChainTrigger: DamageDealt
+    ChainAiDataId: 8105501
+  - Ai_Id: 8105501
+    NameDesc: "\uC704\uC561 \uC2AC\uB77C\uC784 \uD761\uD608"
+    Type: Buff
+    Target: Self
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81055001
+    ChainTrigger: 
+    ChainAiDataId: 0
