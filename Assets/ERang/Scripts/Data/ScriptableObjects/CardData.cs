@@ -162,7 +162,14 @@ namespace ERang.Data
         {
             if (!card_dict.TryGetValue(card_id, out CardData cardData))
             {
-                Debug.LogError($"CardData {card_id} not found");
+                if (card_id == 1001)
+                {
+                    Debug.LogWarning($"마스터 카드 {card_id}");
+                }
+                else
+                {
+                    Debug.LogError($"CardData {card_id} not found");
+                }
                 return null;
             }
             return cardData;

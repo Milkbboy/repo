@@ -129,6 +129,7 @@ namespace ERang.Data
                 "DeleteCard" => AbilityType.DeleteCard,
                 "AddSatiety_Buff" => AbilityType.AddSatietyBuff,
                 "SubSatiety_Buff" => AbilityType.SubSatietyBuff,
+                "MaxSatietyGauge" => AbilityType.MaxSatietyGauge,
                 _ => AbilityType.None,
             };
         }

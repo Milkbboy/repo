@@ -75,7 +75,7 @@ namespace ERang
         {
             string coloredMessage = AbilityType switch
             {
-                AbilityType.Damage or AbilityType.Burn or AbilityType.Poison => $"<color=red>[{AbilityType}]</color> {message}",
+                AbilityType.Damage or AbilityType.Burn or AbilityType.Poison or AbilityType.MaxSatietyGauge => $"<color=red>[{AbilityType}]</color> {message}",
                 AbilityType.Heal => $"<color=green>[{AbilityType}]</color> {message}",
                 AbilityType.AtkUp or AbilityType.DefUp => $"<color=blue>[{AbilityType}]</color> {message}",
                 AbilityType.ReducedMana => $"<color=cyan>[{AbilityType}]</color> {message}",

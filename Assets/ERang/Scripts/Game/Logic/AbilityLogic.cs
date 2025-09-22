@@ -219,6 +219,11 @@ namespace ERang
         /// </summary>
         public IEnumerator AbilityAction(CardAbility cardAbility, BoardSlot selfSlot, BoardSlot targetSlot)
         {
+            if (cardAbility.abilityType == AbilityType.None)
+            {
+                Debug.LogError($"AbilityData 의 ConvertAbilityType 함수에 {cardAbility.ToCardAbilityLogInfo()} 정의 했는지 확인.");
+            }
+
             if (!abilityActions.TryGetValue(cardAbility.abilityType, out IAbility abilityAction))
             {
                 Debug.LogWarning($"<color=orange>[AbilityAction]</color> {targetSlot?.ToSlotLogInfo() ?? "targetSlot 없음."} {cardAbility.ToCardAbilityLogInfo()}에 대한 동작이 없음.");

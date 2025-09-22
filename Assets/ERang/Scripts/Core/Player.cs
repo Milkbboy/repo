@@ -31,7 +31,7 @@ namespace ERang
         public int Gold { get => gold; set => gold = value; }
         public int CreatureSlotCount => creatureSlots;
         public int Satiety { get => satiety; set => satiety = value; }
-        public int MaxSatiety => maxSatiety;
+        public int MaxSatiety { get => maxSatiety; set => maxSatiety = value; }
 
         private int masterId;
         private MasterType masterType;

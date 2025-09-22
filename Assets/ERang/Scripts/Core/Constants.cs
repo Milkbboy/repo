@@ -197,6 +197,7 @@ namespace ERang
         DeleteCard, // 자신의 덱에 있는 카드 중 특정 카드를 특정 개수만큼 삭제하는 기능
         AddSatietyBuff, // 만복도 턴 증가
         SubSatietyBuff, // 만복도 턴 감소
+        MaxSatietyGauge, // 최대 만복도 변경
     }
 
     /// <summary>

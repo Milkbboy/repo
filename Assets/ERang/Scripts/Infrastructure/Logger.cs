@@ -97,9 +97,9 @@ namespace ERang
         public static string ToSlotLogInfo(this BoardSlot slot)
         {
             if (slot?.Card == null)
-                return $"{slot?.SlotNum ?? -1}번 슬롯 (빈 슬롯)";
+                return $"{slot?.SlotNum ?? -1}번 슬롯 (빈 슬롯).";
 
-            return $"<color=cyan>[{slot.SlotNum}번 슬롯]</color> {GetCardType(slot.Card.CardType)} 카드({slot.Card.Id})";
+            return $"<color=cyan>[{slot.SlotNum}번 슬롯]</color> {GetCardType(slot.Card.CardType)} 카드({slot.Card.Id}).";
         }
 
         public static string ToAbilityLogInfo(this AbilityData abilityData)

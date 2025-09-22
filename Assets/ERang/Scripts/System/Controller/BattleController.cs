@@ -182,6 +182,22 @@ namespace ERang
             satietyUI.UpdateSatiety(player.Satiety, player.MaxSatiety);
         }
 
+        /// <summary>
+        /// 최대 포만감 설정 및 UI 업데이트
+        /// </summary>
+        public void UpdateMaxSatietyGauge(int newMaxSatiety)
+        {
+            player.MaxSatiety = newMaxSatiety;
+
+            // 현재 만복도가 새로운 최대 만복도보다 높다면 조정
+            if (player.Satiety > newMaxSatiety)
+            {
+                player.Satiety = newMaxSatiety;
+            }
+
+            satietyUI.UpdateSatiety(player.Satiety, player.MaxSatiety);
+        }
+
         // ========================================
         // TurnManager 위임 메서드들
         // ========================================
