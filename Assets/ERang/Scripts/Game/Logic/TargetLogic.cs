@@ -25,13 +25,13 @@ namespace ERang
             {
                 case AiDataTarget.Self: targetSlots = new List<BoardSlot> { selfSlot }; break;
                 case AiDataTarget.Enemy: targetSlots = TargetEnemy(aiData, selfSlot); break;
-                case AiDataTarget.EnemyMaster: targetSlots = new List<BoardSlot> { BoardSystem.Instance.GetMasterSlot() }; break;
+                case AiDataTarget.EnemyMaster: targetSlots = new List<BoardSlot> { BoardSystem.Instance.GetEnemyMasterSlot() }; break;
                 case AiDataTarget.NearEnemy: targetSlots = TargetNearEnemy(aiData, selfSlot); break;
                 case AiDataTarget.AllEnemy: targetSlots = TargetAllEnemy(selfSlot); break;
                 case AiDataTarget.AllEnemyCreature: targetSlots = TargetAllEnemy(selfSlot, true); break;
                 case AiDataTarget.RandomEnemy: targetSlots = TargetRandomEnemy(selfSlot); break;
                 case AiDataTarget.RandomEnemyCreature: targetSlots = TargetRandomEnemy(selfSlot, true); break;
-                case AiDataTarget.FriendlyMaster: targetSlots = new List<BoardSlot> { BoardSystem.Instance.GetEnemyMasterSlot() }; break;
+                case AiDataTarget.FriendlyMaster: targetSlots = new List<BoardSlot> { BoardSystem.Instance.GetMasterSlot() }; break;
                 case AiDataTarget.AllFriendly: targetSlots = TargetAllFriendly(selfSlot, true); break;
                 case AiDataTarget.AllFriendlyCreature: targetSlots = TargetAllFriendly(selfSlot); break;
                 case AiDataTarget.FirstEnemy: targetSlots = TargetFirstEnemy(selfSlot); break;
