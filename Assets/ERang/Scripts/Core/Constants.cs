@@ -177,6 +177,7 @@ namespace ERang
         AddSatietyBuff, // 만복도 턴 증가
         SubSatietyBuff, // 만복도 턴 감소
         MaxSatietyGauge, // 최대 만복도 변경
+        Stun, // 지정된 Duration 만큼 행동불능
     }
 
     /// <summary>
@@ -309,6 +310,7 @@ namespace ERang
         public static readonly AbilityType[] CardPostAbilities = new[]
         {
             AbilityType.Poison,
+            AbilityType.Stun,
         };
     }
 }

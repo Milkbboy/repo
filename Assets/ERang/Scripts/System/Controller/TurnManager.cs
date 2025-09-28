@@ -136,6 +136,26 @@ namespace ERang
         // 턴 관련 헬퍼 메서드들
         // ========================================
 
+        /// <summary>
+        /// 카드가 스턴 상태인지 확인
+        /// </summary>
+        private bool IsStunned(BoardSlot boardSlot)
+        {
+            if (boardSlot?.Card == null)
+                return false;
+
+            var stunAbilities = boardSlot.Card.AbilitySystem.CardAbilities
+                .Where(ability => ability.abilityType == AbilityType.Stun)
+                .ToList();
+
+            bool isStunned = stunAbilities.Any(ability => ability.duration > 0);
+
+            Debug.Log($"{boardSlot.ToSlotLogInfo()} 스턴 체크: {isStunned}, 스턴 어빌리티 수: {stunAbilities.Count}, " +
+                      $"Duration: [{string.Join(", ", stunAbilities.Select(a => a.duration))}]");
+
+            return isStunned;
+        }
+
         private IEnumerator TurnStartMonsterReaction()
         {
             List<BoardSlot> reactionSlots = BoardSystem.Instance.GetRightBoardSlots();
@@ -147,6 +167,13 @@ namespace ERang
 
                 if (card == null)
                     continue;
+
+                // 스턴 상태 체크 - 스턴에 걸린 카드는 행동 불가
+                if (IsStunned(boardSlot))
+                {
+                    Debug.Log($"{boardSlot.ToSlotLogInfo()} 스턴 상태로 인해 턴 시작 행동 불가");
+                    continue; // 이 카드만 건너뛰고 다음 카드로
+                }
 
                 foreach (int aiGroupId in card.AiGroupIds)
                 {
@@ -219,6 +246,13 @@ namespace ERang
 
             if (card == null)
                 yield break;
+
+            // 스턴 상태 체크 - 스턴에 걸린 카드는 행동 불가
+            if (IsStunned(boardSlot))
+            {
+                Debug.Log($"{boardSlot.ToSlotLogInfo()} 스턴 상태로 인해 행동 불가");
+                yield break;
+            }
 
             if (card.AiGroupIds == null || card.AiGroupIds.Count == 0)
             {

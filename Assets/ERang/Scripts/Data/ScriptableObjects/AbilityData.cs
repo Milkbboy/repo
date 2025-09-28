@@ -130,6 +130,7 @@ namespace ERang.Data
                 "AddSatiety_Buff" => AbilityType.AddSatietyBuff,
                 "SubSatiety_Buff" => AbilityType.SubSatietyBuff,
                 "MaxSatietyGauge" => AbilityType.MaxSatietyGauge,
+                "Stun" => AbilityType.Stun,
                 _ => AbilityType.None,
             };
         }

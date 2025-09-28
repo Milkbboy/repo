@@ -80,6 +80,7 @@ namespace ERang
                 AbilityType.AtkUp or AbilityType.DefUp => $"<color=blue>[{AbilityType}]</color> {message}",
                 AbilityType.ReducedMana => $"<color=cyan>[{AbilityType}]</color> {message}",
                 AbilityType.SubSatiety => $"<color=yellow>[{AbilityType}]</color> {message}",
+                AbilityType.Stun => $"<color=purple>[{AbilityType}]</color> {message}",
                 _ => $"<color=white>[{AbilityType}]</color> {message}"
             };
 
