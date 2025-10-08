@@ -2029,3 +2029,27 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
+  - Card_Id: 81064
+    NameDesc: "\uC18C\uB8E1\uD3EC"
+    CardNameDesc_Id: CardName_81064
+    CardDesc_Id: CardDesc_81064
+    CardShortDesc_Id: CardShortDesc_81064
+    CardType: Magic
+    Grade: Rare
+    AiGroup_ids: 810640
+    CostMana: 0
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_064
+    Level_3_img: Lucy_064
+    Level_5_img: Lucy_064
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
