@@ -1723,11 +1723,11 @@ MonoBehaviour:
     CardDesc_Id: CardDesc_81051
     CardShortDesc_Id: CardShortDesc_81051
     CardType: Magic
-    Grade: Rare
-    AiGroup_ids: 810500
-    CostMana: 0
+    Grade: Legendary
+    AiGroup_ids: 810510
+    CostMana: 2
     CostGold: 0
-    CostSatiety: 10
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
@@ -1748,10 +1748,10 @@ MonoBehaviour:
     CardShortDesc_Id: CardShortDesc_81052
     CardType: Magic
     Grade: Rare
-    AiGroup_ids: 810500
-    CostMana: 0
+    AiGroup_ids: 810520
+    CostMana: 2
     CostGold: 0
-    CostSatiety: 10
+    CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
