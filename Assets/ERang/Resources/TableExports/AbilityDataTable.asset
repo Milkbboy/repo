@@ -2986,3 +2986,111 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81061000
+    NameDesc: "\uB9CC\uCC2C"
+    AbilityType: Damage
+    Value: 3
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81062000
+    NameDesc: "\uC7AC\uB8CC\uC190\uC9C8_\uACF5\uACA9"
+    AbilityType: Damage
+    Value: 3
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81062001
+    NameDesc: "\uC7AC\uB8CC\uC190\uC9C8_\uCC0C\uB974\uAE30"
+    AbilityType: BrokenDef
+    Value: 0
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 99
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefDown_01
+    SkillIconDesc: 81062001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81062002
+    NameDesc: "\uC7AC\uB8CC\uC190\uC9C8_\uC790\uB974\uAE30"
+    AbilityType: BrokenDef
+    Value: 0
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 99
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefDown_01
+    SkillIconDesc: 81062002_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81063000
+    NameDesc: "\uAF2C\uCE58\uAD6C\uC774_\uACF5\uACA9"
+    AbilityType: Damage
+    Value: 2
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: Atk_01
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81063001
+    NameDesc: "\uAF2C\uCE58\uAD6C\uC774_\uCC0C\uB974\uAE30"
+    AbilityType: BrokenDef
+    Value: 0
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 5
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefDown_01
+    SkillIconDesc: 81063001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
