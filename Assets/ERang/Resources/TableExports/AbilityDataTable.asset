@@ -2824,3 +2824,75 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81056000
+    NameDesc: "\uBABD\uB9C8 \uC2A4\uD134"
+    AbilityType: Stun
+    Value: 0
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefUp_01
+    SkillIconDesc: 81056000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81057000
+    NameDesc: "\uBC29\uC5B4_\uBC29\uC5B4"
+    AbilityType: DefUp
+    Value: 3
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefUp_01
+    SkillIconDesc: 81057000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81058000
+    NameDesc: "\uC804\uD22C\uC900\uBE44_\uBC29\uC5B4"
+    AbilityType: DefUp
+    Value: 2
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefUp_01
+    SkillIconDesc: 81058000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81058001
+    NameDesc: "\uC804\uD22C\uC900\uBE44_\uACF5\uACA9"
+    AbilityType: AtkUp
+    Value: 2
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitAtkUp_01
+    PtojectileFx: 
+    SkillIcon: AtkUp_01
+    SkillIconDesc: 81058001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0

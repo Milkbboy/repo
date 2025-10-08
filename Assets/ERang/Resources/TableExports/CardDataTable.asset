@@ -1725,14 +1725,14 @@ MonoBehaviour:
     CardType: Magic
     Grade: Legendary
     AiGroup_ids: 810510
-    CostMana: 2
+    CostMana: 5
     CostGold: 0
     CostSatiety: 0
     Hp: 0
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 0
+    Extinction: 1
     CompleteExtinction: 0
     Level: 0
     Level_1_img: Lucy_051
@@ -1756,7 +1756,7 @@ MonoBehaviour:
     Atk: 0
     Def: 0
     InUse: 1
-    Extinction: 0
+    Extinction: 1
     CompleteExtinction: 0
     Level: 0
     Level_1_img: Lucy_052
@@ -1824,7 +1824,7 @@ MonoBehaviour:
     CostMana: 2
     CostGold: 0
     CostSatiety: 0
-    Hp: 99
+    Hp: 5
     Atk: 2
     Def: 0
     InUse: 1
@@ -1834,6 +1834,78 @@ MonoBehaviour:
     Level_1_img: Lucy_055
     Level_3_img: Lucy_055
     Level_5_img: Lucy_055
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81056
+    NameDesc: "\uBABD\uB9C8"
+    CardNameDesc_Id: CardName_81056
+    CardDesc_Id: CardDesc_81056
+    CardShortDesc_Id: CardShortDesc_81056
+    CardType: Creature
+    Grade: Rare
+    AiGroup_ids: 810560
+    CostMana: 2
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 2
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_056
+    Level_3_img: Lucy_056
+    Level_5_img: Lucy_056
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81057
+    NameDesc: "\uBC29\uC5B4"
+    CardNameDesc_Id: CardName_81057
+    CardDesc_Id: CardDesc_81057
+    CardShortDesc_Id: CardShortDesc_81057
+    CardType: Magic
+    Grade: Common
+    AiGroup_ids: 810570
+    CostMana: 1
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_057
+    Level_3_img: Lucy_057
+    Level_5_img: Lucy_057
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81058
+    NameDesc: "\uC804\uD22C\uC900\uBE44"
+    CardNameDesc_Id: CardName_81058
+    CardDesc_Id: CardDesc_81058
+    CardShortDesc_Id: CardShortDesc_81058
+    CardType: Magic
+    Grade: Rare
+    AiGroup_ids: 810580
+    CostMana: 1
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_058
+    Level_3_img: Lucy_058
+    Level_5_img: Lucy_058
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
