@@ -529,7 +529,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 3
     Def: 0
     InUse: 1
     Extinction: 0
@@ -553,7 +553,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 2
     Def: 0
     InUse: 1
     Extinction: 0
@@ -577,7 +577,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 1
     Def: 0
     InUse: 1
     Extinction: 0
@@ -649,7 +649,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 3
     Def: 0
     InUse: 1
     Extinction: 0
@@ -841,7 +841,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 2
     Def: 0
     InUse: 1
     Extinction: 0
@@ -865,7 +865,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 2
     Def: 0
     InUse: 1
     Extinction: 0
@@ -889,7 +889,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 2
     Def: 0
     InUse: 1
     Extinction: 0
@@ -913,7 +913,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 6
     Def: 0
     InUse: 1
     Extinction: 0
@@ -937,7 +937,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 2
     Def: 0
     InUse: 1
     Extinction: 0
@@ -961,7 +961,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 1
     Def: 0
     InUse: 1
     Extinction: 0
@@ -1057,7 +1057,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 3
     Def: 0
     InUse: 1
     Extinction: 0
@@ -1129,7 +1129,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 5
     Def: 0
     InUse: 1
     Extinction: 1
@@ -1657,7 +1657,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 50
     Hp: 0
-    Atk: 0
+    Atk: 4
     Def: 0
     InUse: 1
     Extinction: 0
@@ -1753,7 +1753,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 0
     Hp: 0
-    Atk: 0
+    Atk: 3
     Def: 0
     InUse: 1
     Extinction: 1
@@ -1945,7 +1945,7 @@ MonoBehaviour:
     CostGold: 0
     CostSatiety: 80
     Hp: 0
-    Atk: 0
+    Atk: 12
     Def: 0
     InUse: 1
     Extinction: 1
@@ -2074,6 +2074,54 @@ MonoBehaviour:
     Level_1_img: Lucy_065
     Level_3_img: Lucy_065
     Level_5_img: Lucy_065
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81066
+    NameDesc: "\uC9C0\uB3C5\uD55C\uC219\uCDE8"
+    CardNameDesc_Id: CardName_81066
+    CardDesc_Id: CardDesc_81066
+    CardShortDesc_Id: CardShortDesc_81066
+    CardType: Magic
+    Grade: Rare
+    AiGroup_ids: 810660, 810661
+    CostMana: 2
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 3
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_066
+    Level_3_img: Lucy_066
+    Level_5_img: Lucy_066
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81067
+    NameDesc: "\uAFF0\uB6AB\uB294\uC77C\uACA9"
+    CardNameDesc_Id: CardName_81067
+    CardDesc_Id: CardDesc_81067
+    CardShortDesc_Id: CardShortDesc_81067
+    CardType: Magic
+    Grade: Rare
+    AiGroup_ids: 810670
+    CostMana: 1
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 2
+    Def: 0
+    InUse: 1
+    Extinction: 0
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_067
+    Level_3_img: Lucy_067
+    Level_5_img: Lucy_067
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
