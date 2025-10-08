@@ -2896,3 +2896,93 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81059000
+    NameDesc: "\uC2DD\uC695 \uD3ED\uBC1C_\uB9CC\uBCF5\uB3C4 \uAC10\uC18C"
+    AbilityType: SubSatiety
+    Value: 30
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81059001
+    NameDesc: "\uC2DD\uC695 \uD3ED\uBC1C_\uBC29\uC5B4"
+    AbilityType: DefUp
+    Value: 3
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefUp_01
+    SkillIconDesc: 81059001_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81059002
+    NameDesc: "\uC2DD\uC695 \uD3ED\uBC1C_\uACF5\uACA9"
+    AbilityType: AtkUp
+    Value: 3
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitAtkUp_01
+    PtojectileFx: 
+    SkillIcon: AtkUp_01
+    SkillIconDesc: 81059002_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81060000
+    NameDesc: "\uACF5\uD5C8\uC758 \uBC14\uB2E4"
+    AbilityType: SubSatiety
+    Value: 80
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 1004
+    ChainAbilityId: 0
+  - AbilityData_Id: 81060001
+    NameDesc: "\uACF5\uD5C8\uC758 \uBC14\uB2E4 \uACF5\uACA9"
+    AbilityType: Damage
+    Value: 12
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
