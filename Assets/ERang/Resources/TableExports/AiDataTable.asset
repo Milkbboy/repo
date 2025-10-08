@@ -1863,3 +1863,31 @@ MonoBehaviour:
     Ability_id: 81064000, 81064001
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8106500
+    NameDesc: "\uC9D1\uC5B4\uC0BC\uD0A4\uAE30_\uACF5\uACA9"
+    Type: Melee
+    Target: Near Enemy
+    Atk_Type: Automatic
+    Atk_Range: 1
+    isSameTime: 0
+    Atk_Cnt: 3
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81065000
+    ChainTrigger: DamageDealt
+    ChainAiDataId: 8106501
+  - Ai_Id: 8106501
+    NameDesc: "\uC9D1\uC5B4\uC0BC\uD0A4\uAE30_\uB9CC\uBCF5\uB3C4"
+    Type: Buff
+    Target: Friendly Master
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81065001
+    ChainTrigger: 
+    ChainAiDataId: 0
