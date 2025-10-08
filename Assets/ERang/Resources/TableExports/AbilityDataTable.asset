@@ -3220,3 +3220,39 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81068000
+    NameDesc: "\uB9C8\uC655\uC758\uC7A5\uB9C9_\uBC29\uC5B4"
+    AbilityType: DefUp
+    Value: 3
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: Skill_Use_01
+    SkillFx: Hit_01
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefUp_01
+    SkillIconDesc: 81068000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81069000
+    NameDesc: "\uB9C8\uC655\uC758\uBE44\uC218_\uACF5\uACA9"
+    AbilityType: AtkUp
+    Value: 2
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 2
+    SkillAnim: Ranged_01
+    SkillFx: Skill_Use_01
+    HitFx: HitAtkUp_01
+    PtojectileFx: 
+    SkillIcon: AtkUp_01
+    SkillIconDesc: 81069000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
