@@ -3292,3 +3292,39 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81071000
+    NameDesc: "\uC644\uC804\uC18C\uD654_\uB9CC\uBCF5\uB3C4"
+    AbilityType: AddSatiety
+    Value: 100
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81071001
+    NameDesc: "\uC644\uC804\uC18C\uD654_\uCE74\uB4DC\uC0AD\uC81C"
+    AbilityType: DeleteCard
+    Value: 99
+    Value2: 1015
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0

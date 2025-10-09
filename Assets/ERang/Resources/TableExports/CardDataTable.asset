@@ -2197,3 +2197,27 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
+  - Card_Id: 81071
+    NameDesc: "\uC644\uC804\uC18C\uD654"
+    CardNameDesc_Id: CardName_81071
+    CardDesc_Id: CardDesc_81071
+    CardShortDesc_Id: CardShortDesc_81071
+    CardType: Magic
+    Grade: Legendary
+    AiGroup_ids: 810710
+    CostMana: 3
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_071
+    Level_3_img: Lucy_071
+    Level_5_img: Lucy_071
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001

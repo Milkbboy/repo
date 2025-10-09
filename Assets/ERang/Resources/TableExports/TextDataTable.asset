@@ -1338,3 +1338,17 @@ MonoBehaviour:
     NameDesc: "\uB9C8\uC655\uC758\uAC00\uD638_\uBC29\uC5B4\uB825"
     Desc_Ko: "\uBC29\uC5B4\uB825 +20"
     Desc_En: 
+  - DescID: CardName_81071
+    NameDesc: "\uC644\uC804\uC18C\uD654"
+    Desc_Ko: "\uC644\uC804\uC18C\uD654"
+    Desc_En: 
+  - DescID: CardDesc_81071
+    NameDesc: "\uC644\uC804\uC18C\uD654"
+    Desc_Ko: "\uC18C\uD654\uBD88\uB7C9 \uCE74\uB4DC\uB97C \uBAA8\uB450 \uC0AD\uC81C\uD558\uACE0
+      \uB9CC\uBCF5\uB3C4\uB97C 100 \uC99D\uAC00\uC2DC\uD0A8\uB2E4."
+    Desc_En: 
+  - DescID: CardShortDesc_81071
+    NameDesc: "\uC644\uC804\uC18C\uD654"
+    Desc_Ko: "\uC18C\uD654\uBD88\uB7C9 \uCE74\uB4DC \uC0AD\uC81C, \uB9CC\uBCF5\uB3C4
+      +100"
+    Desc_En: 

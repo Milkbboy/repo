@@ -1975,3 +1975,17 @@ MonoBehaviour:
     Ability_id: 81070000, 81070001
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8107100
+    NameDesc: "\uC644\uC804\uC18C\uD654"
+    Type: Buff
+    Target: Friendly Master
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81071000, 81071001
+    ChainTrigger: 
+    ChainAiDataId: 0
