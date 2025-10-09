@@ -1961,3 +1961,17 @@ MonoBehaviour:
     Ability_id: 81069000
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8107000
+    NameDesc: "\uB9C8\uC655\uC758\uAC00\uD638"
+    Type: Buff
+    Target: All Friendly Creature
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81070000, 81070001
+    ChainTrigger: 
+    ChainAiDataId: 0
