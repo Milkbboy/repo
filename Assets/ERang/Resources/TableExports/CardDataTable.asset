@@ -2221,3 +2221,51 @@ MonoBehaviour:
     HandStart_Ability: 
     HandEnd_Ability: 
     Owner: 1001
+  - Card_Id: 81072
+    NameDesc: "\uBD80\uD328\uC758 \uC228\uACB0"
+    CardNameDesc_Id: CardName_81072
+    CardDesc_Id: CardDesc_81072
+    CardShortDesc_Id: CardShortDesc_81072
+    CardType: Magic
+    Grade: Common
+    AiGroup_ids: 810720
+    CostMana: 1
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_072
+    Level_3_img: Lucy_072
+    Level_5_img: Lucy_072
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001
+  - Card_Id: 81073
+    NameDesc: "\uC704\uC561 \uBD84\uBE44"
+    CardNameDesc_Id: CardName_81073
+    CardDesc_Id: CardDesc_81073
+    CardShortDesc_Id: CardShortDesc_81073
+    CardType: Magic
+    Grade: Rare
+    AiGroup_ids: 810730, 810731
+    CostMana: 2
+    CostGold: 0
+    CostSatiety: 0
+    Hp: 0
+    Atk: 0
+    Def: 0
+    InUse: 1
+    Extinction: 1
+    CompleteExtinction: 0
+    Level: 0
+    Level_1_img: Lucy_073
+    Level_3_img: Lucy_073
+    Level_5_img: Lucy_073
+    HandStart_Ability: 
+    HandEnd_Ability: 
+    Owner: 1001

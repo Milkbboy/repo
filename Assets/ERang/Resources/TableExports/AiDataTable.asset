@@ -1989,3 +1989,45 @@ MonoBehaviour:
     Ability_id: 81071000, 81071001
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8107200
+    NameDesc: "\uBD80\uD328\uC758\uC228\uACB0_\uBC29\uC5B4\uB825 \uAC10\uC18C"
+    Type: DeBuff
+    Target: All Enemy
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81072000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8107300
+    NameDesc: "\uC704\uC561\uBD84\uBE44_\uBC29\uC5B4\uB825 \uAC10\uC18C"
+    Type: DeBuff
+    Target: All Enemy
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81073000
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8107301
+    NameDesc: "\uC704\uC561\uBD84\uBE44_\uACF5\uACA9"
+    Type: Melee
+    Target: All Enemy
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 1
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81073001
+    ChainTrigger: 
+    ChainAiDataId: 0
