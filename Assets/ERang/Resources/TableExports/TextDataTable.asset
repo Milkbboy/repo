@@ -1412,3 +1412,15 @@ MonoBehaviour:
     NameDesc: "\uC870\uBA85\uD0C4"
     Desc_Ko: "\uBAA8\uB4E0 \uC801 1\uD134\uAC04 \uC2A4\uD134"
     Desc_En: 
+  - DescID: CardName_81076
+    NameDesc: "\uD669\uAE08\uACE0\uBE14\uB9B0"
+    Desc_Ko: "\uD669\uAE08\uACE0\uBE14\uB9B0"
+    Desc_En: 
+  - DescID: CardDesc_81076
+    NameDesc: "\uD669\uAE08\uACE0\uBE14\uB9B0"
+    Desc_Ko: "\uD134 \uC885\uB8CC \uC2DC 30\uC758 \uACE8\uB4DC\uB97C \uCC44\uAD74\uD55C\uB2E4."
+    Desc_En: 
+  - DescID: CardShortDesc_81076
+    NameDesc: "\uD669\uAE08\uACE0\uBE14\uB9B0"
+    Desc_Ko: "\uD134 \uB2F9 \uACE8\uB4DC +30"
+    Desc_En: 
