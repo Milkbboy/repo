@@ -3382,3 +3382,57 @@ MonoBehaviour:
     FxSound: 
     Summon_GroupId: 0
     ChainAbilityId: 0
+  - AbilityData_Id: 81074000
+    NameDesc: "\uC218\uBC15_\uCCB4\uB825\uD68C\uBCF5"
+    AbilityType: Heal
+    Value: 5
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81074001
+    NameDesc: "\uC218\uBC15_\uB9CC\uBCF5\uB3C4"
+    AbilityType: AddSatiety
+    Value: 10
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 0
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: 
+    SkillIconDesc: 
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0
+  - AbilityData_Id: 81075000
+    NameDesc: "\uC870\uBA85\uD0C4_\uC2A4\uD134"
+    AbilityType: Stun
+    Value: 0
+    Value2: 0
+    Ratio: 0
+    Type: Active
+    Duration: 1
+    SkillAnim: 
+    SkillFx: 
+    HitFx: 
+    PtojectileFx: 
+    SkillIcon: DefUp_01
+    SkillIconDesc: 81056000_IconDesc
+    SkillViewIcon: 
+    FxSound: 
+    Summon_GroupId: 0
+    ChainAbilityId: 0

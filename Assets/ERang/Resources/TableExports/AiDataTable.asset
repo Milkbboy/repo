@@ -2031,3 +2031,31 @@ MonoBehaviour:
     Ability_id: 81073001
     ChainTrigger: 
     ChainAiDataId: 0
+  - Ai_Id: 8107400
+    NameDesc: "\uC218\uBC15"
+    Type: Buff
+    Target: Friendly Master
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 0
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81074000, 81074001
+    ChainTrigger: 
+    ChainAiDataId: 0
+  - Ai_Id: 8107500
+    NameDesc: "\uC870\uBA85\uD0C4"
+    Type: DeBuff
+    Target: All Enemy
+    Atk_Type: Automatic
+    Atk_Range: 
+    isSameTime: 0
+    Atk_Cnt: 1
+    Atk_Interval: 0
+    Value: 100
+    Explosion_Shock: 0
+    Ability_id: 81075000
+    ChainTrigger: 
+    ChainAiDataId: 0
