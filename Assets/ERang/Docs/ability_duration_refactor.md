@@ -31,20 +31,10 @@ public abstract class BaseAbility : MonoBehaviour, IAbility
         yield return StartCoroutine(ApplyEffect(cardAbility, selfSlot, targetSlot));
         
         // 2. duration 감소
-        cardAbility.DecreaseDuration();
+        cardAbility.DecreaseDuration(TurnManager.Instance.TurnCount);
         
-        // 3. duration이 0이 되었으면 release 처리
-        if (cardAbility.duration <= 0)
-        {
-            // ability 해제
-            yield return StartCoroutine(Release(cardAbility, selfSlot, targetSlot));
-            
-            // ability 제거
-            if (targetSlot.Card != null)
-            {
-                targetSlot.Card.AbilitySystem.RemoveCardAbility(cardAbility);
-            }
-        }
+        // 3. duration이 0이 되면 TurnManager에서 턴 종료시 일괄 해제함
+        // (BaseAbility 내부에서 스스로 Release 하지 않음)
         
         // 4. 아이콘 갱신
         targetSlot.DrawAbilityIcons();
@@ -201,48 +191,6 @@ public List<CardAbility> DecreaseDuration()
         if (cardAbility.duration == 0)
             removedCardAbilities.Add(cardAbility);
     }
-    
-    return removedCardAbilities;
-}
-```
-
-## 적용 후 동작 Flow
-
-1. 어빌리티 발동
-   - AbilityLogic.AbilityAction() 호출
-   - BaseAbility.ApplySingle() 호출
-
-2. ApplySingle() 내부 처리
-   - ApplyEffect() 호출하여 실제 효과 적용
-   - duration 감소
-   - duration 0 체크 및 release 처리
-   - UI 갱신
-
-3. Duration 관리
-   - 각 어빌리티가 실제로 발동될 때 duration 감소
-   - duration이 0이 되면 자동으로 release 및 제거
-   - UI는 실시간으로 갱신
-
-## 기대 효과
-
-1. 어빌리티 시스템 일관성 향상
-   - 효과 발동과 duration 감소가 동시에 처리됨
-   - duration 관리가 BaseAbility로 일원화됨
-
-2. 코드 품질 향상
-   - 중복 코드 제거
-   - 책임 분리가 명확해짐
-   - 유지보수성 향상
-
-3. 버그 발생 가능성 감소
-   - duration 관리 로직이 한 곳으로 통합됨
-   - 자동 release 처리로 누락 가능성 제거
-
-## 주의사항
-
-1. 기존 duration 감소 로직을 모두 제거했는지 확인
-2. 각 어빌리티의 ApplySingle을 ApplyEffect로 변경했는지 확인
-3. UI 갱신이 적절한 시점에 이루어지는지 확인
 4. BaseHandAbility 구현시 sealed override로 보드 슬롯 메서드 막았는지 확인
 
 ## 2025-01-23 추가 수정 사항

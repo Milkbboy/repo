@@ -1,0 +1,9 @@
+﻿<Solution>
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="DOTween.Modules.csproj" />
+  <Project Path="DOTweenPro.EditorScripts.csproj" />
+  <Project Path="ExcelImporter.Editor.csproj" />
+  <Project Path="DOTweenPro.Scripts.csproj" />
+  <Project Path="ExcelImporter.csproj" />
+</Solution>
